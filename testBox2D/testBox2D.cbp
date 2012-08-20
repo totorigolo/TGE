@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="testBox2D" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Release">
+				<Option output="bin\Release\testBox2D" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj\Release\" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O2" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+		</Compiler>
+		<Unit filename="src\ActionMouseWheel.h" />
+		<Unit filename="src\Body.cpp" />
+		<Unit filename="src\Body.h" />
+		<Unit filename="src\Box2DGame.cpp" />
+		<Unit filename="src\Box2DGame.h" />
+		<Unit filename="src\DistanceJoint.cpp" />
+		<Unit filename="src\DistanceJoint.h" />
+		<Unit filename="src\DynamicBox.cpp" />
+		<Unit filename="src\DynamicBox.h" />
+		<Unit filename="src\DynamicCircle.cpp" />
+		<Unit filename="src\DynamicCircle.h" />
+		<Unit filename="src\Game.cpp" />
+		<Unit filename="src\Game.h" />
+		<Unit filename="src\Joint.cpp" />
+		<Unit filename="src\Joint.h" />
+		<Unit filename="src\MouseJoint.cpp" />
+		<Unit filename="src\MouseJoint.h" />
+		<Unit filename="src\OverlappingBodyCallback.h" />
+		<Unit filename="src\StaticBox.cpp" />
+		<Unit filename="src\StaticBox.h" />
+		<Unit filename="src\World.cpp" />
+		<Unit filename="src\World.h" />
+		<Unit filename="src\config.h" />
+		<Unit filename="src\main.cpp" />
+		<Unit filename="src\utils.h" />
+		<Extensions>
+			<code_completion />
+			<envvars />
+			<debugger />
+			<lib_finder disable_auto="1" />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>
