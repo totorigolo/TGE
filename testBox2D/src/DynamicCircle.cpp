@@ -3,28 +3,20 @@
 #include "utils.h"
 
 //Ctor
-DynamicCircle::DynamicCircle(b2World *world, b2Vec2 posInMeters, std::shared_ptr<sf::Texture> texture)
-	: Body(world, texture)
+DynamicCircle::DynamicCircle(World *world, b2Vec2 pos, std::shared_ptr<sf::Texture> texture)
+	: Body(world), mTexture(texture)
 {
-	Create(posInMeters);
-}
+	// Change la texture
+	this->setTexture(*mTexture);
 
-// Dtor
-DynamicCircle::~DynamicCircle(void)
-{
-}
-
-// Crée le body dans le monde
-void DynamicCircle::Create(b2Vec2 posInMeters)
-{
 	if (mWorld)
 	{
 		/* Crée le body */
 		// BodyDef
 		b2BodyDef bodyDef;
-		bodyDef.position = posInMeters;
+		bodyDef.position = pos;
 		bodyDef.type = b2_dynamicBody;
-		mBody = mWorld->CreateBody(&bodyDef);
+		mBody = mWorld->CreateBody(&bodyDef, this);
 
 		// Shape
 		mShape = new b2CircleShape;
@@ -37,5 +29,23 @@ void DynamicCircle::Create(b2Vec2 posInMeters)
 		fixtureDef.restitution = 0.6f;
 		fixtureDef.shape = mShape;
 		mBody->CreateFixture(&fixtureDef);
+
+		mBody->SetUserData(this);
+	}
+}
+
+// Dtor
+DynamicCircle::~DynamicCircle(void)
+{
+}
+
+// Met à jour la position du sprite
+void DynamicCircle::Update()
+{
+	if (mBody && mWorld)
+	{
+		this->setPosition(b22sfVec(mBody->GetPosition()));
+		this->setOrigin(u2f(mTexture->getSize()) / 2.f);
+		this->setRotation(- mBody->GetAngle() * DPR);
 	}
 }

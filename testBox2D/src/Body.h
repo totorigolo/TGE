@@ -2,38 +2,48 @@
 #include <SFML/Graphics.hpp>
 #include <Box2D/Box2D.h>
 #include <Thor/Resources.hpp>
+#include <list>
+#include "World.h"
+#include "Joint.h"
 
+class World;
+class Joint;
 class Body : public sf::Sprite
 {
 public:
 	// Ctor & dtor
-	Body(b2World *world, std::shared_ptr<sf::Texture> texture);
+	Body(World *world);
 	virtual ~Body(void);
-
-	// Crée le body dans le monde
-	virtual void Create(b2Vec2 posInMeters) = 0;
-
-	// Met à jour la position du sprite
-	void Update();
+	
+	// Met à jour le body
+	virtual void Update();
 
 	// Retourne true si l'objet est trop loin
 	bool IsInRange(b2Vec2 const& xw, b2Vec2 const& yh) const;
 
-	// Supprime le body du monde
-	void Destroy();
+	// Gestion des joints
+	void RegisterJoint(Joint *joint);
+	void RemoveJoint(Joint *joint);
+	void DestroyJoint(Joint *joint, bool remove = true);
+	void DestroyAllJoints();
 
 	// Accesseurs
+	void SetBody(b2Body *body); // NE PAS UTILISER
+
 	bool IsStatic() const { return mBody->GetType() == b2_staticBody; }
+	b2Body* GetBody() { return mBody; }
+	World* GetWorld() { return mWorld; }
+	b2Shape* GetShape() { return mShape; }
 	b2Body const* GetBody() const { return mBody; }
-	b2World const* GetWorld() const { return mWorld; }
+	World const* GetWorld() const { return mWorld; }
 	b2Shape const* GetShape() const { return mShape; }
 
 protected:
 	// Variables pour l'objet physique
-	b2World *mWorld;
+	World *mWorld;
 	b2Body *mBody;
 	b2Shape *mShape;
 
-	// Variables pour l'objet dessinable
-	std::shared_ptr<sf::Texture> mTexture;
+	// Liste des joint auxquels il est attaché
+	std::list<Joint*> mJointList;
 };

@@ -5,6 +5,7 @@
 #include "StaticBox.h"
 #include "DynamicBox.h"
 #include "DynamicCircle.h"
+#include "DistanceJoint.h"
 #include <iostream>
 
 // Ctor
@@ -14,6 +15,8 @@ Box2DGame::Box2DGame(sf::RenderWindow & window)
 	mGravity(0.0f, -9.8f), mWorld(mGravity)
 {
 	mMouseJoint = nullptr;
+	mPinBodyA = nullptr;
+	mPinBodyB = nullptr;
 }
 
 // Dtor
@@ -46,13 +49,13 @@ void Box2DGame::OnInit()
 	}
 
 	// Crée le sol
-	mStaticBodyList.push_back(new StaticBox(&mWorld, b2Vec2(0.f, -5.f), mTextureMap["ground"]));
+	mWorld.RegisterBody(new StaticBox(&mWorld, b2Vec2(0.f, -6.f), mTextureMap["ground"]));
 
 	/* Crée les actions */
 	mActionMap["onMoveObject"] = thor::Action(sf::Mouse::Right, thor::Action::Hold);
-	mActionMap["onUnMoveObject"] = thor::Action(sf::Mouse::Right, thor::Action::ReleaseOnce);
 	mActionMap["onCreateBox"] = thor::Action(sf::Mouse::Left, thor::Action::Hold);
 	mActionMap["onCreateCircle"] = thor::Action(sf::Keyboard::C, thor::Action::Hold);
+	mActionMap["onPin"] = thor::Action(sf::Keyboard::P, thor::Action::PressOnce);
 }
 
 /// Appelé quand la boucle commence
@@ -66,6 +69,35 @@ void Box2DGame::OnLoopBegin()
 
 	// Simule
 	mWorld.Step(1.f / 60.f, 8, 3);
+
+	// Affichage des objets dynamiques
+	for (auto it = mWorld.GetBodyList().begin(); it != mWorld.GetBodyList().end(); )
+	{
+		bool erase = false;
+		// Vérifie si l'objet est hors du monde et pas accroché à la souris
+		if (!(*it)->IsInRange(b2Vec2(200.f, -200.f), b2Vec2(800.f, -200.f)))
+			{
+				erase = true;
+				if (mMouseJoint)
+					if (*it == mMouseJoint->GetAttachedBody())
+						erase = false;
+			}
+
+		// Supprime le body
+		if (erase)
+		{
+			auto it2 = it;
+			++it2;
+			mWorld.DestroyBody(*it);
+			it = it2;
+		}
+
+		// Sinon passe simplement au suivant
+		else
+		{
+			++it;
+		}
+	}
 }
 
 /// Appelé pour les évènements
@@ -76,26 +108,73 @@ void Box2DGame::OnEvent()
 	// Création d'objets
 	if (mActionMap.isActive("onCreateBox"))
 	{
-		std::string s = ((randMinMax(0, 1) == 0) ? "box" : "box2");
-		mBodyList.push_back(new DynamicBox(&mWorld, mMp, mTextureMap[s]));
+		std::string list[] = {"box", "box2"};
+		mWorld.RegisterBody(new DynamicBox(&mWorld, mMp, mTextureMap[randomElement(list, 2)]));
 	}
 	if (mActionMap.isActive("onCreateCircle"))
 	{
-		mBodyList.push_back(new DynamicCircle(&mWorld, mMp, mTextureMap["circle"]));
+		mWorld.RegisterBody(new DynamicCircle(&mWorld, mMp, mTextureMap["circle"]));
+	}
+
+	// Epingle un objet
+	if (mActionMap.isActive("onPin"))
+	{
+		if (!mPinBodyA || !mPinBodyB)
+		{
+			// Crée une petite AABB sur la souris
+			b2AABB aabb;
+			b2Vec2 d;
+			d.Set(0.001f, 0.001f);
+			aabb.lowerBound = mMp - d;
+			aabb.upperBound = mMp + d;
+
+			// Demande au monde les formes qui sont sous l'AABB
+			OverlappingBodyCallback callback(mMp);
+			mWorld.QueryAABB(&callback, aabb);
+
+			// Il y a un objet, on le retient
+			if (callback.GetFixture())
+			{
+				if (!mPinBodyA && mPinBodyB != (Body*) callback.GetFixture()->GetBody()->GetUserData())
+				{
+					mPinBodyA = (Body*) callback.GetFixture()->GetBody()->GetUserData();
+					mPinAnchorA = mMp;
+				}
+				else if (!mPinBodyB && mPinBodyA != (Body*) callback.GetFixture()->GetBody()->GetUserData())
+				{
+					mPinBodyB = (Body*) callback.GetFixture()->GetBody()->GetUserData();
+					mPinAnchorB = mMp;
+				}
+				else
+				{
+					mPinBodyA = nullptr;
+					mPinBodyB = nullptr;
+				}
+			}
+			// Si on a cliqué sur rien, on oublie les deux
+			else
+			{
+				mPinBodyA = nullptr;
+				mPinBodyB = nullptr;
+			}
+		}
+		if (mPinBodyA && mPinBodyB)
+		{
+			mWorld.RegisterJoint(new DistanceJoint(&mWorld, mPinBodyA, mPinAnchorA, mPinBodyB, mPinAnchorB));
+
+			mPinBodyA = nullptr;
+			mPinBodyB = nullptr; // TODO : mPinAchor => local
+		}
 	}
 
 	// Déplacements des objets
-	if (mActionMap.isActive("onUnMoveObject"))
-	{
-		if (mMouseJoint)
-			mWorld.DestroyJoint(mMouseJoint);
-		mMouseJoint = nullptr;
-	}
 	if (mActionMap.isActive("onMoveObject"))
 	{
 		// Si la souris est déjà attachée, on met à jour la position
 		if (mMouseJoint)
+		{
 			mMouseJoint->SetTarget(mMp);
+		}
 
 		// Sinon on recherche l'objet sous la souris et on l'attache
 		else
@@ -114,16 +193,17 @@ void Box2DGame::OnEvent()
 			// Il y a un objet, on l'attache
 			if (callback.GetFixture())
 			{
-				b2Body* body = callback.GetFixture()->GetBody();
-				b2MouseJointDef md;
-				md.bodyA = body;
-				md.bodyB = body;
-				md.target = mMp;
-				md.maxForce = 80000.0f * body->GetMass();
-				mMouseJoint = (b2MouseJoint*)mWorld.CreateJoint(&md);
-				body->SetAwake(true);
+				b2Body* b2body = callback.GetFixture()->GetBody();
+				Body* body = (Body*) b2body->GetUserData();
+				mMouseJoint = new MouseJoint(&mWorld, body, mWorld.GetAnyStaticBody(), mMp, 80000.f * b2body->GetMass());
 			}
 		}
+	}
+	else
+	{
+		if (mMouseJoint)
+			mWorld.DestroyJoint(mMouseJoint);
+		mMouseJoint = nullptr;
 	}
 }
 
@@ -132,44 +212,38 @@ void Box2DGame::OnRender()
 {
 	mWindow.clear(sf::Color::White);
 	
-	// Affichage des objets dynamiques
-	for (auto it = mBodyList.begin(); it != mBodyList.end(); )
+	// Affichage des joints
+	for (auto it = mWorld.GetJointList().begin(); it != mWorld.GetJointList().end(); ++it)
 	{
-		bool erase = false;
-		// Vérifie si l'objet n'est pas statique
-		if (!(*it)->IsStatic())
-		{
-			// Vérifie si l'objet est hors du monde et pas accroché à la souris
-			if (!(*it)->IsInRange(b2Vec2(20.f, 5.f), b2Vec2(-00.f, -30.f)))
-			{
-				erase = true;
-				if (mMouseJoint)
-					if ((*it)->GetBody() == mMouseJoint->GetBodyA())
-						erase = false;
-			}
-		}
+		(*it)->Update();
+		mWindow.draw(**it);
+	}
 
-		// Supprime le body
-		if (erase)
-		{
-			(*it)->Destroy();
-			it = mBodyList.erase(it);
-		}
-
-		// Sinon on l'affiche
-		else
+	// Affichage des objets dynamiques
+	for (auto it = mWorld.GetBodyList().begin(); it != mWorld.GetBodyList().end(); ++it)
+	{
+		if ((*it)->GetBody()->GetType() == b2_dynamicBody)
 		{
 			(*it)->Update();
 			mWindow.draw(**it);
-			++it;
 		}
 	}
 
 	// Affichage des objets statiques
-	for (auto it = mStaticBodyList.rbegin(); it != mStaticBodyList.rend(); ++it)
+	for (auto it = mWorld.GetBodyList().rbegin(); it != mWorld.GetBodyList().rend(); ++it)
 	{
-		(*it)->Update();
-		mWindow.draw(**it);
+		if ((*it)->GetBody()->GetType() == b2_staticBody)
+		{
+			(*it)->Update();
+			mWindow.draw(**it);
+		}
+	}
+
+	// Affichage du joint de la souris
+	if (mMouseJoint)
+	{
+		mMouseJoint->Update();
+		mWindow.draw(*mMouseJoint);
 	}
 
 	mWindow.display();
@@ -188,4 +262,15 @@ void Box2DGame::OnLoopEnd()
 void Box2DGame::OnQuit()
 {
 	Game::OnQuit();
+
+	// Supprime le joint de la souris
+	if (mMouseJoint)
+	{
+		mWorld.DestroyJoint(mMouseJoint);
+		mMouseJoint = nullptr;
+	}
+
+	// Vide les listes d'objets
+	mWorld.DestroyAllJoints();
+	mWorld.DestroyAllBody();
 }

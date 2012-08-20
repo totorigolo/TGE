@@ -29,8 +29,11 @@ protected:
 	/// Appelé quand la boucle se termine
 	virtual void OnLoopEnd();
 
-	// Appelé quand le jeu se termine
+	/// Appelé quand le jeu se termine
 	virtual void OnQuit();
+	
+	/* Pour la molette de la souris */
+	friend class OnMouseWheelMoved;
 
 protected:
 	// Etats du jeu
@@ -56,3 +59,13 @@ protected:
 	sf::Clock mElapsedTime;
 };
 
+/* Pour la molette de la souris */
+class OnMouseWheelMoved
+{
+public:
+	explicit OnMouseWheelMoved(Game *_game);
+	void operator() (thor::ActionContext<std::string> context);
+
+private:
+	Game *mGame;
+};

@@ -2,17 +2,22 @@
 #include <SFML/Graphics.hpp>
 #include <Box2D/Box2D.h>
 #include <Thor/Resources.hpp>
+#include "World.h"
 #include "Body.h"
 
+class World;
+class Body;
 class DynamicBox : public Body
 {
 public:
 	// Ctor & dtor
-	DynamicBox(b2World *world, b2Vec2 posInMeters, std::shared_ptr<sf::Texture> texture);
+	DynamicBox(World *world, b2Vec2 pos, std::shared_ptr<sf::Texture> texture);
 	virtual ~DynamicBox(void);
 	
-	// Crée la boite dans le monde
-	virtual void Create(b2Vec2 posInMeters);
+	// Met à jour la position du sprite
+	virtual void Update();
 
 private:
+	// Texture
+	std::shared_ptr<sf::Texture> mTexture;
 };

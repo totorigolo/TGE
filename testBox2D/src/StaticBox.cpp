@@ -3,20 +3,12 @@
 #include "utils.h"
 
 //Ctor
-StaticBox::StaticBox(b2World *world, b2Vec2 posInMeters, std::shared_ptr<sf::Texture> texture)
-	: Body(world, texture)
+StaticBox::StaticBox(World *world, b2Vec2 posInMeters, std::shared_ptr<sf::Texture> texture)
+	: Body(world), mTexture(texture)
 {
-	Create(posInMeters);
-}
+	// Change la texture
+	this->setTexture(*mTexture);
 
-// Dtor
-StaticBox::~StaticBox(void)
-{
-}
-
-// Crée le body dans le monde
-void StaticBox::Create(b2Vec2 posInMeters)
-{
 	if (mWorld)
 	{
 		/* Crée le body */
@@ -24,7 +16,7 @@ void StaticBox::Create(b2Vec2 posInMeters)
 		b2BodyDef bodyDef;
 		bodyDef.position = posInMeters;
 		bodyDef.type = b2_staticBody;
-		mBody = mWorld->CreateBody(&bodyDef);
+		mBody = mWorld->CreateBody(&bodyDef, this);
 
 		// Shape
 		mShape = new b2PolygonShape;
@@ -35,5 +27,23 @@ void StaticBox::Create(b2Vec2 posInMeters)
 		fixtureDef.density = 0.f;
 		fixtureDef.shape = mShape;
 		mBody->CreateFixture(&fixtureDef);
+		
+		mBody->SetUserData(this);
+	}
+}
+
+// Dtor
+StaticBox::~StaticBox(void)
+{
+}
+
+// Met à jour la position du sprite
+void StaticBox::Update()
+{
+	if (mBody && mWorld)
+	{
+		this->setPosition(b22sfVec(mBody->GetPosition()));
+		this->setOrigin(u2f(mTexture->getSize()) / 2.f);
+		this->setRotation(- mBody->GetAngle() * DPR);
 	}
 }

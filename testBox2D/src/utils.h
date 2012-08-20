@@ -1,12 +1,21 @@
 #pragma once
 #include <SFML/System.hpp>
 #include <Box2D/Box2D.h>
+#include <string>
+#include "config.h"
 
 // [min ; max]
 inline int randMinMax(int min, int max)
 {
 	if ((max - min + 1) + min == 0) return 0;
 	return abs(rand()) % (max - min + 1) + min;
+}
+
+// Retourne un element de la liste au hasard
+template<typename T>
+inline std::string randomElement(T list[], int count)
+{
+	return list[randMinMax(0, count - 1)];
 }
 
 // Retourne le minimum
@@ -21,16 +30,6 @@ template<typename T>
 inline T max(T a, T b)
 {
 	return (a > b) ? a : b;
-}
-
-// Convertion sf::Vector <> b2Vec2 (sans convertion)
-inline b2Vec2 sf2b2Vec(sf::Vector2f const& vector)
-{
-	return b2Vec2(vector.x, vector.y);
-}
-inline sf::Vector2f b22sfVec(b2Vec2 const& vector)
-{
-	return sf::Vector2f(vector.x, vector.y);
 }
 
 // Converti les sf::Vector2 entre eux
@@ -100,4 +99,14 @@ template<typename T>
 sf::Vector2<T> operator/(sf::Vector2<T> a, sf::Vector2<T> b)
 {
 	return sf::Vector2<T>(a.x / b.x, a.y / b.y);
+}
+
+// Convertion sf::Vector <> b2Vec2 (avec convertion)
+inline b2Vec2 sf2b2Vec(sf::Vector2f const& vector)
+{
+	return b2Vec2(vector.x * MPP, - vector.y * MPP);
+}
+inline sf::Vector2f b22sfVec(b2Vec2 const& vector)
+{
+	return sf::Vector2f(vector.x, - vector.y) * PPM;
 }

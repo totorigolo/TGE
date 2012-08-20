@@ -3,28 +3,24 @@
 #include "utils.h"
 
 //Ctor
-Body::Body(b2World *world, std::shared_ptr<sf::Texture> texture)
-	: mWorld(world), mBody(nullptr), mTexture(texture)
+Body::Body(World *world)
+	: mWorld(world), mBody(nullptr)
 {
-	// Change la texture
-	this->setTexture(*mTexture);
 }
 
 // Dtor
 Body::~Body(void)
 {
+	this->DestroyAllJoints();
+
+	if (mWorld && mBody)
+		mWorld->DestroyBody(this, false);
 }
 
-// Met à jour la position du sprite
+// Met à jour le body
 void Body::Update()
 {
-	if (mBody && mWorld)
-	{
-		// "-y" parce que la SFML inverse
-		this->setPosition(mBody->GetPosition().x * PPM, - mBody->GetPosition().y * PPM);
-		this->setOrigin(u2f(mTexture->getSize()) / 2.f);
-		this->setRotation(mBody->GetAngle() * DPR);
-	}
+	// Ne fait rien
 }
 
 // Retourne true si l'objet est trop loin
@@ -36,8 +32,41 @@ bool Body::IsInRange(b2Vec2 const& xw, b2Vec2 const& yh) const
 	return false;
 }
 
-void Body::Destroy()
+// Gestion des joints
+void Body::RegisterJoint(Joint *joint)
 {
-	if (mWorld && mBody)
-		mWorld->DestroyBody(mBody);
+	if (joint)
+	{
+		mJointList.push_back(joint);
+	}
+}
+void Body::RemoveJoint(Joint *joint)
+{
+	if (joint)
+	{
+		mJointList.remove(joint);
+	}
+}
+void Body::DestroyJoint(Joint *joint, bool remove)
+{
+	if (joint)
+	{
+		if (remove)
+			mJointList.remove(joint);
+		mWorld->DestroyJoint(joint);
+	}
+}
+void Body::DestroyAllJoints()
+{
+	for (auto it = mJointList.begin(); it != mJointList.end(); )
+	{
+		mWorld->DestroyJoint(*it, false, true);
+		it = mJointList.erase(it);
+	}
+}
+
+// Accesseurs
+void Body::SetBody(b2Body *body) // NE PAS UTILISER
+{
+	mBody = body;
 }

@@ -7,7 +7,9 @@
 #include <map>
 #include "Game.h"
 #include "Body.h"
+#include "MouseJoint.h"
 
+class MouseJoint;
 class Box2DGame : public Game
 {
 public:
@@ -42,12 +44,16 @@ private:
 
 	// Monde physique
 	b2Vec2 mGravity;
-	b2World mWorld;
-	std::list<Body*> mBodyList;
-	std::list<Body*> mStaticBodyList;
+	World mWorld;
 
 	// Déplacement des objets
-	b2MouseJoint *mMouseJoint;
+	MouseJoint *mMouseJoint;
+
+	// Variables pour la création de joints
+	Body *mPinBodyA;
+	b2Vec2 mPinAnchorA;
+	Body *mPinBodyB;
+	b2Vec2 mPinAnchorB;
 
 	// Textures
 	thor::ResourceCache<sf::Texture> mTextureCache;

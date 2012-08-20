@@ -60,10 +60,12 @@ void Game::OnInit()
 	//mActionCallbackSystem.connect("closed", std::bind(&sf::RenderWindow::close, &mWindow));
 
 	// Action de zoom + resize
-	mActionMap["zoomIn"] = thor::Action(sf::Keyboard::Add, thor::Action::PressOnce);// || (thor::Action(sf::Event::MouseWheelMoved));
-	mActionMap["zoomOut"] = thor::Action(sf::Keyboard::Subtract, thor::Action::PressOnce);// || (thor::Action(sf::Event::MouseWheelMoved));
+	mActionMap["zoomIn"] = thor::Action(sf::Keyboard::Add, thor::Action::PressOnce);
+	mActionMap["zoomOut"] = thor::Action(sf::Keyboard::Subtract, thor::Action::PressOnce);
 	mActionMap["zoomReset"] = thor::Action(sf::Keyboard::Numpad0, thor::Action::PressOnce);
 	mActionMap["resized"] = thor::Action(sf::Event::Resized);
+	mActionMap["mouseWheelMoved"] = thor::Action(sf::Event::MouseWheelMoved);
+	mActionCallbackSystem.connect("mouseWheelMoved", OnMouseWheelMoved(this));
 
 	// Actions pour la souris
 	mActionMap["movingView"] = thor::Action(sf::Mouse::Middle, thor::Action::Hold);
@@ -111,10 +113,12 @@ void Game::OnEvent()
 	{
 		mCurrentZoom = 1.f;
 		mView.setSize(mWindow.getSize().x * mView.getViewport().width, mWindow.getSize().y * mView.getViewport().height);
+		mView.setCenter(sf::Vector2f(0.f, 0.f));
 		mWindow.setView(mView);
 	}
     if (mActionMap.isActive("resized"))
 	{
+		mView.setCenter(sf::Vector2f(0.f, 0.f));
 		mView.setSize(mWindow.getSize().x * mView.getViewport().width, mWindow.getSize().y * mView.getViewport().height);
 		mView.zoom(mCurrentZoom);
 		mWindow.setView(mView);
@@ -151,4 +155,25 @@ void Game::OnLoopEnd()
 // Appelé quand le jeu se termine
 void Game::OnQuit()
 {
+}
+
+/* Pour la molette de la souris */
+OnMouseWheelMoved::OnMouseWheelMoved(Game *_game)
+: mGame(_game)
+{
+}
+void OnMouseWheelMoved::operator() (thor::ActionContext<std::string> context)
+{
+	if (context.event->mouseWheel.delta > 0)
+	{
+		mGame->mCurrentZoom *= 0.8f;
+		mGame->mView.zoom(0.8f);
+		mGame->mWindow.setView(mGame->mView);
+	}
+	else
+	{
+		mGame->mCurrentZoom *= 1.2f;
+		mGame->mView.zoom(1.2f);
+		mGame->mWindow.setView(mGame->mView);
+	}
 }
