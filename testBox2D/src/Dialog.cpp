@@ -203,7 +203,7 @@ namespace Dialog
 				}
 
 				// Si on appuie sur retour arrière : on efface la dernière lettre
-				else if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Back)
+				else if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::BackSpace)
 				{
 					std::string str = inputText.getString();
 					if (str.size() > 0)
@@ -341,7 +341,7 @@ namespace Dialog
 				}
 
 				// Si on appuie sur retour arrière : on efface la dernière lettre
-				else if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Back)
+				else if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::BackSpace)
 				{
 					number /= 10;
 					inputText.setString(int2string(number));

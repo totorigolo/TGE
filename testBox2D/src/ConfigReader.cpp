@@ -1,6 +1,6 @@
 #include "ConfigReader.h"
+#include "Dialog.h"
 #include "Parser.h"
-#include "FileLogger.h"
 
 ConfigReader::ConfigReader(const std::string& path)
 	: mIsOk(false), mPath(path)
