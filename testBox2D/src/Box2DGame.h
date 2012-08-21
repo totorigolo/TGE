@@ -1,13 +1,16 @@
 #pragma once
+#include <Thor/Resources.hpp>
 #include <SFML/Graphics.hpp>
 #include <Thor/Events.hpp>
-#include <Thor/Resources.hpp>
 #include <Box2D/Box2D.h>
 #include <list>
 #include <map>
 #include "Game.h"
-#include "Body.h"
-#include "MouseJoint.h"
+#include "Physics/Body.h"
+#include "Physics/World.h"
+#include "Physics/MouseJoint.h"
+
+class Body;
 
 class MouseJoint;
 class Box2DGame : public Game

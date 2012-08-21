@@ -27,6 +27,10 @@
 		<Unit filename="src\Body.h" />
 		<Unit filename="src\Box2DGame.cpp" />
 		<Unit filename="src\Box2DGame.h" />
+		<Unit filename="src\ConfigReader.cpp" />
+		<Unit filename="src\ConfigReader.h" />
+		<Unit filename="src\Dialog.cpp" />
+		<Unit filename="src\Dialog.h" />
 		<Unit filename="src\DistanceJoint.cpp" />
 		<Unit filename="src\DistanceJoint.h" />
 		<Unit filename="src\DynamicBox.cpp" />
@@ -40,6 +44,8 @@
 		<Unit filename="src\MouseJoint.cpp" />
 		<Unit filename="src\MouseJoint.h" />
 		<Unit filename="src\OverlappingBodyCallback.h" />
+		<Unit filename="src\Parser.cpp" />
+		<Unit filename="src\Parser.h" />
 		<Unit filename="src\StaticBox.cpp" />
 		<Unit filename="src\StaticBox.h" />
 		<Unit filename="src\World.cpp" />

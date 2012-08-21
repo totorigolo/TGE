@@ -13,6 +13,12 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Fichiers sources\Physics">
+      <UniqueIdentifier>{6decee5c-dfb6-4835-8b1f-90b8552fab0f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers d%27en-tête\Physics">
+      <UniqueIdentifier>{996286db-83e1-4924-be19-5d55fecdbafb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
@@ -24,36 +30,33 @@
     <ClCompile Include="src\Box2DGame.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="src\DynamicBox.cpp">
-      <Filter>Fichiers sources</Filter>
+    <ClCompile Include="src\Physics\Body.cpp">
+      <Filter>Fichiers sources\Physics</Filter>
     </ClCompile>
-    <ClCompile Include="src\DynamicCircle.cpp">
-      <Filter>Fichiers sources</Filter>
+    <ClCompile Include="src\Physics\DistanceJoint.cpp">
+      <Filter>Fichiers sources\Physics</Filter>
     </ClCompile>
-    <ClCompile Include="src\Body.cpp">
-      <Filter>Fichiers sources</Filter>
+    <ClCompile Include="src\Physics\DynamicBox.cpp">
+      <Filter>Fichiers sources\Physics</Filter>
     </ClCompile>
-    <ClCompile Include="src\StaticBox.cpp">
-      <Filter>Fichiers sources</Filter>
+    <ClCompile Include="src\Physics\DynamicCircle.cpp">
+      <Filter>Fichiers sources\Physics</Filter>
     </ClCompile>
-    <ClCompile Include="src\DistanceJoint.cpp">
-      <Filter>Fichiers sources</Filter>
+    <ClCompile Include="src\Physics\Joint.cpp">
+      <Filter>Fichiers sources\Physics</Filter>
     </ClCompile>
-    <ClCompile Include="src\Joint.cpp">
-      <Filter>Fichiers sources</Filter>
+    <ClCompile Include="src\Physics\MouseJoint.cpp">
+      <Filter>Fichiers sources\Physics</Filter>
     </ClCompile>
-    <ClCompile Include="src\World.cpp">
-      <Filter>Fichiers sources</Filter>
+    <ClCompile Include="src\Physics\StaticBox.cpp">
+      <Filter>Fichiers sources\Physics</Filter>
     </ClCompile>
-    <ClCompile Include="src\MouseJoint.cpp">
-      <Filter>Fichiers sources</Filter>
+    <ClCompile Include="src\Physics\World.cpp">
+      <Filter>Fichiers sources\Physics</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\utils.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="src\config.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
     <ClInclude Include="src\Game.h">
@@ -62,32 +65,35 @@
     <ClInclude Include="src\Box2DGame.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="src\OverlappingBodyCallback.h">
-      <Filter>Fichiers d%27en-tête</Filter>
+    <ClInclude Include="src\Physics\Body.h">
+      <Filter>Fichiers d%27en-tête\Physics</Filter>
     </ClInclude>
-    <ClInclude Include="src\DynamicBox.h">
-      <Filter>Fichiers d%27en-tête</Filter>
+    <ClInclude Include="src\Physics\config.h">
+      <Filter>Fichiers d%27en-tête\Physics</Filter>
     </ClInclude>
-    <ClInclude Include="src\DynamicCircle.h">
-      <Filter>Fichiers d%27en-tête</Filter>
+    <ClInclude Include="src\Physics\DistanceJoint.h">
+      <Filter>Fichiers d%27en-tête\Physics</Filter>
     </ClInclude>
-    <ClInclude Include="src\Body.h">
-      <Filter>Fichiers d%27en-tête</Filter>
+    <ClInclude Include="src\Physics\DynamicBox.h">
+      <Filter>Fichiers d%27en-tête\Physics</Filter>
     </ClInclude>
-    <ClInclude Include="src\StaticBox.h">
-      <Filter>Fichiers d%27en-tête</Filter>
+    <ClInclude Include="src\Physics\DynamicCircle.h">
+      <Filter>Fichiers d%27en-tête\Physics</Filter>
     </ClInclude>
-    <ClInclude Include="src\DistanceJoint.h">
-      <Filter>Fichiers d%27en-tête</Filter>
+    <ClInclude Include="src\Physics\Joint.h">
+      <Filter>Fichiers d%27en-tête\Physics</Filter>
     </ClInclude>
-    <ClInclude Include="src\Joint.h">
-      <Filter>Fichiers d%27en-tête</Filter>
+    <ClInclude Include="src\Physics\MouseJoint.h">
+      <Filter>Fichiers d%27en-tête\Physics</Filter>
     </ClInclude>
-    <ClInclude Include="src\World.h">
-      <Filter>Fichiers d%27en-tête</Filter>
+    <ClInclude Include="src\Physics\OverlappingBodyCallback.h">
+      <Filter>Fichiers d%27en-tête\Physics</Filter>
     </ClInclude>
-    <ClInclude Include="src\MouseJoint.h">
-      <Filter>Fichiers d%27en-tête</Filter>
+    <ClInclude Include="src\Physics\StaticBox.h">
+      <Filter>Fichiers d%27en-tête\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Physics\World.h">
+      <Filter>Fichiers d%27en-tête\Physics</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

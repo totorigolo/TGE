@@ -1,11 +1,11 @@
 #include "Box2DGame.h"
-#include "config.h"
+#include "Physics/config.h"
+#include "Physics/StaticBox.h"
+#include "Physics/DynamicBox.h"
+#include "Physics/DynamicCircle.h"
+#include "Physics/DistanceJoint.h"
+#include "Physics/OverlappingBodyCallback.h"
 #include "utils.h"
-#include "OverlappingBodyCallback.h"
-#include "StaticBox.h"
-#include "DynamicBox.h"
-#include "DynamicCircle.h"
-#include "DistanceJoint.h"
 #include <iostream>
 
 // Ctor
@@ -36,10 +36,10 @@ void Box2DGame::OnInit()
 
 	// Charge les textures dans la textureKeyMap
 	try {
-		mTextureMap["box"] = mTextureCache.acquire(thor::Resources::fromFile<sf::Texture>("box.png"));
-		mTextureMap["box2"] = mTextureCache.acquire(thor::Resources::fromFile<sf::Texture>("box2.png"));
-		mTextureMap["ground"] = mTextureCache.acquire(thor::Resources::fromFile<sf::Texture>("ground.png"));
-		mTextureMap["circle"] = mTextureCache.acquire(thor::Resources::fromFile<sf::Texture>("circle.png"));
+		mTextureMap["box"] = mTextureCache.acquire(thor::Resources::fromFile<sf::Texture>("tex/box.png"));
+		mTextureMap["box2"] = mTextureCache.acquire(thor::Resources::fromFile<sf::Texture>("tex/box2.png"));
+		mTextureMap["ground"] = mTextureCache.acquire(thor::Resources::fromFile<sf::Texture>("tex/ground.png"));
+		mTextureMap["circle"] = mTextureCache.acquire(thor::Resources::fromFile<sf::Texture>("tex/circle.png"));
 	}
 	catch (thor::ResourceLoadingException const& e)
 	{

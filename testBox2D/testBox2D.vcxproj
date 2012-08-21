@@ -11,32 +11,32 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Body.cpp" />
-    <ClCompile Include="src\DynamicBox.cpp" />
     <ClCompile Include="src\Box2DGame.cpp" />
-    <ClCompile Include="src\DynamicCircle.cpp" />
     <ClCompile Include="src\Game.cpp" />
-    <ClCompile Include="src\DistanceJoint.cpp" />
-    <ClCompile Include="src\Joint.cpp" />
     <ClCompile Include="src\main.cpp" />
-    <ClCompile Include="src\MouseJoint.cpp" />
-    <ClCompile Include="src\StaticBox.cpp" />
-    <ClCompile Include="src\World.cpp" />
+    <ClCompile Include="src\Physics\Body.cpp" />
+    <ClCompile Include="src\Physics\DistanceJoint.cpp" />
+    <ClCompile Include="src\Physics\DynamicBox.cpp" />
+    <ClCompile Include="src\Physics\DynamicCircle.cpp" />
+    <ClCompile Include="src\Physics\Joint.cpp" />
+    <ClCompile Include="src\Physics\MouseJoint.cpp" />
+    <ClCompile Include="src\Physics\StaticBox.cpp" />
+    <ClCompile Include="src\Physics\World.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\Body.h" />
-    <ClInclude Include="src\DynamicBox.h" />
     <ClInclude Include="src\Box2DGame.h" />
-    <ClInclude Include="src\config.h" />
-    <ClInclude Include="src\DynamicCircle.h" />
     <ClInclude Include="src\Game.h" />
-    <ClInclude Include="src\DistanceJoint.h" />
-    <ClInclude Include="src\Joint.h" />
-    <ClInclude Include="src\MouseJoint.h" />
-    <ClInclude Include="src\OverlappingBodyCallback.h" />
-    <ClInclude Include="src\StaticBox.h" />
+    <ClInclude Include="src\Physics\Body.h" />
+    <ClInclude Include="src\Physics\config.h" />
+    <ClInclude Include="src\Physics\DistanceJoint.h" />
+    <ClInclude Include="src\Physics\DynamicBox.h" />
+    <ClInclude Include="src\Physics\DynamicCircle.h" />
+    <ClInclude Include="src\Physics\Joint.h" />
+    <ClInclude Include="src\Physics\MouseJoint.h" />
+    <ClInclude Include="src\Physics\OverlappingBodyCallback.h" />
+    <ClInclude Include="src\Physics\StaticBox.h" />
+    <ClInclude Include="src\Physics\World.h" />
     <ClInclude Include="src\utils.h" />
-    <ClInclude Include="src\World.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{DDBE465C-1800-4235-BA67-5C2B4EB437B7}</ProjectGuid>

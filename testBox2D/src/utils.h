@@ -2,7 +2,7 @@
 #include <SFML/System.hpp>
 #include <Box2D/Box2D.h>
 #include <string>
-#include "config.h"
+#include "Physics/config.h"
 
 // [min ; max]
 inline int randMinMax(int min, int max)
