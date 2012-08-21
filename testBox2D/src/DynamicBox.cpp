@@ -21,6 +21,7 @@ DynamicBox::DynamicBox(World *world, b2Vec2 pos, std::shared_ptr<sf::Texture> te
 		// Shape
 		mShape = new b2PolygonShape;
 		((b2PolygonShape*)mShape)->SetAsBox((mTexture->getSize().x / 2) * MPP, (mTexture->getSize().y / 2) * MPP);
+		((b2PolygonShape*)mShape)->m_radius = 0.f;
 
 		// Fixture
 		b2FixtureDef fixtureDef;
