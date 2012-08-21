@@ -160,12 +160,12 @@ void Box2DGame::OnEvent()
 				if (!mPinBodyA && mPinBodyB != (Body*) callback.GetFixture()->GetBody()->GetUserData())
 				{
 					mPinBodyA = (Body*) callback.GetFixture()->GetBody()->GetUserData();
-					mPinAnchorA = mMp;
+					mPinAnchorA = b2MulT(b2Rot(mPinBodyA->GetBody()->GetAngle()), mMp - mPinBodyA->GetBody()->GetPosition());
 				}
 				else if (!mPinBodyB && mPinBodyA != (Body*) callback.GetFixture()->GetBody()->GetUserData())
 				{
 					mPinBodyB = (Body*) callback.GetFixture()->GetBody()->GetUserData();
-					mPinAnchorB = mMp;
+					mPinAnchorB = b2MulT(b2Rot(mPinBodyB->GetBody()->GetAngle()), mMp - mPinBodyB->GetBody()->GetPosition());
 				}
 				else
 				{
@@ -173,6 +173,7 @@ void Box2DGame::OnEvent()
 					mPinBodyB = nullptr;
 				}
 			}
+
 			// Si on a cliqué sur rien, on oublie les deux
 			else
 			{

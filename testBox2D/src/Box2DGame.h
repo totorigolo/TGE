@@ -54,7 +54,7 @@ private:
 
 	// Variables pour la création de joints
 	Body *mPinBodyA;
-	b2Vec2 mPinAnchorA;
+	b2Vec2 mPinAnchorA; // Ancres locales aux bodies
 	Body *mPinBodyB;
 	b2Vec2 mPinAnchorB;
 

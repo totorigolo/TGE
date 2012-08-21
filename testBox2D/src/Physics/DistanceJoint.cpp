@@ -7,8 +7,8 @@ DistanceJoint::DistanceJoint(World *world, Body *b1, b2Vec2 p1, Body *b2, b2Vec2
 {
 	mBodyA = b1;
 	mBodyB = b2;
-	mAnchorA = p1;
-	mAnchorB = p2;
+	mAnchorA = b2Mul(b2Rot(mBodyA->GetBody()->GetAngle()), p1) + mBodyA->GetBody()->GetPosition();
+	mAnchorB = b2Mul(b2Rot(mBodyB->GetBody()->GetAngle()), p2) + mBodyB->GetBody()->GetPosition();
 
 	if (mWorld && mBodyA && mBodyB)
 	{
