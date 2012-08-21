@@ -12,8 +12,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Box2DGame.cpp" />
+    <ClCompile Include="src\ConfigReader.cpp" />
+    <ClCompile Include="src\Dialog.cpp" />
     <ClCompile Include="src\Game.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\Parser.cpp" />
     <ClCompile Include="src\Physics\Body.cpp" />
     <ClCompile Include="src\Physics\DistanceJoint.cpp" />
     <ClCompile Include="src\Physics\DynamicBox.cpp" />
@@ -25,7 +28,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Box2DGame.h" />
+    <ClInclude Include="src\ConfigReader.h" />
+    <ClInclude Include="src\Dialog.h" />
     <ClInclude Include="src\Game.h" />
+    <ClInclude Include="src\Parser.h" />
     <ClInclude Include="src\Physics\Body.h" />
     <ClInclude Include="src\Physics\config.h" />
     <ClInclude Include="src\Physics\DistanceJoint.h" />
