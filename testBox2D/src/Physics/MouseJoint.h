@@ -9,7 +9,7 @@ class MouseJoint : public Joint
 {
 public:
 	// Ctor & dtor
-	MouseJoint(World *world, Body *body, Body *ground, b2Vec2 target, float maxForce, float frequencyHz = 4.f, float damping = 0.5f, sf::Color const& color = sf::Color::Cyan);
+	MouseJoint(World *world, Body *body, Body *ground, b2Vec2 target, float maxForce, float frequencyHz = 8.f, float damping = 0.5f, sf::Color const& color = sf::Color::Cyan);
 	virtual ~MouseJoint(void);
 	
 	// Mets à jour le VertexArray
