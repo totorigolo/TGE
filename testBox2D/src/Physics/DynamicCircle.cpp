@@ -3,7 +3,7 @@
 #include "../utils.h"
 
 //Ctor
-DynamicCircle::DynamicCircle(World *world, b2Vec2 pos, std::shared_ptr<sf::Texture> texture)
+DynamicCircle::DynamicCircle(World *world, b2Vec2 pos, std::shared_ptr<sf::Texture> texture, float density, float friction, float restitution)
 	: Body(world), mTexture(texture)
 {
 	// Change la texture
@@ -24,9 +24,9 @@ DynamicCircle::DynamicCircle(World *world, b2Vec2 pos, std::shared_ptr<sf::Textu
 
 		// Fixture
 		b2FixtureDef fixtureDef;
-		fixtureDef.density = 1.f;
-		fixtureDef.friction = 0.7f;
-		fixtureDef.restitution = 0.6f;
+		fixtureDef.density = density;
+		fixtureDef.friction = friction;
+		fixtureDef.restitution = restitution;
 		fixtureDef.shape = mShape;
 		mBody->CreateFixture(&fixtureDef);
 

@@ -56,7 +56,7 @@ void Box2DGame::OnInit()
 	}
 
 	// Crée le sol
-	mWorld.RegisterBody(new StaticBox(&mWorld, b2Vec2(0.f, -6.f), mTextureMap["ground"]));
+	mWorld.RegisterBody(new StaticBox(&mWorld, b2Vec2(0.f, -6.f), mTextureMap["ground"], 0.4f));
 
 	/* Crée les actions */
 	mActionMap["onMoveObject"] = thor::Action(sf::Mouse::Right, thor::Action::Hold);
@@ -122,16 +122,17 @@ void Box2DGame::OnEvent()
 	if (mActionMap.isActive("onCreateCircle"))
 	{
 		std::string list[] = {"ball", "circle"};
-		mWorld.RegisterBody(new DynamicCircle(&mWorld, mMp, mTextureMap[randomElement(list, 2)]));
+		mWorld.RegisterBody(new DynamicCircle(&mWorld, mMp, mTextureMap[randomElement(list, 2)], 1.f, 0.2f, 0.5f));
 	}
 	if (mActionMap.isActive("onCreateLamp"))
 	{
-		mWorld.RegisterBody(new StaticBox(&mWorld, mMp, mTextureMap["lampadere"]));
+		mWorld.RegisterBody(new StaticBox(&mWorld, mMp, mTextureMap["lampadere"], 0.1f, 0.05f));
 	}
 
 	// Epingle un objet
 	if (mActionMap.isActive("onPin"))
 	{
+		// Enregistre les bobies et leurs ancres
 		if (!mPinBodyA || !mPinBodyB)
 		{
 			// Crée une petite AABB sur la souris
@@ -181,6 +182,8 @@ void Box2DGame::OnEvent()
 				mPinBodyB = nullptr;
 			}
 		}
+
+		// Crée le joint
 		if (mPinBodyA && mPinBodyB)
 		{
 			mWorld.RegisterJoint(new DistanceJoint(&mWorld, mPinBodyA, mPinAnchorA, mPinBodyB, mPinAnchorB));
