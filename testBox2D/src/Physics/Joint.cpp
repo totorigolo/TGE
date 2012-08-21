@@ -1,5 +1,5 @@
 #include "Joint.h"
-#include "utils.h"
+#include "../utils.h"
 
 //Ctor
 Joint::Joint(World *world)

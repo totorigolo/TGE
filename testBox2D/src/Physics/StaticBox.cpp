@@ -1,6 +1,6 @@
 #include "StaticBox.h"
 #include "config.h"
-#include "utils.h"
+#include "../utils.h"
 
 //Ctor
 StaticBox::StaticBox(World *world, b2Vec2 posInMeters, std::shared_ptr<sf::Texture> texture)

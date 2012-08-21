@@ -1,6 +1,6 @@
 #include "DynamicCircle.h"
 #include "config.h"
-#include "utils.h"
+#include "../utils.h"
 
 //Ctor
 DynamicCircle::DynamicCircle(World *world, b2Vec2 pos, std::shared_ptr<sf::Texture> texture)

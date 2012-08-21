@@ -1,6 +1,6 @@
 #include "DynamicBox.h"
 #include "config.h"
-#include "utils.h"
+#include "../utils.h"
 
 //Ctor
 DynamicBox::DynamicBox(World *world, b2Vec2 pos, std::shared_ptr<sf::Texture> texture)

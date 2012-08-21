@@ -1,6 +1,6 @@
 #include "Body.h"
 #include "config.h"
-#include "utils.h"
+#include "../utils.h"
 
 //Ctor
 Body::Body(World *world)
