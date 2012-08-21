@@ -4,7 +4,7 @@
 
 //Ctor
 Body::Body(World *world)
-	: mWorld(world), mBody(nullptr)
+	: mWorld(world), mBody(nullptr), mIsNull(true)
 {
 }
 
@@ -15,6 +15,8 @@ Body::~Body(void)
 
 	if (mWorld && mBody)
 		mWorld->DestroyBody(this, false);
+
+	mIsNull = true;
 }
 
 // Met à jour le body

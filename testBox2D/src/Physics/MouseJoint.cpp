@@ -20,6 +20,7 @@ MouseJoint::MouseJoint(World *world, Body *body, Body *ground, b2Vec2 target, fl
 		jointDef.maxForce = maxForce;
 		mJoint = (b2MouseJoint*) mWorld->CreateJoint(&jointDef, this);
 		mBodyA->GetBody()->SetAwake(true);
+		mIsNull = false;
 	}
 
 	(*this)[0].color = mColor;

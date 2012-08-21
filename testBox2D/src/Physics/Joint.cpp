@@ -4,7 +4,7 @@
 //Ctor
 Joint::Joint(World *world)
 	: mWorld(world), mJoint(nullptr), mBodyA(nullptr), mBodyB(nullptr), mAnchorA(0.f, 0.f), mAnchorB(0.f, 0.f),
-	sf::VertexArray(sf::LinesStrip, 2U)
+	sf::VertexArray(sf::LinesStrip, 2U), mIsNull(true)
 {
 }
 
@@ -27,6 +27,7 @@ Joint::~Joint(void)
 		mJoint = nullptr;
 	}
 	mWorld = nullptr;
+	mIsNull = true;
 }
 
 // Met à jour le body

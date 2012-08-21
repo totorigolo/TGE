@@ -31,6 +31,7 @@ DynamicCircle::DynamicCircle(World *world, b2Vec2 pos, std::shared_ptr<sf::Textu
 		mBody->CreateFixture(&fixtureDef);
 
 		mBody->SetUserData(this);
+		mIsNull = false;
 	}
 }
 

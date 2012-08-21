@@ -18,6 +18,8 @@ public:
 	virtual void Update();
 
 	// Accesseurs
+	bool IsNull() const { return mIsNull; }
+
 	World* GetWorld() { return mWorld; }
 	World const* GetWorld() const { return mWorld; }
 
@@ -31,6 +33,8 @@ public:
 	b2Vec2 const& GetAnchorB() const { return mAnchorB; }
 
 protected:
+	bool mIsNull;
+
 	World *mWorld;
 	b2Joint *mJoint;
 

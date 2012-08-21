@@ -38,7 +38,14 @@ void Box2DGame::OnInit()
 	try {
 		mTextureMap["box"] = mTextureCache.acquire(thor::Resources::fromFile<sf::Texture>("tex/box.png"));
 		mTextureMap["box2"] = mTextureCache.acquire(thor::Resources::fromFile<sf::Texture>("tex/box2.png"));
+		mTextureMap["caisse"] = mTextureCache.acquire(thor::Resources::fromFile<sf::Texture>("tex/caisse.png"));
+		mTextureMap["tonneau"] = mTextureCache.acquire(thor::Resources::fromFile<sf::Texture>("tex/tonneau.png"));
+		mTextureMap["way"] = mTextureCache.acquire(thor::Resources::fromFile<sf::Texture>("tex/way.png"));
+		
 		mTextureMap["ground"] = mTextureCache.acquire(thor::Resources::fromFile<sf::Texture>("tex/ground.png"));
+		mTextureMap["lampadere"] = mTextureCache.acquire(thor::Resources::fromFile<sf::Texture>("tex/lampadere.png"));
+
+		mTextureMap["ball"] = mTextureCache.acquire(thor::Resources::fromFile<sf::Texture>("tex/ball.png"));
 		mTextureMap["circle"] = mTextureCache.acquire(thor::Resources::fromFile<sf::Texture>("tex/circle.png"));
 	}
 	catch (thor::ResourceLoadingException const& e)
@@ -55,6 +62,7 @@ void Box2DGame::OnInit()
 	mActionMap["onMoveObject"] = thor::Action(sf::Mouse::Right, thor::Action::Hold);
 	mActionMap["onCreateBox"] = thor::Action(sf::Mouse::Left, thor::Action::Hold);
 	mActionMap["onCreateCircle"] = thor::Action(sf::Keyboard::C, thor::Action::Hold);
+	mActionMap["onCreateLamp"] = thor::Action(sf::Keyboard::L, thor::Action::ReleaseOnce);
 	mActionMap["onPin"] = thor::Action(sf::Keyboard::P, thor::Action::PressOnce);
 }
 
@@ -108,12 +116,17 @@ void Box2DGame::OnEvent()
 	// Création d'objets
 	if (mActionMap.isActive("onCreateBox"))
 	{
-		std::string list[] = {"box", "box2"};
-		mWorld.RegisterBody(new DynamicBox(&mWorld, mMp, mTextureMap[randomElement(list, 2)]));
+		std::string list[] = {"box", "box2", "caisse", "way", "tonneau"};
+		mWorld.RegisterBody(new DynamicBox(&mWorld, mMp, mTextureMap[randomElement(list, 5)]));
 	}
 	if (mActionMap.isActive("onCreateCircle"))
 	{
-		mWorld.RegisterBody(new DynamicCircle(&mWorld, mMp, mTextureMap["circle"]));
+		std::string list[] = {"ball", "circle"};
+		mWorld.RegisterBody(new DynamicCircle(&mWorld, mMp, mTextureMap[randomElement(list, 2)]));
+	}
+	if (mActionMap.isActive("onCreateLamp"))
+	{
+		mWorld.RegisterBody(new StaticBox(&mWorld, mMp, mTextureMap["lampadere"]));
 	}
 
 	// Epingle un objet
@@ -135,6 +148,15 @@ void Box2DGame::OnEvent()
 			// Il y a un objet, on le retient
 			if (callback.GetFixture())
 			{
+				// Vérifie que les bodies soient valides
+				if (mPinBodyA)
+					if (mPinBodyA->IsNull())
+						mPinBodyA = nullptr;
+				if (mPinBodyB)
+					if (!mPinBodyB->IsNull())
+						mPinBodyB = nullptr;
+
+				// Enregistre le body appuyé
 				if (!mPinBodyA && mPinBodyB != (Body*) callback.GetFixture()->GetBody()->GetUserData())
 				{
 					mPinBodyA = (Body*) callback.GetFixture()->GetBody()->GetUserData();

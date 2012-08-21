@@ -25,10 +25,12 @@ StaticBox::StaticBox(World *world, b2Vec2 posInMeters, std::shared_ptr<sf::Textu
 		// Fixture
 		b2FixtureDef fixtureDef;
 		fixtureDef.density = 0.f;
+		fixtureDef.friction = 0.7f;
 		fixtureDef.shape = mShape;
 		mBody->CreateFixture(&fixtureDef);
 		
 		mBody->SetUserData(this);
+		mIsNull = false;
 	}
 }
 

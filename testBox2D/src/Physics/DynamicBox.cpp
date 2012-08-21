@@ -31,6 +31,7 @@ DynamicBox::DynamicBox(World *world, b2Vec2 pos, std::shared_ptr<sf::Texture> te
 		mBody->CreateFixture(&fixtureDef);
 
 		mBody->SetUserData(this);
+		mIsNull = false;
 	}
 }
 

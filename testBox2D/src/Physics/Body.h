@@ -30,6 +30,7 @@ public:
 	// Accesseurs
 	void SetBody(b2Body *body); // NE PAS UTILISER
 
+	bool IsNull() const { return mIsNull; }
 	bool IsStatic() const { return mBody->GetType() == b2_staticBody; }
 	b2Body* GetBody() { return mBody; }
 	World* GetWorld() { return mWorld; }
@@ -39,6 +40,8 @@ public:
 	b2Shape const* GetShape() const { return mShape; }
 
 protected:
+	bool mIsNull;
+
 	// Variables pour l'objet physique
 	World *mWorld;
 	b2Body *mBody;
