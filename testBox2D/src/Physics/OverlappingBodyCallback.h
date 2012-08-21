@@ -5,8 +5,9 @@
 class OverlappingBodyCallback : public b2QueryCallback
 {
 public:
-	OverlappingBodyCallback(const b2Vec2& point)
+	OverlappingBodyCallback(const b2Vec2& point, bool onlyDynamicsBody = true)
 	{
+		mOnlyDynamicsBody = onlyDynamicsBody;
 		mPoint = point;
 		mFixture = nullptr;
 	}
@@ -14,7 +15,7 @@ public:
 	virtual bool ReportFixture(b2Fixture* fixture)
 	{
 		b2Body* body = fixture->GetBody();
-		if (body->GetType() == b2_dynamicBody)
+		if (body->GetType() == b2_dynamicBody || !mOnlyDynamicsBody)
 		{
 			if (fixture->TestPoint(mPoint))
 			{
@@ -35,4 +36,5 @@ public:
 private:
 	b2Vec2 mPoint;
 	b2Fixture* mFixture;
+	bool mOnlyDynamicsBody;
 };

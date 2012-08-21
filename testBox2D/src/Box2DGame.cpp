@@ -143,7 +143,7 @@ void Box2DGame::OnEvent()
 			aabb.upperBound = mMp + d;
 
 			// Demande au monde les formes qui sont sous l'AABB
-			OverlappingBodyCallback callback(mMp);
+			OverlappingBodyCallback callback(mMp, false);
 			mWorld.QueryAABB(&callback, aabb);
 
 			// Il y a un objet, on le retient
