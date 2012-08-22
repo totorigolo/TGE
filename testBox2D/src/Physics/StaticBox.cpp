@@ -2,7 +2,7 @@
 #include "../utils.h"
 
 //Ctor
-StaticBox::StaticBox(World *world, b2Vec2 posInMeters, std::shared_ptr<sf::Texture> texture, float friction, float restitution)
+StaticBox::StaticBox(World *world, b2Vec3 posRot, std::shared_ptr<sf::Texture> texture, float friction, float restitution)
 	: Body(world), mTexture(texture)
 {
 	// Change la texture
@@ -13,7 +13,8 @@ StaticBox::StaticBox(World *world, b2Vec2 posInMeters, std::shared_ptr<sf::Textu
 		/* Crée le body */
 		// BodyDef
 		b2BodyDef bodyDef;
-		bodyDef.position = posInMeters;
+		bodyDef.angle = posRot.z * RPD;
+		bodyDef.position = getVec2(posRot);
 		bodyDef.type = b2_staticBody;
 		mBody = mWorld->CreateBody(&bodyDef, this);
 

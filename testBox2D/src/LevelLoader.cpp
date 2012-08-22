@@ -1,4 +1,5 @@
 #include "LevelLoader.h"
+#include "utils.h"
 #include "Dialog.h"
 #include "Parser.h"
 #include "Physics/World.h"
@@ -171,7 +172,7 @@ bool LevelLoader::CreateLine(std::string& section, std::string& name, std::strin
 	{
 		// Charge la texture dans la textureKeyMap
 		try {
-			mLevel->mTextureMap->operator[](name) = mLevel->mTextureCache->acquire(thor::Resources::fromFile<sf::Texture>(value));
+			(*mLevel->mTextureMap)[name] = mLevel->mTextureCache->acquire(thor::Resources::fromFile<sf::Texture>(value));
 		}
 		catch (thor::ResourceLoadingException const& e)
 		{
@@ -205,24 +206,79 @@ bool LevelLoader::CreateLine(std::string& section, std::string& name, std::strin
 			size_t isdb = value.find("db", posRotOffset);
 			size_t isdc = value.find("dc", posRotOffset);
 			size_t issb = value.find("sb", posRotOffset);
+			size_t list[] = {isdb, isdc, issb};
+			size_t isOffset = first_not_of(list, 3, std::string::npos);
 			
-			// dynamicBox
-			if (isdb != std::string::npos)
+			if (isOffset != std::string::npos)
 			{
-				mLevel->mWorld->RegisterBody(new DynamicBox(mLevel->mWorld, b2Vec2(posRot.x, posRot.y), mLevel->mTextureMap->operator[](name)));
-				return true;
-			}
-			// dynamicCircle
-			else if (isdc != std::string::npos)
-			{
-				mLevel->mWorld->RegisterBody(new DynamicCircle(mLevel->mWorld, b2Vec2(posRot.x, posRot.y), mLevel->mTextureMap->operator[](name)));
-				return true;
-			}
-			// staticBox
-			else if (issb != std::string::npos)
-			{
-				mLevel->mWorld->RegisterBody(new StaticBox(mLevel->mWorld, b2Vec2(posRot.x, posRot.y), mLevel->mTextureMap->operator[](name)));
-				return true;
+				// Récupère les propriétés
+				float p1 = -1.f, p2 = -1.f, p3 = -1.f;
+
+				// Cherche p1
+				size_t pOffset = value.find_first_of(',', isOffset);
+				size_t p1Offset = value.find_first_of(',', pOffset + 1);
+				if (p1Offset == std::string::npos)
+				{
+					p1Offset = value.find_first_of('!', pOffset + 1);
+				}
+				if (pOffset != std::string::npos && p1Offset != std::string::npos)
+				{
+					p1 = Parser::string2float(value.substr(pOffset + 1, p1Offset).c_str());
+
+					// Cherche p2
+					size_t p2Offset = value.find_first_of(',', p1Offset + 1);
+					if (p2Offset == std::string::npos)
+					{
+						p2Offset = value.find_first_of('!', p1Offset + 1);
+					}
+					if (p2Offset != std::string::npos)
+					{
+						p2 = Parser::string2float(value.substr(p1Offset + 1, p2Offset).c_str());
+
+						// Cherche p3
+						size_t p3Offset = value.find_first_of('!', p2Offset + 1);
+						if (p3Offset != std::string::npos)
+						{
+							p3 = Parser::string2float(value.substr(p2Offset + 1, p3Offset).c_str());
+						}
+					}
+				}
+			
+				// dynamicBox
+				if (isdb != std::string::npos)
+				{
+					// Récupère les propriétés
+					float density = (p1 != -1.f) ? p1 : 1.f;
+					float friction = (p2 != -1.f) ? p2 : 0.2f;
+					float restitution = (p3 != -1.f) ? p3 : 0.f;
+
+					// Crée le body
+					mLevel->mWorld->RegisterBody(new DynamicBox(mLevel->mWorld, posRot, (*mLevel->mTextureMap)[name], density, friction, restitution));
+					return true;
+				}
+				// dynamicCircle
+				else if (isdc != std::string::npos)
+				{
+					// Récupère les propriétés
+					float density = (p1 != -1.f) ? p1 : 1.f;
+					float friction = (p2 != -1.f) ? p2 : 0.2f;
+					float restitution = (p3 != -1.f) ? p3 : 0.f;
+
+					// Crée le body
+					mLevel->mWorld->RegisterBody(new DynamicCircle(mLevel->mWorld, posRot, (*mLevel->mTextureMap)[name], density, friction, restitution));
+					return true;
+				}
+				// staticBox
+				else if (issb != std::string::npos)
+				{
+					// Récupère les propriétés
+					float friction = (p1 != -1.f) ? p1 : 0.2f;
+					float restitution = (p2 != -1.f) ? p2 : 0.f;
+
+					// Crée le body
+					mLevel->mWorld->RegisterBody(new StaticBox(mLevel->mWorld, posRot, (*mLevel->mTextureMap)[name], friction, restitution));
+					return true;
+				}
 			}
 
 			Dialog::Error("ConfigReader::CreateLine() - ["+ section +"]\n-> body type unknow!");
@@ -233,7 +289,63 @@ bool LevelLoader::CreateLine(std::string& section, std::string& name, std::strin
 		return false;
 	}
 
+	// [deco] = Création des textures sans colisions
+	/*
+		# Crée des textures sans colisions
+		# "deco_" + nombre == z-index // parallax
+		# ex: [deco_5]
+		[deco_5]
+		#   texture = (position + rotation° facultative), z-index
+
+		# ex : lampadere = (5.2f, 9.f, 45.f), 5
+	*/
+	else if (section.find("deco") != std::string::npos)
+	{
+		std::string texture = name;
+		
+		// Récupère le z-index de la déco
+		int levelZindex = 1;
+		size_t decoZindexOffset = section.find_first_of('_');
+		if (decoZindexOffset != std::string::npos)
+		{
+			levelZindex = Parser::string2int(section.substr(decoZindexOffset + 1).c_str());
+		}
+
+		// Vérifie si la texture existe
+		if (mLevel->mTextureMap->find(name) != mLevel->mTextureMap->end())
+		{
+			// Récupère la position et rotation
+			size_t posRotOffset = value.find_first_of(')');
+			if (posRotOffset != std::string::npos)
+			{
+				b2Vec3 posRot = Parser::string2b2Vec3(value.substr(0, posRotOffset + 1).c_str());
+
+				// Récupère le z-index
+				int zindex = -1;
+				size_t zindexOffset = value.find_first_of(',', value.find_last_of(')') + 1);
+			
+				if (zindexOffset != std::string::npos)
+				{
+					zindex = Parser::string2int(value.substr(zindexOffset + 1).c_str());
+
+					mLevel->AddDeco(levelZindex, posRot, texture, zindex);
+
+					return true;
+				}
+
+				Dialog::Error("ConfigReader::CreateLine() - ["+ section +"]\n-> z-index not found!");
+				return false;
+			}
+
+			Dialog::Error("ConfigReader::CreateLine() - ["+ section +"]\n-> posRot not found!");
+			return false;
+		}
+		
+		Dialog::Error("ConfigReader::CreateLine() - ["+ section +"]\n-> texture \""+ name +"\" unknow!");
+		return false;
+	}
+
 	// Si on arrive là : section inconnue
-	Dialog::Error("ConfigReader::CreateLine()\n-> Section \""+ section +"\" unknow!");
+	Dialog::Error("ConfigReader::CreateLine()\n-> Section ["+ section +"] unknow!");
 	return false;
 }

@@ -10,8 +10,8 @@ class Body;
 class StaticBox : public Body
 {
 public:
-	// Ctor & dtor
-	StaticBox(World *world, b2Vec2 pos, std::shared_ptr<sf::Texture> texture, float friction = 0.2f, float restitution = 0.f);
+	// Ctor & dtor         metres + degrès
+	StaticBox(World *world, b2Vec3 posRot, std::shared_ptr<sf::Texture> texture, float friction = 0.2f, float restitution = 0.f);
 	virtual ~StaticBox(void);
 	
 	// Met à jour la position du sprite

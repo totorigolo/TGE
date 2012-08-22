@@ -6,7 +6,7 @@
 int main()
 {
 	// Crée la fenêtre de rendu
-	sf::RenderWindow window(sf::VideoMode(800, 600, 32), "Test");
+	sf::RenderWindow window(sf::VideoMode(800, 600, 32), "Bad Guy : Bloody Rescue");
 	window.setFramerateLimit(60U);
 	window.setVerticalSyncEnabled(true);
 

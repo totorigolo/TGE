@@ -2,7 +2,7 @@
 #include "../utils.h"
 
 //Ctor
-DynamicBox::DynamicBox(World *world, b2Vec2 pos, std::shared_ptr<sf::Texture> texture, float density, float friction, float restitution)
+DynamicBox::DynamicBox(World *world, b2Vec3 posRot, std::shared_ptr<sf::Texture> texture, float density, float friction, float restitution)
 	: Body(world), mTexture(texture)
 {
 	// Change la texture
@@ -13,7 +13,8 @@ DynamicBox::DynamicBox(World *world, b2Vec2 pos, std::shared_ptr<sf::Texture> te
 		/* Crée le body */
 		// BodyDef
 		b2BodyDef bodyDef;
-		bodyDef.position = pos;
+		bodyDef.angle = posRot.z * RPD;
+		bodyDef.position = getVec2(posRot);
 		bodyDef.type = b2_dynamicBody;
 		mBody = mWorld->CreateBody(&bodyDef, this);
 

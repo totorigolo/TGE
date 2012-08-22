@@ -10,8 +10,8 @@ class Body;
 class DynamicBox : public Body
 {
 public:
-	// Ctor & dtor
-	DynamicBox(World *world, b2Vec2 pos, std::shared_ptr<sf::Texture> texture, float density = 1.f, float friction = 0.2f, float restitution = 0.0f);
+	// Ctor & dtor          metres + degrès
+	DynamicBox(World *world, b2Vec3 posRot, std::shared_ptr<sf::Texture> texture, float density = 1.f, float friction = 0.2f, float restitution = 0.0f);
 	virtual ~DynamicBox(void);
 	
 	// Met à jour la position du sprite

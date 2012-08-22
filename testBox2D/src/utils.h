@@ -24,6 +24,16 @@ inline std::string randomElement(T list[], int count)
 	return list[randMinMax(0, count - 1)];
 }
 
+// Renvoi le premier élément non égal à la valeur passée, sinon retourne la valeur
+template<typename T>
+inline T first_not_of(T list[], int count, T value)
+{
+	for (int i = 0; i < count; ++i)
+		if (list[i] != value)
+			return list[i];
+	return value;
+}
+
 // Retourne le minimum
 template<typename T>
 inline T min(T a, T b)
@@ -115,4 +125,14 @@ inline b2Vec2 sf2b2Vec(sf::Vector2f const& vector, float mpp)
 inline sf::Vector2f b22sfVec(b2Vec2 const& vector, float ppm)
 {
 	return sf::Vector2f(vector.x, - vector.y) * ppm;
+}
+
+// Conversion b2Vec2 <> b2Vec3
+inline b2Vec2 getVec2(b2Vec3 const& vec3)
+{
+	return b2Vec2(vec3.x, vec3.y);
+}
+inline b2Vec3 getVec3(b2Vec2 const& vec2, float z = 0.f)
+{
+	return b2Vec3(vec2.x, vec2.y, z);
 }

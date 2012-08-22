@@ -62,7 +62,7 @@ void Box2DGame::OnInit()
 	}
 
 	// Crée le sol
-	//mWorld.RegisterBody(new StaticBox(&mWorld, b2Vec2(0.f, -6.f), mTextureMap["ground"], 0.4f));
+	//mWorld.RegisterBody(new StaticBox(&mWorld, b2Vec3(0.f, -6.f, 0.f), mTextureMap["ground"], 0.4f));
 
 	/* Crée les actions */
 	mActionMap["onLoadLevel"] = thor::Action(sf::Keyboard::R, thor::Action::ReleaseOnce);
@@ -124,16 +124,16 @@ void Box2DGame::OnEvent()
 	if (mActionMap.isActive("onCreateBox"))
 	{
 		std::string list[] = {"box", "box2", "caisse", "way", "tonneau"};
-		mWorld.RegisterBody(new DynamicBox(&mWorld, mMp, mTextureMap[randomElement(list, 5)]));
+		mWorld.RegisterBody(new DynamicBox(&mWorld, getVec3(mMp), mTextureMap[randomElement(list, 5)]));
 	}
 	if (mActionMap.isActive("onCreateCircle"))
 	{
 		std::string list[] = {"ball", "circle"};
-		mWorld.RegisterBody(new DynamicCircle(&mWorld, mMp, mTextureMap[randomElement(list, 2)], 1.f, 0.2f, 0.5f));
+		mWorld.RegisterBody(new DynamicCircle(&mWorld, getVec3(mMp), mTextureMap[randomElement(list, 2)], 1.f, 0.2f, 0.5f));
 	}
 	if (mActionMap.isActive("onCreateLamp"))
 	{
-		mWorld.RegisterBody(new StaticBox(&mWorld, mMp, mTextureMap["lampadere"], 0.1f, 0.05f));
+		mWorld.RegisterBody(new StaticBox(&mWorld, getVec3(mMp), mTextureMap["lampadere"], 0.1f, 0.05f));
 	}
 	
 	// Charge un niveau
@@ -251,6 +251,18 @@ void Box2DGame::OnRender()
 {
 	mWindow.clear(sf::Color::White);
 	
+	// Affichage des levels de la déco avec zindex positif
+	for (auto it = mLevel->GetDeco().begin(); it != mLevel->GetDeco().end(); ++it)
+	{
+		if (it->first > 0)
+		{
+			for (auto it2 = it->second.begin(); it2 != it->second.end(); ++it2)
+			{
+				mWindow.draw(*it2->second);
+			}
+		}
+	}
+
 	// Affichage des joints
 	for (auto it = mWorld.GetJointList().begin(); it != mWorld.GetJointList().end(); ++it)
 	{
@@ -283,6 +295,15 @@ void Box2DGame::OnRender()
 	{
 		mMouseJoint->Update();
 		mWindow.draw(*mMouseJoint);
+	}
+	
+	// Affichage des levels de la déco avec zindex négatif
+	for (auto it = mLevel->GetDeco().begin(); it != mLevel->GetDeco().end() && it->first < 0; ++it)
+	{
+		for (auto it2 = it->second.begin(); it2 != it->second.end(); ++it2)
+		{
+			mWindow.draw(*it2->second);
+		}
 	}
 
 	mWindow.display();

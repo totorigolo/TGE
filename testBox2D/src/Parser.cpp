@@ -92,7 +92,7 @@ b2Vec3 string2b2Vec3(const std::string& value, const b2Vec3& default)
 	// Cherche le x
 	size_t p1Offset = value.find_first_of('(');
 	size_t xOffset = value.find_first_of(',', p1Offset + 1);
-	if (xOffset != std::string::npos)
+	if (p1Offset != std::string::npos && xOffset != std::string::npos)
 	{
 		result.x = string2float(value.substr(p1Offset + 1, xOffset).c_str());
 
@@ -107,7 +107,7 @@ b2Vec3 string2b2Vec3(const std::string& value, const b2Vec3& default)
 			result.y = string2float(value.substr(xOffset + 1, yOffset).c_str());
 
 			// Cherche le z
-	size_t zOffset = value.find_first_of(')', yOffset + 1);
+			size_t zOffset = value.find_first_of(')', yOffset + 1);
 			if (zOffset != std::string::npos)
 			{
 				result.z = string2float(value.substr(yOffset + 1, zOffset).c_str());
