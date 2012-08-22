@@ -30,6 +30,10 @@
 		<Unit filename="src\Dialog.h" />
 		<Unit filename="src\Game.cpp" />
 		<Unit filename="src\Game.h" />
+		<Unit filename="src\Level.cpp" />
+		<Unit filename="src\Level.h" />
+		<Unit filename="src\LevelLoader.cpp" />
+		<Unit filename="src\LevelLoader.h" />
 		<Unit filename="src\Parser.cpp" />
 		<Unit filename="src\Parser.h" />
 		<Unit filename="src\Physics\Body.cpp" />
@@ -50,6 +54,7 @@
 		<Unit filename="src\Physics\World.cpp" />
 		<Unit filename="src\Physics\World.h" />
 		<Unit filename="src\Physics\config.h" />
+		<Unit filename="src\_TODO.txt" />
 		<Unit filename="src\main.cpp" />
 		<Unit filename="src\utils.h" />
 		<Extensions>
