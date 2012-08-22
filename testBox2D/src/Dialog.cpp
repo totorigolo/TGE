@@ -120,12 +120,12 @@ namespace Dialog
 
 	void Error(const std::string &message, bool quit, int output)
 	{
-		Dialog("res/erreur.png", "Erreur", message, quit, output);
+		Dialog("tex/erreur.png", "Erreur", message, quit, output);
 	}
 
 	void Information(const std::string &message)
 	{
-		Dialog("res/information.png", "Info", message);
+		Dialog("tex/information.png", "Info", message);
 	}
 	
 	const std::string TextInput(const std::string &title, const std::string &message, const std::string& default)
@@ -344,14 +344,14 @@ namespace Dialog
 				else if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::BackSpace)
 				{
 					number /= 10;
-					inputText.setString(int2string(number));
+					inputText.setString(Parser::int2string(number));
 				}
 
 				// Si on appuie sur une touche : on ajoute à la zone d'entrée
 				else if (event.type == sf::Event::KeyPressed)
 				{
-					number = number * 10 + key2int(event.key.code);
-					inputText.setString(int2string(number));
+					number = number * 10 + Parser::key2int(event.key.code);
+					inputText.setString(Parser::int2string(number));
 				}
 
 				// Si la souris survole un bouton : on met le fond

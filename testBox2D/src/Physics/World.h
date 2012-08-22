@@ -12,7 +12,7 @@ class World : public b2World
 {
 public:
 	// Ctor & dtor
-	World(b2Vec2 const& gravity);
+	World(b2Vec2 const& gravity, float ppm = 30.f);
 	virtual ~World(void);
 	
 	// Gestion des body
@@ -34,6 +34,14 @@ public:
 	std::list<Joint*> const& GetJointList() const { return mJointList; }
 
 	Body* GetAnyStaticBody(); // Pour le mouseJoint
+	
+	void SetPPM(float ppm) { mPPM = ppm; }
+	void SetMPP(float mmp) { mPPM = 1.f / mmp; }
+	float GetPPM() const { return mPPM; }
+	float GetMPP() const { return 1.f / mPPM; }
+
+private:
+	float mPPM; // Pixels per meters
 
 protected:
 	// Listes d'objets

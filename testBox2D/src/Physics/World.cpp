@@ -2,8 +2,8 @@
 #include <iostream> // Pour le message de GetAnyStaticBody()
 
 //Ctor
-World::World(b2Vec2 const& gravity)
-	: b2World(gravity)
+World::World(b2Vec2 const& gravity, float ppm)
+	: b2World(gravity), mPPM(ppm)
 {
 }
 

@@ -1,6 +1,8 @@
 #include "Parser.h"
 #include <sstream>
 
+namespace Parser
+{
 bool string2bool(const std::string& value, bool default)
 {
 	if (value == "true" || value == "1" || value == "on")
@@ -34,7 +36,7 @@ sf::Uint32 string2Uint32(const std::string& value, const sf::Uint32 default)
 	return result;
 }
 
-const sf::Color string2color(const std::string& value, const sf::Color& default)
+ sf::Color string2color(const std::string& value, const sf::Color& default)
 {
 	sf::Color result = default;
 
@@ -61,8 +63,63 @@ const sf::Color string2color(const std::string& value, const sf::Color& default)
 	}
 	return result;
 }
+ 
+b2Vec2 string2b2Vec2(const std::string& value, const b2Vec2& default)
+{
+	b2Vec2 result = default;
 
-const std::string int2string(int n)
+	// Cherche le x
+	size_t p1Offset = value.find_first_of('(');
+	size_t xOffset = value.find_first_of(',');
+	size_t yOffset = value.find_first_of(')', xOffset + 1);
+	if (xOffset != std::string::npos)
+	{
+		result.x = string2float(value.substr(p1Offset + 1, xOffset).c_str());
+
+		// Cherche le y
+		if (yOffset != std::string::npos)
+		{
+			result.y = string2float(value.substr(xOffset + 1, yOffset).c_str());
+		}
+	}
+	return result;
+}
+	
+b2Vec3 string2b2Vec3(const std::string& value, const b2Vec3& default)
+{
+	b2Vec3 result = default;
+
+	// Cherche le x
+	size_t p1Offset = value.find_first_of('(');
+	size_t xOffset = value.find_first_of(',', p1Offset + 1);
+	if (xOffset != std::string::npos)
+	{
+		result.x = string2float(value.substr(p1Offset + 1, xOffset).c_str());
+
+		// Cherche le y
+		size_t yOffset = value.find_first_of(',', xOffset + 1);
+		if (yOffset == std::string::npos)
+		{
+			yOffset = value.find_first_of(')', xOffset + 1);
+		}
+		if (yOffset != std::string::npos)
+		{
+			result.y = string2float(value.substr(xOffset + 1, yOffset).c_str());
+
+			// Cherche le z
+	size_t zOffset = value.find_first_of(')', yOffset + 1);
+			if (zOffset != std::string::npos)
+			{
+				result.z = string2float(value.substr(yOffset + 1, zOffset).c_str());
+			}
+		}
+	}
+	return result;
+}
+	
+ ////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+ std::string int2string(int n)
 {
 	std::ostringstream oss;
 	oss << n;
@@ -70,7 +127,7 @@ const std::string int2string(int n)
 	return s;
 }
 
-const std::string float2string(float n, int nbOfDecimals)
+ std::string float2string(float n, int nbOfDecimals)
 {
 	if (nbOfDecimals != -1)
 	{
@@ -86,7 +143,7 @@ const std::string float2string(float n, int nbOfDecimals)
 	return s;
 }
 
-const std::string key2string(sf::Keyboard::Key key, bool maj)
+ std::string key2string(sf::Keyboard::Key key, bool maj)
 {
 	std::string str;
 	// Les lettres
@@ -148,3 +205,4 @@ int key2int(sf::Keyboard::Key key)
 	else
 		return -1;
 }
+} // namespace Parser

@@ -37,8 +37,8 @@ void DistanceJoint::Update()
 {
 	if (mBodyA && mBodyB)
 	{
-		(*this)[0].position = b22sfVec(mJoint->GetAnchorA());
-		(*this)[1].position = b22sfVec(mJoint->GetAnchorB());
+		(*this)[0].position = b22sfVec(mJoint->GetAnchorA(), mWorld->GetPPM());
+		(*this)[1].position = b22sfVec(mJoint->GetAnchorB(), mWorld->GetPPM());
 	}
 }
 

@@ -1,5 +1,5 @@
 #include "Box2DGame.h"
-#include "Physics/config.h"
+#include "LevelLoader.h"
 #include "Physics/StaticBox.h"
 #include "Physics/DynamicBox.h"
 #include "Physics/DynamicCircle.h"
@@ -17,11 +17,13 @@ Box2DGame::Box2DGame(sf::RenderWindow & window)
 	mMouseJoint = nullptr;
 	mPinBodyA = nullptr;
 	mPinBodyB = nullptr;
+	mLevel = nullptr;
 }
 
 // Dtor
 Box2DGame::~Box2DGame(void)
 {
+	// Les pointeurs sont supprimés dans OnQuit();
 }
 
 /* Surcharge des fonctions évènements */
@@ -33,6 +35,10 @@ void Box2DGame::OnInit()
 	// Centre la vue
 	mView.setCenter(sf::Vector2f(0.f, 0.f));
 	mWindow.setView(mView);
+
+	// Charge un niveau
+	mLevel = new Level(&mWorld, &mTextureCache, &mTextureMap);
+	LevelLoader("lvls/1.lvl", mLevel);
 
 	// Charge les textures dans la textureKeyMap
 	try {
@@ -56,9 +62,10 @@ void Box2DGame::OnInit()
 	}
 
 	// Crée le sol
-	mWorld.RegisterBody(new StaticBox(&mWorld, b2Vec2(0.f, -6.f), mTextureMap["ground"], 0.4f));
+	//mWorld.RegisterBody(new StaticBox(&mWorld, b2Vec2(0.f, -6.f), mTextureMap["ground"], 0.4f));
 
 	/* Crée les actions */
+	mActionMap["onLoadLevel"] = thor::Action(sf::Keyboard::R, thor::Action::ReleaseOnce);
 	mActionMap["onMoveObject"] = thor::Action(sf::Mouse::Right, thor::Action::Hold);
 	mActionMap["onCreateBox"] = thor::Action(sf::Mouse::Left, thor::Action::Hold);
 	mActionMap["onCreateCircle"] = thor::Action(sf::Keyboard::C, thor::Action::Hold);
@@ -72,8 +79,8 @@ void Box2DGame::OnLoopBegin()
 	Game::OnLoopBegin();
 
 	// Converti la position de la souris en système Box2D
-	mMp.x = mCurrentMousePosRV.x * MPP;
-	mMp.y = - mCurrentMousePosRV.y * MPP;
+	mMp.x = mCurrentMousePosRV.x * mWorld.GetMPP();
+	mMp.y = - mCurrentMousePosRV.y * mWorld.GetMPP();
 
 	// Simule
 	mWorld.Step(1.f / 60.f, 8, 3);
@@ -127,6 +134,12 @@ void Box2DGame::OnEvent()
 	if (mActionMap.isActive("onCreateLamp"))
 	{
 		mWorld.RegisterBody(new StaticBox(&mWorld, mMp, mTextureMap["lampadere"], 0.1f, 0.05f));
+	}
+	
+	// Charge un niveau
+	if (mActionMap.isActive("onLoadLevel"))
+	{
+		LevelLoader("lvls/1.lvl", mLevel);
 	}
 
 	// Epingle un objet

@@ -1,5 +1,4 @@
 #include "Body.h"
-#include "config.h"
 #include "../utils.h"
 
 //Ctor

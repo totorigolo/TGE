@@ -63,6 +63,12 @@
     <ClCompile Include="src\Parser.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
+    <ClCompile Include="src\LevelLoader.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Level.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\utils.h">
@@ -75,9 +81,6 @@
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
     <ClInclude Include="src\Physics\Body.h">
-      <Filter>Fichiers d%27en-tête\Physics</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Physics\config.h">
       <Filter>Fichiers d%27en-tête\Physics</Filter>
     </ClInclude>
     <ClInclude Include="src\Physics\DistanceJoint.h">
@@ -113,5 +116,14 @@
     <ClInclude Include="src\Parser.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
+    <ClInclude Include="src\LevelLoader.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Level.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="src\_TODO.txt" />
   </ItemGroup>
 </Project>

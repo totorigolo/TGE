@@ -2,7 +2,13 @@
 #include <SFML/System.hpp>
 #include <Box2D/Box2D.h>
 #include <string>
-#include "Physics/config.h"
+
+// Constantes de convertion Degrés <> Radians
+const float DEGREES_PER_RADIANS = 180.f / b2_pi;
+const float DPR = DEGREES_PER_RADIANS;
+
+const float RADIANS_PER_DEGREES = 1.f / DPR;
+const float RPD = RADIANS_PER_DEGREES;
 
 // [min ; max]
 inline int randMinMax(int min, int max)
@@ -101,12 +107,12 @@ sf::Vector2<T> operator/(sf::Vector2<T> a, sf::Vector2<T> b)
 	return sf::Vector2<T>(a.x / b.x, a.y / b.y);
 }
 
-// Convertion sf::Vector <> b2Vec2 (avec convertion)
-inline b2Vec2 sf2b2Vec(sf::Vector2f const& vector)
+// Convertion sf::Vector <> b2Vec2 (avec convertion, inversion y)
+inline b2Vec2 sf2b2Vec(sf::Vector2f const& vector, float mpp)
 {
-	return b2Vec2(vector.x * MPP, - vector.y * MPP);
+	return b2Vec2(vector.x * mpp, - vector.y * mpp);
 }
-inline sf::Vector2f b22sfVec(b2Vec2 const& vector)
+inline sf::Vector2f b22sfVec(b2Vec2 const& vector, float ppm)
 {
-	return sf::Vector2f(vector.x, - vector.y) * PPM;
+	return sf::Vector2f(vector.x, - vector.y) * ppm;
 }

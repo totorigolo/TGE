@@ -74,7 +74,7 @@ const std::string ConfigReader::ParseLine(const std::string& line, const std::st
 				if ((offset + index) < line.size() && index > 0)
 					lineSection = _section;
 				else
-					Dialog::Error("ConfigReader::ParseLine("+ int2string(lineNumber) +")\n-> délimiteur ']' manquant.");
+					Dialog::Error("ConfigReader::ParseLine("+ Parser::int2string(lineNumber) +")\n-> délimiteur ']' manquant.");
 			}
 			// Lit la paire nom=valeur dans la section courante
 			else
@@ -113,7 +113,7 @@ const std::string ConfigReader::ParseLine(const std::string& line, const std::st
 					StoreNameValue(lineSection, name, value);
 				}
 				else
-					Dialog::Error("ConfigReader::ParseLine("+ int2string(lineNumber) +")\n-> délimiteur '=' ou ':' manquant.");
+					Dialog::Error("ConfigReader::ParseLine("+ Parser::int2string(lineNumber) +")\n-> délimiteur '=' ou ':' manquant.");
 			}
 		}
 	}
@@ -188,7 +188,7 @@ int ConfigReader::GetInt(const std::string& section, const std::string& name, in
 			iterNameValue = map->find(name);
 			if (iterNameValue != map->end())
 			{
-				return string2int(iterNameValue->second, default);
+				return Parser::string2int(iterNameValue->second, default);
 			}
 			Dialog::Error("La valeur \""+ name +"\" n'existe pas.");
 		}
@@ -213,7 +213,7 @@ bool ConfigReader::GetBool(const std::string& section, const std::string& name, 
 			iterNameValue = map->find(name);
 			if (iterNameValue != map->end())
 			{
-				return string2bool(iterNameValue->second, default);
+				return Parser::string2bool(iterNameValue->second, default);
 			}
 			Dialog::Error("La valeur \""+ name +"\" n'existe pas.");
 		}
@@ -238,7 +238,7 @@ float ConfigReader::GetFloat(const std::string& section, const std::string& name
 			iterNameValue = map->find(name);
 			if (iterNameValue != map->end())
 			{
-				return string2float(iterNameValue->second, default);
+				return Parser::string2float(iterNameValue->second, default);
 			}
 			Dialog::Error("La valeur \""+ name +"\" n'existe pas.");
 		}
@@ -263,7 +263,7 @@ sf::Uint32 ConfigReader::GetUint32(const std::string& section, const std::string
 			iterNameValue = map->find(name);
 			if (iterNameValue != map->end())
 			{
-				return string2Uint32(iterNameValue->second, default);
+				return Parser::string2Uint32(iterNameValue->second, default);
 			}
 			Dialog::Error("La valeur \""+ name +"\" n'existe pas.");
 		}
@@ -288,7 +288,7 @@ const sf::Color ConfigReader::GetColor(const std::string& section, const std::st
 			iterNameValue = map->find(name);
 			if (iterNameValue != map->end())
 			{
-				return string2color(iterNameValue->second, default);
+				return Parser::string2color(iterNameValue->second, default);
 			}
 			Dialog::Error("La valeur \""+ name +"\" n'existe pas.");
 		}

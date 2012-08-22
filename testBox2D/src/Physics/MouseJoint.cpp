@@ -37,8 +37,8 @@ void MouseJoint::Update()
 {
 	if (mBodyA && mBodyB)
 	{
-		(*this)[0].position = b22sfVec(((b2MouseJoint*) mJoint)->GetTarget());
-		(*this)[1].position = b22sfVec(mJoint->GetAnchorB());
+		(*this)[0].position = b22sfVec(((b2MouseJoint*) mJoint)->GetTarget(), mWorld->GetPPM());
+		(*this)[1].position = b22sfVec(mJoint->GetAnchorB(), mWorld->GetPPM());
 	}
 }
 

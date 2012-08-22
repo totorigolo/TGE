@@ -6,12 +6,13 @@
 #include <list>
 #include <map>
 #include "Game.h"
+#include "Level.h"
 #include "Physics/Body.h"
 #include "Physics/World.h"
 #include "Physics/MouseJoint.h"
 
 class Body;
-
+class World;
 class MouseJoint;
 class Box2DGame : public Game
 {
@@ -41,9 +42,12 @@ protected:
 	void OnQuit();
 
 private:
-	// Positions de la souris (relative à la vue, non inversée et en metres)
+	// Positions de la souris (relative à la vue, en mètres et l'Y à la Box2D)
 	b2Vec2 mMp;
 	b2Vec2 mLMp;
+
+	// Niveau
+	Level *mLevel;
 
 	// Monde physique
 	b2Vec2 mGravity;

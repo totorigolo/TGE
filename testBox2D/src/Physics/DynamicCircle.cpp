@@ -1,5 +1,4 @@
 #include "DynamicCircle.h"
-#include "config.h"
 #include "../utils.h"
 
 //Ctor
@@ -20,7 +19,7 @@ DynamicCircle::DynamicCircle(World *world, b2Vec2 pos, std::shared_ptr<sf::Textu
 
 		// Shape
 		mShape = new b2CircleShape;
-		((b2CircleShape*)mShape)->m_radius = mTexture->getSize().x / 2.f * MPP;
+		((b2CircleShape*)mShape)->m_radius = mTexture->getSize().x / 2.f * mWorld->GetMPP();
 
 		// Fixture
 		b2FixtureDef fixtureDef;
@@ -45,7 +44,7 @@ void DynamicCircle::Update()
 {
 	if (mBody && mWorld)
 	{
-		this->setPosition(b22sfVec(mBody->GetPosition()));
+		this->setPosition(b22sfVec(mBody->GetPosition(), mWorld->GetPPM()));
 		this->setOrigin(u2f(mTexture->getSize()) / 2.f);
 		this->setRotation(- mBody->GetAngle() * DPR);
 	}

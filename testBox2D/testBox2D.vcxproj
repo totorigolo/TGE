@@ -15,6 +15,8 @@
     <ClCompile Include="src\ConfigReader.cpp" />
     <ClCompile Include="src\Dialog.cpp" />
     <ClCompile Include="src\Game.cpp" />
+    <ClCompile Include="src\Level.cpp" />
+    <ClCompile Include="src\LevelLoader.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\Parser.cpp" />
     <ClCompile Include="src\Physics\Body.cpp" />
@@ -31,9 +33,10 @@
     <ClInclude Include="src\ConfigReader.h" />
     <ClInclude Include="src\Dialog.h" />
     <ClInclude Include="src\Game.h" />
+    <ClInclude Include="src\Level.h" />
+    <ClInclude Include="src\LevelLoader.h" />
     <ClInclude Include="src\Parser.h" />
     <ClInclude Include="src\Physics\Body.h" />
-    <ClInclude Include="src\Physics\config.h" />
     <ClInclude Include="src\Physics\DistanceJoint.h" />
     <ClInclude Include="src\Physics\DynamicBox.h" />
     <ClInclude Include="src\Physics\DynamicCircle.h" />
@@ -43,6 +46,9 @@
     <ClInclude Include="src\Physics\StaticBox.h" />
     <ClInclude Include="src\Physics\World.h" />
     <ClInclude Include="src\utils.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="src\_TODO.txt" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{DDBE465C-1800-4235-BA67-5C2B4EB437B7}</ProjectGuid>
