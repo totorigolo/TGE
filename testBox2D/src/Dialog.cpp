@@ -1,5 +1,6 @@
 #include "Dialog.h"
 #include "Parser.h"
+#include "utils.h"
 
 namespace Dialog
 {
@@ -70,14 +71,14 @@ namespace Dialog
 				else if (event.type == sf::Event::Resized)
 				{
 					// Vue de la fenêtre
-					windowView.reset(sf::FloatRect(0.f, 0.f, window->getSize().x, window->getSize().y));
+					windowView.reset(sf::FloatRect(sf::Vector2f(0.f, 0.f), u2f(window->getSize())));
 				}
 
 				// Si la souris survole un bouton : on met le fond
 				else if (event.type == sf::Event::MouseMoved)
 				{
 					overFlying = true;
-					if (button.getGlobalBounds().contains(event.mouseMove.x, event.mouseMove.y))
+					if (button.getGlobalBounds().contains(i2f(sf::Vector2i(event.mouseMove.x, event.mouseMove.y))))
 						backgroung.setPosition(button.getPosition());
 					else
 						overFlying = false;
@@ -86,7 +87,7 @@ namespace Dialog
 				// Clic gauche : on vérifie si on est sur un bouton et on retourne sa valeur
 				else if (event.type == sf::Event::MouseButtonReleased)
 				{
-					if (button.getGlobalBounds().contains(event.mouseButton.x, event.mouseButton.y))
+					if (button.getGlobalBounds().contains(i2f(sf::Vector2i(event.mouseMove.x, event.mouseMove.y))))
 						window->close();
 				}
 			}
@@ -199,7 +200,7 @@ namespace Dialog
 				else if (event.type == sf::Event::Resized)
 				{
 					// Vue de la fenêtre
-					windowView.reset(sf::FloatRect(0.f, 0.f, window->getSize().x, window->getSize().y));
+					windowView.reset(sf::FloatRect(sf::Vector2f(0.f, 0.f), u2f(window->getSize())));
 				}
 
 				// Si on appuie sur retour arrière : on efface la dernière lettre
@@ -225,7 +226,7 @@ namespace Dialog
 				else if (event.type == sf::Event::MouseMoved)
 				{
 					overFlying = true;
-					if (button.getGlobalBounds().contains(event.mouseMove.x, event.mouseMove.y))
+					if (button.getGlobalBounds().contains(i2f(sf::Vector2i(event.mouseMove.x, event.mouseMove.y))))
 						backgroung.setPosition(button.getPosition());
 					else
 						overFlying = false;
@@ -234,7 +235,7 @@ namespace Dialog
 				// Clic gauche : on vérifie si on est sur un bouton et on retourne sa valeur
 				else if (event.type == sf::Event::MouseButtonReleased)
 				{
-					if (button.getGlobalBounds().contains(event.mouseButton.x, event.mouseButton.y))
+					if (button.getGlobalBounds().contains(i2f(sf::Vector2i(event.mouseMove.x, event.mouseMove.y))))
 						window->close();
 				}
 			}
@@ -337,7 +338,7 @@ namespace Dialog
 				else if (event.type == sf::Event::Resized)
 				{
 					// Vue de la fenêtre
-					windowView.reset(sf::FloatRect(0.f, 0.f, window->getSize().x, window->getSize().y));
+					windowView.reset(sf::FloatRect(sf::Vector2f(0.f, 0.f), u2f(window->getSize())));
 				}
 
 				// Si on appuie sur retour arrière : on efface la dernière lettre
@@ -358,7 +359,7 @@ namespace Dialog
 				else if (event.type == sf::Event::MouseMoved)
 				{
 					overFlying = true;
-					if (button.getGlobalBounds().contains(event.mouseMove.x, event.mouseMove.y))
+					if (button.getGlobalBounds().contains(i2f(sf::Vector2i(event.mouseMove.x, event.mouseMove.y))))
 						backgroung.setPosition(button.getPosition());
 					else
 						overFlying = false;
@@ -367,7 +368,7 @@ namespace Dialog
 				// Clic gauche : on vérifie si on est sur un bouton et on retourne sa valeur
 				else if (event.type == sf::Event::MouseButtonReleased)
 				{
-					if (button.getGlobalBounds().contains(event.mouseButton.x, event.mouseButton.y))
+					if (button.getGlobalBounds().contains(i2f(sf::Vector2i(event.mouseMove.x, event.mouseMove.y))))
 						window->close();
 				}
 			}
@@ -461,15 +462,15 @@ namespace Dialog
 				else if (event.type == sf::Event::Resized)
 				{
 					// Vue de la fenêtre
-					windowView.reset(sf::FloatRect(0.f, 0.f, window->getSize().x, window->getSize().y));
+					windowView.reset(sf::FloatRect(sf::Vector2f(0.f, 0.f), u2f(window->getSize())));
 				}
 				// Si la souris survole un bouton : on met le fond
 				else if (event.type == sf::Event::MouseMoved)
 				{
 					overFlying = true;
-					if (button1.getGlobalBounds().contains(event.mouseMove.x, event.mouseMove.y))
+					if (button1.getGlobalBounds().contains(i2f(sf::Vector2i(event.mouseMove.x, event.mouseMove.y))))
 						backgroung.setPosition(button1.getPosition());
-					else if (button2.getGlobalBounds().contains(event.mouseMove.x, event.mouseMove.y))
+					else if (button2.getGlobalBounds().contains(i2f(sf::Vector2i(event.mouseMove.x, event.mouseMove.y))))
 						backgroung.setPosition(button2.getPosition());
 					else
 						overFlying = false;
@@ -478,10 +479,10 @@ namespace Dialog
 				// Clic gauche : on vérifie si on est sur un bouton et on retourne sa valeur
 				else if (event.type == sf::Event::MouseButtonReleased || event.type == sf::Event::KeyReleased)
 				{
-					if (button1.getGlobalBounds().contains(event.mouseButton.x, event.mouseButton.y) ||
+					if (button1.getGlobalBounds().contains(i2f(sf::Vector2i(event.mouseMove.x, event.mouseMove.y))) ||
 						event.key.code == sf::Keyboard::Num1 || event.key.code == sf::Keyboard::Numpad1)
 						button = 1;
-					else if (button2.getGlobalBounds().contains(event.mouseButton.x, event.mouseButton.y) ||
+					else if (button2.getGlobalBounds().contains(i2f(sf::Vector2i(event.mouseMove.x, event.mouseMove.y))) ||
 						event.key.code == sf::Keyboard::Num2 || event.key.code == sf::Keyboard::Numpad2)
 						button = 2;
 
