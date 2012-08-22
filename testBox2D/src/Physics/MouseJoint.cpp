@@ -19,7 +19,8 @@ MouseJoint::MouseJoint(World *world, Body *body, Body *ground, b2Vec2 target, fl
 		jointDef.collideConnected = true;
 		jointDef.maxForce = maxForce;
 		mJoint = (b2MouseJoint*) mWorld->CreateJoint(&jointDef, this);
-		mBodyA->GetBody()->SetAwake(true);
+		mBodyB->GetBody()->SetAwake(true);
+		mBodyB->GetBody()->SetBullet(true);
 		mIsNull = false;
 	}
 
@@ -30,6 +31,9 @@ MouseJoint::MouseJoint(World *world, Body *body, Body *ground, b2Vec2 target, fl
 // Dtor
 MouseJoint::~MouseJoint(void)
 {
+	if (mBodyB)
+		if (mBodyB->GetBody())
+			mBodyB->GetBody()->SetBullet(false);
 }
 
 // Mets à jour le VertexArray
