@@ -10,7 +10,7 @@ Qu'est-ce que c'est ?
 
 TODO...
 
-Le dépot Mercurial est disponible (mais privé) à cet endroit :
+Le dépot Mercurial est disponible (mais privé) a cet endroit :
 https://bitbucket.org/totorigolo/inverse-way-liberation
 
 
@@ -23,7 +23,7 @@ Le bugtracker est disponible ici :
 https://bitbucket.org/totorigolo/inverse-way-liberation/issues
 
 
-Remerciments :
+Remerciements :
 ==============
 
 Eric Catto pour son formidable Box2D (et "Tomb Raider : Legend" :D)
