@@ -1,0 +1,86 @@
+# Défini les propriétés du monde
+[world]
+	gravity = (0.f, -9.8f)
+	PPM = 100.f
+
+# Charge les textures
+[textures]
+#	nom = chemin
+	way 		= tex/way.png
+	box 		= tex/box.png
+	box2 		= tex/box2.png
+	caisse 		= tex/caisse.png
+	tonneau 	= tex/tonneau.png
+	circle		= tex/circle.png
+	ball 		= tex/ball.png
+	ground 		= tex/ground.png
+	lampadere 	= tex/lampadere.png
+
+# Crée les bodies
+[bodies]
+#   texture,ID(facultatif et unique) = (position + rotation° facultative) type proprietés
+# (les propriétées sont facultatives comme les paramètres C++)
+# types : ( + propriétés)
+#  - db = dynamicBox +, densité(1.f), friction(0.2f), restitution(0.0f)!
+#  - dc = dynamicCircle +, densité(1.f), friction(0.2f), restitution(0.0f)!
+#  - sb = staticBox +, friction(0.2f), restitution(0.0f)!
+
+# ex : box = (5.2f, 9.f, 45.f) db, 2.f!
+
+	box 	= (0.f, 10.f, 45.f) db
+	box2 	= (2.f, 10.f) db, 1.f, 0.2f, 0.8f!
+	caisse 	= (4.f, 10.f, 40.f) db
+	tonneau = (6.f, 10.f) db, 1.f, 0.002f!
+	
+	circle 	= (-2.f, 10.f) dc, 1.f, 0.2f, 0.5f!
+	ball 	= (-1.85f, 11.f) dc, 5.f, 0.05f!
+	
+	ground = (0.f, -0.64f) sb, 0.4f!
+	
+	lampadere = (-3.f, 1.25f) sb
+	lampadere = (10.f, 1.25f) sb
+
+# Crée des textures sans colisions
+# "deco_" + nombre == z-index // parallax
+# ex: [deco_5]
+[deco_5]
+#   texture = (position + rotation° facultative), z-index
+
+# ex : lampadere = (5.2f, 9.f, 45.f), 5
+
+	lampadere = (-3.f, 1.25f, 90.f), 1
+	lampadere = (-1.f, 1.25f), 1
+	lampadere = (1.f, 1.25f), 1
+	lampadere = (3.f, 1.25f), 1
+	lampadere = (5.f, 1.25f), 1
+	lampadere = (7.f, 1.25f), 1
+
+[deco_2]
+	ground = (0.f, 1.28f), -5
+
+[deco_-1]
+	way = (0.f, 1.28f), 5
+	way = (0.8f, 1.3f), 6
+	way = (1.6f, 1.28f), 4
+
+# Crée un sol à partir d'une fonction
+# "floor_" + nombre == z-index (pas parallax)
+# ex: [floor_5]
+[floor_5]
+#   (position) = 
+
+# ex : lampadere = (5.2f, 9.f, 45.f), 5
+
+
+
+
+
+
+
+
+
+
+
+
+
+
