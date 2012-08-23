@@ -215,12 +215,12 @@ void Box2DGame::OnEvent()
 	}
 
 	// Coupe un objet // TODO: Finir
-	if (mActionMap.isActive("onSplice") && !mSplice1Get)
+	if (false && mActionMap.isActive("onSplice") && !mSplice1Get)
 	{
 		mSpliceL1 = mMp;
 		mSplice1Get = true;
 	}
-	else if (mSplice1Get)
+	else if (false && mSplice1Get)
 	{
 		mSpliceL2 = mMp;
 
@@ -448,6 +448,7 @@ void Box2DGame::OnRender()
 	}
 
 	// Affichage du laser-spliter
+	if (false)
 	{
 		sf::VertexArray splicer(sf::LinesStrip, 2);
 		splicer[0].position = b22sfVec(mSpliceL1, mWorld.GetPPM());
