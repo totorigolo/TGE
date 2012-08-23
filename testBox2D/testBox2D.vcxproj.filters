@@ -122,6 +122,9 @@
     <ClInclude Include="src\Level.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
+    <ClInclude Include="src\Physics\FirstBodyRaycastCallback.h">
+      <Filter>Fichiers d%27en-tête\Physics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\_TODO.txt" />

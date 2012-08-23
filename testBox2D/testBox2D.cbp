@@ -53,7 +53,6 @@
 		<Unit filename="src\Physics\StaticBox.h" />
 		<Unit filename="src\Physics\World.cpp" />
 		<Unit filename="src\Physics\World.h" />
-		<Unit filename="src\Physics\config.h" />
 		<Unit filename="src\_TODO.txt" />
 		<Unit filename="src\main.cpp" />
 		<Unit filename="src\utils.h" />

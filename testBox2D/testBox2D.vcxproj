@@ -40,6 +40,7 @@
     <ClInclude Include="src\Physics\DistanceJoint.h" />
     <ClInclude Include="src\Physics\DynamicBox.h" />
     <ClInclude Include="src\Physics\DynamicCircle.h" />
+    <ClInclude Include="src\Physics\FirstBodyRaycastCallback.h" />
     <ClInclude Include="src\Physics\Joint.h" />
     <ClInclude Include="src\Physics\MouseJoint.h" />
     <ClInclude Include="src\Physics\OverlappingBodyCallback.h" />

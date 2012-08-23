@@ -52,9 +52,16 @@ private:
 	// Monde physique
 	b2Vec2 mGravity;
 	World mWorld;
-
+	
 	// Déplacement des objets
 	MouseJoint *mMouseJoint;
+
+	// Découpage des objets
+	bool mSplice1Get;
+	b2Vec2 mSpliceL1; // Laser
+	b2Vec2 mSpliceL2;
+	b2Vec2 mSpliceP1; // Point d'intersection
+	b2Vec2 mSpliceP2;
 
 	// Variables pour la création de joints
 	Body *mPinBodyA;

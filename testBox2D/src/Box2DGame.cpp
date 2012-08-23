@@ -5,6 +5,7 @@
 #include "Physics/DynamicCircle.h"
 #include "Physics/DistanceJoint.h"
 #include "Physics/OverlappingBodyCallback.h"
+#include "Physics/FirstBodyRaycastCallback.h"
 #include "utils.h"
 #include <iostream>
 
@@ -18,6 +19,9 @@ Box2DGame::Box2DGame(sf::RenderWindow & window)
 	mPinBodyA = nullptr;
 	mPinBodyB = nullptr;
 	mLevel = nullptr;
+	mSpliceL1 = mSpliceL2 = b2Vec2(0.f, 0.f);
+	mSpliceP1 = mSpliceP2 = b2Vec2(0.f, 0.f);
+	mSplice1Get = false;
 }
 
 // Dtor
@@ -42,6 +46,8 @@ void Box2DGame::OnInit()
 
 	// Charge les textures dans la textureKeyMap
 	try {
+		mTextureMap["hollowCircle"] = mTextureCache.acquire(thor::Resources::fromFile<sf::Texture>("tex/hollowCircle.png"));
+
 		mTextureMap["box"] = mTextureCache.acquire(thor::Resources::fromFile<sf::Texture>("tex/box.png"));
 		mTextureMap["box2"] = mTextureCache.acquire(thor::Resources::fromFile<sf::Texture>("tex/box2.png"));
 		mTextureMap["caisse"] = mTextureCache.acquire(thor::Resources::fromFile<sf::Texture>("tex/caisse.png"));
@@ -71,6 +77,8 @@ void Box2DGame::OnInit()
 	mActionMap["onCreateCircle"] = thor::Action(sf::Keyboard::C, thor::Action::Hold);
 	mActionMap["onCreateLamp"] = thor::Action(sf::Keyboard::L, thor::Action::ReleaseOnce);
 	mActionMap["onPin"] = thor::Action(sf::Keyboard::P, thor::Action::PressOnce);
+	mActionMap["onSplice"] = thor::Action(sf::Keyboard::S, thor::Action::Hold);
+	mActionMap["onFire"] = thor::Action(sf::Keyboard::F, thor::Action::PressOnce);
 }
 
 /// Appelé quand la boucle commence
@@ -79,11 +87,11 @@ void Box2DGame::OnLoopBegin()
 	Game::OnLoopBegin();
 
 	// Converti la position de la souris en système Box2D
-	mMp.x = mCurrentMousePosRV.x * mWorld.GetMPP();
-	mMp.y = - mCurrentMousePosRV.y * mWorld.GetMPP();
+	mMp = sf2b2Vec(mCurrentMousePosRV, mWorld.GetMPP());
 
 	// Simule
 	mWorld.Step(1.f / 60.f, 8, 3);
+	mWorld.ClearForces();
 
 	// Affichage des objets dynamiques
 	for (auto it = mWorld.GetBodyList().begin(); it != mWorld.GetBodyList().end(); )
@@ -141,7 +149,7 @@ void Box2DGame::OnEvent()
 	{
 		LevelLoader("lvls/1.lvl", mLevel);
 	}
-
+	
 	// Epingle un objet
 	if (mActionMap.isActive("onPin"))
 	{
@@ -203,6 +211,139 @@ void Box2DGame::OnEvent()
 
 			mPinBodyA = nullptr;
 			mPinBodyB = nullptr; // TODO : mPinAchor => local
+		}
+	}
+
+	// Coupe un objet // TODO: Finir
+	if (mActionMap.isActive("onSplice") && !mSplice1Get)
+	{
+		mSpliceL1 = mMp;
+		mSplice1Get = true;
+	}
+	else if (mSplice1Get)
+	{
+		mSpliceL2 = mMp;
+
+		if (!(mSpliceL1 == mSpliceL2) && !mActionMap.isActive("onSplice"))
+		{
+			mSplice1Get = false;
+
+			// Récupère le premier point d'intersection
+			FirstBodyRaycastCallback callback;
+			mWorld.RayCast(&callback, mSpliceL1, mSpliceL2);
+			if (callback.mHit)
+			{
+				callback.mHit = false;
+				mSpliceP1 = callback.mFixture->GetBody()->GetLocalPoint(callback.mPoint);
+
+				// Récupère le dernier point d'intersection
+				callback.SetBody(callback.mFixture->GetBody());
+				mWorld.RayCast(&callback, mSpliceL2, mSpliceL1);
+				if (callback.mHit)
+				{
+					mSpliceP2 = callback.mFixture->GetBody()->GetLocalPoint(callback.mPoint);
+
+					// Coupe le body touché (uniquement dynamic_box)
+					if (callback.mFixture->GetBody()->GetType() == b2_dynamicBody && callback.mFixture->GetType() == b2Shape::e_polygon)
+					{
+						b2Body *body = callback.mFixture->GetBody();
+						b2Fixture *fix = callback.mFixture;
+						b2PolygonShape *shape = (b2PolygonShape*) fix->GetShape();
+						int count = shape->GetVertexCount();
+
+						int p1a = -1, p1b = -1;
+						int p2a = -1, p2b = -1;
+
+						// Regarde entre quels sommets sont les points
+						for (int i = 0; i < shape->GetVertexCount(); ++i)
+						{
+							int v1 = (i == shape->GetVertexCount()) ? 0 : i;
+							int v2 = (v1 + 1 == shape->GetVertexCount()) ? 0 : v1 + 1;
+
+							std::cout << "Vertices " << v1 << " et " << v2 << std::endl;
+
+							b2Vec2 u = shape->GetVertex(v2) - shape->GetVertex(v1);
+							b2Vec2 v = mSpliceP1 - shape->GetVertex(v1);
+							b2Vec2 w = mSpliceP2 - shape->GetVertex(v1);
+
+							std::cout << "u (" << u.x << "," << u.y << ") et " << "v (" << v.x << "," << v.y << ")" << std::endl;
+
+							float cop1 = (u.x * v.y) - (v.x * u.y);
+							float cop2 = (u.x * w.y) - (w.x * u.y);
+							std::cout << cop1 << std::endl;
+							std::cout << cop2 << std::endl;
+
+							// On a trouvé pour le point 1
+							if (cop1 < 0.0002f && cop1 > -0.0002f)
+							{
+								p1a = v1;
+								p1b = v2;
+								std::cout << "trouv\x82 p1 !!" << std::endl;
+							}
+							std::cout << std::endl;
+
+							// On a trouvé pour le point 2
+							if (cop2 < 0.0002f && cop2 > -0.0002f)
+							{
+								p2a = v1;
+								p2b = v2;
+								std::cout << "trouv\x82 p2 !!" << std::endl;
+							}
+							std::cout << std::endl;
+						}
+						std::cout << std::endl << std::endl;
+
+						if (p1a != -1 && p1b != -1 && p2a != -1 && p2b != -1)
+						{
+							// On ajoute les points dans la liste des vertices
+							int count = shape->GetVertexCount() + 2;
+							b2Vec2 vertices[8];
+							vertices[0];
+							int offset = 0;
+							for (int i = 0; i < count; ++i)
+							{
+								if (p1a + 1 == i)
+								{
+									vertices[i] = mSpliceP1;
+									offset += 1;
+								}
+								else if (p2a + 1 == i)
+								{
+									vertices[i] = mSpliceP2;
+									offset += 1;
+								}
+								else
+								{
+									vertices[i] = shape->GetVertex((i - offset < 0) ? shape->GetVertexCount() - offset : i - offset);
+								}
+							}
+							
+							for (int i = 0; i < shape->GetVertexCount(); ++i)
+							{
+								std::cout << shape->GetVertex(i).x << "," << shape->GetVertex(i).y << std::endl;
+							}
+							std::cout << "----" << std::endl;
+							for (int i = 0; i < count; ++i)
+							{
+								std::cout << vertices[i].x << "," << vertices[i].y << std::endl;
+							}
+
+							// Crée un shape avec ces vertices
+							b2PolygonShape *newShape = new b2PolygonShape();
+							newShape->Set(vertices, count);
+							
+							b2FixtureDef fixtureDef;
+							fixtureDef.density = callback.mFixture->GetDensity();
+							fixtureDef.friction = callback.mFixture->GetFriction();
+							fixtureDef.restitution = callback.mFixture->GetRestitution();
+							fixtureDef.shape = newShape;
+
+							//body->DestroyFixture(callback.mFixture);
+							//body->CreateFixture(&fixtureDef);
+						}
+					}
+				}
+			}
 		}
 	}
 
@@ -304,6 +445,30 @@ void Box2DGame::OnRender()
 		{
 			mWindow.draw(*it2->second);
 		}
+	}
+
+	// Affichage du laser-spliter
+	{
+		sf::VertexArray splicer(sf::LinesStrip, 2);
+		splicer[0].position = b22sfVec(mSpliceL1, mWorld.GetPPM());
+		splicer[1].position = b22sfVec(mSpliceL2, mWorld.GetPPM());
+		splicer[0].color = sf::Color::Cyan;
+		splicer[1].color = sf::Color::Cyan;
+		mWindow.draw(splicer);
+
+		sf::VertexArray laser(sf::LinesStrip, 2);
+		laser[0].position = b22sfVec(mSpliceP1, mWorld.GetPPM());
+		laser[1].position = b22sfVec(mSpliceP2, mWorld.GetPPM());
+		laser[0].color = sf::Color::Red;
+		laser[1].color = sf::Color::Red;
+		mWindow.draw(laser);
+
+		sf::Sprite s(*mTextureMap["hollowCircle"]);
+		s.setOrigin(u2f(s.getTexture()->getSize()) / 2.f);
+		s.setPosition(b22sfVec(mSpliceP1, mWorld.GetPPM()));
+		mWindow.draw(s);
+		s.setPosition(b22sfVec(mSpliceP2, mWorld.GetPPM()));
+		mWindow.draw(s);
 	}
 
 	mWindow.display();

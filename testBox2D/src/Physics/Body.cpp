@@ -3,7 +3,7 @@
 
 //Ctor
 Body::Body(World *world)
-	: mWorld(world), mBody(nullptr), mIsNull(true)
+	: mWorld(world), mBody(nullptr), mShape(nullptr), mIsNull(true)
 {
 }
 
