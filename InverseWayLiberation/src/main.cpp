@@ -6,7 +6,7 @@
 int main()
 {
 	// Crée la fenêtre de rendu
-	sf::RenderWindow window(sf::VideoMode(800, 600, 32), "Bad Guy : Bloody Rescue");
+	sf::RenderWindow window(sf::VideoMode(800, 600, 32), "Inverse Way Liberation");
 	window.setFramerateLimit(60U);
 	window.setVerticalSyncEnabled(true);
 
