@@ -484,7 +484,7 @@ void Box2DGame::OnEvent()
 			{
 				b2Body* b2body = callback.GetFixture()->GetBody();
 				Body* body = (Body*) b2body->GetUserData();
-				mMouseJoint = new MouseJoint(&mWorld, body, mWorld.GetAnyStaticBody(), mMp, 80000.f * b2body->GetMass());
+				mMouseJoint = new MouseJoint(&mWorld, body, mWorld.GetAnyStaticBody(), mMp, 999999999.f * b2body->GetMass());
 			}
 		}
 	}
