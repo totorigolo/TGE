@@ -21,6 +21,7 @@ DistanceJoint::DistanceJoint(World *world, Body *b1, b2Vec2 p1, Body *b2, b2Vec2
 		
 		mBodyA->RegisterJoint(this);
 		mBodyB->RegisterJoint(this);
+		mIsNull = false;
 	}
 
 	(*this)[0].color = mColor;
@@ -37,8 +38,16 @@ void DistanceJoint::Update()
 {
 	if (mBodyA && mBodyB)
 	{
-		(*this)[0].position = b22sfVec(mJoint->GetAnchorA(), mWorld->GetPPM());
-		(*this)[1].position = b22sfVec(mJoint->GetAnchorB(), mWorld->GetPPM());
+		if (!mBodyA->IsNull() && !mBodyB->IsNull())
+		{
+			(*this)[0].position = b22sfVec(mJoint->GetAnchorA(), mWorld->GetPPM());
+			(*this)[1].position = b22sfVec(mJoint->GetAnchorB(), mWorld->GetPPM());
+		}
+		else
+		{
+			mWorld->DestroyJoint(this, false);
+			delete this;
+		}
 	}
 }
 
@@ -58,6 +67,8 @@ float DistanceJoint::GetDampingRatio() const
 
 void DistanceJoint::SetLenght(float lenght)
 {
+	mBodyA->GetBody()->SetAwake(true);
+	mBodyB->GetBody()->SetAwake(true);
 	((b2DistanceJoint*) mJoint)->SetLength(lenght);
 }
 void DistanceJoint::SetFrequencyHz(float frequencyHz)

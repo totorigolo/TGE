@@ -43,6 +43,7 @@ void Box2DGame::OnInit()
 	LevelLoader("lvls/1.lvl", mLevel);
 
 	// Centre la vue
+	mCurrentZoom = mLevel->GetDefaultZoom();
 	mView.setCenter(b22sfVec(mLevel->GetOriginView(), mWorld.GetPPM()));
 	mView.zoom(mLevel->GetDefaultZoom());
 	mWindow.setView(mView);
@@ -135,7 +136,7 @@ void Box2DGame::OnLoopBegin()
 		else
 		{
 			if (mHookJoint->GetLenght() - mHookClock.getElapsedTime().asSeconds() * 0.2f > 0)
-				mHookJoint->SetLenght(mHookJoint->GetLenght() - mHookClock.getElapsedTime().asSeconds() * 0.2f);
+				mHookJoint->SetLenght(mHookJoint->GetLenght() - mHookClock.getElapsedTime().asSeconds() * 8.f);
 			mHookClock.restart();
 		}
 	}
@@ -168,10 +169,15 @@ void Box2DGame::OnEvent()
 		LevelLoader("lvls/1.lvl", mLevel);
 
 		// Centre la vue
+		mCurrentZoom = mLevel->GetDefaultZoom();
 		mView.setSize(mWindow.getSize().x * mView.getViewport().width, mWindow.getSize().y * mView.getViewport().height);
 		mView.setCenter(b22sfVec(mLevel->GetOriginView(), mWorld.GetPPM()));
 		mView.zoom(mLevel->GetDefaultZoom());
 		mWindow.setView(mView);
+
+		// Supprime les pointeurs
+		mHookJoint = nullptr;
+		mMouseJoint = nullptr;
 	}
 
 	// "Surcharge" des zooms
@@ -194,6 +200,9 @@ void Box2DGame::OnEvent()
 	// Grapin
 	if (mActionMap.isActive("onHookS"))
 	{
+		if (mHookJoint)
+			mHookJoint = nullptr;
+
 		if (mHookedSBody)
 			mHookedSBody = nullptr;
 
