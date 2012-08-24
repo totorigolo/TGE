@@ -25,7 +25,9 @@ namespace Dialog
 			afficherImg = true;
 
 		// Création du texte
-		sf::Text text(message);
+		sf::Font f;
+		f.loadFromFile("tex/calibri.ttf");
+		sf::Text text(message, f);
 		text.scale(0.8f, 0.8f);
 		text.setColor(sf::Color::Black);
 
@@ -47,7 +49,7 @@ namespace Dialog
 		button.setOutlineColor(sf::Color::Black);
 		button.setOutlineThickness(1.f);
 		button.setPosition(x, y);
-		sf::Text txtButton((quit) ? ("Quitter") : ("Valider"));
+		sf::Text txtButton((quit) ? ("Quitter") : ("Valider"), f);
 		txtButton.scale(0.6f, 0.6f);
 		txtButton.setColor(sf::Color::Black);
 		txtButton.setPosition(x + 5.f, y + 2.f);
@@ -138,7 +140,9 @@ namespace Dialog
 		sf::View windowView(window->getDefaultView());
 
 		// Création du texte
-		sf::Text text(message);
+		sf::Font f;
+		f.loadFromFile("tex/calibri.ttf");
+		sf::Text text(message, f);
 		text.scale(0.8f, 0.8f);
 		text.setColor(sf::Color::Black);
 		text.setPosition(10.f, 10.f);
@@ -170,7 +174,7 @@ namespace Dialog
 		button.setOutlineColor(sf::Color::Black);
 		button.setOutlineThickness(1.f);
 		button.setPosition(10.f, y);
-		sf::Text txtButton("Valider");
+		sf::Text txtButton("Valider", f);
 		txtButton.scale(0.6f, 0.6f);
 		txtButton.setColor(sf::Color::Black);
 		txtButton.setPosition(10.f + 5.f, y + 2.f);
@@ -275,7 +279,9 @@ namespace Dialog
 		sf::View windowView(window->getDefaultView());
 
 		// Création du texte
-		sf::Text text(message);
+		sf::Font f;
+		f.loadFromFile("tex/calibri.ttf");
+		sf::Text text(message, f);
 		text.scale(0.8f, 0.8f);
 		text.setColor(sf::Color::Black);
 		text.setPosition(10.f, 10.f);
@@ -308,7 +314,7 @@ namespace Dialog
 		button.setOutlineColor(sf::Color::Black);
 		button.setOutlineThickness(1.f);
 		button.setPosition(10.f, y);
-		sf::Text txtButton("Valider");
+		sf::Text txtButton("Valider", f);
 		txtButton.scale(0.6f, 0.6f);
 		txtButton.setColor(sf::Color::Black);
 		txtButton.setPosition(10.f + 5.f, y + 2.f);
@@ -408,7 +414,9 @@ namespace Dialog
 		sf::View windowView(window->getDefaultView());
 
 		// Création du texte
-		sf::Text text(message);
+		sf::Font f;
+		f.loadFromFile("tex/calibri.ttf");
+		sf::Text text(message, f);
 		text.scale(0.8f, 0.8f);
 		text.setColor(sf::Color::Black);
 		text.setPosition(10.f, 10.f);
@@ -424,7 +432,7 @@ namespace Dialog
 		button1.setOutlineColor(sf::Color::Black);
 		button1.setOutlineThickness(2.f);
 		button1.setPosition(x1, y);
-		sf::Text txtButton1(one);
+		sf::Text txtButton1(one, f);
 		txtButton1.scale(0.8f, 0.8f);
 		txtButton1.setColor(sf::Color::Black);
 		txtButton1.setPosition(x1 + 5.f, y + 5.f);
@@ -435,7 +443,7 @@ namespace Dialog
 		button2.setOutlineColor(sf::Color::Black);
 		button2.setOutlineThickness(2.f);
 		button2.setPosition(x2, y);
-		sf::Text txtButton2(two);
+		sf::Text txtButton2(two, f);
 		txtButton2.scale(0.8f, 0.8f);
 		txtButton2.setColor(sf::Color::Black);
 		txtButton2.setPosition(x2 + 5.f, y + 5.f);
