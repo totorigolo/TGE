@@ -22,6 +22,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="src\_TODO.txt" />
+    <None Include="..\README.txt" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Box2DGame.cpp">
