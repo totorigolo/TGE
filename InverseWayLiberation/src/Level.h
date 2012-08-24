@@ -38,6 +38,10 @@ public:
 
 	bool IsCharged() const { return mIsValid; }
 	void SetCharged(bool charged) { mIsCharged = charged; }
+	
+	float GetDefaultZoom() const { return mDefaulfZoom; }
+	sf::Color const& GetBckgColor() const { return mBckgC; }
+	b2Vec2 const& GetOriginView() const { return mOriginView; }
 
 	std::map<int, std::list<std::pair<int, sf::Sprite*>>> const& GetDeco() const { return mDecoMap; }
 
@@ -47,6 +51,11 @@ private:
 
 	// Monde
 	World *mWorld;
+
+	// Config de la fenêtre de rendu
+	sf::Color mBckgC;
+	float mDefaulfZoom;
+	b2Vec2 mOriginView;
 	
 	// Textures
 	thor::ResourceCache<sf::Texture> *mTextureCache;

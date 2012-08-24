@@ -55,3 +55,16 @@ float DistanceJoint::GetDampingRatio() const
 {
 	return ((b2DistanceJoint*) mJoint)->GetDampingRatio();
 }
+
+void DistanceJoint::SetLenght(float lenght)
+{
+	((b2DistanceJoint*) mJoint)->SetLength(lenght);
+}
+void DistanceJoint::SetFrequencyHz(float frequencyHz)
+{
+	((b2DistanceJoint*) mJoint)->SetFrequency(frequencyHz);
+}
+void DistanceJoint::SetDampingRatio(float damping)
+{
+	((b2DistanceJoint*) mJoint)->SetDampingRatio(damping);
+}

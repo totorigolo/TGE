@@ -21,6 +21,10 @@ public:
 	float GetLenght() const;
 	float GetFrequencyHz() const;
 	float GetDampingRatio() const;
+
+	void SetLenght(float lenght);
+	void SetFrequencyHz(float frequencyHz);
+	void SetDampingRatio(float damping);
 	
 	sf::Color& GetColor() { return mColor; }
 	void SetColor(sf::Color const& color) { mColor = color; }

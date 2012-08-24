@@ -10,6 +10,7 @@
 #include "Physics/Body.h"
 #include "Physics/World.h"
 #include "Physics/MouseJoint.h"
+#include "Physics/DistanceJoint.h"
 
 class Body;
 class World;
@@ -53,6 +54,12 @@ private:
 	b2Vec2 mGravity;
 	World mWorld;
 	
+	// Grapin
+	Body *mHookedSBody;
+	b2Vec2 mHookedSAnchor;
+	DistanceJoint *mHookJoint;
+	sf::Clock mHookClock;
+
 	// Déplacement des objets
 	MouseJoint *mMouseJoint;
 

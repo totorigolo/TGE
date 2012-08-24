@@ -152,10 +152,28 @@ bool LevelLoader::CreateLine(std::string& section, std::string& name, std::strin
 			mLevel->mWorld->SetGravity(Parser::string2b2Vec2(value));
 			return true;
 		}
-
+		
 		else if (name == "PPM")
 		{
 			mLevel->mWorld->SetPPM(Parser::string2float(value));
+			return true;
+		}
+		
+		else if (name == "bckgc")
+		{
+			mLevel->mBckgC = Parser::string2color(value);
+			return true;
+		}
+
+		else if (name == "originView")
+		{
+			mLevel->mOriginView = Parser::string2b2Vec2(value);
+			return true;
+		}
+
+		else if (name == "defaultZoom")
+		{
+			mLevel->mDefaulfZoom = Parser::string2float(value);
 			return true;
 		}
 		

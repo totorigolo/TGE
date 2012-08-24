@@ -21,6 +21,7 @@ StaticBox::StaticBox(World *world, b2Vec3 posRot, std::shared_ptr<sf::Texture> t
 		// Shape
 		mShape = new b2PolygonShape;
 		((b2PolygonShape*)mShape)->SetAsBox((mTexture->getSize().x / 2) * mWorld->GetMPP(), (mTexture->getSize().y / 2) * mWorld->GetMPP());
+		mShape->m_radius = 0.f;
 
 		// Fixture
 		b2FixtureDef fixtureDef;

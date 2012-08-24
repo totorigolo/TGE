@@ -2,6 +2,9 @@
 [world]
 	gravity = (0.f, -9.8f)
 	PPM = 100.f
+	bckgc = (0, 0, 0, 255)
+	originView = (0.f, 2.f)
+	defaultZoom = 1.f
 
 # Charge les textures
 [textures]
@@ -15,6 +18,7 @@
 	ball 		= tex/ball.png
 	ground 		= tex/ground.png
 	lampadere 	= tex/lampadere.png
+	volcan		= tex/volcan.png
 
 # Crée les bodies
 [bodies]
@@ -27,18 +31,31 @@
 
 # ex : box = (5.2f, 9.f, 45.f) db, 2.f!
 
-	box 	= (0.f, 10.f, 45.f) db
-	box2 	= (2.f, 10.f) db, 1.f, 0.2f, 0.8f!
-	caisse 	= (4.f, 10.f, 40.f) db
-	tonneau = (6.f, 10.f) db, 1.f, 0.002f!
+;	box 	= (0.f, 10.f, 45.f) db
+;	box2 	= (2.f, 10.f) db, 1.f, 0.2f, 0.8f!
+;	caisse 	= (4.f, 10.f, 40.f) db
+;	tonneau = (6.f, 10.f) db, 1.f, 0.002f!
 	
-	circle 	= (-2.f, 10.f) dc, 1.f, 0.2f, 0.5f!
-	ball 	= (-1.85f, 11.f) dc, 5.f, 0.05f!
+;	circle 	= (-2.f, 10.f) dc, 1.f, 0.2f, 0.5f!
+;	ball 	= (-1.85f, 11.f) dc, 5.f, 0.05f!
 	
 	ground = (0.f, -0.64f) sb, 0.4f!
+
+	way = (-5.f, 0.5f, 90.f) sb
+	way = (-5.f, 1.5f, 90.f) sb
+	way = (-4.25f, 1.75f) sb
+	way = (-3.25f, 1.75f) sb
+	way = (-3.f, 1.5f, 90.f) sb
 	
-	lampadere = (-3.f, 1.25f) sb
-	lampadere = (10.f, 1.25f) sb
+	way 	= (-3.f, 0.5f, 90.f) db, 1.f!
+	tonneau	= (-4.55f, 0.25f) db, 15.f, 0.05f!
+	ball 	= (-4.55f, 0.675f) dc, 8.f, 0.05f!
+	
+	way 	= (0.f, 2.5f) sb
+	way 	= (1.5f, 2.5f) sb
+	box 	= (0.f, 3.f) db
+	box2 	= (1.5f, 3.f) db
+	caisse 	= (2f, 3.f) db
 
 # Crée des textures sans colisions
 # "deco_" + nombre == z-index // parallax
@@ -48,28 +65,16 @@
 
 # ex : lampadere = (5.2f, 9.f, 45.f), 5
 
-	lampadere = (-3.f, 1.25f, 90.f), 1
-	lampadere = (-1.f, 1.25f), 1
-	lampadere = (1.f, 1.25f), 1
-	lampadere = (3.f, 1.25f), 1
-	lampadere = (5.f, 1.25f), 1
-	lampadere = (7.f, 1.25f), 1
-
-[deco_2]
-	ground = (0.f, 1.28f), -5
+	volcan = (0.f, 5.f), 1
 
 [deco_-1]
-	way = (0.f, 1.28f), 5
-	way = (0.8f, 1.3f), 6
-	way = (1.6f, 1.28f), 4
+	
 
 # Crée un sol à partir d'une fonction
 # "floor_" + nombre == z-index (pas parallax)
 # ex: [floor_5]
 [floor_5]
-#   (position) = 
-
-# ex : lampadere = (5.2f, 9.f, 45.f), 5
+#   : (position)
 
 
 

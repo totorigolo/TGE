@@ -3,7 +3,7 @@
 
 // Ctor
 Level::Level(World *world, thor::ResourceCache<sf::Texture> *textureCache, std::map<std::string, std::shared_ptr<sf::Texture>> *textureMap)
-	: mIsValid(false), mIsCharged(false), mWorld(world), mTextureCache(textureCache), mTextureMap(textureMap)
+	: mIsValid(false), mIsCharged(false), mWorld(world), mTextureCache(textureCache), mTextureMap(textureMap), mBckgC(255, 255, 255)
 {
 	if (mWorld && mTextureCache && mTextureMap)
 	{

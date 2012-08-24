@@ -22,6 +22,8 @@ Box2DGame::Box2DGame(sf::RenderWindow & window)
 	mSpliceL1 = mSpliceL2 = b2Vec2(0.f, 0.f);
 	mSpliceP1 = mSpliceP2 = b2Vec2(0.f, 0.f);
 	mSplice1Get = false;
+	mHookJoint = nullptr;
+	mHookedSBody = nullptr;
 }
 
 // Dtor
@@ -36,13 +38,14 @@ void Box2DGame::OnInit()
 {
 	Game::OnInit();
 
-	// Centre la vue
-	mView.setCenter(sf::Vector2f(0.f, 0.f));
-	mWindow.setView(mView);
-
 	// Charge un niveau
 	mLevel = new Level(&mWorld, &mTextureCache, &mTextureMap);
 	LevelLoader("lvls/1.lvl", mLevel);
+
+	// Centre la vue
+	mView.setCenter(b22sfVec(mLevel->GetOriginView(), mWorld.GetPPM()));
+	mView.zoom(mLevel->GetDefaultZoom());
+	mWindow.setView(mView);
 
 	// Charge les textures dans la textureKeyMap
 	try {
@@ -79,6 +82,8 @@ void Box2DGame::OnInit()
 	mActionMap["onPin"] = thor::Action(sf::Keyboard::P, thor::Action::PressOnce);
 	mActionMap["onSplice"] = thor::Action(sf::Keyboard::S, thor::Action::Hold);
 	mActionMap["onFire"] = thor::Action(sf::Keyboard::F, thor::Action::PressOnce);
+	mActionMap["onHookS"] = thor::Action(sf::Keyboard::G, thor::Action::PressOnce);
+	mActionMap["onHook"] = thor::Action(sf::Keyboard::H, thor::Action::PressOnce);
 }
 
 /// Appelé quand la boucle commence
@@ -121,6 +126,19 @@ void Box2DGame::OnLoopBegin()
 			++it;
 		}
 	}
+
+	// Mets à jour le grapin
+	if (mHookJoint)
+	{
+		if (mHookJoint->IsNull())
+			mHookJoint = nullptr;
+		else
+		{
+			if (mHookJoint->GetLenght() - mHookClock.getElapsedTime().asSeconds() * 0.2f > 0)
+				mHookJoint->SetLenght(mHookJoint->GetLenght() - mHookClock.getElapsedTime().asSeconds() * 0.2f);
+			mHookClock.restart();
+		}
+	}
 }
 
 /// Appelé pour les évènements
@@ -148,8 +166,90 @@ void Box2DGame::OnEvent()
 	if (mActionMap.isActive("onLoadLevel"))
 	{
 		LevelLoader("lvls/1.lvl", mLevel);
+
+		// Centre la vue
+		mView.setSize(mWindow.getSize().x * mView.getViewport().width, mWindow.getSize().y * mView.getViewport().height);
+		mView.setCenter(b22sfVec(mLevel->GetOriginView(), mWorld.GetPPM()));
+		mView.zoom(mLevel->GetDefaultZoom());
+		mWindow.setView(mView);
+	}
+
+	// "Surcharge" des zooms
+    if (mActionMap.isActive("zoomReset"))
+	{
+		mCurrentZoom = mLevel->GetDefaultZoom();
+		mView.setSize(mWindow.getSize().x * mView.getViewport().width, mWindow.getSize().y * mView.getViewport().height);
+		mView.setCenter(b22sfVec(mLevel->GetOriginView(), mWorld.GetPPM()));
+		mView.zoom(mLevel->GetDefaultZoom());
+		mWindow.setView(mView);
+	}
+    if (mActionMap.isActive("resized"))
+	{
+		mView.setSize(mWindow.getSize().x * mView.getViewport().width, mWindow.getSize().y * mView.getViewport().height);
+		mView.setCenter(b22sfVec(mLevel->GetOriginView(), mWorld.GetPPM()));
+		mView.zoom(mLevel->GetDefaultZoom());
+		mWindow.setView(mView);
 	}
 	
+	// Grapin
+	if (mActionMap.isActive("onHookS"))
+	{
+		if (mHookedSBody)
+			mHookedSBody = nullptr;
+
+		// Crée une petite AABB sur la souris
+		b2AABB aabb;
+		b2Vec2 d;
+		d.Set(0.001f, 0.001f);
+		aabb.lowerBound = mMp - d;
+		aabb.upperBound = mMp + d;
+
+		// Demande au monde les formes qui sont sous l'AABB
+		OverlappingBodyCallback callback(mMp, false);
+		mWorld.QueryAABB(&callback, aabb);
+
+		// Il y a un objet, on le retient
+		if (callback.GetFixture())
+		{
+			// Vérifie que le body soient valides
+			if (mHookedSBody)
+				if (mHookedSBody->IsNull())
+					mHookedSBody = nullptr;
+
+			// Enregistre le body appuyé
+			mHookedSBody = (Body*) callback.GetFixture()->GetBody()->GetUserData();
+			mHookedSAnchor = b2MulT(b2Rot(mHookedSBody->GetBody()->GetAngle()), mMp - mHookedSBody->GetBody()->GetPosition());
+		}
+	}
+	if (mActionMap.isActive("onHook"))
+	{
+		// Crée une petite AABB sur la souris
+		b2AABB aabb;
+		b2Vec2 d;
+		d.Set(0.001f, 0.001f);
+		aabb.lowerBound = mMp - d;
+		aabb.upperBound = mMp + d;
+
+		// Demande au monde les formes qui sont sous l'AABB
+		OverlappingBodyCallback callback(mMp, false);
+		mWorld.QueryAABB(&callback, aabb);
+
+		// Il y a un objet, on le retient
+		if (callback.GetFixture() && mHookedSBody)
+		{
+			if (mHookJoint)
+				mWorld.DestroyJoint(mHookJoint);
+
+			// Enregistre le body appuyé
+			Body *b = (Body*) callback.GetFixture()->GetBody()->GetUserData();
+			b2Vec2 v = b2MulT(b2Rot(b->GetBody()->GetAngle()), mMp - b->GetBody()->GetPosition());
+
+			mHookJoint = new DistanceJoint(&mWorld, mHookedSBody, mHookedSAnchor, b, v);
+			mWorld.RegisterJoint(mHookJoint);
+			mHookClock.restart();
+		}
+	}
+
 	// Epingle un objet
 	if (mActionMap.isActive("onPin"))
 	{
@@ -210,7 +310,7 @@ void Box2DGame::OnEvent()
 			mWorld.RegisterJoint(new DistanceJoint(&mWorld, mPinBodyA, mPinAnchorA, mPinBodyB, mPinAnchorB));
 
 			mPinBodyA = nullptr;
-			mPinBodyB = nullptr; // TODO : mPinAchor => local
+			mPinBodyB = nullptr;
 		}
 	}
 
@@ -390,7 +490,7 @@ void Box2DGame::OnEvent()
 /// Appelé pour le rendu
 void Box2DGame::OnRender()
 {
-	mWindow.clear(sf::Color::White);
+	mWindow.clear(mLevel->GetBckgColor());
 	
 	// Affichage des levels de la déco avec zindex positif
 	for (auto it = mLevel->GetDeco().begin(); it != mLevel->GetDeco().end(); ++it)

@@ -36,7 +36,7 @@ sf::Uint32 string2Uint32(const std::string& value, const sf::Uint32 default)
 	return result;
 }
 
- sf::Color string2color(const std::string& value, const sf::Color& default)
+sf::Color string2color(const std::string& value, const sf::Color& default)
 {
 	sf::Color result = default;
 
