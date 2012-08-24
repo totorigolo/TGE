@@ -23,18 +23,20 @@ Le bugtracker est disponible ici :
 https://bitbucket.org/totorigolo/inverse-way-liberation/issues
 
 
-Remerciements :
-==============
-
-Eric Catto pour son formidable Box2D (et "Tomb Raider : Legend" :D)
-
-
 Staff:
 ============================
 
 Développeur : Thomas Lacroix aka totorigolo  -  toto.rigolo@free.fr
 
 Graphiste : Yann Chateau aka Ozzie
+
+
+Remerciements :
+==============
+
+Laurent Gomila pour sa SFML.
+Nexus pour sa librairie Thor.
+Eric Catto pour son formidable Box2D (et "Tomb Raider : Legend" :D).
 
 
 Licence :
