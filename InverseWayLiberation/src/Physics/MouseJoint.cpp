@@ -22,6 +22,7 @@ MouseJoint::MouseJoint(World *world, Body *body, Body *ground, b2Vec2 target, fl
 		mBodyB->GetBody()->SetAwake(true);
 		mBodyB->GetBody()->SetBullet(true);
 		mIsNull = false;
+		mBodyB->RegisterJoint(this);
 	}
 
 	(*this)[0].color = mColor;

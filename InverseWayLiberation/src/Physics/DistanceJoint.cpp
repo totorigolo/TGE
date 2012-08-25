@@ -19,6 +19,9 @@ DistanceJoint::DistanceJoint(World *world, Body *b1, b2Vec2 p1, Body *b2, b2Vec2
 		jointDef.dampingRatio = damping;
 		mJoint = (b2DistanceJoint*) mWorld->CreateJoint(&jointDef, this);
 		
+		mBodyA->GetBody()->SetBullet(true);
+		mBodyB->GetBody()->SetBullet(true);
+		
 		mBodyA->RegisterJoint(this);
 		mBodyB->RegisterJoint(this);
 		mIsNull = false;
@@ -31,6 +34,12 @@ DistanceJoint::DistanceJoint(World *world, Body *b1, b2Vec2 p1, Body *b2, b2Vec2
 // Dtor
 DistanceJoint::~DistanceJoint(void)
 {
+	if (mBodyA)
+		if (mBodyA->GetBody())
+			mBodyA->GetBody()->SetBullet(false);
+	if (mBodyB)
+		if (mBodyB->GetBody())
+			mBodyB->GetBody()->SetBullet(false);
 }
 
 // Mets à jour le VertexArray

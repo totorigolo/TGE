@@ -61,8 +61,9 @@ void Body::DestroyAllJoints()
 {
 	for (auto it = mJointList.begin(); it != mJointList.end(); )
 	{
-		mWorld->DestroyJoint(*it, false, true);
-		it = mJointList.erase(it);
+		auto it2 = it; it2++;
+		mWorld->DestroyJoint(*it);
+		it = it2;
 	}
 }
 

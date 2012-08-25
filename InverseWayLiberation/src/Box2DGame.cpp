@@ -83,7 +83,6 @@ void Box2DGame::OnInit()
 	mActionMap["onPin"] = thor::Action(sf::Keyboard::P, thor::Action::PressOnce);
 	mActionMap["onSplice"] = thor::Action(sf::Keyboard::S, thor::Action::Hold);
 	mActionMap["onFire"] = thor::Action(sf::Keyboard::F, thor::Action::PressOnce);
-	mActionMap["onHookS"] = thor::Action(sf::Keyboard::G, thor::Action::PressOnce);
 	mActionMap["onHook"] = thor::Action(sf::Keyboard::H, thor::Action::PressOnce);
 }
 
@@ -99,12 +98,15 @@ void Box2DGame::OnLoopBegin()
 	mWorld.Step(1.f / 60.f, 8, 3);
 	mWorld.ClearForces();
 
-	// Affichage des objets dynamiques
+	// Destruction des bodies en dehors de la zone
 	for (auto it = mWorld.GetBodyList().begin(); it != mWorld.GetBodyList().end(); )
 	{
-		bool erase = false;
-		// Vérifie si l'objet est hors du monde et pas accroché à la souris
-		if (!(*it)->IsInRange(b2Vec2(200.f, -200.f), b2Vec2(800.f, -200.f)))
+		// On supprime seulement les dynamicBodies
+		if ((*it)->GetBody()->GetType() == b2_dynamicBody)
+		{
+			bool erase = false;
+			// Vérifie si l'objet est hors du monde et pas accroché à la souris
+			if (!(*it)->IsInRange(b2Vec2(200.f, -200.f), b2Vec2(800.f, -200.f)))
 			{
 				erase = true;
 				if (mMouseJoint)
@@ -112,26 +114,29 @@ void Box2DGame::OnLoopBegin()
 						erase = false;
 			}
 
-		// Supprime le body
-		if (erase)
-		{
-			auto it2 = it;
-			++it2;
-			mWorld.DestroyBody(*it);
-			it = it2;
-		}
+			// Supprime le body
+			if (erase)
+			{
+				auto it2 = it;
+				++it2;
+				mWorld.DestroyBody(*it);
+				it = it2;
+			}
 
-		// Sinon passe simplement au suivant
-		else
-		{
-			++it;
+			// Sinon passe simplement au suivant
+			else
+			{
+				++it;
+			}
 		}
+		else
+			++it;
 	}
 
 	// Mets à jour le grapin
 	if (mHookJoint)
 	{
-		if (mHookJoint->IsNull())
+		if (mHookJoint->IsNull() || !mHookJoint->GetBodyA() || !mHookJoint->GetBodyB())
 			mHookJoint = nullptr;
 		else
 		{
@@ -193,69 +198,86 @@ void Box2DGame::OnEvent()
 	{
 		mView.setSize(mWindow.getSize().x * mView.getViewport().width, mWindow.getSize().y * mView.getViewport().height);
 		mView.setCenter(b22sfVec(mLevel->GetOriginView(), mWorld.GetPPM()));
-		mView.zoom(mLevel->GetDefaultZoom());
+		mView.zoom(mCurrentZoom);
 		mWindow.setView(mView);
 	}
 	
 	// Grapin
-	if (mActionMap.isActive("onHookS"))
-	{
-		if (mHookJoint)
-			mHookJoint = nullptr;
-
-		if (mHookedSBody)
-			mHookedSBody = nullptr;
-
-		// Crée une petite AABB sur la souris
-		b2AABB aabb;
-		b2Vec2 d;
-		d.Set(0.001f, 0.001f);
-		aabb.lowerBound = mMp - d;
-		aabb.upperBound = mMp + d;
-
-		// Demande au monde les formes qui sont sous l'AABB
-		OverlappingBodyCallback callback(mMp, false);
-		mWorld.QueryAABB(&callback, aabb);
-
-		// Il y a un objet, on le retient
-		if (callback.GetFixture())
-		{
-			// Vérifie que le body soient valides
-			if (mHookedSBody)
-				if (mHookedSBody->IsNull())
-					mHookedSBody = nullptr;
-
-			// Enregistre le body appuyé
-			mHookedSBody = (Body*) callback.GetFixture()->GetBody()->GetUserData();
-			mHookedSAnchor = b2MulT(b2Rot(mHookedSBody->GetBody()->GetAngle()), mMp - mHookedSBody->GetBody()->GetPosition());
-		}
-	}
 	if (mActionMap.isActive("onHook"))
 	{
-		// Crée une petite AABB sur la souris
-		b2AABB aabb;
-		b2Vec2 d;
-		d.Set(0.001f, 0.001f);
-		aabb.lowerBound = mMp - d;
-		aabb.upperBound = mMp + d;
-
-		// Demande au monde les formes qui sont sous l'AABB
-		OverlappingBodyCallback callback(mMp, false);
-		mWorld.QueryAABB(&callback, aabb);
-
-		// Il y a un objet, on le retient
-		if (callback.GetFixture() && mHookedSBody)
+		// Si le grapin est déjà accroché, on le décroche
+		if (mHookJoint)
 		{
-			if (mHookJoint)
+			if (!mHookJoint->IsNull())
 				mWorld.DestroyJoint(mHookJoint);
+			mHookJoint = nullptr;
+		}
 
-			// Enregistre le body appuyé
-			Body *b = (Body*) callback.GetFixture()->GetBody()->GetUserData();
-			b2Vec2 v = b2MulT(b2Rot(b->GetBody()->GetAngle()), mMp - b->GetBody()->GetPosition());
+		// Si le body est déjà sélectionné, on l'accroche avec le grapin
+		else if (mHookedSBody)
+		{
+			// Crée une petite AABB sur la souris
+			b2AABB aabb;
+			b2Vec2 d;
+			d.Set(0.001f, 0.001f);
+			aabb.lowerBound = mMp - d;
+			aabb.upperBound = mMp + d;
 
-			mHookJoint = new DistanceJoint(&mWorld, mHookedSBody, mHookedSAnchor, b, v);
-			mWorld.RegisterJoint(mHookJoint);
-			mHookClock.restart();
+			// Demande au monde les formes qui sont sous l'AABB
+			OverlappingBodyCallback callback(mMp, false);
+			mWorld.QueryAABB(&callback, aabb);
+
+			// Il y a un objet, on le retient
+			if (callback.GetFixture() && mHookedSBody)
+			{
+				if (mHookJoint)
+					mWorld.DestroyJoint(mHookJoint);
+
+				// Vérifie que le body soient valides
+				if (mHookedSBody->IsNull())
+					mHookedSBody = nullptr;
+				else
+				{
+					// Enregistre le body appuyé
+					Body *b = (Body*) callback.GetFixture()->GetBody()->GetUserData();
+					b2Vec2 v = b2MulT(b2Rot(b->GetBody()->GetAngle()), mMp - b->GetBody()->GetPosition());
+
+					mHookJoint = new DistanceJoint(&mWorld, mHookedSBody, mHookedSAnchor, b, v);
+					mWorld.RegisterJoint(mHookJoint);
+					mHookClock.restart();
+				}
+			}
+			mHookedSBody = nullptr;
+		}
+
+		// Sinon on cherche le body survollé pour l'accrocher
+		else
+		{
+			// Supprime le grapin existant
+			if (mHookJoint)
+			{
+				mWorld.DestroyJoint(mHookJoint);
+				mHookJoint = nullptr;
+			}
+
+			// Crée une petite AABB sur la souris
+			b2AABB aabb;
+			b2Vec2 d;
+			d.Set(0.001f, 0.001f);
+			aabb.lowerBound = mMp - d;
+			aabb.upperBound = mMp + d;
+
+			// Demande au monde les formes qui sont sous l'AABB
+			OverlappingBodyCallback callback(mMp, false);
+			mWorld.QueryAABB(&callback, aabb);
+
+			// Il y a un objet, on le retient
+			if (callback.GetFixture())
+			{
+				// Enregistre le body appuyé
+				mHookedSBody = (Body*) callback.GetFixture()->GetBody()->GetUserData();
+				mHookedSAnchor = b2MulT(b2Rot(mHookedSBody->GetBody()->GetAngle()), mMp - mHookedSBody->GetBody()->GetPosition());
+			}
 		}
 	}
 
