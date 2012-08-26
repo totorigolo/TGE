@@ -3,10 +3,11 @@
 #include <Box2D/Box2D.h>
 #include <string>
 
-// Constantes de convertion Degrés <> Radians
+// Constantes de convertion Radians -> Degrés
 const float DEGREES_PER_RADIANS = 180.f / b2_pi;
 const float DPR = DEGREES_PER_RADIANS;
 
+// Constantes de convertion Degrés -> Radians
 const float RADIANS_PER_DEGREES = 1.f / DPR;
 const float RPD = RADIANS_PER_DEGREES;
 
