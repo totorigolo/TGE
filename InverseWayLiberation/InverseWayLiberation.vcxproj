@@ -25,6 +25,8 @@
     <ClCompile Include="src\Physics\DynamicCircle.cpp" />
     <ClCompile Include="src\Physics\Joint.cpp" />
     <ClCompile Include="src\Physics\MouseJoint.cpp" />
+    <ClCompile Include="src\Physics\Ragdoll.cpp" />
+    <ClCompile Include="src\Physics\RevoluteJoint.cpp" />
     <ClCompile Include="src\Physics\StaticBox.cpp" />
     <ClCompile Include="src\Physics\World.cpp" />
   </ItemGroup>
@@ -44,6 +46,8 @@
     <ClInclude Include="src\Physics\Joint.h" />
     <ClInclude Include="src\Physics\MouseJoint.h" />
     <ClInclude Include="src\Physics\OverlappingBodyCallback.h" />
+    <ClInclude Include="src\Physics\Ragdoll.h" />
+    <ClInclude Include="src\Physics\RevoluteJoint.h" />
     <ClInclude Include="src\Physics\StaticBox.h" />
     <ClInclude Include="src\Physics\World.h" />
     <ClInclude Include="src\utils.h" />

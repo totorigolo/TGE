@@ -9,11 +9,13 @@
 #include "Level.h"
 #include "Physics/Body.h"
 #include "Physics/World.h"
+#include "Physics/Ragdoll.h"
 #include "Physics/MouseJoint.h"
 #include "Physics/DistanceJoint.h"
 
 class Body;
 class World;
+class Ragdoll;
 class MouseJoint;
 class Box2DGame : public Game
 {
@@ -53,6 +55,9 @@ private:
 	// Monde physique
 	b2Vec2 mGravity;
 	World mWorld;
+
+	// Héro
+	Ragdoll *mHeroRagdoll;
 	
 	// Grapin
 	Body *mHookedSBody;

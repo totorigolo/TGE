@@ -24,12 +24,36 @@ Box2DGame::Box2DGame(sf::RenderWindow & window)
 	mSplice1Get = false;
 	mHookJoint = nullptr;
 	mHookedSBody = nullptr;
+	mHeroRagdoll = nullptr;
 }
 
 // Dtor
 Box2DGame::~Box2DGame(void)
 {
-	// Les pointeurs sont supprimés dans OnQuit();
+	// Les pointeurs sont aussi supprimés dans OnQuit();
+
+	// TODO: Ce destructeur
+
+	delete mLevel;
+	mLevel = nullptr;
+
+	/*/ Héro
+	Ragdoll *mHeroRagdoll;
+	
+	// Grapin
+	Body *mHookedSBody;
+	b2Vec2 mHookedSAnchor;
+	DistanceJoint *mHookJoint;
+	sf::Clock mHookClock;
+
+	// Déplacement des objets
+	MouseJoint *mMouseJoint;
+
+	// Variables pour la création de joints
+	Body *mPinBodyA;
+	b2Vec2 mPinAnchorA; // Ancres locales aux bodies
+	Body *mPinBodyB;
+	b2Vec2 mPinAnchorB;*/
 }
 
 /* Surcharge des fonctions évènements */
@@ -71,8 +95,8 @@ void Box2DGame::OnInit()
 		exit(222);
 	}
 
-	// Crée le sol
-	//mWorld.RegisterBody(new StaticBox(&mWorld, b2Vec3(0.f, -6.f, 0.f), mTextureMap["ground"], 0.4f));
+	// Crée le héro
+	mHeroRagdoll = new Ragdoll(&mWorld, b2Vec3(-1.f, 2.f, 0.f), &mTextureCache, &mTextureMap);
 
 	/* Crée les actions */
 	mActionMap["onLoadLevel"] = thor::Action(sf::Keyboard::R, thor::Action::ReleaseOnce);
@@ -183,6 +207,10 @@ void Box2DGame::OnEvent()
 		// Supprime les pointeurs
 		mHookJoint = nullptr;
 		mMouseJoint = nullptr;
+
+		// Crée le héro
+		delete mHeroRagdoll;
+		mHeroRagdoll = new Ragdoll(&mWorld, b2Vec3(-0.3f, 10.f, 0.f), &mTextureCache, &mTextureMap);
 	}
 
 	// "Surcharge" des zooms
@@ -228,7 +256,7 @@ void Box2DGame::OnEvent()
 			mWorld.QueryAABB(&callback, aabb);
 
 			// Il y a un objet, on le retient
-			if (callback.GetFixture() && mHookedSBody)
+			if (callback.GetFixture() && mHookedSBody && callback.GetFixture()->GetBody() != mHookedSBody->GetBody())
 			{
 				if (mHookJoint)
 					mWorld.DestroyJoint(mHookJoint);
@@ -240,7 +268,7 @@ void Box2DGame::OnEvent()
 				{
 					// Enregistre le body appuyé
 					Body *b = (Body*) callback.GetFixture()->GetBody()->GetUserData();
-					b2Vec2 v = b2MulT(b2Rot(b->GetBody()->GetAngle()), mMp - b->GetBody()->GetPosition());
+					b2Vec2 v = b->GetBody()->GetLocalPoint(mMp);
 
 					mHookJoint = new DistanceJoint(&mWorld, mHookedSBody, mHookedSAnchor, b, v);
 					mWorld.RegisterJoint(mHookJoint);
@@ -313,12 +341,12 @@ void Box2DGame::OnEvent()
 				if (!mPinBodyA && mPinBodyB != (Body*) callback.GetFixture()->GetBody()->GetUserData())
 				{
 					mPinBodyA = (Body*) callback.GetFixture()->GetBody()->GetUserData();
-					mPinAnchorA = b2MulT(b2Rot(mPinBodyA->GetBody()->GetAngle()), mMp - mPinBodyA->GetBody()->GetPosition());
+					mPinAnchorA = mPinBodyA->GetBody()->GetLocalPoint(mMp);
 				}
 				else if (!mPinBodyB && mPinBodyA != (Body*) callback.GetFixture()->GetBody()->GetUserData())
 				{
 					mPinBodyB = (Body*) callback.GetFixture()->GetBody()->GetUserData();
-					mPinAnchorB = b2MulT(b2Rot(mPinBodyB->GetBody()->GetAngle()), mMp - mPinBodyB->GetBody()->GetPosition());
+					mPinAnchorB = mPinBodyB->GetBody()->GetLocalPoint(mMp);
 				}
 				else
 				{
@@ -339,6 +367,7 @@ void Box2DGame::OnEvent()
 		if (mPinBodyA && mPinBodyB)
 		{
 			mWorld.RegisterJoint(new DistanceJoint(&mWorld, mPinBodyA, mPinAnchorA, mPinBodyB, mPinAnchorB));
+			//mWorld.RegisterJoint(new RevoluteJoint(&mWorld, mPinBodyA, mPinBodyB, mPinAnchorA, true, 90.f, 270.f, true, 30.f));
 
 			mPinBodyA = nullptr;
 			mPinBodyB = nullptr;
@@ -535,13 +564,6 @@ void Box2DGame::OnRender()
 		}
 	}
 
-	// Affichage des joints
-	for (auto it = mWorld.GetJointList().begin(); it != mWorld.GetJointList().end(); ++it)
-	{
-		(*it)->Update();
-		mWindow.draw(**it);
-	}
-
 	// Affichage des objets dynamiques
 	for (auto it = mWorld.GetBodyList().begin(); it != mWorld.GetBodyList().end(); ++it)
 	{
@@ -560,6 +582,13 @@ void Box2DGame::OnRender()
 			(*it)->Update();
 			mWindow.draw(**it);
 		}
+	}
+	
+	// Affichage des joints
+	for (auto it = mWorld.GetJointList().begin(); it != mWorld.GetJointList().end(); ++it)
+	{
+		(*it)->Update();
+		mWindow.draw(**it);
 	}
 
 	// Affichage du joint de la souris
