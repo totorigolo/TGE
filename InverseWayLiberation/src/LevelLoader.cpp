@@ -5,6 +5,7 @@
 #include "Physics/World.h"
 #include "Physics/StaticBox.h"
 #include "Physics/DynamicBox.h"
+#include "Physics/KinematicBox.h"
 #include "Physics/DynamicCircle.h"
 #include "Physics/DistanceJoint.h"
 #include <Thor/Resources.hpp>
@@ -208,6 +209,7 @@ bool LevelLoader::CreateLine(std::string& section, std::string& name, std::strin
 		#  - db = dynamicBox + densité(1.f) friction(0.2f) restitution(0.0f)
 		#  - dc = dynamicCircle + densité(1.f) friction(0.2f) restitution(0.0f)
 		#  - sb = staticBox + friction(0.2f) restitution(0.0f)
+		#  - kb = kinematicBody + restitution(0.0f)
 
 		# ex : box = (5.2f, 9.f, 45.f) db 2.f
 	*/
@@ -224,8 +226,9 @@ bool LevelLoader::CreateLine(std::string& section, std::string& name, std::strin
 			size_t isdb = value.find("db", posRotOffset);
 			size_t isdc = value.find("dc", posRotOffset);
 			size_t issb = value.find("sb", posRotOffset);
-			size_t list[] = {isdb, isdc, issb};
-			size_t isOffset = first_not_of(list, 3, std::string::npos);
+			size_t iskb = value.find("kb", posRotOffset);
+			size_t list[] = {isdb, isdc, issb, iskb};
+			size_t isOffset = first_not_of(list, 4, std::string::npos);
 			
 			if (isOffset != std::string::npos)
 			{
@@ -295,6 +298,16 @@ bool LevelLoader::CreateLine(std::string& section, std::string& name, std::strin
 
 					// Crée le body
 					mLevel->mWorld->RegisterBody(new StaticBox(mLevel->mWorld, posRot, (*mLevel->mTextureMap)[name], friction, restitution));
+					return true;
+				}
+				// kinematicBox
+				else if (iskb != std::string::npos)
+				{
+					// Récupère les propriétés
+					float restitution = (p1 != -1.f) ? p1 : 0.f;
+
+					// Crée le body
+					mLevel->mWorld->RegisterBody(new KinematicBox(mLevel->mWorld, posRot, (*mLevel->mTextureMap)[name], restitution));
 					return true;
 				}
 			}

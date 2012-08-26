@@ -48,6 +48,8 @@
 		<Unit filename="src\Physics\FirstBodyRaycastCallback.h" />
 		<Unit filename="src\Physics\Joint.cpp" />
 		<Unit filename="src\Physics\Joint.h" />
+		<Unit filename="src\Physics\KinematicBox.cpp" />
+		<Unit filename="src\Physics\KinematicBox.h" />
 		<Unit filename="src\Physics\MouseJoint.cpp" />
 		<Unit filename="src\Physics\MouseJoint.h" />
 		<Unit filename="src\Physics\OverlappingBodyCallback.h" />

@@ -28,17 +28,10 @@
 #  - db = dynamicBox +, densité(1.f), friction(0.2f), restitution(0.0f)!
 #  - dc = dynamicCircle +, densité(1.f), friction(0.2f), restitution(0.0f)!
 #  - sb = staticBox +, friction(0.2f), restitution(0.0f)!
+#  - kb = kinematicBox +, restitution(0.0f)!
 
 # ex : box = (5.2f, 9.f, 45.f) db, 2.f!
 
-;	box 	= (0.f, 10.f, 45.f) db
-;	box2 	= (2.f, 10.f) db, 1.f, 0.2f, 0.8f!
-;	caisse 	= (4.f, 10.f, 40.f) db
-;	tonneau = (6.f, 10.f) db, 1.f, 0.002f!
-	
-;	circle 	= (-2.f, 10.f) dc, 1.f, 0.2f, 0.5f!
-;	ball 	= (-1.85f, 11.f) dc, 5.f, 0.05f!
-	
 	ground = (0.f, -0.64f) sb, 0.4f!
 
 	way = (-5.f, 0.5f, 90.f) sb
@@ -56,6 +49,8 @@
 	box 	= (0.f, 3.f) db
 	box2 	= (1.5f, 3.f) db
 	caisse 	= (1.9f, 3.f) db
+	
+	caisse 	= (1.9f, 4.f) kb, 0.9f!
 
 # Crée des textures sans colisions
 # "deco_" + nombre == z-index // parallax
@@ -75,6 +70,8 @@
 # ex: [floor_5]
 [floor_5]
 #   : (position)
+
+
 
 
 

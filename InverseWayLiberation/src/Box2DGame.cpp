@@ -567,17 +567,27 @@ void Box2DGame::OnRender()
 	// Affichage des objets dynamiques
 	for (auto it = mWorld.GetBodyList().begin(); it != mWorld.GetBodyList().end(); ++it)
 	{
-		if ((*it)->GetBody()->GetType() == b2_dynamicBody)
+		if ((*it)->GetBody()->GetType() == b2_dynamicBody && (*it)->IsDrawable())
+		{
+			(*it)->Update();
+			mWindow.draw(**it);
+		}
+	}
+	
+	// Affichage des objets statiques
+	for (auto it = mWorld.GetBodyList().rbegin(); it != mWorld.GetBodyList().rend(); ++it)
+	{
+		if ((*it)->GetBody()->GetType() == b2_staticBody && (*it)->IsDrawable())
 		{
 			(*it)->Update();
 			mWindow.draw(**it);
 		}
 	}
 
-	// Affichage des objets statiques
+	// Affichage des objets cinématiques
 	for (auto it = mWorld.GetBodyList().rbegin(); it != mWorld.GetBodyList().rend(); ++it)
 	{
-		if ((*it)->GetBody()->GetType() == b2_staticBody)
+		if ((*it)->GetBody()->GetType() == b2_kinematicBody && (*it)->IsDrawable())
 		{
 			(*it)->Update();
 			mWindow.draw(**it);

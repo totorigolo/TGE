@@ -79,6 +79,9 @@
     <ClCompile Include="src\Physics\RevoluteJoint.cpp">
       <Filter>Fichiers sources\Physics</Filter>
     </ClCompile>
+    <ClCompile Include="src\Physics\KinematicBox.cpp">
+      <Filter>Fichiers sources\Physics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Box2DGame.h">
@@ -139,6 +142,9 @@
       <Filter>Fichiers d%27en-tête\Physics</Filter>
     </ClInclude>
     <ClInclude Include="src\Physics\RevoluteJoint.h">
+      <Filter>Fichiers d%27en-tête\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Physics\KinematicBox.h">
       <Filter>Fichiers d%27en-tête\Physics</Filter>
     </ClInclude>
   </ItemGroup>

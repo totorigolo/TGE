@@ -29,8 +29,10 @@ public:
 
 	// Accesseurs
 	void SetBody(b2Body *body); // NE PAS UTILISER
+	void SetDrawable(bool drawable) { mIsDrawable = drawable; }
 
 	bool IsNull() const { return mIsNull; }
+	bool IsDrawable() const { return mIsDrawable; }
 	bool IsStatic() const { return mBody->GetType() == b2_staticBody; }
 	b2Body* GetBody() { return mBody; }
 	World* GetWorld() { return mWorld; }
@@ -41,6 +43,7 @@ public:
 
 protected:
 	bool mIsNull;
+	bool mIsDrawable;
 
 	// Variables pour l'objet physique
 	World *mWorld;
