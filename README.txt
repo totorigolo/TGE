@@ -36,7 +36,7 @@ Remerciements :
 
 Laurent Gomila pour sa SFML.
 Nexus pour sa librairie Thor.
-Eric Catto pour son formidable Box2D (et "Tomb Raider : Legend" :D).
+Erin Catto pour son formidable Box2D (et "Tomb Raider : Legend" :D).
 
 
 Licence :
