@@ -41,23 +41,31 @@ sf::Color string2color(const std::string& value, const sf::Color& default)
 	sf::Color result = default;
 
 	// Cherche le rouge
+	size_t p1Offset = value.find_first_of('(');
 	size_t redOffset = value.find_first_of(',');
 	if (redOffset != std::string::npos)
 	{
-		result.r = (sf::Uint8) atoi(value.substr(0, redOffset).c_str());
+		result.r = (sf::Uint8) string2int(value.substr(p1Offset + 1, redOffset).c_str());
 
 		// Cherche le vert
 		size_t greenOffset = value.find_first_of(',', redOffset + 1);
 		if (greenOffset != std::string::npos)
 		{
-			result.g = (sf::Uint8) atoi(value.substr(redOffset + 1, greenOffset).c_str());
+			result.g = (sf::Uint8) string2int(value.substr(redOffset + 1, greenOffset).c_str());
 
-			// Cherche le bleu et le canal alpha
+			// Cherche le bleu
 			size_t blueOffset = value.find_first_of(',', greenOffset + 1);
 			if (blueOffset != std::string::npos)
 			{
-				result.b = (sf::Uint8) atoi(value.substr(greenOffset + 1, blueOffset).c_str());
-				result.a = (sf::Uint8) atoi(value.substr(blueOffset + 1).c_str());
+				result.b = (sf::Uint8) string2int(value.substr(greenOffset + 1, blueOffset).c_str());
+				
+				// Cherche le canal alpha
+				size_t alphaOffset = value.find_first_of(',', blueOffset + 1);
+				size_t p2Offset = value.find_first_of(')', blueOffset + 1);
+				if (alphaOffset != std::string::npos)
+				{
+					result.a = (sf::Uint8) string2int(value.substr(alphaOffset + 1, p2Offset).c_str());
+				}
 			}
 		}
 	}
