@@ -42,10 +42,13 @@ void World::DestroyBody(Body *body, bool _delete, bool remove)
 }
 void World::DestroyAllBody()
 {
-	for (auto it = mBodyList.begin(); it != mBodyList.end(); ++it)
+	for (auto it = mBodyList.begin(); it != mBodyList.end(); )
 	{
+		auto it2 = it; ++it2;
 		this->DestroyBody(*it, true, false);
+		it = it2;
 	}
+	// Au cas où...
 	mBodyList.clear();
 }
 
@@ -76,10 +79,13 @@ void World::DestroyJoint(Joint *joint, bool _delete, bool remove)
 }
 void World::DestroyAllJoints()
 {
-	for (auto it = mJointList.begin(); it != mJointList.end(); ++it)
+	for (auto it = mJointList.begin(); it != mJointList.end(); )
 	{
-		this->DestroyJoint(*it, true, false);
+		auto it2 = it; ++it2;
+		this->DestroyJoint(*it);
+		it = it2;
 	}
+	// Au cas où...
 	mJointList.clear();
 }
 
