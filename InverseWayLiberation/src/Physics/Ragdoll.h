@@ -21,6 +21,9 @@ public:
 	// Met à jour la position des sprites
 	void Update();
 
+	// Accesseurs
+	bool IsValid() const { return mIsValid; }
+
 private:
 	bool mIsValid;
 	World *mWorld;
@@ -28,8 +31,9 @@ private:
 	std::map<std::string, std::shared_ptr<sf::Texture>> *mTextureMap;
 
 	/* Bodies */
-	// Tête
+	// Tête et cou
 	DynamicCircle *mHead;
+	DynamicBox *mNeck;
 	
 	// Torse
 	DynamicBox *mTorso1;
@@ -41,15 +45,20 @@ private:
 	DynamicBox *mArmL2;
 	DynamicBox *mArmR1;
 	DynamicBox *mArmR2;
-
+	
 	// Jambes
 	DynamicBox *mLegL1;
 	DynamicBox *mLegL2;
 	DynamicBox *mLegR1;
 	DynamicBox *mLegR2;
 
+	// Pieds
+	DynamicBox *mFootL;
+	DynamicBox *mFootR;
+
 	/* Joints */
-	RevoluteJoint *mHead_Torso1;
+	RevoluteJoint *mHead_Neck;
+	RevoluteJoint *mNeck_Torso1;
 	RevoluteJoint *mTorso1_2;
 	RevoluteJoint *mTorso2_3;
 	RevoluteJoint *mArmL_Torso1;
@@ -60,4 +69,6 @@ private:
 	RevoluteJoint *mArmR1_2;
 	RevoluteJoint *mLegL1_2;
 	RevoluteJoint *mLegR1_2;
+	RevoluteJoint *mLegL2_FootL;
+	RevoluteJoint *mLegR2_FootR;
 };
