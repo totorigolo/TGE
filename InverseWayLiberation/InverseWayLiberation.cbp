@@ -45,11 +45,16 @@
 		<Unit filename="src\Physics\DynamicBox.h" />
 		<Unit filename="src\Physics\DynamicCircle.cpp" />
 		<Unit filename="src\Physics\DynamicCircle.h" />
+		<Unit filename="src\Physics\FirstBodyRaycastCallback.h" />
 		<Unit filename="src\Physics\Joint.cpp" />
 		<Unit filename="src\Physics\Joint.h" />
 		<Unit filename="src\Physics\MouseJoint.cpp" />
 		<Unit filename="src\Physics\MouseJoint.h" />
 		<Unit filename="src\Physics\OverlappingBodyCallback.h" />
+		<Unit filename="src\Physics\Ragdoll.cpp" />
+		<Unit filename="src\Physics\Ragdoll.h" />
+		<Unit filename="src\Physics\RevoluteJoint.cpp" />
+		<Unit filename="src\Physics\RevoluteJoint.h" />
 		<Unit filename="src\Physics\StaticBox.cpp" />
 		<Unit filename="src\Physics\StaticBox.h" />
 		<Unit filename="src\Physics\World.cpp" />
