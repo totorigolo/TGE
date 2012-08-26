@@ -3,7 +3,7 @@
 	gravity = (0.f, -9.8f)
 	PPM = 100.f
 	bckgc = (0, 0, 0, 255)
-	originView = (0.f, 2.f)
+	originView = (-1.7f, 2.f)
 	defaultZoom = 1.f
 
 # Charge les textures
@@ -55,7 +55,7 @@
 	way 	= (1.5f, 2.5f) sb
 	box 	= (0.f, 3.f) db
 	box2 	= (1.5f, 3.f) db
-	caisse 	= (2f, 3.f) db
+	caisse 	= (1.9f, 3.f) db
 
 # Crée des textures sans colisions
 # "deco_" + nombre == z-index // parallax
