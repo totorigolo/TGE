@@ -2,7 +2,8 @@
 #include "../utils.h"
 
 //Ctor
-DynamicBox::DynamicBox(World *world, b2Vec3 posRot, std::shared_ptr<sf::Texture> texture, float density, float friction, float restitution)
+DynamicBox::DynamicBox(World *world, b2Vec3 posRot, std::shared_ptr<sf::Texture> texture, float density, float friction, float restitution
+																						, int groupIndex, uint16 categoryBits, uint16 maskBits)
 	: Body(world), mTexture(texture)
 {
 	// Change la texture
@@ -28,6 +29,9 @@ DynamicBox::DynamicBox(World *world, b2Vec3 posRot, std::shared_ptr<sf::Texture>
 		fixtureDef.density = density;
 		fixtureDef.friction = friction;
 		fixtureDef.restitution = restitution;
+		fixtureDef.filter.groupIndex = groupIndex;
+		fixtureDef.filter.categoryBits = categoryBits;
+		fixtureDef.filter.maskBits = maskBits;
 		fixtureDef.shape = mShape;
 		mBody->CreateFixture(&fixtureDef);
 

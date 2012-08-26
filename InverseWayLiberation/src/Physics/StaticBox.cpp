@@ -2,7 +2,8 @@
 #include "../utils.h"
 
 //Ctor
-StaticBox::StaticBox(World *world, b2Vec3 posRot, std::shared_ptr<sf::Texture> texture, float friction, float restitution)
+StaticBox::StaticBox(World *world, b2Vec3 posRot, std::shared_ptr<sf::Texture> texture, float friction, float restitution
+																					  , int groupIndex, uint16 categoryBits, uint16 maskBits)
 	: Body(world), mTexture(texture)
 {
 	// Change la texture
@@ -28,6 +29,9 @@ StaticBox::StaticBox(World *world, b2Vec3 posRot, std::shared_ptr<sf::Texture> t
 		fixtureDef.density = 0.f;
 		fixtureDef.friction = friction;
 		fixtureDef.restitution = restitution;
+		fixtureDef.filter.groupIndex = groupIndex;
+		fixtureDef.filter.categoryBits = categoryBits;
+		fixtureDef.filter.maskBits = maskBits;
 		fixtureDef.shape = mShape;
 		mBody->CreateFixture(&fixtureDef);
 		
