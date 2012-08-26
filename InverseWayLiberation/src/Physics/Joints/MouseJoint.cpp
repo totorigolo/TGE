@@ -77,3 +77,11 @@ Body const* MouseJoint::GetAttachedBody() const
 {
 	return this->GetBodyB();
 }
+b2Vec2 MouseJoint::GetAnchor() const
+{
+	return ((b2MouseJoint*) mJoint)->GetAnchorB();
+}
+b2Vec2 MouseJoint::GetTarget() const
+{
+	return ((b2MouseJoint*) mJoint)->GetTarget();
+}

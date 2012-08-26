@@ -7,20 +7,15 @@ DistanceJoint::DistanceJoint(World *world, Body *b1, b2Vec2 p1, Body *b2, b2Vec2
 {
 	mBodyA = b1;
 	mBodyB = b2;
-	mAnchorA = mBodyA->GetBody()->GetWorldPoint(p1);
-	mAnchorB = mBodyB->GetBody()->GetWorldPoint(p2);
 
 	if (mWorld && mBodyA && mBodyB)
 	{
 		b2DistanceJointDef jointDef;
-		jointDef.Initialize(mBodyA->GetBody(), mBodyB->GetBody(), mAnchorA, mAnchorB);
+		jointDef.Initialize(mBodyA->GetBody(), mBodyB->GetBody(), mBodyA->GetBody()->GetWorldPoint(p1), mBodyB->GetBody()->GetWorldPoint(p2));
 		jointDef.collideConnected = collideconnected;
 		jointDef.frequencyHz = frequencyHz;
 		jointDef.dampingRatio = damping;
 		mJoint = (b2DistanceJoint*) mWorld->CreateJoint(&jointDef, this);
-		
-		mBodyA->GetBody()->SetBullet(true);
-		mBodyB->GetBody()->SetBullet(true);
 		
 		mBodyA->RegisterJoint(this);
 		mBodyB->RegisterJoint(this);
@@ -34,12 +29,6 @@ DistanceJoint::DistanceJoint(World *world, Body *b1, b2Vec2 p1, Body *b2, b2Vec2
 // Dtor
 DistanceJoint::~DistanceJoint(void)
 {
-	if (mBodyA)
-		if (mBodyA->GetBody())
-			mBodyA->GetBody()->SetBullet(false);
-	if (mBodyB)
-		if (mBodyB->GetBody())
-			mBodyB->GetBody()->SetBullet(false);
 }
 
 // Mets à jour le VertexArray
@@ -61,7 +50,7 @@ void DistanceJoint::Update()
 }
 
 // Accesseurs
-float DistanceJoint::GetLenght() const
+float DistanceJoint::GetLength() const
 {
 	return ((b2DistanceJoint*) mJoint)->GetLength();
 }
@@ -73,12 +62,20 @@ float DistanceJoint::GetDampingRatio() const
 {
 	return ((b2DistanceJoint*) mJoint)->GetDampingRatio();
 }
+b2Vec2 DistanceJoint::GetAnchorA() const
+{
+	return ((b2DistanceJoint*) mJoint)->GetAnchorA();
+}
+b2Vec2 DistanceJoint::GetAnchorB() const
+{
+	return ((b2DistanceJoint*) mJoint)->GetAnchorB();
+}
 
-void DistanceJoint::SetLenght(float lenght)
+void DistanceJoint::SetLength(float length)
 {
 	mBodyA->GetBody()->SetAwake(true);
 	mBodyB->GetBody()->SetAwake(true);
-	((b2DistanceJoint*) mJoint)->SetLength(lenght);
+	((b2DistanceJoint*) mJoint)->SetLength(length);
 }
 void DistanceJoint::SetFrequencyHz(float frequencyHz)
 {

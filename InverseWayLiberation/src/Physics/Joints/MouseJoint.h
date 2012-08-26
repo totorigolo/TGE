@@ -24,6 +24,8 @@ public:
 	float GetFrequencyHz() const;
 	float GetDampingRatio() const;
 	Body const* GetAttachedBody() const;
+	b2Vec2 GetAnchor() const;
+	b2Vec2 GetTarget() const;
 	
 	sf::Color& GetColor() { return mColor; }
 	void SetColor(sf::Color const& color) { mColor = color; }

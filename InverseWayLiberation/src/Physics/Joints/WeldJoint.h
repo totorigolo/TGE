@@ -7,25 +7,24 @@
 
 class World;
 class Joint;
-class DistanceJoint : public Joint
+class WeldJoint : public Joint
 {
 public:
-	// Ctor & dtor
-	DistanceJoint(World *world, Body *b1, b2Vec2 p1, Body *b2, b2Vec2 p2, float frequencyHz = 4.f, float damping = 0.5f, bool collideconnected = true
-																		, sf::Color const& color = sf::Color::Magenta);
-	virtual ~DistanceJoint(void);
+	// Ctor & dtor                             Anchor relative to bodyA
+	WeldJoint(World *world, Body *b1, Body *b2, b2Vec2 anchor, float frequencyHz = 4.f, float damping = 0.5f, bool collideconnected = true
+															 , sf::Color const& color = sf::Color::Magenta);
+	virtual ~WeldJoint(void);
 	
 	// Mets à jour le VertexArray
 	void Update();
 
 	// Accesseurs
-	float GetLength() const;
+	float GetReferenceAngle() const;
 	float GetFrequencyHz() const;
 	float GetDampingRatio() const;
 	b2Vec2 GetAnchorA() const;
 	b2Vec2 GetAnchorB() const;
 
-	void SetLength(float length);
 	void SetFrequencyHz(float frequencyHz);
 	void SetDampingRatio(float damping);
 	

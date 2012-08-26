@@ -17,6 +17,12 @@ public:
 	// Met à jour le joint
 	virtual void Update();
 
+	// Gestion des joints à supprimer avant celui-ci (pour les GearJoints)
+	void RegisterJoint(Joint *joint);
+	void RemoveJoint(Joint *joint);
+	void DestroyJoint(Joint *joint, bool remove = true);
+	void DestroyAllJoints();
+
 	// Accesseurs
 	bool IsNull() const { return mIsNull; }
 
@@ -29,8 +35,10 @@ public:
 
 	Body const* GetBodyA() const { return mBodyA; }
 	Body const* GetBodyB() const { return mBodyB; }
-	b2Vec2 const& GetAnchorA() const { return mAnchorA; }
-	b2Vec2 const& GetAnchorB() const { return mAnchorB; }
+
+	// Ces deux fonctions peuvent demander qqs calculs, donc à ne pas trop utiliser
+	b2Vec2 GetReactionForce(float inv_dt) const;
+	float GetReactionTorque(float inv_dt) const;
 
 protected:
 	bool mIsNull;
@@ -40,6 +48,7 @@ protected:
 
 	Body *mBodyA;
 	Body *mBodyB;
-	b2Vec2 mAnchorA;
-	b2Vec2 mAnchorB;
+
+	// Liste des joint à supprimer avant celui-ci
+	std::list<Joint*> mJointList;
 };

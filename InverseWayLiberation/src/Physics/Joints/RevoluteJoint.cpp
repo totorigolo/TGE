@@ -9,12 +9,11 @@ RevoluteJoint::RevoluteJoint(World *world, Body *b1, Body *b2, b2Vec2 anchor, bo
 {
 	mBodyA = b1;
 	mBodyB = b2;
-	mAnchorA = mBodyA->GetBody()->GetWorldPoint(anchor);
 
 	if (mWorld && mBodyA && mBodyB)
 	{
 		b2RevoluteJointDef jointDef;
-		jointDef.Initialize(mBodyA->GetBody(), mBodyB->GetBody(), mAnchorA);
+		jointDef.Initialize(mBodyA->GetBody(), mBodyB->GetBody(), mBodyA->GetBody()->GetWorldPoint(anchor));
 		jointDef.collideConnected = collideconnected;
 		jointDef.enableLimit = enableLimit;
 		jointDef.lowerAngle = lowerAngle * RPD;
@@ -22,7 +21,7 @@ RevoluteJoint::RevoluteJoint(World *world, Body *b1, Body *b2, b2Vec2 anchor, bo
 		jointDef.enableMotor = enableMotor;
 		jointDef.motorSpeed = motorSpeed * RPD;
 		jointDef.maxMotorTorque = maxMotorTorque;
-		mJoint = (b2DistanceJoint*) mWorld->CreateJoint(&jointDef, this);
+		mJoint = (b2RevoluteJoint*) mWorld->CreateJoint(&jointDef, this);
 		
 		mBodyA->RegisterJoint(this);
 		mBodyB->RegisterJoint(this);
@@ -86,6 +85,10 @@ bool RevoluteJoint::IsMotorEnabled() const
 {
 	return ((b2RevoluteJoint*) mJoint)->IsMotorEnabled();
 }
+float RevoluteJoint::GetMotorTorque(float inv_dt) const
+{
+	return ((b2RevoluteJoint*) mJoint)->GetMotorTorque(inv_dt);
+}
 float RevoluteJoint::GetMaxMotorTorque() const
 {
 	return ((b2RevoluteJoint*) mJoint)->GetMaxMotorTorque();
@@ -93,6 +96,14 @@ float RevoluteJoint::GetMaxMotorTorque() const
 float RevoluteJoint::GetMotorSpeed() const
 {
 	return ((b2RevoluteJoint*) mJoint)->GetMotorSpeed();
+}
+b2Vec2 RevoluteJoint::GetAnchorRelativeToBodyA() const
+{
+	return ((b2RevoluteJoint*) mJoint)->GetAnchorA();
+}
+b2Vec2 RevoluteJoint::GetAnchorRelativeToBodyB() const
+{
+	return ((b2RevoluteJoint*) mJoint)->GetAnchorB();
 }
 
 void RevoluteJoint::SetLimitEnabled(bool enableLimit)

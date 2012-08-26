@@ -94,6 +94,27 @@
     <ClCompile Include="src\Physics\World.cpp">
       <Filter>Fichiers sources\Physics</Filter>
     </ClCompile>
+    <ClCompile Include="src\Physics\Joints\FrictionJoint.cpp">
+      <Filter>Fichiers sources\Physics\Joints</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Physics\Joints\GearJoint.cpp">
+      <Filter>Fichiers sources\Physics\Joints</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Physics\Joints\PrismaticJoint.cpp">
+      <Filter>Fichiers sources\Physics\Joints</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Physics\Joints\PulleyJoint.cpp">
+      <Filter>Fichiers sources\Physics\Joints</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Physics\Joints\RopeJoint.cpp">
+      <Filter>Fichiers sources\Physics\Joints</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Physics\Joints\WeldJoint.cpp">
+      <Filter>Fichiers sources\Physics\Joints</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Physics\Joints\WheelJoint.cpp">
+      <Filter>Fichiers sources\Physics\Joints</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Box2DGame.h">
@@ -158,6 +179,27 @@
     </ClInclude>
     <ClInclude Include="src\Physics\World.h">
       <Filter>Fichiers d%27en-tête\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Physics\Joints\FrictionJoint.h">
+      <Filter>Fichiers d%27en-tête\Physics\Joints</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Physics\Joints\GearJoint.h">
+      <Filter>Fichiers d%27en-tête\Physics\Joints</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Physics\Joints\PrismaticJoint.h">
+      <Filter>Fichiers d%27en-tête\Physics\Joints</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Physics\Joints\PulleyJoint.h">
+      <Filter>Fichiers d%27en-tête\Physics\Joints</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Physics\Joints\RopeJoint.h">
+      <Filter>Fichiers d%27en-tête\Physics\Joints</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Physics\Joints\WeldJoint.h">
+      <Filter>Fichiers d%27en-tête\Physics\Joints</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Physics\Joints\WheelJoint.h">
+      <Filter>Fichiers d%27en-tête\Physics\Joints</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

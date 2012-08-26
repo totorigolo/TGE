@@ -25,9 +25,16 @@
     <ClCompile Include="src\Physics\Bodies\KinematicBox.cpp" />
     <ClCompile Include="src\Physics\Bodies\StaticBox.cpp" />
     <ClCompile Include="src\Physics\Joints\DistanceJoint.cpp" />
+    <ClCompile Include="src\Physics\Joints\FrictionJoint.cpp" />
+    <ClCompile Include="src\Physics\Joints\GearJoint.cpp" />
     <ClCompile Include="src\Physics\Joints\Joint.cpp" />
     <ClCompile Include="src\Physics\Joints\MouseJoint.cpp" />
+    <ClCompile Include="src\Physics\Joints\PrismaticJoint.cpp" />
+    <ClCompile Include="src\Physics\Joints\PulleyJoint.cpp" />
     <ClCompile Include="src\Physics\Joints\RevoluteJoint.cpp" />
+    <ClCompile Include="src\Physics\Joints\RopeJoint.cpp" />
+    <ClCompile Include="src\Physics\Joints\WeldJoint.cpp" />
+    <ClCompile Include="src\Physics\Joints\WheelJoint.cpp" />
     <ClCompile Include="src\Physics\Ragdoll.cpp" />
     <ClCompile Include="src\Physics\World.cpp" />
   </ItemGroup>
@@ -46,9 +53,16 @@
     <ClInclude Include="src\Physics\Bodies\StaticBox.h" />
     <ClInclude Include="src\Physics\FirstBodyRaycastCallback.h" />
     <ClInclude Include="src\Physics\Joints\DistanceJoint.h" />
+    <ClInclude Include="src\Physics\Joints\FrictionJoint.h" />
+    <ClInclude Include="src\Physics\Joints\GearJoint.h" />
     <ClInclude Include="src\Physics\Joints\Joint.h" />
     <ClInclude Include="src\Physics\Joints\MouseJoint.h" />
+    <ClInclude Include="src\Physics\Joints\PrismaticJoint.h" />
+    <ClInclude Include="src\Physics\Joints\PulleyJoint.h" />
     <ClInclude Include="src\Physics\Joints\RevoluteJoint.h" />
+    <ClInclude Include="src\Physics\Joints\RopeJoint.h" />
+    <ClInclude Include="src\Physics\Joints\WeldJoint.h" />
+    <ClInclude Include="src\Physics\Joints\WheelJoint.h" />
     <ClInclude Include="src\Physics\OverlappingBodyCallback.h" />
     <ClInclude Include="src\Physics\Ragdoll.h" />
     <ClInclude Include="src\Physics\World.h" />

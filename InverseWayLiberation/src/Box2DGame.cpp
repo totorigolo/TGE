@@ -164,8 +164,8 @@ void Box2DGame::OnLoopBegin()
 			mHookJoint = nullptr;
 		else
 		{
-			if (mHookJoint->GetLenght() - mHookClock.getElapsedTime().asSeconds() * 0.2f > 0)
-				mHookJoint->SetLenght(mHookJoint->GetLenght() - mHookClock.getElapsedTime().asSeconds() * 8.f);
+			if (mHookJoint->GetLength() - mHookClock.getElapsedTime().asSeconds() * 0.2f > 0)
+				mHookJoint->SetLength(mHookJoint->GetLength() - mHookClock.getElapsedTime().asSeconds() * 8.f);
 			mHookClock.restart();
 		}
 	}

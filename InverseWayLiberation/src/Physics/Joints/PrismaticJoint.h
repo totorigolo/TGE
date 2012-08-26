@@ -7,36 +7,36 @@
 
 class World;
 class Joint;
-class RevoluteJoint : public Joint
+class PrismaticJoint : public Joint
 {
 public:
 	// Ctor & dtor                             Anchor relative to bodyA
-	RevoluteJoint(World *world, Body *b1, Body *b2, b2Vec2 anchor, bool enableLimit = false, float lowerAngle = 0.f, float upperAngle = 0.f
-																 , bool enableMotor = false, float motorSpeed = 0.f, float maxMotorTorque = 10.f
-																 , bool collideconnected = false, sf::Color const& color = sf::Color::Green);
-	virtual ~RevoluteJoint(void);
+	PrismaticJoint(World *world, Body *b1, Body *b2, b2Vec2 anchor, b2Vec2 axis, bool enableLimit = false, float lowerAngle = 0.f, float upperAngle = 0.f
+																			   , bool enableMotor = false, float motorSpeed = 0.f, float maxMotorTorque = 10.f
+																			   , bool collideconnected = false, sf::Color const& color = sf::Color::Green);
+	virtual ~PrismaticJoint(void);
 	
 	// Mets à jour le VertexArray
 	void Update();
 
 	// Accesseurs
-	float GetJointAngle() const;
+	float GetJointTranslation() const;
 	float GetJointSpeed() const;
 	bool IsCollideConnected() const;
 	bool IsLimitEnabled() const;
-	float GetLowerAngle() const;
-	float GetUpperAngle() const;
+	float GetLowerTranslation() const;
+	float GetUpperTranslation() const;
 	bool IsMotorEnabled() const;
-	float GetMotorTorque(float inv_dt) const;
-	float GetMaxMotorTorque() const;
 	float GetMotorSpeed() const;
+	float GetMotorForce(float inv_dt) const;
+	float GetMaxMotorForce() const;
 	b2Vec2 GetAnchorRelativeToBodyA() const;
 	b2Vec2 GetAnchorRelativeToBodyB() const;
 	
 	void SetLimitEnabled(bool enableLimit);
-	void SetLimits(float lowerAngle, float upperAngle);
+	void SetLimits(float lowerTranslation, float upperTranslation);
 	void SetMotorEnabled(bool enableMotor);
-	void SetMaxMotorTorque(float maxMotorTorque);
+	void SetMaxMotorForce(float maxMotorTorque);
 	void SetMotorSpeed(float motorSpeed);
 
 	sf::Color& GetColor() { return mColor; }
