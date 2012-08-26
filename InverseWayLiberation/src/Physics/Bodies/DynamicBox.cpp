@@ -1,9 +1,9 @@
-#include "StaticBox.h"
-#include "../utils.h"
+#include "DynamicBox.h"
+#include "../../utils.h"
 
 //Ctor
-StaticBox::StaticBox(World *world, b2Vec3 posRot, std::shared_ptr<sf::Texture> texture, float friction, float restitution
-																					  , int groupIndex, uint16 categoryBits, uint16 maskBits)
+DynamicBox::DynamicBox(World *world, b2Vec3 posRot, std::shared_ptr<sf::Texture> texture, float density, float friction, float restitution
+																						, int groupIndex, uint16 categoryBits, uint16 maskBits)
 	: Body(world), mTexture(texture)
 {
 	// Change la texture
@@ -16,17 +16,17 @@ StaticBox::StaticBox(World *world, b2Vec3 posRot, std::shared_ptr<sf::Texture> t
 		b2BodyDef bodyDef;
 		bodyDef.angle = posRot.z * RPD;
 		bodyDef.position = getVec2(posRot);
-		bodyDef.type = b2_staticBody;
+		bodyDef.type = b2_dynamicBody;
 		mBody = mWorld->CreateBody(&bodyDef, this);
 
 		// Shape
 		mShape = new b2PolygonShape;
 		((b2PolygonShape*)mShape)->SetAsBox((mTexture->getSize().x / 2) * mWorld->GetMPP(), (mTexture->getSize().y / 2) * mWorld->GetMPP());
-		mShape->m_radius = 0.f;
+		((b2PolygonShape*)mShape)->m_radius = 0.f;
 
 		// Fixture
 		b2FixtureDef fixtureDef;
-		fixtureDef.density = 0.f;
+		fixtureDef.density = density;
 		fixtureDef.friction = friction;
 		fixtureDef.restitution = restitution;
 		fixtureDef.filter.groupIndex = groupIndex;
@@ -34,19 +34,19 @@ StaticBox::StaticBox(World *world, b2Vec3 posRot, std::shared_ptr<sf::Texture> t
 		fixtureDef.filter.maskBits = maskBits;
 		fixtureDef.shape = mShape;
 		mBody->CreateFixture(&fixtureDef);
-		
+
 		mBody->SetUserData(this);
 		mIsNull = false;
 	}
 }
 
 // Dtor
-StaticBox::~StaticBox(void)
+DynamicBox::~DynamicBox(void)
 {
 }
 
 // Met à jour la position du sprite
-void StaticBox::Update()
+void DynamicBox::Update()
 {
 	if (mBody && mWorld)
 	{

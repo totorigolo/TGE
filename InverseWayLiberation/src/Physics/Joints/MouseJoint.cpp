@@ -1,5 +1,5 @@
 #include "MouseJoint.h"
-#include "../utils.h"
+#include "../../utils.h"
 
 //Ctor
 MouseJoint::MouseJoint(World *world, Body *body, Body *ground, b2Vec2 target, float maxForce, float frequencyHz, float damping, sf::Color const& color)

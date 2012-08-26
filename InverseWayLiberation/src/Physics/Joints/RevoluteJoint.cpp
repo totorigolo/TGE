@@ -1,5 +1,5 @@
 #include "RevoluteJoint.h"
-#include "../utils.h"
+#include "../../utils.h"
 
 //Ctor
 RevoluteJoint::RevoluteJoint(World *world, Body *b1, Body *b2, b2Vec2 anchor, bool enableLimit, float lowerAngle, float upperAngle

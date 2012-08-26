@@ -3,8 +3,8 @@
 #include <Box2D/Box2D.h>
 #include <Thor/Resources.hpp>
 #include <list>
-#include "Body.h"
-#include "Joint.h"
+#include "Bodies/Body.h"
+#include "Joints/Joint.h"
 
 class Body;
 class Joint;

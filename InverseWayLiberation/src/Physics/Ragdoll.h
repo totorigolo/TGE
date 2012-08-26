@@ -5,9 +5,9 @@
 #include <string>
 #include <map>
 #include "World.h"
-#include "DynamicBox.h"
-#include "DynamicCircle.h"
-#include "RevoluteJoint.h"
+#include "Bodies/DynamicBox.h"
+#include "Bodies/DynamicCircle.h"
+#include "Joints/RevoluteJoint.h"
 
 class World;
 class DynamicBox;

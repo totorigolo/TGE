@@ -3,27 +3,29 @@
 #include <Box2D/Box2D.h>
 #include <Thor/Resources.hpp>
 #include "Joint.h"
-#include "World.h"
+#include "../World.h"
 
 class World;
 class Joint;
-class MouseJoint : public Joint
+class DistanceJoint : public Joint
 {
 public:
 	// Ctor & dtor
-	MouseJoint(World *world, Body *body, Body *ground, b2Vec2 target, float maxForce, float frequencyHz = 4.f, float damping = 0.5f, sf::Color const& color = sf::Color::Cyan);
-	virtual ~MouseJoint(void);
+	DistanceJoint(World *world, Body *b1, b2Vec2 p1, Body *b2, b2Vec2 p2, float frequencyHz = 4.f, float damping = 0.5f, bool collideconnected = true
+																		, sf::Color const& color = sf::Color::Magenta);
+	virtual ~DistanceJoint(void);
 	
 	// Mets à jour le VertexArray
 	void Update();
 
 	// Accesseurs
-	void SetTarget(b2Vec2 const& target);
-
-	float GetMaxForce() const;
+	float GetLenght() const;
 	float GetFrequencyHz() const;
 	float GetDampingRatio() const;
-	Body const* GetAttachedBody() const;
+
+	void SetLenght(float lenght);
+	void SetFrequencyHz(float frequencyHz);
+	void SetDampingRatio(float damping);
 	
 	sf::Color& GetColor() { return mColor; }
 	void SetColor(sf::Color const& color) { mColor = color; }

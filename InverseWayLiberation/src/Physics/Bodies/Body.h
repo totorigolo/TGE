@@ -3,8 +3,8 @@
 #include <Box2D/Box2D.h>
 #include <Thor/Resources.hpp>
 #include <list>
-#include "World.h"
-#include "Joint.h"
+#include "../World.h"
+#include "../Joints/Joint.h"
 
 class World;
 class Joint;

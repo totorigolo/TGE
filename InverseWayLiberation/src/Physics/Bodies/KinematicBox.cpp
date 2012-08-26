@@ -1,5 +1,5 @@
 #include "KinematicBox.h"
-#include "../utils.h"
+#include "../../utils.h"
 
 //Ctor
 KinematicBox::KinematicBox(World *world, b2Vec3 posRot, std::shared_ptr<sf::Texture> texture, float restitution

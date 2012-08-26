@@ -7,11 +7,11 @@
 #include <map>
 #include "Game.h"
 #include "Level.h"
-#include "Physics/Body.h"
 #include "Physics/World.h"
 #include "Physics/Ragdoll.h"
-#include "Physics/MouseJoint.h"
-#include "Physics/DistanceJoint.h"
+#include "Physics/Bodies/Body.h"
+#include "Physics/Joints/MouseJoint.h"
+#include "Physics/Joints/DistanceJoint.h"
 
 class Body;
 class World;

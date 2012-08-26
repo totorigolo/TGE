@@ -1,5 +1,5 @@
 #include "DynamicCircle.h"
-#include "../utils.h"
+#include "../../utils.h"
 
 //Ctor
 DynamicCircle::DynamicCircle(World *world, b2Vec3 posRot, std::shared_ptr<sf::Texture> texture, float density, float friction, float restitution

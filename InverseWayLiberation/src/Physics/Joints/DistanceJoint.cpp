@@ -1,5 +1,5 @@
 #include "DistanceJoint.h"
-#include "../utils.h"
+#include "../../utils.h"
 
 //Ctor
 DistanceJoint::DistanceJoint(World *world, Body *b1, b2Vec2 p1, Body *b2, b2Vec2 p2, float frequencyHz, float damping, bool collideconnected, sf::Color const& color)

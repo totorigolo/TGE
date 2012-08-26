@@ -3,11 +3,11 @@
 #include "Dialog.h"
 #include "Parser.h"
 #include "Physics/World.h"
-#include "Physics/StaticBox.h"
-#include "Physics/DynamicBox.h"
-#include "Physics/KinematicBox.h"
-#include "Physics/DynamicCircle.h"
-#include "Physics/DistanceJoint.h"
+#include "Physics/Bodies/StaticBox.h"
+#include "Physics/Bodies/DynamicBox.h"
+#include "Physics/Bodies/KinematicBox.h"
+#include "Physics/Bodies/DynamicCircle.h"
+#include "Physics/Joints/DistanceJoint.h"
 #include <Thor/Resources.hpp>
 
 // Ctor

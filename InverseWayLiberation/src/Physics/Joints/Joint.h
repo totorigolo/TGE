@@ -2,8 +2,8 @@
 #include <SFML/Graphics.hpp>
 #include <Box2D/Box2D.h>
 #include <Thor/Resources.hpp>
-#include "World.h"
-#include "Body.h"
+#include "../World.h"
+#include "../Bodies/Body.h"
 
 class World;
 class Body;

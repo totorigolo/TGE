@@ -19,16 +19,16 @@
     <ClCompile Include="src\LevelLoader.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\Parser.cpp" />
-    <ClCompile Include="src\Physics\Body.cpp" />
-    <ClCompile Include="src\Physics\DistanceJoint.cpp" />
-    <ClCompile Include="src\Physics\DynamicBox.cpp" />
-    <ClCompile Include="src\Physics\DynamicCircle.cpp" />
-    <ClCompile Include="src\Physics\Joint.cpp" />
-    <ClCompile Include="src\Physics\KinematicBox.cpp" />
-    <ClCompile Include="src\Physics\MouseJoint.cpp" />
+    <ClCompile Include="src\Physics\Bodies\Body.cpp" />
+    <ClCompile Include="src\Physics\Bodies\DynamicBox.cpp" />
+    <ClCompile Include="src\Physics\Bodies\DynamicCircle.cpp" />
+    <ClCompile Include="src\Physics\Bodies\KinematicBox.cpp" />
+    <ClCompile Include="src\Physics\Bodies\StaticBox.cpp" />
+    <ClCompile Include="src\Physics\Joints\DistanceJoint.cpp" />
+    <ClCompile Include="src\Physics\Joints\Joint.cpp" />
+    <ClCompile Include="src\Physics\Joints\MouseJoint.cpp" />
+    <ClCompile Include="src\Physics\Joints\RevoluteJoint.cpp" />
     <ClCompile Include="src\Physics\Ragdoll.cpp" />
-    <ClCompile Include="src\Physics\RevoluteJoint.cpp" />
-    <ClCompile Include="src\Physics\StaticBox.cpp" />
     <ClCompile Include="src\Physics\World.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -39,18 +39,18 @@
     <ClInclude Include="src\Level.h" />
     <ClInclude Include="src\LevelLoader.h" />
     <ClInclude Include="src\Parser.h" />
-    <ClInclude Include="src\Physics\Body.h" />
-    <ClInclude Include="src\Physics\DistanceJoint.h" />
-    <ClInclude Include="src\Physics\DynamicBox.h" />
-    <ClInclude Include="src\Physics\DynamicCircle.h" />
+    <ClInclude Include="src\Physics\Bodies\Body.h" />
+    <ClInclude Include="src\Physics\Bodies\DynamicBox.h" />
+    <ClInclude Include="src\Physics\Bodies\DynamicCircle.h" />
+    <ClInclude Include="src\Physics\Bodies\KinematicBox.h" />
+    <ClInclude Include="src\Physics\Bodies\StaticBox.h" />
     <ClInclude Include="src\Physics\FirstBodyRaycastCallback.h" />
-    <ClInclude Include="src\Physics\Joint.h" />
-    <ClInclude Include="src\Physics\KinematicBox.h" />
-    <ClInclude Include="src\Physics\MouseJoint.h" />
+    <ClInclude Include="src\Physics\Joints\DistanceJoint.h" />
+    <ClInclude Include="src\Physics\Joints\Joint.h" />
+    <ClInclude Include="src\Physics\Joints\MouseJoint.h" />
+    <ClInclude Include="src\Physics\Joints\RevoluteJoint.h" />
     <ClInclude Include="src\Physics\OverlappingBodyCallback.h" />
     <ClInclude Include="src\Physics\Ragdoll.h" />
-    <ClInclude Include="src\Physics\RevoluteJoint.h" />
-    <ClInclude Include="src\Physics\StaticBox.h" />
     <ClInclude Include="src\Physics\World.h" />
     <ClInclude Include="src\utils.h" />
   </ItemGroup>
