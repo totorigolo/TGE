@@ -2,19 +2,19 @@
 #include "../utils.h"
 
 //Ctor
-DistanceJoint::DistanceJoint(World *world, Body *b1, b2Vec2 p1, Body *b2, b2Vec2 p2, float frequencyHz, float damping, sf::Color const& color)
+DistanceJoint::DistanceJoint(World *world, Body *b1, b2Vec2 p1, Body *b2, b2Vec2 p2, float frequencyHz, float damping, bool collideconnected, sf::Color const& color)
 	: Joint(world), mColor(color)
 {
 	mBodyA = b1;
 	mBodyB = b2;
-	mAnchorA = b2Mul(b2Rot(mBodyA->GetBody()->GetAngle()), p1) + mBodyA->GetBody()->GetPosition();
-	mAnchorB = b2Mul(b2Rot(mBodyB->GetBody()->GetAngle()), p2) + mBodyB->GetBody()->GetPosition();
+	mAnchorA = mBodyA->GetBody()->GetWorldPoint(p1);
+	mAnchorB = mBodyB->GetBody()->GetWorldPoint(p2);
 
 	if (mWorld && mBodyA && mBodyB)
 	{
 		b2DistanceJointDef jointDef;
 		jointDef.Initialize(mBodyA->GetBody(), mBodyB->GetBody(), mAnchorA, mAnchorB);
-		jointDef.collideConnected = true;
+		jointDef.collideConnected = collideconnected;
 		jointDef.frequencyHz = frequencyHz;
 		jointDef.dampingRatio = damping;
 		mJoint = (b2DistanceJoint*) mWorld->CreateJoint(&jointDef, this);
