@@ -3,7 +3,7 @@
 
 //Ctor
 PrismaticJoint::PrismaticJoint(World *world, Body *b1, Body *b2, b2Vec2 anchor, b2Vec2 axis, bool enableLimit, float lowerTranslation, float upperTranslation
-																						   , bool enableMotor, float motorSpeed, float maxMotorTorque
+																						   , bool enableMotor, float motorSpeed, float maxMotorForce
 																						   , bool collideconnected, sf::Color const& color)
 	: Joint(world), mColor(color)
 {
@@ -20,7 +20,7 @@ PrismaticJoint::PrismaticJoint(World *world, Body *b1, Body *b2, b2Vec2 anchor, 
 		jointDef.upperTranslation = upperTranslation;
 		jointDef.enableMotor = enableMotor;
 		jointDef.motorSpeed = motorSpeed * RPD;
-		jointDef.maxMotorForce = maxMotorTorque;
+		jointDef.maxMotorForce = maxMotorForce;
 		mJoint = (b2PrismaticJoint*) mWorld->CreateJoint(&jointDef, this);
 		
 		mBodyA->RegisterJoint(this);

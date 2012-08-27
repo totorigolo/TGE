@@ -6,6 +6,7 @@
 	originView = (-1.7f, 2.f)
 	defaultZoom = 1.f
 
+	
 # Charge les textures
 [textures]
 #	nom = chemin
@@ -20,38 +21,67 @@
 	lampadere 	= tex/lampadere.png
 	volcan		= tex/volcan.png
 
+	
 # Crée les bodies
 [bodies]
 #   texture,ID(facultatif et unique) = (position + rotation° facultative) type proprietés
 # (les propriétées sont facultatives comme les paramètres C++)
 # types : ( + propriétés)
-#  - db = dynamicBox +, densité(1.f), friction(0.2f), restitution(0.0f)!
-#  - dc = dynamicCircle +, densité(1.f), friction(0.2f), restitution(0.0f)!
-#  - sb = staticBox +, friction(0.2f), restitution(0.0f)!
-#  - kb = kinematicBox +, restitution(0.0f)!
+#  - db = dynamicBox + densité(1.f), friction(0.2f), restitution(0.0f)!
+#  - dc = dynamicCircle + densité(1.f), friction(0.2f), restitution(0.0f)!
+#  - sb = staticBox + friction(0.2f), restitution(0.0f)!
+#  - kb = kinematicBox + restitution(0.0f)!
 
 # ex : box = (5.2f, 9.f, 45.f) db, 2.f!
 
 	ground = (0.f, -0.64f) sb, 0.4f!
 
-	way = (-5.f, 0.5f, 90.f) sb
-	way = (-5.f, 1.5f, 90.f) sb
-	way = (-4.25f, 1.75f) sb
-	way = (-3.25f, 1.75f) sb
-	way = (-3.f, 1.5f, 90.f) sb
+	way		= (-5.f, 0.5f, 90.f) sb
+	way 	= (-5.f, 1.5f, 90.f) sb
+	way 	= (-4.25f, 1.75f) sb
+	way 	= (-3.25f, 1.75f) sb
+	way 	= (-3.f, 1.5f, 90.f) sb
 	
-	way 	= (-3.f, 0.5f, 90.f) db, 1.f!
+	way, 1 	= (-3.f, 0.5f, 90.f) db, 1.f!
 	tonneau	= (-4.55f, 0.25f) db, 15.f, 0.05f!
 	ball 	= (-4.55f, 0.675f) dc, 8.f, 0.05f!
 	
-	way 	= (0.f, 2.5f) sb
-	way 	= (1.5f, 2.5f) sb
-	box 	= (0.f, 3.f) db
-	box2 	= (1.5f, 3.f) db
-	caisse 	= (1.9f, 3.f) db
+	way,3 		= (0.f, 2.5f) sb
+	way 		= (1.5f, 2.5f) sb
+	box 		= (0.f, 3.f) db
+	box2, 4		= (1.5f, 3.f) db
+	caisse, 2 	= (1.9f, 3.f) db
 	
 	caisse 	= (1.9f, 4.f) kb, 0.9f!
 
+	
+# Crée les joints
+[joints]
+# type,ID(facultatif et unique) = proprietés
+# (les dernières propriétés() sont facultatives comme les paramètres C++)
+# types : ( + propriétés) + "!" à la fin // ((col = collideConnected))
+# - dj = distanceJoint + b1, p1, b2, p2, frequency(4.0f), damping(0.5f), col(true), color(magenta)
+# - fj = frictionJoint + b1, p1, b2, p2, maxForce(0.f), maxTorque(0.f), col(true), color(magenta)
+# - gj = gearJoint + b1, b2, j1, j2, ratio(1.f), col(true), color(80, 0, 200)
+# - prj = prismaticJoint + b1, b2, anchorRel2A, axis, enableLimits(false), lower(0.f), upper(0.f)
+#													, enableMotor(false), speed(0.f), maxForce(10.f),
+#													, col(false), color(green)
+# - puj = pulleyJoint + b1, p1, b2, p2, groundP1, groundP2, ratio(1.f), col(true), color(170, 80, 0)
+# - rej = revoluteJoint + b1, b2, anchorRel2A, enableLimits(false), lower(0.f), upper(0.f)
+#											 , enableMotor(false), speed(0.f), maxTorque(10.f)
+#											 , col(false), color(green)
+# - roj = ropeJoint + b1, p1, b2, p2, maxLength, col(true), color(magenta)
+# - wej = weldJoint + b1, b2, anchorRel2A, frequency(4.f), damping(0.5f), col(false), color(magenta)
+# - whj = wheelJoint + car, wheel, pWheel, axis, frequency(4.f), damping(0.5f)
+#											   , enableMotor(false), speed(0.f), maxTorque(10.f)
+#											   , col(false), color(magenta)
+
+# ex : puj = 4_ (0.f, 0.f)_ 2_ (0.f, 0.f)_ (-1.f, 2.f)_ (1.f, 2.f)_ 1.5f!
+
+	puj	= 1_ (0.f, 0.f)_ 2_ (0.f, 0.f)_ (-2.f, 0.5f)_ (1.9f, 4.f)_ 1.5f!
+	roj	= 3_ (0.f, 0.f)_ 4_ (0.f, 0.f)_ 2.f_ true_ (0, 255, 255)!
+
+	
 # Crée des textures sans colisions
 # "deco_" + nombre == z-index // parallax
 # ex: [deco_5]

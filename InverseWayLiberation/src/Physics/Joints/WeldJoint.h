@@ -11,7 +11,7 @@ class WeldJoint : public Joint
 {
 public:
 	// Ctor & dtor                             Anchor relative to bodyA
-	WeldJoint(World *world, Body *b1, Body *b2, b2Vec2 anchor, float frequencyHz = 4.f, float damping = 0.5f, bool collideconnected = true
+	WeldJoint(World *world, Body *b1, Body *b2, b2Vec2 anchor, float frequencyHz = 4.f, float damping = 0.5f, bool collideconnected = false
 															 , sf::Color const& color = sf::Color::Magenta);
 	virtual ~WeldJoint(void);
 	

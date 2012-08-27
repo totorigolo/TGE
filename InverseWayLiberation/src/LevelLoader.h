@@ -1,5 +1,7 @@
 #pragma once
 #include "Physics/World.h"
+#include "Physics/Bodies/Body.h"
+#include "Physics/Joints/Joint.h"
 #include "Level.h"
 #include "ConfigReader.h"
 #include <SFML/Graphics.hpp>
@@ -7,7 +9,6 @@
 #include <fstream>
 #include <cassert>
 #include <string>
-#include <tuple>
 #include <map>
 
 class Level;
@@ -32,4 +33,7 @@ private:
 	Level *mLevel;
 	std::string mPath;
 	std::fstream* mFile;
+	
+	std::map<unsigned int, Body*> mBodyIDMap;
+	std::map<unsigned int, Joint*> mJointIDMap;
 };

@@ -11,8 +11,8 @@ class PrismaticJoint : public Joint
 {
 public:
 	// Ctor & dtor                             Anchor relative to bodyA
-	PrismaticJoint(World *world, Body *b1, Body *b2, b2Vec2 anchor, b2Vec2 axis, bool enableLimit = false, float lowerAngle = 0.f, float upperAngle = 0.f
-																			   , bool enableMotor = false, float motorSpeed = 0.f, float maxMotorTorque = 10.f
+	PrismaticJoint(World *world, Body *b1, Body *b2, b2Vec2 anchor, b2Vec2 axis, bool enableLimit = false, float lowerTranslation = 0.f, float upperTranslation = 0.f
+																			   , bool enableMotor = false, float motorSpeed = 0.f, float maxMotorForce = 10.f
 																			   , bool collideconnected = false, sf::Color const& color = sf::Color::Green);
 	virtual ~PrismaticJoint(void);
 	

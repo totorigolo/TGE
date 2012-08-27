@@ -20,8 +20,12 @@ PulleyJoint::PulleyJoint(World *world, Body *b1, b2Vec2 p1, Body *b2, b2Vec2 p2,
 		mIsNull = false;
 	}
 
+	this->resize(4U);
+	this->setPrimitiveType(sf::Lines);
 	(*this)[0].color = mColor;
 	(*this)[1].color = mColor;
+	(*this)[2].color = mColor;
+	(*this)[3].color = mColor;
 }
 
 // Dtor
@@ -36,8 +40,11 @@ void PulleyJoint::Update()
 	{
 		if (!mBodyA->IsNull() && !mBodyB->IsNull())
 		{
-			(*this)[0].position = b22sfVec(mJoint->GetAnchorA(), mWorld->GetPPM());
-			(*this)[1].position = b22sfVec(mJoint->GetAnchorB(), mWorld->GetPPM());
+			(*this)[0].position = b22sfVec(GetGroundAnchorA(), mWorld->GetPPM());
+			(*this)[1].position = b22sfVec(mJoint->GetAnchorA(), mWorld->GetPPM());
+
+			(*this)[2].position = b22sfVec(GetGroundAnchorB(), mWorld->GetPPM());
+			(*this)[3].position = b22sfVec(mJoint->GetAnchorB(), mWorld->GetPPM());
 		}
 		else
 		{

@@ -3,16 +3,32 @@
 
 namespace Parser
 {
-bool string2bool(const std::string& value, bool default)
+bool string2bool(std::string const& value, bool default)
 {
-	if (value == "true" || value == "1" || value == "on")
+	if (value.find("true") != std::string::npos || value.find("1") != std::string::npos || value.find("on") != std::string::npos)
 		return true;
-	if (value == "false" || value == "0" || value == "off")
+	if (value.find("false") != std::string::npos || value.find("0") != std::string::npos || value.find("off") != std::string::npos)
 		return false;
 	return default;
 }
 
-int string2int(const std::string& value, int default)
+char string2char(std::string const& value, char default)
+{
+	char result = default;
+	std::istringstream iss(value);
+	iss >> result;
+	return result;
+}
+
+char string2uchar(std::string const& value, unsigned char default)
+{
+	unsigned char result = default;
+	std::istringstream iss(value);
+	iss >> result;
+	return result;
+}
+
+int string2int(std::string const& value, int default)
 {
 	int result = default;
 	std::istringstream iss(value);
@@ -20,7 +36,15 @@ int string2int(const std::string& value, int default)
 	return result;
 }
 
-float string2float(const std::string& value, float default)
+unsigned int string2uint(std::string const& value, unsigned int default)
+{
+	unsigned int result = default;
+	std::istringstream iss(value);
+	iss >> result;
+	return result;
+}
+
+float string2float(std::string const& value, float default)
 {
 	float result = default;
 	std::istringstream iss(value);
@@ -28,7 +52,7 @@ float string2float(const std::string& value, float default)
 	return result;
 }
 
-sf::Uint32 string2Uint32(const std::string& value, const sf::Uint32 default)
+sf::Uint32 string2Uint32(std::string const& value, sf::Uint32 default)
 {
 	sf::Uint32 result = default;
 	std::istringstream iss(value);
@@ -36,7 +60,7 @@ sf::Uint32 string2Uint32(const std::string& value, const sf::Uint32 default)
 	return result;
 }
 
-sf::Color string2color(const std::string& value, const sf::Color& default)
+sf::Color string2color(std::string const& value, sf::Color const& default)
 {
 	sf::Color result = default;
 
@@ -45,26 +69,26 @@ sf::Color string2color(const std::string& value, const sf::Color& default)
 	size_t redOffset = value.find_first_of(',');
 	if (redOffset != std::string::npos)
 	{
-		result.r = (sf::Uint8) string2int(value.substr(p1Offset + 1, redOffset).c_str());
+		result.r = (sf::Uint8) string2uchar(value.substr(p1Offset + 1, redOffset - p1Offset - 1).c_str());
 
 		// Cherche le vert
 		size_t greenOffset = value.find_first_of(',', redOffset + 1);
 		if (greenOffset != std::string::npos)
 		{
-			result.g = (sf::Uint8) string2int(value.substr(redOffset + 1, greenOffset).c_str());
+			result.g = (sf::Uint8) string2uchar(value.substr(redOffset + 1, greenOffset - redOffset - 1).c_str());
 
 			// Cherche le bleu
 			size_t blueOffset = value.find_first_of(',', greenOffset + 1);
 			if (blueOffset != std::string::npos)
 			{
-				result.b = (sf::Uint8) string2int(value.substr(greenOffset + 1, blueOffset).c_str());
+				result.b = (sf::Uint8) string2uchar(value.substr(greenOffset + 1, blueOffset - greenOffset - 1).c_str());
 				
 				// Cherche le canal alpha
 				size_t alphaOffset = value.find_first_of(',', blueOffset + 1);
 				size_t p2Offset = value.find_first_of(')', blueOffset + 1);
 				if (alphaOffset != std::string::npos)
 				{
-					result.a = (sf::Uint8) string2int(value.substr(alphaOffset + 1, p2Offset).c_str());
+					result.a = (sf::Uint8) string2uchar(value.substr(alphaOffset + 1, p2Offset - alphaOffset - 1).c_str());
 				}
 			}
 		}
@@ -72,7 +96,7 @@ sf::Color string2color(const std::string& value, const sf::Color& default)
 	return result;
 }
  
-b2Vec2 string2b2Vec2(const std::string& value, const b2Vec2& default)
+b2Vec2 string2b2Vec2(std::string const& value, b2Vec2 const& default)
 {
 	b2Vec2 result = default;
 
@@ -82,18 +106,18 @@ b2Vec2 string2b2Vec2(const std::string& value, const b2Vec2& default)
 	size_t yOffset = value.find_first_of(')', xOffset + 1);
 	if (xOffset != std::string::npos)
 	{
-		result.x = string2float(value.substr(p1Offset + 1, xOffset).c_str());
+		result.x = string2float(value.substr(p1Offset + 1, xOffset - p1Offset - 1).c_str());
 
 		// Cherche le y
 		if (yOffset != std::string::npos)
 		{
-			result.y = string2float(value.substr(xOffset + 1, yOffset).c_str());
+			result.y = string2float(value.substr(xOffset + 1, yOffset - xOffset - 1).c_str());
 		}
 	}
 	return result;
 }
 	
-b2Vec3 string2b2Vec3(const std::string& value, const b2Vec3& default)
+b2Vec3 string2b2Vec3(std::string const& value, b2Vec3 const& default)
 {
 	b2Vec3 result = default;
 
@@ -102,7 +126,7 @@ b2Vec3 string2b2Vec3(const std::string& value, const b2Vec3& default)
 	size_t xOffset = value.find_first_of(',', p1Offset + 1);
 	if (p1Offset != std::string::npos && xOffset != std::string::npos)
 	{
-		result.x = string2float(value.substr(p1Offset + 1, xOffset).c_str());
+		result.x = string2float(value.substr(p1Offset + 1, xOffset - p1Offset - 1).c_str());
 
 		// Cherche le y
 		size_t yOffset = value.find_first_of(',', xOffset + 1);
@@ -112,13 +136,13 @@ b2Vec3 string2b2Vec3(const std::string& value, const b2Vec3& default)
 		}
 		if (yOffset != std::string::npos)
 		{
-			result.y = string2float(value.substr(xOffset + 1, yOffset).c_str());
+			result.y = string2float(value.substr(xOffset + 1, yOffset - xOffset - 1).c_str());
 
 			// Cherche le z
 			size_t zOffset = value.find_first_of(')', yOffset + 1);
 			if (zOffset != std::string::npos)
 			{
-				result.z = string2float(value.substr(yOffset + 1, zOffset).c_str());
+				result.z = string2float(value.substr(yOffset + 1, zOffset - yOffset - 1).c_str());
 			}
 		}
 	}
@@ -127,7 +151,15 @@ b2Vec3 string2b2Vec3(const std::string& value, const b2Vec3& default)
 	
  ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
- std::string int2string(int n)
+std::string int2string(int n)
+{
+	std::ostringstream oss;
+	oss << n;
+	std::string s = oss.str();
+	return s;
+}
+
+std::string uint2string(unsigned int n)
 {
 	std::ostringstream oss;
 	oss << n;

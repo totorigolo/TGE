@@ -13,7 +13,7 @@ public:
 	// Ctor & dtor                             Anchor relative to wheel
 	WheelJoint(World *world, Body *car, Body *wheel, b2Vec2 pWheel, b2Vec2 axis, float frequencyHz = 2.f, float damping = 0.7f
 																			   , bool enableMotor = false, float motorSpeed = 0.f, float maxMotorTorque = 10.f
-																			   , bool collideconnected = true, sf::Color const& color = sf::Color::Magenta);
+																			   , bool collideconnected = false, sf::Color const& color = sf::Color::Magenta);
 	virtual ~WheelJoint(void);
 	
 	// Mets à jour le VertexArray

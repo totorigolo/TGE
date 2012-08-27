@@ -13,7 +13,7 @@ class GearJoint : public Joint
 
 public:
 	// Ctor & dtor
-	GearJoint(World *world, Body *b1, Body *b2, Joint *j1, Joint *j2, float ratio, bool collideconnected = true, sf::Color const& color = sf::Color::Magenta);
+	GearJoint(World *world, Body *b1, Body *b2, Joint *j1, Joint *j2, float ratio = 1.f, bool collideconnected = true, sf::Color const& color = sf::Color(80, 0, 200));
 	virtual ~GearJoint(void);
 	
 	// Mets à jour le VertexArray
