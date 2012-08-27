@@ -86,10 +86,10 @@ namespace Dialog
 						overFlying = false;
 				}
 
-				// Clic gauche : on vérifie si on est sur un bouton et on retourne sa valeur
+				// Clic gauche : on vérifie si on est sur un bouton et on quitte la cas échéant
 				else if (event.type == sf::Event::MouseButtonReleased)
 				{
-					if (button.getGlobalBounds().contains(i2f(sf::Vector2i(event.mouseMove.x, event.mouseMove.y))))
+					if (button.getGlobalBounds().contains(i2f(sf::Vector2i(event.mouseButton.x, event.mouseButton.y))))
 						window->close();
 				}
 			}
@@ -235,11 +235,11 @@ namespace Dialog
 					else
 						overFlying = false;
 				}
-
-				// Clic gauche : on vérifie si on est sur un bouton et on retourne sa valeur
+					
+				// Clic gauche : on vérifie si on est sur un bouton et on quitte la cas échéant
 				else if (event.type == sf::Event::MouseButtonReleased)
 				{
-					if (button.getGlobalBounds().contains(i2f(sf::Vector2i(event.mouseMove.x, event.mouseMove.y))))
+					if (button.getGlobalBounds().contains(i2f(sf::Vector2i(event.mouseButton.x, event.mouseButton.y))))
 						window->close();
 				}
 			}
@@ -370,11 +370,11 @@ namespace Dialog
 					else
 						overFlying = false;
 				}
-
-				// Clic gauche : on vérifie si on est sur un bouton et on retourne sa valeur
+				
+				// Clic gauche : on vérifie si on est sur un bouton et on quitte la cas échéant
 				else if (event.type == sf::Event::MouseButtonReleased)
 				{
-					if (button.getGlobalBounds().contains(i2f(sf::Vector2i(event.mouseMove.x, event.mouseMove.y))))
+					if (button.getGlobalBounds().contains(i2f(sf::Vector2i(event.mouseButton.x, event.mouseButton.y))))
 						window->close();
 				}
 			}
@@ -487,10 +487,10 @@ namespace Dialog
 				// Clic gauche : on vérifie si on est sur un bouton et on retourne sa valeur
 				else if (event.type == sf::Event::MouseButtonReleased || event.type == sf::Event::KeyReleased)
 				{
-					if (button1.getGlobalBounds().contains(i2f(sf::Vector2i(event.mouseMove.x, event.mouseMove.y))) ||
+					if (button1.getGlobalBounds().contains(i2f(sf::Vector2i(event.mouseButton.x, event.mouseButton.y))) ||
 						event.key.code == sf::Keyboard::Num1 || event.key.code == sf::Keyboard::Numpad1)
 						button = 1;
-					else if (button2.getGlobalBounds().contains(i2f(sf::Vector2i(event.mouseMove.x, event.mouseMove.y))) ||
+					else if (button2.getGlobalBounds().contains(i2f(sf::Vector2i(event.mouseButton.x, event.mouseButton.y))) ||
 						event.key.code == sf::Keyboard::Num2 || event.key.code == sf::Keyboard::Numpad2)
 						button = 2;
 
