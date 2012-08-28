@@ -13,7 +13,7 @@ namespace Parser
 	char string2char(std::string const& value, char default = -1);
 	
 	// Transforme un string en unsigned char
-	char string2uchar(std::string const& value, unsigned char default = -1);
+	unsigned char string2uchar(std::string const& value, unsigned char default = 255);
 	
 	// Transforme un string en int
 	int string2int(std::string const& value, int default = -1);

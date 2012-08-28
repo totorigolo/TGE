@@ -20,12 +20,12 @@ char string2char(std::string const& value, char default)
 	return result;
 }
 
-char string2uchar(std::string const& value, unsigned char default)
+unsigned char string2uchar(std::string const& value, unsigned char default)
 {
-	unsigned char result = default;
+	unsigned int result = default;
 	std::istringstream iss(value);
 	iss >> result;
-	return result;
+	return static_cast<unsigned char>(result);
 }
 
 int string2int(std::string const& value, int default)
