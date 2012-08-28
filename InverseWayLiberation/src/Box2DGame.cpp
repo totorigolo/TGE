@@ -62,6 +62,11 @@ void Box2DGame::OnInit()
 {
 	Game::OnInit();
 
+	// Charge le shader et initialise la renderTexture
+	mShader.setParameter("texture", sf::Shader::CurrentTexture);
+	mShader.loadFromFile("fx/shader1.fx", sf::Shader::Fragment);
+	mRenderTexture.create(mWindow.getSize().x, mWindow.getSize().y);
+
 	// Charge un niveau
 	mLevel = new Level(&mWorld, &mTextureCache, &mTextureMap);
 	LevelLoader("lvls/1.lvl", mLevel);
@@ -70,7 +75,6 @@ void Box2DGame::OnInit()
 	mCurrentZoom = mLevel->GetDefaultZoom();
 	mView.setCenter(b22sfVec(mLevel->GetOriginView(), mWorld.GetPPM()));
 	mView.zoom(mLevel->GetDefaultZoom());
-	mWindow.setView(mView);
 
 	// Charge les textures dans la textureKeyMap
 	try {
@@ -116,6 +120,7 @@ void Box2DGame::OnLoopBegin()
 	Game::OnLoopBegin();
 
 	// Converti la position de la souris en système Box2D
+	mCurrentMousePosRV = mRenderTexture.convertCoords(sf::Mouse::getPosition(mWindow), mView);
 	mMp = sf2b2Vec(mCurrentMousePosRV, mWorld.GetMPP());
 
 	// Simule
@@ -202,7 +207,6 @@ void Box2DGame::OnEvent()
 		mView.setSize(mWindow.getSize().x * mView.getViewport().width, mWindow.getSize().y * mView.getViewport().height);
 		mView.setCenter(b22sfVec(mLevel->GetOriginView(), mWorld.GetPPM()));
 		mView.zoom(mLevel->GetDefaultZoom());
-		mWindow.setView(mView);
 
 		// Supprime les pointeurs
 		mHookJoint = nullptr;
@@ -220,14 +224,13 @@ void Box2DGame::OnEvent()
 		mView.setSize(mWindow.getSize().x * mView.getViewport().width, mWindow.getSize().y * mView.getViewport().height);
 		mView.setCenter(b22sfVec(mLevel->GetOriginView(), mWorld.GetPPM()));
 		mView.zoom(mLevel->GetDefaultZoom());
-		mWindow.setView(mView);
 	}
     if (mActionMap.isActive("resized"))
 	{
 		mView.setSize(mWindow.getSize().x * mView.getViewport().width, mWindow.getSize().y * mView.getViewport().height);
 		mView.setCenter(b22sfVec(mLevel->GetOriginView(), mWorld.GetPPM()));
 		mView.zoom(mCurrentZoom);
-		mWindow.setView(mView);
+		mRenderTexture.create(mWindow.getSize().x, mWindow.getSize().y);
 	}
 	
 	// Grapin
@@ -550,7 +553,13 @@ void Box2DGame::OnEvent()
 /// Appelé pour le rendu
 void Box2DGame::OnRender()
 {
+	// Mets à jour les shaders
+	mShader.setParameter("blink_alpha", 0.5f + std::cos(mShaderTime.getElapsedTime().asSeconds() * 3) * 0.25f);
+
+	// Rendu
+	mRenderTexture.clear(mLevel->GetBckgColor());
 	mWindow.clear(mLevel->GetBckgColor());
+	mRenderTexture.setView(mView);
 	
 	// Affichage des levels de la déco avec zindex positif
 	for (auto it = mLevel->GetDeco().begin(); it != mLevel->GetDeco().end(); ++it)
@@ -559,7 +568,7 @@ void Box2DGame::OnRender()
 		{
 			for (auto it2 = it->second.begin(); it2 != it->second.end(); ++it2)
 			{
-				mWindow.draw(*it2->second);
+				mRenderTexture.draw(*it2->second);
 			}
 		}
 	}
@@ -570,7 +579,7 @@ void Box2DGame::OnRender()
 		if ((*it)->GetBody()->GetType() == b2_dynamicBody && (*it)->IsDrawable())
 		{
 			(*it)->Update();
-			mWindow.draw(**it);
+			mRenderTexture.draw(**it);
 		}
 	}
 	
@@ -580,7 +589,7 @@ void Box2DGame::OnRender()
 		if ((*it)->GetBody()->GetType() == b2_staticBody && (*it)->IsDrawable())
 		{
 			(*it)->Update();
-			mWindow.draw(**it);
+			mRenderTexture.draw(**it);
 		}
 	}
 
@@ -590,7 +599,7 @@ void Box2DGame::OnRender()
 		if ((*it)->GetBody()->GetType() == b2_kinematicBody && (*it)->IsDrawable())
 		{
 			(*it)->Update();
-			mWindow.draw(**it);
+			mRenderTexture.draw(**it);
 		}
 	}
 	
@@ -598,14 +607,14 @@ void Box2DGame::OnRender()
 	for (auto it = mWorld.GetJointList().begin(); it != mWorld.GetJointList().end(); ++it)
 	{
 		(*it)->Update();
-		mWindow.draw(**it);
+		mRenderTexture.draw(**it);
 	}
 
 	// Affichage du joint de la souris
 	if (mMouseJoint)
 	{
 		mMouseJoint->Update();
-		mWindow.draw(*mMouseJoint);
+		mRenderTexture.draw(*mMouseJoint);
 	}
 	
 	// Affichage des levels de la déco avec zindex négatif
@@ -613,7 +622,7 @@ void Box2DGame::OnRender()
 	{
 		for (auto it2 = it->second.begin(); it2 != it->second.end(); ++it2)
 		{
-			mWindow.draw(*it2->second);
+			mRenderTexture.draw(*it2->second);
 		}
 	}
 
@@ -642,6 +651,8 @@ void Box2DGame::OnRender()
 		mWindow.draw(s);
 	}
 
+	mRenderTexture.display();
+	mWindow.draw(sf::Sprite(mRenderTexture.getTexture()), &mShader);
 	mWindow.display();
 }
 

@@ -45,6 +45,11 @@ protected:
 	void OnQuit();
 
 private:
+	// Variables pour les shaders
+	sf::RenderTexture mRenderTexture;
+	sf::Shader mShader;
+	sf::Clock mShaderTime;
+
 	// Positions de la souris (relative à la vue, en mètres et l'Y à la Box2D)
 	b2Vec2 mMp;
 	b2Vec2 mLMp;

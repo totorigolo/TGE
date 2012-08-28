@@ -52,7 +52,6 @@ void Game::OnInit()
 	// Crée la vue
 	mView = mWindow.getDefaultView();
 	mView.setViewport(sf::FloatRect(0.f, 0.f, 1.f, 1.f));
-	mWindow.setView(mView);
 
 	/* Crée les actions */
 	// Action de fermeture de la fenêtre + callback
@@ -101,27 +100,23 @@ void Game::OnEvent()
 	{
 		mCurrentZoom *= 0.8f;
 		mView.zoom(0.8f);
-		mWindow.setView(mView);
 	}
     if (mActionMap.isActive("zoomOut"))
 	{
 		mCurrentZoom *= 1.2f;
 		mView.zoom(1.2f);
-		mWindow.setView(mView);
 	}
     if (mActionMap.isActive("zoomReset"))
 	{
 		mCurrentZoom = 1.f;
 		mView.setSize(mWindow.getSize().x * mView.getViewport().width, mWindow.getSize().y * mView.getViewport().height);
 		mView.setCenter(sf::Vector2f(0.f, 0.f));
-		mWindow.setView(mView);
 	}
     if (mActionMap.isActive("resized"))
 	{
 		mView.setCenter(sf::Vector2f(0.f, 0.f));
 		mView.setSize(mWindow.getSize().x * mView.getViewport().width, mWindow.getSize().y * mView.getViewport().height);
 		mView.zoom(mCurrentZoom);
-		mWindow.setView(mView);
 	}
 
 	// Gère le déplacement à la souris (clic molette)
@@ -129,7 +124,6 @@ void Game::OnEvent()
 	{
 		mView.move(- static_cast<float>(mCurrentMousePos.x - mLastMousePos.x) * mCurrentZoom,
 						- static_cast<float>(mCurrentMousePos.y - mLastMousePos.y) * mCurrentZoom);
-		mWindow.setView(mView);
 	}
 }
 
@@ -137,8 +131,10 @@ void Game::OnEvent()
 void Game::OnRender()
 {
 	// Affichage
+	//mWindow.setView(mView);
+
 	mWindow.clear(sf::Color::White);
-		
+	
 	mWindow.display();
 }
 
