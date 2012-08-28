@@ -78,9 +78,9 @@ Ragdoll::Ragdoll(World *world, b2Vec3 posRot, thor::ResourceCache<sf::Texture> *
 		mWorld->RegisterBody(mFootR);
 
 		/* Jointe les bodies entre eux */
-		mHead_Neck = new RevoluteJoint(mWorld, mHead, mNeck, b2Vec2(0.f, -0.15f), true, -20.f, 30.f, false, 0.f, 0.004f);
-		mWorld->RegisterJoint(mHead_Neck);
-		mNeck_Torso1 = new RevoluteJoint(mWorld, mNeck, mTorso1, b2Vec2(0.f, -0.05f), true, 0.f, 10.f, false, 0.f, 0.004f);
+		mHead_Torso1 = new RevoluteJoint(mWorld, mHead, mTorso1, b2Vec2(0.f, -0.15f), true, -30.f, 50.f, false, 0.f, 0.004f);
+		mWorld->RegisterJoint(mHead_Torso1);
+		mNeck_Torso1 = new WeldJoint(mWorld, mNeck, mTorso1, b2Vec2(0.f, -0.05f), 0.f, 0.f);
 		mWorld->RegisterJoint(mNeck_Torso1);
 		
 		mTorso1_2 = new RevoluteJoint(mWorld, mTorso1, mTorso2, b2Vec2(0.f, -0.1f), true, -10.f, 10.f, true, 0.f, 0.004f);

@@ -8,6 +8,7 @@
 #include "Bodies/DynamicBox.h"
 #include "Bodies/DynamicCircle.h"
 #include "Joints/RevoluteJoint.h"
+#include "Joints/WeldJoint.h"
 
 class World;
 class DynamicBox;
@@ -57,8 +58,8 @@ private:
 	DynamicBox *mFootR;
 
 	/* Joints */
-	RevoluteJoint *mHead_Neck;
-	RevoluteJoint *mNeck_Torso1;
+	RevoluteJoint *mHead_Torso1;
+	WeldJoint *mNeck_Torso1;
 	RevoluteJoint *mTorso1_2;
 	RevoluteJoint *mTorso2_3;
 	RevoluteJoint *mArmL_Torso1;
