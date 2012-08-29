@@ -93,9 +93,9 @@ Ragdoll::Ragdoll(World *world, b2Vec3 posRot, thor::ResourceCache<sf::Texture> *
 		mArmR_Torso1 = new RevoluteJoint(mWorld, mArmR1, mTorso1, b2Vec2(0.f, 0.1f), true, -180.f, 0.f, true, 0.f, 0.004f);
 		mWorld->RegisterJoint(mArmR_Torso1);
 		
-		mLegL_Torso3 = new RevoluteJoint(mWorld, mLegL1, mTorso3, b2Vec2(0.f, 0.1f), true, -110.f, 20.f, true, 0.f, 0.004f);
+		mLegL_Torso3 = new RevoluteJoint(mWorld, mLegL1, mTorso3, b2Vec2(0.f, 0.1f), true, -110.f, 30.f, true, 0.f, 0.004f);
 		mWorld->RegisterJoint(mLegL_Torso3);
-		mLegR_Torso3 = new RevoluteJoint(mWorld, mLegR1, mTorso3, b2Vec2(0.f, 0.1f), true, -110.f, 20.f, true, 0.f, 0.004f);
+		mLegR_Torso3 = new RevoluteJoint(mWorld, mLegR1, mTorso3, b2Vec2(0.f, 0.1f), true, -110.f, 30.f, true, 0.f, 0.004f);
 		mWorld->RegisterJoint(mLegR_Torso3);
 		
 		mArmL1_2 = new RevoluteJoint(mWorld, mArmL1, mArmL2, b2Vec2(0.f, -0.1f), true, 0.f, 150.f, true, 0.f, 0.004f);

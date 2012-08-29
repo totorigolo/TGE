@@ -49,6 +49,13 @@ inline T max(T a, T b)
 	return (a > b) ? a : b;
 }
 
+// Retourne le signe
+template<typename T>
+inline T sign(T a)
+{
+	return (a == T(0)) ? T(1) : a / abs(a);
+}
+
 // Converti les sf::Vector2 entre eux
 inline sf::Vector2f u2f(sf::Vector2u vec)
 {
@@ -118,7 +125,7 @@ sf::Vector2<T> operator/(sf::Vector2<T> a, sf::Vector2<T> b)
 	return sf::Vector2<T>(a.x / b.x, a.y / b.y);
 }
 
-// Convertion sf::Vector <> b2Vec2 (avec convertion, inversion y)
+// Convertion sf::Vector <> b2Vec2 (avec inversion y)
 inline b2Vec2 sf2b2Vec(sf::Vector2f const& vector, float mpp)
 {
 	return b2Vec2(vector.x * mpp, - vector.y * mpp);
@@ -128,7 +135,7 @@ inline sf::Vector2f b22sfVec(b2Vec2 const& vector, float ppm)
 	return sf::Vector2f(vector.x, - vector.y) * ppm;
 }
 
-// Conversion b2Vec2 <> b2Vec3
+// Convertion b2Vec2 <> b2Vec3
 inline b2Vec2 getVec2(b2Vec3 const& vec3)
 {
 	return b2Vec2(vec3.x, vec3.y);
