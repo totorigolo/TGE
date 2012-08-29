@@ -5,11 +5,11 @@
 #include <Box2D/Box2D.h>
 #include <list>
 #include <map>
-#include "Game.h"
 #include "Level.h"
 #include "Physics/World.h"
 #include "Physics/Ragdoll.h"
 #include "Physics/Bodies/Body.h"
+#include "Physics/Bodies/DynamicBox.h"
 #include "Physics/Joints/MouseJoint.h"
 #include "Physics/Joints/DistanceJoint.h"
 
@@ -17,15 +17,18 @@ class Body;
 class World;
 class Ragdoll;
 class MouseJoint;
-class Box2DGame : public Game
+class Box2DGame
 {
 public:
 	// Ctor & dtor
 	Box2DGame(sf::RenderWindow & window);
 	virtual ~Box2DGame(void);
+	
+	/// Boucle de jeu
+	void Run();
 
 protected:
-	/* Surcharge des fonctions évènements */
+	/* Fonctions évènements */
 	/// Initialise le jeu
 	void OnInit();
 
@@ -43,12 +46,44 @@ protected:
 
 	// Appelé quand le jeu se termine
 	void OnQuit();
+	
+	/* Pour la molette de la souris */
+	friend class OnMouseWheelMoved;
 
 private:
+	// Etats du jeu
+	bool mPaused;
+	bool mExited;
+
+	// Fenêtre
+	sf::RenderWindow & mWindow;
+	sf::View mWindowView;
+	float mCurrentZoom;
+	sf::Clock mFrameTime;
+	
 	// Variables pour les shaders
 	sf::RenderTexture mRenderTexture;
+	sf::View mRenderTextureView;
 	sf::Shader mShader;
 	sf::Clock mShaderTime;
+
+	// Evènements
+	thor::ActionMap<std::string> mActionMap;
+	thor::ActionMap<std::string>::CallbackSystem mActionCallbackSystem;
+
+	// Positions de la souris
+	sf::Vector2f mCurrentMousePos;
+	sf::Vector2f mCurrentMousePosRV; // RV = relative to view
+	sf::Vector2f mLastMousePos;
+	sf::Vector2f mLastMousePosRV; // RV = relative to view
+
+	// Simulation physique
+	sf::Clock mElapsedTime;
+
+	// Héro
+	bool mIsJumping;
+	DynamicBox *mHeroBody;
+	Ragdoll *mHeroRagdoll;
 
 	// Positions de la souris (relative à la vue, en mètres et l'Y à la Box2D)
 	b2Vec2 mMp;
@@ -61,9 +96,6 @@ private:
 	b2Vec2 mGravity;
 	World mWorld;
 
-	// Héro
-	Ragdoll *mHeroRagdoll;
-	
 	// Grapin
 	Body *mHookedSBody;
 	b2Vec2 mHookedSAnchor;
@@ -91,3 +123,13 @@ private:
 	std::map<std::string, std::shared_ptr<sf::Texture>> mTextureMap;
 };
 
+/* Pour la molette de la souris */
+class OnMouseWheelMoved
+{
+public:
+	explicit OnMouseWheelMoved(Box2DGame *_game);
+	void operator() (thor::ActionContext<std::string> context);
+
+private:
+	Box2DGame *mGame;
+};

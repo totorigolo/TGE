@@ -46,9 +46,6 @@
     <ClCompile Include="src\Dialog.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="src\Game.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
     <ClCompile Include="src\Level.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
@@ -115,6 +112,9 @@
     <ClCompile Include="src\Physics\Joints\WheelJoint.cpp">
       <Filter>Fichiers sources\Physics\Joints</Filter>
     </ClCompile>
+    <ClCompile Include="src\Physics\ContactListener.cpp">
+      <Filter>Fichiers sources\Physics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Box2DGame.h">
@@ -124,9 +124,6 @@
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
     <ClInclude Include="src\Dialog.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Game.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
     <ClInclude Include="src\Level.h">
@@ -200,6 +197,9 @@
     </ClInclude>
     <ClInclude Include="src\Physics\Joints\WheelJoint.h">
       <Filter>Fichiers d%27en-tête\Physics\Joints</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Physics\ContactListener.h">
+      <Filter>Fichiers d%27en-tête\Physics</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

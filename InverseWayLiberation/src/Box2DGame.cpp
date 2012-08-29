@@ -11,10 +11,16 @@
 
 // Ctor
 Box2DGame::Box2DGame(sf::RenderWindow & window)
-	: Game(window),
+	: mWindow(window), mActionMap(mWindow),
 	// Physique
 	mGravity(0.0f, -9.8f), mWorld(mGravity)
 {
+	// Etats du jeu
+	mPaused = false;
+	mExited = false;
+
+	mCurrentZoom = 1.f;
+
 	mMouseJoint = nullptr;
 	mPinBodyA = nullptr;
 	mPinBodyB = nullptr;
@@ -25,6 +31,7 @@ Box2DGame::Box2DGame(sf::RenderWindow & window)
 	mHookJoint = nullptr;
 	mHookedSBody = nullptr;
 	mHeroRagdoll = nullptr;
+	mHeroBody = nullptr;
 }
 
 // Dtor
@@ -56,11 +63,41 @@ Box2DGame::~Box2DGame(void)
 	b2Vec2 mPinAnchorB;*/
 }
 
-/* Surcharge des fonctions évènements */
+// Boucle de jeu
+void Box2DGame::Run()
+{
+	// Appel l'initialisation
+	this->OnInit();
+
+	// Tant que la fenêtre est ouverte
+	while (mWindow.isOpen() && !mExited)
+	{
+		// La boucle commence
+		this->OnLoopBegin();
+
+		// Appel des évènements
+		this->OnEvent();
+
+		// Rendu
+		this->OnRender();
+
+		// La boucle se termine
+		this->OnLoopEnd();
+	}
+
+	// On quite
+	this->OnQuit();
+}
+
+/* Fonctions évènements */
 /// Initialise le jeu
 void Box2DGame::OnInit()
 {
-	Game::OnInit();
+	/* Fenêtrage */
+	// Crée la vue
+	mWindowView = mWindow.getDefaultView();
+	mWindowView.setViewport(sf::FloatRect(0.f, 0.f, 1.f, 1.f));
+	mRenderTextureView = mWindowView;
 
 	// Charge le shader et initialise la renderTexture
 	mShader.setParameter("texture", sf::Shader::CurrentTexture);
@@ -73,8 +110,8 @@ void Box2DGame::OnInit()
 
 	// Centre la vue
 	mCurrentZoom = mLevel->GetDefaultZoom();
-	mView.setCenter(b22sfVec(mLevel->GetOriginView(), mWorld.GetPPM()));
-	mView.zoom(mLevel->GetDefaultZoom());
+	mRenderTextureView.setCenter(b22sfVec(mLevel->GetOriginView(), mWorld.GetPPM()));
+	mRenderTextureView.zoom(mLevel->GetDefaultZoom());
 
 	// Charge les textures dans la textureKeyMap
 	try {
@@ -91,6 +128,8 @@ void Box2DGame::OnInit()
 
 		mTextureMap["ball"] = mTextureCache.acquire(thor::Resources::fromFile<sf::Texture>("tex/ball.png"));
 		mTextureMap["circle"] = mTextureCache.acquire(thor::Resources::fromFile<sf::Texture>("tex/circle.png"));
+
+		mTextureMap["hero"] = mTextureCache.acquire(thor::Resources::fromFile<sf::Texture>("tex/hero/test.png"));
 	}
 	catch (thor::ResourceLoadingException const& e)
 	{
@@ -100,9 +139,23 @@ void Box2DGame::OnInit()
 	}
 
 	// Crée le héro
+	mHeroBody = new DynamicBox(&mWorld, b2Vec3(0.f, 0.f, 0.f), mTextureMap["hero"]);
+	mWorld.RegisterBody(mHeroBody);
+	mHeroBody->GetBody()->SetFixedRotation(true);
 	mHeroRagdoll = new Ragdoll(&mWorld, b2Vec3(-1.f, 2.f, 0.f), &mTextureCache, &mTextureMap);
 
 	/* Crée les actions */
+	mWindow.setKeyRepeatEnabled(false);
+	mActionMap["closed"] = thor::Action(sf::Keyboard::Escape, thor::Action::ReleaseOnce) || thor::Action(sf::Event::Closed);
+	//mActionCallbackSystem.connect("closed", std::bind(&sf::RenderWindow::close, &mWindow));
+	mActionMap["zoomIn"] = thor::Action(sf::Keyboard::Add, thor::Action::PressOnce);
+	mActionMap["zoomOut"] = thor::Action(sf::Keyboard::Subtract, thor::Action::PressOnce);
+	mActionMap["zoomReset"] = thor::Action(sf::Keyboard::Numpad0, thor::Action::PressOnce);
+	mActionMap["resized"] = thor::Action(sf::Event::Resized);
+	mActionMap["mouseWheelMoved"] = thor::Action(sf::Event::MouseWheelMoved);
+	mActionCallbackSystem.connect("mouseWheelMoved", OnMouseWheelMoved(this));
+	mActionMap["movingView"] = thor::Action(sf::Mouse::Middle, thor::Action::Hold);
+
 	mActionMap["onLoadLevel"] = thor::Action(sf::Keyboard::R, thor::Action::ReleaseOnce);
 	mActionMap["onMoveObject"] = thor::Action(sf::Mouse::Right, thor::Action::Hold);
 	mActionMap["onCreateBox"] = thor::Action(sf::Mouse::Left, thor::Action::Hold);
@@ -112,16 +165,20 @@ void Box2DGame::OnInit()
 	mActionMap["onSplice"] = thor::Action(sf::Keyboard::S, thor::Action::Hold);
 	mActionMap["onFire"] = thor::Action(sf::Keyboard::F, thor::Action::PressOnce);
 	mActionMap["onHook"] = thor::Action(sf::Keyboard::H, thor::Action::PressOnce);
+	
+	mActionMap["onJump"] = thor::Action(sf::Keyboard::Up, thor::Action::PressOnce) || thor::Action(sf::Keyboard::Space, thor::Action::PressOnce);
+	mActionMap["onCrawl"] = thor::Action(sf::Keyboard::Down, thor::Action::Hold);
+	mActionMap["onGoLeft"] = thor::Action(sf::Keyboard::Left, thor::Action::Hold);
+	mActionMap["onGoRight"] = thor::Action(sf::Keyboard::Right, thor::Action::Hold);
 }
 
 /// Appelé quand la boucle commence
 void Box2DGame::OnLoopBegin()
 {
-	Game::OnLoopBegin();
-
-	// Converti la position de la souris en système Box2D
-	mCurrentMousePosRV = mRenderTexture.convertCoords(sf::Mouse::getPosition(mWindow), mView);
-	mMp = sf2b2Vec(mCurrentMousePosRV, mWorld.GetMPP());
+	// Sauvegarde la dernière position de la souris
+	mCurrentMousePos = i2f(sf::Mouse::getPosition());
+	mCurrentMousePosRV = mRenderTexture.convertCoords(sf::Mouse::getPosition(mWindow), mRenderTextureView);
+	mMp = sf2b2Vec(mCurrentMousePosRV, mWorld.GetMPP()); // système Box2D
 
 	// Simule
 	mWorld.Step(1.f / 60.f, 8, 3);
@@ -179,7 +236,56 @@ void Box2DGame::OnLoopBegin()
 /// Appelé pour les évènements
 void Box2DGame::OnEvent()
 {
-	Game::OnEvent();
+	/* Evenements */
+	// Récupère les évènements
+	mActionMap.update();
+
+	// Invoque les callbacks
+	mActionMap.invokeCallbacks(mActionCallbackSystem);
+
+	// Gestion de la fermeture de la fenêtre
+	if (mActionMap.isActive("closed"))
+	{
+		mExited = true;
+		mWindow.close();
+	}
+
+	// Gestion du zoom et du resize
+    if (mActionMap.isActive("zoomIn"))
+	{
+		mCurrentZoom *= 0.8f;
+		mRenderTextureView.zoom(0.8f);
+	}
+    if (mActionMap.isActive("zoomOut"))
+	{
+		mCurrentZoom *= 1.2f;
+		mRenderTextureView.zoom(1.2f);
+	}
+    if (mActionMap.isActive("zoomReset"))
+	{
+		mCurrentZoom = mLevel->GetDefaultZoom();
+		mRenderTextureView.zoom(mCurrentZoom);
+		mRenderTextureView.setSize(u2f(mWindow.getSize()) * sf::Vector2f(mRenderTextureView.getViewport().width, mRenderTextureView.getViewport().height));
+		mRenderTextureView.setCenter(b22sfVec(mLevel->GetOriginView(), mWorld.GetPPM()));
+	}
+    if (mActionMap.isActive("resized"))
+	{
+		mRenderTexture.create(static_cast<unsigned int>(mWindow.getSize().x * mRenderTextureView.getViewport().width)
+								, static_cast<unsigned int>(mWindow.getSize().y * mRenderTextureView.getViewport().height));
+		mRenderTextureView.setSize(u2f(mWindow.getSize()) * sf::Vector2f(mRenderTextureView.getViewport().width, mRenderTextureView.getViewport().height));
+		mRenderTextureView.setCenter(b22sfVec(mLevel->GetOriginView(), mWorld.GetPPM()));
+		mRenderTextureView.zoom(mCurrentZoom);
+		
+		mWindowView.setSize(u2f(mWindow.getSize()) * sf::Vector2f(mRenderTextureView.getViewport().width, mRenderTextureView.getViewport().height));
+		mWindowView.setCenter(mWindowView.getSize() / 2.f); // TODO: Pourquoi ?
+	}
+
+	// Gère le déplacement à la souris (clic molette)
+	if (mActionMap.isActive("movingView"))
+	{
+		mRenderTextureView.move(- static_cast<float>(mCurrentMousePos.x - mLastMousePos.x) * mCurrentZoom,
+						- static_cast<float>(mCurrentMousePos.y - mLastMousePos.y) * mCurrentZoom);
+	}
 
 	// Création d'objets
 	if (mActionMap.isActive("onCreateBox"))
@@ -204,9 +310,9 @@ void Box2DGame::OnEvent()
 
 		// Centre la vue
 		mCurrentZoom = mLevel->GetDefaultZoom();
-		mView.setSize(mWindow.getSize().x * mView.getViewport().width, mWindow.getSize().y * mView.getViewport().height);
-		mView.setCenter(b22sfVec(mLevel->GetOriginView(), mWorld.GetPPM()));
-		mView.zoom(mLevel->GetDefaultZoom());
+		mRenderTextureView.zoom(mCurrentZoom);
+		mRenderTextureView.setSize(u2f(mWindow.getSize()) * sf::Vector2f(mRenderTextureView.getViewport().width, mRenderTextureView.getViewport().height));
+		mRenderTextureView.setCenter(b22sfVec(mLevel->GetOriginView(), mWorld.GetPPM()));
 
 		// Supprime les pointeurs
 		mHookJoint = nullptr;
@@ -215,24 +321,11 @@ void Box2DGame::OnEvent()
 		// Crée le héro
 		delete mHeroRagdoll;
 		mHeroRagdoll = new Ragdoll(&mWorld, b2Vec3(-0.3f, 10.f, 0.f), &mTextureCache, &mTextureMap);
+		mHeroBody = new DynamicBox(&mWorld, b2Vec3(0.f, 0.f, 0.f), mTextureMap["hero"]);
+		mWorld.RegisterBody(mHeroBody);
+		mHeroBody->GetBody()->SetFixedRotation(true);
 	}
 
-	// "Surcharge" des zooms
-    if (mActionMap.isActive("zoomReset"))
-	{
-		mCurrentZoom = mLevel->GetDefaultZoom();
-		mView.setSize(mWindow.getSize().x * mView.getViewport().width, mWindow.getSize().y * mView.getViewport().height);
-		mView.setCenter(b22sfVec(mLevel->GetOriginView(), mWorld.GetPPM()));
-		mView.zoom(mLevel->GetDefaultZoom());
-	}
-    if (mActionMap.isActive("resized"))
-	{
-		mView.setSize(mWindow.getSize().x * mView.getViewport().width, mWindow.getSize().y * mView.getViewport().height);
-		mView.setCenter(b22sfVec(mLevel->GetOriginView(), mWorld.GetPPM()));
-		mView.zoom(mCurrentZoom);
-		mRenderTexture.create(mWindow.getSize().x, mWindow.getSize().y);
-	}
-	
 	// Grapin
 	if (mActionMap.isActive("onHook"))
 	{
@@ -548,18 +641,71 @@ void Box2DGame::OnEvent()
 			mWorld.DestroyJoint(mMouseJoint);
 		mMouseJoint = nullptr;
 	}
+
+	// Déplacements du héro
+	if (mHeroBody)
+	{
+		if (!mHeroBody->IsNull())
+		{
+			bool hasMoved = false;
+			float dep = 0.f;
+			float ft = mFrameTime.getElapsedTime().asSeconds();
+			if (mActionMap.isActive("onJump") && !mIsJumping)
+			{
+				mIsJumping = true;
+				mHeroBody->GetBody()->ApplyLinearImpulse(b2Vec2(0.f, 240.f * ft), mHeroBody->GetBody()->GetWorldCenter());
+			}
+			else if (mIsJumping)
+			{
+				// TODO: contacts
+				if (mHeroBody->GetBody()->GetLinearVelocity().y < 0.001f && mHeroBody->GetBody()->GetLinearVelocity().y > -0.001f)
+					mIsJumping = false;
+			}
+			if (mActionMap.isActive("onCrawl"))
+			{
+			}
+			if (mActionMap.isActive("onGoLeft"))
+			{
+				dep -= 400.f * ft;
+				hasMoved = true;
+			}
+			if (mActionMap.isActive("onGoRight"))
+			{
+				dep += 400.f * ft;
+				hasMoved = true;
+			}
+			if (hasMoved)
+			{
+				dep = min(abs(mHeroBody->GetBody()->GetLinearVelocity().x + dep), 400.f * ft) * sign(dep);
+
+				//dep -= (dep - (sign(dep) * 400.f * ft) > 0) ? dep - (sign(dep) * 400.f * ft) : 0.f;
+
+				//mHeroBody->GetBody()->ApplyForceToCenter(b2Vec2(dep, 0.f));
+
+				mHeroBody->GetBody()->SetLinearVelocity(b2Vec2(dep, mHeroBody->GetBody()->GetLinearVelocity().y));
+			}
+			else if 
+			{
+				//mHeroBody->GetBody()->ApplyForceToCenter(b2Vec2(- mHeroBody->GetBody()->GetLinearVelocity().x * 2.f * ft, 0.f));
+				mHeroBody->GetBody()->SetLinearVelocity(b2Vec2(- mHeroBody->GetBody()->GetLinearVelocity().x / 2.f, mHeroBody->GetBody()->GetLinearVelocity().y));
+			}
+		}
+	}
 }
 
 /// Appelé pour le rendu
 void Box2DGame::OnRender()
 {
 	// Mets à jour les shaders
-	mShader.setParameter("blink_alpha", 0.5f + std::cos(mShaderTime.getElapsedTime().asSeconds() * 3) * 0.25f);
+	//mShader.setParameter("blink_alpha", 0.5f + std::cos(mShaderTime.getElapsedTime().asSeconds() * 3) * 0.25f);
+	
+	mFrameTime.restart();
 
 	// Rendu
 	mRenderTexture.clear(mLevel->GetBckgColor());
 	mWindow.clear(mLevel->GetBckgColor());
-	mRenderTexture.setView(mView);
+	mWindow.setView(mWindowView);
+	mRenderTexture.setView(mRenderTextureView);
 	
 	// Affichage des levels de la déco avec zindex positif
 	for (auto it = mLevel->GetDeco().begin(); it != mLevel->GetDeco().end(); ++it)
@@ -652,24 +798,22 @@ void Box2DGame::OnRender()
 	}
 
 	mRenderTexture.display();
-	mWindow.draw(sf::Sprite(mRenderTexture.getTexture()), &mShader);
+	mWindow.draw(sf::Sprite(mRenderTexture.getTexture()));//, &mShader);
 	mWindow.display();
 }
 
 /// Appelé quand la boucle se termine
 void Box2DGame::OnLoopEnd()
 {
-	Game::OnLoopEnd();
-
 	// Sauvegarde la dernière position de la souris en système Box2D
+	mLastMousePos = mCurrentMousePos;
+	mLastMousePosRV = mCurrentMousePosRV;
 	mLMp = mMp;
 }
 
 /// Appelé quand le jeu se termine
 void Box2DGame::OnQuit()
 {
-	Game::OnQuit();
-
 	// Supprime le joint de la souris
 	if (mMouseJoint)
 	{
@@ -680,4 +824,25 @@ void Box2DGame::OnQuit()
 	// Vide les listes d'objets
 	mWorld.DestroyAllJoints();
 	mWorld.DestroyAllBody();
+}
+
+/* Pour la molette de la souris */
+OnMouseWheelMoved::OnMouseWheelMoved(Box2DGame *_game)
+: mGame(_game)
+{
+}
+void OnMouseWheelMoved::operator() (thor::ActionContext<std::string> context)
+{
+	if (context.event->mouseWheel.delta > 0)
+	{
+		mGame->mCurrentZoom *= 0.8f;
+		mGame->mRenderTextureView.zoom(0.8f);
+		mGame->mWindow.setView(mGame->mRenderTextureView);
+	}
+	else
+	{
+		mGame->mCurrentZoom *= 1.2f;
+		mGame->mRenderTextureView.zoom(1.2f);
+		mGame->mWindow.setView(mGame->mRenderTextureView);
+	}
 }
