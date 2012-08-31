@@ -6,13 +6,20 @@
 #include "../World.h"
 #include "../Joints/Joint.h"
 
+enum BodyType
+{
+	body_fullySimulated = 0,
+	body_actor,
+	body_oneSidedPlatform
+};
+
 class World;
 class Joint;
 class Body : public sf::Sprite
 {
 public:
 	// Ctor & dtor
-	Body(World *world);
+	Body(World *world, BodyType type = body_fullySimulated);
 	virtual ~Body(void);
 	
 	// Met à jour le body
@@ -29,19 +36,29 @@ public:
 
 	// Accesseurs
 	void SetBody(b2Body *body); // NE PAS UTILISER
-	void SetDrawable(bool drawable) { mIsDrawable = drawable; }
+	inline void SetDrawable(bool drawable) { mIsDrawable = drawable; }
+	
+	void SetType(BodyType type);
+	inline BodyType GetType() const { return mType; }
+	
+	virtual b2AABB GetBodyAABB() const; // = 0; // Retourne une AABB nulle
+	b2Vec2 GetBodySize() const;
+	float GetBodyAngle() const;
+	b2Vec2 GetBodyPosition() const;
 
-	bool IsNull() const { return mIsNull; }
-	bool IsDrawable() const { return mIsDrawable; }
-	bool IsStatic() const { return mBody->GetType() == b2_staticBody; }
-	b2Body* GetBody() { return mBody; }
-	World* GetWorld() { return mWorld; }
-	b2Shape* GetShape() { return mShape; }
-	b2Body const* GetBody() const { return mBody; }
-	World const* GetWorld() const { return mWorld; }
-	b2Shape const* GetShape() const { return mShape; }
+	inline bool IsNull() const { return mIsNull; }
+	inline bool IsDrawable() const { return mIsDrawable; }
+	inline bool IsStatic() const { return mBody->GetType() == b2_staticBody; }
+	inline b2Body* GetBody() { return mBody; }
+	inline World* GetWorld() { return mWorld; }
+	inline b2Shape* GetShape() { return mShape; }
+	inline b2Body const* GetBody() const { return mBody; }
+	inline World const* GetWorld() const { return mWorld; }
+	inline b2Shape const* GetShape() const { return mShape; }
 
 protected:
+	BodyType mType;
+
 	bool mIsNull;
 	bool mIsDrawable;
 

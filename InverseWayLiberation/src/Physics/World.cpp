@@ -5,6 +5,7 @@
 World::World(b2Vec2 const& gravity, float ppm)
 	: b2World(gravity), mPPM(ppm)
 {
+	SetContactListener(&mContactListener);
 }
 
 // Dtor

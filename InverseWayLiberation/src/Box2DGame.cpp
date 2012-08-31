@@ -140,6 +140,7 @@ void Box2DGame::OnInit()
 
 	// Crée le héro
 	mHeroBody = new DynamicBox(&mWorld, b2Vec3(0.f, 0.f, 0.f), mTextureMap["hero"]);
+	mHeroBody->SetType(body_actor);
 	mWorld.RegisterBody(mHeroBody);
 	mHeroBody->GetBody()->SetFixedRotation(true);
 	mHeroRagdoll = new Ragdoll(&mWorld, b2Vec3(-1.f, 2.f, 0.f), &mTextureCache, &mTextureMap);
@@ -322,6 +323,7 @@ void Box2DGame::OnEvent()
 		delete mHeroRagdoll;
 		mHeroRagdoll = new Ragdoll(&mWorld, b2Vec3(-0.3f, 10.f, 0.f), &mTextureCache, &mTextureMap);
 		mHeroBody = new DynamicBox(&mWorld, b2Vec3(0.f, 0.f, 0.f), mTextureMap["hero"]);
+		mHeroBody->SetType(body_actor);
 		mWorld.RegisterBody(mHeroBody);
 		mHeroBody->GetBody()->SetFixedRotation(true);
 	}
@@ -666,28 +668,23 @@ void Box2DGame::OnEvent()
 			}
 			if (mActionMap.isActive("onGoLeft"))
 			{
-				dep -= 400.f * ft;
+				dep -= 200.f * ft;
 				hasMoved = true;
 			}
 			if (mActionMap.isActive("onGoRight"))
 			{
-				dep += 400.f * ft;
+				dep += 200.f * ft;
 				hasMoved = true;
 			}
 			if (hasMoved)
 			{
 				dep = min(abs(mHeroBody->GetBody()->GetLinearVelocity().x + dep), 400.f * ft) * sign(dep);
 
-				//dep -= (dep - (sign(dep) * 400.f * ft) > 0) ? dep - (sign(dep) * 400.f * ft) : 0.f;
+				mHeroBody->GetBody()->ApplyForceToCenter(b2Vec2(dep, 0.f));
 
-				//mHeroBody->GetBody()->ApplyForceToCenter(b2Vec2(dep, 0.f));
-
-				mHeroBody->GetBody()->SetLinearVelocity(b2Vec2(dep, mHeroBody->GetBody()->GetLinearVelocity().y));
-			}
-			else if 
-			{
-				//mHeroBody->GetBody()->ApplyForceToCenter(b2Vec2(- mHeroBody->GetBody()->GetLinearVelocity().x * 2.f * ft, 0.f));
-				mHeroBody->GetBody()->SetLinearVelocity(b2Vec2(- mHeroBody->GetBody()->GetLinearVelocity().x / 2.f, mHeroBody->GetBody()->GetLinearVelocity().y));
+				if (abs(mHeroBody->GetBody()->GetLinearVelocity().x) > 500.f * ft)
+					mHeroBody->GetBody()->SetLinearVelocity(b2Vec2(500.f * ft * sign(mHeroBody->GetBody()->GetLinearVelocity().x)
+																	, mHeroBody->GetBody()->GetLinearVelocity().y));
 			}
 		}
 	}

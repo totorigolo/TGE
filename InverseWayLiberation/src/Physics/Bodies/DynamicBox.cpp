@@ -55,3 +55,11 @@ void DynamicBox::Update()
 		this->setRotation(- mBody->GetAngle() * DPR);
 	}
 }
+
+// Accesseurs
+b2AABB DynamicBox::GetBodyAABB() const
+{
+	b2AABB aabb;
+	((b2PolygonShape*) mShape)->ComputeAABB(&aabb, mBody->GetTransform(), 0);
+	return aabb;
+}

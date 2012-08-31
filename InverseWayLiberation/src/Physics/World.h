@@ -5,6 +5,7 @@
 #include <list>
 #include "Bodies/Body.h"
 #include "Joints/Joint.h"
+#include "ContactListener.h"
 
 class Body;
 class Joint;
@@ -47,4 +48,7 @@ protected:
 	// Listes d'objets
 	std::list<Body*> mBodyList;
 	std::list<Joint*> mJointList;
+
+	// Contacts
+	ContactListener mContactListener;
 };

@@ -2,8 +2,9 @@
 #include "../../utils.h"
 
 //Ctor
-Body::Body(World *world)
+Body::Body(World *world, BodyType type)
 	: mWorld(world), mBody(nullptr), mShape(nullptr), mIsNull(true), mIsDrawable(true)
+	, mType(type)
 {
 }
 
@@ -71,4 +72,30 @@ void Body::DestroyAllJoints()
 void Body::SetBody(b2Body *body) // NE PAS UTILISER
 {
 	mBody = body;
+}
+
+void Body::SetType(BodyType type)
+{
+	mType = type;
+	if (mType == body_actor)
+		mBody->SetBullet(true);
+	else
+		mBody->SetBullet(false);
+}
+
+b2AABB Body::GetBodyAABB() const
+{
+	return b2AABB();
+}
+b2Vec2 Body::GetBodySize() const
+{
+	return sf2b2Vec(u2f(getTexture()->getSize()), mWorld->GetMPP());
+}
+float Body::GetBodyAngle() const
+{
+	return mBody->GetAngle() * DPR;
+}
+b2Vec2 Body::GetBodyPosition() const
+{
+	return mBody->GetPosition();
 }

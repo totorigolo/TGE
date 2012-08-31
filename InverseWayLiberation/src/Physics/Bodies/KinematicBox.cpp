@@ -54,6 +54,14 @@ void KinematicBox::Update()
 	}
 }
 
+// Accesseurs
+b2AABB KinematicBox::GetBodyAABB() const
+{
+	b2AABB aabb;
+	((b2PolygonShape*) mShape)->ComputeAABB(&aabb, mBody->GetTransform(), 0);
+	return aabb;
+}
+
 void KinematicBox::SetVelocity(b2Vec2 const& velocity, float angularVelocity)
 {
 	if (mBody && mWorld)

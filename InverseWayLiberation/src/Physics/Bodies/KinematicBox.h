@@ -18,6 +18,9 @@ public:
 	// Met à jour la position du sprite
 	virtual void Update();
 
+	// Accesseurs
+	virtual b2AABB GetBodyAABB() const;
+
 	virtual void SetVelocity(b2Vec2 const& velocity, float angularVelocity = 0.f);
 	virtual void SetPosition(b2Vec2 const& pos, float angle);
 

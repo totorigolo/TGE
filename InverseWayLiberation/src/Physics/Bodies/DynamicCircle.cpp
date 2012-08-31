@@ -54,3 +54,11 @@ void DynamicCircle::Update()
 		this->setRotation(- mBody->GetAngle() * DPR);
 	}
 }
+
+// Accesseurs
+b2AABB DynamicCircle::GetBodyAABB() const
+{
+	b2AABB aabb;
+	((b2PolygonShape*) mShape)->ComputeAABB(&aabb, mBody->GetTransform(), 0);
+	return aabb;
+}

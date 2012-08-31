@@ -47,6 +47,8 @@
 		<Unit filename="src\Physics\Bodies\KinematicBox.h" />
 		<Unit filename="src\Physics\Bodies\StaticBox.cpp" />
 		<Unit filename="src\Physics\Bodies\StaticBox.h" />
+		<Unit filename="src\Physics\ContactListener.cpp" />
+		<Unit filename="src\Physics\ContactListener.h" />
 		<Unit filename="src\Physics\FirstBodyRaycastCallback.h" />
 		<Unit filename="src\Physics\Joints\DistanceJoint.cpp" />
 		<Unit filename="src\Physics\Joints\DistanceJoint.h" />

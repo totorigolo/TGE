@@ -18,6 +18,9 @@ public:
 	// Met à jour la position du sprite
 	virtual void Update();
 
+	// Accesseur
+	virtual b2AABB GetBodyAABB() const;
+
 private:
 	// Texture
 	std::shared_ptr<sf::Texture> mTexture;

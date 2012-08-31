@@ -55,3 +55,11 @@ void StaticBox::Update()
 		this->setRotation(- mBody->GetAngle() * DPR);
 	}
 }
+
+// Accesseur
+b2AABB StaticBox::GetBodyAABB() const
+{
+	b2AABB aabb;
+	((b2PolygonShape*) mShape)->ComputeAABB(&aabb, mBody->GetTransform(), 0);
+	return aabb;
+}
