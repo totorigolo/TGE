@@ -78,6 +78,9 @@ void Box2DGame::Run()
 		// Appel des évènements
 		this->OnEvent();
 
+		// Gestion de la physique
+		this->OnStepPhysics();
+
 		// Rendu
 		this->OnRender();
 
@@ -180,58 +183,6 @@ void Box2DGame::OnLoopBegin()
 	mCurrentMousePos = i2f(sf::Mouse::getPosition());
 	mCurrentMousePosRV = mRenderTexture.convertCoords(sf::Mouse::getPosition(mWindow), mRenderTextureView);
 	mMp = sf2b2Vec(mCurrentMousePosRV, mWorld.GetMPP()); // système Box2D
-
-	// Simule
-	mWorld.Step(1.f / 60.f, 8, 3);
-	mWorld.ClearForces();
-
-	// Destruction des bodies en dehors de la zone
-	for (auto it = mWorld.GetBodyList().begin(); it != mWorld.GetBodyList().end(); )
-	{
-		// On supprime seulement les dynamicBodies
-		if ((*it)->GetBody()->GetType() == b2_dynamicBody)
-		{
-			bool erase = false;
-			// Vérifie si l'objet est hors du monde et pas accroché à la souris
-			if (!(*it)->IsInRange(b2Vec2(200.f, -200.f), b2Vec2(800.f, -200.f)))
-			{
-				erase = true;
-				if (mMouseJoint)
-					if (*it == mMouseJoint->GetAttachedBody())
-						erase = false;
-			}
-
-			// Supprime le body
-			if (erase)
-			{
-				auto it2 = it;
-				++it2;
-				mWorld.DestroyBody(*it);
-				it = it2;
-			}
-
-			// Sinon passe simplement au suivant
-			else
-			{
-				++it;
-			}
-		}
-		else
-			++it;
-	}
-
-	// Mets à jour le grapin
-	if (mHookJoint)
-	{
-		if (mHookJoint->IsNull() || !mHookJoint->GetBodyA() || !mHookJoint->GetBodyB())
-			mHookJoint = nullptr;
-		else
-		{
-			if (mHookJoint->GetLength() - mHookClock.getElapsedTime().asSeconds() * 0.2f > 0)
-				mHookJoint->SetLength(mHookJoint->GetLength() - mHookClock.getElapsedTime().asSeconds() * 8.f);
-			mHookClock.restart();
-		}
-	}
 }
 
 /// Appelé pour les évènements
@@ -686,6 +637,62 @@ void Box2DGame::OnEvent()
 					mHeroBody->GetBody()->SetLinearVelocity(b2Vec2(500.f * ft * sign(mHeroBody->GetBody()->GetLinearVelocity().x)
 																	, mHeroBody->GetBody()->GetLinearVelocity().y));
 			}
+		}
+	}
+}
+
+/// Appelé pour la physique
+void Box2DGame::OnStepPhysics()
+{
+	// Simule
+	mWorld.Step(1.f / 60.f, 8, 3);
+	mWorld.ClearForces();
+
+	// Destruction des bodies en dehors de la zone
+	for (auto it = mWorld.GetBodyList().begin(); it != mWorld.GetBodyList().end(); )
+	{
+		// On supprime seulement les dynamicBodies
+		if ((*it)->GetBody()->GetType() == b2_dynamicBody)
+		{
+			bool erase = false;
+			// Vérifie si l'objet est hors du monde et pas accroché à la souris
+			if (!(*it)->IsInRange(b2Vec2(200.f, -200.f), b2Vec2(800.f, -200.f)))
+			{
+				erase = true;
+				if (mMouseJoint)
+					if (*it == mMouseJoint->GetAttachedBody())
+						erase = false;
+			}
+
+			// Supprime le body
+			if (erase)
+			{
+				auto it2 = it;
+				++it2;
+				mWorld.DestroyBody(*it);
+				it = it2;
+			}
+
+			// Sinon passe simplement au suivant
+			else
+			{
+				++it;
+			}
+		}
+		else
+			++it;
+	}
+
+	// Mets à jour le grapin
+	if (mHookJoint)
+	{
+		if (mHookJoint->IsNull() || !mHookJoint->GetBodyA() || !mHookJoint->GetBodyB())
+			mHookJoint = nullptr;
+		else
+		{
+			if (mHookJoint->GetLength() - mHookClock.getElapsedTime().asSeconds() * 0.2f > 0)
+				mHookJoint->SetLength(mHookJoint->GetLength() - mHookClock.getElapsedTime().asSeconds() * 8.f);
+			mHookClock.restart();
 		}
 	}
 }

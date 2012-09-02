@@ -38,6 +38,9 @@ protected:
 	/// Appelé pour les évènements
 	void OnEvent();
 
+	/// Appelé pour la physique
+	void OnStepPhysics();
+
 	/// Appelé pour le rendu
 	void OnRender();
 
