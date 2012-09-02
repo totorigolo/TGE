@@ -32,8 +32,8 @@
 #  - sb = staticBox + friction(0.2f), restitution(0.0f)!
 #  - kb = kinematicBox + restitution(0.0f)!
 # [flags] :
-#  - [ac] = actor
-#  - [osp] = oneSidedPlatform, seulement les PolygonShape
+#  - [ac] = actor (peut être tout, mais en général plutôt les êtres "vivants")
+#  - [osp] = oneSidedPlatform (seulement les PolygonShape)
 #  - [fl] = fullySimulated (valeur par défaut)
 
 # ex : box = (5.2f, 9.f, 45.f) db [ac], 2.f!
@@ -41,7 +41,7 @@
 	ground = (0.f, -0.64f) sb, 0.4f!
 
 	way		= (-5.f, 5.5f, 90.f) sb [osp]
-	way		= (-5.f, 6.f) db [ac]
+	way		= (-5.f, 6.f) db
 	
 	way		= (-5.f, 0.5f, 90.f) sb
 	way 	= (-5.f, 1.5f, 90.f) sb
@@ -51,13 +51,13 @@
 	
 	way, 1 	= (-3.f, 0.5f, 90.f) db, 1.f!
 	tonneau	= (-4.55f, 0.25f) db, 15.f, 0.05f!
-	ball 	= (-4.55f, 0.675f) dc [ac], 8.f, 0.05f!
+	ball 	= (-4.55f, 0.675f) dc, 8.f, 0.05f, 0.3f!
 	
 	way,3 		= (0.f, 2.5f) sb [osp]
 	way 		= (1.5f, 2.5f) sb [osp]
-	box 		= (0.f, 3.f) db [ac]
-	box2, 4		= (1.5f, 3.f) db [ac]
-	caisse, 2 	= (1.9f, 3.f) db [ac]
+	box 		= (0.f, 3.f) db
+	box2, 4		= (1.5f, 3.f) db
+	caisse, 2 	= (1.9f, 3.f) db
 	
 	caisse 	= (1.9f, 4.f) kb, 0.9f!
 

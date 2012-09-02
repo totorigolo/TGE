@@ -34,8 +34,8 @@ void ContactListener::PreSolve(b2Contact* contact, const b2Manifold* oldManifold
 	}
 	if (actor && platform)
 	{
-		// TODO: Amméliorer la méthode
-		if (/*actor->GetBody()->GetLinearVelocity().y > 0.f || */actor->GetBodyAABB().lowerBound.y < platform->GetBodyAABB().upperBound.y - 0.08f)
+		if (actor->GetBody()->GetLinearVelocity().y < 5.f && actor->GetBody()->GetLinearVelocity().y > 0.1f
+			|| actor->GetBodyAABB().lowerBound.y < platform->GetBodyAABB().upperBound.y - 0.2f)
 		{
 			contact->SetEnabled(false);
 		}
@@ -50,7 +50,7 @@ void ContactListener::PostSolve(b2Contact* contact, const b2ContactImpulse* impu
 	Body *bodyA = (Body*) fixtureA->GetBody()->GetUserData();
 	Body *bodyB = (Body*) fixtureB->GetBody()->GetUserData();
 
-	// Collision Actor <> OneSidedPlatform
+	// Dégats collision Actor <> (Bad)Body
 	Body *actor = nullptr, *badBody = nullptr; // :D
 	if (bodyA->GetType() == body_actor)
 	{
@@ -64,6 +64,23 @@ void ContactListener::PostSolve(b2Contact* contact, const b2ContactImpulse* impu
 	}
 	if (actor && badBody)
 	{
+		// Récupération des dommages
+		float damages = impulse->normalImpulses[0];
+		if (impulse->count == 2)
+		{
+			damages += impulse->normalImpulses[1];
+		}
 
+		// Annonce :)
+		// Dégats de contact
+		if (badBody->GetBody()->GetType() == b2_dynamicBody && damages >= 1.5f)
+		{
+			std::cout << "Et BAM ! " << damages << " PV en moins !" << std::endl;
+		}
+		// Dégats de chute
+		else if (damages >= 8.f)
+		{
+			std::cout << "Et BAM ! " << damages << " PV en moins !" << std::endl;
+		}
 	}
 }
