@@ -25,7 +25,7 @@ public:
 	// Met à jour le body
 	virtual void Update();
 
-	// Retourne true si l'objet est trop loin
+	// Retourne true si l'objet est dedans
 	bool IsInRange(b2Vec2 const& xw, b2Vec2 const& yh) const;
 
 	// Gestion des joints

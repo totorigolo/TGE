@@ -25,7 +25,7 @@ void Body::Update()
 	// Ne fait rien
 }
 
-// Retourne true si l'objet est trop loin
+// Retourne true si l'objet est dedans
 bool Body::IsInRange(b2Vec2 const& xw, b2Vec2 const& yh) const
 {
 	if (mBody)
