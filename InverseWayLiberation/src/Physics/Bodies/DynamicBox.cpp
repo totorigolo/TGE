@@ -56,6 +56,12 @@ void DynamicBox::Update()
 	}
 }
 
+// Change les collisions / la taille du body
+void DynamicBox::SetSize(float w, float h)
+{
+	((b2PolygonShape*) mShape)->SetAsBox(w / 2.f, h / 2.f);
+}
+
 // Accesseurs
 b2AABB DynamicBox::GetBodyAABB() const
 {

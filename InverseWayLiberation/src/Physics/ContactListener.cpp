@@ -2,6 +2,7 @@
 #include "Bodies/Body.h"
 #include "Joints/Joint.h"
 #include <iostream>
+
 // Début du contact (début du AABB overlap)
 void ContactListener::BeginContact(b2Contact* contact)
 {

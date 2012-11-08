@@ -18,6 +18,9 @@ public:
 	// Met à jour la position du sprite
 	virtual void Update();
 
+	// Change les collisions / la taille du body
+	void SetSize(float w, float h);
+
 	// Accesseur
 	virtual b2AABB GetBodyAABB() const;
 
