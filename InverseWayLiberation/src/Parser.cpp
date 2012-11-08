@@ -3,66 +3,66 @@
 
 namespace Parser
 {
-bool string2bool(std::string const& value, bool default)
+bool string2bool(std::string const& value, bool _default)
 {
 	if (value.find("true") != std::string::npos || value.find("1") != std::string::npos || value.find("on") != std::string::npos)
 		return true;
 	if (value.find("false") != std::string::npos || value.find("0") != std::string::npos || value.find("off") != std::string::npos)
 		return false;
-	return default;
+	return _default;
 }
 
-char string2char(std::string const& value, char default)
+char string2char(std::string const& value, char _default)
 {
-	char result = default;
+	char result = _default;
 	std::istringstream iss(value);
 	iss >> result;
 	return result;
 }
 
-unsigned char string2uchar(std::string const& value, unsigned char default)
+unsigned char string2uchar(std::string const& value, unsigned char _default)
 {
-	unsigned int result = default;
+	unsigned int result = _default;
 	std::istringstream iss(value);
 	iss >> result;
 	return static_cast<unsigned char>(result);
 }
 
-int string2int(std::string const& value, int default)
+int string2int(std::string const& value, int _default)
 {
-	int result = default;
+	int result = _default;
 	std::istringstream iss(value);
 	iss >> result;
 	return result;
 }
 
-unsigned int string2uint(std::string const& value, unsigned int default)
+unsigned int string2uint(std::string const& value, unsigned int _default)
 {
-	unsigned int result = default;
+	unsigned int result = _default;
 	std::istringstream iss(value);
 	iss >> result;
 	return result;
 }
 
-float string2float(std::string const& value, float default)
+float string2float(std::string const& value, float _default)
 {
-	float result = default;
+	float result = _default;
 	std::istringstream iss(value);
 	iss >> result;
 	return result;
 }
 
-sf::Uint32 string2Uint32(std::string const& value, sf::Uint32 default)
+sf::Uint32 string2Uint32(std::string const& value, sf::Uint32 _default)
 {
-	sf::Uint32 result = default;
+	sf::Uint32 result = _default;
 	std::istringstream iss(value);
 	iss >> result;
 	return result;
 }
 
-sf::Color string2color(std::string const& value, sf::Color const& default)
+sf::Color string2color(std::string const& value, sf::Color const& _default)
 {
-	sf::Color result = default;
+	sf::Color result = _default;
 
 	// Cherche le rouge
 	size_t p1Offset = value.find_first_of('(');
@@ -82,7 +82,7 @@ sf::Color string2color(std::string const& value, sf::Color const& default)
 			if (blueOffset != std::string::npos)
 			{
 				result.b = (sf::Uint8) string2uchar(value.substr(greenOffset + 1, blueOffset - greenOffset - 1).c_str());
-				
+
 				// Cherche le canal alpha
 				size_t alphaOffset = value.find_first_of(',', blueOffset + 1);
 				size_t p2Offset = value.find_first_of(')', blueOffset + 1);
@@ -95,7 +95,7 @@ sf::Color string2color(std::string const& value, sf::Color const& default)
 	}
 	return result;
 }
- 
+
 b2Vec2 string2b2Vec2(std::string const& value, b2Vec2 const& default)
 {
 	b2Vec2 result = default;
@@ -148,7 +148,7 @@ b2Vec3 string2b2Vec3(std::string const& value, b2Vec3 const& default)
 	}
 	return result;
 }
-	
+
  ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 std::string int2string(int n)
@@ -189,16 +189,16 @@ std::string uint2string(unsigned int n)
 	// Les lettres
 	if (key >= sf::Keyboard::A && key <= sf::Keyboard::Z)
 	{
-		str += 'a' + key - sf::Keyboard::A;
+		str += 'a' + static_cast<char>(key - sf::Keyboard::A);
 		if (maj)
-			str.back() -= 32; // majuscule
+			*str.begin() -= 32; // majuscule
 	}
 
 	// Les chiffres
 	else if (key >= sf::Keyboard::Num0 && key <= sf::Keyboard::Num9)
-		str += '0' + key - sf::Keyboard::Num0;
+		str += '0' + static_cast<char>(key - sf::Keyboard::Num0);
 	else if (key >= sf::Keyboard::Numpad0 && key <= sf::Keyboard::Numpad9)
-		str += '0' + key - sf::Keyboard::Numpad0;
+		str += '0' + static_cast<char>(key - sf::Keyboard::Numpad0);
 
 	// Les autres caractères
 	// Le point

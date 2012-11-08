@@ -83,27 +83,6 @@ inline sf::Vector2u i2u(sf::Vector2i vec)
 }
 
 // Surcharges d'opérateurs pour les sf::Vector
-template<typename T, typename N>
-sf::Vector2<T> operator+(sf::Vector2<T> a, N b)
-{
-	return sf::Vector2<T>(a.x + b, a.y + b);
-}
-template<typename T, typename N>
-sf::Vector2<T> operator-(sf::Vector2<T> a, N b)
-{
-	return sf::Vector2<T>(a.x - b, a.y - b);
-}
-template<typename T, typename N>
-sf::Vector2<T> operator*(sf::Vector2<T> a, N b)
-{
-	return sf::Vector2<T>(a.x * b, a.y * b);
-}
-template<typename T, typename N>
-sf::Vector2<T> operator/(sf::Vector2<T> a, N b)
-{
-	return sf::Vector2<T>(a.x / b, a.y / b);
-}
-
 template<typename T>
 sf::Vector2<T> operator+(sf::Vector2<T> a, sf::Vector2<T> b)
 {
