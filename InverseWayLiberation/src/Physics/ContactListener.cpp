@@ -1,6 +1,7 @@
 #include "ContactListener.h"
 #include "Bodies/Body.h"
 #include "Joints/Joint.h"
+#include "Entities/Entity.h"
 #include <iostream>
 
 // Début du contact (début du AABB overlap)
@@ -23,12 +24,12 @@ void ContactListener::PreSolve(b2Contact* contact, const b2Manifold* oldManifold
 
 	// Collision Actor <> OneSidedPlatform
 	Body *actor = nullptr, *platform = nullptr;
-	if (bodyA->GetType() == body_actor && bodyB->GetType() == body_oneSidedPlatform)
+	if (bodyA->GetType() == BodyType::Bullet && bodyB->GetType() == BodyType::OneSidedPlatform)
 	{
 		actor = bodyA;
 		platform = bodyB;
 	}
-	else if (bodyA->GetType() == body_oneSidedPlatform && bodyB->GetType() == body_actor)
+	else if (bodyA->GetType() == BodyType::OneSidedPlatform && bodyB->GetType() == BodyType::Bullet)
 	{
 		actor = bodyB;
 		platform = bodyA;
@@ -50,20 +51,27 @@ void ContactListener::PostSolve(b2Contact* contact, const b2ContactImpulse* impu
 	b2Fixture *fixtureB = contact->GetFixtureB();
 	Body *bodyA = (Body*) fixtureA->GetBody()->GetUserData();
 	Body *bodyB = (Body*) fixtureB->GetBody()->GetUserData();
+	Entity *entity = nullptr;
 
 	// Dégats collision Actor <> (Bad)Body
 	Body *actor = nullptr, *badBody = nullptr; // :D
-	if (bodyA->GetType() == body_actor)
+	if (bodyA->GetType() == BodyType::Entity)
 	{
 		actor = bodyA;
 		badBody = bodyB;
 	}
-	else if (bodyB->GetType() == body_actor)
+	else if (bodyB->GetType() == BodyType::Entity)
 	{
 		actor = bodyB;
 		badBody = bodyA;
 	}
-	if (actor && badBody)
+
+	if (actor)
+	{
+		entity = (Entity*) actor->GetEntity();
+	}
+
+	if (actor && badBody && entity)
 	{
 		// Récupération des dommages
 		float damages = impulse->normalImpulses[0];
@@ -73,15 +81,17 @@ void ContactListener::PostSolve(b2Contact* contact, const b2ContactImpulse* impu
 		}
 
 		// Annonce :)
-		// Dégats de contact
-		if (badBody->GetBody()->GetType() == b2_dynamicBody && damages >= 1.5f)
-		{
-			std::cout << "Et BAM ! " << damages << " PV en moins !" << std::endl;
-		}
 		// Dégats de chute
-		else if (damages >= 8.f)
+		if (damages >= 8.f)
+		{
+			std::cout << "Et BOUM ! " << damages << " PV en moins !" << std::endl;
+			entity->AddDamage(damages);
+		}
+		// Dégats de contact
+		else if (badBody->GetBody()->GetType() == b2_dynamicBody)// && damages >= 1.5f)
 		{
 			std::cout << "Et BAM ! " << damages << " PV en moins !" << std::endl;
+			entity->AddDamage(damages);
 		}
 	}
 }

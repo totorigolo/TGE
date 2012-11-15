@@ -2,10 +2,11 @@
 #include "utils.h"
 
 // Ctor
-Level::Level(World *world, thor::ResourceCache<sf::Texture> *textureCache, std::map<std::string, std::shared_ptr<sf::Texture>> *textureMap)
-	: mIsValid(false), mIsCharged(false), mWorld(world), mTextureCache(textureCache), mTextureMap(textureMap), mBckgC(255, 255, 255)
+Level::Level(World *world)
+	: mIsValid(false), mIsCharged(false), mWorld(world),  mBckgC(255, 255, 255),
+	mResourceManager(ResourceManager::GetInstance()), mTextureMap(mResourceManager.GetTextureMap())
 {
-	if (mWorld && mTextureCache && mTextureMap)
+	if (mWorld)
 	{
 		mIsValid = true;
 	}
@@ -26,7 +27,7 @@ void Level::Clear()
 	mWorld->DestroyAllJoints();
 	mWorld->DestroyAllBody();
 
-	mDecoMap; // vérifier si c'est vide
+	mDecoMap; // TODO: vérifier si c'est vide
 }
 
 // Gestion de la déco
@@ -45,7 +46,7 @@ void Level::DestroyDeco(int level_zindex, sf::Sprite *sprite, int zindex)
 }
 void Level::AddDeco(int level_zindex, b2Vec3 posRot, std::string const& texture, int zindex)
 {
-	sf::Sprite *s = new sf::Sprite(*(*mTextureMap)[texture]);
+	sf::Sprite *s = new sf::Sprite(*mTextureMap[texture]);
 	s->setPosition(b22sfVec(getVec2(posRot), mWorld->GetPPM()));
 	s->setRotation(posRot.z);
 	s->setOrigin(u2f(s->getTexture()->getSize()) / 2.f);
@@ -54,7 +55,7 @@ void Level::AddDeco(int level_zindex, b2Vec3 posRot, std::string const& texture,
 }
 void Level::DestroyDeco(int level_zindex, b2Vec3 posRot, std::string const& texture, int zindex)
 {
-	sf::Sprite *s = new sf::Sprite(*(*mTextureMap)[texture]);
+	sf::Sprite *s = new sf::Sprite(*mTextureMap[texture]);
 	s->setPosition(b22sfVec(getVec2(posRot), mWorld->GetPPM()));
 	s->setRotation(posRot.z);
 	mDecoMap[level_zindex].remove(std::make_pair(zindex, s));

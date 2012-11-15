@@ -5,21 +5,24 @@
 #include <list>
 #include "../World.h"
 #include "../Joints/Joint.h"
+//#include "../Entities/Entity.h"
 
-enum BodyType
+enum class BodyType
 {
-	body_fullySimulated = 0,
-	body_actor,
-	body_oneSidedPlatform
+	FullySimulated = 0,
+	Bullet,
+	Entity,
+	OneSidedPlatform
 };
 
 class World;
 class Joint;
-class Body : public sf::Sprite
+class Entity;
+class Body : public sf::Drawable
 {
 public:
 	// Ctor & dtor
-	Body(World *world, BodyType type = body_fullySimulated);
+	Body(World *world, BodyType type = BodyType::FullySimulated);
 	virtual ~Body(void);
 	
 	// Met à jour le body
@@ -35,11 +38,17 @@ public:
 	void DestroyAllJoints();
 
 	// Accesseurs
+	void SetSprite(sf::Sprite *sprite);
+
 	void SetBody(b2Body *body); // NE PAS UTILISER
 	inline void SetDrawable(bool drawable) { mIsDrawable = drawable; }
 	
 	void SetType(BodyType type);
 	inline BodyType GetType() const { return mType; }
+
+	void SetEntity(Entity *entity);
+	inline Entity* GetEntity() { return mEntity; }
+	inline Entity const* GetEntity() const { return mEntity; }
 	
 	virtual b2AABB GetBodyAABB() const; // = 0; // Retourne une AABB nulle
 	b2Vec2 GetBodySize() const;
@@ -57,6 +66,9 @@ public:
 	inline b2Shape const* GetShape() const { return mShape; }
 
 protected:
+	virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const;
+
+protected:
 	BodyType mType;
 
 	bool mIsNull;
@@ -69,4 +81,11 @@ protected:
 
 	// Liste des joint auxquels il est attaché
 	std::list<Joint*> mJointList;
+
+	// Sprite
+	sf::Sprite *mSprite;
+	bool mItsMySprite;
+
+	// Pointeur sur l'Entity correspondante
+	Entity* mEntity;
 };

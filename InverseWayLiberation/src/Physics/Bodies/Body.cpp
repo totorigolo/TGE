@@ -1,16 +1,25 @@
 #include "Body.h"
 #include "../../utils.h"
+#include <cassert>
 
 //Ctor
 Body::Body(World *world, BodyType type)
 	: mWorld(world), mBody(nullptr), mShape(nullptr), mIsNull(true), mIsDrawable(true)
-	, mType(type)
+	, mType(type), mItsMySprite(false), mEntity(nullptr)
 {
+	// Vérifie les objets passés
+	assert(mWorld && "World invalid!");
+
+	mSprite = new sf::Sprite;
+	mItsMySprite = (mSprite != nullptr);
 }
 
 // Dtor
 Body::~Body(void)
 {
+	if (mItsMySprite)
+		delete mSprite;
+
 	this->DestroyAllJoints();
 
 	if (mWorld && mBody)
@@ -69,6 +78,15 @@ void Body::DestroyAllJoints()
 }
 
 // Accesseurs
+void Body::SetSprite(sf::Sprite *sprite)
+{
+	if (mItsMySprite && mSprite)
+		delete mSprite;
+
+	mSprite = sprite;
+	mItsMySprite = false;
+}
+
 void Body::SetBody(b2Body *body) // NE PAS UTILISER
 {
 	mBody = body;
@@ -77,10 +95,15 @@ void Body::SetBody(b2Body *body) // NE PAS UTILISER
 void Body::SetType(BodyType type)
 {
 	mType = type;
-	if (mType == body_actor)
+	if (mType == BodyType::Bullet)
 		mBody->SetBullet(true);
 	else
 		mBody->SetBullet(false);
+}
+
+void Body::SetEntity(Entity* entity)
+{
+	mEntity = entity;
 }
 
 b2AABB Body::GetBodyAABB() const
@@ -89,7 +112,7 @@ b2AABB Body::GetBodyAABB() const
 }
 b2Vec2 Body::GetBodySize() const
 {
-	return sf2b2Vec(u2f(getTexture()->getSize()), mWorld->GetMPP());
+	return sf2b2Vec(u2f(mSprite->getTexture()->getSize()), mWorld->GetMPP());
 }
 float Body::GetBodyAngle() const
 {
@@ -98,4 +121,9 @@ float Body::GetBodyAngle() const
 b2Vec2 Body::GetBodyPosition() const
 {
 	return mBody->GetPosition();
+}
+
+void Body::draw(sf::RenderTarget &target, sf::RenderStates states) const
+{
+	target.draw(*mSprite, states);
 }

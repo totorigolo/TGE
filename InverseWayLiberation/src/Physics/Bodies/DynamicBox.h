@@ -11,8 +11,10 @@ class DynamicBox : public Body
 {
 public:
 	// Ctor & dtor          metres + degrès
-	DynamicBox(World *world, b2Vec3 posRot, std::shared_ptr<sf::Texture> texture, float density = 1.f, float friction = 0.2f, float restitution = 0.0f
-																				, int groupIndex = 0, uint16 categoryBits = 0x0001, uint16 maskBits = 0xFFFF);
+	DynamicBox(World *world, b2Vec3 posRot, std::shared_ptr<sf::Texture>, float density = 1.f, float friction = 0.2f, float restitution = 0.0f
+																		, int groupIndex = 0, uint16 categoryBits = 0x0001, uint16 maskBits = 0xFFFF);
+	DynamicBox(World *world, b2Vec3 posRot, sf::Sprite *sprite, float density = 1.f, float friction = 0.2f, float restitution = 0.0f
+															  , int groupIndex = 0, uint16 categoryBits = 0x0001, uint16 maskBits = 0xFFFF);
 	virtual ~DynamicBox(void);
 	
 	// Met à jour la position du sprite
@@ -25,6 +27,4 @@ public:
 	virtual b2AABB GetBodyAABB() const;
 
 private:
-	// Texture
-	std::shared_ptr<sf::Texture> mTexture;
 };

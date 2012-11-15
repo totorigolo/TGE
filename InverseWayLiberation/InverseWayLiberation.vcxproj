@@ -24,6 +24,7 @@
     <ClCompile Include="src\Physics\Bodies\KinematicBox.cpp" />
     <ClCompile Include="src\Physics\Bodies\StaticBox.cpp" />
     <ClCompile Include="src\Physics\ContactListener.cpp" />
+    <ClCompile Include="src\Physics\Entities\Entity.cpp" />
     <ClCompile Include="src\Physics\Joints\DistanceJoint.cpp" />
     <ClCompile Include="src\Physics\Joints\FrictionJoint.cpp" />
     <ClCompile Include="src\Physics\Joints\GearJoint.cpp" />
@@ -35,10 +36,14 @@
     <ClCompile Include="src\Physics\Joints\RopeJoint.cpp" />
     <ClCompile Include="src\Physics\Joints\WeldJoint.cpp" />
     <ClCompile Include="src\Physics\Joints\WheelJoint.cpp" />
-    <ClCompile Include="src\Physics\Ragdoll.cpp" />
+    <ClCompile Include="src\Physics\Entities\Ragdoll.cpp" />
     <ClCompile Include="src\Physics\World.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Physics\Entities\Entity.h" />
+    <ClInclude Include="src\Resources\ResourceManager.h" />
+    <ClInclude Include="src\Tools\NonCopyable.h" />
+    <ClInclude Include="src\Tools\Singleton.h" />
     <ClInclude Include="src\Box2DGame.h" />
     <ClInclude Include="src\ConfigReader.h" />
     <ClInclude Include="src\Dialog.h" />
@@ -64,7 +69,7 @@
     <ClInclude Include="src\Physics\Joints\WeldJoint.h" />
     <ClInclude Include="src\Physics\Joints\WheelJoint.h" />
     <ClInclude Include="src\Physics\OverlappingBodyCallback.h" />
-    <ClInclude Include="src\Physics\Ragdoll.h" />
+    <ClInclude Include="src\Physics\Entities\Ragdoll.h" />
     <ClInclude Include="src\Physics\World.h" />
     <ClInclude Include="src\utils.h" />
   </ItemGroup>

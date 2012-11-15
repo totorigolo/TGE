@@ -1,7 +1,4 @@
 #pragma once
-#include "LevelLoader.h"
-#include "utils.h"
-#include "Physics/World.h"
 #include <SFML/Graphics.hpp>
 #include <Thor/Resources.hpp>
 #include <Box2D/Box2D.h>
@@ -9,6 +6,10 @@
 #include <map>
 #include <utility>
 #include <list>
+#include "LevelLoader.h"
+#include "utils.h"
+#include "Physics/World.h"
+#include "Resources/ResourceManager.h"
 
 class LevelLoader;
 class Level
@@ -17,7 +18,7 @@ class Level
 
 public:
 	// Ctor & dtor
-	Level(World *world, thor::ResourceCache<sf::Texture> *textureCache, std::map<std::string, std::shared_ptr<sf::Texture>> *textureMap);
+	Level(World *world);
 	virtual ~Level(void);
 
 	// Vide tout le niveau
@@ -58,8 +59,8 @@ private:
 	b2Vec2 mOriginView;
 	
 	// Textures
-	thor::ResourceCache<sf::Texture> *mTextureCache;
-	std::map<std::string, std::shared_ptr<sf::Texture>> *mTextureMap;
+	ResourceManager &mResourceManager;
+	TextureMap &mTextureMap;
 
 	// Déco (z-index // parallax),  <z-index, sf::Sprite>
 	std::map<int, std::list<std::pair<int, sf::Sprite*>>> mDecoMap;

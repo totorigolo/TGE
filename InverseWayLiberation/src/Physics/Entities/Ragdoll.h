@@ -4,11 +4,12 @@
 #include <Thor/Resources.hpp>
 #include <string>
 #include <map>
-#include "World.h"
-#include "Bodies/DynamicBox.h"
-#include "Bodies/DynamicCircle.h"
-#include "Joints/RevoluteJoint.h"
-#include "Joints/WeldJoint.h"
+#include "../World.h"
+#include "../Bodies/DynamicBox.h"
+#include "../Bodies/DynamicCircle.h"
+#include "../Joints/RevoluteJoint.h"
+#include "../Joints/WeldJoint.h"
+#include "../../Resources/ResourceManager.h"
 
 class World;
 class DynamicBox;
@@ -16,7 +17,7 @@ class DynamicCircle;
 class Ragdoll
 {
 public:
-	Ragdoll(World *world, b2Vec3 posRot, thor::ResourceCache<sf::Texture> *textureCache, std::map<std::string, std::shared_ptr<sf::Texture>> *textureMap);
+	Ragdoll(World *world, b2Vec3 posRot);
 	virtual ~Ragdoll(void);
 
 	// Met à jour la position des sprites
@@ -28,8 +29,8 @@ public:
 private:
 	bool mIsValid;
 	World *mWorld;
-	thor::ResourceCache<sf::Texture> *mTextureCache;
-	std::map<std::string, std::shared_ptr<sf::Texture>> *mTextureMap;
+	ResourceManager &mResourceManager;
+	TextureMap &mTextureMap;
 
 	/* Bodies */
 	// Tête et cou

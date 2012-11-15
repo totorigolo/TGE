@@ -25,6 +25,4 @@ public:
 	virtual void SetPosition(b2Vec2 const& pos, float angle);
 
 private:
-	// Texture
-	std::shared_ptr<sf::Texture> mTexture;
 };

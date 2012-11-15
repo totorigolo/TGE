@@ -207,7 +207,7 @@ bool LevelLoader::CreateLine(std::string& section, std::string& name, std::strin
 	{
 		// Charge la texture dans la textureKeyMap
 		try {
-			(*mLevel->mTextureMap)[name] = mLevel->mTextureCache->acquire(thor::Resources::fromFile<sf::Texture>(value));
+			mLevel->mTextureMap[name] = mLevel->mResourceManager.acquire(thor::Resources::fromFile<sf::Texture>(value));
 		}
 		catch (thor::ResourceLoadingException const& e)
 		{
@@ -245,18 +245,18 @@ bool LevelLoader::CreateLine(std::string& section, std::string& name, std::strin
 		if (!IDexists || mBodyIDMap.find(id) == mBodyIDMap.end())
 		{
 			// Vérifie si la texture existe
-			if (mLevel->mTextureMap->find(texture) != mLevel->mTextureMap->end())
+			if (mLevel->mTextureMap.find(texture) != mLevel->mTextureMap.end())
 			{
 				// Récupère la position et rotation
 				size_t posRotOffset = value.find_first_of(')');
 				b2Vec3 posRot = Parser::string2b2Vec3(value.substr(0, posRotOffset + 1).c_str());
 				
 				// Récupère le "flag" (BodyType)
-				BodyType bt = body_fullySimulated;
+				BodyType bt = BodyType::FullySimulated;
 				if (value.find("[ac]", posRotOffset) != std::string::npos)
-					bt = body_actor;
+					bt = BodyType::Bullet;
 				else if (value.find("[osp]", posRotOffset) != std::string::npos)
-					bt = body_oneSidedPlatform;
+					bt = BodyType::OneSidedPlatform;
 
 				// Récupère le type
 				size_t isdb = value.find("db", posRotOffset);
@@ -312,7 +312,7 @@ bool LevelLoader::CreateLine(std::string& section, std::string& name, std::strin
 						float restitution = (p3 != -1.f) ? p3 : 0.f;
 
 						// Crée le body
-						b = new DynamicBox(mLevel->mWorld, posRot, (*mLevel->mTextureMap)[texture], density, friction, restitution);
+						b = new DynamicBox(mLevel->mWorld, posRot, mLevel->mTextureMap[texture], density, friction, restitution);
 						b->SetType(bt);
 						mLevel->mWorld->RegisterBody(b);
 					}
@@ -325,7 +325,7 @@ bool LevelLoader::CreateLine(std::string& section, std::string& name, std::strin
 						float restitution = (p3 != -1.f) ? p3 : 0.f;
 
 						// Crée le body
-						b = new DynamicCircle(mLevel->mWorld, posRot, (*mLevel->mTextureMap)[texture], density, friction, restitution);
+						b = new DynamicCircle(mLevel->mWorld, posRot, mLevel->mTextureMap[texture], density, friction, restitution);
 						b->SetType(bt);
 						mLevel->mWorld->RegisterBody(b);
 					}
@@ -337,7 +337,7 @@ bool LevelLoader::CreateLine(std::string& section, std::string& name, std::strin
 						float restitution = (p2 != -1.f) ? p2 : 0.f;
 
 						// Crée le body
-						b = new StaticBox(mLevel->mWorld, posRot, (*mLevel->mTextureMap)[texture], friction, restitution);
+						b = new StaticBox(mLevel->mWorld, posRot, mLevel->mTextureMap[texture], friction, restitution);
 						b->SetType(bt);
 						mLevel->mWorld->RegisterBody(b);
 					}
@@ -348,7 +348,7 @@ bool LevelLoader::CreateLine(std::string& section, std::string& name, std::strin
 						float restitution = (p1 != -1.f) ? p1 : 0.f;
 
 						// Crée le body
-						b = new KinematicBox(mLevel->mWorld, posRot, (*mLevel->mTextureMap)[texture], restitution);
+						b = new KinematicBox(mLevel->mWorld, posRot, mLevel->mTextureMap[texture], restitution);
 						b->SetType(bt);
 						mLevel->mWorld->RegisterBody(b);
 					}
@@ -1048,7 +1048,7 @@ bool LevelLoader::CreateLine(std::string& section, std::string& name, std::strin
 		}
 
 		// Vérifie si la texture existe
-		if (mLevel->mTextureMap->find(name) != mLevel->mTextureMap->end())
+		if (mLevel->mTextureMap.find(name) != mLevel->mTextureMap.end())
 		{
 			// Récupère la position et rotation
 			size_t posRotOffset = value.find_first_of(')');

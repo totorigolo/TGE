@@ -22,6 +22,4 @@ public:
 	virtual b2AABB GetBodyAABB() const;
 
 protected:
-	// Texture
-	std::shared_ptr<sf::Texture> mTexture;
 };

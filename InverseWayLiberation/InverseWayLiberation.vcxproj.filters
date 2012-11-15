@@ -31,6 +31,24 @@
     <Filter Include="Fichiers sources\Physics\Bodies">
       <UniqueIdentifier>{e52180cc-5f88-4d2d-b74a-e31d1f27cff6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Fichiers d%27en-tête\Tools">
+      <UniqueIdentifier>{b654ce01-8d80-4b8b-91a3-f95e20aa689c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers sources\Tools">
+      <UniqueIdentifier>{26e21777-48ac-4645-8293-4e4db7d3225b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers d%27en-tête\Resources">
+      <UniqueIdentifier>{2a884565-4cc7-4a34-b8ca-2003f9c19572}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers sources\Resources">
+      <UniqueIdentifier>{f82ff6e3-17c1-4ebc-8974-2fde365f79a6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers d%27en-tête\Physics\Entities">
+      <UniqueIdentifier>{e904180f-e16b-4735-a52b-454aec732289}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers sources\Physics\Entities">
+      <UniqueIdentifier>{43e5b502-d105-4493-9279-319a78340903}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\_TODO.txt" />
@@ -85,9 +103,6 @@
     <ClCompile Include="src\Physics\Joints\Joint.cpp">
       <Filter>Fichiers sources\Physics\Joints</Filter>
     </ClCompile>
-    <ClCompile Include="src\Physics\Ragdoll.cpp">
-      <Filter>Fichiers sources\Physics</Filter>
-    </ClCompile>
     <ClCompile Include="src\Physics\World.cpp">
       <Filter>Fichiers sources\Physics</Filter>
     </ClCompile>
@@ -114,6 +129,12 @@
     </ClCompile>
     <ClCompile Include="src\Physics\ContactListener.cpp">
       <Filter>Fichiers sources\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Physics\Entities\Entity.cpp">
+      <Filter>Fichiers sources\Physics\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Physics\Entities\Ragdoll.cpp">
+      <Filter>Fichiers sources\Physics\Entities</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -171,9 +192,6 @@
     <ClInclude Include="src\Physics\OverlappingBodyCallback.h">
       <Filter>Fichiers d%27en-tête\Physics</Filter>
     </ClInclude>
-    <ClInclude Include="src\Physics\Ragdoll.h">
-      <Filter>Fichiers d%27en-tête\Physics</Filter>
-    </ClInclude>
     <ClInclude Include="src\Physics\World.h">
       <Filter>Fichiers d%27en-tête\Physics</Filter>
     </ClInclude>
@@ -200,6 +218,21 @@
     </ClInclude>
     <ClInclude Include="src\Physics\ContactListener.h">
       <Filter>Fichiers d%27en-tête\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Tools\Singleton.h">
+      <Filter>Fichiers d%27en-tête\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Tools\NonCopyable.h">
+      <Filter>Fichiers d%27en-tête\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Resources\ResourceManager.h">
+      <Filter>Fichiers d%27en-tête\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Physics\Entities\Entity.h">
+      <Filter>Fichiers d%27en-tête\Physics\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Physics\Entities\Ragdoll.h">
+      <Filter>Fichiers d%27en-tête\Physics\Entities</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

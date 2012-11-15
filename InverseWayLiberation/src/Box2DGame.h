@@ -7,15 +7,18 @@
 #include <map>
 #include "Level.h"
 #include "Physics/World.h"
-#include "Physics/Ragdoll.h"
+#include "Physics/Entities/Ragdoll.h"
+#include "Physics/Entities/Entity.h"
 #include "Physics/Bodies/Body.h"
 #include "Physics/Bodies/DynamicBox.h"
 #include "Physics/Joints/MouseJoint.h"
 #include "Physics/Joints/DistanceJoint.h"
+#include "Resources/ResourceManager.h"
 
 class Body;
 class World;
 class Ragdoll;
+class Entity;
 class MouseJoint;
 class Box2DGame
 {
@@ -87,6 +90,7 @@ private:
 	bool mIsJumping;
 	DynamicBox *mHeroBody;
 	Ragdoll *mHeroRagdoll;
+	Entity *mCharacter;
 
 	// Positions de la souris (relative à la vue, en mètres et l'Y à la Box2D)
 	b2Vec2 mMp;
@@ -122,8 +126,8 @@ private:
 	b2Vec2 mPinAnchorB;
 
 	// Textures
-	thor::ResourceCache<sf::Texture> mTextureCache;
-	std::map<std::string, std::shared_ptr<sf::Texture>> mTextureMap;
+	ResourceManager &mResourceManager;
+	TextureMap &mTextureMap;
 };
 
 /* Pour la molette de la souris */

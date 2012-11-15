@@ -8,10 +8,11 @@
 #include "Physics/FirstBodyRaycastCallback.h"
 #include "utils.h"
 #include <iostream>
+#include <Thor/Animation.hpp>
 
 // Ctor
 Box2DGame::Box2DGame(sf::RenderWindow & window)
-	: mWindow(window), mActionMap(mWindow),
+	: mWindow(window), mActionMap(mWindow), mResourceManager(ResourceManager::GetInstance()), mTextureMap(mResourceManager.GetTextureMap()),
 	// Physique
 	mGravity(0.0f, -9.8f), mWorld(mGravity)
 {
@@ -101,14 +102,11 @@ void Box2DGame::OnInit()
 	mWindowView = mWindow.getDefaultView();
 	mWindowView.setViewport(sf::FloatRect(0.f, 0.f, 1.f, 1.f));
 	mRenderTextureView = mWindowView;
-
-	// Charge le shader et initialise la renderTexture
-	mShader.setParameter("texture", sf::Shader::CurrentTexture);
-	mShader.loadFromFile("fx/shader1.fx", sf::Shader::Fragment);
+	
+	// Initialise la renderTexture
 	mRenderTexture.create(mWindow.getSize().x, mWindow.getSize().y);
-
 	// Charge un niveau
-	mLevel = new Level(&mWorld, &mTextureCache, &mTextureMap);
+	mLevel = new Level(&mWorld);
 	LevelLoader("lvls/1.lvl", mLevel);
 
 	// Centre la vue
@@ -118,21 +116,24 @@ void Box2DGame::OnInit()
 
 	// Charge les textures dans la textureKeyMap
 	try {
-		mTextureMap["hollowCircle"] = mTextureCache.acquire(thor::Resources::fromFile<sf::Texture>("tex/hollowCircle.png"));
+		mTextureMap["skyrim"] = mResourceManager.acquire(thor::Resources::fromFile<sf::Texture>("tex/skyrim.jpg"));
 
-		mTextureMap["box"] = mTextureCache.acquire(thor::Resources::fromFile<sf::Texture>("tex/box.png"));
-		mTextureMap["box2"] = mTextureCache.acquire(thor::Resources::fromFile<sf::Texture>("tex/box2.png"));
-		mTextureMap["caisse"] = mTextureCache.acquire(thor::Resources::fromFile<sf::Texture>("tex/caisse.png"));
-		mTextureMap["tonneau"] = mTextureCache.acquire(thor::Resources::fromFile<sf::Texture>("tex/tonneau.png"));
-		mTextureMap["way"] = mTextureCache.acquire(thor::Resources::fromFile<sf::Texture>("tex/way.png"));
+		mTextureMap["hollowCircle"] = mResourceManager.acquire(thor::Resources::fromFile<sf::Texture>("tex/hollowCircle.png"));
+
+		mTextureMap["box"] = mResourceManager.acquire(thor::Resources::fromFile<sf::Texture>("tex/box.png"));
+		mTextureMap["box2"] = mResourceManager.acquire(thor::Resources::fromFile<sf::Texture>("tex/box2.png"));
+		mTextureMap["caisse"] = mResourceManager.acquire(thor::Resources::fromFile<sf::Texture>("tex/caisse.png"));
+		mTextureMap["tonneau"] = mResourceManager.acquire(thor::Resources::fromFile<sf::Texture>("tex/tonneau.png"));
+		mTextureMap["way"] = mResourceManager.acquire(thor::Resources::fromFile<sf::Texture>("tex/way.png"));
+		mTextureMap["way"]->setSmooth(true);
 		
-		mTextureMap["ground"] = mTextureCache.acquire(thor::Resources::fromFile<sf::Texture>("tex/ground.png"));
-		mTextureMap["lampadere"] = mTextureCache.acquire(thor::Resources::fromFile<sf::Texture>("tex/lampadere.png"));
+		mTextureMap["ground"] = mResourceManager.acquire(thor::Resources::fromFile<sf::Texture>("tex/ground.png"));
+		mTextureMap["lampadere"] = mResourceManager.acquire(thor::Resources::fromFile<sf::Texture>("tex/lampadere.png"));
 
-		mTextureMap["ball"] = mTextureCache.acquire(thor::Resources::fromFile<sf::Texture>("tex/ball.png"));
-		mTextureMap["circle"] = mTextureCache.acquire(thor::Resources::fromFile<sf::Texture>("tex/circle.png"));
+		mTextureMap["ball"] = mResourceManager.acquire(thor::Resources::fromFile<sf::Texture>("tex/ball.png"));
+		mTextureMap["circle"] = mResourceManager.acquire(thor::Resources::fromFile<sf::Texture>("tex/circle.png"));
 
-		mTextureMap["hero"] = mTextureCache.acquire(thor::Resources::fromFile<sf::Texture>("tex/hero/test.png"));
+		mTextureMap["hero"] = mResourceManager.acquire(thor::Resources::fromFile<sf::Texture>("tex/hero/test.png"));
 	}
 	catch (thor::ResourceLoadingException const& e)
 	{
@@ -142,11 +143,12 @@ void Box2DGame::OnInit()
 	}
 
 	// Crée le héro
-	mHeroBody = new DynamicBox(&mWorld, b2Vec3(0.f, 0.f, 0.f), mTextureMap["hero"]);
-	mHeroBody->SetType(body_actor);
+	mHeroRagdoll = new Ragdoll(&mWorld, b2Vec3(-1.f, 2.f, 0.f));
+	mHeroBody = new DynamicBox(&mWorld, b2Vec3(0.f, 200.f, 0.f), mTextureMap["hero"]);
+	mHeroBody->SetType(BodyType::Bullet);
 	mWorld.RegisterBody(mHeroBody);
 	mHeroBody->GetBody()->SetFixedRotation(true);
-	mHeroRagdoll = new Ragdoll(&mWorld, b2Vec3(-1.f, 2.f, 0.f), &mTextureCache, &mTextureMap);
+	mCharacter = new Entity(&mWorld, &*(mTextureMap["hero"]), b2Vec3(0.f, 0.f, 0.f));
 
 	/* Crée les actions */
 	mWindow.setKeyRepeatEnabled(false);
@@ -271,12 +273,14 @@ void Box2DGame::OnEvent()
 		mMouseJoint = nullptr;
 
 		// Crée le héro
-		delete mHeroRagdoll;
-		mHeroRagdoll = new Ragdoll(&mWorld, b2Vec3(-0.3f, 10.f, 0.f), &mTextureCache, &mTextureMap);
+		//delete mHeroRagdoll;
+		mHeroRagdoll = new Ragdoll(&mWorld, b2Vec3(-0.3f, 10.f, 0.f));
 		mHeroBody = new DynamicBox(&mWorld, b2Vec3(0.f, 0.f, 0.f), mTextureMap["hero"]);
-		mHeroBody->SetType(body_actor);
+		mHeroBody->SetType(BodyType::Bullet);
 		mWorld.RegisterBody(mHeroBody);
 		mHeroBody->GetBody()->SetFixedRotation(true);
+		//delete mCharacter;
+		mCharacter = new Entity(&mWorld, &*(mTextureMap["hero"]), b2Vec3(0.f, 0.f, 0.f));
 	}
 
 	// Grapin
@@ -455,10 +459,8 @@ void Box2DGame::OnEvent()
 					// Coupe le body touché (uniquement dynamic_box)
 					if (callback.mFixture->GetBody()->GetType() == b2_dynamicBody && callback.mFixture->GetType() == b2Shape::e_polygon)
 					{
-						b2Body *body = callback.mFixture->GetBody();
 						b2Fixture *fix = callback.mFixture;
 						b2PolygonShape *shape = (b2PolygonShape*) fix->GetShape();
-						int count = shape->GetVertexCount();
 
 						int p1a = -1, p1b = -1;
 						int p2a = -1, p2b = -1;
@@ -695,14 +697,14 @@ void Box2DGame::OnStepPhysics()
 			mHookClock.restart();
 		}
 	}
+
+	// Mets à jour le character
+	mCharacter->Update();
 }
 
 /// Appelé pour le rendu
 void Box2DGame::OnRender()
 {
-	// Mets à jour les shaders
-	//mShader.setParameter("blink_alpha", 0.5f + std::cos(mShaderTime.getElapsedTime().asSeconds() * 3) * 0.25f);
-	
 	mFrameTime.restart();
 
 	// Rendu
@@ -763,8 +765,16 @@ void Box2DGame::OnRender()
 	// Affichage du joint de la souris
 	if (mMouseJoint)
 	{
-		mMouseJoint->Update();
-		mRenderTexture.draw(*mMouseJoint);
+		if (!mMouseJoint->IsNull())
+		{
+			mMouseJoint->Update();
+			mRenderTexture.draw(*mMouseJoint);
+		}
+		else
+		{
+			std::cout << "MouseJoint supprimé à cause d'un bug (\x82""vit\x82"")." << std::endl;
+			mMouseJoint = nullptr;
+		}
 	}
 	
 	// Affichage des levels de la déco avec zindex négatif
@@ -802,7 +812,7 @@ void Box2DGame::OnRender()
 	}
 
 	mRenderTexture.display();
-	mWindow.draw(sf::Sprite(mRenderTexture.getTexture()));//, &mShader);
+	mWindow.draw(sf::Sprite(mRenderTexture.getTexture()));
 	mWindow.display();
 }
 

@@ -4,10 +4,10 @@
 //Ctor
 DynamicCircle::DynamicCircle(World *world, b2Vec3 posRot, std::shared_ptr<sf::Texture> texture, float density, float friction, float restitution
 																							  , int groupIndex, uint16 categoryBits, uint16 maskBits)
-	: Body(world), mTexture(texture)
+	: Body(world)
 {
 	// Change la texture
-	this->setTexture(*mTexture);
+	mSprite->setTexture(*texture);
 
 	if (mWorld)
 	{
@@ -21,7 +21,7 @@ DynamicCircle::DynamicCircle(World *world, b2Vec3 posRot, std::shared_ptr<sf::Te
 
 		// Shape
 		mShape = new b2CircleShape;
-		((b2CircleShape*)mShape)->m_radius = mTexture->getSize().x / 2.f * mWorld->GetMPP();
+		((b2CircleShape*)mShape)->m_radius = mSprite->getTexture()->getSize().x / 2.f * mWorld->GetMPP();
 
 		// Fixture
 		b2FixtureDef fixtureDef;
@@ -47,11 +47,11 @@ DynamicCircle::~DynamicCircle(void)
 // Met à jour la position du sprite
 void DynamicCircle::Update()
 {
-	if (mBody && mWorld)
+	if (mBody && mWorld && mSprite)
 	{
-		this->setPosition(b22sfVec(mBody->GetPosition(), mWorld->GetPPM()));
-		this->setOrigin(u2f(mTexture->getSize()) / 2.f);
-		this->setRotation(- mBody->GetAngle() * DPR);
+		mSprite->setPosition(b22sfVec(mBody->GetPosition(), mWorld->GetPPM()));
+		mSprite->setOrigin(mSprite->getTextureRect().width / 2.f, mSprite->getTextureRect().height / 2.f);
+		mSprite->setRotation(- mBody->GetAngle() * DPR);
 	}
 }
 
