@@ -28,7 +28,7 @@ KinematicBox::KinematicBox(World *world, b2Vec3 posRot, std::shared_ptr<sf::Text
 		// Fixture
 		b2FixtureDef fixtureDef;
 		fixtureDef.restitution = restitution;
-		fixtureDef.filter.groupIndex = groupIndex;
+		fixtureDef.filter.groupIndex = static_cast<int16>(groupIndex);
 		fixtureDef.filter.categoryBits = categoryBits;
 		fixtureDef.filter.maskBits = maskBits;
 		fixtureDef.shape = mShape;

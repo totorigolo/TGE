@@ -30,7 +30,7 @@ StaticBox::StaticBox(World *world, b2Vec3 posRot, std::shared_ptr<sf::Texture> t
 		fixtureDef.density = 0.f;
 		fixtureDef.friction = friction;
 		fixtureDef.restitution = restitution;
-		fixtureDef.filter.groupIndex = groupIndex;
+		fixtureDef.filter.groupIndex = static_cast<int16>(groupIndex);
 		fixtureDef.filter.categoryBits = categoryBits;
 		fixtureDef.filter.maskBits = maskBits;
 		fixtureDef.shape = mShape;

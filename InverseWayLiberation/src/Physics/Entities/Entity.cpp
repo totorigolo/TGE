@@ -8,8 +8,8 @@ void testAnimation(sf::Sprite& animated, float progress)
 {
 	animated.setTexture(*ResourceManager::GetInstance().GetTextureMap()["skyrim"]);
 	//animated.setOrigin(u2f(animated.getTexture()->getSize()) / 2.f);
-	float x = progress * static_cast<float>(animated.getTexture()->getSize().x);
-	float y = progress * static_cast<float>(animated.getTexture()->getSize().y);
+	int x = progress * static_cast<float>(animated.getTexture()->getSize().x);
+	int y = progress * static_cast<float>(animated.getTexture()->getSize().y);
 	animated.setTextureRect(sf::IntRect(x, y, 40, 150));
 	animated.setOrigin(0.f, 0.f);
 }
