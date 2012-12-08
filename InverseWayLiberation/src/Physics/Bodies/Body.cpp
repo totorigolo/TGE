@@ -86,6 +86,10 @@ void Body::SetSprite(sf::Sprite *sprite)
 	mSprite = sprite;
 	mItsMySprite = false;
 }
+const sf::Sprite* Body::GetSprite() const
+{
+	return mSprite;
+}
 
 void Body::SetBody(b2Body *body) // NE PAS UTILISER
 {

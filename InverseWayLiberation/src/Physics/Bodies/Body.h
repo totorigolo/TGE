@@ -39,6 +39,7 @@ public:
 
 	// Accesseurs
 	void SetSprite(sf::Sprite *sprite);
+	const sf::Sprite* GetSprite() const;
 
 	void SetBody(b2Body *body); // NE PAS UTILISER
 	inline void SetDrawable(bool drawable) { mIsDrawable = drawable; }
