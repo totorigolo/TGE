@@ -8,6 +8,8 @@
 #include "Physics/FirstBodyRaycastCallback.h"
 #include "utils.h"
 #include <iostream>
+#include <vector>
+#include <list>
 #include <Thor/Animation.hpp>
 
 // Ctor
@@ -157,6 +159,10 @@ void Box2DGame::OnInit()
 	mActionMap["zoomIn"] = thor::Action(sf::Keyboard::Add, thor::Action::PressOnce);
 	mActionMap["zoomOut"] = thor::Action(sf::Keyboard::Subtract, thor::Action::PressOnce);
 	mActionMap["zoomReset"] = thor::Action(sf::Keyboard::Numpad0, thor::Action::PressOnce);
+	mActionMap["viewMoveUp"] = thor::Action(sf::Keyboard::Up, thor::Action::Hold);
+	mActionMap["viewMoveDown"] = thor::Action(sf::Keyboard::Down, thor::Action::Hold);
+	mActionMap["viewMoveLeft"] = thor::Action(sf::Keyboard::Left, thor::Action::Hold);
+	mActionMap["viewMoveRight"] = thor::Action(sf::Keyboard::Right, thor::Action::Hold);
 	mActionMap["resized"] = thor::Action(sf::Event::Resized);
 	mActionMap["mouseWheelMoved"] = thor::Action(sf::Event::MouseWheelMoved);
 	mActionCallbackSystem.connect("mouseWheelMoved", OnMouseWheelMoved(this));
@@ -232,6 +238,24 @@ void Box2DGame::OnEvent()
 		
 		mWindowView.setSize(u2f(mWindow.getSize()) * sf::Vector2f(mRenderTextureView.getViewport().width, mRenderTextureView.getViewport().height));
 		mWindowView.setCenter(mWindowView.getSize() / 2.f); // TODO: Pourquoi ?
+	}
+	
+	// Déplacement de la vue avec les flèches
+	if (mActionMap.isActive("viewMoveUp"))
+	{
+		mRenderTextureView.move(sf::Vector2f(0.f, -5.f) * mCurrentZoom);
+	}
+	if (mActionMap.isActive("viewMoveDown"))
+	{
+		mRenderTextureView.move(sf::Vector2f(0.f, 5.f) * mCurrentZoom);
+	}
+	if (mActionMap.isActive("viewMoveLeft"))
+	{
+		mRenderTextureView.move(sf::Vector2f(-5.f, 0.f) * mCurrentZoom);
+	}
+	if (mActionMap.isActive("viewMoveRight"))
+	{
+		mRenderTextureView.move(sf::Vector2f(5.f, 0.f) * mCurrentZoom);
 	}
 
 	// Gère le déplacement à la souris (clic molette)
@@ -647,7 +671,7 @@ void Box2DGame::OnEvent()
 void Box2DGame::OnStepPhysics()
 {
 	// Simule
-	mWorld.Step(1.f / 60.f, 8, 3);
+	mWorld.Step(1.f / 60.f, 6, 3);
 	mWorld.ClearForces();
 
 	// Destruction des bodies en dehors de la zone
@@ -702,6 +726,45 @@ void Box2DGame::OnStepPhysics()
 	mCharacter->Update();
 }
 
+bool intersect(sf::Vector2f A, sf::Vector2f B, sf::Vector2f C, sf::Vector2f D)
+{
+	// Soit le segment [AB], et le segment [CD].
+	// Je note I le vecteur AB, et J le vecteur CD
+	sf::Vector2f I = B - A;
+	sf::Vector2f J = D - C;
+
+	// Si les vecteurs sont colinéaires, alors les droites sont paralleles, pas d'intersection.
+	float col = I.x * J.y - I.y * J.x;
+	if (col > -0.01f && col < 0.01f)
+		return false;
+
+	// Soit k le parametre du point d'intersection du segment CD sur la droite AB. on sera sur le segment si 0 < k < 1
+	// Soit m le parametre du point d'intersection du segment AB sur la droite CD, on sera sur le segment si 0 < m < 1
+	//
+	// Soit P le point d'intersection
+	//   P = A + k * I; // equation (1)
+	//   P = C + m * J;
+	//
+	// D'où :
+	//   A + k*I = C + m*J
+	//
+	// On décompose les points et vecteurs, on a :
+	//   Ax + k * Ix = Cx + m * Jx
+	//   Ay + k * Iy = Cy + m * Jy
+	//
+	//   2 équations, 2 inconnues, en résolvant, on trouve :
+
+	float m = - (- I.x * A.y + I.x * C.y + I.y * A.x - I.y * C.x) / (I.x * J.y - I.y * J.x);
+	float k = - (A.x * J.y - C.x * J.y - J.x * A.y + J.x * C.y) / (I.x * J.y - I.y * J.x);
+
+	// (Notez que les dénominateurs sont les mêmes)
+
+	// On vérifie que 0 < m < 1 et 0 < k < 1 --> sinon, cela veut dire que les droites s'intersectent, mais pas au niveau du segment.
+	if (0.f < m && m < 1.f && 0.f < k && k < 1.f)
+		return true;
+	return false;
+}
+
 /// Appelé pour le rendu
 void Box2DGame::OnRender()
 {
@@ -713,6 +776,32 @@ void Box2DGame::OnRender()
 	mWindow.setView(mWindowView);
 	mRenderTexture.setView(mRenderTextureView);
 	
+	// Ombres
+	float PPM = mWorld.GetPPM();
+	sf::Vector2f lightPos(mCurrentMousePosRV);
+	float lightRadius = 5.f * PPM;
+
+	sf::RenderTexture shadowTex;
+	shadowTex.create(mWindow.getSize().x, mWindow.getSize().y);
+	shadowTex.clear(sf::Color(0, 0, 0, 0));
+	shadowTex.setView(mRenderTextureView);
+
+	sf::RectangleShape obscurity(mRenderTextureView.getSize());
+	obscurity.setOrigin(obscurity.getSize() / 2.f);
+	obscurity.setPosition(mRenderTextureView.getCenter());
+	obscurity.setFillColor(sf::Color(0, 0, 0, 200));
+	shadowTex.draw(obscurity);
+
+	sf::RenderStates states;
+	states.blendMode = sf::BlendNone;
+
+	sf::CircleShape light;
+	light.setRadius(lightRadius);
+	light.setFillColor(sf::Color(0, 0, 0, 0));
+	light.setOrigin(light.getGlobalBounds().width / 2.f, light.getGlobalBounds().height / 2.f);
+	light.setPosition(lightPos);
+	shadowTex.draw(light, states);
+
 	// Affichage des levels de la déco avec zindex positif
 	for (auto it = mLevel->GetDeco().begin(); it != mLevel->GetDeco().end(); ++it)
 	{
@@ -732,6 +821,114 @@ void Box2DGame::OnRender()
 		{
 			(*it)->Update();
 			mRenderTexture.draw(**it);
+
+			if (abs(((b2PolygonShape*) (*it)->GetShape())->GetVertexCount()) == 4)
+			{//*/
+				// Garde qqs variables
+				b2PolygonShape *shape = (b2PolygonShape*) (*it)->GetShape();
+				unsigned int nbPts = shape->GetVertexCount();
+
+				// Récupère les positions des points
+				std::vector<sf::Vector2f> points(nbPts);
+				for (unsigned int i = 0; i < points.size(); ++i)
+				{
+					points[i] = b22sfVec((*it)->GetBody()->GetWorldPoint(shape->GetVertex(i)), PPM);
+				}
+
+				// Regarde quels points sont cachés
+				// les vector<bool> sont spécialisés
+				std::vector<unsigned char> pointsCaches(points.size(), false);
+				for (unsigned int i = 0; i < pointsCaches.size(); ++i)
+				{
+					// Pour chaque points => pour chaque arête
+					for (unsigned int j = 0; j < points.size() && !pointsCaches[i]; ++j)
+					{
+						// Calcule le nb du prochain sommet
+						unsigned int k = (j + 1 < points.size()) ? (j + 1) : 0;
+
+						// L'arête n'est pas issue du sommet testé
+						if (i != j && i != k)
+							if (intersect(lightPos, points[i], points[j], points[k]))
+								pointsCaches[i] = true;
+					}
+				}
+
+				// Prend les deux points extrèmes non cachés
+				unsigned int ptE1 = 0U;
+				bool b1 = false;
+				// Trouve ptE1, càd celui juste avant les cachés
+				for (unsigned int i = 0; i < points.size(); ++i)
+				{
+					if (!pointsCaches[i])
+					{
+						ptE1 = i;
+						b1 = true;
+					}
+					else if (b1)
+						break;
+				}
+				// Trouve ptE2, càd celui juste après les cachés
+				// Il est possible que ptE2 ne soit pas changé ci-après, mais ça veut dire qu'il vaut 0
+				unsigned int ptE2 = 0U;
+				bool vuCache = false;
+				for (unsigned int i = 0; i < points.size(); ++i)
+				{
+					if (pointsCaches[i])
+						vuCache = true;
+
+					if (vuCache && !pointsCaches[i])
+					{
+						ptE2 = i;
+						vuCache = false;
+						break;
+					}
+				}
+				
+				sf::ConvexShape polygonn;
+				polygonn.setPointCount(points.size());
+
+				// Projette les points
+				std::vector<sf::Vector2f> pointsProjetes(points.size());
+				for (unsigned int i = 0U; i < points.size(); ++i)
+				{
+					pointsProjetes[i] = points[i] + (((points[i] - lightPos) / distance(points[i], lightPos)) * lightRadius * 3.f);
+					polygonn.setPoint(i, pointsProjetes[i]);
+				}
+
+				// Affiche le polygone
+				polygonn.setFillColor(sf::Color(0, 0, 0, 200));
+				states.blendMode = sf::BlendNone;
+				shadowTex.draw(polygonn, states);
+
+				// Récupère les points à afficher
+				std::vector<sf::Vector2f> pointsAAfficher;
+				for (unsigned int i = 0U; i < points.size(); ++i)
+				{
+					if (!pointsCaches[i])
+					{
+						if (i == ptE2)
+							pointsAAfficher.push_back(pointsProjetes[i]);
+
+						pointsAAfficher.push_back(points[i]);
+
+						if (i == ptE1)
+							pointsAAfficher.push_back(pointsProjetes[i]);
+					}
+				}
+				
+				// Crée le polygone
+				sf::ConvexShape polygon;
+				polygon.setPointCount(pointsAAfficher.size());
+				for (unsigned int i = 0U; i < pointsAAfficher.size(); ++i)
+				{
+					polygon.setPoint(i, pointsAAfficher[i]);
+				}
+			
+				// Affiche le polygone
+				polygon.setFillColor(sf::Color(0, 0, 0, 200));
+				states.blendMode = sf::BlendAlpha;
+				shadowTex.draw(polygon, states);
+			}//*/
 		}
 	}
 	
@@ -742,6 +939,7 @@ void Box2DGame::OnRender()
 		{
 			(*it)->Update();
 			mRenderTexture.draw(**it);
+			//shadowTex.draw(**it);
 		}
 	}
 
@@ -752,6 +950,7 @@ void Box2DGame::OnRender()
 		{
 			(*it)->Update();
 			mRenderTexture.draw(**it);
+			//shadowTex.draw(**it);
 		}
 	}
 	
@@ -811,8 +1010,10 @@ void Box2DGame::OnRender()
 		mWindow.draw(s);
 	}
 
+	shadowTex.display();
 	mRenderTexture.display();
 	mWindow.draw(sf::Sprite(mRenderTexture.getTexture()));
+	mWindow.draw(sf::Sprite(shadowTex.getTexture()));
 	mWindow.display();
 }
 

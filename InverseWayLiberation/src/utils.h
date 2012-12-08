@@ -56,6 +56,17 @@ inline T sign(T a)
 	return (a == T(0)) ? T(1) : a / abs(a);
 }
 
+// Retourne la distance entre deux points
+inline float distance(b2Vec2 A, b2Vec2 B)
+{
+	return sqrt((B.y - A.y)*(B.y - A.y) + (B.x - A.x)*(B.x - A.x));
+}
+template<typename T>
+inline T distance(sf::Vector2<T> A, sf::Vector2<T> B)
+{
+	return sqrt((B.y - A.y)*(B.y - A.y) + (B.x - A.x)*(B.x - A.x));
+}
+
 // Converti les sf::Vector2 entre eux
 inline sf::Vector2f u2f(sf::Vector2u vec)
 {
@@ -83,16 +94,6 @@ inline sf::Vector2u i2u(sf::Vector2i vec)
 }
 
 // Surcharges d'opérateurs pour les sf::Vector
-template<typename T>
-sf::Vector2<T> operator+(sf::Vector2<T> a, sf::Vector2<T> b)
-{
-	return sf::Vector2<T>(a.x + b.x, a.y + b.y);
-}
-template<typename T>
-sf::Vector2<T> operator-(sf::Vector2<T> a, sf::Vector2<T> b)
-{
-	return sf::Vector2<T>(a.x - b.x, a.y - b.y);
-}
 template<typename T>
 sf::Vector2<T> operator*(sf::Vector2<T> a, sf::Vector2<T> b)
 {
