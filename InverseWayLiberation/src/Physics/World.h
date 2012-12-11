@@ -38,8 +38,8 @@ public:
 	
 	void SetPPM(float ppm) { mPPM = ppm; }
 	void SetMPP(float mmp) { mPPM = 1.f / mmp; }
-	float GetPPM() const { return mPPM; }
-	float GetMPP() const { return 1.f / mPPM; }
+	inline float GetPPM() const { return mPPM; }
+	inline float GetMPP() const { return 1.f / mPPM; }
 
 private:
 	float mPPM; // Pixels per meters

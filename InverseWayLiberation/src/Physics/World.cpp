@@ -1,5 +1,6 @@
 #include "World.h"
 #include <iostream> // Pour le message de GetAnyStaticBody()
+#include "../Lights/LightManager.h"
 
 //Ctor
 World::World(b2Vec2 const& gravity, float ppm)
@@ -19,6 +20,12 @@ World::~World(void)
 void World::RegisterBody(Body *body)
 {
 	mBodyList.push_back(body);
+
+	// TODO: Un truc plus beau...
+	if (body->GetHull())
+	{
+		LightManager::GetInstance().AddHull(body->GetHull());
+	}
 }
 b2Body* World::CreateBody(b2BodyDef const* bodyDef, Body *body)
 {
@@ -31,6 +38,12 @@ void World::DestroyBody(Body *body, bool _delete, bool remove)
 {
 	if (body)
 	{
+		// TODO: Un truc plus beau...
+		if (body->GetHull())
+		{
+			LightManager::GetInstance().DeleteHull(body->GetHull());
+		}
+
 		body->DestroyAllJoints();
 		if (body->GetBody())
 			b2World::DestroyBody(body->GetBody());

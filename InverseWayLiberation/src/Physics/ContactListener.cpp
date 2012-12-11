@@ -84,13 +84,13 @@ void ContactListener::PostSolve(b2Contact* contact, const b2ContactImpulse* impu
 		// Dégats de chute
 		if (damages >= 8.f)
 		{
-			std::cout << "Et BOUM ! " << damages << " PV en moins !" << std::endl;
+			//std::cout << "Et BOUM ! " << damages << " PV en moins !" << std::endl;
 			entity->AddDamage(damages);
 		}
 		// Dégats de contact
 		else if (badBody->GetBody()->GetType() == b2_dynamicBody)// && damages >= 1.5f)
 		{
-			std::cout << "Et BAM ! " << damages << " PV en moins !" << std::endl;
+			//std::cout << "Et BAM ! " << damages << " PV en moins !" << std::endl;
 			entity->AddDamage(damages);
 		}
 	}

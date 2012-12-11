@@ -5,7 +5,7 @@
 //Ctor
 Body::Body(World *world, BodyType type)
 	: mWorld(world), mBody(nullptr), mShape(nullptr), mIsNull(true), mIsDrawable(true)
-	, mType(type), mItsMySprite(false), mEntity(nullptr)
+	, mType(type), mItsMySprite(false), mEntity(nullptr), mHull(nullptr)
 {
 	// Vérifie les objets passés
 	assert(mWorld && "World invalid!");

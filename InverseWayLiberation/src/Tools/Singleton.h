@@ -4,7 +4,7 @@
 template <class T>
 class Singleton : public NonCopyable
 {
-public :
+public:
 
 	// Renvoie l'instance unique de la classe
     static T& GetInstance()
@@ -22,7 +22,7 @@ public :
         mInst = nullptr;
     }
 
-protected :
+protected:
 	// Ctor & Dtor
     Singleton() {}
     ~Singleton() {}

@@ -3,11 +3,13 @@
 #include <Thor\Events.hpp>
 #include "Box2DGame.h"
 
+// Mettre la fonction main() en tant que fonction statique d'une classe
+
 int main()
 {
 	// Crée la fenêtre de rendu
 	sf::RenderWindow window(sf::VideoMode(800, 600, 32), "Inverse Way Liberation");
-	window.setFramerateLimit(60U);
+	//window.setFramerateLimit(60U);
 	window.setVerticalSyncEnabled(true);
 
 	// Crée le jeu

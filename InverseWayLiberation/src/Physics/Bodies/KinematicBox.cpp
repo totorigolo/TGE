@@ -1,5 +1,6 @@
 #include "KinematicBox.h"
 #include "../../utils.h"
+#include "../../Lights/ConvexHull.h"
 
 //Ctor
 KinematicBox::KinematicBox(World *world, b2Vec3 posRot, std::shared_ptr<sf::Texture> texture, float restitution
@@ -36,6 +37,9 @@ KinematicBox::KinematicBox(World *world, b2Vec3 posRot, std::shared_ptr<sf::Text
 
 		mBody->SetUserData(this);
 		mIsNull = false;
+
+		// Crée le Hull
+		mHull = new ConvexHull(this, false);
 	}
 }
 

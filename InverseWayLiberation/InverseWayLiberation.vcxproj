@@ -16,6 +16,13 @@
     <ClCompile Include="src\Dialog.cpp" />
     <ClCompile Include="src\Level.cpp" />
     <ClCompile Include="src\LevelLoader.cpp" />
+    <ClCompile Include="src\Lights\CircleHull.cpp" />
+    <ClCompile Include="src\Lights\ConvexHull.cpp" />
+    <ClCompile Include="src\Lights\Hull.cpp" />
+    <ClCompile Include="src\Lights\Light.cpp" />
+    <ClCompile Include="src\Lights\LightManager.cpp" />
+    <ClCompile Include="src\Lights\PointLight.cpp" />
+    <ClCompile Include="src\Lights\SpotLight.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\Parser.cpp" />
     <ClCompile Include="src\Physics\Bodies\Body.cpp" />
@@ -38,11 +45,22 @@
     <ClCompile Include="src\Physics\Joints\WheelJoint.cpp" />
     <ClCompile Include="src\Physics\Entities\Ragdoll.cpp" />
     <ClCompile Include="src\Physics\World.cpp" />
+    <ClCompile Include="src\Tools\QuadTree\QuadTree.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Lights\CircleHull.h" />
+    <ClInclude Include="src\Lights\ConvexHull.h" />
+    <ClInclude Include="src\Lights\Hull.h" />
+    <ClInclude Include="src\Lights\Light.h" />
+    <ClInclude Include="src\Lights\LightManager.h" />
+    <ClInclude Include="src\Lights\PointLight.h" />
+    <ClInclude Include="src\Lights\SpotLight.h" />
     <ClInclude Include="src\Physics\Entities\Entity.h" />
     <ClInclude Include="src\Resources\ResourceManager.h" />
     <ClInclude Include="src\Tools\NonCopyable.h" />
+    <ClInclude Include="src\Tools\QuadTree\QuadTree.h" />
+    <ClInclude Include="src\Tools\QuadTree\QuadTreeObject.h" />
+    <ClInclude Include="src\Tools\Segment.h" />
     <ClInclude Include="src\Tools\Singleton.h" />
     <ClInclude Include="src\Box2DGame.h" />
     <ClInclude Include="src\ConfigReader.h" />

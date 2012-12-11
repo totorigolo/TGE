@@ -1,5 +1,6 @@
 #include "DynamicBox.h"
 #include "../../utils.h"
+#include "../../Lights/ConvexHull.h"
 
 //Ctor
 DynamicBox::DynamicBox(World *world, b2Vec3 posRot, std::shared_ptr<sf::Texture> texture, float density, float friction, float restitution
@@ -37,6 +38,9 @@ DynamicBox::DynamicBox(World *world, b2Vec3 posRot, std::shared_ptr<sf::Texture>
 
 		mBody->SetUserData(this);
 		mIsNull = false;
+
+		// Crée le Hull
+		mHull = new ConvexHull(this, false);
 	}
 }
 DynamicBox::DynamicBox(World *world, b2Vec3 posRot, sf::Sprite *sprite, float density, float friction, float restitution

@@ -15,6 +15,7 @@ enum class BodyType
 	OneSidedPlatform
 };
 
+class Hull;
 class World;
 class Joint;
 class Entity;
@@ -61,10 +62,13 @@ public:
 	inline bool IsStatic() const { return mBody->GetType() == b2_staticBody; }
 	inline b2Body* GetBody() { return mBody; }
 	inline World* GetWorld() { return mWorld; }
+	// TODO: Pas Beau -> objets multi-shapes !!!
 	inline b2Shape* GetShape() { return mShape; }
 	inline b2Body const* GetBody() const { return mBody; }
 	inline World const* GetWorld() const { return mWorld; }
 	inline b2Shape const* GetShape() const { return mShape; }
+
+	Hull* GetHull() { return mHull; } // TODO: Const ??
 
 protected:
 	virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const;
@@ -78,7 +82,7 @@ protected:
 	// Variables pour l'objet physique
 	World *mWorld;
 	b2Body *mBody;
-	b2Shape *mShape;
+	b2Shape *mShape; // TODO: Pas Beau -> objets multi-shapes !!!
 
 	// Liste des joint auxquels il est attaché
 	std::list<Joint*> mJointList;
@@ -89,4 +93,7 @@ protected:
 
 	// Pointeur sur l'Entity correspondante
 	Entity* mEntity;
+	
+	// Lumières
+	Hull* mHull;
 };

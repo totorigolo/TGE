@@ -1,5 +1,6 @@
 #include "StaticBox.h"
 #include "../../utils.h"
+#include "../../Lights/ConvexHull.h"
 
 //Ctor
 StaticBox::StaticBox(World *world, b2Vec3 posRot, std::shared_ptr<sf::Texture> texture, float friction, float restitution
@@ -38,6 +39,9 @@ StaticBox::StaticBox(World *world, b2Vec3 posRot, std::shared_ptr<sf::Texture> t
 		
 		mBody->SetUserData(this);
 		mIsNull = false;
+
+		// Crée le Hull
+		mHull = new ConvexHull(this, true);
 	}
 }
 

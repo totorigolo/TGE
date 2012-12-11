@@ -3,6 +3,7 @@
 	gravity = (0.f, -9.8f)
 	PPM = 100.f
 	bckgc = (0, 0, 0, 255)
+	bckgc = (255, 255, 255, 255)
 	originView = (-1.7f, 2.f)
 	defaultZoom = 1.f
 
@@ -97,7 +98,7 @@
 
 # ex : lampadere = (5.2f, 9.f, 45.f), 5
 
-	volcan = (0.f, 5.f), 1
+#	volcan = (0.f, 5.f), 1
 
 [deco_-1]
 	

@@ -14,6 +14,8 @@
 #include "Physics/Joints/MouseJoint.h"
 #include "Physics/Joints/DistanceJoint.h"
 #include "Resources/ResourceManager.h"
+#include "Lights/LightManager.h"
+#include "Lights/PointLight.h"
 
 class Body;
 class World;
@@ -36,22 +38,23 @@ protected:
 	void OnInit();
 
 	/// Appelé quand la boucle commence
-	void OnLoopBegin();
+	inline void OnLoopBegin();
 
 	/// Appelé pour les évènements
-	void OnEvent();
+	inline void OnRealTimeEvent();
+	inline void OnEvent(const sf::Event& event);
 
 	/// Appelé pour la physique
-	void OnStepPhysics();
+	inline void OnStepPhysics();
 
 	/// Appelé pour le rendu
-	void OnRender();
+	inline void OnRender();
 
 	/// Appelé quand la boucle se termine
-	void OnLoopEnd();
+	inline void OnLoopEnd();
 
 	// Appelé quand le jeu se termine
-	void OnQuit();
+	inline void OnQuit();
 	
 	/* Pour la molette de la souris */
 	friend class OnMouseWheelMoved;
@@ -59,7 +62,6 @@ protected:
 private:
 	// Etats du jeu
 	bool mPaused;
-	bool mExited;
 
 	// Fenêtre
 	sf::RenderWindow & mWindow;
@@ -69,11 +71,13 @@ private:
 	
 	// Variables pour les shaders
 	sf::RenderTexture mRenderTexture;
+	sf::RenderTexture mShadowRenderTexture;
 	sf::View mRenderTextureView;
 	sf::Shader mShader;
 	sf::Clock mShaderTime;
 
 	// Evènements
+	sf::Event mEvent;
 	thor::ActionMap<std::string> mActionMap;
 	thor::ActionMap<std::string>::CallbackSystem mActionCallbackSystem;
 
@@ -128,6 +132,10 @@ private:
 	// Textures
 	ResourceManager &mResourceManager;
 	TextureMap &mTextureMap;
+
+	// Lumières
+	LightManager &mLightManager;
+	PointLight mMouseLight;
 };
 
 /* Pour la molette de la souris */
