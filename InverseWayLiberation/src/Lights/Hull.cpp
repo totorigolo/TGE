@@ -59,7 +59,7 @@ void Hull::AddLight(Light* light)
 		index = mLights.size() - 1U;
 	}
 
-	InitializeVectors(index);
+	InitializeVectors(index, !found);
 }
 void Hull::RemoveLight(Light* light)
 {
@@ -75,11 +75,14 @@ void Hull::RemoveLight(Light* light)
 }
 
 // Gestion des conteneurs
-void Hull::InitializeVectors(unsigned int lightID)
+void Hull::InitializeVectors(unsigned int lightID, bool isNew)
 {
 	// Redimmentionne les conteneurs
-	mInitialized.resize(mInitialized.size() + 1U, false);
-	mIsNear.resize(mIsNear.size() + 1U, false);
+	if (isNew)
+	{
+		mInitialized.resize(mInitialized.size() + 1U, false);
+		mIsNear.resize(mIsNear.size() + 1U, false);
+	}
 }
 void Hull::ClearVectors(unsigned int lightID)
 {

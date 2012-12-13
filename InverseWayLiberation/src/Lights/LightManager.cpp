@@ -63,17 +63,24 @@ void LightManager::Update()
 	// Affichage du masque d'obscurité
 	mRenderTexture.draw(mObscurity, mShadowStates);
 	
-	// Affchage des lumières
+	// Mise à jour
 	for (std::list<Light*>::iterator it = mLights.begin(); it != mLights.end(); ++it)
 	{
 		(*it)->Update();
-		mRenderTexture.draw(**it, mShadowStates);
 	}
-
-	// Affchage des ombres
 	for (std::list<Hull*>::iterator it = mHulls.begin(); it != mHulls.end(); ++it)
 	{
 		(*it)->Update();
+	}
+
+	// Affchage
+	for (std::list<Light*>::iterator it = mLights.begin(); it != mLights.end(); ++it)
+	{
+		if (!(*it)->IsHiden())
+			mRenderTexture.draw(**it, mShadowStates);
+	}
+	for (std::list<Hull*>::iterator it = mHulls.begin(); it != mHulls.end(); ++it)
+	{
 		mRenderTexture.draw(**it, mShadowStates);
 	}
 

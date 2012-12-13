@@ -79,6 +79,9 @@ DynamicBox::DynamicBox(World *world, b2Vec3 posRot, sf::Sprite *sprite, float de
 
 		mBody->SetUserData(this);
 		mIsNull = false;
+
+		// Crée le Hull
+		mHull = new ConvexHull(this, false);
 	}
 }
 

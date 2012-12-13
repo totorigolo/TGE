@@ -24,7 +24,7 @@ public:
 	virtual void RemoveLight(Light* light);
 	
 	// Gestion des conteneurs
-	virtual void InitializeVectors(unsigned int lightID);
+	virtual void InitializeVectors(unsigned int lightID, bool isNew);
 	virtual void ClearVectors(unsigned int lightID);
 
 	// Mise à jour

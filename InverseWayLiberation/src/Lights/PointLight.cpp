@@ -27,9 +27,12 @@ void PointLight::SetRadius(float radius)
 	mLight.setRadius(mRadius);
 	mLight.setOrigin(mLight.getGlobalBounds().width / 2.f, mLight.getGlobalBounds().height / 2.f);
 }
+
 // Mise à jour
 void PointLight::Update()
 {
+	Light::Update();
+
 	mLight.setPosition(mPosition);
 }
 

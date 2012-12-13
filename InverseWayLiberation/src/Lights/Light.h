@@ -26,7 +26,11 @@ public:
 	void Move(const sf::Vector2f& dep);
 
 	// Mise à jour
-	virtual void Update() = 0;
+	virtual void Update();
+
+	// La lumière est *dans* un objet
+	bool IsHiden() const;
+	void IsHiden(bool hiden);
 
 	// Récupérer l'AABB de la lumière
 	virtual sf::FloatRect GetAABB() const = 0;
@@ -58,6 +62,9 @@ protected:
 	bool mIsStatic;
 	sf::Vector2f mPosition;
 	Body* mEmitter;
+
+	// Etat
+	bool mIsHiden;
 
 private:
 };

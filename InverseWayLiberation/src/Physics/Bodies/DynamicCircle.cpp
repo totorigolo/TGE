@@ -1,5 +1,6 @@
 #include "DynamicCircle.h"
 #include "../../utils.h"
+#include "../../Lights/CircleHull.h"
 
 //Ctor
 DynamicCircle::DynamicCircle(World *world, b2Vec3 posRot, std::shared_ptr<sf::Texture> texture, float density, float friction, float restitution
@@ -36,6 +37,9 @@ DynamicCircle::DynamicCircle(World *world, b2Vec3 posRot, std::shared_ptr<sf::Te
 
 		mBody->SetUserData(this);
 		mIsNull = false;
+
+		// Crée le Hull
+		mHull = new CircleHull(this, false);
 	}
 }
 

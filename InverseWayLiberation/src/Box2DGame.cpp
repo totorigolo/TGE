@@ -269,10 +269,9 @@ void Box2DGame::OnRealTimeEvent()
 			}
 		}
 	}
-	else
+	else if (mMouseJoint)
 	{
-		if (mMouseJoint)
-			mWorld.DestroyJoint(mMouseJoint);
+		mWorld.DestroyJoint(mMouseJoint);
 		mMouseJoint = nullptr;
 	}
 }
@@ -362,7 +361,7 @@ void Box2DGame::OnEvent(const sf::Event& event)
 		mWorld.RegisterBody(l);
 		sf::Vector2f pos = mCurrentMousePosRV;
 		pos.y -= 1.2f * mWorld.GetPPM();
-		mLightManager.AddLight(new PointLight(pos, 0.8f * mWorld.GetPPM(), true, true, l));
+		mLightManager.AddLight(new PointLight(pos, 1.2f * mWorld.GetPPM(), true, true, l));
 	}
 
 	// Charge un niveau
@@ -838,30 +837,6 @@ void Box2DGame::OnRender()
 	mRenderTexture.setView(mRenderTextureView);
 	mLightManager.SetView(&mRenderTextureView);
 	
-	// Ombres
-	/*float PPM = mWorld.GetPPM();
-	sf::Vector2f lightPos(mCurrentMousePosRV);
-	float lightRadius = 5.f * PPM;
-
-	mShadowRenderTexture.clear(sf::Color(0, 0, 0, 0));
-	mShadowRenderTexture.setView(mRenderTextureView);
-
-	sf::RectangleShape obscurity(mRenderTextureView.getSize());
-	obscurity.setOrigin(obscurity.getSize() / 2.f);
-	obscurity.setPosition(mRenderTextureView.getCenter());
-	obscurity.setFillColor(sf::Color(0, 0, 0, 200));
-	mShadowRenderTexture.draw(obscurity);
-
-	sf::RenderStates states;
-	states.blendMode = sf::BlendNone;
-
-	sf::CircleShape light;
-	light.setRadius(lightRadius);
-	light.setFillColor(sf::Color(0, 0, 0, 0));
-	light.setOrigin(light.getGlobalBounds().width / 2.f, light.getGlobalBounds().height / 2.f);
-	light.setPosition(lightPos);
-	mShadowRenderTexture.draw(light, states);//*/
-
 	// Affichage des levels de la déco avec zindex positif
 	for (auto it = mLevel->GetDeco().begin(); it != mLevel->GetDeco().end(); ++it)
 	{
@@ -881,112 +856,6 @@ void Box2DGame::OnRender()
 		{
 			(*it)->Update();
 			mRenderTexture.draw(**it);
-
-			/*if (abs(((b2PolygonShape*) (*it)->GetShape())->GetVertexCount()) == 4)
-			{//* /
-				// Garde qqs variables
-				b2PolygonShape *shape = (b2PolygonShape*) (*it)->GetShape();
-				unsigned int nbPts = shape->GetVertexCount();
-
-				// Récupère les positions des points
-				std::vector<sf::Vector2f> points(nbPts);
-				for (unsigned int i = 0; i < points.size(); ++i)
-				{
-					points[i] = b22sfVec((*it)->GetBody()->GetWorldPoint(shape->GetVertex(i)), PPM);
-				}
-
-				// Regarde quels points sont cachés
-				// les vector<bool> sont spécialisés
-				std::vector<unsigned char> pointsCaches(points.size(), false);
-				for (unsigned int i = 0; i < pointsCaches.size(); ++i)
-				{
-					// Pour chaque points => pour chaque arête
-					for (unsigned int j = 0; j < points.size() && !pointsCaches[i]; ++j)
-					{
-						// Calcule le nb du prochain sommet
-						unsigned int k = (j + 1 < points.size()) ? (j + 1) : 0;
-
-						// L'arête n'est pas issue du sommet testé
-						if (i != j && i != k)
-							if (intersect(lightPos, points[i], points[j], points[k]))
-								pointsCaches[i] = true;
-					}
-				}
-
-				// Prend les deux points extrèmes non cachés
-				unsigned int ptE1 = 0U;
-				bool b1 = false;
-				// Trouve ptE1, càd celui juste avant les cachés
-				for (unsigned int i = 0; i < points.size(); ++i)
-				{
-					if (!pointsCaches[i])
-					{
-						ptE1 = i;
-						b1 = true;
-					}
-					else if (b1)
-						break;
-				}
-				// Trouve ptE2, càd celui juste après les cachés
-				// Il est possible que ptE2 ne soit pas changé ci-après, mais ça veut dire qu'il vaut 0
-				unsigned int ptE2 = 0U;
-				bool vuCache = false;
-				for (unsigned int i = 0; i < points.size(); ++i)
-				{
-					if (pointsCaches[i])
-						vuCache = true;
-
-					if (vuCache && !pointsCaches[i])
-					{
-						ptE2 = i;
-						vuCache = false;
-						break;
-					}
-				}
-				
-				sf::ConvexShape polygonn;
-				polygonn.setPointCount(points.size());
-
-				// Projette les points
-				std::vector<sf::Vector2f> pointsProjetes(points.size());
-				for (unsigned int i = 0U; i < points.size(); ++i)
-				{
-					pointsProjetes[i] = points[i] + (((points[i] - lightPos) / distance(points[i], lightPos)) * lightRadius * 3.f);
-					polygonn.setPoint(i, pointsProjetes[i]);
-				}
-
-				// Affiche le polygone
-				polygonn.setFillColor(sf::Color(0, 0, 0, 200));
-				mShadowRenderTexture.draw(polygonn, states);
-
-				// Récupère les points à afficher
-				std::vector<sf::Vector2f> pointsAAfficher;
-				for (unsigned int i = 0U; i < points.size(); ++i)
-				{
-					if (!pointsCaches[i])
-					{
-						if (i == ptE2)
-							pointsAAfficher.push_back(pointsProjetes[i]);
-
-						pointsAAfficher.push_back(points[i]);
-
-						if (i == ptE1)
-							pointsAAfficher.push_back(pointsProjetes[i]);
-					}
-				}
-				
-				// Crée le polygone
-				sf::ConvexShape polygon;
-				polygon.setPointCount(pointsAAfficher.size());
-				for (unsigned int i = 0U; i < pointsAAfficher.size(); ++i)
-				{
-					polygon.setPoint(i, pointsAAfficher[i]);
-				}
-			
-				// Affiche le polygone
-				polygon.setFillColor(sf::Color(0, 0, 0, 200));
-				mShadowRenderTexture.draw(polygon, states);
-			}//*/
 		}
 	}
 	
@@ -1073,12 +942,10 @@ void Box2DGame::OnRender()
 
 	// Création des ombres
 	mLightManager.Update();
-	//mShadowRenderTexture.display();
 
 	// Affichage
 	mWindow.draw(sf::Sprite(mRenderTexture.getTexture()));
 	mWindow.draw(sf::Sprite(mLightManager.GetTexture()));
-	//mWindow.draw(sf::Sprite(mShadowRenderTexture.getTexture()));
 	mWindow.display();
 }
 

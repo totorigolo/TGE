@@ -3,12 +3,12 @@
 
 // Ctor & Dtor
 Light::Light(sf::Vector2f pos, float radius, bool isStatic, bool isActivated, Body* emitter)
-	: mPosition(pos), mRadius(radius), mIsStatic(isStatic), mIsActivated(isActivated), mEmitter(emitter)
+	: mPosition(pos), mRadius(radius), mIsStatic(isStatic), mIsActivated(isActivated), mEmitter(emitter), mIsHiden(false)
 {
 	SetRadius(mRadius);
 }
 Light::Light(float x, float y, float radius, bool isStatic, bool isActivated, Body* emitter)
-	: mPosition(x, y), mRadius(radius), mIsStatic(isStatic), mIsActivated(isActivated), mEmitter(emitter)
+	: mPosition(x, y), mRadius(radius), mIsStatic(isStatic), mIsActivated(isActivated), mEmitter(emitter), mIsHiden(false)
 {
 	SetRadius(mRadius);
 }
@@ -73,6 +73,22 @@ void Light::Move(const sf::Vector2f& dep)
 
 	mPosition += dep;
 	Update();
+}
+
+// Mise à jour
+void Light::Update()
+{
+	IsHiden(false);
+}
+
+// La lumière est *dans* un objet
+bool Light::IsHiden() const
+{
+	return mIsHiden;
+}
+void Light::IsHiden(bool hiden)
+{
+	mIsHiden = hiden;
 }
 
 // Règle la lumière
