@@ -9,8 +9,8 @@ int main()
 {
 	// Crée la fenêtre de rendu
 	sf::RenderWindow window(sf::VideoMode(800, 600, 32), "Inverse Way Liberation");
-	//window.setFramerateLimit(60U);
-	window.setVerticalSyncEnabled(true);
+	window.setFramerateLimit(60U);
+	//window.setVerticalSyncEnabled(true); // La VSync bouffe tout le CPU
 
 	// Crée le jeu
 	Box2DGame jeu(window);
