@@ -84,11 +84,7 @@ void Box2DGame::Run()
 		this->OnLoopBegin();
 
 		// Appel des évènements
-		while (mWindow.pollEvent(mEvent))
-			this->OnEvent(mEvent);
-
-		// Appel des évènements temps-réel
-		this->OnRealTimeEvent();
+		this->OnEvent();
 
 		// Gestion de la physique
 		this->OnStepPhysics();
@@ -211,34 +207,35 @@ void Box2DGame::OnLoopBegin()
 }
 
 /// Appelé pour les évènements
-void Box2DGame::OnRealTimeEvent()
+void Box2DGame::OnEvent()
 {
-	/* Evenements */
+	// Récupère les évènements
+	mActionMap.update();
+
+	// Invoque les callbacks
+	mActionMap.invokeCallbacks(mActionCallbackSystem);
+
 	// Gère le déplacement à la souris (clic molette)
-	//if (mActionMap.isActive("movingView"))
-	if (sf::Mouse::isButtonPressed(sf::Mouse::Middle))
+	if (mActionMap.isActive("movingView"))
 	{
 		mRenderTextureView.move(- static_cast<float>(mCurrentMousePos.x - mLastMousePos.x) * mCurrentZoom,
 						- static_cast<float>(mCurrentMousePos.y - mLastMousePos.y) * mCurrentZoom);
 	}
 
 	// Création d'objets
-	//if (mActionMap.isActive("onCreateBox"))
-	if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+	if (mActionMap.isActive("onCreateBox"))
 	{
 		std::string list[] = {"box", "box2", "caisse", "way", "tonneau"};
 		mWorld.RegisterBody(new DynamicBox(&mWorld, getVec3(mMp), mTextureMap[randomElement(list, 5)]));
 	}
-	//if (mActionMap.isActive("onCreateCircle"))
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::C))
+	if (mActionMap.isActive("onCreateCircle"))
 	{
 		std::string list[] = {"ball", "circle"};
 		mWorld.RegisterBody(new DynamicCircle(&mWorld, getVec3(mMp), mTextureMap[randomElement(list, 2)], 1.f, 0.2f, 0.5f));
 	}
 	
 	// Déplacements des objets
-	//if (mActionMap.isActive("onMoveObject"))
-	if (sf::Mouse::isButtonPressed(sf::Mouse::Right))
+	if (mActionMap.isActive("onMoveObject"))
 	{
 		// Si la souris est déjà attachée, on met à jour la position
 		if (mMouseJoint)
@@ -274,17 +271,6 @@ void Box2DGame::OnRealTimeEvent()
 		mWorld.DestroyJoint(mMouseJoint);
 		mMouseJoint = nullptr;
 	}
-}
-
-/// Appelé pour les évènements
-void Box2DGame::OnEvent(const sf::Event& event)
-{
-	/* Evenements */
-	// Récupère les évènements
-	//mActionMap.update();
-
-	// Invoque les callbacks
-	//mActionMap.invokeCallbacks(mActionCallbackSystem);
 
 	// Déplacements du héro
 	if (mHeroBody && false)
@@ -332,29 +318,24 @@ void Box2DGame::OnEvent(const sf::Event& event)
 	}
 
 	// Déplacement de la vue avec les flèches
-	//else if (mActionMap.isActive("viewMoveUp"))
-	else if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Up)
+	if (mActionMap.isActive("viewMoveUp"))
 	{
 		mRenderTextureView.move(sf::Vector2f(0.f, -5.f) * mCurrentZoom);
 	}
-	//else if (mActionMap.isActive("viewMoveDown"))
-	else if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Down)
+	if (mActionMap.isActive("viewMoveDown"))
 	{
 		mRenderTextureView.move(sf::Vector2f(0.f, 5.f) * mCurrentZoom);
 	}
-	//else if (mActionMap.isActive("viewMoveLeft"))
-	else if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Left)
+	if (mActionMap.isActive("viewMoveLeft"))
 	{
 		mRenderTextureView.move(sf::Vector2f(-5.f, 0.f) * mCurrentZoom);
 	}
-	//else if (mActionMap.isActive("viewMoveRight"))
-	else if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Right)
+	if (mActionMap.isActive("viewMoveRight"))
 	{
 		mRenderTextureView.move(sf::Vector2f(5.f, 0.f) * mCurrentZoom);
 	}
 
-	//else if (mActionMap.isActive("onCreateLamp"))
-	else if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::L)
+	if (mActionMap.isActive("onCreateLamp"))
 	{
 		StaticBox *l = new StaticBox(&mWorld, getVec3(mMp), mTextureMap["lampadere"], 0.1f, 0.05f);
 		l->GetHull()->Deactivate();
@@ -365,8 +346,7 @@ void Box2DGame::OnEvent(const sf::Event& event)
 	}
 
 	// Charge un niveau
-	//else if (mActionMap.isActive("onLoadLevel"))
-	else if (event.type == sf::Event::KeyReleased && event.key.code == sf::Keyboard::R)
+	if (mActionMap.isActive("onLoadLevel"))
 	{
 		LevelLoader("lvls/1.lvl", mLevel);
 
@@ -392,8 +372,7 @@ void Box2DGame::OnEvent(const sf::Event& event)
 	}
 
 	// Grapin
-	//else if (mActionMap.isActive("onHook"))
-	else if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::H)
+	if (mActionMap.isActive("onHook"))
 	{
 		// Si le grapin est déjà accroché, on le décroche
 		if (mHookJoint)
@@ -472,8 +451,7 @@ void Box2DGame::OnEvent(const sf::Event& event)
 	}
 
 	// Epingle un objet
-	//else if (mActionMap.isActive("onPin"))
-	else if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::P)
+	if (mActionMap.isActive("onPin"))
 	{
 		// Enregistre les bobies et leurs ancres
 		if (!mPinBodyA || !mPinBodyB)
@@ -671,30 +649,24 @@ void Box2DGame::OnEvent(const sf::Event& event)
 #endif
 
 	// Gestion du zoom et du resize
-	//if (mActionMap.isActive("zoomIn"))
-	else if ((event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Add)
-			|| (event.type == sf::Event::MouseWheelMoved && event.mouseWheel.delta > 0))
+	if (mActionMap.isActive("zoomIn"))
 	{
 		mCurrentZoom *= 0.8f;
 		mRenderTextureView.zoom(0.8f);
 	}
-    //else if (mActionMap.isActive("zoomOut"))
-	else if ((event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Subtract)
-			|| (event.type == sf::Event::MouseWheelMoved && event.mouseWheel.delta < 0))
+    if (mActionMap.isActive("zoomOut"))
 	{
 		mCurrentZoom *= 1.2f;
 		mRenderTextureView.zoom(1.2f);
 	}
-    //else if (mActionMap.isActive("zoomReset"))
-	else if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Numpad0)
+    if (mActionMap.isActive("zoomReset"))
 	{
 		mCurrentZoom = mLevel->GetDefaultZoom();
 		mRenderTextureView.zoom(mCurrentZoom);
 		mRenderTextureView.setSize(u2f(mWindow.getSize()) * sf::Vector2f(mRenderTextureView.getViewport().width, mRenderTextureView.getViewport().height));
 		mRenderTextureView.setCenter(b22sfVec(mLevel->GetOriginView(), mWorld.GetPPM()));
 	}
-    //else if (mActionMap.isActive("resized"))
-	else if (event.type == sf::Event::Resized)
+    if (mActionMap.isActive("resized"))
 	{
 		mRenderTextureView.setSize(u2f(mWindow.getSize()) * sf::Vector2f(mRenderTextureView.getViewport().width, mRenderTextureView.getViewport().height));
 		mRenderTextureView.setCenter(b22sfVec(mLevel->GetOriginView(), mWorld.GetPPM()));
@@ -713,8 +685,7 @@ void Box2DGame::OnEvent(const sf::Event& event)
 	}
 	
 	// Gestion de la fermeture de la fenêtre
-	//if (mActionMap.isActive("closed"))
-	else if (event.type == sf::Event::Closed)
+	if (mActionMap.isActive("closed"))
 	{
 		mWindow.close();
 	}
@@ -723,8 +694,10 @@ void Box2DGame::OnEvent(const sf::Event& event)
 /// Appelé pour la physique
 void Box2DGame::OnStepPhysics()
 {
+	mFrameTime.restart();
+
 	// Simule
-	mWorld.Step(1.f / 60.f, 6, 3);
+	mWorld.Step(1.f / 60.f, 5, 3);
 	mWorld.ClearForces();
 
 	// Destruction des bodies en dehors de la zone
@@ -828,8 +801,6 @@ void Box2DGame::OnStepPhysics()
 /// Appelé pour le rendu
 void Box2DGame::OnRender()
 {
-	mFrameTime.restart();
-
 	// Rendu
 	mRenderTexture.clear(mLevel->GetBckgColor());
 	mWindow.clear(mLevel->GetBckgColor());

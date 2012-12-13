@@ -41,8 +41,7 @@ protected:
 	inline void OnLoopBegin();
 
 	/// Appelé pour les évènements
-	inline void OnRealTimeEvent();
-	inline void OnEvent(const sf::Event& event);
+	inline void OnEvent();
 
 	/// Appelé pour la physique
 	inline void OnStepPhysics();
@@ -77,7 +76,6 @@ private:
 	sf::Clock mShaderTime;
 
 	// Evènements
-	sf::Event mEvent;
 	thor::ActionMap<std::string> mActionMap;
 	thor::ActionMap<std::string>::CallbackSystem mActionCallbackSystem;
 
