@@ -13,9 +13,9 @@
   <ItemGroup>
     <ClCompile Include="src\Box2DGame.cpp" />
     <ClCompile Include="src\ConfigReader.cpp" />
-    <ClCompile Include="src\Dialog.cpp" />
-    <ClCompile Include="src\Level.cpp" />
-    <ClCompile Include="src\LevelLoader.cpp" />
+    <ClCompile Include="src\Tools\Dialog.cpp" />
+    <ClCompile Include="src\Level\Level.cpp" />
+    <ClCompile Include="src\Level\LevelLoader.cpp" />
     <ClCompile Include="src\Lights\CircleHull.cpp" />
     <ClCompile Include="src\Lights\ConvexHull.cpp" />
     <ClCompile Include="src\Lights\Hull.cpp" />
@@ -24,7 +24,7 @@
     <ClCompile Include="src\Lights\PointLight.cpp" />
     <ClCompile Include="src\Lights\SpotLight.cpp" />
     <ClCompile Include="src\main.cpp" />
-    <ClCompile Include="src\Parser.cpp" />
+    <ClCompile Include="src\Tools\Parser.cpp" />
     <ClCompile Include="src\Physics\Bodies\Body.cpp" />
     <ClCompile Include="src\Physics\Bodies\DynamicBox.cpp" />
     <ClCompile Include="src\Physics\Bodies\DynamicCircle.cpp" />
@@ -45,9 +45,12 @@
     <ClCompile Include="src\Physics\Joints\WheelJoint.cpp" />
     <ClCompile Include="src\Physics\Entities\Ragdoll.cpp" />
     <ClCompile Include="src\Physics\World.cpp" />
+    <ClCompile Include="src\Tools\Loader.cpp" />
     <ClCompile Include="src\Tools\QuadTree\QuadTree.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Level\Level.h" />
+    <ClInclude Include="src\Level\LevelLoader.h" />
     <ClInclude Include="src\Lights\CircleHull.h" />
     <ClInclude Include="src\Lights\ConvexHull.h" />
     <ClInclude Include="src\Lights\Hull.h" />
@@ -57,6 +60,7 @@
     <ClInclude Include="src\Lights\SpotLight.h" />
     <ClInclude Include="src\Physics\Entities\Entity.h" />
     <ClInclude Include="src\Resources\ResourceManager.h" />
+    <ClInclude Include="src\Tools\Loader.h" />
     <ClInclude Include="src\Tools\NonCopyable.h" />
     <ClInclude Include="src\Tools\QuadTree\QuadTree.h" />
     <ClInclude Include="src\Tools\QuadTree\QuadTreeObject.h" />
@@ -64,10 +68,8 @@
     <ClInclude Include="src\Tools\Singleton.h" />
     <ClInclude Include="src\Box2DGame.h" />
     <ClInclude Include="src\ConfigReader.h" />
-    <ClInclude Include="src\Dialog.h" />
-    <ClInclude Include="src\Level.h" />
-    <ClInclude Include="src\LevelLoader.h" />
-    <ClInclude Include="src\Parser.h" />
+    <ClInclude Include="src\Tools\Dialog.h" />
+    <ClInclude Include="src\Tools\Parser.h" />
     <ClInclude Include="src\Physics\Bodies\Body.h" />
     <ClInclude Include="src\Physics\Bodies\DynamicBox.h" />
     <ClInclude Include="src\Physics\Bodies\DynamicCircle.h" />
@@ -89,7 +91,7 @@
     <ClInclude Include="src\Physics\OverlappingBodyCallback.h" />
     <ClInclude Include="src\Physics\Entities\Ragdoll.h" />
     <ClInclude Include="src\Physics\World.h" />
-    <ClInclude Include="src\utils.h" />
+    <ClInclude Include="src\Tools\utils.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\README.txt" />
@@ -130,10 +132,11 @@
     <ClCompile>
       <WarningLevel>Level4</WarningLevel>
       <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>TIXML_USE_STL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>Box2D-d.lib;sfml-system-d.lib;sfml-window-d.lib;sfml-graphics-d.lib;thor-d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>tinyxml2-d.lib;Box2D-d.lib;sfml-system-d.lib;sfml-window-d.lib;sfml-graphics-d.lib;thor-d.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -142,12 +145,13 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>TIXML_USE_STL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>Box2D.lib;sfml-system.lib;sfml-window.lib;sfml-graphics.lib;thor.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>tinyxml2.lib;Box2D.lib;sfml-system.lib;sfml-window.lib;sfml-graphics.lib;thor.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

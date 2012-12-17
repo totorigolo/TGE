@@ -22,9 +22,9 @@ public:
 	// Accesseurs
 	float GetRatio() const;
 	Joint *GetJoint1(); // NE PAS CHANGER LE JOINT !!! Seulement modifier ses propriétés
-	Joint const* GetJoint1() const;
+	const Joint* GetJoint1() const;
 	Joint *GetJoint2();
-	Joint const* GetJoint2() const;
+	const Joint* GetJoint2() const;
 	
 	sf::Color& GetColor() { return mColor; }
 	void SetColor(sf::Color const& color) { mColor = color; }

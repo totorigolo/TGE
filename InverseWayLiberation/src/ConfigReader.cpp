@@ -1,6 +1,6 @@
 #include "ConfigReader.h"
-#include "Dialog.h"
-#include "Parser.h"
+#include "Tools/Dialog.h"
+#include "Tools/Parser.h"
 
 ConfigReader::ConfigReader(const std::string& path)
 	: mIsOk(false), mPath(path)

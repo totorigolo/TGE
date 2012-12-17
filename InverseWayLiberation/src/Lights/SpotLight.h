@@ -9,7 +9,7 @@ public:
 	virtual ~SpotLight();
 	
 	// Récupérer l'AABB de la lumière
-	virtual b2AABB GetAABB() const;
+	virtual sf::FloatRect GetAABB() const;
 
 protected:
 	virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const;

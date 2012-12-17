@@ -1,9 +1,9 @@
 #include "Level.h"
-#include "utils.h"
+#include "../Tools/utils.h"
 
 // Ctor
 Level::Level(World *world)
-	: mIsValid(false), mIsCharged(false), mWorld(world),  mBckgC(255, 255, 255),
+	: mIsValid(false), mIsCharged(false), mWorld(world),  mBckgC(255, 255, 255), mLightning(false),
 	mResourceManager(ResourceManager::GetInstance()), mTextureMap(mResourceManager.GetTextureMap())
 {
 	if (mWorld)

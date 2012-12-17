@@ -12,7 +12,7 @@ PointLight::PointLight(float x, float y, float radius, bool isStatic, bool isAct
 	: Light(x, y, radius, isStatic, isActivated, emitter)
 {
 	// Règle la lumière
-	mLight.setFillColor(sf::Color(200, 200, 0, 128));
+	mLight.setFillColor(sf::Color(255, 255, 0, 128));
 	SetRadius(mRadius);
 }
 PointLight::~PointLight()

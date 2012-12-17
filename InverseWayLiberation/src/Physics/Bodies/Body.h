@@ -67,8 +67,10 @@ public:
 	inline b2Body const* GetBody() const { return mBody; }
 	inline World const* GetWorld() const { return mWorld; }
 	inline b2Shape const* GetShape() const { return mShape; }
-
-	Hull* GetHull() { return mHull; } // TODO: Const ??
+	
+	void SetHull(Hull *hull); // Faire attention à supprimer / ajouter le Hull au LightManager !
+	Hull* GetHull() { return mHull; }
+	const Hull* GetHull() const { return mHull; }
 
 protected:
 	virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const;

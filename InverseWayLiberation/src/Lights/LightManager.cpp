@@ -1,5 +1,5 @@
 #include "LightManager.h"
-#include "../utils.h"
+#include "../Tools/utils.h"
 
 // Ctor & Dtor
 LightManager::LightManager()
@@ -76,7 +76,7 @@ void LightManager::Update()
 	// Affchage
 	for (std::list<Light*>::iterator it = mLights.begin(); it != mLights.end(); ++it)
 	{
-		if (!(*it)->IsHiden())
+		if (!(*it)->IsHidden())
 			mRenderTexture.draw(**it, mShadowStates);
 	}
 	for (std::list<Hull*>::iterator it = mHulls.begin(); it != mHulls.end(); ++it)
@@ -138,10 +138,15 @@ void LightManager::AddHull(Hull* hull)
 }
 void LightManager::DeleteHull(Hull* hull, bool _delete)
 {
-	mHulls.remove(hull);
+	if (hull)
+	{
+		mHulls.remove(hull);
 
-	if (_delete)
-		delete hull;
+		if (_delete)
+		{
+			delete hull;
+		}
+	}
 }
 void LightManager::DeleteAllHulls()
 {
@@ -153,7 +158,6 @@ void LightManager::DeleteAllHulls()
 		delete h;
 	}
 }
-	
 
 // Affichage
 void LightManager::draw(sf::RenderTarget &target, sf::RenderStates states) const

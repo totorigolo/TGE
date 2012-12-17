@@ -1,5 +1,5 @@
 #include "WeldJoint.h"
-#include "../../utils.h"
+#include "../../Tools/utils.h"
 
 //Ctor
 WeldJoint::WeldJoint(World *world, Body *b1, Body *b2, b2Vec2 anchor, float frequencyHz, float damping, bool collideconnected, sf::Color const& color)

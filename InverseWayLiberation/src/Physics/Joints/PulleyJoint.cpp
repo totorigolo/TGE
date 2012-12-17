@@ -1,8 +1,8 @@
 #include "PulleyJoint.h"
-#include "../../utils.h"
+#include "../../Tools/utils.h"
 
 //Ctor
-PulleyJoint::PulleyJoint(World *world, Body *b1, b2Vec2 p1, Body *b2, b2Vec2 p2, b2Vec2 groundP1, b2Vec2 groundP2, float ratio, bool collideconnected, sf::Color const& color)
+PulleyJoint::PulleyJoint(World *world, Body *b1, b2Vec2 pt1, Body *b2, b2Vec2 p2, b2Vec2 groundP1, b2Vec2 groundP2, float ratio, bool collideconnected, sf::Color const& color)
 	: Joint(world), mColor(color)
 {
 	mBodyA = b1;
@@ -11,7 +11,7 @@ PulleyJoint::PulleyJoint(World *world, Body *b1, b2Vec2 p1, Body *b2, b2Vec2 p2,
 	if (mWorld && mBodyA && mBodyB)
 	{
 		b2PulleyJointDef jointDef;
-		jointDef.Initialize(mBodyA->GetBody(), mBodyB->GetBody(), groundP1, groundP2, mBodyA->GetBody()->GetWorldPoint(p1), mBodyB->GetBody()->GetWorldPoint(p2), ratio);
+		jointDef.Initialize(mBodyA->GetBody(), mBodyB->GetBody(), groundP1, groundP2, mBodyA->GetBody()->GetWorldPoint(pt1), mBodyB->GetBody()->GetWorldPoint(p2), ratio);
 		jointDef.collideConnected = collideconnected;
 		mJoint = (b2PulleyJoint*) mWorld->CreateJoint(&jointDef, this);
 		

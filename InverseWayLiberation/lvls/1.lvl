@@ -98,7 +98,7 @@
 
 # ex : lampadere = (5.2f, 9.f, 45.f), 5
 
-#	volcan = (0.f, 5.f), 1
+	volcan = (0.f, 5.f), 1
 
 [deco_-1]
 	

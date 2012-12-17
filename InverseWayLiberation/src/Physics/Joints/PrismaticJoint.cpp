@@ -1,5 +1,5 @@
 #include "PrismaticJoint.h"
-#include "../../utils.h"
+#include "../../Tools/utils.h"
 
 //Ctor
 PrismaticJoint::PrismaticJoint(World *world, Body *b1, Body *b2, b2Vec2 anchor, b2Vec2 axis, bool enableLimit, float lowerTranslation, float upperTranslation

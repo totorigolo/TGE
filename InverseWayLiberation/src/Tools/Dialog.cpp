@@ -24,7 +24,7 @@ namespace Dialog
 
 		// Création du texte
 		sf::Font f;
-		f.loadFromFile("calibri.ttf");
+		f.loadFromFile("tex/calibri.ttf");
 		sf::Text text(message, f);
 		text.scale(0.8f, 0.8f);
 		text.setColor(sf::Color::Black);
@@ -125,12 +125,12 @@ namespace Dialog
 
 	void Error(const sf::String &message, bool quit, int output)
 	{
-		Dialog("res/erreur.png", "Erreur", message, quit, output);
+		Dialog("tex/erreur.png", "Erreur", message, quit, output);
 	}
 
 	void Information(const sf::String &message)
 	{
-		Dialog("res/information.png", "Info", message);
+		Dialog("tex/information.png", "Info", message);
 	}
 
 	const sf::String TextInput(const std::string &title, const sf::String &message, const sf::String& _default)
@@ -143,7 +143,7 @@ namespace Dialog
 
 		// Création du texte
 		sf::Font f;
-		f.loadFromFile("calibri.ttf");
+		f.loadFromFile("tex/calibri.ttf");
 		sf::Text text(message, f);
 		text.scale(0.8f, 0.8f);
 		text.setColor(sf::Color::Black);
@@ -433,7 +433,7 @@ namespace Dialog
 
 		// Création du texte
 		sf::Font f;
-		f.loadFromFile("calibri.ttf");
+		f.loadFromFile("tex/calibri.ttf");
 		sf::Text text(message, f);
 		text.scale(0.8f, 0.8f);
 		text.setColor(sf::Color::Black);

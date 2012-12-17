@@ -1,0 +1,133 @@
+<?xml version="1.0"?>
+<level>
+	<!-- Propriétés du monde -->
+	<world
+		gravity = "(0.f, -9.8f)"
+		PPM = "100.f"
+		bckgcolor = "(0, 0, 0, 255)"
+		originview = "(-1.7f, 2.f)"
+		defaultzoom = "1.f"
+		defaultlightning = "false"
+		/>
+	
+	<!-- Charge les textures -->
+	<textures>
+		<img name="way" src="tex/way.png"/>
+		<img name="box" src="tex/box.png"/>
+		<img name="box2" src="tex/box2.png"/>
+		<img name="caisse" src="tex/caisse.png"/>
+		<img name="tonneau" src="tex/tonneau.png"/>
+		<img name="circle" src="tex/circle.png"/>
+		<img name="ball" src="tex/ball.png"/>
+		<img name="ground" src="tex/ground.png"/>
+		<img name="lampadere" src="tex/lampadere.png"/>
+		<img name="volcan" src="tex/volcan.png"/>
+	</textures>
+	
+	<!-- Défini les bodies simples -->
+	<bodies>
+<!--
+Les attributs sont facultatifs, sauf la position et la texture.
+Il est possible de définir un ID, afin de reconnaitre le body par la suite du chargement (ex: joints).
+
+ex: (NB = les valeurs mises sont celles par défaut) (osp = OneSidedPlatform)
+
+<staticbox texture="ground" pos="(0.f, -0.64f)" rotation="0.f" friction="0.2f" restitution="0.f" osd="false" shadow="true">
+<dynamicbox texture="tonneau" pos="(-4.55f, 0.25f)" rotation="0.f" density="1.f" friction="0.2f" restitution="0.f" bullet="false" shadow="true">
+<dynamiccircle texture="ball" pos="(-4.55f, 0.675f)" rotation="0.f" type="dc" density="1.f" friction="0.2f" restitution="0.f" bullet="false" shadow="true">
+<kinematicbox texture="caisse" pos="(1.9f, 4.f)" rotation="0.f" restitution="0.0f" shadow="true">
+-->
+		<body type="staticbox" texture="ground" pos="(0.f, -0.64f)" friction="0.4f"/>
+		
+		<body type="staticbox" id="6" texture="way" pos="(-5.f, 5.5f)" rotation="90.f" osp="true"/>
+		<body type="dynamicbox" texture="way" pos="(-5.f, 6.f)"/>
+		
+		<body type="staticbox" texture="way" pos="(-5.f, 0.5f)" rotation="90.f"/>
+		<body type="staticbox" texture="way" pos="(-5.f, 1.5f)" rotation="90.f"/>
+		<body type="staticbox" texture="way" pos="(-4.25f, 1.75f)"/>
+		<body type="staticbox" texture="way" pos="(-3.25f, 1.75f)"/>
+		<body type="staticbox" texture="way" pos="(-3.f, 1.5f)" rotation="90.f"/>
+		
+		<body type="dynamicbox" id="1" texture="way" pos="(-3.f, 0.5f)" rotation="90.f" density="1.f"/>
+		<body type="dynamicbox" texture="tonneau" pos="(-4.55f, 0.25f)" density="15.f" friction="0.05f"/>
+		<body type="dynamiccircle" texture="ball" pos="(-4.55f, 0.675f)" density="8.f" friction="0.05f" restitution="0.3f"/>
+		
+		<body type="staticbox" id="3" texture="way" pos="(0.f, 2.5f)" osp="true"/>
+		<body type="staticbox" texture="way" pos="(1.5f, 2.5f)" osp="true"/>
+		<body type="dynamicbox" texture="box" pos="(0.f, 3.f)"/>
+		<body type="dynamicbox" id="4" texture="box2" pos="(1.5f, 3.f)"/>
+		<body type="dynamicbox" id="2" texture="caisse" pos="(1.9f, 3.f)"/>
+		
+		<body type="kinematicbox" id="5" texture="caisse" pos="(1.9f, 4.f)" restitution="0.9f"/>
+	</bodies>
+	
+	<!-- Crée les chaines - -> TODO
+	<chains>
+	</chains>-->
+	
+	<!-- Crée les joints -->
+	<joints>
+<!--
+Certains attributs (après le "||" dans l'exemple) sont facultatifs. Les "color" sont pour le debug.
+Il est possible de définir des ID afin de reconnaitre les joints plus loin dans le chargement.
+ -> "colision" : Est-ce que les deux bodies attachés se colisionnent ?
+ex: (NB = les valeurs mises pour les facultatifs sont celles par défaut)
+
+<joint type="gear" body1="0" body2="0" joint1="0" joint2="0" || ratio="1.f" colision="true" color="(80, 0, 200)"/>
+<joint type="distance" body1="0" pt1="(0.f, 0.f)" body2="0" pt2="(0.f, 0.f)" || frequency="4.0f" damping="0.5f" colision="true" color="(255, 0, 255)"/>
+<joint type="friction" body1="0" pt1="(0.f, 0.f)" body2="0" pt2="(0.f, 0.f)" || maxForce="0.f" maxTorque="0.f" colision="true" color="(255, 0, 255)"/>
+<joint type="rope" body1="0" pt1="(0.f, 0.f)" body2="0" pt2="(0.f, 0.f)" maxLength="0.f" || colision="true" color="255, 0, 255"/>
+<joint type="weld" body1="0" anchor="(0.f, 0.f)" body2="0" || frequency="4.f" damping="0.5f" colision="false" color="(255, 0, 255)"/>
+<joint type="pulley" body1="0" pt1="(0.f, 0.f)" body2="0" pt2="(0.f, 0.f)" groundpt1="(0.f, 0.f)" groundpt2="(0.f, 0.f)" ratio="1.f" color="(170, 80, 0)"/>
+<joint type="prismatic" body1="0" anchor="(0.f, 0.f)" body2="0" axis="(0.f, 0.f)" || enableLimits="false" lower="0.f" upper="0.f"
+																					 enableMotor="false" speed="0.f" maxForce="10.f"
+																					 colision="false" color="green"/>
+<joint type="revolute" body1="0" anchor="(0.f, 0.f)" body2="0" || enableLimits="false" lower="0.f" upper="0.f"
+																  enableMotor="false" speed="0.f" maxTorque="10.f"
+																  colision="false" color="(0, 255, 0)"/>
+<joint type="wheel" body1="0" body2="0" anchor="(0.f, 0.f)" axis="(0.f, 0.f)" || frequency="4.f" damping="0.5f"
+																					enableMotor="false" speed="0.f" maxTorque="10.f"
+																					colision="false" color="(255, 0, 255)"/>
+-->
+		<joint type="pulley" body1="1" pt1="(0.f, 0.f)" body2="2" pt2="(0.f, 0.f)" groundpt1="(-2.f, 0.5f)" groundpt2="(1.9f, 4.f)" ratio="1.5f"/>
+		<joint type="rope" body1="3" pt1="(0.f, 0.f)" body2="4" pt2="(0.f, 0.f)" maxlength="2.f" colision="true" color="(0, 255, 255)"/>
+	</joints>
+	
+	<!-- Crée la déco -->
+	<deco>
+<!--
+Il est possible de définir des ID afin de reconnaitre la déco plus loin dans le chargement.
+ex : (La rotation est en degré, et est facultative.)
+<img texture="volcan" position="(0.f, 0.f)" rotation="0.f" z-index="1"/>
+-->
+		<level z="5">
+			<img texture="volcan" position="(0.f, 5.f)" z-index="1"/>
+		</level>
+		<level z="-1">
+			<img texture="lampadere" position="(3.f, 1.25f)" z-index="1"/>
+		</level>
+	</deco>
+	
+	<!-- Défini les lumiéres -->
+	<lights>
+<!--
+"direction" est un vecteur. L'angle est en degré.
+La position est relative aux parents.
+<light parent="body" id="5" pos="(0.f, 0.f)" | type="point" radius="5.f" static="true" activated="true"/>
+<light parent="alone" pos="(0.f, 0.f)"		 | type="spot" radius="5.f" static="true" direction="(0.f, 0.f)" angle="45.f" activated="true"/>
+-->
+		<light parent="body" id="6" pos="(0.f, 0.f)" type="point" radius="1.f" static="false"/>
+		<light parent="alone" pos="(3.f, 1.5f)" type="point" radius="2.f"/>
+	</lights>
+</level>
+
+
+
+
+
+
+
+
+
+
+

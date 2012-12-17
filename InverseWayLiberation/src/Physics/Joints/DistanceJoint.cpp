@@ -1,8 +1,8 @@
 #include "DistanceJoint.h"
-#include "../../utils.h"
+#include "../../Tools/utils.h"
 
 //Ctor
-DistanceJoint::DistanceJoint(World *world, Body *b1, b2Vec2 p1, Body *b2, b2Vec2 p2, float frequencyHz, float damping, bool collideconnected, sf::Color const& color)
+DistanceJoint::DistanceJoint(World *world, Body *b1, b2Vec2 pt1, Body *b2, b2Vec2 p2, float frequencyHz, float damping, bool collideconnected, sf::Color const& color)
 	: Joint(world), mColor(color)
 {
 	mBodyA = b1;
@@ -11,7 +11,7 @@ DistanceJoint::DistanceJoint(World *world, Body *b1, b2Vec2 p1, Body *b2, b2Vec2
 	if (mWorld && mBodyA && mBodyB)
 	{
 		b2DistanceJointDef jointDef;
-		jointDef.Initialize(mBodyA->GetBody(), mBodyB->GetBody(), mBodyA->GetBody()->GetWorldPoint(p1), mBodyB->GetBody()->GetWorldPoint(p2));
+		jointDef.Initialize(mBodyA->GetBody(), mBodyB->GetBody(), mBodyA->GetBody()->GetWorldPoint(pt1), mBodyB->GetBody()->GetWorldPoint(p2));
 		jointDef.collideConnected = collideconnected;
 		jointDef.frequencyHz = frequencyHz;
 		jointDef.dampingRatio = damping;

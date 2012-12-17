@@ -1,5 +1,5 @@
 #include "CircleHull.h"
-#include "../utils.h"
+#include "../Tools/utils.h"
 #include "../Tools/Segment.h"
 #include <iostream>
 
@@ -72,8 +72,10 @@ void CircleHull::Update()
 			float lightRadius = (*light)->GetRadius();
 
 			// Vérifie que la lumière n'est pas cachée
-			if ((*light)->IsHiden())
+			if ((*light)->IsHidden())
+			{
 				continue;
+			}
 
 			// Vérifie que la lumière touche ce shape
 			mIsNear[iLight] = (*light)->GetAABB().intersects(mBody->GetSprite()->getGlobalBounds());
@@ -82,9 +84,9 @@ void CircleHull::Update()
 			if (mIsNear[iLight] && (!mIsStatic || !mHasChanged || !(*light)->IsStatic() || !mInitialized[iLight]))
 			{
 				// Positionne l'ombre du cercle
-				mOriginCircle[iShape][iLight].setPosition(mCenter[iShape]);
-				mOriginCircle[iShape][iLight].setRadius(mRadius[iShape]);
-				mOriginCircle[iShape][iLight].setOrigin(mRadius[iShape], mRadius[iShape]);
+				mOriginCircle[iLight][iShape].setPosition(mCenter[iShape]);
+				mOriginCircle[iLight][iShape].setRadius(mRadius[iShape]);
+				mOriginCircle[iLight][iShape].setOrigin(mRadius[iShape], mRadius[iShape]);
 
 				// Calcule l'ombre
 				// Vecteur lumière -> centre
@@ -94,7 +96,9 @@ void CircleHull::Update()
 				// On regarde si la lumière n'est pas dans le cercle
 				if (dist < mRadius[iShape])
 				{
-					(*light)->IsHiden(true);
+					// La lumière est caché si un objet autre que l'émetteur la cache
+					if ((*light)->GetEmitter() != mBody)
+						(*light)->IsHidden(true);
 					continue;
 				}
 
@@ -112,13 +116,14 @@ void CircleHull::Update()
 				sf::Vector2f ptEE2 = ptE2 + ((ptE2 - lightPos) / dist * lightRadius);
 
 				// Création du poly de l'ombre
-				mLinkingPoly[iShape][iLight].setPointCount(4U);
-				mLinkingPoly[iShape][iLight].setPoint(0U, ptE1);
-				mLinkingPoly[iShape][iLight].setPoint(1U, ptE2);
-				mLinkingPoly[iShape][iLight].setPoint(2U, ptEE2);
-				mLinkingPoly[iShape][iLight].setPoint(3U, ptEE1);
+				mLinkingPoly[iLight][iShape].setPointCount(4U);
+				mLinkingPoly[iLight][iShape].setPoint(0U, ptE1);
+				mLinkingPoly[iLight][iShape].setPoint(1U, ptE2);
+				mLinkingPoly[iLight][iShape].setPoint(2U, ptEE2);
+				mLinkingPoly[iLight][iShape].setPoint(3U, ptEE1);
+
+				mInitialized[iLight] = true;
 			}
-			mInitialized[iLight] = true;
 		}
 	}
 	mHasChanged = false;

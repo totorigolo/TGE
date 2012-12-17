@@ -11,7 +11,7 @@ class FrictionJoint : public Joint
 {
 public:
 	// Ctor & dtor
-	FrictionJoint(World *world, Body *b1, b2Vec2 p1, Body *b2, b2Vec2 p2, float maxForce = 0.f, float maxTorque = 0.f, bool collideconnected = true
+	FrictionJoint(World *world, Body *b1, b2Vec2 pt1, Body *b2, b2Vec2 p2, float maxForce = 0.f, float maxTorque = 0.f, bool collideconnected = true
 																		, sf::Color const& color = sf::Color::Magenta);
 	virtual ~FrictionJoint(void);
 	

@@ -1,5 +1,5 @@
 #include "GearJoint.h"
-#include "../../utils.h"
+#include "../../Tools/utils.h"
 
 //Ctor
 GearJoint::GearJoint(World *world, Body *b1, Body *b2, Joint *j1, Joint *j2, float ratio, bool collideconnected, sf::Color const& color)

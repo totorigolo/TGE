@@ -1,5 +1,5 @@
 #include "ConvexHull.h"
-#include "../utils.h"
+#include "../Tools/utils.h"
 #include "../Tools/Segment.h"
 #include <iostream>
 
@@ -77,9 +77,11 @@ void ConvexHull::Update()
 			float lightRadius = (*light)->GetRadius();
 
 			// Test si la lampe n'est pas dans le shape
-			if ((*light)->IsHiden() || (*shape)->TestPoint(mBody->GetBody()->GetTransform(), sf2b2Vec(lightPos, mBody->GetWorld()->GetMPP())))
+			if ((*light)->IsHidden() || (*shape)->TestPoint(mBody->GetBody()->GetTransform(), sf2b2Vec(lightPos, mBody->GetWorld()->GetMPP())))
 			{
-				(*light)->IsHiden(true);
+				// La lumière est caché si un objet autre que l'émetteur la cache
+				if ((*light)->GetEmitter() != mBody)
+					(*light)->IsHidden(true);
 				continue;
 			}
 
@@ -174,8 +176,8 @@ void ConvexHull::Update()
 						}
 					}
 				}
+				mInitialized[iLight] = true;
 			}
-			mInitialized[iLight] = true;
 		}
 	}
 	mHasChanged = false;

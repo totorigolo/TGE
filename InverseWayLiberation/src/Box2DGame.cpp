@@ -1,12 +1,12 @@
 #include "Box2DGame.h"
-#include "LevelLoader.h"
+#include "Level/LevelLoader.h"
 #include "Physics/Bodies/StaticBox.h"
 #include "Physics/Bodies/DynamicBox.h"
 #include "Physics/Bodies/DynamicCircle.h"
 #include "Physics/Joints/DistanceJoint.h"
 #include "Physics/OverlappingBodyCallback.h"
 #include "Physics/FirstBodyRaycastCallback.h"
-#include "utils.h"
+#include "Tools/utils.h"
 #include <iostream>
 #include <vector>
 #include <list>
@@ -116,16 +116,16 @@ void Box2DGame::OnInit()
 
 	// Charge un niveau
 	mLevel = new Level(&mWorld);
-	LevelLoader("lvls/1.lvl", mLevel);
+	LevelLoader("lvls/1.xvl", mLevel);
+
+	// Initialise le système de lumières
+	mLightManager.Initialize(mRenderTexture, &mRenderTextureView);
+	mLightManager.AddLight(&mMouseLight);
 
 	// Centre la vue
 	mCurrentZoom = mLevel->GetDefaultZoom();
 	mRenderTextureView.setCenter(b22sfVec(mLevel->GetOriginView(), mWorld.GetPPM()));
 	mRenderTextureView.zoom(mLevel->GetDefaultZoom());
-
-	// Initialise le système de lumières
-	mLightManager.Initialize(mRenderTexture, &mRenderTextureView);
-	mLightManager.AddLight(&mMouseLight);
 
 	// Charge les textures dans la textureKeyMap
 	try {
@@ -233,6 +233,15 @@ void Box2DGame::OnEvent()
 		std::string list[] = {"ball", "circle"};
 		mWorld.RegisterBody(new DynamicCircle(&mWorld, getVec3(mMp), mTextureMap[randomElement(list, 2)], 1.f, 0.2f, 0.5f));
 	}
+	if (mActionMap.isActive("onCreateLamp"))
+	{
+		StaticBox *l = new StaticBox(&mWorld, getVec3(mMp), mTextureMap["lampadere"], 0.1f, 0.05f);
+		l->GetHull()->Deactivate();
+		mWorld.RegisterBody(l);
+		sf::Vector2f pos = mCurrentMousePosRV;
+		pos.y -= 1.2f * mWorld.GetPPM();
+		mLightManager.AddLight(new PointLight(pos, 100.2f * mWorld.GetPPM(), true, true, l));
+	}
 	
 	// Déplacements des objets
 	if (mActionMap.isActive("onMoveObject"))
@@ -335,20 +344,12 @@ void Box2DGame::OnEvent()
 		mRenderTextureView.move(sf::Vector2f(5.f, 0.f) * mCurrentZoom);
 	}
 
-	if (mActionMap.isActive("onCreateLamp"))
-	{
-		StaticBox *l = new StaticBox(&mWorld, getVec3(mMp), mTextureMap["lampadere"], 0.1f, 0.05f);
-		l->GetHull()->Deactivate();
-		mWorld.RegisterBody(l);
-		sf::Vector2f pos = mCurrentMousePosRV;
-		pos.y -= 1.2f * mWorld.GetPPM();
-		mLightManager.AddLight(new PointLight(pos, 1.2f * mWorld.GetPPM(), true, true, l));
-	}
-
 	// Charge un niveau
 	if (mActionMap.isActive("onLoadLevel"))
 	{
-		LevelLoader("lvls/1.lvl", mLevel);
+		mLightManager.DeleteLight(&mMouseLight, false);
+		LevelLoader("lvls/1.xvl", mLevel);
+		mLightManager.AddLight(&mMouseLight);
 
 		// Centre la vue
 		mCurrentZoom = mLevel->GetDefaultZoom();
@@ -578,7 +579,7 @@ void Box2DGame::OnEvent()
 							{
 								p1a = v1;
 								p1b = v2;
-								std::cout << "trouv\x82 p1 !!" << std::endl;
+								std::cout << "trouv\x82 pt1 !!" << std::endl;
 							}
 							std::cout << std::endl;
 
@@ -801,6 +802,9 @@ void Box2DGame::OnStepPhysics()
 /// Appelé pour le rendu
 void Box2DGame::OnRender()
 {
+	if (!mLevel)
+		return;
+
 	// Rendu
 	mRenderTexture.clear(mLevel->GetBckgColor());
 	mWindow.clear(mLevel->GetBckgColor());
@@ -820,36 +824,11 @@ void Box2DGame::OnRender()
 		}
 	}
 
-	// Affichage des objets dynamiques
+	// Affichage des objets physiques
 	for (auto it = mWorld.GetBodyList().begin(); it != mWorld.GetBodyList().end(); ++it)
 	{
-		if ((*it)->GetBody()->GetType() == b2_dynamicBody && (*it)->IsDrawable())
-		{
 			(*it)->Update();
 			mRenderTexture.draw(**it);
-		}
-	}
-	
-	// Affichage des objets statiques
-	for (auto it = mWorld.GetBodyList().rbegin(); it != mWorld.GetBodyList().rend(); ++it)
-	{
-		if ((*it)->GetBody()->GetType() == b2_staticBody && (*it)->IsDrawable())
-		{
-			(*it)->Update();
-			mRenderTexture.draw(**it);
-			//mShadowRenderTexture.draw(**it);
-		}
-	}
-
-	// Affichage des objets cinématiques
-	for (auto it = mWorld.GetBodyList().rbegin(); it != mWorld.GetBodyList().rend(); ++it)
-	{
-		if ((*it)->GetBody()->GetType() == b2_kinematicBody && (*it)->IsDrawable())
-		{
-			(*it)->Update();
-			mRenderTexture.draw(**it);
-			//mShadowRenderTexture.draw(**it);
-		}
 	}
 	
 	// Affichage des joints
@@ -910,13 +889,16 @@ void Box2DGame::OnRender()
 
 	// Finalise le rendu des objets
 	mRenderTexture.display();
+	mWindow.draw(sf::Sprite(mRenderTexture.getTexture()));
 
 	// Création des ombres
-	mLightManager.Update();
+	if (mLevel->GetLightning())
+	{
+		mLightManager.Update();
+		mWindow.draw(sf::Sprite(mLightManager.GetTexture()));
+	}
 
-	// Affichage
-	mWindow.draw(sf::Sprite(mRenderTexture.getTexture()));
-	mWindow.draw(sf::Sprite(mLightManager.GetTexture()));
+	// Affichage du tout
 	mWindow.display();
 }
 

@@ -7,9 +7,9 @@
 #include <utility>
 #include <list>
 #include "LevelLoader.h"
-#include "utils.h"
-#include "Physics/World.h"
-#include "Resources/ResourceManager.h"
+#include "../Tools/utils.h"
+#include "../Physics/World.h"
+#include "../Resources/ResourceManager.h"
 
 class LevelLoader;
 class Level
@@ -43,6 +43,7 @@ public:
 	float GetDefaultZoom() const { return mDefaulfZoom; }
 	sf::Color const& GetBckgColor() const { return mBckgC; }
 	b2Vec2 const& GetOriginView() const { return mOriginView; }
+	bool const& GetLightning() const { return mLightning; }
 
 	std::map<int, std::list<std::pair<int, sf::Sprite*>>> const& GetDeco() const { return mDecoMap; }
 
@@ -57,6 +58,7 @@ private:
 	sf::Color mBckgC;
 	float mDefaulfZoom;
 	b2Vec2 mOriginView;
+	bool mLightning;
 	
 	// Textures
 	ResourceManager &mResourceManager;

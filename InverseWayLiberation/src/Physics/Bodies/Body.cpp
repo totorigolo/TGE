@@ -1,5 +1,6 @@
 #include "Body.h"
-#include "../../utils.h"
+#include "../../Tools/utils.h"
+#include "../../Lights/LightManager.h"
 #include <cassert>
 
 //Ctor
@@ -17,6 +18,12 @@ Body::Body(World *world, BodyType type)
 // Dtor
 Body::~Body(void)
 {
+	if (mHull)
+	{
+		LightManager::GetInstance().DeleteHull(mHull);
+		mHull = nullptr;
+	}
+
 	if (mItsMySprite)
 		delete mSprite;
 
@@ -125,6 +132,11 @@ float Body::GetBodyAngle() const
 b2Vec2 Body::GetBodyPosition() const
 {
 	return mBody->GetPosition();
+}
+
+void Body::SetHull(Hull *hull)
+{
+	mHull = hull;
 }
 
 void Body::draw(sf::RenderTarget &target, sf::RenderStates states) const

@@ -11,7 +11,7 @@ class DistanceJoint : public Joint
 {
 public:
 	// Ctor & dtor
-	DistanceJoint(World *world, Body *b1, b2Vec2 p1, Body *b2, b2Vec2 p2, float frequencyHz = 4.f, float damping = 0.5f, bool collideconnected = true
+	DistanceJoint(World *world, Body *b1, b2Vec2 pt1, Body *b2, b2Vec2 p2, float frequencyHz = 4.f, float damping = 0.5f, bool collideconnected = true
 																		, sf::Color const& color = sf::Color::Magenta);
 	virtual ~DistanceJoint(void);
 	

@@ -11,7 +11,7 @@ class RopeJoint : public Joint
 {
 public:
 	// Ctor & dtor
-	RopeJoint(World *world, Body *b1, b2Vec2 p1, Body *b2, b2Vec2 p2, float maxLength, bool collideconnected = true, sf::Color const& color = sf::Color::Magenta);
+	RopeJoint(World *world, Body *b1, b2Vec2 pt1, Body *b2, b2Vec2 p2, float maxLength, bool collideconnected = true, sf::Color const& color = sf::Color::Magenta);
 	virtual ~RopeJoint(void);
 	
 	// Mets à jour le VertexArray

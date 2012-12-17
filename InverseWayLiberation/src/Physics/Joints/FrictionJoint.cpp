@@ -1,8 +1,8 @@
 #include "FrictionJoint.h"
-#include "../../utils.h"
+#include "../../Tools/utils.h"
 
 //Ctor
-FrictionJoint::FrictionJoint(World *world, Body *b1, b2Vec2 p1, Body *b2, b2Vec2 p2, float maxForce, float maxTorque, bool collideconnected, sf::Color const& color)
+FrictionJoint::FrictionJoint(World *world, Body *b1, b2Vec2 pt1, Body *b2, b2Vec2 p2, float maxForce, float maxTorque, bool collideconnected, sf::Color const& color)
 	: Joint(world), mColor(color)
 {
 	mBodyA = b1;
@@ -13,7 +13,7 @@ FrictionJoint::FrictionJoint(World *world, Body *b1, b2Vec2 p1, Body *b2, b2Vec2
 		b2FrictionJointDef jointDef;
 		jointDef.bodyA = mBodyA->GetBody();
 		jointDef.bodyB = mBodyB->GetBody();
-		jointDef.localAnchorA = p1;
+		jointDef.localAnchorA = pt1;
 		jointDef.localAnchorB = p2;
 		jointDef.maxForce = maxForce;
 		jointDef.maxTorque = maxTorque;

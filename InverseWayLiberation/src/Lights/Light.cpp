@@ -1,15 +1,32 @@
 #include "Light.h"
+#include "../Tools/utils.h"
 #include <iostream>
 
 // Ctor & Dtor
 Light::Light(sf::Vector2f pos, float radius, bool isStatic, bool isActivated, Body* emitter)
-	: mPosition(pos), mRadius(radius), mIsStatic(isStatic), mIsActivated(isActivated), mEmitter(emitter), mIsHiden(false)
+	: mPosition(pos), mRadius(radius), mIsStatic(isStatic), mIsActivated(isActivated), mIsHidden(false),
+	mEmitter(emitter)
 {
+	// La position est relative au body
+	if (mEmitter)
+	{
+		mPosRelEmitter = pos;
+		mPosition = b22sfVec(emitter->GetBodyPosition(), emitter->GetWorld()->GetPPM()) - mPosRelEmitter;
+	}
+
 	SetRadius(mRadius);
 }
 Light::Light(float x, float y, float radius, bool isStatic, bool isActivated, Body* emitter)
-	: mPosition(x, y), mRadius(radius), mIsStatic(isStatic), mIsActivated(isActivated), mEmitter(emitter), mIsHiden(false)
+	: mPosition(x, y), mRadius(radius), mIsStatic(isStatic), mIsActivated(isActivated), mEmitter(emitter), mIsHidden(false)
 {
+	// La position est relative au body
+	if (mEmitter)
+	{
+		mPosRelEmitter.x = x;
+		mPosRelEmitter.y = y;
+		mPosition = b22sfVec(emitter->GetBodyPosition(), emitter->GetWorld()->GetPPM()) - mPosRelEmitter;
+	}
+
 	SetRadius(mRadius);
 }
 Light::~Light()
@@ -78,17 +95,23 @@ void Light::Move(const sf::Vector2f& dep)
 // Mise à jour
 void Light::Update()
 {
-	IsHiden(false);
+	IsHidden(false);
+
+	// La position est relative au body
+	if (mEmitter)
+	{
+		mPosition = b22sfVec(mEmitter->GetBodyPosition(), mEmitter->GetWorld()->GetPPM()) - mPosRelEmitter;
+	}
 }
 
 // La lumière est *dans* un objet
-bool Light::IsHiden() const
+bool Light::IsHidden() const
 {
-	return mIsHiden;
+	return mIsHidden;
 }
-void Light::IsHiden(bool hiden)
+void Light::IsHidden(bool hiden)
 {
-	mIsHiden = hiden;
+	mIsHidden = hiden;
 }
 
 // Règle la lumière

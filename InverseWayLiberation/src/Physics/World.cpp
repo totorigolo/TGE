@@ -42,6 +42,7 @@ void World::DestroyBody(Body *body, bool _delete, bool remove)
 		if (body->GetHull())
 		{
 			LightManager::GetInstance().DeleteHull(body->GetHull());
+			body->SetHull(nullptr);
 		}
 
 		body->DestroyAllJoints();

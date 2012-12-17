@@ -1,8 +1,8 @@
 #include "RopeJoint.h"
-#include "../../utils.h"
+#include "../../Tools/utils.h"
 
 //Ctor
-RopeJoint::RopeJoint(World *world, Body *b1, b2Vec2 p1, Body *b2, b2Vec2 p2, float maxLength, bool collideconnected, sf::Color const& color)
+RopeJoint::RopeJoint(World *world, Body *b1, b2Vec2 pt1, Body *b2, b2Vec2 p2, float maxLength, bool collideconnected, sf::Color const& color)
 	: Joint(world), mColor(color)
 {
 	mBodyA = b1;
@@ -13,7 +13,7 @@ RopeJoint::RopeJoint(World *world, Body *b1, b2Vec2 p1, Body *b2, b2Vec2 p2, flo
 		b2RopeJointDef jointDef;
 		jointDef.bodyA = mBodyA->GetBody();
 		jointDef.bodyB = mBodyB->GetBody();
-		jointDef.localAnchorA = p1;
+		jointDef.localAnchorA = pt1;
 		jointDef.localAnchorB = p2;
 		jointDef.maxLength = maxLength;
 		jointDef.collideConnected = collideconnected;

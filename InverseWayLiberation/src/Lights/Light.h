@@ -29,8 +29,8 @@ public:
 	virtual void Update();
 
 	// La lumière est *dans* un objet
-	bool IsHiden() const;
-	void IsHiden(bool hiden);
+	bool IsHidden() const;
+	void IsHidden(bool hiden);
 
 	// Récupérer l'AABB de la lumière
 	virtual sf::FloatRect GetAABB() const = 0;
@@ -62,9 +62,10 @@ protected:
 	bool mIsStatic;
 	sf::Vector2f mPosition;
 	Body* mEmitter;
+	sf::Vector2f mPosRelEmitter;
 
 	// Etat
-	bool mIsHiden;
+	bool mIsHidden;
 
 private:
 };

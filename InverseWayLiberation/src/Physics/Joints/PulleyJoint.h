@@ -11,7 +11,7 @@ class PulleyJoint : public Joint
 {
 public:
 	// Ctor & dtor
-	PulleyJoint(World *world, Body *b1, b2Vec2 p1, Body *b2, b2Vec2 p2, b2Vec2 groundP1, b2Vec2 groundP2, float ratio = 1.f, bool collideconnected = true
+	PulleyJoint(World *world, Body *b1, b2Vec2 pt1, Body *b2, b2Vec2 p2, b2Vec2 groundP1, b2Vec2 groundP2, float ratio = 1.f, bool collideconnected = true
 																	  , sf::Color const& color = sf::Color(170, 80, 0));
 	virtual ~PulleyJoint(void);
 	
