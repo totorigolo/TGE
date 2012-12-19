@@ -236,11 +236,10 @@ void Box2DGame::OnEvent()
 	if (mActionMap.isActive("onCreateLamp"))
 	{
 		StaticBox *l = new StaticBox(&mWorld, getVec3(mMp), mTextureMap["lampadere"], 0.1f, 0.05f);
-		l->GetHull()->Deactivate();
 		mWorld.RegisterBody(l);
 		sf::Vector2f pos = mCurrentMousePosRV;
 		pos.y -= 1.2f * mWorld.GetPPM();
-		mLightManager.AddLight(new PointLight(pos, 100.2f * mWorld.GetPPM(), true, true, l));
+		mLightManager.AddLight(new PointLight(pos, 100.2f, true, true, l));
 	}
 	
 	// Déplacements des objets
@@ -895,7 +894,7 @@ void Box2DGame::OnRender()
 	if (mLevel->GetLightning())
 	{
 		mLightManager.Update();
-		mWindow.draw(sf::Sprite(mLightManager.GetTexture()));
+		mWindow.draw(mLightManager);
 	}
 
 	// Affichage du tout

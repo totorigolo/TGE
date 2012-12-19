@@ -33,9 +33,9 @@ void CircleHull::InitializeVectors(unsigned int lightID, bool isNew)
 		mLinkingPoly.resize(mLinkingPoly.size() + 1U);
 		
 		sf::ConvexShape polyS;
-		polyS.setFillColor(sf::Color(0, 0, 0, 200));
+		polyS.setFillColor(sf::Color(0, 0, 0, 0));
 		sf::CircleShape cS;
-		cS.setFillColor(sf::Color(0, 0, 0, 200));
+		cS.setFillColor(sf::Color(0, 0, 0, 0));
 		mLinkingPoly[lightID].resize(mShapes.size(), polyS);
 		mOriginCircle[lightID].resize(mShapes.size(), cS);
 	}
@@ -71,9 +71,12 @@ void CircleHull::Update()
 			sf::Vector2f lightPos = (*light)->GetPosition();
 			float lightRadius = (*light)->GetRadius();
 
-			// Vérifie que la lumière n'est pas cachée
-			if ((*light)->IsHidden())
+			// Vérifie que la lumière n'est pas dans le shape
+			if ((*light)->IsHidden() || (*shape)->TestPoint(mBody->GetBody()->GetTransform(), sf2b2Vec(lightPos, mBody->GetWorld()->GetMPP())))
 			{
+				// La lumière est caché si un objet autre que l'émetteur la cache
+				if ((*light)->GetEmitter() != mBody)
+					(*light)->IsHidden(true);
 				continue;
 			}
 
@@ -124,26 +127,11 @@ void CircleHull::Update()
 
 				mInitialized[iLight] = true;
 			}
+			
+			// Affichage sur la lumière
+			(*light)->DrawOn(mLinkingPoly[iLight][iShape], mStates);
+			(*light)->DrawOn(mOriginCircle[iLight][iShape], mStates);
 		}
 	}
 	mHasChanged = false;
-}
-
-void CircleHull::draw(sf::RenderTarget &target, sf::RenderStates states) const
-{
-	if (mIsActivated)
-	{
-		// Affiche les ombres
-		for (unsigned int iL = 0u; iL < mLights.size(); ++iL)
-		{
-			if (mIsNear[iL])
-			{
-				for (unsigned int iS = 0u; iS < mShapes.size(); ++iS)
-				{
-					target.draw(mLinkingPoly[iL][iS], states);
-					target.draw(mOriginCircle[iL][iS], states);
-				}
-			}
-		}
-	}
 }

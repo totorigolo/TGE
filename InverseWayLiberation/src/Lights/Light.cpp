@@ -7,27 +7,21 @@ Light::Light(sf::Vector2f pos, float radius, bool isStatic, bool isActivated, Bo
 	: mPosition(pos), mRadius(radius), mIsStatic(isStatic), mIsActivated(isActivated), mIsHidden(false),
 	mEmitter(emitter)
 {
-	// La position est relative au body
-	if (mEmitter)
-	{
-		mPosRelEmitter = pos;
-		mPosition = b22sfVec(emitter->GetBodyPosition(), emitter->GetWorld()->GetPPM()) - mPosRelEmitter;
-	}
-
 	SetRadius(mRadius);
+
+	if (mEmitter)
+		mPosRelEmitter = pos;
+	UpdatePosition();
 }
 Light::Light(float x, float y, float radius, bool isStatic, bool isActivated, Body* emitter)
-	: mPosition(x, y), mRadius(radius), mIsStatic(isStatic), mIsActivated(isActivated), mEmitter(emitter), mIsHidden(false)
+	: mPosition(x, y), mRadius(radius), mIsStatic(isStatic), mIsActivated(isActivated), mIsHidden(false),
+	mEmitter(emitter)
 {
-	// La position est relative au body
-	if (mEmitter)
-	{
-		mPosRelEmitter.x = x;
-		mPosRelEmitter.y = y;
-		mPosition = b22sfVec(emitter->GetBodyPosition(), emitter->GetWorld()->GetPPM()) - mPosRelEmitter;
-	}
-
 	SetRadius(mRadius);
+
+	if (mEmitter)
+		mPosRelEmitter = sf::Vector2f(x, y);
+	UpdatePosition();
 }
 Light::~Light()
 {
@@ -68,7 +62,7 @@ void Light::SetPosition(sf::Vector2f pos)
 #endif
 
 	mPosition = pos;
-	Update();
+	UpdatePosition();
 }
 void Light::Move(float dx, float dy)
 {
@@ -79,7 +73,7 @@ void Light::Move(float dx, float dy)
 
 	mPosition.x += dx;
 	mPosition.y += dy;
-	Update();
+	UpdatePosition();
 }
 void Light::Move(const sf::Vector2f& dep)
 {
@@ -89,19 +83,31 @@ void Light::Move(const sf::Vector2f& dep)
 #endif
 
 	mPosition += dep;
-	Update();
+	UpdatePosition();
 }
 
-// Mise à jour
-void Light::Update()
+// Mise à jour de la position
+void Light::UpdatePosition()
 {
-	IsHidden(false);
-
-	// La position est relative au body
-	if (mEmitter)
+	// La position est relative au body, mais ne bouge pas si la lumière est statique
+	if (mEmitter && !mIsStatic)
 	{
-		mPosition = b22sfVec(mEmitter->GetBodyPosition(), mEmitter->GetWorld()->GetPPM()) - mPosRelEmitter;
+		mPosition = b22sfVec(mEmitter->GetBodyPosition(), mEmitter->GetWorld()->GetPPM()) + mPosRelEmitter;
 	}
+	mSprite.setPosition(mPosition);
+
+	mView.setCenter(mPosition);
+	mRenderTexture.setView(mView);
+}
+
+// Affichage des ombres de la texture de la lumière
+void Light::DisplayTexture()
+{
+	mRenderTexture.display();
+}
+void Light::DrawOn(const sf::Drawable &drawable, sf::RenderStates states)
+{
+	mRenderTexture.draw(drawable, states);
 }
 
 // La lumière est *dans* un objet
@@ -123,3 +129,10 @@ float Light::GetRadius() const
 {
 	return mRadius;
 }
+
+void Light::draw(sf::RenderTarget &target, sf::RenderStates states) const
+{
+	if (mIsActivated && !mIsHidden)
+		target.draw(mSprite, states);
+}
+	

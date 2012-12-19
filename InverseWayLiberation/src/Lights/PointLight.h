@@ -12,14 +12,11 @@ public:
 	// Règle la lumière
 	virtual void SetRadius(float radius);
 
-	// Mise à jour
-	virtual void Update();
+	// Affichage de la lumière
+	virtual void RenderLight();
 
 	// Récupérer l'AABB de la lumière
 	virtual sf::FloatRect GetAABB() const;
-
-protected:
-	virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const;
 
 private:
 	// Affichage

@@ -19,9 +19,6 @@ public:
 	// Mise à jour
 	virtual void Update();
 
-protected:
-	virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const;
-
 private:
 	/*
 	** Les polygones sont sauvegardés pour accélérer le rendu.

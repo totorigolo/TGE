@@ -4,7 +4,7 @@
 #include "Light.h"
 
 class Body;
-class Hull : public sf::Drawable
+class Hull
 {
 public:
 	// Ctor & Dtor
@@ -34,12 +34,11 @@ public:
 	Body* GetBody() { return mBody; }
 
 protected:
-	virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const = 0;
-	
 	// Propriétés
 	bool mIsActivated;
 	bool mIsStatic;
 	bool mHasChanged;
+	sf::RenderStates mStates;
 
 	// Lights
 	std::vector<Light*> mLights;

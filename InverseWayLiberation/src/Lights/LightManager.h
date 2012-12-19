@@ -49,6 +49,7 @@ private:
 	sf::RenderTexture mRenderTexture;
 	sf::Sprite mRenderTextureSprite;
 	sf::RectangleShape mObscurity;
+	sf::RenderStates mLightStates;
 	sf::RenderStates mShadowStates;
 	
 	// Lumières

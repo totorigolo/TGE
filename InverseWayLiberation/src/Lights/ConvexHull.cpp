@@ -36,7 +36,7 @@ void ConvexHull::InitializeVectors(unsigned int lightID, bool isNew)
 		mProjectionPoly.resize(mProjectionPoly.size() + 1U);
 
 		sf::ConvexShape shape;
-		shape.setFillColor(sf::Color(0, 0, 0, 200));
+		shape.setFillColor(sf::Color(0, 0, 0, 0));
 		mLinkingPoly[lightID].resize(mShapes.size(), shape);
 		mProjectionPoly[lightID].resize(mShapes.size(), shape);
 	}
@@ -178,26 +178,11 @@ void ConvexHull::Update()
 				}
 				mInitialized[iLight] = true;
 			}
+
+			// Affichage sur la lumière
+			(*light)->DrawOn(mLinkingPoly[iLight][iShape], mStates);
+			(*light)->DrawOn(mProjectionPoly[iLight][iShape], mStates);
 		}
 	}
 	mHasChanged = false;
-}
-
-void ConvexHull::draw(sf::RenderTarget &target, sf::RenderStates states) const
-{
-	if (mIsActivated)
-	{
-		// Affiche les ombres
-		for (unsigned int iL = 0u; iL < mLights.size(); ++iL)
-		{
-			if (mIsNear[iL])
-			{
-				for (unsigned int iS = 0u; iS < mShapes.size(); ++iS)
-				{
-					target.draw(mLinkingPoly[iL][iS], states);
-					target.draw(mProjectionPoly[iL][iS], states);
-				}
-			}
-		}
-	}
 }

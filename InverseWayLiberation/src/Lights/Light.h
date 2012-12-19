@@ -25,13 +25,18 @@ public:
 	void Move(float dx, float dy);
 	void Move(const sf::Vector2f& dep);
 
-	// Mise à jour
-	virtual void Update();
+	// Mise à jour de la position
+	virtual void UpdatePosition();
+
+	// Affichage des ombres de la texture de la lumière
+	virtual void RenderLight() = 0;
+	void DisplayTexture();
+	void DrawOn(const sf::Drawable &drawable, sf::RenderStates states);
 
 	// La lumière est *dans* un objet
 	bool IsHidden() const;
 	void IsHidden(bool hiden);
-
+	
 	// Récupérer l'AABB de la lumière
 	virtual sf::FloatRect GetAABB() const = 0;
 	
@@ -54,7 +59,7 @@ public:
 	}
 
 protected:
-	virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const = 0;
+	virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const;
 	
 	// Propriétés
 	bool mIsActivated;
@@ -66,6 +71,11 @@ protected:
 
 	// Etat
 	bool mIsHidden;
+
+	// Texture de rendu
+	sf::View mView;
+	sf::Sprite mSprite;
+	sf::RenderTexture mRenderTexture;
 
 private:
 };

@@ -4,6 +4,7 @@
 Hull::Hull(Body* body, bool isStatic, bool isActivated)
 	: mBody(body), mIsStatic(isStatic), mHasChanged(true), mIsActivated(isActivated)
 {
+	mStates.blendMode = sf::BlendNone;
 }
 Hull::~Hull()
 {

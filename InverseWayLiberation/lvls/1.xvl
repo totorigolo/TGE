@@ -4,7 +4,7 @@
 	<world
 		gravity = "(0.f, -9.8f)"
 		PPM = "100.f"
-		bckgcolor = "(0, 0, 0, 255)"
+		bckgcolor = "(255, 255, 255, 255)"
 		originview = "(-1.7f, 2.f)"
 		defaultzoom = "1.f"
 		defaultlightning = "false"
@@ -49,8 +49,8 @@ ex: (NB = les valeurs mises sont celles par défaut) (osp = OneSidedPlatform)
 		<body type="staticbox" texture="way" pos="(-3.f, 1.5f)" rotation="90.f"/>
 		
 		<body type="dynamicbox" id="1" texture="way" pos="(-3.f, 0.5f)" rotation="90.f" density="1.f"/>
-		<body type="dynamicbox" texture="tonneau" pos="(-4.55f, 0.25f)" density="15.f" friction="0.05f"/>
-		<body type="dynamiccircle" texture="ball" pos="(-4.55f, 0.675f)" density="8.f" friction="0.05f" restitution="0.3f"/>
+		<body type="dynamicbox" id ="7" texture="tonneau" pos="(-4.55f, 0.25f)" density="0.2f" friction="0.05f"/>
+		<body type="dynamiccircle" id="8" texture="ball" pos="(-4.55f, 0.675f)" friction="20.f"/>
 		
 		<body type="staticbox" id="3" texture="way" pos="(0.f, 2.5f)" osp="true"/>
 		<body type="staticbox" texture="way" pos="(1.5f, 2.5f)" osp="true"/>
@@ -58,7 +58,7 @@ ex: (NB = les valeurs mises sont celles par défaut) (osp = OneSidedPlatform)
 		<body type="dynamicbox" id="4" texture="box2" pos="(1.5f, 3.f)"/>
 		<body type="dynamicbox" id="2" texture="caisse" pos="(1.9f, 3.f)"/>
 		
-		<body type="kinematicbox" id="5" texture="caisse" pos="(1.9f, 4.f)" restitution="0.9f"/>
+		<body type="kinematicbox" id="5" texture="caisse" pos="(1.9f, 4.f)" restitution="1.9f"/>
 	</bodies>
 	
 	<!-- Crée les chaines - -> TODO
@@ -90,7 +90,10 @@ ex: (NB = les valeurs mises pour les facultatifs sont celles par défaut)
 																					colision="false" color="(255, 0, 255)"/>
 -->
 		<joint type="pulley" body1="1" pt1="(0.f, 0.f)" body2="2" pt2="(0.f, 0.f)" groundpt1="(-2.f, 0.5f)" groundpt2="(1.9f, 4.f)" ratio="1.5f"/>
-		<joint type="rope" body1="3" pt1="(0.f, 0.f)" body2="4" pt2="(0.f, 0.f)" maxlength="2.f" colision="true" color="(0, 255, 255)"/>
+		<joint type="rope" body1="3" pt1="(0.f, 0.f)" body2="4" pt2="(0.f, 0.f)" maxlength="3.f" colision="true" color="(0, 255, 255)"/>
+		<joint type="wheel" body1="7" body2="8" anchor="(0.f, 0.f)" axis="(0.f, 1.f)" frequency="4.f" damping="0.4f"
+																					  enableMotor="true" speed="-40.f" maxTorque="100.f"
+																					  colision="false" color="(255, 0, 255)"/>
 	</joints>
 	
 	<!-- Crée la déco -->
@@ -101,7 +104,7 @@ ex : (La rotation est en degré, et est facultative.)
 <img texture="volcan" position="(0.f, 0.f)" rotation="0.f" z-index="1"/>
 -->
 		<level z="5">
-			<img texture="volcan" position="(0.f, 5.f)" z-index="1"/>
+			<!--img texture="volcan" position="(0.f, 5.f)" z-index="1"/-->
 		</level>
 		<level z="-1">
 			<img texture="lampadere" position="(3.f, 1.25f)" z-index="1"/>
@@ -116,8 +119,8 @@ La position est relative aux parents.
 <light parent="body" id="5" pos="(0.f, 0.f)" | type="point" radius="5.f" static="true" activated="true"/>
 <light parent="alone" pos="(0.f, 0.f)"		 | type="spot" radius="5.f" static="true" direction="(0.f, 0.f)" angle="45.f" activated="true"/>
 -->
-		<light parent="body" id="6" pos="(0.f, 0.f)" type="point" radius="1.f" static="false"/>
-		<light parent="alone" pos="(3.f, 1.5f)" type="point" radius="2.f"/>
+		<!--light parent="body" id="6" pos="(0.f, 0.f)" type="point" radius="1.f" static="false"/>
+		<light parent="alone" pos="(3.f, 1.5f)" type="point" radius="2.f"/-->
 	</lights>
 </level>
 

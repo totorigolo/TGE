@@ -6,7 +6,8 @@ LightManager::LightManager()
 	: mIsInitialized(false), mView(nullptr)
 {
 	// Règle l'état d'affichage
-	mShadowStates.blendMode = sf::BlendNone;
+	mShadowStates.blendMode = sf::BlendAlpha;
+	mLightStates.blendMode = sf::BlendAlpha;
 
 	// Réglage des objets
 	mObscurity.setFillColor(sf::Color(0, 0, 0, 200));
@@ -53,7 +54,6 @@ void LightManager::Update()
 {
 	/* Crée les ombres */
 	mRenderTexture.clear(sf::Color(0, 0, 0, 0));
-	mRenderTexture.setView(*mView);
 
 	// Mise à jour des objets
 	mObscurity.setSize(mView->getSize());
@@ -66,7 +66,8 @@ void LightManager::Update()
 	// Mise à jour
 	for (std::list<Light*>::iterator it = mLights.begin(); it != mLights.end(); ++it)
 	{
-		(*it)->Update();
+		(*it)->UpdatePosition();
+		(*it)->RenderLight();
 	}
 	for (std::list<Hull*>::iterator it = mHulls.begin(); it != mHulls.end(); ++it)
 	{
@@ -76,12 +77,8 @@ void LightManager::Update()
 	// Affchage
 	for (std::list<Light*>::iterator it = mLights.begin(); it != mLights.end(); ++it)
 	{
-		if (!(*it)->IsHidden())
-			mRenderTexture.draw(**it, mShadowStates);
-	}
-	for (std::list<Hull*>::iterator it = mHulls.begin(); it != mHulls.end(); ++it)
-	{
-		mRenderTexture.draw(**it, mShadowStates);
+		(*it)->DisplayTexture();
+		mRenderTexture.draw(**it, mLightStates);
 	}
 
 	// Finalisation du rendu
