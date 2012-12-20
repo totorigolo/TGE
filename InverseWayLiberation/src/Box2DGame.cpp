@@ -678,10 +678,10 @@ void Box2DGame::OnEvent()
 		mShadowRenderTexture.create(static_cast<unsigned int>(mWindow.getSize().x * mRenderTextureView.getViewport().width)
 								, static_cast<unsigned int>(mWindow.getSize().y * mRenderTextureView.getViewport().height));
 
-		mLightManager.Resize(mWindow);
-
 		mWindowView.setSize(u2f(mWindow.getSize()) * sf::Vector2f(mRenderTextureView.getViewport().width, mRenderTextureView.getViewport().height));
-		mWindowView.setCenter(mWindowView.getSize() / 2.f); // TODO: Pourquoi ?
+		mWindowView.setCenter(mWindowView.getSize() / 2.f);
+
+		mLightManager.Resize(mWindow);
 	}
 	
 	// Gestion de la fermeture de la fenêtre

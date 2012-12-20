@@ -32,10 +32,6 @@ void LightManager::Resize(const sf::RenderTarget& target)
 
 	// Mise à jour du sprite
 	mRenderTextureSprite.setTexture(mRenderTexture.getTexture());
-
-	// Réglage des objets
-	mObscurity.setSize(mView->getSize());
-	mObscurity.setOrigin(mObscurity.getSize() / 2.f);
 }
 
 // Gestion de la vue
@@ -54,6 +50,7 @@ void LightManager::Update()
 {
 	/* Crée les ombres */
 	mRenderTexture.clear(sf::Color(0, 0, 0, 0));
+	mRenderTexture.setView(*mView);
 
 	// Mise à jour des objets
 	mObscurity.setSize(mView->getSize());
