@@ -67,6 +67,11 @@ public:
 	inline b2Body const* GetBody() const { return mBody; }
 	inline World const* GetWorld() const { return mWorld; }
 	inline b2Shape const* GetShape() const { return mShape; }
+
+	inline bool IsSleeping() const
+	{
+		return !mBody->IsAwake();
+	}
 	
 	void SetHull(Hull *hull); // Faire attention à supprimer / ajouter le Hull au LightManager !
 	Hull* GetHull() { return mHull; }

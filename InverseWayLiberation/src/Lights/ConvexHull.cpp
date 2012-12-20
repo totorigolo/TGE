@@ -60,7 +60,7 @@ void ConvexHull::Update()
 	for (std::vector<b2PolygonShape*>::iterator shape = mShapes.begin(); shape < mShapes.end(); ++shape, ++iShape)
 	{
 		// Récupère les positions des points
-		if (!mIsStatic || mHasChanged)
+		if (!mBody->IsSleeping())
 		{
 			mPoints[iShape].clear();
 			mPoints[iShape].resize((*shape)->GetVertexCount());
@@ -89,7 +89,7 @@ void ConvexHull::Update()
 			mIsNear[iLight] = (*light)->GetAABB().intersects(mBody->GetSprite()->getGlobalBounds());
 
 			// Si on doit recalculer les ombres
-			if (mIsNear[iLight] && (!mIsStatic || !mHasChanged || !(*light)->IsStatic() || !mInitialized[iLight]))
+			if (mIsNear[iLight] && (!mBody->IsSleeping() || (*light)->HasMoved()))
 			{
 				// Vide les tableaux
 				mHidedPoints.clear();
@@ -180,9 +180,11 @@ void ConvexHull::Update()
 			}
 
 			// Affichage sur la lumière
-			(*light)->DrawOn(mLinkingPoly[iLight][iShape], mStates);
-			(*light)->DrawOn(mProjectionPoly[iLight][iShape], mStates);
+			if (mIsNear[iLight])
+			{
+				(*light)->DrawOn(mLinkingPoly[iLight][iShape], mStates);
+				(*light)->DrawOn(mProjectionPoly[iLight][iShape], mStates);
+			}
 		}
 	}
-	mHasChanged = false;
 }

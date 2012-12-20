@@ -59,7 +59,7 @@ void CircleHull::Update()
 	for (std::vector<b2CircleShape*>::iterator shape = mShapes.begin(); shape < mShapes.end(); ++shape, ++iShape)
 	{
 		// Centre et rayon du cercle
-		if (!mIsStatic || mHasChanged)
+		if (!mBody->IsSleeping())
 		{
 			mRadius[iShape] = (*shape)->m_radius * mBody->GetWorld()->GetPPM();
 			mCenter[iShape] = b22sfVec(mBody->GetBody()->GetWorldPoint((*shape)->m_p), mBody->GetWorld()->GetPPM());
@@ -84,7 +84,7 @@ void CircleHull::Update()
 			mIsNear[iLight] = (*light)->GetAABB().intersects(mBody->GetSprite()->getGlobalBounds());
 
 			// Si on doit recalculer les ombres
-			if (mIsNear[iLight] && (!mIsStatic || !mHasChanged || !(*light)->IsStatic() || !mInitialized[iLight]))
+			if (mIsNear[iLight] && (!mBody->IsSleeping() || (*light)->HasMoved()))
 			{
 				// Positionne l'ombre du cercle
 				mOriginCircle[iLight][iShape].setPosition(mCenter[iShape]);
@@ -129,9 +129,11 @@ void CircleHull::Update()
 			}
 			
 			// Affichage sur la lumière
-			(*light)->DrawOn(mLinkingPoly[iLight][iShape], mStates);
-			(*light)->DrawOn(mOriginCircle[iLight][iShape], mStates);
+			if (mIsNear[iLight])
+			{
+				(*light)->DrawOn(mLinkingPoly[iLight][iShape], mStates);
+				(*light)->DrawOn(mOriginCircle[iLight][iShape], mStates);
+			}
 		}
 	}
-	mHasChanged = false;
 }

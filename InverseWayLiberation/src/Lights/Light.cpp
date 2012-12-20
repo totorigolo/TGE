@@ -5,7 +5,7 @@
 // Ctor & Dtor
 Light::Light(sf::Vector2f pos, float radius, bool isStatic, bool isActivated, Body* emitter)
 	: mPosition(pos), mRadius(radius), mIsStatic(isStatic), mIsActivated(isActivated), mIsHidden(false),
-	mEmitter(emitter)
+	mEmitter(emitter), mHasMoved(false)
 {
 	SetRadius(mRadius);
 
@@ -15,7 +15,7 @@ Light::Light(sf::Vector2f pos, float radius, bool isStatic, bool isActivated, Bo
 }
 Light::Light(float x, float y, float radius, bool isStatic, bool isActivated, Body* emitter)
 	: mPosition(x, y), mRadius(radius), mIsStatic(isStatic), mIsActivated(isActivated), mIsHidden(false),
-	mEmitter(emitter)
+	mEmitter(emitter), mHasMoved(false)
 {
 	SetRadius(mRadius);
 
@@ -98,6 +98,8 @@ void Light::UpdatePosition()
 
 	mView.setCenter(mPosition);
 	mRenderTexture.setView(mView);
+
+	mHasMoved = true;
 }
 
 // Affichage des ombres de la texture de la lumière

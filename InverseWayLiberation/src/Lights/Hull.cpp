@@ -2,7 +2,7 @@
 
 // Ctor & Dtor
 Hull::Hull(Body* body, bool isStatic, bool isActivated)
-	: mBody(body), mIsStatic(isStatic), mHasChanged(true), mIsActivated(isActivated)
+	: mBody(body), mIsStatic(isStatic), mIsActivated(isActivated)
 {
 	mStates.blendMode = sf::BlendNone;
 }

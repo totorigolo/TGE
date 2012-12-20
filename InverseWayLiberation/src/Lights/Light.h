@@ -49,6 +49,10 @@ public:
 	{
 		return mEmitter;
 	}
+	inline bool HasMoved() const
+	{
+		return mHasMoved;
+	}
 	inline const Body* GetEmitter() const
 	{
 		return mEmitter;
@@ -71,6 +75,7 @@ protected:
 
 	// Etat
 	bool mIsHidden;
+	bool mHasMoved;
 
 	// Texture de rendu
 	sf::View mView;

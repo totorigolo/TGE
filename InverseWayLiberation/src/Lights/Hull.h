@@ -35,9 +35,8 @@ public:
 
 protected:
 	// Propriétés
-	bool mIsActivated;
 	bool mIsStatic;
-	bool mHasChanged;
+	bool mIsActivated;
 	sf::RenderStates mStates;
 
 	// Lights
