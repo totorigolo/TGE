@@ -25,7 +25,7 @@ public:
 protected:
 	// Ctor & Dtor
     Singleton() {}
-    ~Singleton() {}
+    virtual ~Singleton() {}
 
 private :
 	// Instance de la classe

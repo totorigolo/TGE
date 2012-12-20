@@ -11,6 +11,9 @@ public:
 		mPoint = point;
 		mFixture = nullptr;
 	}
+	virtual ~OverlappingBodyCallback()
+	{
+	}
 
 	virtual bool ReportFixture(b2Fixture* fixture)
 	{

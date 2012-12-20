@@ -5,9 +5,12 @@
 class FirstBodyRaycastCallback : public b2RayCastCallback
 {
 public:
-	// Ctor
+	// Ctor & Dtor
 	FirstBodyRaycastCallback(b2Body *body = nullptr)
 		: mFixture(nullptr), mBody(body), mHit(false)
+	{
+	}
+	virtual ~FirstBodyRaycastCallback()
 	{
 	}
 

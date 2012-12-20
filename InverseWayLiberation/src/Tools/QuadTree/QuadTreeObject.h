@@ -3,5 +3,5 @@
 class QuadTreeObject
 {
 	QuadTreeObject();
-	~QuadTreeObject();
+	virtual ~QuadTreeObject();
 };

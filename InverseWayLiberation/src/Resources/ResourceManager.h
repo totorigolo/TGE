@@ -11,7 +11,7 @@ class ResourceManager : public thor::MultiResourceCache, public Singleton<Resour
 {
 public:
 	ResourceManager() {}
-	~ResourceManager() {}
+	virtual ~ResourceManager() {}
 
 	TextureMap &GetTextureMap()
 	{
