@@ -49,6 +49,24 @@
     <Filter Include="Fichiers sources\Physics\Entities">
       <UniqueIdentifier>{43e5b502-d105-4493-9279-319a78340903}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Fichiers sources\Lights">
+      <UniqueIdentifier>{e1c73960-709f-4f8c-972b-26c343eff343}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers sources\Level">
+      <UniqueIdentifier>{8c1ee394-4fa2-4a92-b83f-eb3cb0920f6f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers sources\Tools\QuadTree">
+      <UniqueIdentifier>{0806d5ed-b91a-4321-b8f0-67618585e2a9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers d%27en-tête\Lights">
+      <UniqueIdentifier>{7b380e1c-f0a9-4671-94b1-a210dba0b14d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers d%27en-tête\Level">
+      <UniqueIdentifier>{3dfebfa7-8d81-41b4-9986-d8dc2d1b8c09}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers d%27en-tête\Tools\QuadTree">
+      <UniqueIdentifier>{057201a5-f12d-42c4-9556-4af391e5c445}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\_TODO.txt" />
@@ -124,44 +142,44 @@
     <ClCompile Include="src\Physics\Entities\Ragdoll.cpp">
       <Filter>Fichiers sources\Physics\Entities</Filter>
     </ClCompile>
-    <ClCompile Include="src\Tools\QuadTree\QuadTree.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
     <ClCompile Include="src\Lights\CircleHull.cpp">
-      <Filter>Fichiers sources</Filter>
+      <Filter>Fichiers sources\Lights</Filter>
     </ClCompile>
     <ClCompile Include="src\Lights\ConvexHull.cpp">
-      <Filter>Fichiers sources</Filter>
+      <Filter>Fichiers sources\Lights</Filter>
     </ClCompile>
     <ClCompile Include="src\Lights\Hull.cpp">
-      <Filter>Fichiers sources</Filter>
+      <Filter>Fichiers sources\Lights</Filter>
     </ClCompile>
     <ClCompile Include="src\Lights\Light.cpp">
-      <Filter>Fichiers sources</Filter>
+      <Filter>Fichiers sources\Lights</Filter>
     </ClCompile>
     <ClCompile Include="src\Lights\LightManager.cpp">
-      <Filter>Fichiers sources</Filter>
+      <Filter>Fichiers sources\Lights</Filter>
     </ClCompile>
     <ClCompile Include="src\Lights\PointLight.cpp">
-      <Filter>Fichiers sources</Filter>
+      <Filter>Fichiers sources\Lights</Filter>
     </ClCompile>
     <ClCompile Include="src\Lights\SpotLight.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Level\Level.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Level\LevelLoader.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Tools\Loader.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Tools\Parser.cpp">
-      <Filter>Fichiers sources</Filter>
+      <Filter>Fichiers sources\Lights</Filter>
     </ClCompile>
     <ClCompile Include="src\Tools\Dialog.cpp">
-      <Filter>Fichiers sources</Filter>
+      <Filter>Fichiers sources\Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Level\Level.cpp">
+      <Filter>Fichiers sources\Level</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Level\LevelLoader.cpp">
+      <Filter>Fichiers sources\Level</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Tools\Loader.cpp">
+      <Filter>Fichiers sources\Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Tools\Parser.cpp">
+      <Filter>Fichiers sources\Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Tools\QuadTree\QuadTree.cpp">
+      <Filter>Fichiers sources\Tools\QuadTree</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -247,52 +265,52 @@
       <Filter>Fichiers d%27en-tête\Physics\Entities</Filter>
     </ClInclude>
     <ClInclude Include="src\Tools\QuadTree\QuadTree.h">
-      <Filter>Fichiers d%27en-tête</Filter>
+      <Filter>Fichiers d%27en-tête\Tools\QuadTree</Filter>
     </ClInclude>
     <ClInclude Include="src\Tools\QuadTree\QuadTreeObject.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Lights\CircleHull.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Lights\ConvexHull.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Lights\Hull.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Lights\Light.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Lights\LightManager.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Lights\PointLight.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Lights\SpotLight.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Tools\Segment.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Level\Level.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Level\LevelLoader.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Tools\Loader.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Tools\Parser.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Tools\Dialog.h">
-      <Filter>Fichiers d%27en-tête</Filter>
+      <Filter>Fichiers d%27en-tête\Tools\QuadTree</Filter>
     </ClInclude>
     <ClInclude Include="src\Tools\utils.h">
-      <Filter>Fichiers d%27en-tête</Filter>
+      <Filter>Fichiers d%27en-tête\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Tools\Segment.h">
+      <Filter>Fichiers d%27en-tête\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Lights\SpotLight.h">
+      <Filter>Fichiers d%27en-tête\Lights</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Lights\PointLight.h">
+      <Filter>Fichiers d%27en-tête\Lights</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Lights\LightManager.h">
+      <Filter>Fichiers d%27en-tête\Lights</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Lights\Light.h">
+      <Filter>Fichiers d%27en-tête\Lights</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Lights\Hull.h">
+      <Filter>Fichiers d%27en-tête\Lights</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Lights\ConvexHull.h">
+      <Filter>Fichiers d%27en-tête\Lights</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Lights\CircleHull.h">
+      <Filter>Fichiers d%27en-tête\Lights</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Level\Level.h">
+      <Filter>Fichiers d%27en-tête\Level</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Level\LevelLoader.h">
+      <Filter>Fichiers d%27en-tête\Level</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Tools\Loader.h">
+      <Filter>Fichiers d%27en-tête\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Tools\Dialog.h">
+      <Filter>Fichiers d%27en-tête\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Tools\Parser.h">
+      <Filter>Fichiers d%27en-tête\Tools</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
