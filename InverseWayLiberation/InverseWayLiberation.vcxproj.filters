@@ -103,9 +103,6 @@
     <None Include="..\README.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\ConfigReader.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
     <ClCompile Include="src\main.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
@@ -234,9 +231,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\ConfigReader.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
     <ClInclude Include="src\Physics\Bodies\Body.h">
       <Filter>Fichiers d%27en-tête\Physics\Bodies</Filter>
     </ClInclude>
