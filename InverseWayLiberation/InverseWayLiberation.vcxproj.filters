@@ -67,15 +67,42 @@
     <Filter Include="Fichiers d%27en-tête\Tools\QuadTree">
       <UniqueIdentifier>{057201a5-f12d-42c4-9556-4af391e5c445}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Fichiers d%27en-tête\Scripting">
+      <UniqueIdentifier>{3ba6d075-c6d8-4a74-9bb6-29cd33a5ea3b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers sources\Scripting">
+      <UniqueIdentifier>{cd7a1397-ed74-4cf6-aa92-22341af4dc17}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers d%27en-tête\Sounds">
+      <UniqueIdentifier>{36d65d69-69a8-4868-8155-70b3dd40314a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers sources\Sounds">
+      <UniqueIdentifier>{711855b9-e88a-4a42-8695-7df8e3d56bae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers sources\App">
+      <UniqueIdentifier>{a9d8b39c-50c5-4715-9db3-bc454c823551}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers d%27en-tête\App">
+      <UniqueIdentifier>{e653be40-b2b0-40e3-b670-e598ecb85f2b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers d%27en-tête\App\States">
+      <UniqueIdentifier>{65629c4d-885f-492d-ae82-e9fe85c9d247}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers sources\App\States">
+      <UniqueIdentifier>{2bc5be36-31c8-4c3d-a4cd-d1a1b1e0560d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers d%27en-tête\Game">
+      <UniqueIdentifier>{23e10aec-146b-4bf3-95f8-f5e780d6a60a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers sources\Game">
+      <UniqueIdentifier>{36327a7c-8171-41de-b16d-cd74ecbbb97a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\_TODO.txt" />
     <None Include="..\README.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Box2DGame.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
     <ClCompile Include="src\ConfigReader.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
@@ -181,11 +208,32 @@
     <ClCompile Include="src\Tools\QuadTree\QuadTree.cpp">
       <Filter>Fichiers sources\Tools\QuadTree</Filter>
     </ClCompile>
+    <ClCompile Include="src\Scripting\Lua.cpp">
+      <Filter>Fichiers sources\Scripting</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Sounds\SoundManager.cpp">
+      <Filter>Fichiers sources\Sounds</Filter>
+    </ClCompile>
+    <ClCompile Include="src\App\App.cpp">
+      <Filter>Fichiers sources\App</Filter>
+    </ClCompile>
+    <ClCompile Include="src\App\States\StartUp.cpp">
+      <Filter>Fichiers sources\App\States</Filter>
+    </ClCompile>
+    <ClCompile Include="src\App\States\StateSystem.cpp">
+      <Filter>Fichiers sources\App\States</Filter>
+    </ClCompile>
+    <ClCompile Include="src\App\States\MainMenu.cpp">
+      <Filter>Fichiers sources\App\States</Filter>
+    </ClCompile>
+    <ClCompile Include="src\App\States\DevGame.cpp">
+      <Filter>Fichiers sources\App\States</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\Box2DGame.cpp">
+      <Filter>Fichiers sources\Game</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\Box2DGame.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
     <ClInclude Include="src\ConfigReader.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
@@ -311,6 +359,33 @@
     </ClInclude>
     <ClInclude Include="src\Tools\Parser.h">
       <Filter>Fichiers d%27en-tête\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Scripting\Lua.h">
+      <Filter>Fichiers d%27en-tête\Scripting</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Sounds\SoundManager.h">
+      <Filter>Fichiers d%27en-tête\Sounds</Filter>
+    </ClInclude>
+    <ClInclude Include="src\App\App.h">
+      <Filter>Fichiers d%27en-tête\App</Filter>
+    </ClInclude>
+    <ClInclude Include="src\App\States\State.h">
+      <Filter>Fichiers d%27en-tête\App\States</Filter>
+    </ClInclude>
+    <ClInclude Include="src\App\States\StartUp.h">
+      <Filter>Fichiers d%27en-tête\App\States</Filter>
+    </ClInclude>
+    <ClInclude Include="src\App\States\StateSystem.h">
+      <Filter>Fichiers d%27en-tête\App\States</Filter>
+    </ClInclude>
+    <ClInclude Include="src\App\States\MainMenu.h">
+      <Filter>Fichiers d%27en-tête\App\States</Filter>
+    </ClInclude>
+    <ClInclude Include="src\App\States\DevGame.h">
+      <Filter>Fichiers d%27en-tête\App\States</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\Box2DGame.h">
+      <Filter>Fichiers d%27en-tête\Game</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

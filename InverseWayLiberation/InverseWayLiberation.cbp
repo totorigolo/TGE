@@ -23,18 +23,25 @@
 			<Add option="-Wall" />
 		</Compiler>
 		<Unit filename="..\README.txt" />
-		<Unit filename="src\Box2DGame.cpp" />
-		<Unit filename="src\Box2DGame.h" />
+		<Unit filename="src\App\App.cpp" />
+		<Unit filename="src\App\App.h" />
+		<Unit filename="src\App\States\DevGame.cpp" />
+		<Unit filename="src\App\States\DevGame.h" />
+		<Unit filename="src\App\States\MainMenu.cpp" />
+		<Unit filename="src\App\States\MainMenu.h" />
+		<Unit filename="src\App\States\StartUp.cpp" />
+		<Unit filename="src\App\States\StartUp.h" />
+		<Unit filename="src\App\States\State.h" />
+		<Unit filename="src\App\States\StateSystem.cpp" />
+		<Unit filename="src\App\States\StateSystem.h" />
 		<Unit filename="src\ConfigReader.cpp" />
 		<Unit filename="src\ConfigReader.h" />
-		<Unit filename="src\Dialog.cpp" />
-		<Unit filename="src\Dialog.h" />
-		<Unit filename="src\Game.cpp" />
-		<Unit filename="src\Game.h" />
-		<Unit filename="src\Level.cpp" />
-		<Unit filename="src\Level.h" />
-		<Unit filename="src\LevelLoader.cpp" />
-		<Unit filename="src\LevelLoader.h" />
+		<Unit filename="src\Game\Box2DGame.cpp" />
+		<Unit filename="src\Game\Box2DGame.h" />
+		<Unit filename="src\Level\Level.cpp" />
+		<Unit filename="src\Level\Level.h" />
+		<Unit filename="src\Level\LevelLoader.cpp" />
+		<Unit filename="src\Level\LevelLoader.h" />
 		<Unit filename="src\Lights\CircleHull.cpp" />
 		<Unit filename="src\Lights\CircleHull.h" />
 		<Unit filename="src\Lights\ConvexHull.cpp" />
@@ -49,8 +56,6 @@
 		<Unit filename="src\Lights\PointLight.h" />
 		<Unit filename="src\Lights\SpotLight.cpp" />
 		<Unit filename="src\Lights\SpotLight.h" />
-		<Unit filename="src\Parser.cpp" />
-		<Unit filename="src\Parser.h" />
 		<Unit filename="src\Physics\Bodies\Body.cpp" />
 		<Unit filename="src\Physics\Bodies\Body.h" />
 		<Unit filename="src\Physics\Bodies\DynamicBox.cpp" />
@@ -91,20 +96,28 @@
 		<Unit filename="src\Physics\Joints\WheelJoint.cpp" />
 		<Unit filename="src\Physics\Joints\WheelJoint.h" />
 		<Unit filename="src\Physics\OverlappingBodyCallback.h" />
-		<Unit filename="src\Physics\Ragdoll.cpp" />
-		<Unit filename="src\Physics\Ragdoll.h" />
 		<Unit filename="src\Physics\World.cpp" />
 		<Unit filename="src\Physics\World.h" />
 		<Unit filename="src\Resources\ResourceManager.h" />
+		<Unit filename="src\Scripting\Lua.cpp" />
+		<Unit filename="src\Scripting\Lua.h" />
+		<Unit filename="src\Sounds\SoundManager.cpp" />
+		<Unit filename="src\Sounds\SoundManager.h" />
+		<Unit filename="src\Tools\Dialog.cpp" />
+		<Unit filename="src\Tools\Dialog.h" />
+		<Unit filename="src\Tools\Loader.cpp" />
+		<Unit filename="src\Tools\Loader.h" />
 		<Unit filename="src\Tools\NonCopyable.h" />
+		<Unit filename="src\Tools\Parser.cpp" />
+		<Unit filename="src\Tools\Parser.h" />
 		<Unit filename="src\Tools\QuadTree\QuadTree.cpp" />
 		<Unit filename="src\Tools\QuadTree\QuadTree.h" />
 		<Unit filename="src\Tools\QuadTree\QuadTreeObject.h" />
 		<Unit filename="src\Tools\Segment.h" />
 		<Unit filename="src\Tools\Singleton.h" />
+		<Unit filename="src\Tools\utils.h" />
 		<Unit filename="src\_TODO.txt" />
 		<Unit filename="src\main.cpp" />
-		<Unit filename="src\utils.h" />
 		<Extensions>
 			<code_completion />
 			<envvars />

@@ -11,8 +11,15 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Box2DGame.cpp" />
+    <ClCompile Include="src\App\App.cpp" />
+    <ClCompile Include="src\App\States\DevGame.cpp" />
+    <ClCompile Include="src\App\States\MainMenu.cpp" />
+    <ClCompile Include="src\App\States\StartUp.cpp" />
+    <ClCompile Include="src\App\States\StateSystem.cpp" />
     <ClCompile Include="src\ConfigReader.cpp" />
+    <ClCompile Include="src\Game\Box2DGame.cpp" />
+    <ClCompile Include="src\Scripting\Lua.cpp" />
+    <ClCompile Include="src\Sounds\SoundManager.cpp" />
     <ClCompile Include="src\Tools\Dialog.cpp" />
     <ClCompile Include="src\Level\Level.cpp" />
     <ClCompile Include="src\Level\LevelLoader.cpp" />
@@ -49,6 +56,13 @@
     <ClCompile Include="src\Tools\QuadTree\QuadTree.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\App\App.h" />
+    <ClInclude Include="src\App\States\DevGame.h" />
+    <ClInclude Include="src\App\States\MainMenu.h" />
+    <ClInclude Include="src\App\States\StartUp.h" />
+    <ClInclude Include="src\App\States\State.h" />
+    <ClInclude Include="src\App\States\StateSystem.h" />
+    <ClInclude Include="src\Game\Box2DGame.h" />
     <ClInclude Include="src\Level\Level.h" />
     <ClInclude Include="src\Level\LevelLoader.h" />
     <ClInclude Include="src\Lights\CircleHull.h" />
@@ -60,13 +74,14 @@
     <ClInclude Include="src\Lights\SpotLight.h" />
     <ClInclude Include="src\Physics\Entities\Entity.h" />
     <ClInclude Include="src\Resources\ResourceManager.h" />
+    <ClInclude Include="src\Scripting\Lua.h" />
+    <ClInclude Include="src\Sounds\SoundManager.h" />
     <ClInclude Include="src\Tools\Loader.h" />
     <ClInclude Include="src\Tools\NonCopyable.h" />
     <ClInclude Include="src\Tools\QuadTree\QuadTree.h" />
     <ClInclude Include="src\Tools\QuadTree\QuadTreeObject.h" />
     <ClInclude Include="src\Tools\Segment.h" />
     <ClInclude Include="src\Tools\Singleton.h" />
-    <ClInclude Include="src\Box2DGame.h" />
     <ClInclude Include="src\ConfigReader.h" />
     <ClInclude Include="src\Tools\Dialog.h" />
     <ClInclude Include="src\Tools\Parser.h" />

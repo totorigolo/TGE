@@ -1,12 +1,12 @@
 #include "Box2DGame.h"
-#include "Level/LevelLoader.h"
-#include "Physics/Bodies/StaticBox.h"
-#include "Physics/Bodies/DynamicBox.h"
-#include "Physics/Bodies/DynamicCircle.h"
-#include "Physics/Joints/DistanceJoint.h"
-#include "Physics/OverlappingBodyCallback.h"
-#include "Physics/FirstBodyRaycastCallback.h"
-#include "Tools/utils.h"
+#include "../Level/LevelLoader.h"
+#include "../Physics/Bodies/StaticBox.h"
+#include "../Physics/Bodies/DynamicBox.h"
+#include "../Physics/Bodies/DynamicCircle.h"
+#include "../Physics/Joints/DistanceJoint.h"
+#include "../Physics/OverlappingBodyCallback.h"
+#include "../Physics/FirstBodyRaycastCallback.h"
+#include "../Tools/utils.h"
 #include <iostream>
 #include <vector>
 #include <list>
@@ -45,30 +45,8 @@ Box2DGame::Box2DGame(sf::RenderWindow & window)
 // Dtor
 Box2DGame::~Box2DGame(void)
 {
-	// Les pointeurs sont aussi supprimés dans OnQuit();
-
-	// TODO: Ce destructeur
-
 	delete mLevel;
 	mLevel = nullptr;
-
-	/*/ Héro
-	Ragdoll *mHeroRagdoll;
-	
-	// Grapin
-	Body *mHookedSBody;
-	b2Vec2 mHookedSAnchor;
-	DistanceJoint *mHookJoint;
-	sf::Clock mHookClock;
-
-	// Déplacement des objets
-	MouseJoint *mMouseJoint;
-
-	// Variables pour la création de joints
-	Body *mPinBodyA;
-	b2Vec2 mPinAnchorA; // Ancres locales aux bodies
-	Body *mPinBodyB;
-	b2Vec2 mPinAnchorB;*/
 }
 
 // Boucle de jeu
@@ -913,6 +891,9 @@ void Box2DGame::OnLoopEnd()
 /// Appelé quand le jeu se termine
 void Box2DGame::OnQuit()
 {
+	// Remet la vue par défaut
+	mWindow.setView(mWindow.getDefaultView());
+
 	// Supprime le joint de la souris
 	if (mMouseJoint)
 	{

@@ -14,6 +14,13 @@ public:
 
         return *mInst;
     }
+    static T* GetPInstance()
+    {
+        if (!mInst)
+			mInst = new T;
+	
+        return mInst;
+    }
 
 	// Détruit l'instance unique de la classe (attention aux autres références !)
     static void Destroy()
