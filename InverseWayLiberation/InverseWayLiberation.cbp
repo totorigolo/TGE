@@ -34,8 +34,6 @@
 		<Unit filename="src\App\States\State.h" />
 		<Unit filename="src\App\States\StateSystem.cpp" />
 		<Unit filename="src\App\States\StateSystem.h" />
-		<Unit filename="src\ConfigReader.cpp" />
-		<Unit filename="src\ConfigReader.h" />
 		<Unit filename="src\Game\Box2DGame.cpp" />
 		<Unit filename="src\Game\Box2DGame.h" />
 		<Unit filename="src\Level\Level.cpp" />
