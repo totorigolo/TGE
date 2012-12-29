@@ -1,20 +1,34 @@
 #include "ContactListener.h"
 #include "Bodies/Body.h"
 #include "Joints/Joint.h"
-#include "Entities/Entity.h"
+#include "../Entities/Entity.h"
 #include <iostream>
 
 // Début du contact (début du AABB overlap)
 void ContactListener::BeginContact(b2Contact* contact)
 {
+	contact->GetManifold(); // Les points de contact
+	contact->IsTouching(); // Est-ce que les shapes se touchent effectivement
+	contact->SetEnabled(true); // Activer / Désactiver le contact
+	contact->GetFixtureA(); // Le 1er shape
+	contact->GetFixtureB(); // Le 2nd shape
+	contact->GetFriction(); // Obtenir & modifier les propriétés
+	contact->GetRestitution();
 }
 
 // Fin du contact (fin du AABB overlap)
 void ContactListener::EndContact(b2Contact* contact)
 {
+	contact->GetManifold(); // Les points de contact
+	contact->IsTouching(); // Est-ce que les shapes se touchent effectivement
+	contact->SetEnabled(true); // Activer / Désactiver le contact
+	contact->GetFixtureA(); // Le 1er shape
+	contact->GetFixtureB(); // Le 2nd shape
+	contact->GetFriction(); // Obtenir & modifier les propriétés
+	contact->GetRestitution();
 }
 
-// Après la détection de la collision, mais avant de la résolution
+// Après la détection de la collision, mais avant la résolution
 void ContactListener::PreSolve(b2Contact* contact, const b2Manifold* oldManifold)
 {
 	b2Fixture *fixtureA = contact->GetFixtureA();
@@ -24,15 +38,15 @@ void ContactListener::PreSolve(b2Contact* contact, const b2Manifold* oldManifold
 
 	// Collision Actor <> OneSidedPlatform
 	Body *actor = nullptr, *platform = nullptr;
-	if (bodyA->GetType() == BodyType::Bullet && bodyB->GetType() == BodyType::OneSidedPlatform)
-	{
-		actor = bodyA;
-		platform = bodyB;
-	}
-	else if (bodyA->GetType() == BodyType::OneSidedPlatform && bodyB->GetType() == BodyType::Bullet)
+	if (bodyA->GetType() == BodyType::OneSidedPlatform)
 	{
 		actor = bodyB;
 		platform = bodyA;
+	}
+	else if (bodyB->GetType() == BodyType::OneSidedPlatform)
+	{
+		actor = bodyA;
+		platform = bodyB;
 	}
 	if (actor && platform)
 	{
@@ -47,51 +61,23 @@ void ContactListener::PreSolve(b2Contact* contact, const b2Manifold* oldManifold
 // Après la résolution des collisions
 void ContactListener::PostSolve(b2Contact* contact, const b2ContactImpulse* impulse)
 {
-	b2Fixture *fixtureA = contact->GetFixtureA();
-	b2Fixture *fixtureB = contact->GetFixtureB();
-	Body *bodyA = (Body*) fixtureA->GetBody()->GetUserData();
-	Body *bodyB = (Body*) fixtureB->GetBody()->GetUserData();
-	Entity *entity = nullptr;
-
-	// Dégats collision Actor <> (Bad)Body
-	Body *actor = nullptr, *badBody = nullptr; // :D
-	if (bodyA->GetType() == BodyType::Entity)
-	{
-		actor = bodyA;
-		badBody = bodyB;
-	}
-	else if (bodyB->GetType() == BodyType::Entity)
-	{
-		actor = bodyB;
-		badBody = bodyA;
-	}
-
-	if (actor)
-	{
-		entity = (Entity*) actor->GetEntity();
-	}
-
-	if (actor && badBody && entity)
-	{
-		// Récupération des dommages
-		float damages = impulse->normalImpulses[0];
-		if (impulse->count == 2)
-		{
-			damages += impulse->normalImpulses[1];
-		}
-
-		// Annonce :)
-		// Dégats de chute
-		if (damages >= 8.f)
-		{
-			//std::cout << "Et BOUM ! " << damages << " PV en moins !" << std::endl;
-			entity->AddDamage(damages);
-		}
-		// Dégats de contact
-		else if (badBody->GetBody()->GetType() == b2_dynamicBody)// && damages >= 1.5f)
-		{
-			//std::cout << "Et BAM ! " << damages << " PV en moins !" << std::endl;
-			entity->AddDamage(damages);
-		}
-	}
+	contact->GetManifold(); // Les points de contact
+	contact->IsTouching(); // Est-ce que les shapes se touchent effectivement
+	contact->SetEnabled(true); // Activer / Désactiver le contact
+	contact->GetFixtureA(); // Le 1er shape
+	contact->GetFixtureB(); // Le 2nd shape
+	contact->GetFriction(); // Obtenir & modifier les propriétés
+	contact->GetRestitution();
+	
+	impulse->count; // Le nombre d'impultions
+	impulse->normalImpulses;
+	impulse->tangentImpulses;
+	/*
+	http://blog.allanbishop.com/box-2d-2-1a-tutorial-part-6-collision-strength/
+    - Normal impulse:
+	    The normal force is the force applied at a contact point to prevent the shapes from penetrating.
+	    For convenience, Box2D works with impulses. The normal impulse is just the normal force multiplied by the time step.
+    - Tangent impulse:
+        The tangent force is generated at a contact point to simulate friction. For convenience, this is stored as an impulse.
+	*/
 }

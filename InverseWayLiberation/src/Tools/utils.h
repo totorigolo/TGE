@@ -124,3 +124,15 @@ inline b2Vec3 getVec3(b2Vec2 const& vec2, float z = 0.f)
 {
 	return b2Vec3(vec2.x, vec2.y, z);
 }
+
+// Convertion sf::Vec2 <> sf::Vec3
+template<typename T>
+inline sf::Vector2<T> getVec2(sf::Vector3<T> const& vec3)
+{
+	return sf::Vector2<T>(vec3.x, vec3.y);
+}
+template<typename T>
+inline sf::Vector3<T> getVec3(sf::Vector2<T> const& vec2, float z = 0.f)
+{
+	return sf::Vector3<T>(vec2.x, vec2.y, z);
+}

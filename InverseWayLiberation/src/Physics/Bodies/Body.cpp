@@ -6,32 +6,30 @@
 //Ctor
 Body::Body(World *world, BodyType type)
 	: mWorld(world), mBody(nullptr), mShape(nullptr), mIsNull(true), mIsDrawable(true)
-	, mType(type), mItsMySprite(false), mEntity(nullptr), mHull(nullptr)
+	, mType(type), mItsMySprite(false), mHull(nullptr), mEntity(nullptr)
 {
 	// Vérifie les objets passés
 	assert(mWorld && "World invalid!");
 
 	mSprite = new sf::Sprite;
-	mItsMySprite = (mSprite != nullptr);
+	mItsMySprite = true;
 }
 
 // Dtor
 Body::~Body(void)
 {
+	// Supprime le Hull
 	if (mHull)
 	{
 		LightManager::GetInstance().DeleteHull(mHull);
 		mHull = nullptr;
 	}
 
-	if (mItsMySprite)
+	// Supprime le Sprite
+	if (mItsMySprite && mSprite)
 		delete mSprite;
 
-	this->DestroyAllJoints();
-
-	if (mWorld && mBody)
-		mWorld->DestroyBody(this, false);
-
+	// Se déclare nullptr
 	mIsNull = true;
 }
 
@@ -76,6 +74,8 @@ void Body::DestroyJoint(Joint *joint, bool remove)
 }
 void Body::DestroyAllJoints()
 {
+	assert(mWorld && "pointeur invalide !");
+
 	for (auto it = mJointList.begin(); it != mJointList.end(); )
 	{
 		auto it2 = it; it2++;
@@ -112,7 +112,7 @@ void Body::SetType(BodyType type)
 		mBody->SetBullet(false);
 }
 
-void Body::SetEntity(Entity* entity)
+void Body::SetEntity(Entity *entity)
 {
 	mEntity = entity;
 }

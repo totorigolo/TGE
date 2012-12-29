@@ -37,6 +37,9 @@ DynamicCircle::DynamicCircle(World *world, b2Vec3 posRot, std::shared_ptr<sf::Te
 
 		mBody->SetUserData(this);
 		mIsNull = false;
+		
+		// Enregistre le Body
+		mWorld->RegisterBody(this);
 
 		// Crée le Hull
 		mHull = new CircleHull(this, false);

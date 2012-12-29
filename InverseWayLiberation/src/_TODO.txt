@@ -1,0 +1,4 @@
+
+
+A faire :
+ - Déplacer les include dans les .cpp pour les déclarations de classes

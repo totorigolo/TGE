@@ -40,6 +40,9 @@ StaticBox::StaticBox(World *world, b2Vec3 posRot, std::shared_ptr<sf::Texture> t
 		mBody->SetUserData(this);
 		mIsNull = false;
 
+		// Enregistre le Body
+		mWorld->RegisterBody(this);
+
 		// Crée le Hull
 		mHull = new ConvexHull(this, true);
 	}

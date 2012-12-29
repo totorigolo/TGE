@@ -5,13 +5,11 @@
 #include <list>
 #include "../World.h"
 #include "../Joints/Joint.h"
-//#include "../Entities/Entity.h"
 
 enum class BodyType
 {
 	FullySimulated = 0,
 	Bullet,
-	Entity,
 	OneSidedPlatform
 };
 
@@ -50,9 +48,9 @@ public:
 
 	void SetEntity(Entity *entity);
 	inline Entity* GetEntity() { return mEntity; }
-	inline Entity const* GetEntity() const { return mEntity; }
-	
-	virtual b2AABB GetBodyAABB() const; // = 0; // Retourne une AABB nulle
+	inline const Entity* GetEntity() const { return mEntity; }
+
+	virtual b2AABB GetBodyAABB() const = 0; // Retourne une AABB nulle
 	b2Vec2 GetBodySize() const;
 	float GetBodyAngle() const;
 	b2Vec2 GetBodyPosition() const;
@@ -98,9 +96,9 @@ protected:
 	sf::Sprite *mSprite;
 	bool mItsMySprite;
 
-	// Pointeur sur l'Entity correspondante
-	Entity* mEntity;
-	
+	// Entity
+	Entity *mEntity;
+
 	// Lumières
 	Hull* mHull;
 };

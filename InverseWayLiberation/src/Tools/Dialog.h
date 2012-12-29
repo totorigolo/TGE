@@ -1,5 +1,4 @@
-#ifndef DIALOG_H
-#define DIALOG_H
+#pragma once
 
 #include <SFML/Graphics.hpp>
 #include <string>
@@ -19,5 +18,3 @@ namespace Dialog
 
 	int ButtonChoice(const std::string &title, const sf::String &message, const sf::String &one, const sf::String &two, int _default = 0);
 }
-
-#endif

@@ -1,7 +1,9 @@
 #include "LevelLoader.h"
+
 #include "../Tools/utils.h"
 #include "../Tools/Dialog.h"
 #include "../Tools/Parser.h"
+
 #include "../Physics/World.h"
 
 #include "../Physics/Bodies/StaticBox.h"
@@ -18,6 +20,10 @@
 #include "../Physics/Joints/RopeJoint.h"
 #include "../Physics/Joints/WeldJoint.h"
 #include "../Physics/Joints/WheelJoint.h"
+
+#include "../Entities/Entity.h"
+#include "../Entities/Deco.h"
+#include "../Entities/RawBody.h"
 
 #include "../Lights/PointLight.h"
 #include "../Lights/SpotLight.h"
@@ -40,8 +46,9 @@ LevelLoader::LevelLoader(std::string const& path, Level *level)
 			LightManager::GetInstance().DeleteAllLights();
 		}
 
-		// Analyse le fichier du niveau
+		// Analyse le fichier du niveau et crée le Level
 		mLevel->mIsCharged = Process();
+		mLevel->PrepareForGame();
 	}
 }
 
@@ -58,42 +65,43 @@ bool LevelLoader::Process()
 	tinyxml2::XMLElement *elem = hdl.FirstChildElement("level").ToElement();
 	if (!elem)
 	{
-		Dialog::Error("Une erreur fatale est survenue lors du chargement du niveau.\nFichier invalide (" + mPath + ").", true);
+		Dialog::Error("Une erreur grave est survenue lors du chargement du niveau.\nFichier invalide (" + mPath + ").");
 		return false;
 	}
 
 	// Charge tout
 	if (!ProcessWorld())
 	{
-		Dialog::Error("Une erreur fatale est survenue lors du chargement du niveau.\nMonde non trouvé (" + mPath + ").", true);
+		Dialog::Error("Une erreur grave est survenue lors du chargement du niveau.\nMonde non trouvé (" + mPath + ").");
 		return false;
 	}
 	if (!ProcessTextures())
 	{
-		Dialog::Error("Une erreur fatale est survenue lors du chargement du niveau.\nTextures invalides (" + mPath + ").", true);
+		Dialog::Error("Une erreur grave est survenue lors du chargement du niveau.\nTextures invalides (" + mPath + ").");
 		return false;
 	}
 	if (!ProcessBodies())
 	{
-		Dialog::Error("Une erreur fatale est survenue lors du chargement du niveau.\nBodies invalides (" + mPath + ").", true);
+		Dialog::Error("Une erreur grave est survenue lors du chargement du niveau.\nBodies invalides (" + mPath + ").");
 		return false;
 	}
 	if (!ProcessJoints())
 	{
-		Dialog::Error("Une erreur fatale est survenue lors du chargement du niveau.\nJoints invalides (" + mPath + ").", true);
+		Dialog::Error("Une erreur grave est survenue lors du chargement du niveau.\nJoints invalides (" + mPath + ").");
 		return false;
 	}
 	if (!ProcessDeco())
 	{
-		Dialog::Error("Une erreur fatale est survenue lors du chargement du niveau.\nDeco invalide (" + mPath + ").", true);
+		Dialog::Error("Une erreur grave est survenue lors du chargement du niveau.\nDeco invalide (" + mPath + ").");
 		return false;
 	}
 	if (!ProcessLights())
 	{
-		Dialog::Error("Une erreur fatale est survenue lors du chargement du niveau.\nLumières non valides (" + mPath + ").", true);
+		Dialog::Error("Une erreur grave est survenue lors du chargement du niveau.\nLumières non valides (" + mPath + ").");
 		return false;
 	}
 
+	// TODO: Essayer ça -> return false;
 	return true;
 }
 
@@ -192,6 +200,7 @@ bool LevelLoader::ProcessBodies()
 
 	// On crée les attributs
 	Body *b = nullptr;
+	RawBody *e = nullptr;
 	bool hasID = false, bullet = false, osp = false;
 	BodyType bodyType = BodyType::FullySimulated;
 	float density = 1.f, friction = 0.2f, restitution = 0.0f;
@@ -206,6 +215,7 @@ bool LevelLoader::ProcessBodies()
 	{
 		// Réinitialise les attributs
 		b = nullptr;
+		e = nullptr;
 		id = 0U;
 		rotation = 0.f;
 		density = 1.f;
@@ -259,27 +269,25 @@ bool LevelLoader::ProcessBodies()
 		if (type == "staticbox")
 		{
 			b = new StaticBox(mLevel->mWorld, posRot, mLevel->mTextureMap[texture], friction, restitution);
-			b->SetType(bodyType);
-			mLevel->mWorld->RegisterBody(b);
 		}
 		else if (type == "dynamicbox")
 		{
 			b = new DynamicBox(mLevel->mWorld, posRot, mLevel->mTextureMap[texture], density, friction, restitution);
-			b->SetType(bodyType);
-			mLevel->mWorld->RegisterBody(b);
 		}
 		else if (type == "dynamiccircle")
 		{
 			b = new DynamicCircle(mLevel->mWorld, posRot, mLevel->mTextureMap[texture], density, friction, restitution);
-			b->SetType(bodyType);
-			mLevel->mWorld->RegisterBody(b);
 		}
 		else if (type == "kinematicbox")
 		{
 			b = new KinematicBox(mLevel->mWorld, posRot, mLevel->mTextureMap[texture], restitution);
-			b->SetType(bodyType);
-			mLevel->mWorld->RegisterBody(b);
 		}
+
+		// Change le type du body
+		b->SetType(bodyType);
+
+		// Crée l'Entity correspondante
+		mLevel->mEntityManager.RegisterEntity(new RawBody(b));
 
 		// Enregiste l'ID
 		if (b != nullptr && hasID)
@@ -552,6 +560,7 @@ bool LevelLoader::ProcessDeco()
 	}
 	
 	// On crée les attributs
+	Deco *d = nullptr;
 	bool hasID = false;
 	unsigned int id = 0U;
 	std::string texture;
@@ -572,6 +581,7 @@ bool LevelLoader::ProcessDeco()
 		while (img)
 		{
 			// Réinitialise les attributs
+			d = nullptr;
 			hasID = false;
 			id = 0U;
 			rotation = 0.f;
@@ -585,7 +595,8 @@ bool LevelLoader::ProcessDeco()
 			posRot.z = rotation;
 			
 			// Ajoute la déco
-			mLevel->AddDeco(z, posRot, texture, zindex);
+			d = new Deco(z, &*mLevel->mTextureMap[texture], getVec3(b22sfVec(getVec2(posRot), mLevel->mWorld->GetPPM()), posRot.z));
+			mLevel->mEntityManager.RegisterEntity(d);
 
 			// On récupère la prochaine image
 			img = img->NextSiblingElement();

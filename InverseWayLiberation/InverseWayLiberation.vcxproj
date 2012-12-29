@@ -16,6 +16,10 @@
     <ClCompile Include="src\App\States\MainMenu.cpp" />
     <ClCompile Include="src\App\States\StartUp.cpp" />
     <ClCompile Include="src\App\States\StateSystem.cpp" />
+    <ClCompile Include="src\Entities\Deco.cpp" />
+    <ClCompile Include="src\Entities\Entity.cpp" />
+    <ClCompile Include="src\Entities\EntityManager.cpp" />
+    <ClCompile Include="src\Entities\RawBody.cpp" />
     <ClCompile Include="src\Game\Box2DGame.cpp" />
     <ClCompile Include="src\Scripting\Lua.cpp" />
     <ClCompile Include="src\Sounds\SoundManager.cpp" />
@@ -37,7 +41,6 @@
     <ClCompile Include="src\Physics\Bodies\KinematicBox.cpp" />
     <ClCompile Include="src\Physics\Bodies\StaticBox.cpp" />
     <ClCompile Include="src\Physics\ContactListener.cpp" />
-    <ClCompile Include="src\Physics\Entities\Entity.cpp" />
     <ClCompile Include="src\Physics\Joints\DistanceJoint.cpp" />
     <ClCompile Include="src\Physics\Joints\FrictionJoint.cpp" />
     <ClCompile Include="src\Physics\Joints\GearJoint.cpp" />
@@ -61,6 +64,10 @@
     <ClInclude Include="src\App\States\StartUp.h" />
     <ClInclude Include="src\App\States\State.h" />
     <ClInclude Include="src\App\States\StateSystem.h" />
+    <ClInclude Include="src\Entities\Deco.h" />
+    <ClInclude Include="src\Entities\Entity.h" />
+    <ClInclude Include="src\Entities\EntityManager.h" />
+    <ClInclude Include="src\Entities\RawBody.h" />
     <ClInclude Include="src\Game\Box2DGame.h" />
     <ClInclude Include="src\Level\Level.h" />
     <ClInclude Include="src\Level\LevelLoader.h" />
@@ -71,7 +78,9 @@
     <ClInclude Include="src\Lights\LightManager.h" />
     <ClInclude Include="src\Lights\PointLight.h" />
     <ClInclude Include="src\Lights\SpotLight.h" />
-    <ClInclude Include="src\Physics\Entities\Entity.h" />
+    <ClInclude Include="src\Physics\Bodies\DynamicCircle.h" />
+    <ClInclude Include="src\Physics\Bodies\KinematicBox.h" />
+    <ClInclude Include="src\Physics\Bodies\StaticBox.h" />
     <ClInclude Include="src\Resources\ResourceManager.h" />
     <ClInclude Include="src\Scripting\Lua.h" />
     <ClInclude Include="src\Sounds\SoundManager.h" />
@@ -85,9 +94,6 @@
     <ClInclude Include="src\Tools\Parser.h" />
     <ClInclude Include="src\Physics\Bodies\Body.h" />
     <ClInclude Include="src\Physics\Bodies\DynamicBox.h" />
-    <ClInclude Include="src\Physics\Bodies\DynamicCircle.h" />
-    <ClInclude Include="src\Physics\Bodies\KinematicBox.h" />
-    <ClInclude Include="src\Physics\Bodies\StaticBox.h" />
     <ClInclude Include="src\Physics\ContactListener.h" />
     <ClInclude Include="src\Physics\FirstBodyRaycastCallback.h" />
     <ClInclude Include="src\Physics\Joints\DistanceJoint.h" />

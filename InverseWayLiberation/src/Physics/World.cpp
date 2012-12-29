@@ -1,5 +1,4 @@
 #include "World.h"
-#include <iostream> // Pour le message de GetAnyStaticBody()
 #include "../Lights/LightManager.h"
 
 //Ctor
@@ -21,7 +20,7 @@ void World::RegisterBody(Body *body)
 {
 	mBodyList.push_back(body);
 
-	// TODO: Un truc plus beau...
+	// TODO: Passer ça aux Entities
 	if (body->GetHull())
 	{
 		LightManager::GetInstance().AddHull(body->GetHull());
@@ -34,37 +33,36 @@ b2Body* World::CreateBody(b2BodyDef const* bodyDef, Body *body)
 	b->SetUserData(body);
 	return b;
 }
-void World::DestroyBody(Body *body, bool _delete, bool remove)
+void World::DestroyBody(Body *body)
 {
 	if (body)
 	{
-		// TODO: Un truc plus beau...
+		// TODO: Passer les Hull aux Entités
 		if (body->GetHull())
 		{
 			LightManager::GetInstance().DeleteHull(body->GetHull());
 			body->SetHull(nullptr);
 		}
 
+		// Supprime tous les Joints du Body
 		body->DestroyAllJoints();
+
+		// Supprime le b2Body
 		if (body->GetBody())
 			b2World::DestroyBody(body->GetBody());
 		body->SetBody(nullptr);
-		if (remove)
-			mBodyList.remove(body);
-		if (_delete)
-			delete body;
+
+		// Retire le Body de la liste (la fx remove() delete le Body)
+		mBodyList.remove(body);
 	}
 }
 void World::DestroyAllBody()
 {
+	// Supprime tous les Bodies
 	for (auto it = mBodyList.begin(); it != mBodyList.end(); )
 	{
-		auto it2 = it; ++it2;
-		this->DestroyBody(*it, true, false);
-		it = it2;
+		DestroyBody(*(it++));
 	}
-	// Au cas où...
-	mBodyList.clear();
 }
 
 // Gestion des joints
@@ -116,21 +114,6 @@ Body* World::GetAnyStaticBody() // Pour le mouseJoint
 		}
 	}
 
-	// Sinon crée le static body
-	std::cerr << "Warning !! Untextured static body created for MouseJoint !" << std::endl;
-
-	/* Crée le body */
-	Body *body = new Body(this);
-	// BodyDef
-	b2BodyDef bodyDef;
-	bodyDef.type = b2_staticBody;
-	b2Body *b2body = this->CreateBody(&bodyDef, body);
-	// Fixture
-	b2FixtureDef fixtureDef;
-	b2body->CreateFixture(&fixtureDef);
-
-	b2body->SetUserData(body);
-	
-	mBodyList.push_back(body);
-	return body;
+	// Il n'y a pas de StaticBody
+	return nullptr;
 }

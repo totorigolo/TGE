@@ -9,10 +9,11 @@
 #include "LevelLoader.h"
 #include "../Tools/utils.h"
 #include "../Physics/World.h"
+#include "../Entities/EntityManager.h"
 #include "../Resources/ResourceManager.h"
 
 class LevelLoader;
-class Level
+class Level : public sf::Drawable
 {
 	friend class LevelLoader;
 
@@ -24,15 +25,14 @@ public:
 	// Vide tout le niveau
 	void Clear();
 
-	// Gestion de la déco
-	void DestroyDecoLevel(int zindex);
-	void AddDeco(int level_zindex, sf::Sprite *sprite, int zindex);
-	void DestroyDeco(int level_zindex, sf::Sprite *sprite, int zindex);
-	void AddDeco(int level_zindex, b2Vec3 posRot, std::string const& texture, int zindex);
-	void DestroyDeco(int level_zindex, b2Vec3 posRot, std::string const& texture, int zindex);
-	void DestroyAllDeco();
-
-	void SortDecoByzIndex();
+	// Mise à jour
+	void Update();
+	
+	// Appelé juste avant la boucle de jeu, après son remplissage
+	void PrepareForGame();
+	
+	// Pour le rendu
+    virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
 	// Accesseurs
 	bool IsValid() const { return mIsValid; }
@@ -40,12 +40,13 @@ public:
 	bool IsCharged() const { return mIsValid; }
 	void SetCharged(bool charged) { mIsCharged = charged; }
 	
+	EntityManager* GetEntityManager() { return &mEntityManager; }
+	const EntityManager* GetEntityManager() const { return &mEntityManager; }
+
 	float GetDefaultZoom() const { return mDefaulfZoom; }
 	sf::Color const& GetBckgColor() const { return mBckgC; }
 	b2Vec2 const& GetOriginView() const { return mOriginView; }
 	bool const& GetLightning() const { return mLightning; }
-
-	std::map<int, std::list<std::pair<int, sf::Sprite*>>> const& GetDeco() const { return mDecoMap; }
 
 private:
 	bool mIsValid;
@@ -53,6 +54,9 @@ private:
 
 	// Monde
 	World *mWorld;
+
+	// Entities
+	EntityManager &mEntityManager;
 
 	// Config de la fenêtre de rendu
 	sf::Color mBckgC;
@@ -63,8 +67,5 @@ private:
 	// Textures
 	ResourceManager &mResourceManager;
 	TextureMap &mTextureMap;
-
-	// Déco (z-index // parallax),  <z-index, sf::Sprite>
-	std::map<int, std::list<std::pair<int, sf::Sprite*>>> mDecoMap;
 };
 

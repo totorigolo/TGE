@@ -4,7 +4,8 @@
 // Ctor
 Level::Level(World *world)
 	: mIsValid(false), mIsCharged(false), mWorld(world),  mBckgC(255, 255, 255), mLightning(false),
-	mResourceManager(ResourceManager::GetInstance()), mTextureMap(mResourceManager.GetTextureMap())
+	mResourceManager(ResourceManager::GetInstance()), mTextureMap(mResourceManager.GetTextureMap()),
+	mEntityManager(EntityManager::GetInstance())
 {
 	if (mWorld)
 	{
@@ -15,6 +16,8 @@ Level::Level(World *world)
 // Dtor
 Level::~Level(void)
 {
+	Clear();
+
 	mIsValid = false;
 	mIsCharged = false;
 }
@@ -22,54 +25,29 @@ Level::~Level(void)
 // Vide tout le niveau
 void Level::Clear()
 {
-	// Vide TOUS les objets du jeu // TODO: Vider les textures
-	DestroyAllDeco();
+	// Vide tous les objets du jeu
+	// TODO: Vider les textures ? (-> faire un système pour ne vider que les textures inutilisées)
 	mWorld->DestroyAllJoints();
 	mWorld->DestroyAllBody();
-
-	mDecoMap; // TODO: vérifier si c'est vide
+	mEntityManager.DestroyAllEntities();
 }
 
-// Gestion de la déco
-void Level::DestroyDecoLevel(int zindex)
+// Mise à jour
+void Level::Update()
 {
-	mDecoMap.erase(mDecoMap.find(zindex));
-}
-void Level::AddDeco(int level_zindex, sf::Sprite *sprite, int zindex)
-{
-	mDecoMap[level_zindex].push_back(std::make_pair(zindex, sprite));
-	SortDecoByzIndex();
-}
-void Level::DestroyDeco(int level_zindex, sf::Sprite *sprite, int zindex)
-{
-	mDecoMap[level_zindex].remove(std::make_pair(zindex, sprite));
-}
-void Level::AddDeco(int level_zindex, b2Vec3 posRot, std::string const& texture, int zindex)
-{
-	sf::Sprite *s = new sf::Sprite(*mTextureMap[texture]);
-	s->setPosition(b22sfVec(getVec2(posRot), mWorld->GetPPM()));
-	s->setRotation(posRot.z);
-	s->setOrigin(u2f(s->getTexture()->getSize()) / 2.f);
-	mDecoMap[level_zindex].push_back(std::make_pair(zindex, s));
-	SortDecoByzIndex();
-}
-void Level::DestroyDeco(int level_zindex, b2Vec3 posRot, std::string const& texture, int zindex)
-{
-	sf::Sprite *s = new sf::Sprite(*mTextureMap[texture]);
-	s->setPosition(b22sfVec(getVec2(posRot), mWorld->GetPPM()));
-	s->setRotation(posRot.z);
-	mDecoMap[level_zindex].remove(std::make_pair(zindex, s));
-}
-void Level::DestroyAllDeco()
-{
-	mDecoMap.clear();
+	mEntityManager.Update();
 }
 
-void Level::SortDecoByzIndex()
+// Appelé juste avant la boucle de jeu, après son remplissage
+void Level::PrepareForGame()
 {
-	// Tri les niveaux de deco par leur zindex
-	for (auto it = mDecoMap.begin(); it != mDecoMap.end(); ++it)
-	{
-		it->second.sort();
-	}
+	// Trie les Entities par leur Layer
+	mEntityManager.SortByLayer();
+}
+
+// Pour le rendu
+void Level::draw(sf::RenderTarget& target, sf::RenderStates states) const
+{
+	// Affiche les Entities
+	target.draw(mEntityManager, states);
 }

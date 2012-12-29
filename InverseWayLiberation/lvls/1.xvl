@@ -40,7 +40,7 @@ ex: (NB = les valeurs mises sont celles par défaut) (osp = OneSidedPlatform)
 		<body type="staticbox" texture="ground" pos="(0.f, -0.64f)" friction="0.4f"/>
 		
 		<body type="staticbox" id="6" texture="way" pos="(-5.f, 5.5f)" rotation="90.f" osp="true"/>
-		<body type="dynamicbox" texture="way" pos="(-5.f, 6.f)"/>
+		<body type="dynamicbox" texture="way" pos="(-5.f, 6.5f)"/>
 		
 		<body type="staticbox" texture="way" pos="(-5.f, 0.5f)" rotation="90.f"/>
 		<body type="staticbox" texture="way" pos="(-5.f, 1.5f)" rotation="90.f"/>
@@ -91,9 +91,6 @@ ex: (NB = les valeurs mises pour les facultatifs sont celles par défaut)
 -->
 		<joint type="pulley" body1="1" pt1="(0.f, 0.f)" body2="2" pt2="(0.f, 0.f)" groundpt1="(-2.f, 0.5f)" groundpt2="(1.9f, 4.f)" ratio="1.5f"/>
 		<joint type="rope" body1="3" pt1="(0.f, 0.f)" body2="4" pt2="(0.f, 0.f)" maxlength="3.f" colision="true" color="(0, 255, 255)"/>
-		<joint type="wheel" body1="7" body2="8" anchor="(0.f, 0.f)" axis="(0.f, 1.f)" frequency="4.f" damping="0.4f"
-																					  enableMotor="true" speed="-40.f" maxTorque="100.f"
-																					  colision="false" color="(255, 0, 255)"/>
 	</joints>
 	
 	<!-- Crée la déco -->

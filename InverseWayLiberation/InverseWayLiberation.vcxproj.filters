@@ -97,6 +97,12 @@
     <Filter Include="Fichiers sources\Game">
       <UniqueIdentifier>{36327a7c-8171-41de-b16d-cd74ecbbb97a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Fichiers d%27en-tête\Entities">
+      <UniqueIdentifier>{adae4b39-067e-4738-9053-80fc0384e970}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers sources\Entities">
+      <UniqueIdentifier>{55763350-e5c3-41ba-b8b2-5443c02b91e5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\_TODO.txt" />
@@ -159,9 +165,6 @@
     </ClCompile>
     <ClCompile Include="src\Physics\ContactListener.cpp">
       <Filter>Fichiers sources\Physics</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Physics\Entities\Entity.cpp">
-      <Filter>Fichiers sources\Physics\Entities</Filter>
     </ClCompile>
     <ClCompile Include="src\Physics\Entities\Ragdoll.cpp">
       <Filter>Fichiers sources\Physics\Entities</Filter>
@@ -229,21 +232,24 @@
     <ClCompile Include="src\Game\Box2DGame.cpp">
       <Filter>Fichiers sources\Game</Filter>
     </ClCompile>
+    <ClCompile Include="src\Entities\Entity.cpp">
+      <Filter>Fichiers sources\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Entities\Deco.cpp">
+      <Filter>Fichiers sources\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Entities\EntityManager.cpp">
+      <Filter>Fichiers sources\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Entities\RawBody.cpp">
+      <Filter>Fichiers sources\Entities</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Physics\Bodies\Body.h">
       <Filter>Fichiers d%27en-tête\Physics\Bodies</Filter>
     </ClInclude>
     <ClInclude Include="src\Physics\Bodies\DynamicBox.h">
-      <Filter>Fichiers d%27en-tête\Physics\Bodies</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Physics\Bodies\DynamicCircle.h">
-      <Filter>Fichiers d%27en-tête\Physics\Bodies</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Physics\Bodies\KinematicBox.h">
-      <Filter>Fichiers d%27en-tête\Physics\Bodies</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Physics\Bodies\StaticBox.h">
       <Filter>Fichiers d%27en-tête\Physics\Bodies</Filter>
     </ClInclude>
     <ClInclude Include="src\Physics\Joints\DistanceJoint.h">
@@ -299,9 +305,6 @@
     </ClInclude>
     <ClInclude Include="src\Resources\ResourceManager.h">
       <Filter>Fichiers d%27en-tête\Resources</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Physics\Entities\Entity.h">
-      <Filter>Fichiers d%27en-tête\Physics\Entities</Filter>
     </ClInclude>
     <ClInclude Include="src\Physics\Entities\Ragdoll.h">
       <Filter>Fichiers d%27en-tête\Physics\Entities</Filter>
@@ -380,6 +383,27 @@
     </ClInclude>
     <ClInclude Include="src\Game\Box2DGame.h">
       <Filter>Fichiers d%27en-tête\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Entities\Entity.h">
+      <Filter>Fichiers d%27en-tête\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Entities\Deco.h">
+      <Filter>Fichiers d%27en-tête\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Entities\EntityManager.h">
+      <Filter>Fichiers d%27en-tête\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Physics\Bodies\DynamicCircle.h">
+      <Filter>Fichiers d%27en-tête\Physics\Bodies</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Physics\Bodies\KinematicBox.h">
+      <Filter>Fichiers d%27en-tête\Physics\Bodies</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Physics\Bodies\StaticBox.h">
+      <Filter>Fichiers d%27en-tête\Physics\Bodies</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Entities\RawBody.h">
+      <Filter>Fichiers d%27en-tête\Entities</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

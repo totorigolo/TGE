@@ -144,7 +144,7 @@ Ragdoll::~Ragdoll(void)
 	mWorld->DestroyJoint(mLegR2_FootR);*/
 
 	// Supprime les bodies 
-	mWorld->DestroyBody(mHead);
+	/*mWorld->DestroyBody(mHead);
 	mWorld->DestroyBody(mNeck);
 	mWorld->DestroyBody(mTorso1);
 	mWorld->DestroyBody(mTorso2);
@@ -158,7 +158,7 @@ Ragdoll::~Ragdoll(void)
 	mWorld->DestroyBody(mLegR1);
 	mWorld->DestroyBody(mLegR2);
 	mWorld->DestroyBody(mFootL);
-	mWorld->DestroyBody(mFootR);
+	mWorld->DestroyBody(mFootR);*/
 
 }
 

@@ -48,6 +48,7 @@ void WheelJoint::Update()
 		}
 		else
 		{
+			// TODO: Euh.... ??? Oo
 			mWorld->DestroyJoint(this, false);
 			delete this;
 		}
