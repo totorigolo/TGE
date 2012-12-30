@@ -61,9 +61,10 @@ ex: (NB = les valeurs mises sont celles par défaut) (osp = OneSidedPlatform)
 		<body type="kinematicbox" id="5" texture="caisse" pos="(1.9f, 4.f)" restitution="1.9f"/>
 	</bodies>
 	
-	<!-- Crée les chaines - -> TODO
-	<chains>
-	</chains>-->
+	<!-- Crée les Entities -->
+	<entities>
+		<entity type="ragdoll" position="(0.f, 1.5f)" />
+	</entities>
 	
 	<!-- Crée les joints -->
 	<joints>
@@ -96,15 +97,14 @@ ex: (NB = les valeurs mises pour les facultatifs sont celles par défaut)
 	<!-- Crée la déco -->
 	<deco>
 <!--
-Il est possible de définir des ID afin de reconnaitre la déco plus loin dans le chargement.
 ex : (La rotation est en degré, et est facultative.)
-<img texture="volcan" position="(0.f, 0.f)" rotation="0.f" z-index="1"/>
+<img texture="volcan" position="(0.f, 0.f)" rotation="0.f"/>
 -->
 		<level z="5">
-			<!--img texture="volcan" position="(0.f, 5.f)" z-index="1"/-->
+			<!--img texture="volcan" position="(0.f, 5.f)"/-->
 		</level>
 		<level z="-1">
-			<img texture="lampadere" position="(3.f, 1.25f)" z-index="1"/>
+			<img texture="lampadere" position="(3.f, 1.25f)"/>
 		</level>
 	</deco>
 	

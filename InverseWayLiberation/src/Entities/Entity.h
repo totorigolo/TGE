@@ -5,7 +5,8 @@ enum class EntityType
 {
 	Entity,
 	Deco,
-	RawBody
+	RawBody,
+	Ragdoll
 };
 
 class Entity : public sf::Drawable

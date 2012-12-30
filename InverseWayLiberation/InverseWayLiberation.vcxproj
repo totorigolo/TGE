@@ -19,6 +19,7 @@
     <ClCompile Include="src\Entities\Deco.cpp" />
     <ClCompile Include="src\Entities\Entity.cpp" />
     <ClCompile Include="src\Entities\EntityManager.cpp" />
+    <ClCompile Include="src\Entities\Ragdoll.cpp" />
     <ClCompile Include="src\Entities\RawBody.cpp" />
     <ClCompile Include="src\Game\Box2DGame.cpp" />
     <ClCompile Include="src\Scripting\Lua.cpp" />
@@ -52,7 +53,6 @@
     <ClCompile Include="src\Physics\Joints\RopeJoint.cpp" />
     <ClCompile Include="src\Physics\Joints\WeldJoint.cpp" />
     <ClCompile Include="src\Physics\Joints\WheelJoint.cpp" />
-    <ClCompile Include="src\Physics\Entities\Ragdoll.cpp" />
     <ClCompile Include="src\Physics\World.cpp" />
     <ClCompile Include="src\Tools\Loader.cpp" />
     <ClCompile Include="src\Tools\QuadTree\QuadTree.cpp" />
@@ -67,6 +67,7 @@
     <ClInclude Include="src\Entities\Deco.h" />
     <ClInclude Include="src\Entities\Entity.h" />
     <ClInclude Include="src\Entities\EntityManager.h" />
+    <ClInclude Include="src\Entities\Ragdoll.h" />
     <ClInclude Include="src\Entities\RawBody.h" />
     <ClInclude Include="src\Game\Box2DGame.h" />
     <ClInclude Include="src\Level\Level.h" />
@@ -108,7 +109,6 @@
     <ClInclude Include="src\Physics\Joints\WeldJoint.h" />
     <ClInclude Include="src\Physics\Joints\WheelJoint.h" />
     <ClInclude Include="src\Physics\OverlappingBodyCallback.h" />
-    <ClInclude Include="src\Physics\Entities\Ragdoll.h" />
     <ClInclude Include="src\Physics\World.h" />
     <ClInclude Include="src\Tools\utils.h" />
   </ItemGroup>

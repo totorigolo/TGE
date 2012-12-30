@@ -24,6 +24,7 @@ private:
 	bool ProcessWorld();
 	bool ProcessTextures();
 	bool ProcessBodies();
+	bool ProcessEntities();
 	bool ProcessJoints();
 	bool ProcessDeco();
 	bool ProcessLights();

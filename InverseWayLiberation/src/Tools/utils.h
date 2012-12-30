@@ -124,6 +124,10 @@ inline b2Vec3 getVec3(b2Vec2 const& vec2, float z = 0.f)
 {
 	return b2Vec3(vec2.x, vec2.y, z);
 }
+inline b2Vec3 operator+(b2Vec3 a, b2Vec2 b)
+{
+	return b2Vec3(a.x + b.x, a.y + b.y, a.y);
+}
 
 // Convertion sf::Vec2 <> sf::Vec3
 template<typename T>

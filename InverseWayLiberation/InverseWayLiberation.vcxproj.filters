@@ -43,12 +43,6 @@
     <Filter Include="Fichiers sources\Resources">
       <UniqueIdentifier>{f82ff6e3-17c1-4ebc-8974-2fde365f79a6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Fichiers d%27en-tête\Physics\Entities">
-      <UniqueIdentifier>{e904180f-e16b-4735-a52b-454aec732289}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Fichiers sources\Physics\Entities">
-      <UniqueIdentifier>{43e5b502-d105-4493-9279-319a78340903}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Fichiers sources\Lights">
       <UniqueIdentifier>{e1c73960-709f-4f8c-972b-26c343eff343}</UniqueIdentifier>
     </Filter>
@@ -166,9 +160,6 @@
     <ClCompile Include="src\Physics\ContactListener.cpp">
       <Filter>Fichiers sources\Physics</Filter>
     </ClCompile>
-    <ClCompile Include="src\Physics\Entities\Ragdoll.cpp">
-      <Filter>Fichiers sources\Physics\Entities</Filter>
-    </ClCompile>
     <ClCompile Include="src\Lights\CircleHull.cpp">
       <Filter>Fichiers sources\Lights</Filter>
     </ClCompile>
@@ -244,6 +235,9 @@
     <ClCompile Include="src\Entities\RawBody.cpp">
       <Filter>Fichiers sources\Entities</Filter>
     </ClCompile>
+    <ClCompile Include="src\Entities\Ragdoll.cpp">
+      <Filter>Fichiers sources\Entities</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Physics\Bodies\Body.h">
@@ -305,9 +299,6 @@
     </ClInclude>
     <ClInclude Include="src\Resources\ResourceManager.h">
       <Filter>Fichiers d%27en-tête\Resources</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Physics\Entities\Ragdoll.h">
-      <Filter>Fichiers d%27en-tête\Physics\Entities</Filter>
     </ClInclude>
     <ClInclude Include="src\Tools\QuadTree\QuadTree.h">
       <Filter>Fichiers d%27en-tête\Tools\QuadTree</Filter>
@@ -403,6 +394,9 @@
       <Filter>Fichiers d%27en-tête\Physics\Bodies</Filter>
     </ClInclude>
     <ClInclude Include="src\Entities\RawBody.h">
+      <Filter>Fichiers d%27en-tête\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Entities\Ragdoll.h">
       <Filter>Fichiers d%27en-tête\Entities</Filter>
     </ClInclude>
   </ItemGroup>

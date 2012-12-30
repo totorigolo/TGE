@@ -23,6 +23,7 @@
 
 #include "../Entities/Entity.h"
 #include "../Entities/Deco.h"
+#include "../Entities/Ragdoll.h"
 #include "../Entities/RawBody.h"
 
 #include "../Lights/PointLight.h"
@@ -83,6 +84,11 @@ bool LevelLoader::Process()
 	if (!ProcessBodies())
 	{
 		Dialog::Error("Une erreur grave est survenue lors du chargement du niveau.\nBodies invalides (" + mPath + ").");
+		return false;
+	}
+	if (!ProcessEntities())
+	{
+		Dialog::Error("Une erreur grave est survenue lors du chargement du niveau.\nEntities invalide (" + mPath + ").");
 		return false;
 	}
 	if (!ProcessJoints())
@@ -209,7 +215,7 @@ bool LevelLoader::ProcessBodies()
 	std::string texture, type;
 	b2Vec3 posRot;
 
-	// Pour toutes les textures
+	// Pour tous les bodies
 	tinyxml2::XMLElement *body = bodies.FirstChildElement().ToElement();
 	while (body)
 	{
@@ -300,6 +306,53 @@ bool LevelLoader::ProcessBodies()
 
 		// On récupère le prochain body
 		body = body->NextSiblingElement();
+	}
+
+	return true;
+}
+bool LevelLoader::ProcessEntities()
+{
+	// Récupère <entities>
+	tinyxml2::XMLHandle hdl(mFile);
+	tinyxml2::XMLHandle entities = hdl.FirstChildElement("level").FirstChildElement("entities");
+
+	// Vérifie que <entities> existe
+	if (!entities.ToElement())
+	{
+		Dialog::Error("Une erreur fatale est survenue lors du chargement du niveau.\n<entities> non trouvé (" + mPath + ").", true);
+		return false;
+	}
+
+	// On crée les attributs
+	Entity *e = nullptr;
+	b2Vec2 position;
+	std::string type;
+	
+	// Pour toutes les Entities
+	tinyxml2::XMLElement *entity = entities.FirstChildElement().ToElement();
+	while (entity)
+	{
+		// Réinitialise les attributs
+		e = nullptr;
+		position = b2Vec2_zero;
+
+		// Récupère le type
+		if (entity->Attribute("type")) type = entity->Attribute("type");
+
+		// Récupère la position et la rotation
+		if (entity->Attribute("position")) position = Parser::string2b2Vec2(entity->Attribute("position"));
+
+		// Crée l'Entity
+		if (type == "ragdoll")
+		{
+			e = new Ragdoll(mLevel->mWorld, position);
+		}
+
+		// Crée l'Entity correspondante
+		mLevel->mEntityManager.RegisterEntity(e);
+
+		// On récupère la prochaine entity
+		entity = entity->NextSiblingElement();
 	}
 
 	return true;
