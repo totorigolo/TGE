@@ -233,7 +233,7 @@ bool LevelLoader::ProcessBodies()
 		bodyType = BodyType::FullySimulated;
 
 		// Récupère le type
-		if (body->Attribute("type")) type = body->Attribute("type");
+		type = body->Name();
 
 		// Récupère la texture et vérifie si elle existe
 		if (body->Attribute("texture")) texture = body->Attribute("texture");
@@ -337,7 +337,7 @@ bool LevelLoader::ProcessEntities()
 		position = b2Vec2_zero;
 
 		// Récupère le type
-		if (entity->Attribute("type")) type = entity->Attribute("type");
+		type = entity->Name();
 
 		// Récupère la position et la rotation
 		if (entity->Attribute("position")) position = Parser::string2b2Vec2(entity->Attribute("position"));
@@ -402,7 +402,7 @@ bool LevelLoader::ProcessJoints()
 		}
 
 		// Récupère le type
-		if (joint->Attribute("type")) type = joint->Attribute("type");
+		type = joint->Name();
 
 		// Change la valeur de colision par défaut
 		if (type == "weld" || type == "prismatic" || type == "revolute" || type == "wheel")

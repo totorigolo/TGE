@@ -37,33 +37,33 @@ ex: (NB = les valeurs mises sont celles par défaut) (osp = OneSidedPlatform)
 <dynamiccircle texture="ball" pos="(-4.55f, 0.675f)" rotation="0.f" type="dc" density="1.f" friction="0.2f" restitution="0.f" bullet="false" shadow="true">
 <kinematicbox texture="caisse" pos="(1.9f, 4.f)" rotation="0.f" restitution="0.0f" shadow="true">
 -->
-		<body type="staticbox" texture="ground" pos="(0.f, -0.64f)" friction="0.4f"/>
+		<staticbox texture="ground" pos="(0.f, -0.64f)" friction="0.4f"/>
 		
-		<body type="staticbox" id="6" texture="way" pos="(-5.f, 5.5f)" rotation="90.f" osp="true"/>
-		<body type="dynamicbox" texture="way" pos="(-5.f, 6.5f)"/>
+		<staticbox id="6" texture="way" pos="(-5.f, 5.5f)" rotation="90.f" osp="true"/>
+		<dynamicbox texture="way" pos="(-5.f, 6.5f)"/>
 		
-		<body type="staticbox" texture="way" pos="(-5.f, 0.5f)" rotation="90.f"/>
-		<body type="staticbox" texture="way" pos="(-5.f, 1.5f)" rotation="90.f"/>
-		<body type="staticbox" texture="way" pos="(-4.25f, 1.75f)"/>
-		<body type="staticbox" texture="way" pos="(-3.25f, 1.75f)"/>
-		<body type="staticbox" texture="way" pos="(-3.f, 1.5f)" rotation="90.f"/>
+		<staticbox texture="way" pos="(-5.f, 0.5f)" rotation="90.f"/>
+		<staticbox texture="way" pos="(-5.f, 1.5f)" rotation="90.f"/>
+		<staticbox texture="way" pos="(-4.25f, 1.75f)"/>
+		<staticbox texture="way" pos="(-3.25f, 1.75f)"/>
+		<staticbox texture="way" pos="(-3.f, 1.5f)" rotation="90.f"/>
 		
-		<body type="dynamicbox" id="1" texture="way" pos="(-3.f, 0.5f)" rotation="90.f" density="1.f"/>
-		<body type="dynamicbox" id ="7" texture="tonneau" pos="(-4.55f, 0.25f)" density="0.2f" friction="0.05f"/>
-		<body type="dynamiccircle" id="8" texture="ball" pos="(-4.55f, 0.675f)" friction="20.f"/>
+		<dynamicbox id="1" texture="way" pos="(-3.f, 0.5f)" rotation="90.f" density="1.f"/>
+		<dynamicbox id ="7" texture="tonneau" pos="(-4.55f, 0.25f)" density="0.2f" friction="0.05f"/>
+		<dynamiccircle id="8" texture="ball" pos="(-4.55f, 0.675f)" friction="20.f"/>
 		
-		<body type="staticbox" id="3" texture="way" pos="(0.f, 2.5f)" osp="true"/>
-		<body type="staticbox" texture="way" pos="(1.5f, 2.5f)" osp="true"/>
-		<body type="dynamicbox" texture="box" pos="(0.f, 3.f)"/>
-		<body type="dynamicbox" id="4" texture="box2" pos="(1.5f, 3.f)"/>
-		<body type="dynamicbox" id="2" texture="caisse" pos="(1.9f, 3.f)"/>
+		<staticbox id="3" texture="way" pos="(0.f, 2.5f)" osp="true"/>
+		<staticbox texture="way" pos="(1.5f, 2.5f)" osp="true"/>
+		<dynamicbox texture="box" pos="(0.f, 3.f)"/>
+		<dynamicbox id="4" texture="box2" pos="(1.5f, 3.f)"/>
+		<dynamicbox id="2" texture="caisse" pos="(1.9f, 3.f)"/>
 		
-		<body type="kinematicbox" id="5" texture="caisse" pos="(1.9f, 4.f)" restitution="1.9f"/>
+		<kinematicbox id="5" texture="caisse" pos="(1.9f, 4.f)" restitution="1.9f"/>
 	</bodies>
 	
 	<!-- Crée les Entities -->
 	<entities>
-		<entity type="ragdoll" position="(0.f, 1.5f)" />
+		<ragdoll position="(0.f, 1.5f)" />
 	</entities>
 	
 	<!-- Crée les joints -->
@@ -74,24 +74,24 @@ Il est possible de définir des ID afin de reconnaitre les joints plus loin dans
  -> "colision" : Est-ce que les deux bodies attachés se colisionnent ?
 ex: (NB = les valeurs mises pour les facultatifs sont celles par défaut)
 
-<joint type="gear" body1="0" body2="0" joint1="0" joint2="0" || ratio="1.f" colision="true" color="(80, 0, 200)"/>
-<joint type="distance" body1="0" pt1="(0.f, 0.f)" body2="0" pt2="(0.f, 0.f)" || frequency="4.0f" damping="0.5f" colision="true" color="(255, 0, 255)"/>
-<joint type="friction" body1="0" pt1="(0.f, 0.f)" body2="0" pt2="(0.f, 0.f)" || maxForce="0.f" maxTorque="0.f" colision="true" color="(255, 0, 255)"/>
-<joint type="rope" body1="0" pt1="(0.f, 0.f)" body2="0" pt2="(0.f, 0.f)" maxLength="0.f" || colision="true" color="255, 0, 255"/>
-<joint type="weld" body1="0" anchor="(0.f, 0.f)" body2="0" || frequency="4.f" damping="0.5f" colision="false" color="(255, 0, 255)"/>
-<joint type="pulley" body1="0" pt1="(0.f, 0.f)" body2="0" pt2="(0.f, 0.f)" groundpt1="(0.f, 0.f)" groundpt2="(0.f, 0.f)" ratio="1.f" color="(170, 80, 0)"/>
-<joint type="prismatic" body1="0" anchor="(0.f, 0.f)" body2="0" axis="(0.f, 0.f)" || enableLimits="false" lower="0.f" upper="0.f"
+<gear body1="0" body2="0" joint1="0" joint2="0" || ratio="1.f" colision="true" color="(80, 0, 200)"/>
+<distance body1="0" pt1="(0.f, 0.f)" body2="0" pt2="(0.f, 0.f)" || frequency="4.0f" damping="0.5f" colision="true" color="(255, 0, 255)"/>
+<friction body1="0" pt1="(0.f, 0.f)" body2="0" pt2="(0.f, 0.f)" || maxForce="0.f" maxTorque="0.f" colision="true" color="(255, 0, 255)"/>
+<rope body1="0" pt1="(0.f, 0.f)" body2="0" pt2="(0.f, 0.f)" maxLength="0.f" || colision="true" color="255, 0, 255"/>
+<weld body1="0" anchor="(0.f, 0.f)" body2="0" || frequency="4.f" damping="0.5f" colision="false" color="(255, 0, 255)"/>
+<pulley body1="0" pt1="(0.f, 0.f)" body2="0" pt2="(0.f, 0.f)" groundpt1="(0.f, 0.f)" groundpt2="(0.f, 0.f)" ratio="1.f" color="(170, 80, 0)"/>
+<prismatic body1="0" anchor="(0.f, 0.f)" body2="0" axis="(0.f, 0.f)" || enableLimits="false" lower="0.f" upper="0.f"
 																					 enableMotor="false" speed="0.f" maxForce="10.f"
 																					 colision="false" color="green"/>
-<joint type="revolute" body1="0" anchor="(0.f, 0.f)" body2="0" || enableLimits="false" lower="0.f" upper="0.f"
+<revolute body1="0" anchor="(0.f, 0.f)" body2="0" || enableLimits="false" lower="0.f" upper="0.f"
 																  enableMotor="false" speed="0.f" maxTorque="10.f"
 																  colision="false" color="(0, 255, 0)"/>
-<joint type="wheel" body1="0" body2="0" anchor="(0.f, 0.f)" axis="(0.f, 0.f)" || frequency="4.f" damping="0.5f"
+<wheel body1="0" body2="0" anchor="(0.f, 0.f)" axis="(0.f, 0.f)" || frequency="4.f" damping="0.5f"
 																					enableMotor="false" speed="0.f" maxTorque="10.f"
 																					colision="false" color="(255, 0, 255)"/>
 -->
-		<joint type="pulley" body1="1" pt1="(0.f, 0.f)" body2="2" pt2="(0.f, 0.f)" groundpt1="(-2.f, 0.5f)" groundpt2="(1.9f, 4.f)" ratio="1.5f"/>
-		<joint type="rope" body1="3" pt1="(0.f, 0.f)" body2="4" pt2="(0.f, 0.f)" maxlength="3.f" colision="true" color="(0, 255, 255)"/>
+		<pulley body1="1" pt1="(0.f, 0.f)" body2="2" pt2="(0.f, 0.f)" groundpt1="(-2.f, 0.5f)" groundpt2="(1.9f, 4.f)" ratio="1.5f"/>
+		<rope body1="3" pt1="(0.f, 0.f)" body2="4" pt2="(0.f, 0.f)" maxlength="3.f" colision="true" color="(0, 255, 255)"/>
 	</joints>
 	
 	<!-- Crée la déco -->
