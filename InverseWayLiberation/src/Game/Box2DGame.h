@@ -33,7 +33,7 @@ public:
 protected:
 	/* Fonctions évènements */
 	/// Initialise le jeu
-	void OnInit();
+	inline bool OnInit();
 
 	/// Appelé quand la boucle commence
 	inline void OnLoopBegin();

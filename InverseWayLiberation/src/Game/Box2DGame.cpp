@@ -52,28 +52,29 @@ Box2DGame::~Box2DGame(void)
 void Box2DGame::Run()
 {
 	// Appel l'initialisation
-	this->OnInit();
-
-	// Tant que la fenêtre est ouverte
-	while (mWindow.isOpen())
+	if (this->OnInit())
 	{
-		// La boucle commence
-		this->OnLoopBegin();
+		// Tant que la fenêtre est ouverte
+		while (mWindow.isOpen())
+		{
+			// La boucle commence
+			this->OnLoopBegin();
 
-		// Appel des évènements
-		this->OnEvent();
+			// Appel des évènements
+			this->OnEvent();
 		
-		// Appel de la logique
-		this->OnLogic();
+			// Appel de la logique
+			this->OnLogic();
 
-		// Gestion de la physique
-		this->OnStepPhysics();
+			// Gestion de la physique
+			this->OnStepPhysics();
 
-		// Rendu
-		this->OnRender();
+			// Rendu
+			this->OnRender();
 
-		// La boucle se termine
-		this->OnLoopEnd();
+			// La boucle se termine
+			this->OnLoopEnd();
+		}
 	}
 
 	// On quite
@@ -82,11 +83,17 @@ void Box2DGame::Run()
 
 /* Fonctions évènements */
 /// Initialise le jeu
-void Box2DGame::OnInit()
+bool Box2DGame::OnInit()
 {
 	// Initialise les variables
 	mPaused = false;
 	mCurrentZoom = 1.f;
+
+	// Charge un niveau
+	mLevel = new Level(&mWorld);
+	LevelLoader("lvls/1.xvl", mLevel);
+	if (!mLevel->IsValid())
+		return false;
 
 	/* Fenêtrage */
 	// Crée la vue
@@ -97,10 +104,6 @@ void Box2DGame::OnInit()
 	// Initialise la renderTexture
 	mRenderTexture.create(mWindow.getSize().x, mWindow.getSize().y);
 	mShadowRenderTexture.create(mWindow.getSize().x, mWindow.getSize().y);
-
-	// Charge un niveau
-	mLevel = new Level(&mWorld);
-	LevelLoader("lvls/1.xvl", mLevel);
 
 	// Initialise le système de lumières
 	mLightManager.Initialize(mRenderTexture, &mRenderTextureView);
@@ -171,6 +174,8 @@ void Box2DGame::OnInit()
 	mActionMap["onCrawl"] = thor::Action(sf::Keyboard::Down, thor::Action::Hold);
 	mActionMap["onGoLeft"] = thor::Action(sf::Keyboard::Left, thor::Action::Hold);
 	mActionMap["onGoRight"] = thor::Action(sf::Keyboard::Right, thor::Action::Hold);
+
+	return true;
 }
 
 /// Appelé quand la boucle commence
