@@ -1,4 +1,5 @@
 
 
 A faire :
+ - Mettre en place un système d'exeptions (erreurs).
  - Déplacer les include dans les .cpp pour les déclarations de classes

@@ -1,11 +1,11 @@
 #include "Body.h"
-#include "../../Tools/utils.h"
-#include "../../Lights/LightManager.h"
+#include "../Tools/utils.h"
+#include "../Lights/LightManager.h"
 #include <cassert>
 
 //Ctor
 Body::Body(World *world, BodyType type)
-	: mWorld(world), mBody(nullptr), mShape(nullptr), mIsNull(true), mIsDrawable(true)
+	: mWorld(world), mBody(nullptr), mIsNull(true), mIsDrawable(true)
 	, mType(type), mItsMySprite(false), mHull(nullptr), mEntity(nullptr)
 {
 	// Vérifie les objets passés

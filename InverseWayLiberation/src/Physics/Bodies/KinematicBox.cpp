@@ -21,10 +21,10 @@ KinematicBox::KinematicBox(World *world, b2Vec3 posRot, std::shared_ptr<sf::Text
 		mBody = mWorld->CreateBody(&bodyDef, this);
 
 		// Shape
-		mShape = new b2PolygonShape;
-		((b2PolygonShape*)mShape)->SetAsBox((mSprite->getTexture()->getSize().x / 2) * mWorld->GetMPP(),
+		b2PolygonShape* shape = new b2PolygonShape;
+		shape->SetAsBox((mSprite->getTexture()->getSize().x / 2) * mWorld->GetMPP(),
 											(mSprite->getTexture()->getSize().y / 2) * mWorld->GetMPP());
-		((b2PolygonShape*)mShape)->m_radius = 0.f;
+		shape->m_radius = 0.f;
 
 		// Fixture
 		b2FixtureDef fixtureDef;
@@ -32,7 +32,7 @@ KinematicBox::KinematicBox(World *world, b2Vec3 posRot, std::shared_ptr<sf::Text
 		fixtureDef.filter.groupIndex = static_cast<int16>(groupIndex);
 		fixtureDef.filter.categoryBits = categoryBits;
 		fixtureDef.filter.maskBits = maskBits;
-		fixtureDef.shape = mShape;
+		fixtureDef.shape = shape;
 		mBody->CreateFixture(&fixtureDef);
 
 		mBody->SetUserData(this);
@@ -66,7 +66,12 @@ void KinematicBox::Update()
 b2AABB KinematicBox::GetBodyAABB() const
 {
 	b2AABB aabb;
-	((b2PolygonShape*) mShape)->ComputeAABB(&aabb, mBody->GetTransform(), 0);
+	// La KinematicBox n'a qu'un shape
+	b2PolygonShape* s = (b2PolygonShape*) mBody->GetFixtureList()->GetShape();
+	if (s)
+	{
+		s->ComputeAABB(&aabb, mBody->GetTransform(), 0);
+	}
 	return aabb;
 }
 

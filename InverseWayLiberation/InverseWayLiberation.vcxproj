@@ -19,10 +19,15 @@
     <ClCompile Include="src\Entities\Deco.cpp" />
     <ClCompile Include="src\Entities\Entity.cpp" />
     <ClCompile Include="src\Entities\EntityManager.cpp" />
+    <ClCompile Include="src\Entities\LivingBeing.cpp" />
+    <ClCompile Include="src\Entities\Player.cpp" />
     <ClCompile Include="src\Entities\Ragdoll.cpp" />
     <ClCompile Include="src\Entities\RawBody.cpp" />
     <ClCompile Include="src\Game\Box2DGame.cpp" />
-    <ClCompile Include="src\Scripting\Lua.cpp" />
+    <ClCompile Include="src\Physics\Bodies\PlayerBody.cpp" />
+    <ClCompile Include="src\Physics\Body.cpp" />
+    <ClCompile Include="src\Physics\Joint.cpp" />
+    <ClCompile Include="src\Resources\AnimatedSprite.cpp" />
     <ClCompile Include="src\Sounds\SoundManager.cpp" />
     <ClCompile Include="src\Tools\Dialog.cpp" />
     <ClCompile Include="src\Level\Level.cpp" />
@@ -36,7 +41,6 @@
     <ClCompile Include="src\Lights\SpotLight.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\Tools\Parser.cpp" />
-    <ClCompile Include="src\Physics\Bodies\Body.cpp" />
     <ClCompile Include="src\Physics\Bodies\DynamicBox.cpp" />
     <ClCompile Include="src\Physics\Bodies\DynamicCircle.cpp" />
     <ClCompile Include="src\Physics\Bodies\KinematicBox.cpp" />
@@ -45,7 +49,6 @@
     <ClCompile Include="src\Physics\Joints\DistanceJoint.cpp" />
     <ClCompile Include="src\Physics\Joints\FrictionJoint.cpp" />
     <ClCompile Include="src\Physics\Joints\GearJoint.cpp" />
-    <ClCompile Include="src\Physics\Joints\Joint.cpp" />
     <ClCompile Include="src\Physics\Joints\MouseJoint.cpp" />
     <ClCompile Include="src\Physics\Joints\PrismaticJoint.cpp" />
     <ClCompile Include="src\Physics\Joints\PulleyJoint.cpp" />
@@ -67,6 +70,8 @@
     <ClInclude Include="src\Entities\Deco.h" />
     <ClInclude Include="src\Entities\Entity.h" />
     <ClInclude Include="src\Entities\EntityManager.h" />
+    <ClInclude Include="src\Entities\LivingBeing.h" />
+    <ClInclude Include="src\Entities\Player.h" />
     <ClInclude Include="src\Entities\Ragdoll.h" />
     <ClInclude Include="src\Entities\RawBody.h" />
     <ClInclude Include="src\Game\Box2DGame.h" />
@@ -81,9 +86,16 @@
     <ClInclude Include="src\Lights\SpotLight.h" />
     <ClInclude Include="src\Physics\Bodies\DynamicCircle.h" />
     <ClInclude Include="src\Physics\Bodies\KinematicBox.h" />
+    <ClInclude Include="src\Physics\Bodies\PlayerBody.h" />
     <ClInclude Include="src\Physics\Bodies\StaticBox.h" />
+    <ClInclude Include="src\Physics\Body.h" />
+    <ClInclude Include="src\Physics\Callback\AABBCallback.h" />
+    <ClInclude Include="src\Physics\Callback\FirstBodyRaycastCallback.h" />
+    <ClInclude Include="src\Physics\Callback\PointCallback.h" />
+    <ClInclude Include="src\Physics\Joint.h" />
+    <ClInclude Include="src\resource.h" />
+    <ClInclude Include="src\Resources\AnimatedSprite.h" />
     <ClInclude Include="src\Resources\ResourceManager.h" />
-    <ClInclude Include="src\Scripting\Lua.h" />
     <ClInclude Include="src\Sounds\SoundManager.h" />
     <ClInclude Include="src\Tools\Loader.h" />
     <ClInclude Include="src\Tools\NonCopyable.h" />
@@ -93,14 +105,11 @@
     <ClInclude Include="src\Tools\Singleton.h" />
     <ClInclude Include="src\Tools\Dialog.h" />
     <ClInclude Include="src\Tools\Parser.h" />
-    <ClInclude Include="src\Physics\Bodies\Body.h" />
     <ClInclude Include="src\Physics\Bodies\DynamicBox.h" />
     <ClInclude Include="src\Physics\ContactListener.h" />
-    <ClInclude Include="src\Physics\FirstBodyRaycastCallback.h" />
     <ClInclude Include="src\Physics\Joints\DistanceJoint.h" />
     <ClInclude Include="src\Physics\Joints\FrictionJoint.h" />
     <ClInclude Include="src\Physics\Joints\GearJoint.h" />
-    <ClInclude Include="src\Physics\Joints\Joint.h" />
     <ClInclude Include="src\Physics\Joints\MouseJoint.h" />
     <ClInclude Include="src\Physics\Joints\PrismaticJoint.h" />
     <ClInclude Include="src\Physics\Joints\PulleyJoint.h" />
@@ -108,13 +117,19 @@
     <ClInclude Include="src\Physics\Joints\RopeJoint.h" />
     <ClInclude Include="src\Physics\Joints\WeldJoint.h" />
     <ClInclude Include="src\Physics\Joints\WheelJoint.h" />
-    <ClInclude Include="src\Physics\OverlappingBodyCallback.h" />
     <ClInclude Include="src\Physics\World.h" />
     <ClInclude Include="src\Tools\utils.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\README.txt" />
+    <None Include="anim\player.xas" />
+    <None Include="anim\player.xim" />
+    <None Include="ClassDiagram.cd" />
+    <None Include="lvls\1.xvl" />
     <None Include="src\_TODO.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="src\InverseWayLiberation.rc" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{5CFA9D6B-D4F2-470E-8462-4B952F955B52}</ProjectGuid>

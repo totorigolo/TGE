@@ -1,7 +1,7 @@
 #pragma once
 #include "Entity.h"
-#include "../Physics/Bodies/Body.h"
-#include "../Physics/Joints/Joint.h"
+#include "../Physics/Body.h"
+#include "../Physics/Joint.h"
 #include "../Resources/ResourceManager.h"
 #include <list>
 #include <string>

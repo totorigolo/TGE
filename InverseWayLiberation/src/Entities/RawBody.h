@@ -1,6 +1,6 @@
 #pragma once
 #include "Entity.h"
-#include "../Physics/Bodies/Body.h"
+#include "../Physics/Body.h"
 
 class RawBody : public Entity
 {

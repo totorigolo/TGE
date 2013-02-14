@@ -22,3 +22,13 @@ Loader::Loader(std::string const& path)
 Loader::~Loader(void)
 {
 }
+
+// Accesseurs
+bool Loader::IsValid() const
+{
+	return mIsValid;
+}
+const std::string& Loader::GetPath() const
+{
+	return mPath;
+}

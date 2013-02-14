@@ -21,10 +21,10 @@ StaticBox::StaticBox(World *world, b2Vec3 posRot, std::shared_ptr<sf::Texture> t
 		mBody = mWorld->CreateBody(&bodyDef, this);
 
 		// Shape
-		mShape = new b2PolygonShape;
-		((b2PolygonShape*)mShape)->SetAsBox((mSprite->getTexture()->getSize().x / 2) * mWorld->GetMPP(),
+		b2PolygonShape* shape = new b2PolygonShape;
+		shape->SetAsBox((mSprite->getTexture()->getSize().x / 2) * mWorld->GetMPP(),
 											(mSprite->getTexture()->getSize().y / 2) * mWorld->GetMPP());
-		mShape->m_radius = 0.f;
+		shape->m_radius = 0.f;
 
 		// Fixture
 		b2FixtureDef fixtureDef;
@@ -34,7 +34,7 @@ StaticBox::StaticBox(World *world, b2Vec3 posRot, std::shared_ptr<sf::Texture> t
 		fixtureDef.filter.groupIndex = static_cast<int16>(groupIndex);
 		fixtureDef.filter.categoryBits = categoryBits;
 		fixtureDef.filter.maskBits = maskBits;
-		fixtureDef.shape = mShape;
+		fixtureDef.shape = shape;
 		mBody->CreateFixture(&fixtureDef);
 		
 		mBody->SetUserData(this);
@@ -68,6 +68,11 @@ void StaticBox::Update()
 b2AABB StaticBox::GetBodyAABB() const
 {
 	b2AABB aabb;
-	((b2PolygonShape*) mShape)->ComputeAABB(&aabb, mBody->GetTransform(), 0);
+	// La StaticBox n'a qu'un shape
+	b2PolygonShape* s = (b2PolygonShape*) mBody->GetFixtureList()->GetShape();
+	if (s)
+	{
+		s->ComputeAABB(&aabb, mBody->GetTransform(), 0);
+	}
 	return aabb;
 }

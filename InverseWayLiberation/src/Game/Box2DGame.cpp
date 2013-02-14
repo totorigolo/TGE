@@ -1,12 +1,13 @@
 #include "Box2DGame.h"
 #include "../Level/LevelLoader.h"
 #include "../Entities/RawBody.h"
+#include "../Entities/Player.h"
 #include "../Physics/Bodies/StaticBox.h"
 #include "../Physics/Bodies/DynamicBox.h"
 #include "../Physics/Bodies/DynamicCircle.h"
 #include "../Physics/Joints/DistanceJoint.h"
-#include "../Physics/OverlappingBodyCallback.h"
-#include "../Physics/FirstBodyRaycastCallback.h"
+#include "../Physics/Callback/PointCallback.h"
+#include "../Physics/Callback/FirstBodyRaycastCallback.h"
 #include "../Tools/utils.h"
 #include <iostream>
 #include <vector>
@@ -170,10 +171,10 @@ bool Box2DGame::OnInit()
 	mActionMap["onFire"] = thor::Action(sf::Keyboard::F, thor::Action::PressOnce);
 	mActionMap["onHook"] = thor::Action(sf::Keyboard::H, thor::Action::PressOnce);
 	
-	mActionMap["onJump"] = thor::Action(sf::Keyboard::Up, thor::Action::PressOnce) || thor::Action(sf::Keyboard::Space, thor::Action::PressOnce);
-	mActionMap["onCrawl"] = thor::Action(sf::Keyboard::Down, thor::Action::Hold);
-	mActionMap["onGoLeft"] = thor::Action(sf::Keyboard::Left, thor::Action::Hold);
-	mActionMap["onGoRight"] = thor::Action(sf::Keyboard::Right, thor::Action::Hold);
+	mActionMap["onJump"] = thor::Action(sf::Keyboard::Z, thor::Action::PressOnce) || thor::Action(sf::Keyboard::Space, thor::Action::PressOnce);
+	mActionMap["onCrawl"] = thor::Action(sf::Keyboard::S, thor::Action::PressOnce);
+	mActionMap["onGoLeft"] = thor::Action(sf::Keyboard::Q, thor::Action::Hold);
+	mActionMap["onGoRight"] = thor::Action(sf::Keyboard::D, thor::Action::Hold);
 
 	return true;
 }
@@ -197,6 +198,24 @@ void Box2DGame::OnEvent()
 
 	// Invoque les callbacks
 	mActionMap.invokeCallbacks(mActionCallbackSystem);
+
+	// Déplacements du joueur
+	if (mActionMap.isActive("onJump"))
+	{
+		((Player*) mLevel->mPlayer)->GetEvent(PlayerEvent::Jump);
+	}
+	if (mActionMap.isActive("onGoLeft"))
+	{
+		((Player*) mLevel->mPlayer)->GetEvent(PlayerEvent::Left);
+	}
+	if (mActionMap.isActive("onGoRight"))
+	{
+		((Player*) mLevel->mPlayer)->GetEvent(PlayerEvent::Right);
+	}
+	if (mActionMap.isActive("onCrawl"))
+	{
+		((Player*) mLevel->mPlayer)->GetEvent(PlayerEvent::Crounch);
+	}
 
 	// Gère le déplacement à la souris (clic molette)
 	if (mActionMap.isActive("movingView"))
@@ -242,16 +261,9 @@ void Box2DGame::OnEvent()
 		// Sinon on recherche l'objet sous la souris et on l'attache
 		else
 		{
-			// Crée une petite AABB sur la souris
-			b2AABB aabb;
-			b2Vec2 d;
-			d.Set(0.001f, 0.001f);
-			aabb.lowerBound = mMp - d;
-			aabb.upperBound = mMp + d;
-
 			// Demande au monde les formes qui sont sous l'AABB
-			OverlappingBodyCallback callback(mMp);
-			mWorld.QueryAABB(&callback, aabb);
+			PointCallback callback(mMp);
+			mWorld.QueryAABB(&callback, callback.GetAABB());
 
 			// Il y a un objet, on l'attache
 			if (callback.GetFixture())
@@ -323,16 +335,9 @@ void Box2DGame::OnEvent()
 		// Si le body est déjà sélectionné, on l'accroche avec le grapin
 		else if (mHookedSBody)
 		{
-			// Crée une petite AABB sur la souris
-			b2AABB aabb;
-			b2Vec2 d;
-			d.Set(0.001f, 0.001f);
-			aabb.lowerBound = mMp - d;
-			aabb.upperBound = mMp + d;
-
 			// Demande au monde les formes qui sont sous l'AABB
-			OverlappingBodyCallback callback(mMp, false);
-			mWorld.QueryAABB(&callback, aabb);
+			PointCallback callback(mMp, false);
+			mWorld.QueryAABB(&callback, callback.GetAABB());
 
 			// Il y a un objet, on le retient
 			if (callback.GetFixture() && mHookedSBody && callback.GetFixture()->GetBody() != mHookedSBody->GetBody())
@@ -367,16 +372,9 @@ void Box2DGame::OnEvent()
 				mHookJoint = nullptr;
 			}
 
-			// Crée une petite AABB sur la souris
-			b2AABB aabb;
-			b2Vec2 d;
-			d.Set(0.001f, 0.001f);
-			aabb.lowerBound = mMp - d;
-			aabb.upperBound = mMp + d;
-
 			// Demande au monde les formes qui sont sous l'AABB
-			OverlappingBodyCallback callback(mMp, false);
-			mWorld.QueryAABB(&callback, aabb);
+			PointCallback callback(mMp, false);
+			mWorld.QueryAABB(&callback, callback.GetAABB());
 
 			// Il y a un objet, on le retient
 			if (callback.GetFixture())
@@ -394,16 +392,9 @@ void Box2DGame::OnEvent()
 		// Enregistre les bobies et leurs ancres
 		if (!mPinBodyA || !mPinBodyB)
 		{
-			// Crée une petite AABB sur la souris
-			b2AABB aabb;
-			b2Vec2 d;
-			d.Set(0.001f, 0.001f);
-			aabb.lowerBound = mMp - d;
-			aabb.upperBound = mMp + d;
-
 			// Demande au monde les formes qui sont sous l'AABB
-			OverlappingBodyCallback callback(mMp, false);
-			mWorld.QueryAABB(&callback, aabb);
+			PointCallback callback(mMp, false);
+			mWorld.QueryAABB(&callback, callback.GetAABB());
 
 			// Il y a un objet, on le retient
 			if (callback.GetFixture())
@@ -642,7 +633,8 @@ void Box2DGame::OnStepPhysics()
 	mFrameTime.restart();
 
 	// Simule
-	mWorld.Step(1.f / 60.f, 5, 3);
+	// TODO: Fixer le Timestep
+	mWorld.Step(1.f / 60.f, 7, 4);
 	mWorld.ClearForces();
 
 	// Destruction des bodies en dehors de la zone

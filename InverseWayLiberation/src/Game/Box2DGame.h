@@ -7,7 +7,7 @@
 #include <map>
 #include "../Level/Level.h"
 #include "../Physics/World.h"
-#include "../Physics/Bodies/Body.h"
+#include "../Physics/Body.h"
 #include "../Physics/Bodies/DynamicBox.h"
 #include "../Physics/Bodies/StaticBox.h"
 #include "../Physics/Joints/MouseJoint.h"

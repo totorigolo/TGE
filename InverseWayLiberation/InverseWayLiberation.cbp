@@ -40,6 +40,8 @@
 		<Unit filename="src/Entities/Entity.h" />
 		<Unit filename="src/Entities/EntityManager.cpp" />
 		<Unit filename="src/Entities/EntityManager.h" />
+		<Unit filename="src/Entities/LivingBeing.cpp" />
+		<Unit filename="src/Entities/LivingBeing.h" />
 		<Unit filename="src/Entities/Ragdoll.cpp" />
 		<Unit filename="src/Entities/Ragdoll.h" />
 		<Unit filename="src/Entities/RawBody.cpp" />
@@ -106,6 +108,8 @@
 		<Unit filename="src/Physics/OverlappingBodyCallback.h" />
 		<Unit filename="src/Physics/World.cpp" />
 		<Unit filename="src/Physics/World.h" />
+		<Unit filename="src/Resources/AnimatedSprite.cpp" />
+		<Unit filename="src/Resources/AnimatedSprite.h" />
 		<Unit filename="src/Resources/ResourceManager.h" />
 		<Unit filename="src/Scripting/Lua.cpp" />
 		<Unit filename="src/Scripting/Lua.h" />

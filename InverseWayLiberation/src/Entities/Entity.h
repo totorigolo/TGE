@@ -6,6 +6,8 @@ enum class EntityType
 	Entity,
 	Deco,
 	RawBody,
+	LivingBeing,
+	Player,
 	Ragdoll
 };
 
@@ -25,6 +27,7 @@ public:
 	// Accesseurs
 	bool IsAlive() const;
 	int GetLayer() const;
+	EntityType GetType() const { return mType; }
 
 protected:
 	// Etat

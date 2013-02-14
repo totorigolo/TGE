@@ -23,6 +23,8 @@
 
 #include "../Entities/Entity.h"
 #include "../Entities/Deco.h"
+#include "../Entities/LivingBeing.h"
+#include "../Entities/Player.h"
 #include "../Entities/Ragdoll.h"
 #include "../Entities/RawBody.h"
 
@@ -207,6 +209,7 @@ bool LevelLoader::ProcessBodies()
 	// On crée les attributs
 	Body *b = nullptr;
 	RawBody *e = nullptr;
+	int layer = 1;
 	bool hasID = false, bullet = false, osp = false;
 	BodyType bodyType = BodyType::FullySimulated;
 	float density = 1.f, friction = 0.2f, restitution = 0.0f;
@@ -222,6 +225,7 @@ bool LevelLoader::ProcessBodies()
 		// Réinitialise les attributs
 		b = nullptr;
 		e = nullptr;
+		layer = 1;
 		id = 0U;
 		rotation = 0.f;
 		density = 1.f;
@@ -258,6 +262,9 @@ bool LevelLoader::ProcessBodies()
 		if (body->Attribute("pos")) posRot = Parser::string2b2Vec3(body->Attribute("pos"));
 		posRot.z = rotation;
 
+		// Récupère le layer
+		body->QueryIntAttribute("layer", &layer);
+
 		// Récupère les flags
 		body->QueryBoolAttribute("osp", &osp);
 		body->QueryBoolAttribute("bullet", &bullet);
@@ -293,7 +300,7 @@ bool LevelLoader::ProcessBodies()
 		b->SetType(bodyType);
 
 		// Crée l'Entity correspondante
-		mLevel->mEntityManager.RegisterEntity(new RawBody(b));
+		mLevel->mEntityManager.RegisterEntity(new RawBody(b, layer));
 
 		// Enregiste l'ID
 		if (b != nullptr && hasID)
@@ -325,8 +332,9 @@ bool LevelLoader::ProcessEntities()
 
 	// On crée les attributs
 	Entity *e = nullptr;
+	int layer = 1;
 	b2Vec2 position;
-	std::string type;
+	std::string type, animation;
 	
 	// Pour toutes les Entities
 	tinyxml2::XMLElement *entity = entities.FirstChildElement().ToElement();
@@ -334,6 +342,9 @@ bool LevelLoader::ProcessEntities()
 	{
 		// Réinitialise les attributs
 		e = nullptr;
+		layer = 1;
+		type = "";
+		animation = "";
 		position = b2Vec2_zero;
 
 		// Récupère le type
@@ -341,11 +352,31 @@ bool LevelLoader::ProcessEntities()
 
 		// Récupère la position et la rotation
 		if (entity->Attribute("position")) position = Parser::string2b2Vec2(entity->Attribute("position"));
+		
+		// Récupère le layer
+		entity->QueryIntAttribute("layer", &layer);
 
 		// Crée l'Entity
 		if (type == "ragdoll")
 		{
-			e = new Ragdoll(mLevel->mWorld, position);
+			e = new Ragdoll(mLevel->mWorld, position, layer);
+		}
+		else if (type == "livingbeing")
+		{
+			// Récupère l'animation
+			animation = entity->Attribute("animation");
+			animation = entity->Attribute("texture");
+
+			e = new LivingBeing(mLevel->mWorld, position, mLevel->mTextureMap[animation], layer);
+		}
+		else if (type == "player")
+		{
+			// Récupère l'animation
+			animation = entity->Attribute("animation");
+			animation = entity->Attribute("texture");
+
+			e = new Player(mLevel->mWorld, position, mLevel->mTextureMap[animation], layer);
+			mLevel->mPlayer = e;
 		}
 
 		// Crée l'Entity correspondante

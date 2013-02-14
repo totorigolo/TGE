@@ -7,25 +7,38 @@ RawBody::RawBody(Body *body, int layer)
 {
 	mType = EntityType::RawBody;
 
-	mBody->SetEntity(this);
+	if (mBody)
+	{
+		mBody->SetEntity(this);
+	}
 }
 RawBody::~RawBody()
 {
-	// Supprime le Body
-	mBody->GetWorld()->DestroyBody(mBody);
-	mBody = nullptr;
+	if (mBody)
+	{
+		// Supprime le Body
+		mBody->GetWorld()->DestroyBody(mBody);
+		mBody = nullptr;
+	}
 }
 
 // Mise à jour
 void RawBody::Update()
 {
-	mBody->Update();
+	if (mBody)
+	{
+		mBody->Update();
+	}
+	// TODO: Else, suppression automatique
 }
 
 // Pour le rendu
 void RawBody::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
-	target.draw(*mBody, states);
+	if (mBody)
+	{
+		target.draw(*mBody, states);
+	}
 }
 
 // Accesseurs

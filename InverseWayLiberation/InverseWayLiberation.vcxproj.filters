@@ -9,10 +9,6 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
     </Filter>
-    <Filter Include="Fichiers de ressources">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
     <Filter Include="Fichiers d%27en-tête\Physics">
       <UniqueIdentifier>{5a46dc7c-fbbe-4ffa-a79b-fb6e01a8b7a7}</UniqueIdentifier>
     </Filter>
@@ -61,12 +57,6 @@
     <Filter Include="Fichiers d%27en-tête\Tools\QuadTree">
       <UniqueIdentifier>{057201a5-f12d-42c4-9556-4af391e5c445}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Fichiers d%27en-tête\Scripting">
-      <UniqueIdentifier>{3ba6d075-c6d8-4a74-9bb6-29cd33a5ea3b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Fichiers sources\Scripting">
-      <UniqueIdentifier>{cd7a1397-ed74-4cf6-aa92-22341af4dc17}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Fichiers d%27en-tête\Sounds">
       <UniqueIdentifier>{36d65d69-69a8-4868-8155-70b3dd40314a}</UniqueIdentifier>
     </Filter>
@@ -97,18 +87,38 @@
     <Filter Include="Fichiers sources\Entities">
       <UniqueIdentifier>{55763350-e5c3-41ba-b8b2-5443c02b91e5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Fichiers de ressources">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Fichiers de ressources\Levels">
+      <UniqueIdentifier>{1bfbb0f9-009a-4d66-9c56-a18bb8a28256}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers de ressources\Anims">
+      <UniqueIdentifier>{ffe0fec8-1483-4943-b722-a4359c40f028}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers d%27en-tête\Physics\Callback">
+      <UniqueIdentifier>{2906bf8d-863c-4dde-8e5b-491fc2734796}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers sources\Physics\Callback">
+      <UniqueIdentifier>{079891bf-b420-49e5-888d-b438bed65ac0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\_TODO.txt" />
     <None Include="..\README.txt" />
+    <None Include="lvls\1.xvl">
+      <Filter>Fichiers de ressources\Levels</Filter>
+    </None>
+    <None Include="anim\player.xas">
+      <Filter>Fichiers de ressources\Anims</Filter>
+    </None>
+    <None Include="anim\player.xim">
+      <Filter>Fichiers de ressources\Anims</Filter>
+    </None>
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\main.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Physics\Bodies\Body.cpp">
-      <Filter>Fichiers sources\Physics\Bodies</Filter>
-    </ClCompile>
     <ClCompile Include="src\Physics\Bodies\DynamicBox.cpp">
       <Filter>Fichiers sources\Physics\Bodies</Filter>
     </ClCompile>
@@ -128,9 +138,6 @@
       <Filter>Fichiers sources\Physics\Joints</Filter>
     </ClCompile>
     <ClCompile Include="src\Physics\Joints\RevoluteJoint.cpp">
-      <Filter>Fichiers sources\Physics\Joints</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Physics\Joints\Joint.cpp">
       <Filter>Fichiers sources\Physics\Joints</Filter>
     </ClCompile>
     <ClCompile Include="src\Physics\World.cpp">
@@ -199,9 +206,6 @@
     <ClCompile Include="src\Tools\QuadTree\QuadTree.cpp">
       <Filter>Fichiers sources\Tools\QuadTree</Filter>
     </ClCompile>
-    <ClCompile Include="src\Scripting\Lua.cpp">
-      <Filter>Fichiers sources\Scripting</Filter>
-    </ClCompile>
     <ClCompile Include="src\Sounds\SoundManager.cpp">
       <Filter>Fichiers sources\Sounds</Filter>
     </ClCompile>
@@ -238,11 +242,29 @@
     <ClCompile Include="src\Entities\Ragdoll.cpp">
       <Filter>Fichiers sources\Entities</Filter>
     </ClCompile>
+    <ClCompile Include="src\Entities\LivingBeing.cpp">
+      <Filter>Fichiers sources\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Resources\AnimatedSprite.cpp">
+      <Filter>Fichiers sources\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Entities\Player.cpp">
+      <Filter>Fichiers sources\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="src\main.cpp">
+      <Filter>Fichiers sources\App</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Physics\Body.cpp">
+      <Filter>Fichiers sources\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Physics\Joint.cpp">
+      <Filter>Fichiers sources\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Physics\Bodies\PlayerBody.cpp">
+      <Filter>Fichiers sources\Physics\Bodies</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\Physics\Bodies\Body.h">
-      <Filter>Fichiers d%27en-tête\Physics\Bodies</Filter>
-    </ClInclude>
     <ClInclude Include="src\Physics\Bodies\DynamicBox.h">
       <Filter>Fichiers d%27en-tête\Physics\Bodies</Filter>
     </ClInclude>
@@ -254,15 +276,6 @@
     </ClInclude>
     <ClInclude Include="src\Physics\Joints\RevoluteJoint.h">
       <Filter>Fichiers d%27en-tête\Physics\Joints</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Physics\Joints\Joint.h">
-      <Filter>Fichiers d%27en-tête\Physics\Joints</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Physics\FirstBodyRaycastCallback.h">
-      <Filter>Fichiers d%27en-tête\Physics</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Physics\OverlappingBodyCallback.h">
-      <Filter>Fichiers d%27en-tête\Physics</Filter>
     </ClInclude>
     <ClInclude Include="src\Physics\World.h">
       <Filter>Fichiers d%27en-tête\Physics</Filter>
@@ -348,9 +361,6 @@
     <ClInclude Include="src\Tools\Parser.h">
       <Filter>Fichiers d%27en-tête\Tools</Filter>
     </ClInclude>
-    <ClInclude Include="src\Scripting\Lua.h">
-      <Filter>Fichiers d%27en-tête\Scripting</Filter>
-    </ClInclude>
     <ClInclude Include="src\Sounds\SoundManager.h">
       <Filter>Fichiers d%27en-tête\Sounds</Filter>
     </ClInclude>
@@ -399,5 +409,40 @@
     <ClInclude Include="src\Entities\Ragdoll.h">
       <Filter>Fichiers d%27en-tête\Entities</Filter>
     </ClInclude>
+    <ClInclude Include="src\Entities\LivingBeing.h">
+      <Filter>Fichiers d%27en-tête\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Resources\AnimatedSprite.h">
+      <Filter>Fichiers d%27en-tête\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Entities\Player.h">
+      <Filter>Fichiers d%27en-tête\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="src\resource.h">
+      <Filter>Fichiers de ressources</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Physics\Body.h">
+      <Filter>Fichiers d%27en-tête\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Physics\Joint.h">
+      <Filter>Fichiers d%27en-tête\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Physics\Callback\AABBCallback.h">
+      <Filter>Fichiers d%27en-tête\Physics\Callback</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Physics\Callback\FirstBodyRaycastCallback.h">
+      <Filter>Fichiers d%27en-tête\Physics\Callback</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Physics\Callback\PointCallback.h">
+      <Filter>Fichiers d%27en-tête\Physics\Callback</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Physics\Bodies\PlayerBody.h">
+      <Filter>Fichiers d%27en-tête\Physics\Bodies</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="src\InverseWayLiberation.rc">
+      <Filter>Fichiers de ressources</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>

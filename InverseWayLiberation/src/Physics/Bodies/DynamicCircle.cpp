@@ -21,8 +21,8 @@ DynamicCircle::DynamicCircle(World *world, b2Vec3 posRot, std::shared_ptr<sf::Te
 		mBody = mWorld->CreateBody(&bodyDef, this);
 
 		// Shape
-		mShape = new b2CircleShape;
-		((b2CircleShape*)mShape)->m_radius = mSprite->getTexture()->getSize().x / 2.f * mWorld->GetMPP();
+		b2CircleShape* shape = new b2CircleShape;
+		shape->m_radius = mSprite->getTexture()->getSize().x / 2.f * mWorld->GetMPP();
 
 		// Fixture
 		b2FixtureDef fixtureDef;
@@ -32,7 +32,7 @@ DynamicCircle::DynamicCircle(World *world, b2Vec3 posRot, std::shared_ptr<sf::Te
 		fixtureDef.filter.groupIndex = static_cast<int16>(groupIndex);
 		fixtureDef.filter.categoryBits = categoryBits;
 		fixtureDef.filter.maskBits = maskBits;
-		fixtureDef.shape = mShape;
+		fixtureDef.shape = shape;
 		mBody->CreateFixture(&fixtureDef);
 
 		mBody->SetUserData(this);
@@ -66,6 +66,11 @@ void DynamicCircle::Update()
 b2AABB DynamicCircle::GetBodyAABB() const
 {
 	b2AABB aabb;
-	((b2PolygonShape*) mShape)->ComputeAABB(&aabb, mBody->GetTransform(), 0);
+	// La DynamicCircle n'a qu'un shape
+	b2CircleShape* s = (b2CircleShape*) mBody->GetFixtureList()->GetShape();
+	if (s)
+	{
+		s->ComputeAABB(&aabb, mBody->GetTransform(), 0);
+	}
 	return aabb;
 }

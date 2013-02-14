@@ -67,5 +67,9 @@ private:
 	// Textures
 	ResourceManager &mResourceManager;
 	TextureMap &mTextureMap;
+
+	// TODO: Virer ça
+public:
+	Entity *mPlayer;
 };
 

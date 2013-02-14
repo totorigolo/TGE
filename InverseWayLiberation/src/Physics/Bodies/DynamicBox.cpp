@@ -3,7 +3,7 @@
 #include "../../Lights/ConvexHull.h"
 #include <iostream>
 
-//Ctor
+// Ctor
 DynamicBox::DynamicBox(World *world, b2Vec3 posRot, std::shared_ptr<sf::Texture> texture, float density, float friction, float restitution
 																						, int groupIndex, uint16 categoryBits, uint16 maskBits)
 	: Body(world)
@@ -22,9 +22,9 @@ DynamicBox::DynamicBox(World *world, b2Vec3 posRot, std::shared_ptr<sf::Texture>
 		mBody = mWorld->CreateBody(&bodyDef, this);
 
 		// Shape
-		mShape = new b2PolygonShape;
-		((b2PolygonShape*)mShape)->SetAsBox((texture->getSize().x / 2) * mWorld->GetMPP(), (texture->getSize().y / 2) * mWorld->GetMPP());
-		((b2PolygonShape*)mShape)->m_radius = 0.f;
+		b2PolygonShape* shape = new b2PolygonShape;
+		shape->SetAsBox((texture->getSize().x / 2) * mWorld->GetMPP(), (texture->getSize().y / 2) * mWorld->GetMPP());
+		shape->m_radius = 0.f;
 
 		// Fixture
 		b2FixtureDef fixtureDef;
@@ -34,7 +34,7 @@ DynamicBox::DynamicBox(World *world, b2Vec3 posRot, std::shared_ptr<sf::Texture>
 		fixtureDef.filter.groupIndex = static_cast<int16>(groupIndex);
 		fixtureDef.filter.categoryBits = categoryBits;
 		fixtureDef.filter.maskBits = maskBits;
-		fixtureDef.shape = mShape;
+		fixtureDef.shape = shape;
 		mBody->CreateFixture(&fixtureDef);
 
 		mBody->SetUserData(this);
@@ -65,10 +65,10 @@ DynamicBox::DynamicBox(World *world, b2Vec3 posRot, sf::Sprite *sprite, float de
 		mBody = mWorld->CreateBody(&bodyDef, this);
 
 		// Shape
-		mShape = new b2PolygonShape;
-		((b2PolygonShape*)mShape)->SetAsBox((mSprite->getTexture()->getSize().x / 2) * mWorld->GetMPP(),
+		b2PolygonShape* shape = new b2PolygonShape;
+		shape->SetAsBox((mSprite->getTexture()->getSize().x / 2) * mWorld->GetMPP(),
 											(mSprite->getTexture()->getSize().y / 2) * mWorld->GetMPP());
-		((b2PolygonShape*)mShape)->m_radius = 0.f;
+		shape->m_radius = 0.f;
 
 		// Fixture
 		b2FixtureDef fixtureDef;
@@ -78,7 +78,7 @@ DynamicBox::DynamicBox(World *world, b2Vec3 posRot, sf::Sprite *sprite, float de
 		fixtureDef.filter.groupIndex = static_cast<int16>(groupIndex);
 		fixtureDef.filter.categoryBits = categoryBits;
 		fixtureDef.filter.maskBits = maskBits;
-		fixtureDef.shape = mShape;
+		fixtureDef.shape = shape;
 		mBody->CreateFixture(&fixtureDef);
 
 		mBody->SetUserData(this);
@@ -111,13 +111,25 @@ void DynamicBox::Update()
 // Change les collisions / la taille du body
 void DynamicBox::SetSize(float w, float h)
 {
-	((b2PolygonShape*) mBody->GetFixtureList()->GetShape())->SetAsBox(w / 2.f, h / 2.f);
+	// TODO: Vérifier si ça marche
+
+	// La DynamicBox n'a qu'un shape
+	b2PolygonShape* s = (b2PolygonShape*) mBody->GetFixtureList()->GetShape();
+	if (s)
+	{
+		s->SetAsBox(w / 2.f, h / 2.f);
+	}
 }
 
 // Accesseurs
 b2AABB DynamicBox::GetBodyAABB() const
 {
 	b2AABB aabb;
-	((b2PolygonShape*) mShape)->ComputeAABB(&aabb, mBody->GetTransform(), 0);
+	// La DynamicBox n'a qu'un shape
+	b2PolygonShape* s = (b2PolygonShape*) mBody->GetFixtureList()->GetShape();
+	if (s)
+	{
+		s->ComputeAABB(&aabb, mBody->GetTransform(), 0);
+	}
 	return aabb;
 }

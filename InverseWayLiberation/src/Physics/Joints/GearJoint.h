@@ -2,7 +2,7 @@
 #include <SFML/Graphics.hpp>
 #include <Box2D/Box2D.h>
 #include <Thor/Resources.hpp>
-#include "Joint.h"
+#include "../Joint.h"
 #include "../World.h"
 
 class World;

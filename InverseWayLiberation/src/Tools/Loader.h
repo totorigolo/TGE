@@ -9,6 +9,10 @@ public:
 	Loader(std::string const& path);
 	virtual ~Loader(void);
 
+	// Accesseurs
+	bool IsValid() const;
+	const std::string& GetPath() const;
+
 protected:
 	// Analyse tout le fichier
 	virtual bool Process() = 0;

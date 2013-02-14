@@ -2,8 +2,8 @@
 #include "Level.h"
 #include "../Tools/Loader.h"
 #include "../Physics/World.h"
-#include "../Physics/Bodies/Body.h"
-#include "../Physics/Joints/Joint.h"
+#include "../Physics/Body.h"
+#include "../Physics/Joint.h"
 #include <SFML/Graphics.hpp>
 #include <string>
 #include <map>
