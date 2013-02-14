@@ -1,5 +1,4 @@
 #include "App.h"
-#include "../Scripting/Lua.h"
 #include "../Sounds/SoundManager.h"
 #include "../App/States/StartUp.h"
 
