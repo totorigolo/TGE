@@ -6,15 +6,10 @@
 #include <list>
 #include <map>
 #include "../Level/Level.h"
-#include "../Physics/World.h"
-#include "../Physics/Body.h"
-#include "../Physics/Bodies/DynamicBox.h"
-#include "../Physics/Bodies/StaticBox.h"
 #include "../Physics/Joints/MouseJoint.h"
-#include "../Physics/Joints/DistanceJoint.h"
 #include "../Resources/ResourceManager.h"
-#include "../Lights/LightManager.h"
-#include "../Lights/PointLight.h"
+#include "../Physics/PhysicManager.h"
+#include "../Entities/Grapnel.h"
 
 class Body;
 class World;
@@ -78,15 +73,16 @@ private:
 
 	// Monde physique
 	b2Vec2 mGravity;
-	World mWorld;
+	//World mWorld;
+	PhysicManager mPhysicMgr;
 
 	// Textures
 	ResourceManager &mResourceManager;
 	TextureMap &mTextureMap;
 
 	// Lumières
-	LightManager &mLightManager;
-	PointLight mMouseLight;
+	//LightManager &mLightManager;
+	//PointLight mMouseLight;
 
 	// Variables pour les shaders
 	sf::RenderTexture mRenderTexture;
@@ -109,9 +105,9 @@ private:
 	b2Vec2 mLMp;
 
 	// Grapin
-	Body *mHookedSBody;
+	b2Body *mHookedSBody;
 	b2Vec2 mHookedSAnchor;
-	DistanceJoint *mHookJoint;
+	Grapnel mGrapnel;
 	sf::Clock mHookClock;
 
 	// Déplacement des objets
@@ -125,9 +121,9 @@ private:
 	b2Vec2 mSpliceP2;
 
 	// Variables pour la création de joints
-	Body *mPinBodyA;
+	b2Body *mPinBodyA;
 	b2Vec2 mPinAnchorA; // Ancres locales aux bodies
-	Body *mPinBodyB;
+	b2Body *mPinBodyB;
 	b2Vec2 mPinAnchorB;
 
 };

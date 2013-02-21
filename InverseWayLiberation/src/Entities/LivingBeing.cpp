@@ -3,8 +3,8 @@
 #include "../Tools/utils.h"
 
 // Ctor & dtor
-LivingBeing::LivingBeing(World *world, b2Vec2 position, std::shared_ptr<sf::Texture> texture, int layer)
-	: Entity(layer), mCollisionBody(nullptr), mTexture(texture), mWorld(world), mIsDead(true), mCanJump(false)
+LivingBeing::LivingBeing(PhysicManager *physicMgr, b2Vec2 position, std::shared_ptr<sf::Texture> texture, int layer)
+	: Entity(layer), mCollisionBody(nullptr), mTexture(texture), mPhysicMgr(physicMgr), mIsDead(true), mCanJump(false)
 {
 	// Change le type
 	mType = EntityType::LivingBeing;
@@ -52,10 +52,10 @@ LivingBeing::LivingBeing(World *world, b2Vec2 position, std::shared_ptr<sf::Text
 	*/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	// Crée le body
-	mCollisionBody = new DynamicBox(mWorld, getVec3(position), mTexture);
-	mCollisionBody->GetBody()->SetFixedRotation(true);
-	mCollisionBody->SetType(BodyType::Bullet);
-	mCollisionBody->SetEntity(this);
+	//mCollisionBody = new DynamicBox(mWorld, getVec3(position), mTexture);
+	//mCollisionBody->GetBody()->SetFixedRotation(true);
+	//mCollisionBody->SetType(BodyType::Bullet);
+	//mCollisionBody->SetEntity(this);
 
 	// Crée le body pour le saut
 
@@ -70,7 +70,7 @@ LivingBeing::~LivingBeing()
 	// Supprime le Body
 	if (mCollisionBody)
 	{
-		mCollisionBody->GetWorld()->DestroyBody(mCollisionBody);
+		mPhysicMgr->DestroyBody(mCollisionBody);
 		mCollisionBody = nullptr;
 	}
 }
@@ -81,12 +81,9 @@ void LivingBeing::Update()
 	// Si on a un body valide
 	if (mCollisionBody)
 	{
-		// On met à jour le body
-		mCollisionBody->Update();
-
 		// On récupère sa position
 		//mSprite.setTexture(*mTexture);
-		mSprite.setPosition(b22sfVec(mCollisionBody->GetBodyPosition(), mWorld->GetPPM()));
+		mSprite.setPosition(b22sfVec(mCollisionBody->GetPosition(), mPhysicMgr->GetPPM()));
 	}
 
 	//if (mAnimatedSprite.IsValid())
@@ -110,11 +107,11 @@ void LivingBeing::CanJump(bool b)
 }
 
 // Accesseurs
-Body* LivingBeing::GetCollisionBody()
+b2Body* LivingBeing::GetCollisionBody()
 {
 	return mCollisionBody;
 }
-const Body* LivingBeing::GetCollisionBody() const
+const b2Body* LivingBeing::GetCollisionBody() const
 {
 	return mCollisionBody;
 }

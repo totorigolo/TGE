@@ -15,7 +15,7 @@ class Player : public LivingBeing
 {
 public:
 	// Ctor & dtor
-	Player(World *world, b2Vec2 position, std::shared_ptr<sf::Texture> texture, int layer = 1);
+	Player(PhysicManager *physicMgr, b2Vec2 position, std::shared_ptr<sf::Texture> texture, int layer = 1);
 	virtual ~Player();
 
 	// Mise à jour

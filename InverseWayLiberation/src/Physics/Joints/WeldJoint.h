@@ -3,16 +3,14 @@
 #include <Box2D/Box2D.h>
 #include <Thor/Resources.hpp>
 #include "../Joint.h"
-#include "../World.h"
 
-class World;
 class Joint;
 class WeldJoint : public Joint
 {
 public:
-	// Ctor & dtor                             Anchor relative to bodyA
-	WeldJoint(World *world, Body *b1, Body *b2, b2Vec2 anchor, float frequencyHz = 4.f, float damping = 0.5f, bool collideconnected = false
-															 , sf::Color const& color = sf::Color::Magenta);
+	// Ctor & dtor										   Anchor relative to bodyA
+	WeldJoint(PhysicManager *physicMgr, b2Body *b1, b2Body *b2, b2Vec2 anchor, float frequencyHz = 4.f, float damping = 0.5f
+											  , bool collideconnected = false , sf::Color const& color = sf::Color::Magenta);
 	virtual ~WeldJoint(void);
 	
 	// Mets à jour le VertexArray

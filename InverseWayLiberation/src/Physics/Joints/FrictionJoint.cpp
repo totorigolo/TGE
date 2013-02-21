@@ -2,29 +2,31 @@
 #include "../../Tools/utils.h"
 
 //Ctor
-FrictionJoint::FrictionJoint(World *world, Body *b1, b2Vec2 pt1, Body *b2, b2Vec2 p2, float maxForce, float maxTorque, bool collideconnected, sf::Color const& color)
-	: Joint(world), mColor(color)
+FrictionJoint::FrictionJoint(PhysicManager *physicMgr, b2Body *b1, b2Vec2 pt1, b2Body *b2, b2Vec2 p2, float maxForce, float maxTorque, bool collideconnected, sf::Color const& color)
+	: Joint(physicMgr), mColor(color)
 {
+	assert(mPhysicMgr && "n'est pas valide.");
+
 	mBodyA = b1;
 	mBodyB = b2;
 
-	if (mWorld && mBodyA && mBodyB)
+	if (mBodyA && mBodyB)
 	{
 		b2FrictionJointDef jointDef;
-		jointDef.bodyA = mBodyA->GetBody();
-		jointDef.bodyB = mBodyB->GetBody();
+		jointDef.bodyA = mBodyA;
+		jointDef.bodyB = mBodyB;
 		jointDef.localAnchorA = pt1;
 		jointDef.localAnchorB = p2;
 		jointDef.maxForce = maxForce;
 		jointDef.maxTorque = maxTorque;
 		jointDef.collideConnected = collideconnected;
-		mJoint = (b2FrictionJoint*) mWorld->CreateJoint(&jointDef, this);
+		mJoint = (b2FrictionJoint*) mPhysicMgr->CreateJoint(&jointDef, this);
 		
-		mBodyA->GetBody()->SetBullet(true);
-		mBodyB->GetBody()->SetBullet(true);
+		mBodyA->SetBullet(true);
+		mBodyB->SetBullet(true);
 		
-		mBodyA->RegisterJoint(this);
-		mBodyB->RegisterJoint(this);
+		//mBodyA->RegisterJoint(this);
+		//mBodyB->RegisterJoint(this);
 		mIsNull = false;
 	}
 
@@ -36,28 +38,25 @@ FrictionJoint::FrictionJoint(World *world, Body *b1, b2Vec2 pt1, Body *b2, b2Vec
 FrictionJoint::~FrictionJoint(void)
 {
 	if (mBodyA)
-		if (mBodyA->GetBody())
-			mBodyA->GetBody()->SetBullet(false);
+		mBodyA->SetBullet(false);
 	if (mBodyB)
-		if (mBodyB->GetBody())
-			mBodyB->GetBody()->SetBullet(false);
+		mBodyB->SetBullet(false);
 }
 
 // Mets à jour le VertexArray
 void FrictionJoint::Update()
 {
-	if (mBodyA && mBodyB)
+	Joint::Update();
+
+	if (mBodyA && mBodyB && !mIsNull)
 	{
-		if (!mBodyA->IsNull() && !mBodyB->IsNull())
-		{
-			(*this)[0].position = b22sfVec(mJoint->GetAnchorA(), mWorld->GetPPM());
-			(*this)[1].position = b22sfVec(mJoint->GetAnchorB(), mWorld->GetPPM());
-		}
-		else
-		{
-			mWorld->DestroyJoint(this, false);
-			delete this;
-		}
+		(*this)[0].position = b22sfVec(mJoint->GetAnchorA(), mPhysicMgr->GetPPM());
+		(*this)[1].position = b22sfVec(mJoint->GetAnchorB(), mPhysicMgr->GetPPM());
+	}
+	else
+	{
+		//mPhysicMgr->DestroyJoint(this, false);
+		//delete this;
 	}
 }
 

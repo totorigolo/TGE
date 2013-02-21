@@ -2,15 +2,12 @@
 #include "../Tools/utils.h"
 
 // Ctor
-Level::Level(World *world)
-	: mIsValid(false), mIsCharged(false), mWorld(world),  mBckgC(255, 255, 255), mLightning(false),
+Level::Level(PhysicManager *physicMgr)
+	: mIsCharged(false), mPhysicMgr(physicMgr),  mBckgC(255, 255, 255), mLightning(false),
 	mResourceManager(ResourceManager::GetInstance()), mTextureMap(mResourceManager.GetTextureMap()),
 	mEntityManager(EntityManager::GetInstance())
 {
-	if (mWorld)
-	{
-		mIsValid = true;
-	}
+	assert(mPhysicMgr && "n'est pas valide.");
 }
 
 // Dtor
@@ -18,7 +15,6 @@ Level::~Level(void)
 {
 	Clear();
 
-	mIsValid = false;
 	mIsCharged = false;
 }
 
@@ -27,8 +23,8 @@ void Level::Clear()
 {
 	// Vide tous les objets du jeu
 	// TODO: Vider les textures ? (-> faire un système pour ne vider que les textures inutilisées)
-	mWorld->DestroyAllJoints();
-	mWorld->DestroyAllBody();
+	mPhysicMgr->DestroyAllJoints();
+	mPhysicMgr->DestroyAllBody();
 	mEntityManager.DestroyAllEntities();
 }
 

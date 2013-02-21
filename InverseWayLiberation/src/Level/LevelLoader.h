@@ -1,12 +1,9 @@
 #pragma once
-#include "Level.h"
-#include "../Tools/Loader.h"
-#include "../Physics/World.h"
-#include "../Physics/Body.h"
-#include "../Physics/Joint.h"
-#include <SFML/Graphics.hpp>
+#include <Box2D/Box2D.h>
 #include <string>
 #include <map>
+#include "Level.h"
+#include "../Tools/Loader.h"
 
 class Level;
 class LevelLoader : public Loader
@@ -23,15 +20,15 @@ private:
 	// Une fonction par catégorie
 	bool ProcessWorld();
 	bool ProcessTextures();
-	bool ProcessBodies();
+	bool ProcessBasicBodies();
 	bool ProcessEntities();
 	bool ProcessJoints();
 	bool ProcessDeco();
-	bool ProcessLights();
+	//bool ProcessLights();
 
 private:
 	Level *mLevel;
 	
-	std::map<unsigned int, Body*> mBodyIDMap;
-	std::map<unsigned int, Joint*> mJointIDMap;
+	std::map<unsigned int, b2Body*> mBodyIDMap;
+	std::map<unsigned int, b2Joint*> mJointIDMap;
 };

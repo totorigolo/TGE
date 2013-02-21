@@ -15,7 +15,7 @@ public:
 	// Ctor & dtor
 	World(b2Vec2 const& gravity, float ppm = 30.f);
 	virtual ~World(void);
-	
+
 	// Gestion des body (Seuls les Bodies devraient appeler ces fonctions)
 	void RegisterBody(Body *body);
 	b2Body* CreateBody(b2BodyDef const* bodyDef, Body *body);

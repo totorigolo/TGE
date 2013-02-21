@@ -2,27 +2,29 @@
 #include "../../Tools/utils.h"
 
 //Ctor
-MouseJoint::MouseJoint(World *world, Body *body, Body *ground, b2Vec2 target, float maxForce, float frequencyHz, float damping, sf::Color const& color)
-	: Joint(world), mColor(color)
+MouseJoint::MouseJoint(PhysicManager *physicMgr, b2Body *body, b2Body *ground, b2Vec2 target, float maxForce, float frequencyHz, float damping, sf::Color const& color)
+	: Joint(physicMgr), mColor(color)
 {
+	assert(mPhysicMgr && "n'est pas valide.");
+
 	mBodyA = ground;
 	mBodyB = body;
 
-	if (mWorld && mBodyA && mBodyB)
+	if (mBodyA && mBodyB)
 	{
 		b2MouseJointDef jointDef;
-		jointDef.bodyA = mBodyA->GetBody(); // Le body A ne sert pas, mais doit exister
-		jointDef.bodyB = mBodyB->GetBody(); // Le body utilisé est le B
+		jointDef.bodyA = mBodyA; // Le body A ne sert pas, mais doit exister
+		jointDef.bodyB = mBodyB; // Le body utilisé est le B
 		jointDef.target = target;
 		jointDef.dampingRatio = damping;
 		jointDef.frequencyHz = frequencyHz;
 		jointDef.collideConnected = true;
 		jointDef.maxForce = maxForce;
-		mJoint = (b2MouseJoint*) mWorld->CreateJoint(&jointDef, this);
-		mBodyB->GetBody()->SetAwake(true);
-		mBodyB->GetBody()->SetBullet(true);
+		mJoint = (b2MouseJoint*) mPhysicMgr->CreateJoint(&jointDef, this);
+		mBodyB->SetAwake(true);
+		mBodyB->SetBullet(true);
 		mIsNull = false;
-		mBodyB->RegisterJoint(this);
+		//mBodyB->RegisterJoint(this);
 	}
 
 	(*this)[0].color = mColor;
@@ -33,25 +35,23 @@ MouseJoint::MouseJoint(World *world, Body *body, Body *ground, b2Vec2 target, fl
 MouseJoint::~MouseJoint(void)
 {
 	if (mBodyB)
-		if (mBodyB->GetBody())
-			mBodyB->GetBody()->SetBullet(false);
+		mBodyB->SetBullet(false);
 }
 
 // Mets à jour le VertexArray
 void MouseJoint::Update()
 {
-	if (mBodyA && mBodyB)
+	Joint::Update();
+
+	if (mBodyA && mBodyB && !mIsNull)
 	{
-		if (!mBodyA->IsNull() && !mBodyB->IsNull())
-		{
-			(*this)[0].position = b22sfVec(((b2MouseJoint*) mJoint)->GetTarget(), mWorld->GetPPM());
-			(*this)[1].position = b22sfVec(mJoint->GetAnchorB(), mWorld->GetPPM());
-		}
-		else
-		{
-			mWorld->DestroyJoint(this, false);
-			delete this;
-		}
+		(*this)[0].position = b22sfVec(((b2MouseJoint*) mJoint)->GetTarget(), mPhysicMgr->GetPPM());
+		(*this)[1].position = b22sfVec(mJoint->GetAnchorB(), mPhysicMgr->GetPPM());
+	}
+	else
+	{
+		//mPhysicMgr->DestroyJoint(this, false);
+		//delete this;
 	}
 }
 
@@ -73,7 +73,7 @@ float MouseJoint::GetDampingRatio() const
 {
 	return ((b2MouseJoint*) mJoint)->GetDampingRatio();
 }
-Body const* MouseJoint::GetAttachedBody() const
+b2Body const* MouseJoint::GetAttachedBody() const
 {
 	return this->GetBodyB();
 }

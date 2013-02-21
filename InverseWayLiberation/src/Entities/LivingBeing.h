@@ -1,15 +1,15 @@
 #pragma once
-#include "Entity.h"
-#include "../Physics/World.h"
-#include "../Physics/Body.h"
-#include "../Resources/AnimatedSprite.h"
+#include <Box2D/Box2D.h>
 #include <string>
+#include "Entity.h"
+#include "../Physics/PhysicManager.h"
+#include "../Resources/AnimatedSprite.h"
 
 class LivingBeing : public Entity
 {
 public:
 	// Ctor & dtor
-	LivingBeing(World *world, b2Vec2 position, std::shared_ptr<sf::Texture> texture, int layer = 1);
+	LivingBeing(PhysicManager *physicMgr, b2Vec2 position, std::shared_ptr<sf::Texture> texture, int layer = 1);
 	virtual ~LivingBeing();
 
 	// Mise à jour
@@ -22,8 +22,8 @@ public:
 	void CanJump(bool b);
 
 	// Accesseurs
-	Body* GetCollisionBody();
-	const Body* GetCollisionBody() const;
+	b2Body* GetCollisionBody();
+	const b2Body* GetCollisionBody() const;
 	//AnimatedSprite& GetAnimatedSprite();
 	//const AnimatedSprite& GetAnimatedSprite() const;
 	
@@ -31,8 +31,8 @@ protected:
 	bool mIsDead;
 	bool mCanJump;
 
-	World *mWorld;
-	Body *mCollisionBody;
+	PhysicManager *mPhysicMgr;
+	b2Body *mCollisionBody;
 
 	sf::Sprite mSprite;
 	std::shared_ptr<sf::Texture> mTexture;

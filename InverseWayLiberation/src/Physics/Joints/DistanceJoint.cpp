@@ -2,23 +2,25 @@
 #include "../../Tools/utils.h"
 
 //Ctor
-DistanceJoint::DistanceJoint(World *world, Body *b1, b2Vec2 pt1, Body *b2, b2Vec2 p2, float frequencyHz, float damping, bool collideconnected, sf::Color const& color)
-	: Joint(world), mColor(color)
+DistanceJoint::DistanceJoint(PhysicManager *physicMgr, b2Body *b1, b2Vec2 pt1, b2Body *b2, b2Vec2 p2, float frequencyHz, float damping, bool collideconnected, sf::Color const& color)
+	: Joint(physicMgr), mColor(color)
 {
+	assert(mPhysicMgr && "n'est pas valide.");
+
 	mBodyA = b1;
 	mBodyB = b2;
 
-	if (mWorld && mBodyA && mBodyB)
+	if (mBodyA && mBodyB)
 	{
 		b2DistanceJointDef jointDef;
-		jointDef.Initialize(mBodyA->GetBody(), mBodyB->GetBody(), mBodyA->GetBody()->GetWorldPoint(pt1), mBodyB->GetBody()->GetWorldPoint(p2));
+		jointDef.Initialize(mBodyA, mBodyB, mBodyA->GetWorldPoint(pt1), mBodyB->GetWorldPoint(p2));
 		jointDef.collideConnected = collideconnected;
 		jointDef.frequencyHz = frequencyHz;
 		jointDef.dampingRatio = damping;
-		mJoint = (b2DistanceJoint*) mWorld->CreateJoint(&jointDef, this);
+		mJoint = (b2DistanceJoint*) mPhysicMgr->CreateJoint(&jointDef, this);
 		
-		mBodyA->RegisterJoint(this);
-		mBodyB->RegisterJoint(this);
+		//mBodyA->RegisterJoint(this);
+		//mBodyB->RegisterJoint(this);
 		mIsNull = false;
 	}
 
@@ -34,18 +36,17 @@ DistanceJoint::~DistanceJoint(void)
 // Mets à jour le VertexArray
 void DistanceJoint::Update()
 {
-	if (mBodyA && mBodyB)
+	Joint::Update();
+
+	if (mBodyA && mBodyB && !mIsNull)
 	{
-		if (!mBodyA->IsNull() && !mBodyB->IsNull())
-		{
-			(*this)[0].position = b22sfVec(mJoint->GetAnchorA(), mWorld->GetPPM());
-			(*this)[1].position = b22sfVec(mJoint->GetAnchorB(), mWorld->GetPPM());
-		}
-		else
-		{
-			mWorld->DestroyJoint(this, false);
-			delete this;
-		}
+		(*this)[0].position = b22sfVec(mJoint->GetAnchorA(), mPhysicMgr->GetPPM());
+		(*this)[1].position = b22sfVec(mJoint->GetAnchorB(), mPhysicMgr->GetPPM());
+	}
+	else
+	{
+		//mPhysicMgr->DestroyJoint(this, false);
+		//delete this;
 	}
 }
 
@@ -73,8 +74,8 @@ b2Vec2 DistanceJoint::GetAnchorB() const
 
 void DistanceJoint::SetLength(float length)
 {
-	mBodyA->GetBody()->SetAwake(true);
-	mBodyB->GetBody()->SetAwake(true);
+	mBodyA->SetAwake(true);
+	mBodyB->SetAwake(true);
 	((b2DistanceJoint*) mJoint)->SetLength(length);
 }
 void DistanceJoint::SetFrequencyHz(float frequencyHz)

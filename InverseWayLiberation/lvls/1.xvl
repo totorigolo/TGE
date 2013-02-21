@@ -20,15 +20,17 @@
     <img name="circle" src="tex/circle.png"/>
     <img name="ball" src="tex/ball.png"/>
     <img name="miniball" src="tex/miniball.png"/>
+    <img name="hollowCircle" src="tex/hollowCircle.png"/>
     <img name="ground" src="tex/ground.png"/>
     <img name="lampadere" src="tex/lampadere.png"/>
     <img name="volcan" src="tex/volcan.png"/>
 
     <img name="hero" src="tex/hero/test2.png"/>
+    <img name="hook" src="tex/hook.png"/>
   </textures>
 
   <!-- Défini les bodies simples -->
-  <bodies>
+  <basicbodies>
     <!--
 Les attributs sont facultatifs, sauf la position et la texture.
 Il est possible de définir un ID, afin de reconnaitre le body par la suite du chargement (ex: joints).
@@ -61,8 +63,8 @@ ex: (NB = les valeurs mises sont celles par défaut) (osp = OneSidedPlatform)
     <dynamicbox id="4" texture="box2" pos="(1.5f, 3.f)"/>
     <dynamicbox id="2" texture="caisse" pos="(1.9f, 3.f)"/>
 
-    <kinematicbox id="5" texture="caisse" pos="(1.9f, 4.f)" restitution="1.9f"/>
-  </bodies>
+    <staticbox id="5" texture="caisse" pos="(1.9f, 4.f)" restitution="1.f"/>
+  </basicbodies>
 
   <!-- Crée les Entities -->
   <entities>

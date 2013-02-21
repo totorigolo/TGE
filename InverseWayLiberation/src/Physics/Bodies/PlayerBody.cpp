@@ -30,7 +30,7 @@ PlayerBody::PlayerBody(World *world, b2Vec3 posRot, std::shared_ptr<sf::Texture>
 		// Sous les pieds
 		b2PolygonShape* shape2 = new b2PolygonShape;
 		shape2->SetAsBox((texture->getSize().x / 2) * mWorld->GetMPP(), (texture->getSize().y / 2) * mWorld->GetMPP() * 0.1f
-			, b2Vec2(0, - static_cast<int>(texture->getSize().y / 2)), 0.f);
+			, b2Vec2(0, - static_cast<float>(texture->getSize().y / 2)), 0.f);
 		shape2->m_radius = 0.f;
 		b2FixtureDef fixtureDef2;
 		fixtureDef2.shape = shape2;

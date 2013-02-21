@@ -3,8 +3,8 @@
 #include "../Physics/Callback/AABBCallback.h"
 
 // Ctor & dtor
-Player::Player(World *world, b2Vec2 position, std::shared_ptr<sf::Texture> texture, int layer)
-	: LivingBeing(world, position, texture, layer)
+Player::Player(PhysicManager *physicMgr, b2Vec2 position, std::shared_ptr<sf::Texture> texture, int layer)
+	: LivingBeing(physicMgr, position, texture, layer)
 {
 	// Change le type
 	mType = EntityType::Player;
@@ -56,18 +56,18 @@ void Player::GetEvent(const PlayerEvent &playerEvent)
 		{
 			//if ((callback.GetFixture() && mCollisionBody->GetBody()->GetLinearVelocity().x >= -5.f)
 			//	|| mCollisionBody->GetBody()->GetLinearVelocity().x >= -3.f)
-			if ((mCanJump && mCollisionBody->GetBody()->GetLinearVelocity().x >= -5.f)
-				|| mCollisionBody->GetBody()->GetLinearVelocity().x >= -3.f)
+			if ((mCanJump && mCollisionBody->GetLinearVelocity().x >= -5.f)
+				|| mCollisionBody->GetLinearVelocity().x >= -3.f)
 			{
-				mCollisionBody->GetBody()->ApplyForceToCenter(b2Vec2(-5.f, 0.f));
+				mCollisionBody->ApplyForceToCenter(b2Vec2(-5.f, 0.f));
 			}
 		}
 		else if (playerEvent == PlayerEvent::Right)
 		{
-			if ((mCanJump && mCollisionBody->GetBody()->GetLinearVelocity().x <= 5.f)
-				|| mCollisionBody->GetBody()->GetLinearVelocity().x <= 3.f)
+			if ((mCanJump && mCollisionBody->GetLinearVelocity().x <= 5.f)
+				|| mCollisionBody->GetLinearVelocity().x <= 3.f)
 			{
-				mCollisionBody->GetBody()->ApplyForceToCenter(b2Vec2(5.f, 0));
+				mCollisionBody->ApplyForceToCenter(b2Vec2(5.f, 0));
 			}
 		}
 		else if (playerEvent == PlayerEvent::Jump)
@@ -75,7 +75,7 @@ void Player::GetEvent(const PlayerEvent &playerEvent)
 			//if (callback.GetFixture())
 			if (mCanJump)
 			{
-				mCollisionBody->GetBody()->ApplyForceToCenter(b2Vec2(0.f, 200.f)); // 300.f = un étage
+				mCollisionBody->ApplyForceToCenter(b2Vec2(0.f, 200.f)); // 300.f = un étage
 			}
 		}
 		else if (playerEvent == PlayerEvent::Crounch)

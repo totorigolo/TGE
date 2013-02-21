@@ -3,16 +3,14 @@
 #include <Box2D/Box2D.h>
 #include <Thor/Resources.hpp>
 #include "../Joint.h"
-#include "../World.h"
 
-class World;
 class Joint;
 class FrictionJoint : public Joint
 {
 public:
 	// Ctor & dtor
-	FrictionJoint(World *world, Body *b1, b2Vec2 pt1, Body *b2, b2Vec2 p2, float maxForce = 0.f, float maxTorque = 0.f, bool collideconnected = true
-																		, sf::Color const& color = sf::Color::Magenta);
+	FrictionJoint(PhysicManager *physicMgr, b2Body *b1, b2Vec2 pt1, b2Body *b2, b2Vec2 p2, float maxForce = 0.f, float maxTorque = 0.f
+														, bool collideconnected = true , sf::Color const& color = sf::Color::Magenta);
 	virtual ~FrictionJoint(void);
 	
 	// Mets à jour le VertexArray

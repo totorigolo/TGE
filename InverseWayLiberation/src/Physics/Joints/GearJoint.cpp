@@ -2,28 +2,30 @@
 #include "../../Tools/utils.h"
 
 //Ctor
-GearJoint::GearJoint(World *world, Body *b1, Body *b2, Joint *j1, Joint *j2, float ratio, bool collideconnected, sf::Color const& color)
-	: Joint(world), mColor(color)
+GearJoint::GearJoint(PhysicManager *physicMgr, b2Body *b1, b2Body *b2, b2Joint *j1, b2Joint *j2, float ratio, bool collideconnected, sf::Color const& color)
+	: Joint(physicMgr), mColor(color)
 {
+	assert(mPhysicMgr && "n'est pas valide.");
+
 	mBodyA = b1;
 	mBodyB = b2;
 
-	if (mWorld && mBodyA && mBodyB)
+	if (mBodyA && mBodyB)
 	{
 		b2GearJointDef jointDef;
-		jointDef.bodyA = mBodyA->GetBody();
-		jointDef.bodyB = mBodyB->GetBody();
-		jointDef.joint1 = j1->GetJoint();
-		jointDef.joint2 = j2->GetJoint();
+		jointDef.bodyA = mBodyA;
+		jointDef.bodyB = mBodyB;
+		jointDef.joint1 = j1;
+		jointDef.joint2 = j2;
 		jointDef.ratio = ratio;
 		jointDef.collideConnected = collideconnected;
-		mJoint = (b2GearJoint*) mWorld->CreateJoint(&jointDef, this);
+		mJoint = (b2GearJoint*) mPhysicMgr->CreateJoint(&jointDef, this);
 		
-		mBodyA->RegisterJoint(this);
-		mBodyB->RegisterJoint(this);
+		//mBodyA->RegisterJoint(this);
+		//mBodyB->RegisterJoint(this);
 		
-		j1->RegisterJoint(this);
-		j2->RegisterJoint(this);
+		//j1->RegisterJoint(this);
+		//j2->RegisterJoint(this);
 
 		mIsNull = false;
 	}
@@ -40,18 +42,17 @@ GearJoint::~GearJoint(void)
 // Mets à jour le VertexArray
 void GearJoint::Update()
 {
-	if (mBodyA && mBodyB)
+	Joint::Update();
+
+	if (mBodyA && mBodyB && !mIsNull)
 	{
-		if (!mBodyA->IsNull() && !mBodyB->IsNull())
-		{
-			(*this)[0].position = b22sfVec(mJoint->GetAnchorA(), mWorld->GetPPM());
-			(*this)[1].position = b22sfVec(mJoint->GetAnchorB(), mWorld->GetPPM());
-		}
-		else
-		{
-			mWorld->DestroyJoint(this, false);
-			delete this;
-		}
+		(*this)[0].position = b22sfVec(mJoint->GetAnchorA(), mPhysicMgr->GetPPM());
+		(*this)[1].position = b22sfVec(mJoint->GetAnchorB(), mPhysicMgr->GetPPM());
+	}
+	else
+	{
+		//mPhysicMgr->DestroyJoint(this, false);
+		//delete this;
 	}
 }
 
@@ -60,19 +61,19 @@ float GearJoint::GetRatio() const
 {
 	return ((b2GearJoint*) mJoint)->GetRatio();
 }
-Joint *GearJoint::GetJoint1()
+b2Joint *GearJoint::GetJoint1()
 {
-	return (Joint*) ((b2GearJoint*) mJoint)->GetJoint1()->GetUserData();
+	return ((b2GearJoint*) mJoint)->GetJoint1();
 }
-Joint const* GearJoint::GetJoint1() const
+b2Joint const* GearJoint::GetJoint1() const
 {
-	return (Joint*) ((b2GearJoint*) mJoint)->GetJoint1()->GetUserData();
+	return ((b2GearJoint*) mJoint)->GetJoint1();
 }
-Joint *GearJoint::GetJoint2()
+b2Joint *GearJoint::GetJoint2()
 {
-	return (Joint*) ((b2GearJoint*) mJoint)->GetJoint2()->GetUserData();
+	return ((b2GearJoint*) mJoint)->GetJoint2();
 }
-Joint const* GearJoint::GetJoint2() const
+b2Joint const* GearJoint::GetJoint2() const
 {
-	return (Joint*) ((b2GearJoint*) mJoint)->GetJoint2()->GetUserData();
+	return ((b2GearJoint*) mJoint)->GetJoint2();
 }

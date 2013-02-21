@@ -2,28 +2,30 @@
 #include "../../Tools/utils.h"
 
 //Ctor
-WheelJoint::WheelJoint(World *world, Body *car, Body *wheel, b2Vec2 pWheel, b2Vec2 axis, float frequencyHz, float damping
+WheelJoint::WheelJoint(PhysicManager *physicMgr, b2Body *car, b2Body *wheel, b2Vec2 pWheel, b2Vec2 axis, float frequencyHz, float damping
 																					   , bool enableMotor, float motorSpeed, float maxMotorTorque
 																					   , bool collideconnected, sf::Color const& color)
-	: Joint(world), mColor(color)
+	: Joint(physicMgr), mColor(color)
 {
+	assert(mPhysicMgr && "n'est pas valide.");
+
 	mBodyA = car;
 	mBodyB = wheel;
 
-	if (mWorld && mBodyA && mBodyB)
+	if (mBodyA && mBodyB)
 	{
 		b2WheelJointDef jointDef;
-		jointDef.Initialize(mBodyA->GetBody(), mBodyB->GetBody(), mBodyB->GetBody()->GetWorldPoint(pWheel), axis);
+		jointDef.Initialize(mBodyA, mBodyB, mBodyB->GetWorldPoint(pWheel), axis);
 		jointDef.motorSpeed = motorSpeed;
 		jointDef.maxMotorTorque = maxMotorTorque;
 		jointDef.enableMotor = enableMotor;
 		jointDef.frequencyHz = frequencyHz;
 		jointDef.dampingRatio = damping;
 		jointDef.collideConnected = collideconnected;
-		mJoint = (b2WheelJoint*) mWorld->CreateJoint(&jointDef, this);
+		mJoint = (b2WheelJoint*) mPhysicMgr->CreateJoint(&jointDef, this);
 		
-		mBodyA->RegisterJoint(this);
-		mBodyB->RegisterJoint(this);
+		//mBodyA->RegisterJoint(this);
+		//mBodyB->RegisterJoint(this);
 		mIsNull = false;
 	}
 
@@ -39,19 +41,18 @@ WheelJoint::~WheelJoint(void)
 // Mets à jour le VertexArray
 void WheelJoint::Update()
 {
-	if (mBodyA && mBodyB)
+	Joint::Update();
+
+	if (mBodyA && mBodyB && !mIsNull)
 	{
-		if (!mBodyA->IsNull() && !mBodyB->IsNull())
-		{
-			(*this)[0].position = b22sfVec(mJoint->GetAnchorA(), mWorld->GetPPM());
-			(*this)[1].position = b22sfVec(mJoint->GetAnchorB(), mWorld->GetPPM());
-		}
-		else
-		{
-			// TODO: Euh.... ??? Oo
-			mWorld->DestroyJoint(this, false);
-			delete this;
-		}
+		(*this)[0].position = b22sfVec(mJoint->GetAnchorA(), mPhysicMgr->GetPPM());
+		(*this)[1].position = b22sfVec(mJoint->GetAnchorB(), mPhysicMgr->GetPPM());
+	}
+	else
+	{
+		// TODO: Euh.... ??? Oo
+		//mPhysicMgr->DestroyJoint(this, false);
+		//delete this;
 	}
 }
 

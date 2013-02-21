@@ -8,7 +8,9 @@ enum class EntityType
 	RawBody,
 	LivingBeing,
 	Player,
-	Ragdoll
+	Ragdoll,
+	BasicBody,
+	Grapnel
 };
 
 class Entity : public sf::Drawable

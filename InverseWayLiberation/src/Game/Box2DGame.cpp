@@ -1,6 +1,6 @@
 #include "Box2DGame.h"
 #include "../Level/LevelLoader.h"
-#include "../Entities/RawBody.h"
+#include "../Entities/BasicBody.h"
 #include "../Entities/Player.h"
 #include "../Physics/Bodies/StaticBox.h"
 #include "../Physics/Bodies/DynamicBox.h"
@@ -21,10 +21,11 @@ Box2DGame::Box2DGame(sf::RenderWindow & window)
 	mResourceManager(ResourceManager::GetInstance()),
 	mTextureMap(mResourceManager.GetTextureMap()),
 	// Lumières
-	mLightManager(LightManager::GetInstance()),
-	mMouseLight(0.f, 0.f, 400.f, false),
+	//mLightManager(LightManager::GetInstance()),
+	//mMouseLight(0.f, 0.f, 400.f, false),
 	// Physique
-	mGravity(0.0f, -9.8f), mWorld(mGravity)
+	mGravity(0.0f, -9.8f), mPhysicMgr(mGravity),
+	mGrapnel(&mPhysicMgr, -1)
 {
 	// Etats du jeu
 	mPaused = false;
@@ -38,7 +39,6 @@ Box2DGame::Box2DGame(sf::RenderWindow & window)
 	mSpliceL1 = mSpliceL2 = b2Vec2(0.f, 0.f);
 	mSpliceP1 = mSpliceP2 = b2Vec2(0.f, 0.f);
 	mSplice1Get = false;
-	mHookJoint = nullptr;
 	mHookedSBody = nullptr;
 }
 
@@ -90,10 +90,14 @@ bool Box2DGame::OnInit()
 	mPaused = false;
 	mCurrentZoom = 1.f;
 
+	// Initialise le monde
+	mPhysicMgr.SetTimeStep(1.f / 60.f);
+	EntityManager::GetInstance().RegisterEntity(&mGrapnel);
+
 	// Charge un niveau
-	mLevel = new Level(&mWorld);
+	mLevel = new Level(&mPhysicMgr);
 	LevelLoader("lvls/1.xvl", mLevel);
-	if (!mLevel->IsValid())
+	if (!mLevel->IsCharged())
 		return false;
 
 	/* Fenêtrage */
@@ -107,45 +111,19 @@ bool Box2DGame::OnInit()
 	mShadowRenderTexture.create(mWindow.getSize().x, mWindow.getSize().y);
 
 	// Initialise le système de lumières
-	mLightManager.Initialize(mRenderTexture, &mRenderTextureView);
-	mLightManager.AddLight(&mMouseLight);
+	//mLightManager.Initialize(mRenderTexture, &mRenderTextureView);
+	//mLightManager.AddLight(&mMouseLight);
 
 	// Centre la vue
 	mCurrentZoom = mLevel->GetDefaultZoom();
-	mRenderTextureView.setCenter(b22sfVec(mLevel->GetOriginView(), mWorld.GetPPM()));
+	mRenderTextureView.setCenter(b22sfVec(mLevel->GetOriginView(), mPhysicMgr.GetPPM()));
 	mRenderTextureView.zoom(mLevel->GetDefaultZoom());
 
-	// Charge les textures dans la textureKeyMap
+	// Initialise le système d'actions
 	mActionMap.clearActions();
 	mActionCallbackSystem.clearAllConnections();
-	try {
-		mTextureMap["skyrim"] = mResourceManager.acquire(thor::Resources::fromFile<sf::Texture>("tex/skyrim.jpg"));
 
-		mTextureMap["hollowCircle"] = mResourceManager.acquire(thor::Resources::fromFile<sf::Texture>("tex/hollowCircle.png"));
-
-		mTextureMap["box"] = mResourceManager.acquire(thor::Resources::fromFile<sf::Texture>("tex/box.png"));
-		mTextureMap["box2"] = mResourceManager.acquire(thor::Resources::fromFile<sf::Texture>("tex/box2.png"));
-		mTextureMap["caisse"] = mResourceManager.acquire(thor::Resources::fromFile<sf::Texture>("tex/caisse.png"));
-		mTextureMap["tonneau"] = mResourceManager.acquire(thor::Resources::fromFile<sf::Texture>("tex/tonneau.png"));
-		mTextureMap["way"] = mResourceManager.acquire(thor::Resources::fromFile<sf::Texture>("tex/way.png"));
-		mTextureMap["way"]->setSmooth(true);
-		
-		mTextureMap["ground"] = mResourceManager.acquire(thor::Resources::fromFile<sf::Texture>("tex/ground.png"));
-		mTextureMap["lampadere"] = mResourceManager.acquire(thor::Resources::fromFile<sf::Texture>("tex/lampadere.png"));
-
-		mTextureMap["ball"] = mResourceManager.acquire(thor::Resources::fromFile<sf::Texture>("tex/ball.png"));
-		mTextureMap["circle"] = mResourceManager.acquire(thor::Resources::fromFile<sf::Texture>("tex/circle.png"));
-
-		mTextureMap["hero"] = mResourceManager.acquire(thor::Resources::fromFile<sf::Texture>("tex/hero/test.png"));
-	}
-	catch (thor::ResourceLoadingException const& e)
-	{
-		std::cout << e.what() << std::endl;
-		system("PAUSE");
-		exit(222);
-	}
-
-	/* Crée les actions */
+	// Crée les actions
 	mWindow.setKeyRepeatEnabled(false);
 	mActionMap["closed"] = thor::Action(sf::Keyboard::Escape, thor::Action::ReleaseOnce) || thor::Action(sf::Event::Closed);
 	//mActionCallbackSystem.connect("closed", std::bind(&sf::RenderWindow::close, &mWindow));
@@ -185,9 +163,9 @@ void Box2DGame::OnLoopBegin()
 	// Sauvegarde la dernière position de la souris
 	mCurrentMousePos = i2f(sf::Mouse::getPosition());
 	mCurrentMousePosRV = mRenderTexture.convertCoords(sf::Mouse::getPosition(mWindow), mRenderTextureView);
-	mMp = sf2b2Vec(mCurrentMousePosRV, mWorld.GetMPP()); // système Box2D
+	mMp = sf2b2Vec(mCurrentMousePosRV, mPhysicMgr.GetMPP()); // système Box2D
 
-	mMouseLight.SetPosition(mCurrentMousePosRV);
+	//mMouseLight.SetPosition(mCurrentMousePosRV);
 }
 
 /// Appelé pour les évènements
@@ -228,25 +206,32 @@ void Box2DGame::OnEvent()
 	if (mActionMap.isActive("onCreateBox"))
 	{
 		std::string list[] = {"box", "box2", "caisse", "way", "tonneau"};
-		RawBody *rb = new RawBody(new DynamicBox(&mWorld, getVec3(mMp), mTextureMap[randomElement(list, 5)]));
-		EntityManager::GetInstance().RegisterEntity(rb);
+		BasicBody *b = new BasicBody(&mPhysicMgr);
+		b->CreateDynBox(getVec3(mMp), mTextureMap[randomElement(list, 5)]);
+
+		EntityManager::GetInstance().RegisterEntity(b);
 		EntityManager::GetInstance().SortByLayer();
 	}
 	if (mActionMap.isActive("onCreateCircle"))
 	{
 		std::string list[] = {"ball", "circle"};
-		RawBody *rb = new RawBody(new DynamicCircle(&mWorld, getVec3(mMp), mTextureMap[randomElement(list, 2)], 1.f, 0.2f, 0.5f));
-		EntityManager::GetInstance().RegisterEntity(rb);
+		BasicBody *b = new BasicBody(&mPhysicMgr);
+		b->CreateDynCircle(getVec3(mMp), mTextureMap[randomElement(list, 2)], 1.f, 0.2f, 0.5f);
+
+		EntityManager::GetInstance().RegisterEntity(b);
 		EntityManager::GetInstance().SortByLayer();
 	}
 	if (mActionMap.isActive("onCreateLamp"))
 	{
-		StaticBox *l = new StaticBox(&mWorld, getVec3(mMp), mTextureMap["lampadere"], 0.1f, 0.05f);
-		EntityManager::GetInstance().RegisterEntity(new RawBody(l));
+		BasicBody *b = new BasicBody(&mPhysicMgr);
+		b->CreateStaticBox(getVec3(mMp), mTextureMap["lampadere"], 0.1f, 0.05f);
+
+		EntityManager::GetInstance().RegisterEntity(b);
 		EntityManager::GetInstance().SortByLayer();
+
 		sf::Vector2f pos = mCurrentMousePosRV;
-		pos.y -= 1.2f * mWorld.GetPPM();
-		mLightManager.AddLight(new PointLight(pos, 100.2f, true, true, l));
+		pos.y -= 1.2f * mPhysicMgr.GetPPM();
+		//mLightManager.AddLight(new PointLight(pos, 100.2f, true, true));
 	}
 	
 	// Déplacements des objets
@@ -263,25 +248,25 @@ void Box2DGame::OnEvent()
 		{
 			// Demande au monde les formes qui sont sous l'AABB
 			PointCallback callback(mMp);
-			mWorld.QueryAABB(&callback, callback.GetAABB());
+			mPhysicMgr.GetWorld()->QueryAABB(&callback, callback.GetAABB());
 
 			// Il y a un objet, on l'attache
 			if (callback.GetFixture())
 			{
 				// On cherche un StaticBody disponible
-				Body *staticBody = mWorld.GetAnyStaticBody();
+				b2Body *staticBody = mPhysicMgr.GetAnyStaticBody();
 				if (staticBody) // Si il y en a un
 				{
-					b2Body* b2body = callback.GetFixture()->GetBody();
-					Body* body = (Body*) b2body->GetUserData();
-					mMouseJoint = new MouseJoint(&mWorld, body, staticBody, mMp, 999999999.f * b2body->GetMass());
+					b2Body* body = callback.GetFixture()->GetBody();
+					mMouseJoint = new MouseJoint(&mPhysicMgr, body, staticBody, mMp, 10000000.f * body->GetMass());
 				}
 			}
 		}
 	}
 	else if (mMouseJoint)
 	{
-		mWorld.DestroyJoint(mMouseJoint);
+		mMouseJoint->Destroy();
+		delete mMouseJoint;
 		mMouseJoint = nullptr;
 	}
 
@@ -306,30 +291,28 @@ void Box2DGame::OnEvent()
 	// Charge un niveau
 	if (mActionMap.isActive("onLoadLevel"))
 	{
-		mLightManager.DeleteLight(&mMouseLight, false);
+		//mLightManager.DeleteLight(&mMouseLight, false);
 		LevelLoader("lvls/1.xvl", mLevel);
-		mLightManager.AddLight(&mMouseLight);
+		//mLightManager.AddLight(&mMouseLight);
 
 		// Centre la vue
 		mCurrentZoom = mLevel->GetDefaultZoom();
 		mRenderTextureView.zoom(mCurrentZoom);
 		mRenderTextureView.setSize(u2f(mWindow.getSize()) * sf::Vector2f(mRenderTextureView.getViewport().width, mRenderTextureView.getViewport().height));
-		mRenderTextureView.setCenter(b22sfVec(mLevel->GetOriginView(), mWorld.GetPPM()));
+		mRenderTextureView.setCenter(b22sfVec(mLevel->GetOriginView(), mPhysicMgr.GetPPM()));
 
 		// Supprime les pointeurs
-		mHookJoint = nullptr;
+		mGrapnel.Destroy();
 		mMouseJoint = nullptr;
 	}
 
-	// Grapin
+	// Grappin
 	if (mActionMap.isActive("onHook"))
 	{
 		// Si le grapin est déjà accroché, on le décroche
-		if (mHookJoint)
+		if (mGrapnel.IsAlive())
 		{
-			if (!mHookJoint->IsNull())
-				mWorld.DestroyJoint(mHookJoint);
-			mHookJoint = nullptr;
+			mGrapnel.Destroy();
 		}
 
 		// Si le body est déjà sélectionné, on l'accroche avec le grapin
@@ -337,27 +320,13 @@ void Box2DGame::OnEvent()
 		{
 			// Demande au monde les formes qui sont sous l'AABB
 			PointCallback callback(mMp, false);
-			mWorld.QueryAABB(&callback, callback.GetAABB());
+			mPhysicMgr.GetWorld()->QueryAABB(&callback, callback.GetAABB());
 
 			// Il y a un objet, on le retient
-			if (callback.GetFixture() && mHookedSBody && callback.GetFixture()->GetBody() != mHookedSBody->GetBody())
+			if (callback.GetFixture() && callback.GetFixture()->GetBody() != mHookedSBody)
 			{
-				if (mHookJoint)
-					mWorld.DestroyJoint(mHookJoint);
-
-				// Vérifie que le body soient valides
-				if (mHookedSBody->IsNull())
-					mHookedSBody = nullptr;
-				else
-				{
-					// Enregistre le body appuyé
-					Body *b = (Body*) callback.GetFixture()->GetBody()->GetUserData();
-					b2Vec2 v = b->GetBody()->GetLocalPoint(mMp);
-
-					mHookJoint = new DistanceJoint(&mWorld, mHookedSBody, mHookedSAnchor, b, v);
-					mWorld.RegisterJoint(mHookJoint);
-					mHookClock.restart();
-				}
+				b2Body *b = callback.GetFixture()->GetBody();
+				mGrapnel.Create(mTextureMap["hook"], b, b->GetLocalPoint(mMp), mHookedSBody, mHookedSAnchor);
 			}
 			mHookedSBody = nullptr;
 		}
@@ -365,23 +334,17 @@ void Box2DGame::OnEvent()
 		// Sinon on cherche le body survollé pour l'accrocher
 		else
 		{
-			// Supprime le grapin existant
-			if (mHookJoint)
-			{
-				mWorld.DestroyJoint(mHookJoint);
-				mHookJoint = nullptr;
-			}
-
 			// Demande au monde les formes qui sont sous l'AABB
 			PointCallback callback(mMp, false);
-			mWorld.QueryAABB(&callback, callback.GetAABB());
+			mPhysicMgr.GetWorld()->QueryAABB(&callback, callback.GetAABB());
 
 			// Il y a un objet, on le retient
 			if (callback.GetFixture())
 			{
 				// Enregistre le body appuyé
-				mHookedSBody = (Body*) callback.GetFixture()->GetBody()->GetUserData();
-				mHookedSAnchor = b2MulT(b2Rot(mHookedSBody->GetBody()->GetAngle()), mMp - mHookedSBody->GetBody()->GetPosition());
+				mHookedSBody = callback.GetFixture()->GetBody();
+				mHookedSAnchor = mHookedSBody->GetLocalPoint(mMp);
+				//mHookedSAnchor = b2MulT(b2Rot(mHookedSBody->GetAngle()), mMp - mHookedSBody->GetPosition());
 			}
 		}
 	}
@@ -394,29 +357,21 @@ void Box2DGame::OnEvent()
 		{
 			// Demande au monde les formes qui sont sous l'AABB
 			PointCallback callback(mMp, false);
-			mWorld.QueryAABB(&callback, callback.GetAABB());
+			mPhysicMgr.GetWorld()->QueryAABB(&callback, callback.GetAABB());
 
 			// Il y a un objet, on le retient
 			if (callback.GetFixture())
 			{
-				// Vérifie que les bodies soient valides
-				if (mPinBodyA)
-					if (mPinBodyA->IsNull())
-						mPinBodyA = nullptr;
-				if (mPinBodyB)
-					if (!mPinBodyB->IsNull())
-						mPinBodyB = nullptr;
-
 				// Enregistre le body appuyé
-				if (!mPinBodyA && mPinBodyB != (Body*) callback.GetFixture()->GetBody()->GetUserData())
+				if (!mPinBodyA && mPinBodyB != callback.GetFixture()->GetBody())
 				{
-					mPinBodyA = (Body*) callback.GetFixture()->GetBody()->GetUserData();
-					mPinAnchorA = mPinBodyA->GetBody()->GetLocalPoint(mMp);
+					mPinBodyA = callback.GetFixture()->GetBody();
+					mPinAnchorA = mPinBodyA->GetLocalPoint(mMp);
 				}
-				else if (!mPinBodyB && mPinBodyA != (Body*) callback.GetFixture()->GetBody()->GetUserData())
+				else if (!mPinBodyB && mPinBodyA != callback.GetFixture()->GetBody())
 				{
-					mPinBodyB = (Body*) callback.GetFixture()->GetBody()->GetUserData();
-					mPinAnchorB = mPinBodyB->GetBody()->GetLocalPoint(mMp);
+					mPinBodyB = callback.GetFixture()->GetBody();
+					mPinAnchorB = mPinBodyB->GetLocalPoint(mMp);
 				}
 				else
 				{
@@ -436,8 +391,8 @@ void Box2DGame::OnEvent()
 		// Crée le joint
 		if (mPinBodyA && mPinBodyB)
 		{
-			mWorld.RegisterJoint(new DistanceJoint(&mWorld, mPinBodyA, mPinAnchorA, mPinBodyB, mPinAnchorB));
-			//mWorld.RegisterJoint(new RevoluteJoint(&mWorld, mPinBodyA, mPinBodyB, mPinAnchorA, true, 90.f, 270.f, true, 30.f));
+			mPhysicMgr.RegisterJoint(new DistanceJoint(&mPhysicMgr, mPinBodyA, mPinAnchorA, mPinBodyB, mPinAnchorB));
+			//mPhysicMgr.RegisterJoint(new RevoluteJoint(&mPhysicMgr, mPinBodyA, mPinBodyB, mPinAnchorA, true, 90.f, 270.f, true, 30.f));
 
 			mPinBodyA = nullptr;
 			mPinBodyB = nullptr;
@@ -461,7 +416,7 @@ void Box2DGame::OnEvent()
 
 			// Récupère le premier point d'intersection
 			FirstBodyRaycastCallback callback;
-			mWorld.RayCast(&callback, mSpliceL1, mSpliceL2);
+			mPhysicMgr.RayCast(&callback, mSpliceL1, mSpliceL2);
 			if (callback.mHit)
 			{
 				callback.mHit = false;
@@ -469,7 +424,7 @@ void Box2DGame::OnEvent()
 
 				// Récupère le dernier point d'intersection
 				callback.SetBody(callback.mFixture->GetBody());
-				mWorld.RayCast(&callback, mSpliceL2, mSpliceL1);
+				mPhysicMgr.RayCast(&callback, mSpliceL2, mSpliceL1);
 				if (callback.mHit)
 				{
 					mSpliceP2 = callback.mFixture->GetBody()->GetLocalPoint(callback.mPoint);
@@ -593,12 +548,12 @@ void Box2DGame::OnEvent()
 		mCurrentZoom = mLevel->GetDefaultZoom();
 		mRenderTextureView.zoom(mCurrentZoom);
 		mRenderTextureView.setSize(u2f(mWindow.getSize()) * sf::Vector2f(mRenderTextureView.getViewport().width, mRenderTextureView.getViewport().height));
-		mRenderTextureView.setCenter(b22sfVec(mLevel->GetOriginView(), mWorld.GetPPM()));
+		mRenderTextureView.setCenter(b22sfVec(mLevel->GetOriginView(), mPhysicMgr.GetPPM()));
 	}
     if (mActionMap.isActive("resized"))
 	{
 		mRenderTextureView.setSize(u2f(mWindow.getSize()) * sf::Vector2f(mRenderTextureView.getViewport().width, mRenderTextureView.getViewport().height));
-		mRenderTextureView.setCenter(b22sfVec(mLevel->GetOriginView(), mWorld.GetPPM()));
+		mRenderTextureView.setCenter(b22sfVec(mLevel->GetOriginView(), mPhysicMgr.GetPPM()));
 		mRenderTextureView.zoom(mCurrentZoom);
 
 		mRenderTexture.create(static_cast<unsigned int>(mWindow.getSize().x * mRenderTextureView.getViewport().width)
@@ -610,7 +565,7 @@ void Box2DGame::OnEvent()
 		mWindowView.setSize(u2f(mWindow.getSize()) * sf::Vector2f(mRenderTextureView.getViewport().width, mRenderTextureView.getViewport().height));
 		mWindowView.setCenter(mWindowView.getSize() / 2.f);
 
-		mLightManager.Resize(mWindow);
+		//mLightManager.Resize(mWindow);
 	}
 	
 	// Gestion de la fermeture de la fenêtre
@@ -633,50 +588,45 @@ void Box2DGame::OnStepPhysics()
 	mFrameTime.restart();
 
 	// Simule
-	// TODO: Fixer le Timestep
-	mWorld.Step(1.f / 60.f, 7, 4);
-	mWorld.ClearForces();
+	mPhysicMgr.Step(7, 4);
+	mPhysicMgr.GetWorld()->ClearForces();
 
 	// Destruction des bodies en dehors de la zone
-	for (auto it = mWorld.GetBodyList().begin(); it != mWorld.GetBodyList().end(); )
+	b2Body *b = mPhysicMgr.GetBodyList(), *bb = nullptr;
+	while (b)
 	{
 		// On supprime seulement les dynamicBodies
-		if ((*it)->GetBody()->GetType() == b2_dynamicBody)
+		if (b->GetType() == b2_dynamicBody)
 		{
 			bool erase = false;
-			// Vérifie si l'objet est hors du monde et n'est pas accroché à la souris
-			if (!(*it)->IsInRange(b2Vec2(200.f, -200.f), b2Vec2(800.f, -200.f)))
+
+			// Vérifie si l'objet est hors du monde
+			b2Vec2 pos = b->GetPosition();
+			if (pos.x < -200.f || pos.x > 200.f || pos.y < -200.f || pos.y > 1000.f)
 			{
 				erase = true;
+
+				// Vérifie si l'objet n'est pas accroché à la souris
 				if (mMouseJoint)
-					if (*it == mMouseJoint->GetAttachedBody())
+					if (b == mMouseJoint->GetAttachedBody())
 						erase = false;
 			}
 
 			// Supprime l'Entity du body
 			if (erase)
-				EntityManager::GetInstance().DestroyEntity((*it++)->GetEntity());
+			{
+				bb = b;
+				b = b->GetNext();
+				EntityManager::GetInstance().DestroyEntity((Entity*) b->GetUserData());
+			}
 
 			// Sinon passe simplement au suivant
 			else
-				++it;
+				b = b->GetNext();
 		}
 		// Le body n'est pas un dynamicBody
 		else
-			++it;
-	}
-
-	// Mets à jour le grapin
-	if (mHookJoint)
-	{
-		if (mHookJoint->IsNull() || !mHookJoint->GetBodyA() || !mHookJoint->GetBodyB())
-			mHookJoint = nullptr;
-		else
-		{
-			if (mHookJoint->GetLength() - mHookClock.getElapsedTime().asSeconds() * 0.2f > 0)
-				mHookJoint->SetLength(mHookJoint->GetLength() - mHookClock.getElapsedTime().asSeconds() * 8.f);
-			mHookClock.restart();
-		}
+			b = b->GetNext();
 	}
 }
 
@@ -693,13 +643,13 @@ void Box2DGame::OnRender()
 	mWindow.clear(mLevel->GetBckgColor());
 	mWindow.setView(mWindowView);
 	mRenderTexture.setView(mRenderTextureView);
-	mLightManager.SetView(&mRenderTextureView);
+	//mLightManager.SetView(&mRenderTextureView);
 	
 	// Affichage du Level
 	mRenderTexture.draw(*mLevel);
-
+	
 	// Affichage des joints
-	for (auto it = mWorld.GetJointList().begin(); it != mWorld.GetJointList().end(); ++it)
+	for (auto it = mPhysicMgr.GetJointList().begin(); it != mPhysicMgr.GetJointList().end(); ++it)
 	{
 		(*it)->Update();
 		mRenderTexture.draw(**it);
@@ -720,41 +670,45 @@ void Box2DGame::OnRender()
 		}
 	}
 	
+#if 0
 	// Affichage du laser-spliter
 	if (false)
 	{
 		sf::VertexArray splicer(sf::LinesStrip, 2);
-		splicer[0].position = b22sfVec(mSpliceL1, mWorld.GetPPM());
-		splicer[1].position = b22sfVec(mSpliceL2, mWorld.GetPPM());
+		splicer[0].position = b22sfVec(mSpliceL1, mPhysicMgr.GetPPM());
+		splicer[1].position = b22sfVec(mSpliceL2, mPhysicMgr.GetPPM());
 		splicer[0].color = sf::Color::Cyan;
 		splicer[1].color = sf::Color::Cyan;
 		mWindow.draw(splicer);
 
 		sf::VertexArray laser(sf::LinesStrip, 2);
-		laser[0].position = b22sfVec(mSpliceP1, mWorld.GetPPM());
-		laser[1].position = b22sfVec(mSpliceP2, mWorld.GetPPM());
+		laser[0].position = b22sfVec(mSpliceP1, mPhysicMgr.GetPPM());
+		laser[1].position = b22sfVec(mSpliceP2, mPhysicMgr.GetPPM());
 		laser[0].color = sf::Color::Red;
 		laser[1].color = sf::Color::Red;
 		mWindow.draw(laser);
 
 		sf::Sprite s(*mTextureMap["hollowCircle"]);
 		s.setOrigin(u2f(s.getTexture()->getSize()) / 2.f);
-		s.setPosition(b22sfVec(mSpliceP1, mWorld.GetPPM()));
+		s.setPosition(b22sfVec(mSpliceP1, mPhysicMgr.GetPPM()));
 		mWindow.draw(s);
-		s.setPosition(b22sfVec(mSpliceP2, mWorld.GetPPM()));
+		s.setPosition(b22sfVec(mSpliceP2, mPhysicMgr.GetPPM()));
 		mWindow.draw(s);
 	}
+#endif
 
 	// Finalise le rendu des objets
 	mRenderTexture.display();
 	mWindow.draw(sf::Sprite(mRenderTexture.getTexture()));
 
+#if 0
 	// Création des ombres
 	if (mLevel->GetLightning())
 	{
 		mLightManager.Update();
 		mWindow.draw(mLightManager);
 	}
+#endif
 
 	// Affichage du tout
 	mWindow.display();
@@ -779,17 +733,18 @@ void Box2DGame::OnQuit()
 	// Supprime le joint de la souris
 	if (mMouseJoint)
 	{
-		mWorld.DestroyJoint(mMouseJoint);
+		mPhysicMgr.DestroyJoint(mMouseJoint);
 	}
 
 	// Vide les listes d'objets
-	mWorld.DestroyAllJoints();
-	mWorld.DestroyAllBody();
+	mPhysicMgr.DestroyAllJoints();
+	mPhysicMgr.DestroyAllBody();
 
 	// Nullifie les pointeurs
 	delete mLevel;
 	mLevel = nullptr;
-	mHookJoint = nullptr;
+	mGrapnel.Destroy();
+	mGrapnel = nullptr;
 	mHookedSBody = nullptr;
 	mMouseJoint = nullptr;
 	mPinBodyA = nullptr;

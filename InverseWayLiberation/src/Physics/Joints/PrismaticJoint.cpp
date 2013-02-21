@@ -2,18 +2,20 @@
 #include "../../Tools/utils.h"
 
 //Ctor
-PrismaticJoint::PrismaticJoint(World *world, Body *b1, Body *b2, b2Vec2 anchor, b2Vec2 axis, bool enableLimit, float lowerTranslation, float upperTranslation
+PrismaticJoint::PrismaticJoint(PhysicManager *physicMgr, b2Body *b1, b2Body *b2, b2Vec2 anchor, b2Vec2 axis, bool enableLimit, float lowerTranslation, float upperTranslation
 																						   , bool enableMotor, float motorSpeed, float maxMotorForce
 																						   , bool collideconnected, sf::Color const& color)
-	: Joint(world), mColor(color)
+	: Joint(physicMgr), mColor(color)
 {
+	assert(mPhysicMgr && "n'est pas valide.");
+
 	mBodyA = b1;
 	mBodyB = b2;
 
-	if (mWorld && mBodyA && mBodyB)
+	if (mBodyA && mBodyB)
 	{
 		b2PrismaticJointDef jointDef;
-		jointDef.Initialize(mBodyA->GetBody(), mBodyB->GetBody(), mBodyA->GetBody()->GetWorldPoint(anchor), axis);
+		jointDef.Initialize(mBodyA, mBodyB, mBodyA->GetWorldPoint(anchor), axis);
 		jointDef.collideConnected = collideconnected;
 		jointDef.enableLimit = enableLimit;
 		jointDef.lowerTranslation = lowerTranslation;
@@ -21,10 +23,10 @@ PrismaticJoint::PrismaticJoint(World *world, Body *b1, Body *b2, b2Vec2 anchor, 
 		jointDef.enableMotor = enableMotor;
 		jointDef.motorSpeed = motorSpeed * RPD;
 		jointDef.maxMotorForce = maxMotorForce;
-		mJoint = (b2PrismaticJoint*) mWorld->CreateJoint(&jointDef, this);
+		mJoint = (b2PrismaticJoint*) mPhysicMgr->CreateJoint(&jointDef, this);
 		
-		mBodyA->RegisterJoint(this);
-		mBodyB->RegisterJoint(this);
+		//mBodyA->RegisterJoint(this);
+		//mBodyB->RegisterJoint(this);
 		mIsNull = false;
 	}
 
@@ -41,18 +43,17 @@ PrismaticJoint::~PrismaticJoint(void)
 // Mets à jour le VertexArray
 void PrismaticJoint::Update()
 {
-	if (mBodyA && mBodyB)
+	Joint::Update();
+
+	if (mBodyA && mBodyB && !mIsNull)
 	{
-		if (!mBodyA->IsNull() && !mBodyB->IsNull())
-		{
-			(*this)[0].position = b22sfVec(mJoint->GetAnchorA(), mWorld->GetPPM());
-			(*this)[1].position = b22sfVec(mJoint->GetBodyB()->GetPosition(), mWorld->GetPPM());
-		}
-		else
-		{
-			mWorld->DestroyJoint(this, false);
-			delete this;
-		}
+		(*this)[0].position = b22sfVec(mJoint->GetAnchorA(), mPhysicMgr->GetPPM());
+		(*this)[1].position = b22sfVec(mJoint->GetBodyB()->GetPosition(), mPhysicMgr->GetPPM());
+	}
+	else
+	{
+		//mPhysicMgr->DestroyJoint(this, false);
+		//delete this;
 	}
 }
 

@@ -3,16 +3,14 @@
 #include <Box2D/Box2D.h>
 #include <Thor/Resources.hpp>
 #include "../Joint.h"
-#include "../World.h"
 
-class World;
 class Joint;
 class DistanceJoint : public Joint
 {
 public:
 	// Ctor & dtor
-	DistanceJoint(World *world, Body *b1, b2Vec2 pt1, Body *b2, b2Vec2 p2, float frequencyHz = 4.f, float damping = 0.5f, bool collideconnected = true
-																		, sf::Color const& color = sf::Color::Magenta);
+	DistanceJoint(PhysicManager *physicMgr, b2Body *b1, b2Vec2 pt1, b2Body *b2, b2Vec2 p2, float frequencyHz = 4.f, float damping = 0.5f
+														  , bool collideconnected = true , sf::Color const& color = sf::Color::Magenta);
 	virtual ~DistanceJoint(void);
 	
 	// Mets à jour le VertexArray

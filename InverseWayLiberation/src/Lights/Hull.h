@@ -1,6 +1,5 @@
 #pragma once
 #include <SFML/Graphics.hpp>
-#include "../Physics/Body.h"
 #include "Light.h"
 
 class Body;

@@ -3,15 +3,15 @@
 #include <Box2D/Box2D.h>
 #include <Thor/Resources.hpp>
 #include "../Joint.h"
-#include "../World.h"
 
-class World;
 class Joint;
 class MouseJoint : public Joint
 {
 public:
 	// Ctor & dtor
-	MouseJoint(World *world, Body *body, Body *ground, b2Vec2 target, float maxForce, float frequencyHz = 4.f, float damping = 0.5f, sf::Color const& color = sf::Color::Cyan);
+	MouseJoint(PhysicManager *physicMgr, b2Body *body, b2Body *ground, b2Vec2 target
+					 , float maxForce, float frequencyHz = 4.f, float damping = 0.5f
+										, sf::Color const& color = sf::Color::Cyan);
 	virtual ~MouseJoint(void);
 	
 	// Mets à jour le VertexArray
@@ -23,7 +23,7 @@ public:
 	float GetMaxForce() const;
 	float GetFrequencyHz() const;
 	float GetDampingRatio() const;
-	Body const* GetAttachedBody() const;
+	b2Body const* GetAttachedBody() const;
 	b2Vec2 GetAnchor() const;
 	b2Vec2 GetTarget() const;
 	

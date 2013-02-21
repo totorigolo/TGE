@@ -41,7 +41,7 @@ DynamicBox::DynamicBox(World *world, b2Vec3 posRot, std::shared_ptr<sf::Texture>
 		mIsNull = false;
 		
 		// Enregistre le Body
-		mWorld->RegisterBody(this);
+		//mWorld->RegisterBody(this);
 
 		// Crée le Hull
 		mHull = new ConvexHull(this, false);

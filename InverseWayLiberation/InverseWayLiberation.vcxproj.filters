@@ -18,14 +18,8 @@
     <Filter Include="Fichiers d%27en-tête\Physics\Joints">
       <UniqueIdentifier>{67dce3cd-7dab-4815-ae38-e3693c37295d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Fichiers d%27en-tête\Physics\Bodies">
-      <UniqueIdentifier>{5075feb8-75b4-47c3-8639-4f0a5e063835}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Fichiers sources\Physics\Joints">
       <UniqueIdentifier>{5e11207a-ac94-4867-91b6-e7e73b4fe7b2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Fichiers sources\Physics\Bodies">
-      <UniqueIdentifier>{e52180cc-5f88-4d2d-b74a-e31d1f27cff6}</UniqueIdentifier>
     </Filter>
     <Filter Include="Fichiers d%27en-tête\Tools">
       <UniqueIdentifier>{b654ce01-8d80-4b8b-91a3-f95e20aa689c}</UniqueIdentifier>
@@ -39,17 +33,11 @@
     <Filter Include="Fichiers sources\Resources">
       <UniqueIdentifier>{f82ff6e3-17c1-4ebc-8974-2fde365f79a6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Fichiers sources\Lights">
-      <UniqueIdentifier>{e1c73960-709f-4f8c-972b-26c343eff343}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Fichiers sources\Level">
       <UniqueIdentifier>{8c1ee394-4fa2-4a92-b83f-eb3cb0920f6f}</UniqueIdentifier>
     </Filter>
     <Filter Include="Fichiers sources\Tools\QuadTree">
       <UniqueIdentifier>{0806d5ed-b91a-4321-b8f0-67618585e2a9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Fichiers d%27en-tête\Lights">
-      <UniqueIdentifier>{7b380e1c-f0a9-4671-94b1-a210dba0b14d}</UniqueIdentifier>
     </Filter>
     <Filter Include="Fichiers d%27en-tête\Level">
       <UniqueIdentifier>{3dfebfa7-8d81-41b4-9986-d8dc2d1b8c09}</UniqueIdentifier>
@@ -117,20 +105,9 @@
       <Filter>Fichiers de ressources\Anims</Filter>
     </None>
     <None Include="ClassDiagram.cd" />
+    <None Include="ClassDiagram1.cd" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Physics\Bodies\DynamicBox.cpp">
-      <Filter>Fichiers sources\Physics\Bodies</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Physics\Bodies\DynamicCircle.cpp">
-      <Filter>Fichiers sources\Physics\Bodies</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Physics\Bodies\KinematicBox.cpp">
-      <Filter>Fichiers sources\Physics\Bodies</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Physics\Bodies\StaticBox.cpp">
-      <Filter>Fichiers sources\Physics\Bodies</Filter>
-    </ClCompile>
     <ClCompile Include="src\Physics\Joints\DistanceJoint.cpp">
       <Filter>Fichiers sources\Physics\Joints</Filter>
     </ClCompile>
@@ -139,9 +116,6 @@
     </ClCompile>
     <ClCompile Include="src\Physics\Joints\RevoluteJoint.cpp">
       <Filter>Fichiers sources\Physics\Joints</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Physics\World.cpp">
-      <Filter>Fichiers sources\Physics</Filter>
     </ClCompile>
     <ClCompile Include="src\Physics\Joints\FrictionJoint.cpp">
       <Filter>Fichiers sources\Physics\Joints</Filter>
@@ -166,27 +140,6 @@
     </ClCompile>
     <ClCompile Include="src\Physics\ContactListener.cpp">
       <Filter>Fichiers sources\Physics</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Lights\CircleHull.cpp">
-      <Filter>Fichiers sources\Lights</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Lights\ConvexHull.cpp">
-      <Filter>Fichiers sources\Lights</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Lights\Hull.cpp">
-      <Filter>Fichiers sources\Lights</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Lights\Light.cpp">
-      <Filter>Fichiers sources\Lights</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Lights\LightManager.cpp">
-      <Filter>Fichiers sources\Lights</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Lights\PointLight.cpp">
-      <Filter>Fichiers sources\Lights</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Lights\SpotLight.cpp">
-      <Filter>Fichiers sources\Lights</Filter>
     </ClCompile>
     <ClCompile Include="src\Tools\Dialog.cpp">
       <Filter>Fichiers sources\Tools</Filter>
@@ -236,9 +189,6 @@
     <ClCompile Include="src\Entities\EntityManager.cpp">
       <Filter>Fichiers sources\Entities</Filter>
     </ClCompile>
-    <ClCompile Include="src\Entities\RawBody.cpp">
-      <Filter>Fichiers sources\Entities</Filter>
-    </ClCompile>
     <ClCompile Include="src\Entities\Ragdoll.cpp">
       <Filter>Fichiers sources\Entities</Filter>
     </ClCompile>
@@ -254,20 +204,20 @@
     <ClCompile Include="src\main.cpp">
       <Filter>Fichiers sources\App</Filter>
     </ClCompile>
-    <ClCompile Include="src\Physics\Body.cpp">
-      <Filter>Fichiers sources\Physics</Filter>
-    </ClCompile>
     <ClCompile Include="src\Physics\Joint.cpp">
       <Filter>Fichiers sources\Physics</Filter>
     </ClCompile>
-    <ClCompile Include="src\Physics\Bodies\PlayerBody.cpp">
-      <Filter>Fichiers sources\Physics\Bodies</Filter>
+    <ClCompile Include="src\Physics\PhysicManager.cpp">
+      <Filter>Fichiers sources\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Entities\BasicBody.cpp">
+      <Filter>Fichiers sources\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Entities\Grapnel.cpp">
+      <Filter>Fichiers sources\Entities</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\Physics\Bodies\DynamicBox.h">
-      <Filter>Fichiers d%27en-tête\Physics\Bodies</Filter>
-    </ClInclude>
     <ClInclude Include="src\Physics\Joints\DistanceJoint.h">
       <Filter>Fichiers d%27en-tête\Physics\Joints</Filter>
     </ClInclude>
@@ -276,9 +226,6 @@
     </ClInclude>
     <ClInclude Include="src\Physics\Joints\RevoluteJoint.h">
       <Filter>Fichiers d%27en-tête\Physics\Joints</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Physics\World.h">
-      <Filter>Fichiers d%27en-tête\Physics</Filter>
     </ClInclude>
     <ClInclude Include="src\Physics\Joints\FrictionJoint.h">
       <Filter>Fichiers d%27en-tête\Physics\Joints</Filter>
@@ -324,27 +271,6 @@
     </ClInclude>
     <ClInclude Include="src\Tools\Segment.h">
       <Filter>Fichiers d%27en-tête\Tools</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Lights\SpotLight.h">
-      <Filter>Fichiers d%27en-tête\Lights</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Lights\PointLight.h">
-      <Filter>Fichiers d%27en-tête\Lights</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Lights\LightManager.h">
-      <Filter>Fichiers d%27en-tête\Lights</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Lights\Light.h">
-      <Filter>Fichiers d%27en-tête\Lights</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Lights\Hull.h">
-      <Filter>Fichiers d%27en-tête\Lights</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Lights\ConvexHull.h">
-      <Filter>Fichiers d%27en-tête\Lights</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Lights\CircleHull.h">
-      <Filter>Fichiers d%27en-tête\Lights</Filter>
     </ClInclude>
     <ClInclude Include="src\Level\Level.h">
       <Filter>Fichiers d%27en-tête\Level</Filter>
@@ -394,18 +320,6 @@
     <ClInclude Include="src\Entities\EntityManager.h">
       <Filter>Fichiers d%27en-tête\Entities</Filter>
     </ClInclude>
-    <ClInclude Include="src\Physics\Bodies\DynamicCircle.h">
-      <Filter>Fichiers d%27en-tête\Physics\Bodies</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Physics\Bodies\KinematicBox.h">
-      <Filter>Fichiers d%27en-tête\Physics\Bodies</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Physics\Bodies\StaticBox.h">
-      <Filter>Fichiers d%27en-tête\Physics\Bodies</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Entities\RawBody.h">
-      <Filter>Fichiers d%27en-tête\Entities</Filter>
-    </ClInclude>
     <ClInclude Include="src\Entities\Ragdoll.h">
       <Filter>Fichiers d%27en-tête\Entities</Filter>
     </ClInclude>
@@ -421,9 +335,6 @@
     <ClInclude Include="src\resource.h">
       <Filter>Fichiers de ressources</Filter>
     </ClInclude>
-    <ClInclude Include="src\Physics\Body.h">
-      <Filter>Fichiers d%27en-tête\Physics</Filter>
-    </ClInclude>
     <ClInclude Include="src\Physics\Joint.h">
       <Filter>Fichiers d%27en-tête\Physics</Filter>
     </ClInclude>
@@ -436,8 +347,14 @@
     <ClInclude Include="src\Physics\Callback\PointCallback.h">
       <Filter>Fichiers d%27en-tête\Physics\Callback</Filter>
     </ClInclude>
-    <ClInclude Include="src\Physics\Bodies\PlayerBody.h">
-      <Filter>Fichiers d%27en-tête\Physics\Bodies</Filter>
+    <ClInclude Include="src\Physics\PhysicManager.h">
+      <Filter>Fichiers d%27en-tête\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Entities\BasicBody.h">
+      <Filter>Fichiers d%27en-tête\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Entities\Grapnel.h">
+      <Filter>Fichiers d%27en-tête\Entities</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

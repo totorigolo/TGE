@@ -3,17 +3,16 @@
 #include <Box2D/Box2D.h>
 #include <Thor/Resources.hpp>
 #include "../Joint.h"
-#include "../World.h"
 
-class World;
 class Joint;
 class RevoluteJoint : public Joint
 {
 public:
-	// Ctor & dtor                             Anchor relative to bodyA
-	RevoluteJoint(World *world, Body *b1, Body *b2, b2Vec2 anchor, bool enableLimit = false, float lowerAngle = 0.f, float upperAngle = 0.f
-																 , bool enableMotor = false, float motorSpeed = 0.f, float maxMotorTorque = 10.f
-																 , bool collideconnected = false, sf::Color const& color = sf::Color::Green);
+	// Ctor & dtor											 Anchor relative to bodyA
+	RevoluteJoint(PhysicManager *physicMgr, b2Body *b1, b2Body *b2, b2Vec2 anchor
+																, bool enableLimit = false, float lowerAngle = 0.f, float upperAngle = 0.f
+																, bool enableMotor = false, float motorSpeed = 0.f, float maxMotorTorque = 10.f
+																, bool collideconnected = false, sf::Color const& color = sf::Color::Green);
 	virtual ~RevoluteJoint(void);
 	
 	// Mets à jour le VertexArray

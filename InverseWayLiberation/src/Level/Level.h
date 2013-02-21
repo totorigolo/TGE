@@ -8,7 +8,7 @@
 #include <list>
 #include "LevelLoader.h"
 #include "../Tools/utils.h"
-#include "../Physics/World.h"
+#include "../Physics/PhysicManager.h"
 #include "../Entities/EntityManager.h"
 #include "../Resources/ResourceManager.h"
 
@@ -19,7 +19,7 @@ class Level : public sf::Drawable
 
 public:
 	// Ctor & dtor
-	Level(World *world);
+	Level(PhysicManager *physicMgr);
 	virtual ~Level(void);
 
 	// Vide tout le niveau
@@ -35,9 +35,7 @@ public:
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
 	// Accesseurs
-	bool IsValid() const { return mIsValid; }
-
-	bool IsCharged() const { return mIsValid; }
+	bool IsCharged() const { return mIsCharged; }
 	void SetCharged(bool charged) { mIsCharged = charged; }
 	
 	EntityManager* GetEntityManager() { return &mEntityManager; }
@@ -49,11 +47,10 @@ public:
 	bool const& GetLightning() const { return mLightning; }
 
 private:
-	bool mIsValid;
 	bool mIsCharged;
 
 	// Monde
-	World *mWorld;
+	PhysicManager *mPhysicMgr;
 
 	// Entities
 	EntityManager &mEntityManager;

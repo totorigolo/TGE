@@ -3,17 +3,16 @@
 #include <Box2D/Box2D.h>
 #include <Thor/Resources.hpp>
 #include "../Joint.h"
-#include "../World.h"
 
-class World;
 class Joint;
 class PrismaticJoint : public Joint
 {
 public:
-	// Ctor & dtor                             Anchor relative to bodyA
-	PrismaticJoint(World *world, Body *b1, Body *b2, b2Vec2 anchor, b2Vec2 axis, bool enableLimit = false, float lowerTranslation = 0.f, float upperTranslation = 0.f
-																			   , bool enableMotor = false, float motorSpeed = 0.f, float maxMotorForce = 10.f
-																			   , bool collideconnected = false, sf::Color const& color = sf::Color::Green);
+	// Ctor & dtor											   Anchor relative to bodyA
+	PrismaticJoint(PhysicManager *physicMgr, b2Body *b1, b2Body *b2, b2Vec2 anchor, b2Vec2 axis
+											, bool enableLimit = false, float lowerTranslation = 0.f, float upperTranslation = 0.f
+											, bool enableMotor = false, float motorSpeed = 0.f, float maxMotorForce = 10.f
+											, bool collideconnected = false, sf::Color const& color = sf::Color::Green);
 	virtual ~PrismaticJoint(void);
 	
 	// Mets à jour le VertexArray

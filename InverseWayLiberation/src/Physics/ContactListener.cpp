@@ -1,8 +1,8 @@
 #include "ContactListener.h"
-#include "Body.h"
 #include "Joint.h"
 #include "../Entities/Entity.h"
 #include "../Entities/Player.h"
+#include "../Entities/BasicBody.h"
 #include <iostream>
 
 // Début du contact (début du AABB overlap)
@@ -21,20 +21,20 @@ void ContactListener::BeginContact(b2Contact* contact)
 	// Récupère les bodies
 	b2Fixture *fixtureA = contact->GetFixtureA();
 	b2Fixture *fixtureB = contact->GetFixtureB();
-	Body *bodyA = (Body*) fixtureA->GetBody()->GetUserData();
-	Body *bodyB = (Body*) fixtureB->GetBody()->GetUserData();
+	Entity *entityA = (Entity*) fixtureA->GetBody()->GetUserData();
+	Entity *entityB = (Entity*) fixtureB->GetBody()->GetUserData();
 
 	// Si il s'agit d'un LivingBeing, on lui dit qu'il peut sauter
-	if ((bodyA->GetEntity()->GetType() == EntityType::Player || bodyA->GetEntity()->GetType() == EntityType::LivingBeing)
+	/*if ((entityA->GetType() == EntityType::Player || entityA->GetType() == EntityType::LivingBeing)
 		&& contact->IsTouching())
 	{
 		// Si le contact est SOUS le perso
-		if (contact->GetManifold()->localPoint.y >= bodyA->GetBodyPosition().y + (bodyA->GetBodySize().y / 2.f))
+		if (contact->GetManifold()->localPoint.y >= bodyA->GetBody()->GetPosition().y + (bodyA->GetBody()->GetSize().y / 2.f))
 		{
-			((LivingBeing*) bodyA->GetEntity())->CanJump(true);
+			((LivingBeing*) bodyA)->CanJump(true);
 		}
 	}
-	else if ((bodyB->GetEntity()->GetType() == EntityType::Player || bodyB->GetEntity()->GetType() == EntityType::LivingBeing)
+	else if ((entityB->GetEntity()->GetType() == EntityType::Player || entityB->GetBody()->GetType() == EntityType::LivingBeing)
 		&& contact->IsTouching())
 	{
 		// Si le contact est SOUS le perso
@@ -42,7 +42,7 @@ void ContactListener::BeginContact(b2Contact* contact)
 		{
 			((LivingBeing*) bodyB->GetEntity())->CanJump(true);
 		}
-	}
+	}*/
 }
 
 // Fin du contact (fin du AABB overlap)
@@ -59,7 +59,7 @@ void ContactListener::EndContact(b2Contact* contact)
 	//*/
 
 	// Récupère les bodies
-	b2Fixture *fixtureA = contact->GetFixtureA();
+	/*b2Fixture *fixtureA = contact->GetFixtureA();
 	b2Fixture *fixtureB = contact->GetFixtureB();
 	Body *bodyA = (Body*) fixtureA->GetBody()->GetUserData();
 	Body *bodyB = (Body*) fixtureB->GetBody()->GetUserData();
@@ -72,17 +72,17 @@ void ContactListener::EndContact(b2Contact* contact)
 	else if (bodyB->GetEntity()->GetType() == EntityType::Player || bodyB->GetEntity()->GetType() == EntityType::LivingBeing)
 	{
 		((LivingBeing*) bodyB->GetEntity())->CanJump(false);
-	}
+	}*/
 }
 
 // Après la détection de la collision, mais avant la résolution
 void ContactListener::PreSolve(b2Contact* contact, const b2Manifold* oldManifold)
 {
 	// Récupère les bodies
-	b2Fixture *fixtureA = contact->GetFixtureA();
+	/*b2Fixture *fixtureA = contact->GetFixtureA();
 	b2Fixture *fixtureB = contact->GetFixtureB();
-	Body *bodyA = (Body*) fixtureA->GetBody()->GetUserData();
-	Body *bodyB = (Body*) fixtureB->GetBody()->GetUserData();
+	b2Body *bodyA = (Body*) fixtureA->GetBody()->GetUserData();
+	b2Body *bodyB = (Body*) fixtureB->GetBody()->GetUserData();
 
 	// Collision Actor <> OneSidedPlatform
 	Body *actor = nullptr, *platform = nullptr;
@@ -103,7 +103,7 @@ void ContactListener::PreSolve(b2Contact* contact, const b2Manifold* oldManifold
 		{
 			contact->SetEnabled(false);
 		}
-	}
+	}*/
 }
 
 // Après la résolution des collisions

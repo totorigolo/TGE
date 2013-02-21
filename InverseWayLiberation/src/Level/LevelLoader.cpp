@@ -4,12 +4,7 @@
 #include "../Tools/Dialog.h"
 #include "../Tools/Parser.h"
 
-#include "../Physics/World.h"
-
-#include "../Physics/Bodies/StaticBox.h"
-#include "../Physics/Bodies/DynamicBox.h"
-#include "../Physics/Bodies/KinematicBox.h"
-#include "../Physics/Bodies/DynamicCircle.h"
+#include "../Physics/PhysicManager.h"
 
 #include "../Physics/Joints/DistanceJoint.h"
 #include "../Physics/Joints/FrictionJoint.h"
@@ -26,11 +21,11 @@
 #include "../Entities/LivingBeing.h"
 #include "../Entities/Player.h"
 #include "../Entities/Ragdoll.h"
-#include "../Entities/RawBody.h"
+#include "../Entities/BasicBody.h"
 
-#include "../Lights/PointLight.h"
-#include "../Lights/SpotLight.h"
-#include "../Lights/LightManager.h"
+//#include "../Lights/PointLight.h"
+//#include "../Lights/SpotLight.h"
+//#include "../Lights/LightManager.h"
 
 #include <Thor/Resources.hpp>
 #include <vector>
@@ -39,14 +34,14 @@
 LevelLoader::LevelLoader(std::string const& path, Level *level)
 	: Loader(path), mLevel(level)
 {
-	// Si le niveau ou le loader n'est pas valide, on ne fait rien
-	if (mLevel->IsValid() && mIsValid)
+	// Si loader n'est pas valide, on ne fait rien
+	if (mIsValid)
 	{
 		// Vide le niveau si il est déjà chargé
 		if (mLevel->IsCharged())
 		{
 			mLevel->Clear();
-			LightManager::GetInstance().DeleteAllLights();
+			//LightManager::GetInstance().DeleteAllLights(); // TODO: ...
 		}
 
 		// Analyse le fichier du niveau et crée le Level
@@ -83,9 +78,9 @@ bool LevelLoader::Process()
 		Dialog::Error("Une erreur grave est survenue lors du chargement du niveau.\nTextures invalides (" + mPath + ").");
 		return false;
 	}
-	if (!ProcessBodies())
+	if (!ProcessBasicBodies())
 	{
-		Dialog::Error("Une erreur grave est survenue lors du chargement du niveau.\nBodies invalides (" + mPath + ").");
+		Dialog::Error("Une erreur grave est survenue lors du chargement du niveau.\nBasicBodies invalides (" + mPath + ").");
 		return false;
 	}
 	if (!ProcessEntities())
@@ -103,11 +98,11 @@ bool LevelLoader::Process()
 		Dialog::Error("Une erreur grave est survenue lors du chargement du niveau.\nDeco invalide (" + mPath + ").");
 		return false;
 	}
-	if (!ProcessLights())
+	/*if (!ProcessLights())
 	{
 		Dialog::Error("Une erreur grave est survenue lors du chargement du niveau.\nLumières non valides (" + mPath + ").");
 		return false;
-	}
+	}*/
 
 	// TODO: Essayer ça -> return false;
 	return true;
@@ -145,8 +140,8 @@ bool LevelLoader::ProcessWorld()
 	}
 
 	// Change les attributs
-	mLevel->mWorld->SetGravity(gravity);
-	mLevel->mWorld->SetPPM(PPM);
+	mLevel->mPhysicMgr->SetGravity(gravity);
+	mLevel->mPhysicMgr->SetPPM(PPM);
 	mLevel->mBckgC = bckgColor;
 	mLevel->mOriginView = originView;
 	mLevel->mDefaulfZoom = defaultZoom;
@@ -193,25 +188,24 @@ bool LevelLoader::ProcessTextures()
 
 	return true;
 }
-bool LevelLoader::ProcessBodies()
+bool LevelLoader::ProcessBasicBodies()
 {
 	// Récupère <bodies>
 	tinyxml2::XMLHandle hdl(mFile);
-	tinyxml2::XMLHandle bodies = hdl.FirstChildElement("level").FirstChildElement("bodies");
+	tinyxml2::XMLHandle bodies = hdl.FirstChildElement("level").FirstChildElement("basicbodies");
 
 	// Vérifie que <bodies> existe
 	if (!bodies.ToElement())
 	{
-		Dialog::Error("Une erreur fatale est survenue lors du chargement du niveau.\n<bodies> non trouvé (" + mPath + ").", true);
+		Dialog::Error("Une erreur fatale est survenue lors du chargement du niveau.\n<basicbodies> non trouvé (" + mPath + ").", true);
 		return false;
 	}
 
 	// On crée les attributs
-	Body *b = nullptr;
-	RawBody *e = nullptr;
+	BasicBody *bb = nullptr;
 	int layer = 1;
-	bool hasID = false, bullet = false, osp = false;
-	BodyType bodyType = BodyType::FullySimulated;
+	bool hasID = false;//, bullet = false, osp = false;
+	//BodyType bodyType = BodyType::FullySimulated;
 	float density = 1.f, friction = 0.2f, restitution = 0.0f;
 	float rotation = 0.f;
 	unsigned int id = 0U;
@@ -223,18 +217,17 @@ bool LevelLoader::ProcessBodies()
 	while (body)
 	{
 		// Réinitialise les attributs
-		b = nullptr;
-		e = nullptr;
+		bb = nullptr;
 		layer = 1;
 		id = 0U;
 		rotation = 0.f;
 		density = 1.f;
 		friction = 0.2f;
 		restitution = 0.0f;
-		osp = false;
 		hasID = false;
-		bullet = false;
-		bodyType = BodyType::FullySimulated;
+		//osp = false;
+		//bullet = false;
+		//bodyType = BodyType::FullySimulated;
 
 		// Récupère le type
 		type = body->Name();
@@ -266,12 +259,12 @@ bool LevelLoader::ProcessBodies()
 		body->QueryIntAttribute("layer", &layer);
 
 		// Récupère les flags
-		body->QueryBoolAttribute("osp", &osp);
-		body->QueryBoolAttribute("bullet", &bullet);
-		if (bullet)
-			bodyType = BodyType::Bullet;
-		else if (osp)
-			bodyType = BodyType::OneSidedPlatform;
+		//body->QueryBoolAttribute("osp", &osp);
+		//body->QueryBoolAttribute("bullet", &bullet);
+		//if (bullet)
+		//	bodyType = BodyType::Bullet;
+		//else if (osp)
+		//	bodyType = BodyType::OneSidedPlatform;
 
 		// Récupère les propriétés
 		body->QueryFloatAttribute("density", &density);
@@ -281,34 +274,33 @@ bool LevelLoader::ProcessBodies()
 		// Crée le body
 		if (type == "staticbox")
 		{
-			b = new StaticBox(mLevel->mWorld, posRot, mLevel->mTextureMap[texture], friction, restitution);
+			bb = new BasicBody(mLevel->mPhysicMgr);
+			bb->CreateStaticBox(posRot, mLevel->mTextureMap[texture], friction, restitution);
 		}
 		else if (type == "dynamicbox")
 		{
-			b = new DynamicBox(mLevel->mWorld, posRot, mLevel->mTextureMap[texture], density, friction, restitution);
+			bb = new BasicBody(mLevel->mPhysicMgr);
+			bb->CreateDynBox(posRot, mLevel->mTextureMap[texture], density, friction, restitution);
 		}
 		else if (type == "dynamiccircle")
 		{
-			b = new DynamicCircle(mLevel->mWorld, posRot, mLevel->mTextureMap[texture], density, friction, restitution);
-		}
-		else if (type == "kinematicbox")
-		{
-			b = new KinematicBox(mLevel->mWorld, posRot, mLevel->mTextureMap[texture], restitution);
+			bb = new BasicBody(mLevel->mPhysicMgr);
+			bb->CreateDynCircle(posRot, mLevel->mTextureMap[texture], density, friction, restitution);
 		}
 
 		// Change le type du body
-		b->SetType(bodyType);
+		//b->SetType(bodyType);
 
 		// Crée l'Entity correspondante
-		mLevel->mEntityManager.RegisterEntity(new RawBody(b, layer));
+		mLevel->mEntityManager.RegisterEntity(bb);
 
 		// Enregiste l'ID
-		if (b != nullptr && hasID)
+		if (bb != nullptr && hasID)
 		{
 			// On regarde si l'ID n'est pas déjà utilisé
 			if (mBodyIDMap.find(id) != mBodyIDMap.end())
 				Dialog::Error("L'ID " + Parser::int2string(id) + " n'est pas unique !", false);
-			mBodyIDMap[id] = b;
+			mBodyIDMap[id] = bb->GetBody();
 		}
 
 		// On récupère le prochain body
@@ -359,7 +351,7 @@ bool LevelLoader::ProcessEntities()
 		// Crée l'Entity
 		if (type == "ragdoll")
 		{
-			e = new Ragdoll(mLevel->mWorld, position, layer);
+			e = new Ragdoll(mLevel->mPhysicMgr, position, layer);
 		}
 		else if (type == "livingbeing")
 		{
@@ -367,7 +359,7 @@ bool LevelLoader::ProcessEntities()
 			animation = entity->Attribute("animation");
 			animation = entity->Attribute("texture");
 
-			e = new LivingBeing(mLevel->mWorld, position, mLevel->mTextureMap[animation], layer);
+			e = new LivingBeing(mLevel->mPhysicMgr, position, mLevel->mTextureMap[animation], layer);
 		}
 		else if (type == "player")
 		{
@@ -375,7 +367,7 @@ bool LevelLoader::ProcessEntities()
 			animation = entity->Attribute("animation");
 			animation = entity->Attribute("texture");
 
-			e = new Player(mLevel->mWorld, position, mLevel->mTextureMap[animation], layer);
+			e = new Player(mLevel->mPhysicMgr, position, mLevel->mTextureMap[animation], layer);
 			mLevel->mPlayer = e;
 		}
 
@@ -407,7 +399,7 @@ bool LevelLoader::ProcessJoints()
 	unsigned int id = 0U;
 	std::string type;
 	unsigned int IDb1 = 0U, IDb2 = 0U;
-	Body *b1 = nullptr, *b2 = nullptr;
+	b2Body *b1 = nullptr, *b2 = nullptr;
 	b2Vec2 pt1, pt2, anchor;
 	bool colision = true;
 	sf::Color color = sf::Color::Green;
@@ -467,7 +459,7 @@ bool LevelLoader::ProcessJoints()
 		// Crée le joint
 		if (type == "gear")
 		{
-			Joint *j1 = nullptr, *j2 = nullptr;
+			b2Joint *j1 = nullptr, *j2 = nullptr;
 			unsigned int IDj1 = 0U, IDj2 = 0U;
 			float ratio;
 
@@ -491,8 +483,8 @@ bool LevelLoader::ProcessJoints()
 			j2 = mJointIDMap[IDj2];
 
 			// Crée le joint
-			j = new GearJoint(mLevel->mWorld, b1, b2, j1, j2, ratio, colision, color);
-			mLevel->mWorld->RegisterJoint(j);
+			j = new GearJoint(mLevel->mPhysicMgr, b1, b2, j1, j2, ratio, colision, color);
+			mLevel->mPhysicMgr->RegisterJoint(j);
 		}
 		else if (type == "distance")
 		{
@@ -503,8 +495,8 @@ bool LevelLoader::ProcessJoints()
 			joint->QueryFloatAttribute("damping", &damping);
 
 			// Crée le joint
-			j = new DistanceJoint(mLevel->mWorld, b1, pt1, b2, pt2, frequency, damping, colision, color);
-			mLevel->mWorld->RegisterJoint(j);
+			j = new DistanceJoint(mLevel->mPhysicMgr, b1, pt1, b2, pt2, frequency, damping, colision, color);
+			mLevel->mPhysicMgr->RegisterJoint(j);
 		}
 		else if (type == "friction")
 		{
@@ -515,8 +507,8 @@ bool LevelLoader::ProcessJoints()
 			joint->QueryFloatAttribute("maxTorque", &maxTorque);
 
 			// Crée le joint
-			j = new FrictionJoint(mLevel->mWorld, b1, pt1, b2, pt2, maxForce, maxTorque, colision, color);
-			mLevel->mWorld->RegisterJoint(j);
+			j = new FrictionJoint(mLevel->mPhysicMgr, b1, pt1, b2, pt2, maxForce, maxTorque, colision, color);
+			mLevel->mPhysicMgr->RegisterJoint(j);
 		}
 		else if (type == "rope")
 		{
@@ -526,8 +518,8 @@ bool LevelLoader::ProcessJoints()
 			joint->QueryFloatAttribute("maxlength", &maxlength);
 
 			// Crée le joint
-			j = new RopeJoint(mLevel->mWorld, b1, pt1, b2, pt2, maxlength, colision, color);
-			mLevel->mWorld->RegisterJoint(j);
+			j = new RopeJoint(mLevel->mPhysicMgr, b1, pt1, b2, pt2, maxlength, colision, color);
+			mLevel->mPhysicMgr->RegisterJoint(j);
 		}
 		else if (type == "weld")
 		{
@@ -538,8 +530,8 @@ bool LevelLoader::ProcessJoints()
 			joint->QueryFloatAttribute("damping", &damping);
 
 			// Crée le joint
-			j = new WeldJoint(mLevel->mWorld, b1, b2, anchor, frequency, damping, colision, color);
-			mLevel->mWorld->RegisterJoint(j);
+			j = new WeldJoint(mLevel->mPhysicMgr, b1, b2, anchor, frequency, damping, colision, color);
+			mLevel->mPhysicMgr->RegisterJoint(j);
 		}
 		else if (type == "pulley")
 		{
@@ -552,8 +544,8 @@ bool LevelLoader::ProcessJoints()
 			if (joint->Attribute("groundpt2")) groundpt2 = Parser::string2b2Vec2(joint->Attribute("groundpt2"));
 
 			// Crée le joint
-			j = new PulleyJoint(mLevel->mWorld, b1, pt1, b2, pt2, groundpt1, groundpt2, ratio, colision, color);
-			mLevel->mWorld->RegisterJoint(j);
+			j = new PulleyJoint(mLevel->mPhysicMgr, b1, pt1, b2, pt2, groundpt1, groundpt2, ratio, colision, color);
+			mLevel->mPhysicMgr->RegisterJoint(j);
 		}
 		else if (type == "prismatic")
 		{
@@ -573,8 +565,8 @@ bool LevelLoader::ProcessJoints()
 			joint->QueryFloatAttribute("maxForce", &maxForce);
 
 			// Crée le joint
-			j = new PrismaticJoint(mLevel->mWorld, b1, b2, anchor, axis, enableLimits, lower, upper, enableMotor, speed, maxForce, colision, color);
-			mLevel->mWorld->RegisterJoint(j);
+			j = new PrismaticJoint(mLevel->mPhysicMgr, b1, b2, anchor, axis, enableLimits, lower, upper, enableMotor, speed, maxForce, colision, color);
+			mLevel->mPhysicMgr->RegisterJoint(j);
 		}
 		else if (type == "revolute")
 		{
@@ -592,8 +584,8 @@ bool LevelLoader::ProcessJoints()
 			joint->QueryFloatAttribute("maxTorque", &maxTorque);
 
 			// Crée le joint
-			j = new RevoluteJoint(mLevel->mWorld, b1, b2, anchor, enableLimits, lower, upper, enableMotor, speed, maxTorque, colision, color);
-			mLevel->mWorld->RegisterJoint(j);
+			j = new RevoluteJoint(mLevel->mPhysicMgr, b1, b2, anchor, enableLimits, lower, upper, enableMotor, speed, maxTorque, colision, color);
+			mLevel->mPhysicMgr->RegisterJoint(j);
 		}
 		else if (type == "wheel")
 		{
@@ -611,8 +603,8 @@ bool LevelLoader::ProcessJoints()
 			joint->QueryFloatAttribute("maxTorque", &maxTorque);
 
 			// Crée le joint
-			j = new WheelJoint(mLevel->mWorld, b1, b2, anchor, axis, frequency, damping, enableMotor, speed, maxTorque, colision, color);
-			mLevel->mWorld->RegisterJoint(j);
+			j = new WheelJoint(mLevel->mPhysicMgr, b1, b2, anchor, axis, frequency, damping, enableMotor, speed, maxTorque, colision, color);
+			mLevel->mPhysicMgr->RegisterJoint(j);
 		}
 
 		// Enregiste l'ID
@@ -621,7 +613,7 @@ bool LevelLoader::ProcessJoints()
 			// On regarde si l'ID n'est pas déjà utilisé
 			if (mBodyIDMap.find(id) != mBodyIDMap.end())
 				Dialog::Error("L'ID " + Parser::int2string(id) + " n'est pas unique !", false);
-			mJointIDMap[id] = j;
+			mJointIDMap[id] = j->GetJoint();
 		}
 
 		// On récupère le prochain body
@@ -679,7 +671,7 @@ bool LevelLoader::ProcessDeco()
 			posRot.z = rotation;
 			
 			// Ajoute la déco
-			d = new Deco(z, &*mLevel->mTextureMap[texture], getVec3(b22sfVec(getVec2(posRot), mLevel->mWorld->GetPPM()), posRot.z));
+			d = new Deco(z, &*mLevel->mTextureMap[texture], getVec3(b22sfVec(getVec2(posRot), mLevel->mPhysicMgr->GetPPM()), posRot.z));
 			mLevel->mEntityManager.RegisterEntity(d);
 
 			// On récupère la prochaine image
@@ -691,7 +683,7 @@ bool LevelLoader::ProcessDeco()
 
 	return true;
 }
-bool LevelLoader::ProcessLights()
+/*bool LevelLoader::ProcessLights()
 {
 	// Récupère <lights>
 	tinyxml2::XMLHandle hdl(mFile);
@@ -708,7 +700,7 @@ bool LevelLoader::ProcessLights()
 	unsigned int id = 0U;
 	std::string parent, type;
 	sf::Vector2f position;
-	Body *b = nullptr;
+	b2Body *b = nullptr;
 
 	// Pour chaque lumière
 	tinyxml2::XMLElement *light = lights.FirstChildElement().ToElement();
@@ -722,7 +714,7 @@ bool LevelLoader::ProcessLights()
 		if (light->Attribute("parent")) parent = light->Attribute("parent");
 
 		// Récupère l'ID de l'objet associé
-		if (light->Attribute("pos")) position = b22sfVec(Parser::string2b2Vec2(light->Attribute("pos")), mLevel->mWorld->GetPPM());
+		if (light->Attribute("pos")) position = b22sfVec(Parser::string2b2Vec2(light->Attribute("pos")), mLevel->mPhysicMgr->GetPPM());
 		if (parent == "body")
 		{
 			light->QueryUnsignedAttribute("id", &id);
@@ -747,9 +739,9 @@ bool LevelLoader::ProcessLights()
 			light->QueryBoolAttribute("static", &isStatic);
 			light->QueryBoolAttribute("activated", &activated);
 
-			radius *= mLevel->mWorld->GetPPM();
+			radius *= mLevel->mPhysicMgr->GetPPM();
 
-			LightManager::GetInstance().AddLight(new PointLight(position, radius, isStatic, activated, b));
+			//LightManager::GetInstance().AddLight(new PointLight(position, radius, isStatic, activated, b));
 		}
 		else if (type == "spot")
 		{
@@ -761,4 +753,4 @@ bool LevelLoader::ProcessLights()
 	}
 
 	return true;
-}
+}*/
