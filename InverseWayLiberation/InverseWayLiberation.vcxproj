@@ -100,9 +100,9 @@
     <None Include="..\README.txt" />
     <None Include="anim\player.xas" />
     <None Include="anim\player.xim" />
-    <None Include="ClassDiagram.cd" />
-    <None Include="ClassDiagram1.cd" />
-    <None Include="lvls\1.xvl" />
+    <None Include="lvls\1.xvl">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="src\_TODO.txt" />
   </ItemGroup>
   <ItemGroup>
@@ -144,11 +144,15 @@
       <WarningLevel>Level4</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>TIXML_USE_STL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <BrowseInformation>false</BrowseInformation>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>tinyxml2-d.lib;Box2D-d.lib;sfml-system-d.lib;sfml-window-d.lib;sfml-graphics-d.lib;thor-d.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <Bscmake>
+      <PreserveSbr>true</PreserveSbr>
+    </Bscmake>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>

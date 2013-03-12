@@ -24,8 +24,8 @@ void Level::Clear()
 	// Vide tous les objets du jeu
 	// TODO: Vider les textures ? (-> faire un système pour ne vider que les textures inutilisées)
 	mPhysicMgr->DestroyAllJoints();
-	mPhysicMgr->DestroyAllBody();
 	mEntityManager.DestroyAllEntities();
+	mPhysicMgr->DestroyAllBody();
 }
 
 // Mise à jour

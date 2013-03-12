@@ -104,8 +104,6 @@
     <None Include="anim\player.xim">
       <Filter>Fichiers de ressources\Anims</Filter>
     </None>
-    <None Include="ClassDiagram.cd" />
-    <None Include="ClassDiagram1.cd" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Physics\Joints\DistanceJoint.cpp">

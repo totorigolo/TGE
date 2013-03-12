@@ -31,6 +31,9 @@ public:
 	int GetLayer() const;
 	EntityType GetType() const { return mType; }
 
+	void DeleteOnDestroy(bool b) { mToDeleteOnDestroy = b; }
+	bool HasToBeDeletedOnDestroy() const { return mToDeleteOnDestroy; }
+
 protected:
 	// Etat
 	bool mIsAlive;
@@ -38,4 +41,6 @@ protected:
 	// Propriétés
 	int mLayer;
 	EntityType mType;
+	// Est-ce que l'EntityManager doit delete cette Entity en supprimant tout ?
+	bool mToDeleteOnDestroy;
 };

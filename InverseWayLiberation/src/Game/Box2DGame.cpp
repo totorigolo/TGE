@@ -92,6 +92,9 @@ bool Box2DGame::OnInit()
 
 	// Initialise le monde
 	mPhysicMgr.SetTimeStep(1.f / 60.f);
+
+	// S'occupe du grapin
+	mGrapnel.DeleteOnDestroy(false);
 	EntityManager::GetInstance().RegisterEntity(&mGrapnel);
 
 	// Charge un niveau

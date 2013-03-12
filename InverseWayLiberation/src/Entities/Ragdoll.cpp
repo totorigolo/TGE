@@ -120,7 +120,7 @@ Ragdoll::~Ragdoll(void)
 	// Les joints sont détruits automatiquement lors de la destruction des bodies
 
 	// Supprime les bodies 
-	for (std::unordered_map<std::string, BasicBody*>::iterator it = mBodies.begin(); it != mBodies.end(); )
+	for (std::unordered_map<std::string, BasicBody*>::iterator it = mBodies.begin(); it != mBodies.end(); ++it)
 	{
 		it->second->Destroy();
 	}

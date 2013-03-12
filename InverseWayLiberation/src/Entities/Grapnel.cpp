@@ -3,12 +3,13 @@
 
 // Ctor & dtor
 Grapnel::Grapnel(PhysicManager *mgr, int layer)
-	: Entity(layer), mPhysicMgr(mgr), mJoint(nullptr), mJointIsCreated(false), mIsRetracting(false)
+	: Entity(layer), mPhysicMgr(mgr), mJoint(nullptr), mJointIsCreated(false)
 {
 	assert(mPhysicMgr && "n'est pas valide.");
 
 	// Défini le type de l'Entity
 	mType = EntityType::Grapnel;
+	mToDeleteOnDestroy = false;
 }
 Grapnel::~Grapnel()
 {

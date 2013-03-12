@@ -2,7 +2,7 @@
 
 // Ctor & dtor
 Entity::Entity(int layer)
-	: mIsAlive(false), mLayer(layer)
+	: mIsAlive(false), mLayer(layer), mToDeleteOnDestroy(true)
 {
 	mType = EntityType::Entity;
 }

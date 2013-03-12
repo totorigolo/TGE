@@ -98,7 +98,8 @@ ex: (NB = les valeurs mises pour les facultatifs sont celles par défaut)
 																					colision="false" color="(255, 0, 255)"/>
 -->
     <pulley body1="1" pt1="(0.f, 0.f)" body2="2" pt2="(0.f, 0.f)" groundpt1="(-2.f, 0.5f)" groundpt2="(1.9f, 4.f)" ratio="1.5f"/>
-    <rope body1="3" pt1="(0.f, 0.f)" body2="4" pt2="(0.f, 0.f)" maxlength="3.f" colision="true" color="(0, 255, 255)"/>
+
+    <rope body1="3" pt1="(0.f, 0.f)" body2="4" pt2="(0.f, 0.f)" maxlength="1.f" colision="true" color="(0, 255, 255)"/>
   </joints>
 
   <!-- Crée la déco -->
