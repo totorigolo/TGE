@@ -13,7 +13,7 @@
 
 // Ctor
 Box2DGame::Box2DGame(sf::RenderWindow & window)
-	: mWindow(window), mActionMap(mWindow),
+	: mWindow(window), mQuit(false), mActionMap(mWindow),
 	// Ressources
 	mResourceManager(ResourceManager::GetInstance()),
 	mTextureMap(mResourceManager.GetTextureMap()),
@@ -56,7 +56,7 @@ void Box2DGame::Run()
 	if (this->OnInit())
 	{
 		// Tant que la fenêtre est ouverte
-		while (mWindow.isOpen())
+		while (mWindow.isOpen() && !mQuit)
 		{
 			// La boucle commence
 			this->OnLoopBegin();
@@ -406,7 +406,8 @@ void Box2DGame::OnEvent()
 	}
 	
 #if 0
-	// Coupe un objet // TODO: Finir
+	// TODO: Finir
+	// Coupe un objet
 	else if (false && mActionMap.isActive("onSplice") && !mSplice1Get)
 	{
 		mSpliceL1 = mMp;
@@ -577,7 +578,7 @@ void Box2DGame::OnEvent()
 	// Gestion de la fermeture de la fenêtre
 	if (mActionMap.isActive("closed"))
 	{
-		mWindow.close();
+		mQuit = true;
 	}
 }
 

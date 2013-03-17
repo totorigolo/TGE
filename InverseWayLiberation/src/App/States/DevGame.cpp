@@ -21,6 +21,5 @@ State* DevGame_State::Run(App *app)
 	Box2DGame game(*app->GetRenderWindow());
 	game.Run();
 
-	return Exit_State; // TODO: Changer ici quand il y aura un menu
 	return MainMenu_State::GetPInstance();
 }

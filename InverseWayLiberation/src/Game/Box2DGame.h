@@ -59,6 +59,7 @@ private:
 	bool mPaused;
 
 	// Fenêtre
+	bool mQuit;
 	sf::RenderWindow & mWindow;
 	sf::View mWindowView;
 	float mCurrentZoom;
