@@ -8,27 +8,27 @@ PrismaticJoint::PrismaticJoint(PhysicManager *physicMgr, b2Body *b1, b2Body *b2,
 	: Joint(physicMgr), mColor(color)
 {
 	assert(mPhysicMgr && "n'est pas valide.");
+	assert(b1 && "n'est pas valide.");
+	assert(b2 && "n'est pas valide.");
+	
+	mPhysicMgr->RegisterJoint(this);
 
-	mBodyA = b1;
-	mBodyB = b2;
-
-	if (mBodyA && mBodyB)
-	{
-		b2PrismaticJointDef jointDef;
-		jointDef.Initialize(mBodyA, mBodyB, mBodyA->GetWorldPoint(anchor), axis);
-		jointDef.collideConnected = collideconnected;
-		jointDef.enableLimit = enableLimit;
-		jointDef.lowerTranslation = lowerTranslation;
-		jointDef.upperTranslation = upperTranslation;
-		jointDef.enableMotor = enableMotor;
-		jointDef.motorSpeed = motorSpeed * RPD;
-		jointDef.maxMotorForce = maxMotorForce;
-		mJoint = (b2PrismaticJoint*) mPhysicMgr->CreateJoint(&jointDef, this);
-		
-		//mBodyA->RegisterJoint(this);
-		//mBodyB->RegisterJoint(this);
-		mIsNull = false;
-	}
+	b2PrismaticJointDef jointDef;
+	jointDef.Initialize(b1, b2, b1->GetWorldPoint(anchor), axis);
+	jointDef.collideConnected = collideconnected;
+	jointDef.enableLimit = enableLimit;
+	jointDef.lowerTranslation = lowerTranslation;
+	jointDef.upperTranslation = upperTranslation;
+	jointDef.enableMotor = enableMotor;
+	jointDef.motorSpeed = motorSpeed * RPD;
+	jointDef.maxMotorForce = maxMotorForce;
+	mJoint = mPhysicMgr->Createb2Joint(&jointDef);
+	mJoint->SetUserData(this);
+	
+	mIsAlive = true;
+	
+	b1->SetAwake(true);
+	b2->SetAwake(true);
 
 	// Règle le VertexArray
 	(*this)[0].color = mColor;
@@ -45,15 +45,10 @@ void PrismaticJoint::Update()
 {
 	Joint::Update();
 
-	if (mBodyA && mBodyB && !mIsNull)
+	if (mIsAlive)
 	{
 		(*this)[0].position = b22sfVec(mJoint->GetAnchorA(), mPhysicMgr->GetPPM());
 		(*this)[1].position = b22sfVec(mJoint->GetBodyB()->GetPosition(), mPhysicMgr->GetPPM());
-	}
-	else
-	{
-		//mPhysicMgr->DestroyJoint(this, false);
-		//delete this;
 	}
 }
 

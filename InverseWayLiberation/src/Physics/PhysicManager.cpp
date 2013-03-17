@@ -2,7 +2,7 @@
 
 //Ctor
 PhysicManager::PhysicManager(b2Vec2 const& gravity, float ppm)
-	: mWorld(gravity), mPPM(ppm), mTimeStep(1.f / 60.f)
+	: mWorld(gravity), mPPM(ppm), mTimeStep(1.f / 60.f), mLastJointID(0)
 {
 	// Défini le ContactListener du monde
 	mWorld.SetContactListener(&mContactListener);
@@ -11,7 +11,6 @@ PhysicManager::PhysicManager(b2Vec2 const& gravity, float ppm)
 // Dtor
 PhysicManager::~PhysicManager(void)
 {
-	// Au cas où
 	DestroyAllJoints();
 	DestroyAllBody();
 }
@@ -23,10 +22,19 @@ b2Body* PhysicManager::CreateBody(b2BodyDef const* bodyDef)
 }
 void PhysicManager::DestroyBody(b2Body *body)
 {
-	if (body)
+	assert(body && "est invalide.");
+
+	// Supprime les joints attachés
+	b2JointEdge *je = body->GetJointList();
+	while (je)
 	{
-		mWorld.DestroyBody(body);
+		auto next = je->next;
+		DestroyJoint(((Joint*) je->joint->GetUserData())->GetID());
+		je = next;
 	}
+
+	// Supprime le b2Body
+	mWorld.DestroyBody(body);
 }
 void PhysicManager::DestroyAllBody()
 {
@@ -42,26 +50,36 @@ void PhysicManager::DestroyAllBody()
 }
 
 // Gestion des joints
+// Création / destruction
+int PhysicManager::RegisterJoint(Joint *joint)
+{
+	mJointList[mLastJointID] = joint;
+	joint->mID = mLastJointID;
+
+	return mLastJointID++;
+}
+void PhysicManager::DestroyJoint(int jointID)
+{
+	// Récupère le joint
+	auto itJoint = mJointList.find(jointID);
+	assert(itJoint != mJointList.end() && "le joint n'existe pas.");
+	Joint *joint = itJoint->second;
+
+	// Supprime le joint
+	mJointList.erase(itJoint);
+	delete joint;
+}
 void PhysicManager::DestroyAllJoints()
 {
 	// Détruit les Joints
 	for (auto it = mJointList.begin(); it != mJointList.end(); )
 	{
-		auto it2 = it; ++it2;
-		this->DestroyJoint(*it);
-		it = it2;
+		delete it->second;
+		it = mJointList.erase(it);
 	}
 	mJointList.clear();
 
-	// Supprime les b2Joints
-	b2Joint *j = mWorld.GetJointList(), *jj = nullptr;
-	while (j)
-	{
-		jj = j;
-		j = j->GetNext();
-
-		Destroyb2Joint(jj);
-	}
+	assert(mWorld.GetJointCount() == 0 && "il ne devrait plus rester de joints.");
 }
 // b2Joint
 b2Joint* PhysicManager::Createb2Joint(b2JointDef const* jointDef)
@@ -70,39 +88,63 @@ b2Joint* PhysicManager::Createb2Joint(b2JointDef const* jointDef)
 }
 void PhysicManager::Destroyb2Joint(b2Joint *joint)
 {
-	if (joint)
+	assert(joint && "n'est pas valide.");
+	mWorld.DestroyJoint(joint);
+}
+// Mide à jour
+void PhysicManager::UpdateJoints()
+{
+	// Met à jour tous les joints
+	for (auto it = mJointList.begin(); it != mJointList.end(); )
 	{
-		mWorld.DestroyJoint(joint);
+		// Met à jour
+		it->second->Update();
+
+		// Supprime le joint si nécessaire
+		if (it->second->ToDestroy())
+		{
+			delete it->second;
+			it = mJointList.erase(it);
+		}
+
+		// Sinon passe juste au suivant
+		else
+			++it;
 	}
 }
-// Joint
-void PhysicManager::RegisterJoint(Joint *joint)
+// Accesseurs
+bool PhysicManager::JointExists(int jointID) const
 {
-	mJointList.push_back(joint);
+	// Récupère le joint
+	auto itJoint = mJointList.find(jointID);
+
+	// Vérifie qu'il est valide
+	if (itJoint != mJointList.end())
+		if (itJoint->second->IsAlive())
+			return true;
+	return false;
 }
-b2Joint* PhysicManager::CreateJoint(b2JointDef const* jointDef, Joint *joint)
+Joint* PhysicManager::GetJoint(int jointID)
 {
-	b2Joint *j = Createb2Joint(jointDef);
-	j->SetUserData(joint);
-	joint->SetJoint(j);
-	return j;
+	// Vérifie qu'il est valide
+	if (!JointExists(jointID))
+		return nullptr;
+
+	// Le retourne
+	return mJointList.at(jointID);
 }
-void PhysicManager::DestroyJoint(Joint *joint, bool _delete, bool remove)
+const Joint* PhysicManager::GetJoint(int jointID) const
 {
-	if (joint)
-	{
-		if (joint->GetJoint())
-			Destroyb2Joint(joint->GetJoint());
-		joint->SetJoint(nullptr);
-		if (remove)
-			mJointList.remove(joint);
-		if (_delete)
-			delete joint;
-	}
+	// Vérifie qu'il est valide
+	if (!JointExists(jointID))
+		return nullptr;
+
+	// Le retourne
+	return mJointList.at(jointID);
 }
 
 // Suppression retardé (utile par ex dans le ContactListener)
-void PhysicManager::ScheduleDestroyBody(b2Body *body)
+/*void PhysicManager::ScheduleDestroyBody(b2Body *body)
 {
 	mScheduledBodiesToDestroy.push_back(body);
 }
@@ -132,7 +174,7 @@ bool PhysicManager::DestroyScheduled()
 
 	// On a réussi
 	return true;
-}
+}*/
 
 // Simulation
 void PhysicManager::SetTimeStep(float timeStep)
@@ -149,7 +191,7 @@ void PhysicManager::Step(int velocityIt, int positionIt)
 {
 	// TODO: Fixer le Timestep
 	mWorld.Step(mTimeStep, velocityIt, positionIt);
-	DestroyScheduled();
+	//DestroyScheduled();
 }
 
 // Gestion des propriétés du monde
@@ -186,29 +228,15 @@ const b2Body* PhysicManager::GetBodyList() const
 	return mWorld.GetBodyList();
 }
 // La liste des Joints
-// b2Joints
-unsigned int PhysicManager::Getb2JointCount()
-{
-	return mWorld.GetJointCount();
-}
-b2Joint* PhysicManager::Getb2JointList()
-{
-	return mWorld.GetJointList();
-}
-const b2Joint* PhysicManager::Getb2JointList() const
-{
-	return mWorld.GetJointList();
-}
-// Joints
 unsigned int PhysicManager::GetJointCount()
 {
 	return mJointList.size();
 }
-std::list<Joint*>& PhysicManager::GetJointList()
+std::map<int, Joint*>& PhysicManager::GetJointList()
 {
 	return mJointList;
 }
-const std::list<Joint*>& PhysicManager::GetJointList() const
+const std::map<int, Joint*>& PhysicManager::GetJointList() const
 {
 	return mJointList;
 }

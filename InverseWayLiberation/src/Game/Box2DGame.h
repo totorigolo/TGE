@@ -107,11 +107,11 @@ private:
 	// Grapin
 	b2Body *mHookedSBody;
 	b2Vec2 mHookedSAnchor;
-	Grapnel mGrapnel;
+	Grapnel *mGrapnel;
 	sf::Clock mHookClock;
 
 	// Déplacement des objets
-	MouseJoint *mMouseJoint;
+	int mMouseJointID;
 
 	// Découpage des objets
 	bool mSplice1Get;

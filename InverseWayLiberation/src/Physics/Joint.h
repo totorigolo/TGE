@@ -3,10 +3,13 @@
 #include <Box2D/Box2D.h>
 #include <Thor/Resources.hpp>
 #include "PhysicManager.h"
+#include "../Entities/Entity.h"
 
 class PhysicManager;
 class Joint : public sf::VertexArray
 {
+	friend class PhysicManager;
+
 public:
 	// Ctor & dtor
 	Joint(PhysicManager *physicMgr);
@@ -18,11 +21,11 @@ public:
 	// Met à jour le joint
 	virtual void Update();
 
-	// Gestion des joints à supprimer avant celui-ci (pour les GearJoints)
-	void RegisterJoint(Joint *joint);
-	void RemoveJoint(Joint *joint);
-	void DestroyJoint(Joint *joint, bool remove = true);
-	void DestroyAllJoints();
+	// Gestion des joints à supprimer avant celui-ci (pour les GearJoints surtout)
+	void RegisterLinkedJoint(int jointID);
+	void RemoveLinkedJoint(int jointID);
+	void DestroyLinkedJoint(int jointID);
+	void DestroyAllLinkedJoints();
 
 	// Définit si le joint est cassable
 	void SetBreakableByForce(bool breakable);
@@ -37,33 +40,42 @@ public:
 	float GetMaxTorque() const;
 
 	// Accesseurs
-	bool IsNull() const { return mIsNull; }
+	bool IsAlive() const { return mIsAlive; }
+	bool ToDestroy() const { return mToDestroy; }
 
 	PhysicManager* GetPhysicManager() { return mPhysicMgr; }
 	PhysicManager const* GetPhysicManager() const { return mPhysicMgr; }
 
-	void SetJoint(b2Joint *joint); // NE PAS UTILISER
+	void SetOwner(Entity *e) { mOwner = e; }
+	Entity* GetOwner() { return mOwner; }
+	const Entity* GetOwner() const { return mOwner; }
+
+	int GetID() const { return mID; }
+
 	b2Joint* GetJoint() { return mJoint; }
 	b2Joint const* GetJoint() const { return mJoint; }
-
-	const b2Body* GetBodyA() const { return mBodyA; }
-	const b2Body* GetBodyB() const { return mBodyB; }
+	
+	b2Body* GetBodyA();
+	b2Body* GetBodyB();
+	const b2Body* GetBodyA() const;
+	const b2Body* GetBodyB() const;
 
 	// Ces deux fonctions peuvent demander qqs calculs, donc à ne pas trop utiliser
 	b2Vec2 GetReactionForce(float inv_dt) const;
 	float GetReactionTorque(float inv_dt) const;
 
 protected:
-	// Propriétés
-	bool mIsNull;
+	// Propriétaire
+	Entity *mOwner;
+
+	// Etat
+	bool mIsAlive;
+	bool mToDestroy;
 
 	// Objets physiques
+	int mID;
 	PhysicManager *mPhysicMgr;
 	b2Joint *mJoint;
-
-	// Les b2Bodies attachées
-	b2Body *mBodyA;
-	b2Body *mBodyB;
 
 	// Propriétés cassable
 	bool mIsBreakableMaxForce;
@@ -74,5 +86,5 @@ protected:
 	float mMaxTorque;
 
 	// Liste des joint à supprimer avant celui-ci
-	std::list<Joint*> mJointList;
+	std::list<int> mLinkedJointList;
 };

@@ -1,5 +1,7 @@
 #include "BasicBody.h"
+#include "EntityManager.h"
 #include "../Tools/utils.h"
+#include <iostream>
 
 // Ctor & dtor
 BasicBody::BasicBody(PhysicManager *mgr, int layer)
@@ -25,6 +27,7 @@ bool BasicBody::CreateDynBox(b2Vec3 posRot, std::shared_ptr<sf::Texture> texture
 
 	// Change la texture
 	mSprite.setTexture(*texture);
+	mSprite.setOrigin(mSprite.getTextureRect().width / 2.f, mSprite.getTextureRect().height / 2.f);
 
 	// BodyDef
 	b2BodyDef bodyDef;
@@ -65,6 +68,7 @@ bool BasicBody::CreateDynCircle(b2Vec3 posRot, std::shared_ptr<sf::Texture> text
 
 	// Change la texture
 	mSprite.setTexture(*texture);
+	mSprite.setOrigin(mSprite.getTextureRect().width / 2.f, mSprite.getTextureRect().height / 2.f);
 
 	// BodyDef
 	b2BodyDef bodyDef;
@@ -104,6 +108,7 @@ bool BasicBody::CreateStaticBox(b2Vec3 posRot, std::shared_ptr<sf::Texture> text
 
 	// Change la texture
 	mSprite.setTexture(*texture);
+	mSprite.setOrigin(mSprite.getTextureRect().width / 2.f, mSprite.getTextureRect().height / 2.f);
 
 	// BodyDef
 	b2BodyDef bodyDef;
@@ -141,16 +146,11 @@ bool BasicBody::CreateStaticBox(b2Vec3 posRot, std::shared_ptr<sf::Texture> text
 void BasicBody::Update()
 {
 	// Si le body est valide
-	if (mBody && mBodyIsCreated)
+	if (mBody)
 	{
 		// Mise à jour de la texture
 		mSprite.setPosition(b22sfVec(mBody->GetPosition(), mPhysicMgr->GetPPM()));
-		mSprite.setOrigin(mSprite.getTextureRect().width / 2.f, mSprite.getTextureRect().height / 2.f); // TODO: utile ?
 		mSprite.setRotation(- mBody->GetAngle() * DPR);
-	}
-	else if (mBodyIsCreated)
-	{
-		// TODO: Suppression et suicide -> erreur
 	}
 }
 
@@ -162,9 +162,10 @@ void BasicBody::Destroy()
 		// Supprime le Body
 		mPhysicMgr->DestroyBody(mBody);
 		mBody = nullptr;
-		mBasicBodyType = BasicBodyType::Null;
-		mBodyIsCreated = false;
 	}
+	mBasicBodyType = BasicBodyType::Null;
+	mBodyIsCreated = false;
+	mIsAlive = false;
 }
 
 // Pour le rendu
@@ -172,6 +173,22 @@ void BasicBody::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
 	if (mBodyIsCreated)
 		target.draw(mSprite, states);
+}
+
+// Gestion des dépendences
+void BasicBody::DependencyDestroyed(void *dependency)
+{
+	std::cout << "BasicBody::DependencyDestroyed" << std::endl;
+	/*/ Vérifie que le b2Body ne soit pas supprimé
+	if (dependency == mBody)
+	{
+		mIsAlive = false;
+		mBody = nullptr;
+		mBasicBodyType = BasicBodyType::Null;
+		mBodyIsCreated = false;
+		EntityManager::GetInstance().DestroyEntity(this, false);
+		delete this;
+	*/
 }
 
 /* Accesseurs */

@@ -2,33 +2,34 @@
 #include "../../Tools/utils.h"
 
 //Ctor
-GearJoint::GearJoint(PhysicManager *physicMgr, b2Body *b1, b2Body *b2, b2Joint *j1, b2Joint *j2, float ratio, bool collideconnected, sf::Color const& color)
+GearJoint::GearJoint(PhysicManager *physicMgr, b2Body *b1, b2Body *b2, int j1, int j2, float ratio, bool collideconnected, sf::Color const& color)
 	: Joint(physicMgr), mColor(color)
 {
 	assert(mPhysicMgr && "n'est pas valide.");
+	assert(b1 && "n'est pas valide.");
+	assert(b2 && "n'est pas valide.");
+	assert(mPhysicMgr->JointExists(j1) && "le joint n'existe pas.");
+	assert(mPhysicMgr->JointExists(j2) && "le joint n'existe pas.");
 
-	mBodyA = b1;
-	mBodyB = b2;
+	mPhysicMgr->RegisterJoint(this);
 
-	if (mBodyA && mBodyB)
-	{
-		b2GearJointDef jointDef;
-		jointDef.bodyA = mBodyA;
-		jointDef.bodyB = mBodyB;
-		jointDef.joint1 = j1;
-		jointDef.joint2 = j2;
-		jointDef.ratio = ratio;
-		jointDef.collideConnected = collideconnected;
-		mJoint = (b2GearJoint*) mPhysicMgr->CreateJoint(&jointDef, this);
-		
-		//mBodyA->RegisterJoint(this);
-		//mBodyB->RegisterJoint(this);
-		
-		//j1->RegisterJoint(this);
-		//j2->RegisterJoint(this);
+	b2GearJointDef jointDef;
+	jointDef.bodyA = b1;
+	jointDef.bodyB = b2;
+	jointDef.joint1 = mPhysicMgr->GetJoint(j1)->GetJoint();
+	jointDef.joint2 = mPhysicMgr->GetJoint(j2)->GetJoint();
+	jointDef.ratio = ratio;
+	jointDef.collideConnected = collideconnected;
+	mJoint = mPhysicMgr->Createb2Joint(&jointDef);
+	mJoint->SetUserData(this);
+	
+	mPhysicMgr->GetJoint(j1)->RegisterLinkedJoint(mID);
+	mPhysicMgr->GetJoint(j2)->RegisterLinkedJoint(mID);
 
-		mIsNull = false;
-	}
+	mIsAlive = false;
+	
+	b1->SetAwake(true);
+	b2->SetAwake(true);
 
 	(*this)[0].color = mColor;
 	(*this)[1].color = mColor;
@@ -44,15 +45,10 @@ void GearJoint::Update()
 {
 	Joint::Update();
 
-	if (mBodyA && mBodyB && !mIsNull)
+	if (mIsAlive)
 	{
 		(*this)[0].position = b22sfVec(mJoint->GetAnchorA(), mPhysicMgr->GetPPM());
 		(*this)[1].position = b22sfVec(mJoint->GetAnchorB(), mPhysicMgr->GetPPM());
-	}
-	else
-	{
-		//mPhysicMgr->DestroyJoint(this, false);
-		//delete this;
 	}
 }
 

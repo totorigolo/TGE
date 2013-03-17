@@ -2,9 +2,6 @@
 #include "../Level/LevelLoader.h"
 #include "../Entities/BasicBody.h"
 #include "../Entities/Player.h"
-#include "../Physics/Bodies/StaticBox.h"
-#include "../Physics/Bodies/DynamicBox.h"
-#include "../Physics/Bodies/DynamicCircle.h"
 #include "../Physics/Joints/DistanceJoint.h"
 #include "../Physics/Callback/PointCallback.h"
 #include "../Physics/Callback/FirstBodyRaycastCallback.h"
@@ -24,15 +21,14 @@ Box2DGame::Box2DGame(sf::RenderWindow & window)
 	//mLightManager(LightManager::GetInstance()),
 	//mMouseLight(0.f, 0.f, 400.f, false),
 	// Physique
-	mGravity(0.0f, -9.8f), mPhysicMgr(mGravity),
-	mGrapnel(&mPhysicMgr, -1)
+	mGravity(0.0f, -9.8f), mPhysicMgr(mGravity)
 {
 	// Etats du jeu
 	mPaused = false;
 
 	mCurrentZoom = 1.f;
 
-	mMouseJoint = nullptr;
+	mMouseJointID = -1;
 	mPinBodyA = nullptr;
 	mPinBodyB = nullptr;
 	mLevel = nullptr;
@@ -40,6 +36,10 @@ Box2DGame::Box2DGame(sf::RenderWindow & window)
 	mSpliceP1 = mSpliceP2 = b2Vec2(0.f, 0.f);
 	mSplice1Get = false;
 	mHookedSBody = nullptr;
+
+	// Grapin de test
+	mGrapnel = new Grapnel(&mPhysicMgr, -1);
+	EntityManager::GetInstance().RegisterEntity(mGrapnel);
 }
 
 // Dtor
@@ -92,10 +92,6 @@ bool Box2DGame::OnInit()
 
 	// Initialise le monde
 	mPhysicMgr.SetTimeStep(1.f / 60.f);
-
-	// S'occupe du grapin
-	mGrapnel.DeleteOnDestroy(false);
-	EntityManager::GetInstance().RegisterEntity(&mGrapnel);
 
 	// Charge un niveau
 	mLevel = new Level(&mPhysicMgr);
@@ -183,19 +179,19 @@ void Box2DGame::OnEvent()
 	// Déplacements du joueur
 	if (mActionMap.isActive("onJump"))
 	{
-		((Player*) mLevel->mPlayer)->GetEvent(PlayerEvent::Jump);
+		mLevel->GetPlayer()->GetEvent(PlayerEvent::Jump);
 	}
 	if (mActionMap.isActive("onGoLeft"))
 	{
-		((Player*) mLevel->mPlayer)->GetEvent(PlayerEvent::Left);
+		mLevel->GetPlayer()->GetEvent(PlayerEvent::Left);
 	}
 	if (mActionMap.isActive("onGoRight"))
 	{
-		((Player*) mLevel->mPlayer)->GetEvent(PlayerEvent::Right);
+		mLevel->GetPlayer()->GetEvent(PlayerEvent::Right);
 	}
 	if (mActionMap.isActive("onCrawl"))
 	{
-		((Player*) mLevel->mPlayer)->GetEvent(PlayerEvent::Crounch);
+		mLevel->GetPlayer()->GetEvent(PlayerEvent::Crounch);
 	}
 
 	// Gère le déplacement à la souris (clic molette)
@@ -241,9 +237,10 @@ void Box2DGame::OnEvent()
 	if (mActionMap.isActive("onMoveObject"))
 	{
 		// Si la souris est déjà attachée, on met à jour la position
-		if (mMouseJoint)
+		MouseJoint *j = ((MouseJoint*) mPhysicMgr.GetJoint(mMouseJointID));
+		if (j)
 		{
-			mMouseJoint->SetTarget(mMp);
+			j->SetTarget(mMp);
 		}
 
 		// Sinon on recherche l'objet sous la souris et on l'attache
@@ -261,16 +258,16 @@ void Box2DGame::OnEvent()
 				if (staticBody) // Si il y en a un
 				{
 					b2Body* body = callback.GetFixture()->GetBody();
-					mMouseJoint = new MouseJoint(&mPhysicMgr, body, staticBody, mMp, 10000000.f * body->GetMass());
+					MouseJoint *j = new MouseJoint(&mPhysicMgr, body, staticBody, mMp, 10000000.f * body->GetMass());
+					mMouseJointID = j->GetID();
 				}
 			}
 		}
 	}
-	else if (mMouseJoint)
+	else if (mPhysicMgr.JointExists(mMouseJointID))
 	{
-		mMouseJoint->Destroy();
-		delete mMouseJoint;
-		mMouseJoint = nullptr;
+		mPhysicMgr.DestroyJoint(mMouseJointID);
+		mMouseJointID = -1;
 	}
 
 	// Déplacement de la vue avec les flèches
@@ -294,6 +291,12 @@ void Box2DGame::OnEvent()
 	// Charge un niveau
 	if (mActionMap.isActive("onLoadLevel"))
 	{
+		// Supprime les pointeurs
+		mGrapnel->Destroy();
+		if (mPhysicMgr.JointExists(mMouseJointID))
+			mPhysicMgr.DestroyJoint(mMouseJointID);
+		mMouseJointID = -1;
+
 		//mLightManager.DeleteLight(&mMouseLight, false);
 		LevelLoader("lvls/1.xvl", mLevel);
 		//mLightManager.AddLight(&mMouseLight);
@@ -303,20 +306,21 @@ void Box2DGame::OnEvent()
 		mRenderTextureView.zoom(mCurrentZoom);
 		mRenderTextureView.setSize(u2f(mWindow.getSize()) * sf::Vector2f(mRenderTextureView.getViewport().width, mRenderTextureView.getViewport().height));
 		mRenderTextureView.setCenter(b22sfVec(mLevel->GetOriginView(), mPhysicMgr.GetPPM()));
-
-		// Supprime les pointeurs
-		mGrapnel.Destroy();
-		mMouseJoint = nullptr;
 	}
 
 	// Grappin
 	if (mActionMap.isActive("onHook"))
 	{
-		// Si le grapin est déjà accroché, on le décroche
-		if (mGrapnel.IsAlive())
+		// Si le grapin n'existe pas, on le crée
+		if (!mGrapnel)
 		{
-			mGrapnel.Destroy();
+			mGrapnel = new Grapnel(&mPhysicMgr, -1);
+			EntityManager::GetInstance().RegisterEntity(mGrapnel);
 		}
+
+		// Si le grapin est déjà accroché, on le décroche
+		if (mGrapnel->IsAlive())
+			mGrapnel->Destroy();
 
 		// Si le body est déjà sélectionné, on l'accroche avec le grapin
 		else if (mHookedSBody)
@@ -329,7 +333,7 @@ void Box2DGame::OnEvent()
 			if (callback.GetFixture() && callback.GetFixture()->GetBody() != mHookedSBody)
 			{
 				b2Body *b = callback.GetFixture()->GetBody();
-				mGrapnel.Create(mTextureMap["hook"], b, b->GetLocalPoint(mMp), mHookedSBody, mHookedSAnchor);
+				mGrapnel->Create(mTextureMap["hook"], b, b->GetLocalPoint(mMp), mHookedSBody, mHookedSAnchor);
 			}
 			mHookedSBody = nullptr;
 		}
@@ -394,8 +398,7 @@ void Box2DGame::OnEvent()
 		// Crée le joint
 		if (mPinBodyA && mPinBodyB)
 		{
-			mPhysicMgr.RegisterJoint(new DistanceJoint(&mPhysicMgr, mPinBodyA, mPinAnchorA, mPinBodyB, mPinAnchorB));
-			//mPhysicMgr.RegisterJoint(new RevoluteJoint(&mPhysicMgr, mPinBodyA, mPinBodyB, mPinAnchorA, true, 90.f, 270.f, true, 30.f));
+			new DistanceJoint(&mPhysicMgr, mPinBodyA, mPinAnchorA, mPinBodyB, mPinAnchorB);
 
 			mPinBodyA = nullptr;
 			mPinBodyB = nullptr;
@@ -581,7 +584,10 @@ void Box2DGame::OnEvent()
 /// Appelé pour la logique
 void Box2DGame::OnLogic()
 {
-	// Mets à jour le niveau
+	// Met à jour les Joints
+	mPhysicMgr.UpdateJoints();
+
+	// Met à jour le niveau
 	mLevel->Update();
 }
 
@@ -610,8 +616,9 @@ void Box2DGame::OnStepPhysics()
 				erase = true;
 
 				// Vérifie si l'objet n'est pas accroché à la souris
-				if (mMouseJoint)
-					if (b == mMouseJoint->GetAttachedBody())
+				MouseJoint *j = (MouseJoint*) mPhysicMgr.GetJoint(mMouseJointID);
+				if (j)
+					if (b == j->GetAttachedBody())
 						erase = false;
 			}
 
@@ -620,7 +627,7 @@ void Box2DGame::OnStepPhysics()
 			{
 				bb = b;
 				b = b->GetNext();
-				EntityManager::GetInstance().DestroyEntity((Entity*) b->GetUserData());
+				EntityManager::GetInstance().DestroyEntity((Entity*) bb->GetUserData());
 			}
 
 			// Sinon passe simplement au suivant
@@ -636,10 +643,7 @@ void Box2DGame::OnStepPhysics()
 /// Appelé pour le rendu
 void Box2DGame::OnRender()
 {
-#if _DEBUG
-	if (!mLevel)
-		return;
-#endif
+	assert(mLevel && "est invalide.");
 
 	// Rendu
 	mRenderTexture.clear(mLevel->GetBckgColor());
@@ -651,26 +655,10 @@ void Box2DGame::OnRender()
 	// Affichage du Level
 	mRenderTexture.draw(*mLevel);
 	
-	// Affichage des joints
+	// Affichage des joints (debug)
 	for (auto it = mPhysicMgr.GetJointList().begin(); it != mPhysicMgr.GetJointList().end(); ++it)
 	{
-		(*it)->Update();
-		mRenderTexture.draw(**it);
-	}
-
-	// Affichage du joint de la souris
-	if (mMouseJoint)
-	{
-		if (!mMouseJoint->IsNull())
-		{
-			mMouseJoint->Update();
-			mRenderTexture.draw(*mMouseJoint);
-		}
-		else
-		{
-			std::cout << "MouseJoint supprimé à cause d'un bug (\x82""vit\x82"")." << std::endl;
-			mMouseJoint = nullptr;
-		}
+		mRenderTexture.draw(*it->second);
 	}
 	
 #if 0
@@ -734,22 +722,19 @@ void Box2DGame::OnQuit()
 	mWindow.setView(mWindowView);
 
 	// Supprime le joint de la souris
-	if (mMouseJoint)
+	if (mPhysicMgr.JointExists(mMouseJointID))
 	{
-		mPhysicMgr.DestroyJoint(mMouseJoint);
+		mPhysicMgr.DestroyJoint(mMouseJointID);
 	}
+	mMouseJointID = -1;
 
-	// Vide les listes d'objets
-	mPhysicMgr.DestroyAllJoints();
-	mPhysicMgr.DestroyAllBody();
+	// Supprime le niveau
+	delete mLevel;
 
 	// Nullifie les pointeurs
-	delete mLevel;
 	mLevel = nullptr;
-	mGrapnel.Destroy();
 	mGrapnel = nullptr;
 	mHookedSBody = nullptr;
-	mMouseJoint = nullptr;
 	mPinBodyA = nullptr;
 	mPinBodyB = nullptr;
 }

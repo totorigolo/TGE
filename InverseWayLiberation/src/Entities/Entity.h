@@ -1,5 +1,6 @@
 #pragma once
 #include <SFML/Graphics.hpp>
+#include <list>
 
 enum class EntityType
 {
@@ -31,8 +32,12 @@ public:
 	int GetLayer() const;
 	EntityType GetType() const { return mType; }
 
-	void DeleteOnDestroy(bool b) { mToDeleteOnDestroy = b; }
-	bool HasToBeDeletedOnDestroy() const { return mToDeleteOnDestroy; }
+	void SetOwner(Entity *e) { mOwner = e; }
+	Entity* GetOwner() { return mOwner; }
+	const Entity* GetOwner() const { return mOwner; }
+
+	// Gestion des dépendences
+	virtual void DependencyDestroyed(void *dependency) = 0;
 
 protected:
 	// Etat
@@ -41,6 +46,5 @@ protected:
 	// Propriétés
 	int mLayer;
 	EntityType mType;
-	// Est-ce que l'EntityManager doit delete cette Entity en supprimant tout ?
-	bool mToDeleteOnDestroy;
+	Entity *mOwner;
 };

@@ -8,26 +8,26 @@ WheelJoint::WheelJoint(PhysicManager *physicMgr, b2Body *car, b2Body *wheel, b2V
 	: Joint(physicMgr), mColor(color)
 {
 	assert(mPhysicMgr && "n'est pas valide.");
+	assert(car && "n'est pas valide.");
+	assert(wheel && "n'est pas valide.");
+	
+	mPhysicMgr->RegisterJoint(this);
 
-	mBodyA = car;
-	mBodyB = wheel;
-
-	if (mBodyA && mBodyB)
-	{
-		b2WheelJointDef jointDef;
-		jointDef.Initialize(mBodyA, mBodyB, mBodyB->GetWorldPoint(pWheel), axis);
-		jointDef.motorSpeed = motorSpeed;
-		jointDef.maxMotorTorque = maxMotorTorque;
-		jointDef.enableMotor = enableMotor;
-		jointDef.frequencyHz = frequencyHz;
-		jointDef.dampingRatio = damping;
-		jointDef.collideConnected = collideconnected;
-		mJoint = (b2WheelJoint*) mPhysicMgr->CreateJoint(&jointDef, this);
-		
-		//mBodyA->RegisterJoint(this);
-		//mBodyB->RegisterJoint(this);
-		mIsNull = false;
-	}
+	b2WheelJointDef jointDef;
+	jointDef.Initialize(car, wheel, wheel->GetWorldPoint(pWheel), axis);
+	jointDef.motorSpeed = motorSpeed;
+	jointDef.maxMotorTorque = maxMotorTorque;
+	jointDef.enableMotor = enableMotor;
+	jointDef.frequencyHz = frequencyHz;
+	jointDef.dampingRatio = damping;
+	jointDef.collideConnected = collideconnected;
+	mJoint = mPhysicMgr->Createb2Joint(&jointDef);
+	mJoint->SetUserData(this);
+	
+	mIsAlive = true;
+	
+	car->SetAwake(true);
+	wheel->SetAwake(true);
 
 	(*this)[0].color = mColor;
 	(*this)[1].color = mColor;
@@ -43,16 +43,10 @@ void WheelJoint::Update()
 {
 	Joint::Update();
 
-	if (mBodyA && mBodyB && !mIsNull)
+	if (mIsAlive)
 	{
 		(*this)[0].position = b22sfVec(mJoint->GetAnchorA(), mPhysicMgr->GetPPM());
 		(*this)[1].position = b22sfVec(mJoint->GetAnchorB(), mPhysicMgr->GetPPM());
-	}
-	else
-	{
-		// TODO: Euh.... ??? Oo
-		//mPhysicMgr->DestroyJoint(this, false);
-		//delete this;
 	}
 }
 

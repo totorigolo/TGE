@@ -28,24 +28,20 @@ void EntityManager::RegisterEntity(Entity *entity)
 	// Ajoute l'Entity à la liste
 	mEntities.push_back(entity);
 }
-void EntityManager::DestroyEntity(Entity *entity, bool _delete, bool remove)
+void EntityManager::DestroyEntity(Entity *entity)
 {
 	// Vérifie que le pointeur soit valide
 	assert(entity && "n'est pas valide !");
 
-	if (remove)
-		mEntities.remove(entity);
-
-	if (_delete)
-		delete entity;
+	mEntities.remove(entity);
+	delete entity;
 }
 void EntityManager::DestroyAllEntities()
 {
 	// Supprime toutes les Entities
 	for (std::list<Entity*>::iterator it = mEntities.begin(); it != mEntities.end(); )
 	{
-		if ((*it)->HasToBeDeletedOnDestroy())
-			delete *it;
+		delete *it;
 		it = mEntities.erase(it);
 	}
 }

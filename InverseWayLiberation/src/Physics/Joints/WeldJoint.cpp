@@ -6,23 +6,23 @@ WeldJoint::WeldJoint(PhysicManager *physicMgr, b2Body *b1, b2Body *b2, b2Vec2 an
 	: Joint(physicMgr), mColor(color)
 {
 	assert(mPhysicMgr && "n'est pas valide.");
+	assert(b1 && "n'est pas valide.");
+	assert(b2 && "n'est pas valide.");
+	
+	mPhysicMgr->RegisterJoint(this);
 
-	mBodyA = b1;
-	mBodyB = b2;
-
-	if (mBodyA && mBodyB)
-	{
-		b2WeldJointDef jointDef;
-		jointDef.Initialize(mBodyA, mBodyB, mBodyA->GetWorldPoint(anchor));
-		jointDef.frequencyHz = frequencyHz;
-		jointDef.dampingRatio = damping;
-		jointDef.collideConnected = collideconnected;
-		mJoint = (b2WeldJoint*) mPhysicMgr->CreateJoint(&jointDef, this);
-		
-		//mBodyA->RegisterJoint(this);
-		//mBodyB->RegisterJoint(this);
-		mIsNull = false;
-	}
+	b2WeldJointDef jointDef;
+	jointDef.Initialize(b1, b2, b1->GetWorldPoint(anchor));
+	jointDef.frequencyHz = frequencyHz;
+	jointDef.dampingRatio = damping;
+	jointDef.collideConnected = collideconnected;
+	mJoint = (b2WeldJoint*) mPhysicMgr->Createb2Joint(&jointDef);
+	mJoint->SetUserData(this);
+	
+	mIsAlive = true;
+	
+	b1->SetAwake(true);
+	b2->SetAwake(true);
 
 	(*this)[0].color = mColor;
 	(*this)[1].color = mColor;
@@ -38,15 +38,10 @@ void WeldJoint::Update()
 {
 	Joint::Update();
 
-	if (mBodyA && mBodyB && !mIsNull)
+	if (mIsAlive)
 	{
 		(*this)[0].position = b22sfVec(mJoint->GetAnchorA(), mPhysicMgr->GetPPM());
 		(*this)[1].position = b22sfVec(mJoint->GetAnchorB(), mPhysicMgr->GetPPM());
-	}
-	else
-	{
-		//mPhysicMgr->DestroyJoint(this, false);
-		//delete this;
 	}
 }
 

@@ -6,26 +6,26 @@ MouseJoint::MouseJoint(PhysicManager *physicMgr, b2Body *body, b2Body *ground, b
 	: Joint(physicMgr), mColor(color)
 {
 	assert(mPhysicMgr && "n'est pas valide.");
+	assert(body && "n'est pas valide.");
+	assert(ground && "n'est pas valide.");
+	
+	mPhysicMgr->RegisterJoint(this);
 
-	mBodyA = ground;
-	mBodyB = body;
+	b2MouseJointDef jointDef;
+	jointDef.bodyA = ground; // Le body A ne sert pas, mais doit exister
+	jointDef.bodyB = body; // Le body utilisé est le B
+	jointDef.target = target;
+	jointDef.dampingRatio = damping;
+	jointDef.frequencyHz = frequencyHz;
+	jointDef.collideConnected = true;
+	jointDef.maxForce = maxForce;
+	mJoint = mPhysicMgr->Createb2Joint(&jointDef);
+	mJoint->SetUserData(this);
 
-	if (mBodyA && mBodyB)
-	{
-		b2MouseJointDef jointDef;
-		jointDef.bodyA = mBodyA; // Le body A ne sert pas, mais doit exister
-		jointDef.bodyB = mBodyB; // Le body utilisé est le B
-		jointDef.target = target;
-		jointDef.dampingRatio = damping;
-		jointDef.frequencyHz = frequencyHz;
-		jointDef.collideConnected = true;
-		jointDef.maxForce = maxForce;
-		mJoint = (b2MouseJoint*) mPhysicMgr->CreateJoint(&jointDef, this);
-		mBodyB->SetAwake(true);
-		mBodyB->SetBullet(true);
-		mIsNull = false;
-		//mBodyB->RegisterJoint(this);
-	}
+	body->SetAwake(true);
+	body->SetBullet(true);
+
+	mIsAlive = true;
 
 	(*this)[0].color = mColor;
 	(*this)[1].color = mColor;
@@ -34,8 +34,8 @@ MouseJoint::MouseJoint(PhysicManager *physicMgr, b2Body *body, b2Body *ground, b
 // Dtor
 MouseJoint::~MouseJoint(void)
 {
-	if (mBodyB)
-		mBodyB->SetBullet(false);
+	if (GetBodyB())
+		GetBodyB()->SetBullet(false);
 }
 
 // Mets à jour le VertexArray
@@ -43,15 +43,10 @@ void MouseJoint::Update()
 {
 	Joint::Update();
 
-	if (mBodyA && mBodyB && !mIsNull)
+	if (mIsAlive)
 	{
 		(*this)[0].position = b22sfVec(((b2MouseJoint*) mJoint)->GetTarget(), mPhysicMgr->GetPPM());
 		(*this)[1].position = b22sfVec(mJoint->GetAnchorB(), mPhysicMgr->GetPPM());
-	}
-	else
-	{
-		//mPhysicMgr->DestroyJoint(this, false);
-		//delete this;
 	}
 }
 

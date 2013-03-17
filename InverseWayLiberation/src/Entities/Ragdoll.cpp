@@ -85,30 +85,57 @@ Ragdoll::Ragdoll(PhysicManager *physicMgr, b2Vec2 position, int layer)
 	mBodies["mFootR"]->CreateDynBox(b2Vec3(0.05f, -0.75f, 0.f) + position, mTextureMap["hero_footR"], 1.f, 0.2f, 0.f, -1);
 
 	/* Jointe les bodies entre eux */
-	mJoints.push_back(new RevoluteJoint(mPhysicMgr, mBodies["mHead"]->GetBody(), mBodies["mTorso1"]->GetBody(), b2Vec2(0.f, -0.15f), true, -30.f, 50.f, false, 0.f, 0.004f));
-	mJoints.push_back(new WeldJoint(mPhysicMgr, mBodies["mNeck"]->GetBody(), mBodies["mTorso1"]->GetBody(), b2Vec2(0.f, -0.05f), 0.f, 0.f));
-		
-	mJoints.push_back(new RevoluteJoint(mPhysicMgr, mBodies["mTorso1"]->GetBody(), mBodies["mTorso2"]->GetBody(), b2Vec2(0.f, -0.1f), true, -10.f, 10.f, true, 0.f, 0.004f));
-	mJoints.push_back(new RevoluteJoint(mPhysicMgr, mBodies["mTorso2"]->GetBody(), mBodies["mTorso3"]->GetBody(), b2Vec2(0.f, -0.1f), true, -10.f, 10.f, true, 0.f, 0.004f));
-		
-	mJoints.push_back(new RevoluteJoint(mPhysicMgr, mBodies["mArmL1"]->GetBody(), mBodies["mTorso1"]->GetBody(), b2Vec2(0.f, 0.1f), true, -180.f, 0.f, true, 0.f, 0.004f));
-	mJoints.push_back(new RevoluteJoint(mPhysicMgr, mBodies["mArmR1"]->GetBody(), mBodies["mTorso1"]->GetBody(), b2Vec2(0.f, 0.1f), true, -180.f, 0.f, true, 0.f, 0.004f));
-		
-	mJoints.push_back(new RevoluteJoint(mPhysicMgr, mBodies["mLegL1"]->GetBody(), mBodies["mTorso3"]->GetBody(), b2Vec2(0.f, 0.1f), true, -110.f, 30.f, true, 0.f, 0.004f));
-	mJoints.push_back(new RevoluteJoint(mPhysicMgr, mBodies["mLegR1"]->GetBody(), mBodies["mTorso3"]->GetBody(), b2Vec2(0.f, 0.1f), true, -110.f, 30.f, true, 0.f, 0.004f));
-		
-	mJoints.push_back(new RevoluteJoint(mPhysicMgr, mBodies["mArmL1"]->GetBody(), mBodies["mArmL2"]->GetBody(), b2Vec2(0.f, -0.1f), true, 0.f, 150.f, true, 0.f, 0.004f));
-	mJoints.push_back(new RevoluteJoint(mPhysicMgr, mBodies["mArmR1"]->GetBody(), mBodies["mArmR2"]->GetBody(), b2Vec2(0.f, -0.1f), true, 0.f, 150.f, true, 0.f, 0.004f));
-		
-	mJoints.push_back(new RevoluteJoint(mPhysicMgr, mBodies["mLegL1"]->GetBody(), mBodies["mLegL2"]->GetBody(), b2Vec2(0.f, -0.1f), true, -90.f, 0.f, true, 0.f, 0.004f));
-	mJoints.push_back(new RevoluteJoint(mPhysicMgr, mBodies["mLegR1"]->GetBody(), mBodies["mLegR2"]->GetBody(), b2Vec2(0.f, -0.1f), true, -90.f, 0.f, true, 0.f, 0.004f));
+	Joint *j;
 
-	mJoints.push_back(new RevoluteJoint(mPhysicMgr, mBodies["mLegL2"]->GetBody(), mBodies["mFootL"]->GetBody(), b2Vec2(-0.035f, -0.15f), true, -90.f, 0.f, true, 50.f, 0.03f));
-	mJoints.push_back(new RevoluteJoint(mPhysicMgr, mBodies["mLegR2"]->GetBody(), mBodies["mFootR"]->GetBody(), b2Vec2(-0.035f, -0.15f), true, -90.f, 0.f, true, 50.f, 0.03f));
+	j = new RevoluteJoint(mPhysicMgr, mBodies["mHead"]->GetBody(), mBodies["mTorso1"]->GetBody(), b2Vec2(0.f, -0.15f), true, -30.f, 50.f, false, 0.f, 0.004f);
+	mJoints.push_back(j->GetID());
+	j = new WeldJoint(mPhysicMgr, mBodies["mNeck"]->GetBody(), mBodies["mTorso1"]->GetBody(), b2Vec2(0.f, -0.05f), 0.f, 0.f);
+	mJoints.push_back(j->GetID());
+		
+	j = new RevoluteJoint(mPhysicMgr, mBodies["mTorso1"]->GetBody(), mBodies["mTorso2"]->GetBody(), b2Vec2(0.f, -0.1f), true, -10.f, 10.f, true, 0.f, 0.004f);
+	mJoints.push_back(j->GetID());
+	j = new RevoluteJoint(mPhysicMgr, mBodies["mTorso2"]->GetBody(), mBodies["mTorso3"]->GetBody(), b2Vec2(0.f, -0.1f), true, -10.f, 10.f, true, 0.f, 0.004f);
+	mJoints.push_back(j->GetID());
+		
+	j = new RevoluteJoint(mPhysicMgr, mBodies["mArmL1"]->GetBody(), mBodies["mTorso1"]->GetBody(), b2Vec2(0.f, 0.1f), true, -180.f, 0.f, true, 0.f, 0.004f);
+	mJoints.push_back(j->GetID());
+	j = new RevoluteJoint(mPhysicMgr, mBodies["mArmR1"]->GetBody(), mBodies["mTorso1"]->GetBody(), b2Vec2(0.f, 0.1f), true, -180.f, 0.f, true, 0.f, 0.004f);
+	mJoints.push_back(j->GetID());
+		
+	j = new RevoluteJoint(mPhysicMgr, mBodies["mLegL1"]->GetBody(), mBodies["mTorso3"]->GetBody(), b2Vec2(0.f, 0.1f), true, -110.f, 30.f, true, 0.f, 0.004f);
+	mJoints.push_back(j->GetID());
+	j = new RevoluteJoint(mPhysicMgr, mBodies["mLegR1"]->GetBody(), mBodies["mTorso3"]->GetBody(), b2Vec2(0.f, 0.1f), true, -110.f, 30.f, true, 0.f, 0.004f);
+	mJoints.push_back(j->GetID());
+		
+	j = new RevoluteJoint(mPhysicMgr, mBodies["mArmL1"]->GetBody(), mBodies["mArmL2"]->GetBody(), b2Vec2(0.f, -0.1f), true, 0.f, 150.f, true, 0.f, 0.004f);
+	mJoints.push_back(j->GetID());
+	j = new RevoluteJoint(mPhysicMgr, mBodies["mArmR1"]->GetBody(), mBodies["mArmR2"]->GetBody(), b2Vec2(0.f, -0.1f), true, 0.f, 150.f, true, 0.f, 0.004f);
+	mJoints.push_back(j->GetID());
+		
+	j = new RevoluteJoint(mPhysicMgr, mBodies["mLegL1"]->GetBody(), mBodies["mLegL2"]->GetBody(), b2Vec2(0.f, -0.1f), true, -90.f, 0.f, true, 0.f, 0.004f);
+	mJoints.push_back(j->GetID());
+	j = new RevoluteJoint(mPhysicMgr, mBodies["mLegR1"]->GetBody(), mBodies["mLegR2"]->GetBody(), b2Vec2(0.f, -0.1f), true, -90.f, 0.f, true, 0.f, 0.004f);
+	mJoints.push_back(j->GetID());
+
+	j = new RevoluteJoint(mPhysicMgr, mBodies["mLegL2"]->GetBody(), mBodies["mFootL"]->GetBody(), b2Vec2(-0.035f, -0.15f), true, -90.f, 0.f, true, 50.f, 0.03f);
+	mJoints.push_back(j->GetID());
+	j = new RevoluteJoint(mPhysicMgr, mBodies["mLegR2"]->GetBody(), mBodies["mFootR"]->GetBody(), b2Vec2(-0.035f, -0.15f), true, -90.f, 0.f, true, 50.f, 0.03f);
+	mJoints.push_back(j->GetID());
 	
-	// Définit la force des joints
-	mJoints.front()->SetBreakableByForce(true);
-	mJoints.front()->SetMaxForce(100.f);
+	// S'enregistre auprès des Bodies et des Joints
+	for (auto it = mBodies.begin(); it != mBodies.end(); ++it)
+	{
+		it->second->SetOwner(this);
+	}
+	for (auto it = mJoints.begin(); it != mJoints.end(); ++it)
+	{
+		Joint *j = mPhysicMgr->GetJoint(*it);
+		j->SetOwner(this);
+
+		// Définit la force des joint
+		j->SetBreakableByForce(true);
+		j->SetMaxForce(80.f);
+	}
 
 	// Valide le ragdoll
 	mIsValid = true;
@@ -139,32 +166,43 @@ void Ragdoll::Update()
 	{
 		it->second->Update();
 	}
-
-	// Met à jour les joints 
-	for (std::list<Joint*>::iterator it = mJoints.begin(); it != mJoints.end(); )
-	{
-		(*it)->Update();
-		if ((*it)->IsNull())
-		{
-			it = mJoints.erase(it);
-		}
-		else
-			++it;
-	}
 }
 
 // Pour le rendu
 void Ragdoll::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
-	// Met à jour les Bodies
-	for (std::unordered_map<std::string, BasicBody*>::const_iterator it = mBodies.begin(); it != mBodies.end(); ++it)
+	// Affiche les Bodies
+	for (auto it = mBodies.cbegin(); it != mBodies.cend(); ++it)
 	{
 		target.draw(*it->second, states);
 	}
+}
 
-	// Met à jour les joints 
-	for (std::list<Joint*>::const_iterator it = mJoints.begin(); it != mJoints.end(); ++it)
+// Gestion des dépendences
+void Ragdoll::DependencyDestroyed(void *dependency)
+{
+	// Recherche quel body est supprimé
+	for (auto it = mBodies.begin(); it != mBodies.end(); ++it)
 	{
-		target.draw(**it, states);
+		// On a trouvé
+		if (it->second == dependency)
+		{
+			mBodies.erase(it);
+			return;
+		}
 	}
+
+	// Sinon regarde si c'est un joint qui a été supprimé
+	for (auto it = mJoints.begin(); it != mJoints.end(); ++it)
+	{
+		// On a trouvé
+		if (!mPhysicMgr->JointExists(*it))
+		{
+			mJoints.erase(it);
+			return;
+		}
+	}
+
+	// TODO: Better Warning
+	assert(false && "On aurait du trouver qqchose...");
 }

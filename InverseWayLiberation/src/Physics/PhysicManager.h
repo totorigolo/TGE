@@ -1,8 +1,10 @@
 #pragma once
-#include <Box2D/Box2D.h>
-#include <vector>
 #include "ContactListener.h"
 #include "Joint.h"
+#include "../Entities/Entity.h"
+#include <Box2D/Box2D.h>
+#include <vector>
+#include <map>
 
 class Joint;
 class PhysicManager
@@ -18,20 +20,25 @@ public:
 	void DestroyAllBody();
 
 	// Gestion des joints
+	// Création / destruction
+	int RegisterJoint(Joint *joint);
+	void DestroyJoint(int jointID);
 	void DestroyAllJoints();
 	// b2Joint
 	b2Joint* Createb2Joint(b2JointDef const* jointDef);
 	void Destroyb2Joint(b2Joint *joint);
-	// Joint
-	void RegisterJoint(Joint *joint);
-	b2Joint* CreateJoint(b2JointDef const* jointDef, Joint *joint);
-	void DestroyJoint(Joint *joint, bool _delete = true, bool remove = true);
+	// Mide à jour
+	void UpdateJoints();
+	// Accesseurs
+	bool JointExists(int jointID) const;
+	Joint* GetJoint(int jointID);
+	const Joint* GetJoint(int jointID) const;
 
 	// Suppression retardée (utile par ex dans le ContactListener)
 	// Ils sont supprimés à la fin de Step() ou avec DestroyScheduled()
-	void ScheduleDestroyBody(b2Body *body);
+	/*void ScheduleDestroyBody(b2Body *body);
 	void ScheduleDestroyb2Joint(b2Joint *joint);
-	bool DestroyScheduled();
+	bool DestroyScheduled();*/
 
 	// Simulation
 	void SetTimeStep(float timeStep);
@@ -59,17 +66,12 @@ public:
 	const b2Body* GetBodyList() const;
 
 	// La liste des Joints
-	// b2Joints
-	unsigned int Getb2JointCount();
-	b2Joint* Getb2JointList();
-	const b2Joint* Getb2JointList() const;
-	// Joints
 	unsigned int GetJointCount();
-	std::list<Joint*>& GetJointList();
-	const std::list<Joint*>& GetJointList() const;
+	std::map<int, Joint*>& GetJointList();
+	const std::map<int, Joint*>& GetJointList() const;
 
 	// Obtient un StaticBody au hasard
-	b2Body* GetAnyStaticBody(); // TODO: const ?
+	b2Body* GetAnyStaticBody();
 
 private:
 	// Pixels per meters
@@ -86,7 +88,8 @@ protected:
 	ContactListener mContactListener;
 
 	// Liste des Joints
-	std::list<Joint*> mJointList;
+	int mLastJointID;
+	std::map<int, Joint*> mJointList;
 
 	// Suppression retardée
 	std::vector<b2Body*> mScheduledBodiesToDestroy;

@@ -3,8 +3,8 @@
 
 //Ctor
 Joint::Joint(PhysicManager *physicMgr)
-	: mPhysicMgr(physicMgr), mJoint(nullptr), mBodyA(nullptr), mBodyB(nullptr),
-	sf::VertexArray(sf::LinesStrip, 2U), mIsNull(true),
+	: mPhysicMgr(physicMgr), mJoint(nullptr), mID(-1),
+	sf::VertexArray(sf::LinesStrip, 2U), mToDestroy(false), mIsAlive(false), mOwner(nullptr),
 	mIsBreakableMaxForce(false), mIsBreakableMaxTorque(false), mMaxForceType(Null), mMaxForce(0.f), mMaxTorque(0.f)
 {
 	assert(mPhysicMgr && "n'est pas valide.");
@@ -13,30 +13,44 @@ Joint::Joint(PhysicManager *physicMgr)
 // Dtor
 Joint::~Joint(void)
 {
-	Destroy();
+	// N'existe plus
+	mIsAlive = false;
+
+	// Avertit le propriétaire
+	if (mOwner)
+	{
+		mOwner->DependencyDestroyed(this);
+		mOwner = nullptr;
+	}
+
+	// Supprime les joints dépendants
+	this->DestroyAllLinkedJoints();
+
+	// Supprime le joint
+	if (mJoint)
+	{
+		mPhysicMgr->Destroyb2Joint(mJoint);
+		mJoint = nullptr;
+	}
+
+	// N'a plus à être supprimé
+	mToDestroy = false;
 }
 
 // Destruction de ce joint
 void Joint::Destroy()
 {
-	if (!mIsNull)
-	{
-		if (mJoint)
-		{
-			mPhysicMgr->Destroyb2Joint(mJoint);
-			mJoint = nullptr;
-		}
-		this->DestroyAllJoints();
-		mIsNull = true;
-	}
+	mToDestroy = true;
+	mIsAlive = false;
 }
 
 // Met à jour le body
 void Joint::Update()
 {
-	if (mIsNull)
+	// Ne se met à jour que si il existe
+	if (!mIsAlive || !mJoint)
 		return;
-
+	
 	// Gestion du joint cassable par Force
 	if (mIsBreakableMaxForce)
 	{
@@ -53,13 +67,14 @@ void Joint::Update()
 				Destroy();
 		}
 	}
+
 	// Gestion du joint cassable par Torque
-	if (mIsBreakableMaxTorque && !mIsNull)
+	if (mIsBreakableMaxTorque && mIsAlive)
 	{
 		float mt = mJoint->GetReactionTorque(1.f / mPhysicMgr->GetTimeStep());
 		
 		if (mMaxTorque > mt)
-			Destroy();
+				Destroy();
 	}
 }
 
@@ -108,11 +123,6 @@ float Joint::GetMaxTorque() const
 }
 
 // Accesseurs
-void Joint::SetJoint(b2Joint *joint) // NE PAS UTILISER
-{
-	mJoint = joint;
-}
-
 b2Vec2 Joint::GetReactionForce(float inv_dt) const
 {
 	return mJoint->GetReactionForce(inv_dt);
@@ -122,37 +132,57 @@ float Joint::GetReactionTorque(float inv_dt) const
 	return mJoint->GetReactionTorque(inv_dt);
 }
 
+b2Body* Joint::GetBodyA()
+{
+	if (!mIsAlive)
+		return nullptr;
+
+	return mJoint->GetBodyA();
+}
+b2Body* Joint::GetBodyB()
+{
+	if (!mIsAlive)
+		return nullptr;
+
+	return mJoint->GetBodyB();
+}
+const b2Body* Joint::GetBodyA() const
+{
+	if (!mIsAlive)
+		return nullptr;
+
+	return mJoint->GetBodyA();
+}
+const b2Body* Joint::GetBodyB() const
+{
+	if (!mIsAlive)
+		return nullptr;
+
+	return mJoint->GetBodyB();
+}
+
 // Gestion des joints à supprimer avant celui-ci
-void Joint::RegisterJoint(Joint *joint)
+void Joint::RegisterLinkedJoint(int jointID)
 {
-	if (joint)
-	{
-		mJointList.push_back(joint);
-	}
+	assert(mPhysicMgr->JointExists(jointID) && "le joint n'existe pas.");
+
+	mLinkedJointList.push_back(jointID);
 }
-void Joint::RemoveJoint(Joint *joint)
+void Joint::RemoveLinkedJoint(int jointID)
 {
-	if (joint)
-	{
-		mJointList.remove(joint);
-	}
+	mLinkedJointList.remove(jointID);
 }
-void Joint::DestroyJoint(Joint *joint, bool remove)
+void Joint::DestroyLinkedJoint(int jointID)
 {
-	if (joint)
-	{
-		if (remove)
-			mJointList.remove(joint);
-		mPhysicMgr->DestroyJoint(joint);
-	}
+	mLinkedJointList.remove(jointID);
+	mPhysicMgr->DestroyJoint(jointID);
 }
-void Joint::DestroyAllJoints()
+void Joint::DestroyAllLinkedJoints()
 {
-	for (auto it = mJointList.begin(); it != mJointList.end(); )
+	for (auto it = mLinkedJointList.begin(); it != mLinkedJointList.end(); ++it)
 	{
-		auto it2 = it; it2++;
 		mPhysicMgr->DestroyJoint(*it);
-		it = it2;
 	}
-	mJointList.clear();
+	mLinkedJointList.clear();
 }
+

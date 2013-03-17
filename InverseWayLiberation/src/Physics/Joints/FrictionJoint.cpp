@@ -6,29 +6,26 @@ FrictionJoint::FrictionJoint(PhysicManager *physicMgr, b2Body *b1, b2Vec2 pt1, b
 	: Joint(physicMgr), mColor(color)
 {
 	assert(mPhysicMgr && "n'est pas valide.");
+	assert(b1 && "n'est pas valide.");
+	assert(b2 && "n'est pas valide.");
+	
+	mPhysicMgr->RegisterJoint(this);
 
-	mBodyA = b1;
-	mBodyB = b2;
-
-	if (mBodyA && mBodyB)
-	{
-		b2FrictionJointDef jointDef;
-		jointDef.bodyA = mBodyA;
-		jointDef.bodyB = mBodyB;
-		jointDef.localAnchorA = pt1;
-		jointDef.localAnchorB = p2;
-		jointDef.maxForce = maxForce;
-		jointDef.maxTorque = maxTorque;
-		jointDef.collideConnected = collideconnected;
-		mJoint = (b2FrictionJoint*) mPhysicMgr->CreateJoint(&jointDef, this);
-		
-		mBodyA->SetBullet(true);
-		mBodyB->SetBullet(true);
-		
-		//mBodyA->RegisterJoint(this);
-		//mBodyB->RegisterJoint(this);
-		mIsNull = false;
-	}
+	b2FrictionJointDef jointDef;
+	jointDef.bodyA = b1;
+	jointDef.bodyB = b2;
+	jointDef.localAnchorA = pt1;
+	jointDef.localAnchorB = p2;
+	jointDef.maxForce = maxForce;
+	jointDef.maxTorque = maxTorque;
+	jointDef.collideConnected = collideconnected;
+	mJoint = mPhysicMgr->Createb2Joint(&jointDef);
+	mJoint->SetUserData(this);
+	
+	mIsAlive = true;
+	
+	b1->SetAwake(true);
+	b2->SetAwake(true);
 
 	(*this)[0].color = mColor;
 	(*this)[1].color = mColor;
@@ -37,10 +34,6 @@ FrictionJoint::FrictionJoint(PhysicManager *physicMgr, b2Body *b1, b2Vec2 pt1, b
 // Dtor
 FrictionJoint::~FrictionJoint(void)
 {
-	if (mBodyA)
-		mBodyA->SetBullet(false);
-	if (mBodyB)
-		mBodyB->SetBullet(false);
 }
 
 // Mets à jour le VertexArray
@@ -48,15 +41,10 @@ void FrictionJoint::Update()
 {
 	Joint::Update();
 
-	if (mBodyA && mBodyB && !mIsNull)
+	if (mIsAlive)
 	{
 		(*this)[0].position = b22sfVec(mJoint->GetAnchorA(), mPhysicMgr->GetPPM());
 		(*this)[1].position = b22sfVec(mJoint->GetAnchorB(), mPhysicMgr->GetPPM());
-	}
-	else
-	{
-		//mPhysicMgr->DestroyJoint(this, false);
-		//delete this;
 	}
 }
 

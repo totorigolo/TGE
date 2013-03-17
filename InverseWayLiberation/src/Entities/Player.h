@@ -24,5 +24,8 @@ public:
 	// Gestion des évènements
 	void GetEvent(const PlayerEvent &playerEvent);
 
+	// Gestion des dépendences
+	virtual void DependencyDestroyed(void *dependency);
+
 private:
 };

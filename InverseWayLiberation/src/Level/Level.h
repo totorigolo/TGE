@@ -8,6 +8,7 @@
 #include <list>
 #include "LevelLoader.h"
 #include "../Tools/utils.h"
+#include "../Entities/Player.h"
 #include "../Physics/PhysicManager.h"
 #include "../Entities/EntityManager.h"
 #include "../Resources/ResourceManager.h"
@@ -38,6 +39,9 @@ public:
 	bool IsCharged() const { return mIsCharged; }
 	void SetCharged(bool charged) { mIsCharged = charged; }
 	
+	Player* GetPlayer() { return mPlayer; }
+	const Player* GetPlayer() const { return mPlayer; }
+
 	EntityManager* GetEntityManager() { return &mEntityManager; }
 	const EntityManager* GetEntityManager() const { return &mEntityManager; }
 
@@ -65,8 +69,7 @@ private:
 	ResourceManager &mResourceManager;
 	TextureMap &mTextureMap;
 
-	// TODO: Virer ça
-public:
-	Entity *mPlayer;
+	// Joueur
+	Player *mPlayer;
 };
 

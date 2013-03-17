@@ -6,22 +6,23 @@ PulleyJoint::PulleyJoint(PhysicManager *physicMgr, b2Body *b1, b2Vec2 pt1, b2Bod
 	: Joint(physicMgr), mColor(color)
 {
 	assert(mPhysicMgr && "n'est pas valide.");
+	assert(b1 && "n'est pas valide.");
+	assert(b2 && "n'est pas valide.");
+	
+	mPhysicMgr->RegisterJoint(this);
 
-	mBodyA = b1;
-	mBodyB = b2;
+	b2PulleyJointDef jointDef;
+	jointDef.Initialize(b1, b2, groundP1, groundP2, b1->GetWorldPoint(pt1), b2->GetWorldPoint(p2), ratio);
+	jointDef.collideConnected = collideconnected;
+	mJoint = mPhysicMgr->Createb2Joint(&jointDef);
+	mJoint->SetUserData(this);
+	
+	mIsAlive = true;
+	
+	b1->SetAwake(true);
+	b2->SetAwake(true);
 
-	if (mBodyA && mBodyB)
-	{
-		b2PulleyJointDef jointDef;
-		jointDef.Initialize(mBodyA, mBodyB, groundP1, groundP2, mBodyA->GetWorldPoint(pt1), mBodyB->GetWorldPoint(p2), ratio);
-		jointDef.collideConnected = collideconnected;
-		mJoint = (b2PulleyJoint*) mPhysicMgr->CreateJoint(&jointDef, this);
-		
-		//mBodyA->RegisterJoint(this);
-		//mBodyB->RegisterJoint(this);
-		mIsNull = false;
-	}
-
+	// Règle le VertexArray
 	this->resize(4U);
 	this->setPrimitiveType(sf::Lines);
 	(*this)[0].color = mColor;
@@ -40,18 +41,13 @@ void PulleyJoint::Update()
 {
 	Joint::Update();
 
-	if (mBodyA && mBodyB && !mIsNull)
+	if (mIsAlive)
 	{
 		(*this)[0].position = b22sfVec(GetGroundAnchorA(), mPhysicMgr->GetPPM());
 		(*this)[1].position = b22sfVec(mJoint->GetAnchorA(), mPhysicMgr->GetPPM());
 
 		(*this)[2].position = b22sfVec(GetGroundAnchorB(), mPhysicMgr->GetPPM());
 		(*this)[3].position = b22sfVec(mJoint->GetAnchorB(), mPhysicMgr->GetPPM());
-	}
-	else
-	{
-		//mPhysicMgr->DestroyJoint(this, false);
-		//delete this;
 	}
 }
 

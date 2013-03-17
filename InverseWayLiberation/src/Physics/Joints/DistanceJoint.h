@@ -9,7 +9,7 @@ class DistanceJoint : public Joint
 {
 public:
 	// Ctor & dtor
-	DistanceJoint(PhysicManager *physicMgr, b2Body *b1, b2Vec2 pt1, b2Body *b2, b2Vec2 p2, float frequencyHz = 4.f, float damping = 0.5f
+	DistanceJoint(PhysicManager *physicMgr, b2Body *b1, b2Vec2 pt1, b2Body *b2, b2Vec2 pt2, float frequencyHz = 4.f, float damping = 0.5f
 														  , bool collideconnected = true , sf::Color const& color = sf::Color::Magenta);
 	virtual ~DistanceJoint(void);
 	

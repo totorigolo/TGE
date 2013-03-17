@@ -1,6 +1,8 @@
 #include "Player.h"
+#include "EntityManager.h"
 #include "../Tools/utils.h"
 #include "../Physics/Callback/AABBCallback.h"
+#include <iostream>
 
 // Ctor & dtor
 Player::Player(PhysicManager *physicMgr, b2Vec2 position, std::shared_ptr<sf::Texture> texture, int layer)
@@ -82,4 +84,20 @@ void Player::GetEvent(const PlayerEvent &playerEvent)
 		{
 		}
 	}
+}
+
+// Gestion des dépendences
+void Player::DependencyDestroyed(void *dependency)
+{
+	// Voir avec l'héritage de LivingBeing, qui est appelé ?
+	std::cout << "Player::DependencyDestroyed()" << std::endl;
+
+	/*/ Vérifie que le Body ne soit pas supprimé
+	if (dependency == mCollisionBody)
+	{
+		mIsAlive = false;
+		mCollisionBody = nullptr;
+		EntityManager::GetInstance().DestroyEntity(this, false);
+		delete this;
+	}*/
 }

@@ -24,6 +24,9 @@ public:
 	// Accesseurs
 	bool IsValid() const { return mIsValid; }
 
+	// Gestion des dépendences
+	virtual void DependencyDestroyed(void *dependency);
+
 private:
 	// Etat
 	bool mIsValid;
@@ -37,5 +40,5 @@ private:
 
 	// Bodies
 	std::unordered_map<std::string, BasicBody*> mBodies;
-	std::list<Joint*> mJoints;
+	std::list<int> mJoints;
 };

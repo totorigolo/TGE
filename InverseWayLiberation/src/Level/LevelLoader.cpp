@@ -104,7 +104,6 @@ bool LevelLoader::Process()
 		return false;
 	}*/
 
-	// TODO: Essayer ça -> return false;
 	return true;
 }
 
@@ -368,7 +367,7 @@ bool LevelLoader::ProcessEntities()
 			animation = entity->Attribute("texture");
 
 			e = new Player(mLevel->mPhysicMgr, position, mLevel->mTextureMap[animation], layer);
-			mLevel->mPlayer = e;
+			mLevel->mPlayer = (Player*) e;
 		}
 
 		// Crée l'Entity correspondante
@@ -471,20 +470,27 @@ bool LevelLoader::ProcessJoints()
 			// Récupère les joints
 			if (mJointIDMap.find(IDj1) == mJointIDMap.end())
 			{
-				Dialog::Error("Le joint #"+ Parser::uint2string(IDj1) +" est introuvable !");
+				Dialog::Error("Le joint #"+ Parser::uint2string(IDj1) +" est introuvable !\n"
+							  "Il doit être construit avant.");
 				continue;
 			}
 			if (mJointIDMap.find(IDj2) == mJointIDMap.end())
 			{
-				Dialog::Error("Le joint #"+ Parser::uint2string(IDj2) +" est introuvable !");
+				Dialog::Error("Le joint #"+ Parser::uint2string(IDj2) +" est introuvable !\n"
+							  "Il doit être construit avant.");
 				continue;
 			}
 			j1 = mJointIDMap[IDj1];
 			j2 = mJointIDMap[IDj2];
 
+			// Vérifie qu'il soient bien construits
+			assert(j1->GetUserData() && "n'est pas valide.");
+			assert(j2->GetUserData() && "n'est pas valide.");
+
 			// Crée le joint
-			j = new GearJoint(mLevel->mPhysicMgr, b1, b2, j1, j2, ratio, colision, color);
-			mLevel->mPhysicMgr->RegisterJoint(j);
+			int j1ID = ((Joint*) j1->GetUserData())->GetID();
+			int j2ID = ((Joint*) j2->GetUserData())->GetID();
+			j = new GearJoint(mLevel->mPhysicMgr, b1, b2, j1ID, j2ID, ratio, colision, color);
 		}
 		else if (type == "distance")
 		{
@@ -496,7 +502,6 @@ bool LevelLoader::ProcessJoints()
 
 			// Crée le joint
 			j = new DistanceJoint(mLevel->mPhysicMgr, b1, pt1, b2, pt2, frequency, damping, colision, color);
-			mLevel->mPhysicMgr->RegisterJoint(j);
 		}
 		else if (type == "friction")
 		{
@@ -508,7 +513,6 @@ bool LevelLoader::ProcessJoints()
 
 			// Crée le joint
 			j = new FrictionJoint(mLevel->mPhysicMgr, b1, pt1, b2, pt2, maxForce, maxTorque, colision, color);
-			mLevel->mPhysicMgr->RegisterJoint(j);
 		}
 		else if (type == "rope")
 		{
@@ -519,7 +523,6 @@ bool LevelLoader::ProcessJoints()
 
 			// Crée le joint
 			j = new RopeJoint(mLevel->mPhysicMgr, b1, pt1, b2, pt2, maxlength, colision, color);
-			mLevel->mPhysicMgr->RegisterJoint(j);
 		}
 		else if (type == "weld")
 		{
@@ -531,7 +534,6 @@ bool LevelLoader::ProcessJoints()
 
 			// Crée le joint
 			j = new WeldJoint(mLevel->mPhysicMgr, b1, b2, anchor, frequency, damping, colision, color);
-			mLevel->mPhysicMgr->RegisterJoint(j);
 		}
 		else if (type == "pulley")
 		{
@@ -545,7 +547,6 @@ bool LevelLoader::ProcessJoints()
 
 			// Crée le joint
 			j = new PulleyJoint(mLevel->mPhysicMgr, b1, pt1, b2, pt2, groundpt1, groundpt2, ratio, colision, color);
-			mLevel->mPhysicMgr->RegisterJoint(j);
 		}
 		else if (type == "prismatic")
 		{
@@ -566,7 +567,6 @@ bool LevelLoader::ProcessJoints()
 
 			// Crée le joint
 			j = new PrismaticJoint(mLevel->mPhysicMgr, b1, b2, anchor, axis, enableLimits, lower, upper, enableMotor, speed, maxForce, colision, color);
-			mLevel->mPhysicMgr->RegisterJoint(j);
 		}
 		else if (type == "revolute")
 		{
@@ -585,7 +585,6 @@ bool LevelLoader::ProcessJoints()
 
 			// Crée le joint
 			j = new RevoluteJoint(mLevel->mPhysicMgr, b1, b2, anchor, enableLimits, lower, upper, enableMotor, speed, maxTorque, colision, color);
-			mLevel->mPhysicMgr->RegisterJoint(j);
 		}
 		else if (type == "wheel")
 		{
@@ -604,7 +603,6 @@ bool LevelLoader::ProcessJoints()
 
 			// Crée le joint
 			j = new WheelJoint(mLevel->mPhysicMgr, b1, b2, anchor, axis, frequency, damping, enableMotor, speed, maxTorque, colision, color);
-			mLevel->mPhysicMgr->RegisterJoint(j);
 		}
 
 		// Enregiste l'ID

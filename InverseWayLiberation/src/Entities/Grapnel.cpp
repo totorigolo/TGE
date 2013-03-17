@@ -1,36 +1,30 @@
 #include "Grapnel.h"
+#include "EntityManager.h"
 #include "../Tools/utils.h"
 
 // Ctor & dtor
 Grapnel::Grapnel(PhysicManager *mgr, int layer)
-	: Entity(layer), mPhysicMgr(mgr), mJoint(nullptr), mJointIsCreated(false)
+	: Entity(layer), mPhysicMgr(mgr), mJoint(nullptr), mJointID(-1)
 {
 	assert(mPhysicMgr && "n'est pas valide.");
 
 	// Défini le type de l'Entity
 	mType = EntityType::Grapnel;
-	mToDeleteOnDestroy = false;
 }
 Grapnel::~Grapnel()
 {
-	if (mJoint)
-	{
-		mJoint->Destroy();
-		mJoint = nullptr;
-	}
-	mIsAlive = false;
+	Destroy();
 }
 
 // Création du body
 bool Grapnel::Create(std::shared_ptr<sf::Texture> textureHook, b2Body *bodyA, b2Vec2 ptA, b2Body *bodyB, b2Vec2 ptB)
 {
 	// On n'en crée pas de nouveau si il y en a déjà un
-	if (mJointIsCreated)
+	if (mPhysicMgr->JointExists(mJointID))
 		return false;
 
 	// On vérifie les bodies et la texture
-	if (!bodyA || !bodyB || !textureHook.get())
-		return false;
+	assert(bodyA && bodyB && textureHook.get() && "ne sont pas valides.");
 
 	// Change la texture du crochet
 	mSpriteHook.setTexture(*textureHook);
@@ -38,14 +32,15 @@ bool Grapnel::Create(std::shared_ptr<sf::Texture> textureHook, b2Body *bodyA, b2
 
 	// Création du Joint
 	mJoint = new DistanceJoint(mPhysicMgr, bodyA, ptA, bodyB, ptB);
-	mJointIsCreated = true;
+	mJointID = mJoint->GetID();
+	mJoint->SetOwner(this);
 	mIsAlive = true;
 	mClock.restart();
 	mIsRetracting = true;
 
 	// Change les propriétés du Joint
 	mJoint->SetBreakableByForce(true);
-	mJoint->SetMaxForce(600.f);
+	mJoint->SetMaxForce(120.f);
 
 	return true;
 }
@@ -53,8 +48,12 @@ bool Grapnel::Create(std::shared_ptr<sf::Texture> textureHook, b2Body *bodyA, b2
 // Destruction du grappin
 void Grapnel::Destroy()
 {
-	delete mJoint;
-	mJointIsCreated = false;
+	if (mPhysicMgr->JointExists(mJointID))
+	{
+		mPhysicMgr->DestroyJoint(mJointID);
+		mJoint = nullptr;
+		mJointID = -1;
+	}
 	mIsAlive = false;
 }
 
@@ -62,7 +61,7 @@ void Grapnel::Destroy()
 void Grapnel::Update()
 {
 	// Si le Joint est valide
-	if (mIsAlive && mJoint && mJointIsCreated)
+	if (mIsAlive && mJoint && mPhysicMgr->JointExists(mJointID))
 	{
 		// Mise à jour de la longueur
 		if (mIsRetracting)
@@ -74,21 +73,13 @@ void Grapnel::Update()
 			// Rétractation
 			if (mIsRetracting)
 			{
-				float l = mJoint->GetLength() - mClock.getElapsedTime().asSeconds();
+				float l = mJoint->GetLength() - (mClock.getElapsedTime().asSeconds());
 				if (l > 0.f)
 					mJoint->SetLength(l);
 				else
 					mIsRetracting = false;
 				mClock.restart();
 			}
-		}
-
-		// Mise à jour du joint
-		mJoint->Update();
-		if (mJoint->IsNull()) // Si il a cassé
-		{
-			Destroy();
-			return;
 		}
 
 		// Mise à jour de la texture
@@ -100,11 +91,22 @@ void Grapnel::Update()
 // Pour le rendu
 void Grapnel::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
-	if (mJointIsCreated)
+	if (mPhysicMgr->JointExists(mJointID))
 	{
 		target.draw(*mJoint);
 		target.draw(mSpriteHook, states);
 	}
+}
+
+// Gestion des dépendences
+void Grapnel::DependencyDestroyed(void *dependency)
+{
+	// Vérifie si le joint n'est pas en train d'être supprimé
+	if (dependency == mJoint)
+	{
+		Destroy();
+	}
+	//this->mSpriteHook; // TODO: Gestion des textures plus poussée
 }
 
 // Accesseurs

@@ -1,6 +1,7 @@
 #include "LivingBeing.h"
-#include "../Physics/Bodies/DynamicBox.h"
+#include "EntityManager.h"
 #include "../Tools/utils.h"
+#include <iostream>
 
 // Ctor & dtor
 LivingBeing::LivingBeing(PhysicManager *physicMgr, b2Vec2 position, std::shared_ptr<sf::Texture> texture, int layer)
@@ -104,6 +105,22 @@ void LivingBeing::draw(sf::RenderTarget& target, sf::RenderStates states) const
 void LivingBeing::CanJump(bool b)
 {
 	mCanJump = b;
+}
+
+// Gestion des dépendences
+void LivingBeing::DependencyDestroyed(void *dependency)
+{
+	std::cout << "LivingBeing::DependencyDestroyed" << std::endl;
+
+	/*/ Vérifie que le Body ne soit pas supprimé
+	if (dependency == mCollisionBody)
+	{
+		mIsAlive = false;
+		mCollisionBody = nullptr;
+		EntityManager::GetInstance().DestroyEntity(this, false);
+		delete this;
+	}*/
+	//mTexture; // TODO: Gestion des textures plus poussée
 }
 
 // Accesseurs

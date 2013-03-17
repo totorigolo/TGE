@@ -21,7 +21,7 @@ App::~App()
 
 bool App::Init() 
 {
-	// TODO: Initialiser Lua et le son
+	// TODO: Initialiser le son
 
 	// Charge la fenêtre de rendu
 	mRenderWindow = new sf::RenderWindow(sf::VideoMode(800U, 600U), "Inverse Way Liberation - Chargement");

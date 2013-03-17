@@ -21,6 +21,9 @@ public:
 	// ContactListener uniquement : indique si l'entité peut sauter
 	void CanJump(bool b);
 
+	// Gestion des dépendences
+	virtual void DependencyDestroyed(void *dependency);
+
 	// Accesseurs
 	b2Body* GetCollisionBody();
 	const b2Body* GetCollisionBody() const;

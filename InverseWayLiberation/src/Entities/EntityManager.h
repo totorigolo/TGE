@@ -15,7 +15,7 @@ public:
 
 	// Gestion des Entities
 	void RegisterEntity(Entity *entity);
-	void DestroyEntity(Entity *entity, bool remove = true, bool _delete = true);
+	void DestroyEntity(Entity *entity);
 	void DestroyAllEntities();
 	void SortByLayer();
 
