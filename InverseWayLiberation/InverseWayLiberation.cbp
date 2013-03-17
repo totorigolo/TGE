@@ -22,7 +22,13 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
+		<Unit filename="../.hg/cur-message.txt" />
+		<Unit filename="../.hg/last-message.txt" />
+		<Unit filename="../DropboxPortableAHK/.dbfiles/7za_license.txt" />
+		<Unit filename="../DropboxPortableAHK/readme_english.txt" />
+		<Unit filename="../DropboxPortableAHK/readme_german.txt" />
 		<Unit filename="../README.txt" />
+		<Unit filename="../Shadows/main.cpp" />
 		<Unit filename="src/App/App.cpp" />
 		<Unit filename="src/App/App.h" />
 		<Unit filename="src/App/States/DevGame.cpp" />
@@ -34,14 +40,20 @@
 		<Unit filename="src/App/States/State.h" />
 		<Unit filename="src/App/States/StateSystem.cpp" />
 		<Unit filename="src/App/States/StateSystem.h" />
+		<Unit filename="src/Entities/BasicBody.cpp" />
+		<Unit filename="src/Entities/BasicBody.h" />
 		<Unit filename="src/Entities/Deco.cpp" />
 		<Unit filename="src/Entities/Deco.h" />
 		<Unit filename="src/Entities/Entity.cpp" />
 		<Unit filename="src/Entities/Entity.h" />
 		<Unit filename="src/Entities/EntityManager.cpp" />
 		<Unit filename="src/Entities/EntityManager.h" />
+		<Unit filename="src/Entities/Grapnel.cpp" />
+		<Unit filename="src/Entities/Grapnel.h" />
 		<Unit filename="src/Entities/LivingBeing.cpp" />
 		<Unit filename="src/Entities/LivingBeing.h" />
+		<Unit filename="src/Entities/Player.cpp" />
+		<Unit filename="src/Entities/Player.h" />
 		<Unit filename="src/Entities/Ragdoll.cpp" />
 		<Unit filename="src/Entities/Ragdoll.h" />
 		<Unit filename="src/Entities/RawBody.cpp" />
@@ -66,31 +78,19 @@
 		<Unit filename="src/Lights/PointLight.h" />
 		<Unit filename="src/Lights/SpotLight.cpp" />
 		<Unit filename="src/Lights/SpotLight.h" />
-		<Unit filename="src/Physics/Bodies/Body.cpp" />
-		<Unit filename="src/Physics/Bodies/Body.h" />
-		<Unit filename="src/Physics/Bodies/DynamicBox.cpp" />
-		<Unit filename="src/Physics/Bodies/DynamicBox.h" />
-		<Unit filename="src/Physics/Bodies/DynamicCircle.cpp" />
-		<Unit filename="src/Physics/Bodies/DynamicCircle.h" />
-		<Unit filename="src/Physics/Bodies/KinematicBox.cpp" />
-		<Unit filename="src/Physics/Bodies/KinematicBox.h" />
-		<Unit filename="src/Physics/Bodies/StaticBox.cpp" />
-		<Unit filename="src/Physics/Bodies/StaticBox.h" />
+		<Unit filename="src/Physics/Callback/AABBCallback.h" />
+		<Unit filename="src/Physics/Callback/FirstBodyRaycastCallback.h" />
+		<Unit filename="src/Physics/Callback/PointCallback.h" />
 		<Unit filename="src/Physics/ContactListener.cpp" />
 		<Unit filename="src/Physics/ContactListener.h" />
-		<Unit filename="src/Physics/Entities/Entity.cpp" />
-		<Unit filename="src/Physics/Entities/Entity.h" />
-		<Unit filename="src/Physics/Entities/Ragdoll.cpp" />
-		<Unit filename="src/Physics/Entities/Ragdoll.h" />
-		<Unit filename="src/Physics/FirstBodyRaycastCallback.h" />
+		<Unit filename="src/Physics/Joint.cpp" />
+		<Unit filename="src/Physics/Joint.h" />
 		<Unit filename="src/Physics/Joints/DistanceJoint.cpp" />
 		<Unit filename="src/Physics/Joints/DistanceJoint.h" />
 		<Unit filename="src/Physics/Joints/FrictionJoint.cpp" />
 		<Unit filename="src/Physics/Joints/FrictionJoint.h" />
 		<Unit filename="src/Physics/Joints/GearJoint.cpp" />
 		<Unit filename="src/Physics/Joints/GearJoint.h" />
-		<Unit filename="src/Physics/Joints/Joint.cpp" />
-		<Unit filename="src/Physics/Joints/Joint.h" />
 		<Unit filename="src/Physics/Joints/MouseJoint.cpp" />
 		<Unit filename="src/Physics/Joints/MouseJoint.h" />
 		<Unit filename="src/Physics/Joints/PrismaticJoint.cpp" />
@@ -105,14 +105,11 @@
 		<Unit filename="src/Physics/Joints/WeldJoint.h" />
 		<Unit filename="src/Physics/Joints/WheelJoint.cpp" />
 		<Unit filename="src/Physics/Joints/WheelJoint.h" />
-		<Unit filename="src/Physics/OverlappingBodyCallback.h" />
-		<Unit filename="src/Physics/World.cpp" />
-		<Unit filename="src/Physics/World.h" />
+		<Unit filename="src/Physics/PhysicManager.cpp" />
+		<Unit filename="src/Physics/PhysicManager.h" />
 		<Unit filename="src/Resources/AnimatedSprite.cpp" />
 		<Unit filename="src/Resources/AnimatedSprite.h" />
 		<Unit filename="src/Resources/ResourceManager.h" />
-		<Unit filename="src/Scripting/Lua.cpp" />
-		<Unit filename="src/Scripting/Lua.h" />
 		<Unit filename="src/Sounds/SoundManager.cpp" />
 		<Unit filename="src/Sounds/SoundManager.h" />
 		<Unit filename="src/Tools/Dialog.cpp" />
@@ -130,6 +127,7 @@
 		<Unit filename="src/Tools/utils.h" />
 		<Unit filename="src/_TODO.txt" />
 		<Unit filename="src/main.cpp" />
+		<Unit filename="src/resource.h" />
 		<Extensions>
 			<code_completion />
 			<envvars />
