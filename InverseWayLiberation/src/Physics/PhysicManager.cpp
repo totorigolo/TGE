@@ -60,6 +60,12 @@ int PhysicManager::RegisterJoint(Joint *joint)
 }
 void PhysicManager::DestroyJoint(int jointID)
 {
+	// Vérifie que l'ID soit cohérent
+	assert(jointID >= 0 && "l'ID est impossible.");
+
+	// Vérifie que la liste ne soit pas vide
+	assert(mJointList.size() != 0 && "la liste des joints est vide.");
+
 	// Récupère le joint
 	auto itJoint = mJointList.find(jointID);
 	assert(itJoint != mJointList.end() && "le joint n'existe pas.");
@@ -115,6 +121,14 @@ void PhysicManager::UpdateJoints()
 // Accesseurs
 bool PhysicManager::JointExists(int jointID) const
 {
+	// Vérifie que l'ID soit cohérent
+	if (jointID < 0)
+		return false;
+
+	// Vérifie que la liste ne soit pas vide
+	if (mJointList.size() == 0)
+		return false;
+
 	// Récupère le joint
 	auto itJoint = mJointList.find(jointID);
 
