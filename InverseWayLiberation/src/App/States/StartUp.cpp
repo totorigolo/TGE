@@ -56,7 +56,10 @@ State* StartUp_State::Run(App *app)
 
 			// N'importe quelle autre touche : splash suivant
 			else if (event.type == sf::Event::KeyReleased)
+			{
+				opacity = 0.f;
 				state = 0;
+			}
 		}
 
 		// Effet
