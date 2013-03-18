@@ -88,9 +88,6 @@
     <Filter Include="Fichiers d%27en-tête\Physics\Callback">
       <UniqueIdentifier>{2906bf8d-863c-4dde-8e5b-491fc2734796}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Fichiers sources\Physics\Callback">
-      <UniqueIdentifier>{079891bf-b420-49e5-888d-b438bed65ac0}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\_TODO.txt" />
