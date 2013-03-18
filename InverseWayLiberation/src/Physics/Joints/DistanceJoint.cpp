@@ -17,7 +17,7 @@ DistanceJoint::DistanceJoint(PhysicManager *physicMgr, b2Body *b1, b2Vec2 pt1, b
 	jointDef.bodyB = b2;
 	jointDef.localAnchorA = pt1;
 	jointDef.localAnchorB = pt2;
-	b2Vec2 d = pt2 - pt1;
+	b2Vec2 d = b2->GetWorldPoint(pt2) - b1->GetWorldPoint(pt1);
 	jointDef.length = d.Length();
 	jointDef.collideConnected = collideconnected;
 	jointDef.frequencyHz = frequencyHz;
