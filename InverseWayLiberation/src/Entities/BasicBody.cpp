@@ -5,7 +5,7 @@
 
 // Ctor & dtor
 BasicBody::BasicBody(PhysicManager *mgr, int layer)
-	: Entity(layer), mBasicBodyType(BasicBodyType::Null), mPhysicMgr(mgr), mBody(nullptr), mBodyIsCreated(false)
+	: Entity(layer), mBasicBodyType(Type::Null), mCollisionType(CollisionType::Default), mPhysicMgr(mgr), mBody(nullptr), mBodyIsCreated(false)
 {
 	assert(mPhysicMgr && "n'est pas valide.");
 
@@ -55,7 +55,7 @@ bool BasicBody::CreateDynBox(b2Vec3 posRot, std::shared_ptr<sf::Texture> texture
 	// Enregistrements
 	mBody->SetUserData(this);
 	mBodyIsCreated = true;
-	mBasicBodyType = BasicBodyType::DynamicBox;
+	mBasicBodyType = Type::DynamicBox;
 
 	return true;
 }
@@ -95,7 +95,7 @@ bool BasicBody::CreateDynCircle(b2Vec3 posRot, std::shared_ptr<sf::Texture> text
 	// Enregistrements
 	mBody->SetUserData(this);
 	mBodyIsCreated = true;
-	mBasicBodyType = BasicBodyType::DynamicCircle;
+	mBasicBodyType = Type::DynamicCircle;
 
 	return true;
 }
@@ -137,7 +137,7 @@ bool BasicBody::CreateStaticBox(b2Vec3 posRot, std::shared_ptr<sf::Texture> text
 	// Enregistrements
 	mBody->SetUserData(this);
 	mBodyIsCreated = true;
-	mBasicBodyType = BasicBodyType::StaticBox;
+	mBasicBodyType = Type::StaticBox;
 
 	return true;
 }
@@ -163,7 +163,7 @@ void BasicBody::Destroy()
 		mPhysicMgr->DestroyBody(mBody);
 		mBody = nullptr;
 	}
-	mBasicBodyType = BasicBodyType::Null;
+	mBasicBodyType = Type::Null;
 	mBodyIsCreated = false;
 	mIsAlive = false;
 }
@@ -193,9 +193,18 @@ void BasicBody::DependencyDestroyed(void *dependency)
 
 /* Accesseurs */
 // Type de BasicBody
-BasicBodyType BasicBody::GetBasicBodyType() const
+BasicBody::Type BasicBody::GetBasicBodyType() const
 {
 	return mBasicBodyType;
+}
+// Type de collision
+void BasicBody::SetCollisionType(BasicBody::CollisionType type)
+{
+	mCollisionType = type;
+}
+BasicBody::CollisionType BasicBody::GetCollisionType() const
+{
+	return mCollisionType;
 }
 // Sprite
 sf::Sprite* BasicBody::GetSprite()

@@ -3,16 +3,26 @@
 #include "Entity.h"
 #include "../Physics/PhysicManager.h"
 
-enum class BasicBodyType
-{
-	Null,
-	DynamicBox,
-	DynamicCircle,
-	StaticBox
-};
-
 class BasicBody : public Entity
 {
+public:
+	// Type de Body
+	enum class Type
+	{
+		Null,
+		DynamicBox,
+		DynamicCircle,
+		StaticBox
+	};
+
+	// Propriété de collision
+	enum class CollisionType
+	{
+		Default,
+		Bullet,
+		OneSidedPlatform
+	};
+
 public:
 	// Ctor & dtor
 	BasicBody(PhysicManager *mgr, int layer = 1);
@@ -39,7 +49,10 @@ public:
 
 	/* Accesseurs */
 	// Type de BasicBody
-	BasicBodyType GetBasicBodyType() const;
+	Type GetBasicBodyType() const;
+	// Type de collision
+	void SetCollisionType(CollisionType type);
+	CollisionType GetCollisionType() const;
 	// Sprite
 	sf::Sprite* GetSprite();
 	const sf::Sprite* GetSprite() const;
@@ -56,7 +69,10 @@ protected:
 
 private:
 	// Type de body
-	BasicBodyType mBasicBodyType;
+	Type mBasicBodyType;
+	
+	// Propriété de collision
+	CollisionType mCollisionType;
 
 	// PhysicManager
 	PhysicManager *mPhysicMgr;

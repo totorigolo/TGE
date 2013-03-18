@@ -79,31 +79,36 @@ void ContactListener::EndContact(b2Contact* contact)
 void ContactListener::PreSolve(b2Contact* contact, const b2Manifold* oldManifold)
 {
 	// Récupère les bodies
-	/*b2Fixture *fixtureA = contact->GetFixtureA();
-	b2Fixture *fixtureB = contact->GetFixtureB();
-	b2Body *bodyA = (Body*) fixtureA->GetBody()->GetUserData();
-	b2Body *bodyB = (Body*) fixtureB->GetBody()->GetUserData();
+	Entity *entityA = (Entity*) contact->GetFixtureA()->GetBody()->GetUserData();
+	Entity *entityB = (Entity*) contact->GetFixtureB()->GetBody()->GetUserData();
 
-	// Collision Actor <> OneSidedPlatform
-	Body *actor = nullptr, *platform = nullptr;
-	if (bodyA->GetType() == BodyType::OneSidedPlatform)
+	// Traite les BasicBodies
+	if (entityA->GetType() == EntityType::BasicBody)
 	{
-		actor = bodyB;
-		platform = bodyA;
-	}
-	else if (bodyB->GetType() == BodyType::OneSidedPlatform)
-	{
-		actor = bodyA;
-		platform = bodyB;
-	}
-	if (actor && platform)
-	{
-		if (actor->GetBody()->GetLinearVelocity().y < 5.f && actor->GetBody()->GetLinearVelocity().y > 0.1f
-			|| actor->GetBodyAABB().lowerBound.y < platform->GetBodyAABB().upperBound.y - 0.2f)
+		/* Collision Actor <> OneSidedPlatform */
+		// Récupère les acteurs
+		b2Fixture *actor = nullptr, *platform = nullptr;
+		if (((BasicBody*) entityA)->GetCollisionType() == BasicBody::CollisionType::OneSidedPlatform)
 		{
-			contact->SetEnabled(false);
+			actor = contact->GetFixtureB();
+			platform = contact->GetFixtureA();
 		}
-	}*/
+		else if (((BasicBody*) entityB)->GetCollisionType() == BasicBody::CollisionType::OneSidedPlatform)
+		{
+			actor = contact->GetFixtureA();
+			platform = contact->GetFixtureB();
+		}
+		
+		// Si on a les deux acteurs
+		if (actor && platform)
+		{
+			if (actor->GetBody()->GetLinearVelocity().y < 5.f && actor->GetBody()->GetLinearVelocity().y > 0.1f
+				|| actor->GetAABB(0).lowerBound.y < platform->GetAABB(0).upperBound.y - 0.2f)
+			{
+				contact->SetEnabled(false);
+			}
+		}
+	}
 }
 
 // Après la résolution des collisions

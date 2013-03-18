@@ -4,7 +4,7 @@
   <world
 		gravity = "(0.f, -9.8f)"
 		PPM = "100.f"
-		bckgcolor = "(255, 255, 255, 255)"
+		bckgcolor = "(0, 0, 0, 255)"
 		originview = "(-1.7f, 2.f)"
 		defaultzoom = "1.f"
 		defaultlightning = "false"
@@ -35,16 +35,16 @@
 Les attributs sont facultatifs, sauf la position et la texture.
 Il est possible de définir un ID, afin de reconnaitre le body par la suite du chargement (ex: joints).
 
-ex: (NB = les valeurs mises sont celles par défaut) (osp = OneSidedPlatform)
+ex: (NB = les valeurs mises sont celles par défaut) (osp = one sided platform)
 
-<staticbox layer="1" texture="ground" pos="(0.f, -0.64f)" rotation="0.f" friction="0.2f" restitution="0.f" osd="false" shadow="true">
+<staticbox layer="1" texture="ground" pos="(0.f, -0.64f)" rotation="0.f" friction="0.2f" restitution="0.f" osp="false" shadow="true">
 <dynamicbox layer="1" texture="tonneau" pos="(-4.55f, 0.25f)" rotation="0.f" density="1.f" friction="0.2f" restitution="0.f" bullet="false" shadow="true">
-<dynamiccircle layer="1" texture="ball" pos="(-4.55f, 0.675f)" rotation="0.f" type="dc" density="1.f" friction="0.2f" restitution="0.f" bullet="false" shadow="true">
+<dynamiccircle layer="1" texture="ball" pos="(-4.55f, 0.675f)" rotation="0.f" type="dc" density="1.f" friction="0.2f" restitution="0.f" shadow="true">
 <kinematicbox layer="1" texture="caisse" pos="(1.9f, 4.f)" rotation="0.f" restitution="0.0f" shadow="true">
 -->
-    <staticbox layer="0" texture="ground" pos="(0.f, -0.64f)" friction="0.4f"/>
+    <staticbox texture="ground" pos="(0.f, -0.64f)" friction="0.4f" layer="-1"/>
 
-    <staticbox id="6" texture="way" pos="(-5.f, 5.5f)" rotation="90.f" osp="true" layer="0"/>
+    <staticbox texture="way" pos="(-5.f, 5.5f)" rotation="90.f" osp="true" layer="-1"/>
     <dynamicbox texture="way" pos="(-5.f, 6.5f)"/>
 
     <staticbox texture="way" pos="(-5.f, 0.5f)" rotation="90.f"/>
@@ -55,10 +55,10 @@ ex: (NB = les valeurs mises sont celles par défaut) (osp = OneSidedPlatform)
 
     <dynamicbox id="1" texture="way" pos="(-3.f, 0.5f)" rotation="90.f" density="1.f"/>
     <dynamicbox id ="7" texture="tonneau" pos="(-4.55f, 0.25f)" density="0.2f" friction="0.05f"/>
-    <dynamiccircle id="8" texture="ball" pos="(-4.55f, 0.675f)" friction="20.f"/>
+    <dynamiccircle id="8" texture="ball" pos="(-4.55f, 0.675f)" friction="20.f" bullet="true"/>
 
-    <staticbox id="3" texture="way" pos="(0.f, 2.5f)" osp="true" layer="0"/>
-    <staticbox texture="way" pos="(1.5f, 2.5f)" osp="true" layer="0"/>
+    <staticbox id="3" texture="way" pos="(0.f, 2.5f)" osp="true" layer="-1"/>
+    <staticbox texture="way" pos="(1.5f, 2.5f)" osp="true" layer="-1"/>
     <dynamicbox texture="box" pos="(0.f, 3.f)"/>
     <dynamicbox id="4" texture="box2" pos="(1.5f, 3.f)"/>
     <dynamicbox id="2" texture="caisse" pos="(1.9f, 3.f)"/>
@@ -109,7 +109,7 @@ ex : (La rotation est en degré, et est facultative.)
 <img texture="volcan" position="(0.f, 0.f)" rotation="0.f"/>
 -->
     <level z="5">
-      <!--img texture="volcan" position="(0.f, 5.f)"/-->
+      <img texture="volcan" position="(0.f, 5.f)"/>
     </level>
     <level z="-1">
       <img texture="lampadere" position="(3.f, 1.25f)"/>

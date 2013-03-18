@@ -203,8 +203,8 @@ bool LevelLoader::ProcessBasicBodies()
 	// On crée les attributs
 	BasicBody *bb = nullptr;
 	int layer = 1;
-	bool hasID = false;//, bullet = false, osp = false;
-	//BodyType bodyType = BodyType::FullySimulated;
+	bool hasID = false;
+	bool bullet = false, osp = false;
 	float density = 1.f, friction = 0.2f, restitution = 0.0f;
 	float rotation = 0.f;
 	unsigned int id = 0U;
@@ -224,9 +224,8 @@ bool LevelLoader::ProcessBasicBodies()
 		friction = 0.2f;
 		restitution = 0.0f;
 		hasID = false;
-		//osp = false;
-		//bullet = false;
-		//bodyType = BodyType::FullySimulated;
+		osp = false;
+		bullet = false;
 
 		// Récupère le type
 		type = body->Name();
@@ -257,14 +256,6 @@ bool LevelLoader::ProcessBasicBodies()
 		// Récupère le layer
 		body->QueryIntAttribute("layer", &layer);
 
-		// Récupère les flags
-		//body->QueryBoolAttribute("osp", &osp);
-		//body->QueryBoolAttribute("bullet", &bullet);
-		//if (bullet)
-		//	bodyType = BodyType::Bullet;
-		//else if (osp)
-		//	bodyType = BodyType::OneSidedPlatform;
-
 		// Récupère les propriétés
 		body->QueryFloatAttribute("density", &density);
 		body->QueryFloatAttribute("friction", &friction);
@@ -273,25 +264,34 @@ bool LevelLoader::ProcessBasicBodies()
 		// Crée le body
 		if (type == "staticbox")
 		{
-			bb = new BasicBody(mLevel->mPhysicMgr);
+			bb = new BasicBody(mLevel->mPhysicMgr, layer);
 			bb->CreateStaticBox(posRot, mLevel->mTextureMap[texture], friction, restitution);
 		}
 		else if (type == "dynamicbox")
 		{
-			bb = new BasicBody(mLevel->mPhysicMgr);
+			bb = new BasicBody(mLevel->mPhysicMgr, layer);
 			bb->CreateDynBox(posRot, mLevel->mTextureMap[texture], density, friction, restitution);
 		}
 		else if (type == "dynamiccircle")
 		{
-			bb = new BasicBody(mLevel->mPhysicMgr);
+			bb = new BasicBody(mLevel->mPhysicMgr, layer);
 			bb->CreateDynCircle(posRot, mLevel->mTextureMap[texture], density, friction, restitution);
 		}
 
-		// Change le type du body
-		//b->SetType(bodyType);
-
 		// Crée l'Entity correspondante
 		mLevel->mEntityManager.RegisterEntity(bb);
+
+		// Propriétés de collision
+		body->QueryBoolAttribute("osp", &osp);
+		body->QueryBoolAttribute("bullet", &bullet);
+
+		// Applique les propriétés
+		if (osp && bullet)
+			Dialog::Error("Impossible d'avoir osp et bullet en même temps !");
+		else if (osp)
+			bb->SetCollisionType(BasicBody::CollisionType::OneSidedPlatform);
+		else if (bullet)
+			bb->SetCollisionType(BasicBody::CollisionType::Bullet);
 
 		// Enregiste l'ID
 		if (bb != nullptr && hasID)
@@ -369,9 +369,14 @@ bool LevelLoader::ProcessEntities()
 			e = new Player(mLevel->mPhysicMgr, position, mLevel->mTextureMap[animation], layer);
 			mLevel->mPlayer = (Player*) e;
 		}
+		else
+		{
+			Dialog::Error("Entity type inconnu ("+ type +") !");
+		}
 
 		// Crée l'Entity correspondante
-		mLevel->mEntityManager.RegisterEntity(e);
+		if (e)
+			mLevel->mEntityManager.RegisterEntity(e);
 
 		// On récupère la prochaine entity
 		entity = entity->NextSiblingElement();
