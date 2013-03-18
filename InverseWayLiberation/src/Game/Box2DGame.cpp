@@ -296,6 +296,9 @@ void Box2DGame::OnEvent()
 		if (mPhysicMgr.JointExists(mMouseJointID))
 			mPhysicMgr.DestroyJoint(mMouseJointID);
 		mMouseJointID = -1;
+		mHookedSBody = nullptr;
+		mPinBodyA = nullptr;
+		mPinBodyB = nullptr;
 
 		//mLightManager.DeleteLight(&mMouseLight, false);
 		LevelLoader("lvls/1.xvl", mLevel);
