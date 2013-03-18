@@ -1,5 +1,6 @@
 #include "MainMenu.h"
 #include "DevGame.h"
+#include "../../Tools/Dialog.h"
 #include <vector>
 
 // Ctor & Dtor
@@ -24,18 +25,19 @@ State* MainMenu_State::Run(App *app)
 	// Charge le fond
 	sf::Texture fondTex;
 	if (!fondTex.loadFromFile("tex/main_menu_bckg.jpg"))
-		return MainMenu_State::GetPInstance();
+		Dialog::Error("Impossible de charger l'image de fond du menu.");
 	sf::Sprite fond(fondTex);
 
 	// Charge la flèche
 	sf::Texture arrowTex;
 	if (!arrowTex.loadFromFile("tex/menu_arrow.png"))
-		return MainMenu_State::GetPInstance();
+		Dialog::Error("Impossible de charger l'image de flèche du menu.");
 	sf::Sprite arrow(arrowTex);
 
 	// Charge la police
 	sf::Font font;
-	font.loadFromFile("tex/calibri.ttf");
+	if (!font.loadFromFile("tex/calibri.ttf"))
+		Dialog::Error("Impossible de charger la police du menu.", true);
 
 	// Crée les entrées du menu
 	std::vector<sf::Text> entries;
