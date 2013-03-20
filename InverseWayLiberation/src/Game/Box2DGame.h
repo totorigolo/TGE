@@ -41,6 +41,9 @@ protected:
 
 	/// Appelé pour la physique
 	inline void OnStepPhysics();
+	
+	/// Appelé pour les mises à jour
+	inline void OnUpdate();
 
 	/// Appelé pour le rendu
 	inline void OnRender();

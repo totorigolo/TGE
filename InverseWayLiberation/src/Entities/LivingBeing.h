@@ -18,7 +18,7 @@ public:
 	// Pour le rendu
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
-	// ContactListener uniquement : indique si l'entité peut sauter
+	// Définit si l'entité peut sauter
 	void CanJump(bool b);
 
 	// Gestion des dépendences
@@ -35,7 +35,8 @@ protected:
 	bool mCanJump;
 
 	PhysicManager *mPhysicMgr;
-	b2Body *mCollisionBody;
+	b2Body *mBody;
+	bool mBodyIsCreated;
 
 	sf::Sprite mSprite;
 	std::shared_ptr<sf::Texture> mTexture;

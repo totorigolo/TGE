@@ -20,67 +20,49 @@ Player::~Player()
 	mIsAlive = false;
 }
 
-/*/ Mise à jour
+// Mise à jour
 void Player::Update()
 {
+	// Appel de la mise à jour de LivingBeing
+	LivingBeing::Update();
+
 	// Si on est vivant
 	if (mIsAlive && !mIsDead)
 	{
 	}
-}*/
+}
 
 // Gestion des évènements
-void Player::GetEvent(const PlayerEvent &playerEvent)
+void Player::GetEvent(const MovementEvent &playerEvent)
 {
 	// Si on est vivant
 	if (mIsAlive && !mIsDead)
 	{
-		/* Crée une petite AABB sous le joueur * /
-		b2AABB aabb;
-		// Calcule les coordonnées des bas gauche et droit
-		b2Vec2 basDroite = mCollisionBody->GetBodyPosition() + (0.5f * mCollisionBody->GetBodySize());
-		b2Vec2 basGauche = basDroite;
-		// Haut à droite
-		basDroite.x -= 0.005f;
-		aabb.upperBound = basDroite;
-		// Bas à gauche
-		basGauche.x -= mCollisionBody->GetBodySize().x - 0.005f;
-		basGauche.y -= 0.005f;
-		aabb.lowerBound = basGauche;
-		
-		/* On vérifie si on a qqchose sous nos pieds * /
-		AABBCallback callback(false, mCollisionBody->GetBody()); // TODO: attribut
-		mWorld->QueryAABB(&callback, aabb);
-		//*/
-
 		/* Traite les différents mouvements */
-		if (playerEvent == PlayerEvent::Left)
+		if (playerEvent == Left)
 		{
-			//if ((callback.GetFixture() && mCollisionBody->GetBody()->GetLinearVelocity().x >= -5.f)
-			//	|| mCollisionBody->GetBody()->GetLinearVelocity().x >= -3.f)
-			if ((mCanJump && mCollisionBody->GetLinearVelocity().x >= -5.f)
-				|| mCollisionBody->GetLinearVelocity().x >= -3.f)
+			if ((mCanJump && mBody->GetLinearVelocity().x >= -5.f)
+				|| mBody->GetLinearVelocity().x >= -3.f)
 			{
-				mCollisionBody->ApplyForceToCenter(b2Vec2(-5.f, 0.f));
+				mBody->ApplyForceToCenter(b2Vec2(-5.f, 0.f));
 			}
 		}
-		else if (playerEvent == PlayerEvent::Right)
+		else if (playerEvent == Right)
 		{
-			if ((mCanJump && mCollisionBody->GetLinearVelocity().x <= 5.f)
-				|| mCollisionBody->GetLinearVelocity().x <= 3.f)
+			if ((mCanJump && mBody->GetLinearVelocity().x <= 5.f)
+				|| mBody->GetLinearVelocity().x <= 3.f)
 			{
-				mCollisionBody->ApplyForceToCenter(b2Vec2(5.f, 0));
+				mBody->ApplyForceToCenter(b2Vec2(5.f, 0));
 			}
 		}
-		else if (playerEvent == PlayerEvent::Jump)
+		else if (playerEvent == Jump)
 		{
-			//if (callback.GetFixture())
 			if (mCanJump)
 			{
-				mCollisionBody->ApplyForceToCenter(b2Vec2(0.f, 200.f)); // 300.f = un étage
+				mBody->ApplyForceToCenter(b2Vec2(0.f, 260.f)); // 300.f = un étage
 			}
 		}
-		else if (playerEvent == PlayerEvent::Crounch)
+		else if (playerEvent == Crounch)
 		{
 		}
 	}
@@ -89,6 +71,9 @@ void Player::GetEvent(const PlayerEvent &playerEvent)
 // Gestion des dépendences
 void Player::DependencyDestroyed(void *dependency)
 {
+	// Appel de la fonction de LivingBeing
+	LivingBeing::DependencyDestroyed(dependency);
+
 	// Voir avec l'héritage de LivingBeing, qui est appelé ?
 	std::cout << "Player::DependencyDestroyed()" << std::endl;
 

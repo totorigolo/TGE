@@ -5,103 +5,101 @@
 
 // Ctor & dtor
 LivingBeing::LivingBeing(PhysicManager *physicMgr, b2Vec2 position, std::shared_ptr<sf::Texture> texture, int layer)
-	: Entity(layer), mCollisionBody(nullptr), mTexture(texture), mPhysicMgr(physicMgr), mIsDead(true), mCanJump(false)
+	: Entity(layer), mBody(nullptr), mTexture(texture), mPhysicMgr(physicMgr), mIsDead(true), mCanJump(false),
+	mBodyIsCreated(false)
 {
+	assert(mPhysicMgr && "n'est pas valide.");
+
 	// Change le type
 	mType = EntityType::LivingBeing;
 
 	// Initialise le sprite
 	mSprite.setTexture(*mTexture);
 	mSprite.setOrigin(u2f(mTexture->getSize()) / 2.f);
-
-	/*////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	// Change la texture
-	mSprite->setTexture(*texture);
-
-	//* Crée le body * //
+	
 	// BodyDef
 	b2BodyDef bodyDef;
-	bodyDef.angle = posRot.z * RPD;
-	bodyDef.position = getVec2(posRot);
+	bodyDef.angle = 0.f;
+	bodyDef.position = position;
 	bodyDef.type = b2_dynamicBody;
-	mBody = mWorld->CreateBody(&bodyDef, this);
+	mBody = mPhysicMgr->CreateBody(&bodyDef);
+	
+	// Shape & Fixture du corps
+	float x = (texture->getSize().x / 2) * mPhysicMgr->GetMPP();
+	float y = (texture->getSize().y / 2) * mPhysicMgr->GetMPP();
+	b2PolygonShape shape1;
+	shape1.SetAsBox(x, y);
+	shape1.m_radius = 0.f;
+	b2FixtureDef fixtureDef1;
+	fixtureDef1.shape = &shape1;
+	mBody->CreateFixture(&fixtureDef1);
 
-	// Shape
-	mShape = new b2PolygonShape;
-	((b2PolygonShape*)mShape)->SetAsBox((texture->getSize().x / 2) * mWorld->GetMPP(), (texture->getSize().y / 2) * mWorld->GetMPP());
-	((b2PolygonShape*)mShape)->m_radius = 0.f;
+	// Shape & Fixture pour la détection du saut
+	b2PolygonShape shape2;
+	b2Vec2 center(0.f, - y - 0.02f);
+	shape2.SetAsBox(x - 0.015f, 0.02f, center, 0.f);
+	b2FixtureDef fixtureDef2;
+	fixtureDef2.shape = &shape2;
+	fixtureDef2.isSensor = true;
+	mBody->CreateFixture(&fixtureDef2);
 
-	// Fixture
-	b2FixtureDef fixtureDef;
-	fixtureDef.density = density;
-	fixtureDef.friction = friction;
-	fixtureDef.restitution = restitution;
-	fixtureDef.filter.groupIndex = static_cast<int16>(groupIndex);
-	fixtureDef.filter.categoryBits = categoryBits;
-	fixtureDef.filter.maskBits = maskBits;
-	fixtureDef.shape = mShape;
-	mBody->CreateFixture(&fixtureDef);
-
+	// Enregistrements
 	mBody->SetUserData(this);
-	mIsNull = false;
-		
-	// Enregistre le Body
-	mWorld->RegisterBody(this);
-
-	// Crée le Hull
-	mHull = new ConvexHull(this, false);
-	*/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	// Crée le body
-	//mCollisionBody = new DynamicBox(mWorld, getVec3(position), mTexture);
-	//mCollisionBody->GetBody()->SetFixedRotation(true);
-	//mCollisionBody->SetType(BodyType::Bullet);
-	//mCollisionBody->SetEntity(this);
-
-	// Crée le body pour le saut
-
+	mBodyIsCreated = true;
+	
 	// Tout est Ok
 	mIsAlive = true;
 	mIsDead = false;
 }
 LivingBeing::~LivingBeing()
 {
-	mIsAlive = false;
-
 	// Supprime le Body
-	if (mCollisionBody)
+	if (mBody)
 	{
-		mPhysicMgr->DestroyBody(mCollisionBody);
-		mCollisionBody = nullptr;
+		mPhysicMgr->DestroyBody(mBody);
+		mBody = nullptr;
 	}
+	mBodyIsCreated = false;
+	mIsAlive = false;
 }
 
 // Mise à jour
 void LivingBeing::Update()
 {
 	// Si on a un body valide
-	if (mCollisionBody)
+	if (mBody)
 	{
 		// On récupère sa position
-		//mSprite.setTexture(*mTexture);
-		mSprite.setPosition(b22sfVec(mCollisionBody->GetPosition(), mPhysicMgr->GetPPM()));
-	}
+		mSprite.setPosition(b22sfVec(mBody->GetPosition(), mPhysicMgr->GetPPM()));
 
-	//if (mAnimatedSprite.IsValid())
-	//	mAnimatedSprite.Update();
+		// Vérifie le saut
+		mCanJump = false;
+		for (b2ContactEdge* ce = mBody->GetContactList(); ce; ce = ce->next)
+		{
+			b2Contact* c = ce->contact;
+			
+			if (c->GetFixtureA()->IsSensor() || c->GetFixtureB()->IsSensor())
+			{
+				if (c->IsTouching())
+				{
+					mCanJump = true;
+					break;
+				}
+			}
+		}
+	}
 }
 
 // Pour le rendu
 void LivingBeing::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
-	if (mIsAlive)// && mAnimatedSprite.IsValid())
+	if (mIsAlive)
 	{
-		//target.draw(mAnimatedSprite, states);
 		target.draw(mSprite, states);
 	}
 }
 
-// ContactListener uniquement : indique si l'entité peut sauter
+// Définit si l'entité peut sauter
 void LivingBeing::CanJump(bool b)
 {
 	mCanJump = b;
@@ -126,11 +124,11 @@ void LivingBeing::DependencyDestroyed(void *dependency)
 // Accesseurs
 b2Body* LivingBeing::GetCollisionBody()
 {
-	return mCollisionBody;
+	return mBody;
 }
 const b2Body* LivingBeing::GetCollisionBody() const
 {
-	return mCollisionBody;
+	return mBody;
 }
 /*
 AnimatedSprite& LivingBeing::GetAnimatedSprite()

@@ -70,6 +70,9 @@ void Box2DGame::Run()
 			// Gestion de la physique
 			this->OnStepPhysics();
 
+			// Appel des mises à jour
+			this->OnUpdate();
+
 			// Rendu
 			this->OnRender();
 
@@ -92,6 +95,7 @@ bool Box2DGame::OnInit()
 
 	// Initialise le monde
 	mPhysicMgr.SetTimeStep(1.f / 60.f);
+	mPhysicMgr.SetDebugDrawTarget(&mRenderTexture);
 
 	// Charge un niveau
 	mLevel = new Level(&mPhysicMgr);
@@ -179,19 +183,19 @@ void Box2DGame::OnEvent()
 	// Déplacements du joueur
 	if (mActionMap.isActive("onJump"))
 	{
-		mLevel->GetPlayer()->GetEvent(PlayerEvent::Jump);
+		mLevel->GetPlayer()->GetEvent(Player::Jump);
 	}
 	if (mActionMap.isActive("onGoLeft"))
 	{
-		mLevel->GetPlayer()->GetEvent(PlayerEvent::Left);
+		mLevel->GetPlayer()->GetEvent(Player::Left);
 	}
 	if (mActionMap.isActive("onGoRight"))
 	{
-		mLevel->GetPlayer()->GetEvent(PlayerEvent::Right);
+		mLevel->GetPlayer()->GetEvent(Player::Right);
 	}
 	if (mActionMap.isActive("onCrawl"))
 	{
-		mLevel->GetPlayer()->GetEvent(PlayerEvent::Crounch);
+		mLevel->GetPlayer()->GetEvent(Player::Crounch);
 	}
 
 	// Gère le déplacement à la souris (clic molette)
@@ -588,11 +592,6 @@ void Box2DGame::OnEvent()
 /// Appelé pour la logique
 void Box2DGame::OnLogic()
 {
-	// Met à jour les Joints
-	mPhysicMgr.UpdateJoints();
-
-	// Met à jour le niveau
-	mLevel->Update();
 }
 
 /// Appelé pour la physique
@@ -644,6 +643,16 @@ void Box2DGame::OnStepPhysics()
 	}
 }
 
+/// Appelé pour les mises à jour
+void Box2DGame::OnUpdate()
+{
+	// Met à jour les Joints
+	mPhysicMgr.UpdateJoints();
+
+	// Met à jour le niveau
+	mLevel->Update();
+}
+
 /// Appelé pour le rendu
 void Box2DGame::OnRender()
 {
@@ -664,7 +673,7 @@ void Box2DGame::OnRender()
 	{
 		mRenderTexture.draw(*it->second);
 	}
-	
+
 #if 0
 	// Affichage du laser-spliter
 	if (false)
@@ -692,6 +701,9 @@ void Box2DGame::OnRender()
 	}
 #endif
 
+	// Affichage du debug
+	mPhysicMgr.DrawDebugData();
+	
 	// Finalise le rendu des objets
 	mRenderTexture.display();
 	mWindow.draw(sf::Sprite(mRenderTexture.getTexture()));
@@ -704,7 +716,7 @@ void Box2DGame::OnRender()
 		mWindow.draw(mLightManager);
 	}
 #endif
-
+	
 	// Affichage du tout
 	mWindow.display();
 }
