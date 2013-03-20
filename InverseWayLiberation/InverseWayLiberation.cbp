@@ -22,13 +22,7 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
-		<Unit filename="../.hg/cur-message.txt" />
-		<Unit filename="../.hg/last-message.txt" />
-		<Unit filename="../DropboxPortableAHK/.dbfiles/7za_license.txt" />
-		<Unit filename="../DropboxPortableAHK/readme_english.txt" />
-		<Unit filename="../DropboxPortableAHK/readme_german.txt" />
 		<Unit filename="../README.txt" />
-		<Unit filename="../Shadows/main.cpp" />
 		<Unit filename="src/App/App.cpp" />
 		<Unit filename="src/App/App.h" />
 		<Unit filename="src/App/States/DevGame.cpp" />
@@ -46,6 +40,8 @@
 		<Unit filename="src/Entities/Deco.h" />
 		<Unit filename="src/Entities/Entity.cpp" />
 		<Unit filename="src/Entities/Entity.h" />
+		<Unit filename="src/Entities/EntityFactory.cpp" />
+		<Unit filename="src/Entities/EntityFactory.h" />
 		<Unit filename="src/Entities/EntityManager.cpp" />
 		<Unit filename="src/Entities/EntityManager.h" />
 		<Unit filename="src/Entities/Grapnel.cpp" />
@@ -83,6 +79,8 @@
 		<Unit filename="src/Physics/Callback/PointCallback.h" />
 		<Unit filename="src/Physics/ContactListener.cpp" />
 		<Unit filename="src/Physics/ContactListener.h" />
+		<Unit filename="src/Physics/DebugDraw.cpp" />
+		<Unit filename="src/Physics/DebugDraw.h" />
 		<Unit filename="src/Physics/Joint.cpp" />
 		<Unit filename="src/Physics/Joint.h" />
 		<Unit filename="src/Physics/Joints/DistanceJoint.cpp" />

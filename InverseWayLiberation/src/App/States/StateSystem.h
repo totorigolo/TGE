@@ -20,6 +20,9 @@ public:
 	bool Run(App *app);
 
 private:
+	// Etat
 	bool mIsRunning;
+
+	// State actuel
 	State *mCurrentState;
 };

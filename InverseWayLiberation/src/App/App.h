@@ -24,7 +24,9 @@ protected:
 	void CleanUp();
 
 private:
+	// Système de States
 	StateSystem &mStateSystem;
 
+	// Fenêtre de rendu
 	sf::RenderWindow *mRenderWindow;
 };
