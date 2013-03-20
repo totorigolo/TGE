@@ -144,7 +144,7 @@ namespace EntityFactory
 	void CreateBox(PhysicManager *physicMgr, const b2Vec3 &posRot, std::string list[], int list_size, int layer)
 	{
 		// Crée le BasicBody / la Box
-		BasicBody *b = new BasicBody(physicMgr);
+		BasicBody *b = new BasicBody(physicMgr, layer);
 		b->CreateDynBox(posRot, mTextureMap[randomElement(list, list_size)]);
 
 		// L'enregistre et trie les Entities
@@ -156,7 +156,7 @@ namespace EntityFactory
 	void CreateCircle(PhysicManager *physicMgr, const b2Vec3 &posRot, std::string list[], int list_size, int layer)
 	{
 		// Crée le BasicBody / le cercle
-		BasicBody *b = new BasicBody(physicMgr);
+		BasicBody *b = new BasicBody(physicMgr, layer);
 		b->CreateDynCircle(posRot, mTextureMap[randomElement(list, list_size)]);
 
 		// L'enregistre et trie les Entities
@@ -168,7 +168,7 @@ namespace EntityFactory
 	void CreateLamp(PhysicManager *physicMgr, const b2Vec3 &posRot, int layer)
 	{
 		// Crée le BasicBody / le lampadaire
-		BasicBody *b = new BasicBody(physicMgr);
+		BasicBody *b = new BasicBody(physicMgr, layer);
 		b->CreateStaticBox(posRot, mTextureMap["lampadere"], 0.1f, 0.05f);
 		
 		// L'enregistre et trie les Entities
