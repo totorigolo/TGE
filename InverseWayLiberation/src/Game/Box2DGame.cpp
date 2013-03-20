@@ -104,6 +104,9 @@ bool Box2DGame::OnInit()
 	if (!mLevel->IsCharged())
 		return false;
 
+	// Charge les scripts
+	mScriptManager.LoadScriptFromFile("test", "test");
+
 	/* Fenêtrage */
 	// Crée la vue
 	mWindowView = mWindow.getDefaultView();
@@ -159,6 +162,8 @@ bool Box2DGame::OnInit()
 	mActionMap["onCrawl"] = thor::Action(sf::Keyboard::S, thor::Action::PressOnce);
 	mActionMap["onGoLeft"] = thor::Action(sf::Keyboard::Q, thor::Action::Hold);
 	mActionMap["onGoRight"] = thor::Action(sf::Keyboard::D, thor::Action::Hold);
+
+	mActionMap["onScriptHello"] = thor::Action(sf::Keyboard::H, thor::Action::ReleaseOnce);
 
 	return true;
 }
@@ -581,6 +586,12 @@ void Box2DGame::OnEvent()
 	if (mActionMap.isActive("closed"))
 	{
 		mQuit = true;
+	}
+
+	// Scripts
+	if (mActionMap.isActive("onScriptHello"))
+	{
+		mScriptManager.ExecuteScript("test", "void hello(const string &in)");
 	}
 }
 

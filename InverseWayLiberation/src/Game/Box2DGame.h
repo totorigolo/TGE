@@ -10,6 +10,7 @@
 #include "../Resources/ResourceManager.h"
 #include "../Physics/PhysicManager.h"
 #include "../Entities/Grapnel.h"
+#include "../Scripting/ScriptManager.h"
 
 class Body;
 class World;
@@ -59,6 +60,9 @@ protected:
 private:
 	// Etats du jeu
 	bool mPaused;
+
+	// Scripting
+	ScriptManager mScriptManager;
 
 	// Fenêtre
 	bool mQuit;
