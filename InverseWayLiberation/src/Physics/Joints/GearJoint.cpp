@@ -2,8 +2,8 @@
 #include "../../Tools/utils.h"
 
 //Ctor
-GearJoint::GearJoint(PhysicManager *physicMgr, b2Body *b1, b2Body *b2, int j1, int j2, float ratio, bool collideconnected, sf::Color const& color)
-	: Joint(physicMgr), mColor(color)
+GearJoint::GearJoint(PhysicManager *physicMgr, b2Body *b1, b2Body *b2, int j1, int j2, float ratio, bool collideconnected)
+	: Joint(physicMgr)
 {
 	assert(mPhysicMgr && "n'est pas valide.");
 	assert(b1 && "n'est pas valide.");
@@ -30,26 +30,11 @@ GearJoint::GearJoint(PhysicManager *physicMgr, b2Body *b1, b2Body *b2, int j1, i
 	
 	b1->SetAwake(true);
 	b2->SetAwake(true);
-
-	(*this)[0].color = mColor;
-	(*this)[1].color = mColor;
 }
 
 // Dtor
 GearJoint::~GearJoint(void)
 {
-}
-
-// Mets à jour le VertexArray
-void GearJoint::Update()
-{
-	Joint::Update();
-
-	if (mIsAlive)
-	{
-		(*this)[0].position = b22sfVec(mJoint->GetAnchorA(), mPhysicMgr->GetPPM());
-		(*this)[1].position = b22sfVec(mJoint->GetAnchorB(), mPhysicMgr->GetPPM());
-	}
 }
 
 // Accesseurs

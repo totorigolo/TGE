@@ -10,12 +10,9 @@ class DistanceJoint : public Joint
 public:
 	// Ctor & dtor
 	DistanceJoint(PhysicManager *physicMgr, b2Body *b1, b2Vec2 pt1, b2Body *b2, b2Vec2 pt2, float frequencyHz = 4.f, float damping = 0.5f
-														  , bool collideconnected = true , sf::Color const& color = sf::Color::Magenta);
+																										 , bool collideconnected = true);
 	virtual ~DistanceJoint(void);
 	
-	// Mets à jour le VertexArray
-	void Update();
-
 	// Accesseurs
 	float GetLength() const;
 	float GetFrequencyHz() const;
@@ -26,10 +23,4 @@ public:
 	void SetLength(float length);
 	void SetFrequencyHz(float frequencyHz);
 	void SetDampingRatio(float damping);
-	
-	sf::Color& GetColor() { return mColor; }
-	void SetColor(sf::Color const& color) { mColor = color; }
-	
-private:
-	sf::Color mColor;
 };

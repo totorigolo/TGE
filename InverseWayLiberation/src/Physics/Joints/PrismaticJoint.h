@@ -12,12 +12,9 @@ public:
 	PrismaticJoint(PhysicManager *physicMgr, b2Body *b1, b2Body *b2, b2Vec2 anchor, b2Vec2 axis
 											, bool enableLimit = false, float lowerTranslation = 0.f, float upperTranslation = 0.f
 											, bool enableMotor = false, float motorSpeed = 0.f, float maxMotorForce = 10.f
-											, bool collideconnected = false, sf::Color const& color = sf::Color::Green);
+											, bool collideconnected = false);
 	virtual ~PrismaticJoint(void);
 	
-	// Mets à jour le VertexArray
-	void Update();
-
 	// Accesseurs
 	float GetJointTranslation() const;
 	float GetJointSpeed() const;
@@ -37,10 +34,4 @@ public:
 	void SetMotorEnabled(bool enableMotor);
 	void SetMaxMotorForce(float maxMotorTorque);
 	void SetMotorSpeed(float motorSpeed);
-
-	sf::Color& GetColor() { return mColor; }
-	void SetColor(sf::Color const& color) { mColor = color; }
-	
-private:
-	sf::Color mColor;
 };

@@ -3,8 +3,8 @@
 // TODO: Classe de communication / erreur
 
 //Ctor
-DistanceJoint::DistanceJoint(PhysicManager *physicMgr, b2Body *b1, b2Vec2 pt1, b2Body *b2, b2Vec2 pt2, float frequencyHz, float damping, bool collideconnected, sf::Color const& color)
-	: Joint(physicMgr), mColor(color)
+DistanceJoint::DistanceJoint(PhysicManager *physicMgr, b2Body *b1, b2Vec2 pt1, b2Body *b2, b2Vec2 pt2, float frequencyHz, float damping, bool collideconnected)
+	: Joint(physicMgr)
 {
 	assert(mPhysicMgr && "n'est pas valide.");
 	assert(b1 && "n'est pas valide.");
@@ -29,27 +29,11 @@ DistanceJoint::DistanceJoint(PhysicManager *physicMgr, b2Body *b1, b2Vec2 pt1, b
 	
 	b1->SetAwake(true);
 	b2->SetAwake(true);
-
-	// Change les couleurs du joint
-	(*this)[0].color = mColor;
-	(*this)[1].color = mColor;
 }
 
 // Dtor
 DistanceJoint::~DistanceJoint(void)
 {
-}
-
-// Mets à jour le VertexArray
-void DistanceJoint::Update()
-{
-	Joint::Update();
-
-	if (mIsAlive)
-	{
-		(*this)[0].position = b22sfVec(mJoint->GetAnchorA(), mPhysicMgr->GetPPM());
-		(*this)[1].position = b22sfVec(mJoint->GetAnchorB(), mPhysicMgr->GetPPM());
-	}
 }
 
 // Accesseurs

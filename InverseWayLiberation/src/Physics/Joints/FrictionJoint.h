@@ -10,12 +10,9 @@ class FrictionJoint : public Joint
 public:
 	// Ctor & dtor
 	FrictionJoint(PhysicManager *physicMgr, b2Body *b1, b2Vec2 pt1, b2Body *b2, b2Vec2 p2, float maxForce = 0.f, float maxTorque = 0.f
-														, bool collideconnected = true , sf::Color const& color = sf::Color::Magenta);
+																									  , bool collideconnected = true);
 	virtual ~FrictionJoint(void);
 	
-	// Mets à jour le VertexArray
-	void Update();
-
 	// Accesseurs
 	float GetMaxForce() const;
 	float GetMaxTorque() const;
@@ -24,10 +21,4 @@ public:
 	
 	void SetMaxForce(float maxForce);
 	void SetMaxTorque(float maxTorque);
-	
-	sf::Color& GetColor() { return mColor; }
-	void SetColor(sf::Color const& color) { mColor = color; }
-	
-private:
-	sf::Color mColor;
 };

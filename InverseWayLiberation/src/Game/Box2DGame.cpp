@@ -105,7 +105,7 @@ bool Box2DGame::OnInit()
 		return false;
 
 	// Charge les scripts
-	mScriptManager.LoadScriptFromFile("test", "test");
+	mScriptManager.LoadScriptFromFile("test");
 
 	/* Fenêtrage */
 	// Crée la vue
@@ -163,7 +163,7 @@ bool Box2DGame::OnInit()
 	mActionMap["onGoLeft"] = thor::Action(sf::Keyboard::Q, thor::Action::Hold);
 	mActionMap["onGoRight"] = thor::Action(sf::Keyboard::D, thor::Action::Hold);
 
-	mActionMap["onScriptHello"] = thor::Action(sf::Keyboard::H, thor::Action::ReleaseOnce);
+	mActionMap["onScriptHello"] = thor::Action(sf::Keyboard::K, thor::Action::ReleaseOnce);
 
 	return true;
 }
@@ -674,12 +674,6 @@ void Box2DGame::OnRender()
 	// Affichage du Level
 	mRenderTexture.draw(*mLevel);
 	
-	// Affichage des joints (debug)
-	for (auto it = mPhysicMgr.GetJointList().begin(); it != mPhysicMgr.GetJointList().end(); ++it)
-	{
-		mRenderTexture.draw(*it->second);
-	}
-
 #if 0
 	// Affichage du laser-spliter
 	if (false)

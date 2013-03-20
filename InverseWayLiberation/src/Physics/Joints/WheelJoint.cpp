@@ -4,8 +4,8 @@
 //Ctor
 WheelJoint::WheelJoint(PhysicManager *physicMgr, b2Body *car, b2Body *wheel, b2Vec2 pWheel, b2Vec2 axis, float frequencyHz, float damping
 																					   , bool enableMotor, float motorSpeed, float maxMotorTorque
-																					   , bool collideconnected, sf::Color const& color)
-	: Joint(physicMgr), mColor(color)
+																					   , bool collideconnected)
+	: Joint(physicMgr)
 {
 	assert(mPhysicMgr && "n'est pas valide.");
 	assert(car && "n'est pas valide.");
@@ -28,26 +28,11 @@ WheelJoint::WheelJoint(PhysicManager *physicMgr, b2Body *car, b2Body *wheel, b2V
 	
 	car->SetAwake(true);
 	wheel->SetAwake(true);
-
-	(*this)[0].color = mColor;
-	(*this)[1].color = mColor;
 }
 
 // Dtor
 WheelJoint::~WheelJoint(void)
 {
-}
-
-// Mets à jour le VertexArray
-void WheelJoint::Update()
-{
-	Joint::Update();
-
-	if (mIsAlive)
-	{
-		(*this)[0].position = b22sfVec(mJoint->GetAnchorA(), mPhysicMgr->GetPPM());
-		(*this)[1].position = b22sfVec(mJoint->GetAnchorB(), mPhysicMgr->GetPPM());
-	}
 }
 
 // Accesseurs

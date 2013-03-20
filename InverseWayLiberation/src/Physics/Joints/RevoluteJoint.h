@@ -12,12 +12,9 @@ public:
 	RevoluteJoint(PhysicManager *physicMgr, b2Body *b1, b2Body *b2, b2Vec2 anchor
 																, bool enableLimit = false, float lowerAngle = 0.f, float upperAngle = 0.f
 																, bool enableMotor = false, float motorSpeed = 0.f, float maxMotorTorque = 10.f
-																, bool collideconnected = false, sf::Color const& color = sf::Color::Green);
+																, bool collideconnected = false);
 	virtual ~RevoluteJoint(void);
 	
-	// Mets à jour le VertexArray
-	void Update();
-
 	// Accesseurs
 	float GetJointAngle() const;
 	float GetJointSpeed() const;
@@ -37,10 +34,4 @@ public:
 	void SetMotorEnabled(bool enableMotor);
 	void SetMaxMotorTorque(float maxMotorTorque);
 	void SetMotorSpeed(float motorSpeed);
-
-	sf::Color& GetColor() { return mColor; }
-	void SetColor(sf::Color const& color) { mColor = color; }
-	
-private:
-	sf::Color mColor;
 };

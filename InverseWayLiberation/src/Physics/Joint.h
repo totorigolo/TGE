@@ -1,12 +1,11 @@
 #pragma once
-#include <SFML/Graphics.hpp>
 #include <Box2D/Box2D.h>
 #include <Thor/Resources.hpp>
 #include "PhysicManager.h"
 #include "../Entities/Entity.h"
 
 class PhysicManager;
-class Joint : public sf::VertexArray
+class Joint
 {
 	friend class PhysicManager;
 

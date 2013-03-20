@@ -2,8 +2,8 @@
 #include "../../Tools/utils.h"
 
 //Ctor
-MouseJoint::MouseJoint(PhysicManager *physicMgr, b2Body *body, b2Body *ground, b2Vec2 target, float maxForce, float frequencyHz, float damping, sf::Color const& color)
-	: Joint(physicMgr), mColor(color)
+MouseJoint::MouseJoint(PhysicManager *physicMgr, b2Body *body, b2Body *ground, b2Vec2 target, float maxForce, float frequencyHz, float damping)
+	: Joint(physicMgr)
 {
 	assert(mPhysicMgr && "n'est pas valide.");
 	assert(body && "n'est pas valide.");
@@ -26,9 +26,6 @@ MouseJoint::MouseJoint(PhysicManager *physicMgr, b2Body *body, b2Body *ground, b
 	body->SetBullet(true);
 
 	mIsAlive = true;
-
-	(*this)[0].color = mColor;
-	(*this)[1].color = mColor;
 }
 
 // Dtor
@@ -36,18 +33,6 @@ MouseJoint::~MouseJoint(void)
 {
 	if (GetBodyB())
 		GetBodyB()->SetBullet(false);
-}
-
-// Mets à jour le VertexArray
-void MouseJoint::Update()
-{
-	Joint::Update();
-
-	if (mIsAlive)
-	{
-		(*this)[0].position = b22sfVec(((b2MouseJoint*) mJoint)->GetTarget(), mPhysicMgr->GetPPM());
-		(*this)[1].position = b22sfVec(mJoint->GetAnchorB(), mPhysicMgr->GetPPM());
-	}
 }
 
 // Accesseurs

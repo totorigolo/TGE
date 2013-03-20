@@ -11,12 +11,9 @@ public:
 	// Ctor & dtor												Anchor relative to wheel
 	WheelJoint(PhysicManager *physicMgr, b2Body *car, b2Body *wheel, b2Vec2 pWheel, b2Vec2 axis, float frequencyHz = 2.f, float damping = 0.7f
 																	, bool enableMotor = false, float motorSpeed = 0.f, float maxMotorTorque = 10.f
-																	, bool collideconnected = false, sf::Color const& color = sf::Color::Magenta);
+																	, bool collideconnected = false);
 	virtual ~WheelJoint(void);
 	
-	// Mets à jour le VertexArray
-	void Update();
-
 	// Accesseurs
 	float GetJointSpeed() const;
 	bool IsMotorEnabled() const;
@@ -33,10 +30,4 @@ public:
 	void SetMotorSpeed(float motorSpeed);
 	void SetFrequencyHz(float frequencyHz);
 	void SetDampingRatio(float damping);
-	
-	sf::Color& GetColor() { return mColor; }
-	void SetColor(sf::Color const& color) { mColor = color; }
-	
-private:
-	sf::Color mColor;
 };

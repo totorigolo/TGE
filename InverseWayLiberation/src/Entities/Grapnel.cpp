@@ -92,7 +92,7 @@ void Grapnel::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
 	if (mPhysicMgr->JointExists(mJointID))
 	{
-		target.draw(*mJoint);
+		//target.draw(*mJoint);
 		target.draw(mSpriteHook, states);
 	}
 }

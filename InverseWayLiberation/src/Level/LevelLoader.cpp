@@ -413,7 +413,6 @@ bool LevelLoader::ProcessJoints()
 	b2Body *b1 = nullptr, *b2 = nullptr;
 	b2Vec2 pt1, pt2, anchor;
 	bool colision = true;
-	sf::Color color = sf::Color::Green;
 
 	// Pour tous les joints
 	tinyxml2::XMLElement *joint = joints.FirstChildElement().ToElement();
@@ -426,7 +425,6 @@ bool LevelLoader::ProcessJoints()
 		IDb1 = 0U, IDb2 = 0U;
 		b1 = nullptr, b2 = nullptr;
 		colision = true;
-		color = sf::Color::Green;
 
 		// Récupère l'ID
 		if (joint->Attribute("id"))
@@ -451,7 +449,6 @@ bool LevelLoader::ProcessJoints()
 		if (joint->Attribute("pt2")) pt2 = Parser::string2b2Vec2(joint->Attribute("pt2"));
 		if (joint->Attribute("anchor")) anchor = Parser::string2b2Vec2(joint->Attribute("anchor"));
 		joint->QueryBoolAttribute("colision", &colision);
-		if (joint->Attribute("color")) color = Parser::string2color(joint->Attribute("color"));
 		
 		// Récupère les bodies
 		if (mBodyIDMap.find(IDb1) == mBodyIDMap.end())
@@ -502,7 +499,7 @@ bool LevelLoader::ProcessJoints()
 			// Crée le joint
 			int j1ID = ((Joint*) j1->GetUserData())->GetID();
 			int j2ID = ((Joint*) j2->GetUserData())->GetID();
-			j = new GearJoint(mLevel->mPhysicMgr, b1, b2, j1ID, j2ID, ratio, colision, color);
+			j = new GearJoint(mLevel->mPhysicMgr, b1, b2, j1ID, j2ID, ratio, colision);
 		}
 		else if (type == "distance")
 		{
@@ -513,7 +510,7 @@ bool LevelLoader::ProcessJoints()
 			joint->QueryFloatAttribute("damping", &damping);
 
 			// Crée le joint
-			j = new DistanceJoint(mLevel->mPhysicMgr, b1, pt1, b2, pt2, frequency, damping, colision, color);
+			j = new DistanceJoint(mLevel->mPhysicMgr, b1, pt1, b2, pt2, frequency, damping, colision);
 		}
 		else if (type == "friction")
 		{
@@ -524,7 +521,7 @@ bool LevelLoader::ProcessJoints()
 			joint->QueryFloatAttribute("maxTorque", &maxTorque);
 
 			// Crée le joint
-			j = new FrictionJoint(mLevel->mPhysicMgr, b1, pt1, b2, pt2, maxForce, maxTorque, colision, color);
+			j = new FrictionJoint(mLevel->mPhysicMgr, b1, pt1, b2, pt2, maxForce, maxTorque, colision);
 		}
 		else if (type == "rope")
 		{
@@ -534,7 +531,7 @@ bool LevelLoader::ProcessJoints()
 			joint->QueryFloatAttribute("maxlength", &maxlength);
 
 			// Crée le joint
-			j = new RopeJoint(mLevel->mPhysicMgr, b1, pt1, b2, pt2, maxlength, colision, color);
+			j = new RopeJoint(mLevel->mPhysicMgr, b1, pt1, b2, pt2, maxlength, colision);
 		}
 		else if (type == "weld")
 		{
@@ -545,7 +542,7 @@ bool LevelLoader::ProcessJoints()
 			joint->QueryFloatAttribute("damping", &damping);
 
 			// Crée le joint
-			j = new WeldJoint(mLevel->mPhysicMgr, b1, b2, anchor, frequency, damping, colision, color);
+			j = new WeldJoint(mLevel->mPhysicMgr, b1, b2, anchor, frequency, damping, colision);
 		}
 		else if (type == "pulley")
 		{
@@ -558,7 +555,7 @@ bool LevelLoader::ProcessJoints()
 			if (joint->Attribute("groundpt2")) groundpt2 = Parser::string2b2Vec2(joint->Attribute("groundpt2"));
 
 			// Crée le joint
-			j = new PulleyJoint(mLevel->mPhysicMgr, b1, pt1, b2, pt2, groundpt1, groundpt2, ratio, colision, color);
+			j = new PulleyJoint(mLevel->mPhysicMgr, b1, pt1, b2, pt2, groundpt1, groundpt2, ratio, colision);
 		}
 		else if (type == "prismatic")
 		{
@@ -578,7 +575,7 @@ bool LevelLoader::ProcessJoints()
 			joint->QueryFloatAttribute("maxForce", &maxForce);
 
 			// Crée le joint
-			j = new PrismaticJoint(mLevel->mPhysicMgr, b1, b2, anchor, axis, enableLimits, lower, upper, enableMotor, speed, maxForce, colision, color);
+			j = new PrismaticJoint(mLevel->mPhysicMgr, b1, b2, anchor, axis, enableLimits, lower, upper, enableMotor, speed, maxForce, colision);
 		}
 		else if (type == "revolute")
 		{
@@ -596,7 +593,7 @@ bool LevelLoader::ProcessJoints()
 			joint->QueryFloatAttribute("maxTorque", &maxTorque);
 
 			// Crée le joint
-			j = new RevoluteJoint(mLevel->mPhysicMgr, b1, b2, anchor, enableLimits, lower, upper, enableMotor, speed, maxTorque, colision, color);
+			j = new RevoluteJoint(mLevel->mPhysicMgr, b1, b2, anchor, enableLimits, lower, upper, enableMotor, speed, maxTorque, colision);
 		}
 		else if (type == "wheel")
 		{
@@ -614,7 +611,7 @@ bool LevelLoader::ProcessJoints()
 			joint->QueryFloatAttribute("maxTorque", &maxTorque);
 
 			// Crée le joint
-			j = new WheelJoint(mLevel->mPhysicMgr, b1, b2, anchor, axis, frequency, damping, enableMotor, speed, maxTorque, colision, color);
+			j = new WheelJoint(mLevel->mPhysicMgr, b1, b2, anchor, axis, frequency, damping, enableMotor, speed, maxTorque, colision);
 		}
 
 		// Enregiste l'ID

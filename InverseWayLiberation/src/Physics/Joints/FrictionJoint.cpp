@@ -2,8 +2,8 @@
 #include "../../Tools/utils.h"
 
 //Ctor
-FrictionJoint::FrictionJoint(PhysicManager *physicMgr, b2Body *b1, b2Vec2 pt1, b2Body *b2, b2Vec2 p2, float maxForce, float maxTorque, bool collideconnected, sf::Color const& color)
-	: Joint(physicMgr), mColor(color)
+FrictionJoint::FrictionJoint(PhysicManager *physicMgr, b2Body *b1, b2Vec2 pt1, b2Body *b2, b2Vec2 p2, float maxForce, float maxTorque, bool collideconnected)
+	: Joint(physicMgr)
 {
 	assert(mPhysicMgr && "n'est pas valide.");
 	assert(b1 && "n'est pas valide.");
@@ -26,26 +26,11 @@ FrictionJoint::FrictionJoint(PhysicManager *physicMgr, b2Body *b1, b2Vec2 pt1, b
 	
 	b1->SetAwake(true);
 	b2->SetAwake(true);
-
-	(*this)[0].color = mColor;
-	(*this)[1].color = mColor;
 }
 
 // Dtor
 FrictionJoint::~FrictionJoint(void)
 {
-}
-
-// Mets à jour le VertexArray
-void FrictionJoint::Update()
-{
-	Joint::Update();
-
-	if (mIsAlive)
-	{
-		(*this)[0].position = b22sfVec(mJoint->GetAnchorA(), mPhysicMgr->GetPPM());
-		(*this)[1].position = b22sfVec(mJoint->GetAnchorB(), mPhysicMgr->GetPPM());
-	}
 }
 
 // Accesseurs

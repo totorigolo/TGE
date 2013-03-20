@@ -10,12 +10,9 @@ class WeldJoint : public Joint
 public:
 	// Ctor & dtor										   Anchor relative to bodyA
 	WeldJoint(PhysicManager *physicMgr, b2Body *b1, b2Body *b2, b2Vec2 anchor, float frequencyHz = 4.f, float damping = 0.5f
-											  , bool collideconnected = false , sf::Color const& color = sf::Color::Magenta);
+											  , bool collideconnected = false);
 	virtual ~WeldJoint(void);
 	
-	// Mets à jour le VertexArray
-	void Update();
-
 	// Accesseurs
 	float GetReferenceAngle() const;
 	float GetFrequencyHz() const;
@@ -25,10 +22,4 @@ public:
 
 	void SetFrequencyHz(float frequencyHz);
 	void SetDampingRatio(float damping);
-	
-	sf::Color& GetColor() { return mColor; }
-	void SetColor(sf::Color const& color) { mColor = color; }
-	
-private:
-	sf::Color mColor;
 };
