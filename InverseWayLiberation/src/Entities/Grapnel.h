@@ -20,9 +20,6 @@ public:
 	// Mise à jour
 	virtual void Update();
 
-	// Gestion des dépendences
-	virtual void DependencyDestroyed(void *dependency);
-
 	// Accesseurs
 	Joint* GetJoint();
 	const Joint* GetJoint() const;

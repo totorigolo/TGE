@@ -99,28 +99,6 @@ void LivingBeing::draw(sf::RenderTarget& target, sf::RenderStates states) const
 	}
 }
 
-// Définit si l'entité peut sauter
-void LivingBeing::CanJump(bool b)
-{
-	mCanJump = b;
-}
-
-// Gestion des dépendences
-void LivingBeing::DependencyDestroyed(void *dependency)
-{
-	std::cout << "LivingBeing::DependencyDestroyed" << std::endl;
-
-	/*/ Vérifie que le Body ne soit pas supprimé
-	if (dependency == mCollisionBody)
-	{
-		mIsAlive = false;
-		mCollisionBody = nullptr;
-		EntityManager::GetInstance().DestroyEntity(this, false);
-		delete this;
-	}*/
-	//mTexture; // TODO: Gestion des textures plus poussée
-}
-
 // Accesseurs
 b2Body* LivingBeing::GetCollisionBody()
 {

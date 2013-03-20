@@ -36,9 +36,6 @@ public:
 	Entity* GetOwner() { return mOwner; }
 	const Entity* GetOwner() const { return mOwner; }
 
-	// Gestion des dépendences
-	virtual void DependencyDestroyed(void *dependency) = 0;
-
 protected:
 	// Etat
 	bool mIsAlive;

@@ -67,22 +67,3 @@ void Player::GetEvent(const MovementEvent &playerEvent)
 		}
 	}
 }
-
-// Gestion des dépendences
-void Player::DependencyDestroyed(void *dependency)
-{
-	// Appel de la fonction de LivingBeing
-	LivingBeing::DependencyDestroyed(dependency);
-
-	// Voir avec l'héritage de LivingBeing, qui est appelé ?
-	std::cout << "Player::DependencyDestroyed()" << std::endl;
-
-	/*/ Vérifie que le Body ne soit pas supprimé
-	if (dependency == mCollisionBody)
-	{
-		mIsAlive = false;
-		mCollisionBody = nullptr;
-		EntityManager::GetInstance().DestroyEntity(this, false);
-		delete this;
-	}*/
-}

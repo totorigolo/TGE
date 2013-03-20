@@ -33,7 +33,6 @@ bool Grapnel::Create(std::shared_ptr<sf::Texture> textureHook, b2Body *bodyA, b2
 	// Création du Joint
 	mJoint = new DistanceJoint(mPhysicMgr, bodyA, ptA, bodyB, ptB);
 	mJointID = mJoint->GetID();
-	mJoint->SetOwner(this);
 	mIsAlive = true;
 	mClock.restart();
 	mIsRetracting = true;
@@ -96,17 +95,6 @@ void Grapnel::draw(sf::RenderTarget& target, sf::RenderStates states) const
 		target.draw(*mJoint);
 		target.draw(mSpriteHook, states);
 	}
-}
-
-// Gestion des dépendences
-void Grapnel::DependencyDestroyed(void *dependency)
-{
-	// Vérifie si le joint n'est pas en train d'être supprimé
-	if (dependency == mJoint)
-	{
-		Destroy();
-	}
-	//this->mSpriteHook; // TODO: Gestion des textures plus poussée
 }
 
 // Accesseurs

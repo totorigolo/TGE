@@ -175,22 +175,6 @@ void BasicBody::draw(sf::RenderTarget& target, sf::RenderStates states) const
 		target.draw(mSprite, states);
 }
 
-// Gestion des dépendences
-void BasicBody::DependencyDestroyed(void *dependency)
-{
-	std::cout << "BasicBody::DependencyDestroyed" << std::endl;
-	/*/ Vérifie que le b2Body ne soit pas supprimé
-	if (dependency == mBody)
-	{
-		mIsAlive = false;
-		mBody = nullptr;
-		mBasicBodyType = BasicBodyType::Null;
-		mBodyIsCreated = false;
-		EntityManager::GetInstance().DestroyEntity(this, false);
-		delete this;
-	*/
-}
-
 /* Accesseurs */
 // Type de BasicBody
 BasicBody::Type BasicBody::GetBasicBodyType() const

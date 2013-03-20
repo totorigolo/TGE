@@ -44,9 +44,6 @@ public:
 	// Destruction du body
 	void Destroy();
 
-	// Gestion des dépendences
-	virtual void DependencyDestroyed(void *dependency);
-
 	/* Accesseurs */
 	// Type de BasicBody
 	Type GetBasicBodyType() const;

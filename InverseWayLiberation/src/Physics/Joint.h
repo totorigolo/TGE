@@ -46,10 +46,6 @@ public:
 	PhysicManager* GetPhysicManager() { return mPhysicMgr; }
 	PhysicManager const* GetPhysicManager() const { return mPhysicMgr; }
 
-	void SetOwner(Entity *e) { mOwner = e; }
-	Entity* GetOwner() { return mOwner; }
-	const Entity* GetOwner() const { return mOwner; }
-
 	int GetID() const { return mID; }
 
 	b2Joint* GetJoint() { return mJoint; }
@@ -65,9 +61,6 @@ public:
 	float GetReactionTorque(float inv_dt) const;
 
 protected:
-	// Propriétaire
-	Entity *mOwner;
-
 	// Etat
 	bool mIsAlive;
 	bool mToDestroy;

@@ -18,12 +18,6 @@ public:
 	// Pour le rendu
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
-	// Définit si l'entité peut sauter
-	void CanJump(bool b);
-
-	// Gestion des dépendences
-	virtual void DependencyDestroyed(void *dependency);
-
 	// Accesseurs
 	b2Body* GetCollisionBody();
 	const b2Body* GetCollisionBody() const;

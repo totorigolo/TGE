@@ -16,9 +16,6 @@ public:
 	// Pour le rendu
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
-	// Gestion des dépendences
-	virtual void DependencyDestroyed(void *dependency);
-
 	// Accesseurs
 	bool IsItMySprite() const;
 	const sf::Sprite* GetSprite() const;

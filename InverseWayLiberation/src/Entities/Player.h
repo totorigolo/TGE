@@ -25,8 +25,5 @@ public:
 	// Gestion des évènements
 	void GetEvent(const MovementEvent &playerEvent);
 
-	// Gestion des dépendences
-	virtual void DependencyDestroyed(void *dependency);
-
 private:
 };

@@ -8,8 +8,6 @@ Entity::Entity(int layer)
 }
 Entity::~Entity()
 {
-	if (mOwner)
-		mOwner->DependencyDestroyed(this);
 }
 
 // Mise à jour

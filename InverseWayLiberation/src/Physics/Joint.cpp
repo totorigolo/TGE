@@ -4,7 +4,7 @@
 //Ctor
 Joint::Joint(PhysicManager *physicMgr)
 	: mPhysicMgr(physicMgr), mJoint(nullptr), mID(-1),
-	sf::VertexArray(sf::LinesStrip, 2U), mToDestroy(false), mIsAlive(false), mOwner(nullptr),
+	sf::VertexArray(sf::LinesStrip, 2U), mToDestroy(false), mIsAlive(false),
 	mIsBreakableMaxForce(false), mIsBreakableMaxTorque(false), mMaxForceType(Null), mMaxForce(0.f), mMaxTorque(0.f)
 {
 	assert(mPhysicMgr && "n'est pas valide.");
@@ -15,13 +15,6 @@ Joint::~Joint(void)
 {
 	// N'existe plus
 	mIsAlive = false;
-
-	// Avertit le propriétaire
-	if (mOwner)
-	{
-		mOwner->DependencyDestroyed(this);
-		mOwner = nullptr;
-	}
 
 	// Supprime les joints dépendants
 	this->DestroyAllLinkedJoints();

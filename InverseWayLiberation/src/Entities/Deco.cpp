@@ -38,12 +38,6 @@ void Deco::draw(sf::RenderTarget& target, sf::RenderStates states) const
 	target.draw(*mSprite, states);
 }
 
-// Gestion des dépendences
-void Deco::DependencyDestroyed(void *dependency)
-{
-	// TODO: Gestion des textures poussée
-}
-
 // Accesseurs
 bool Deco::IsItMySprite() const
 {

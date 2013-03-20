@@ -24,9 +24,6 @@ public:
 	// Accesseurs
 	bool IsValid() const { return mIsValid; }
 
-	// Gestion des dépendences
-	virtual void DependencyDestroyed(void *dependency);
-
 private:
 	// Etat
 	bool mIsValid;

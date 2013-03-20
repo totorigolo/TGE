@@ -130,7 +130,6 @@ Ragdoll::Ragdoll(PhysicManager *physicMgr, b2Vec2 position, int layer)
 	for (auto it = mJoints.begin(); it != mJoints.end(); ++it)
 	{
 		Joint *j = mPhysicMgr->GetJoint(*it);
-		j->SetOwner(this);
 
 		// Définit la force des joint
 		j->SetBreakableByForce(true);
@@ -176,33 +175,4 @@ void Ragdoll::draw(sf::RenderTarget& target, sf::RenderStates states) const
 	{
 		target.draw(*it->second, states);
 	}
-}
-
-// Gestion des dépendences
-void Ragdoll::DependencyDestroyed(void *dependency)
-{
-	// Recherche quel body est supprimé
-	for (auto it = mBodies.begin(); it != mBodies.end(); ++it)
-	{
-		// On a trouvé
-		if (it->second == dependency)
-		{
-			mBodies.erase(it);
-			return;
-		}
-	}
-
-	// Sinon regarde si c'est un joint qui a été supprimé
-	for (auto it = mJoints.begin(); it != mJoints.end(); ++it)
-	{
-		// On a trouvé
-		if (!mPhysicMgr->JointExists(*it))
-		{
-			mJoints.erase(it);
-			return;
-		}
-	}
-
-	// TODO: Better Warning
-	assert(false && "On aurait du trouver qqchose...");
 }
