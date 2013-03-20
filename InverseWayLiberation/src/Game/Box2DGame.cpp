@@ -591,7 +591,7 @@ void Box2DGame::OnEvent()
 	// Scripts
 	if (mActionMap.isActive("onScriptHello"))
 	{
-		mScriptManager.ExecuteScript("test", "void hello(const string &in)");
+		mScriptManager.ExecuteScript("test", "void hello()");
 	}
 }
 

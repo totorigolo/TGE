@@ -3,7 +3,6 @@
 #include "add_on/scriptbuilder/scriptbuilder.h"
 #include <iostream>
 #include <cassert>
-#include <ctime>
 
 // Fonction callback pour les messages d'AngelScript
 void MessageCallback(const asSMessageInfo *msg, void *param)
@@ -14,18 +13,6 @@ void MessageCallback(const asSMessageInfo *msg, void *param)
 	else if (msg->type == asMSGTYPE_INFORMATION)
 		type = "INFO";
 	printf("%s (%d, %d) : %s : %s\n", msg->section, msg->row, msg->col, type, msg->message);
-}
-
-// Fonction callback qui gère le timeout
-void LineCallback(asIScriptContext *ctx, time_t *timeOut)
-{
-	// Arrête le script si le timeout est dépassé
-	if(*timeOut < time(nullptr))
-		ctx->Abort();
-
-	// Possible de faire Suspend(), pour le reprendre avec Execute()
-	//ctx->Suspend();
-	//ctx->Execute();
 }
 
 void print(const std::string &in)
@@ -66,14 +53,14 @@ ScriptManager::~ScriptManager()
 }
 
 // Chargement des scripts
-bool ScriptManager::LoadScriptFromFile(const std::string &module, const std::string &script)
+bool ScriptManager::LoadScriptFromFile(const std::string &script)
 {
 	// Pas de multithread ici
 	std::lock_guard<std::mutex> lock(mGlobalMutex);
 
 	// Crée un ScriptBuilder
 	CScriptBuilder builder;
-	mR = builder.StartNewModule(mScriptEngine, module.c_str()); 
+	mR = builder.StartNewModule(mScriptEngine, script.c_str());
 	if (mR < 0)
 	{
 		// En général, ici, c'est qu'il n'y a plus de RAM
@@ -105,47 +92,56 @@ bool ScriptManager::LoadScriptFromFile(const std::string &module, const std::str
 }
 
 // Exécute le script
-bool ScriptManager::ExecuteScript(const std::string &module, const std::string &fonction)
+bool ScriptManager::ExecuteScript(const std::string &script, const std::string &function)
+{
+	// Récupère la fonction
+	asIScriptFunction *func = GetFunction(script, function);
+	if (!func)
+		return false;
+
+	// Crée et prépare le contexte
+	asIScriptContext *ctx = PrepareContextFromPool(func);
+	if (!ctx)
+		return false;
+
+	// Exécute le contexte
+	ExecuteContext(ctx);
+	
+	// Recyclage du contexte
+	ReturnContextToPool(ctx);
+
+	// Tout s'est bien passé
+	return true;
+}
+
+// Gestion des fonctions
+asIScriptFunction* ScriptManager::GetFunction(const std::string &script, const std::string &function)
 {
 	// Cherche le module
-	asIScriptModule *mod = mScriptEngine->GetModule(module.c_str());
+	asIScriptModule *mod = mScriptEngine->GetModule(script.c_str());
 	if (!mod)
 	{
 		// Le module n'a pas été trouvé
 		mIOmutex.lock();
-		std::cout << "Le module \"" << module << "\" n'a pas \x82""t\x82 trouv\x82""." << std::endl;
+		std::cout << "Le module \"" << script << "\" n'a pas \x82""t\x82 trouv\x82""." << std::endl;
 		mIOmutex.unlock();
-		return false;
+		return nullptr;
 	}
 
 	// Cherche la fonction d'entrée du module
-	asIScriptFunction *func = mod->GetFunctionByDecl(fonction.c_str());
+	asIScriptFunction *func = mod->GetFunctionByDecl(function.c_str());
 	if (!func)
 	{
 		// La fonction n'a pas été trouvée
 		mIOmutex.lock();
-		std::cout << "Le module \"" << module << "\" doit contenir la fonction \"" << fonction << "\" (r = " << mR << ")." << std::endl;
+		std::cout << "Le module \"" << script << "\" doit contenir la fonction \"" << function << "\" (r = " << mR << ")." << std::endl;
 		mIOmutex.unlock();
-		return false;
+		return nullptr;
 	}
-
-	// Crée et prépare le contexte
-	asIScriptContext *ctx = mScriptEngine->CreateContext();
-
-	// Défini un timeout
-	time_t timeOut;
-	mR = ctx->SetLineCallback(asFUNCTION(LineCallback), &timeOut, asCALL_CDECL);
-	
-	// Définie la fonction d'entrée du contexte d'exécution
-	ctx->Prepare(func);
-
-	//!++ Ahhhhh !
-	std::string str("world");
-	ctx->SetArgObject(0, &str);
-	
-	// On donne une seconde max au script
-	timeOut = time(nullptr) + 1;
-
+	return func;
+}
+int ScriptManager::ExecuteContext(asIScriptContext *ctx)
+{
 	// Exécute le contexte
 	mR = ctx->Execute();
 	if (mR != asEXECUTION_FINISHED)
@@ -182,10 +178,47 @@ bool ScriptManager::ExecuteScript(const std::string &module, const std::string &
 			mIOmutex.unlock();
 		}
 	}
-	
-	// Suppression du contexte
-	ctx->Release();
+	return mR;
+}
 
-	// Tout s'est bien passé
-	return true;
+// Gestion du pool de contextes
+asIScriptContext *ScriptManager::PrepareContextFromPool(asIScriptFunction *func)
+{
+	asIScriptContext *ctx = nullptr;
+	if (mContexts.size() < 0)
+	{
+		ctx = mContexts.back();
+		mContexts.pop_back();
+	}
+	else
+		ctx = mScriptEngine->CreateContext();
+
+	if (!ctx)
+	{
+		// Le contexte n'a pas pu être créé
+		mIOmutex.lock();
+		std::cout << "Le contexte n'a pas pu être créé." << std::endl;
+		mIOmutex.unlock();
+		return nullptr;
+	}
+
+	mR = ctx->Prepare(func);
+	if (mR < 0)
+	{
+		// Le contexte n'a pas pu être préparé
+		mIOmutex.lock();
+		std::cout << "Le contexte n'a pas pu être préparé. (r = " << mR << ")." << std::endl;
+		mIOmutex.unlock();
+		return nullptr;
+	}
+
+	return ctx;
+}
+
+void ScriptManager::ReturnContextToPool(asIScriptContext *ctx)
+{
+	mContexts.push_back(ctx);
+
+	// Nettoie le contexte
+	ctx->Unprepare();
 }

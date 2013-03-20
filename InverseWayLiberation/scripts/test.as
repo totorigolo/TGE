@@ -1,6 +1,4 @@
-void hello(const string &in str)
+void hello()
 {
-	print("Hello, ");
-	print(str);
-	println(" !");
+	println("Hello, world !");
 }
