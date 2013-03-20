@@ -2,10 +2,13 @@
 
 //Ctor
 PhysicManager::PhysicManager(b2Vec2 const& gravity, float ppm)
-	: mWorld(gravity), mPPM(ppm), mTimeStep(1.f / 60.f), mLastJointID(0)
+	: mWorld(gravity), mPPM(ppm), mTimeStep(1.f / 60.f), mLastJointID(0), mDebugDraw(this)
 {
 	// Défini le ContactListener du monde
 	mWorld.SetContactListener(&mContactListener);
+
+	// Défini le DebugDraw
+	mWorld.SetDebugDraw(&mDebugDraw);
 }
 
 // Dtor
@@ -227,6 +230,16 @@ b2World* PhysicManager::GetWorld()
 const b2World* PhysicManager::GetWorld() const
 {
 	return &mWorld;
+}
+// DebugDraw
+void PhysicManager::DrawDebugData()
+{
+	mWorld.DrawDebugData();
+	mDebugDraw.DrawContacts();
+}
+void PhysicManager::SetDebugDrawTarget(sf::RenderTarget *target)
+{
+	mDebugDraw.SetRenderTarget(target);
 }
 // La liste des Bodies
 int PhysicManager::GetBodyCount()

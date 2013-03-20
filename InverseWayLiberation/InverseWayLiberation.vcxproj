@@ -25,6 +25,7 @@
     <ClCompile Include="src\Entities\Player.cpp" />
     <ClCompile Include="src\Entities\Ragdoll.cpp" />
     <ClCompile Include="src\Game\Box2DGame.cpp" />
+    <ClCompile Include="src\Physics\DebugDraw.cpp" />
     <ClCompile Include="src\Physics\Joint.cpp" />
     <ClCompile Include="src\Physics\PhysicManager.cpp" />
     <ClCompile Include="src\Resources\AnimatedSprite.cpp" />
@@ -69,6 +70,7 @@
     <ClInclude Include="src\Physics\Callback\AABBCallback.h" />
     <ClInclude Include="src\Physics\Callback\FirstBodyRaycastCallback.h" />
     <ClInclude Include="src\Physics\Callback\PointCallback.h" />
+    <ClInclude Include="src\Physics\DebugDraw.h" />
     <ClInclude Include="src\Physics\Joint.h" />
     <ClInclude Include="src\Physics\PhysicManager.h" />
     <ClInclude Include="src\resource.h" />

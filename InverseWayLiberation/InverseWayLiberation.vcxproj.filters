@@ -211,6 +211,9 @@
     <ClCompile Include="src\Entities\Grapnel.cpp">
       <Filter>Fichiers sources\Entities</Filter>
     </ClCompile>
+    <ClCompile Include="src\Physics\DebugDraw.cpp">
+      <Filter>Fichiers sources\Physics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Physics\Joints\DistanceJoint.h">
@@ -350,6 +353,9 @@
     </ClInclude>
     <ClInclude Include="src\Entities\Grapnel.h">
       <Filter>Fichiers d%27en-tête\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Physics\DebugDraw.h">
+      <Filter>Fichiers d%27en-tête\Physics</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -1,5 +1,6 @@
 #pragma once
 #include "ContactListener.h"
+#include "DebugDraw.h"
 #include "Joint.h"
 #include "../Entities/Entity.h"
 #include <Box2D/Box2D.h>
@@ -7,6 +8,7 @@
 #include <map>
 
 class Joint;
+class DebugDraw;
 class PhysicManager
 {
 public:
@@ -60,6 +62,10 @@ public:
 	b2World* GetWorld();
 	const b2World* GetWorld() const;
 
+	// DebugDraw
+	void DrawDebugData();
+	void SetDebugDrawTarget(sf::RenderTarget *target);
+
 	// La liste des Bodies
 	int GetBodyCount();
 	b2Body* GetBodyList();
@@ -83,6 +89,9 @@ protected:
 
 	// Monde Box2D
 	b2World mWorld;
+
+	// Affichage debug
+	DebugDraw mDebugDraw;
 
 	// Contact Listener
 	ContactListener mContactListener;
