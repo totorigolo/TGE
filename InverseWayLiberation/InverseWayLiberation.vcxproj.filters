@@ -184,9 +184,6 @@
     <ClCompile Include="src\Entities\EntityManager.cpp">
       <Filter>Fichiers sources\Entities</Filter>
     </ClCompile>
-    <ClCompile Include="src\Entities\Ragdoll.cpp">
-      <Filter>Fichiers sources\Entities</Filter>
-    </ClCompile>
     <ClCompile Include="src\Entities\LivingBeing.cpp">
       <Filter>Fichiers sources\Entities</Filter>
     </ClCompile>
@@ -213,6 +210,9 @@
     </ClCompile>
     <ClCompile Include="src\Physics\DebugDraw.cpp">
       <Filter>Fichiers sources\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Entities\EntityFactory.cpp">
+      <Filter>Fichiers sources\Entities</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -318,9 +318,6 @@
     <ClInclude Include="src\Entities\EntityManager.h">
       <Filter>Fichiers d%27en-tête\Entities</Filter>
     </ClInclude>
-    <ClInclude Include="src\Entities\Ragdoll.h">
-      <Filter>Fichiers d%27en-tête\Entities</Filter>
-    </ClInclude>
     <ClInclude Include="src\Entities\LivingBeing.h">
       <Filter>Fichiers d%27en-tête\Entities</Filter>
     </ClInclude>
@@ -356,6 +353,9 @@
     </ClInclude>
     <ClInclude Include="src\Physics\DebugDraw.h">
       <Filter>Fichiers d%27en-tête\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Entities\EntityFactory.h">
+      <Filter>Fichiers d%27en-tête\Entities</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -19,11 +19,11 @@
     <ClCompile Include="src\Entities\BasicBody.cpp" />
     <ClCompile Include="src\Entities\Deco.cpp" />
     <ClCompile Include="src\Entities\Entity.cpp" />
+    <ClCompile Include="src\Entities\EntityFactory.cpp" />
     <ClCompile Include="src\Entities\EntityManager.cpp" />
     <ClCompile Include="src\Entities\Grapnel.cpp" />
     <ClCompile Include="src\Entities\LivingBeing.cpp" />
     <ClCompile Include="src\Entities\Player.cpp" />
-    <ClCompile Include="src\Entities\Ragdoll.cpp" />
     <ClCompile Include="src\Game\Box2DGame.cpp" />
     <ClCompile Include="src\Physics\DebugDraw.cpp" />
     <ClCompile Include="src\Physics\Joint.cpp" />
@@ -59,11 +59,11 @@
     <ClInclude Include="src\Entities\BasicBody.h" />
     <ClInclude Include="src\Entities\Deco.h" />
     <ClInclude Include="src\Entities\Entity.h" />
+    <ClInclude Include="src\Entities\EntityFactory.h" />
     <ClInclude Include="src\Entities\EntityManager.h" />
     <ClInclude Include="src\Entities\Grapnel.h" />
     <ClInclude Include="src\Entities\LivingBeing.h" />
     <ClInclude Include="src\Entities\Player.h" />
-    <ClInclude Include="src\Entities\Ragdoll.h" />
     <ClInclude Include="src\Game\Box2DGame.h" />
     <ClInclude Include="src\Level\Level.h" />
     <ClInclude Include="src\Level\LevelLoader.h" />

@@ -9,7 +9,6 @@ enum class EntityType
 	RawBody,
 	LivingBeing,
 	Player,
-	Ragdoll,
 	BasicBody,
 	Grapnel
 };

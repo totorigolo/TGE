@@ -2,6 +2,7 @@
 #include "../Level/LevelLoader.h"
 #include "../Entities/BasicBody.h"
 #include "../Entities/Player.h"
+#include "../Entities/EntityFactory.h"
 #include "../Physics/Joints/DistanceJoint.h"
 #include "../Physics/Callback/PointCallback.h"
 #include "../Physics/Callback/FirstBodyRaycastCallback.h"
@@ -127,6 +128,7 @@ bool Box2DGame::OnInit()
 	mActionCallbackSystem.clearAllConnections();
 
 	// Crée les actions
+	// TODO: Callbacks et InputManager
 	mWindow.setKeyRepeatEnabled(false);
 	mActionMap["closed"] = thor::Action(sf::Keyboard::Escape, thor::Action::ReleaseOnce) || thor::Action(sf::Event::Closed);
 	//mActionCallbackSystem.connect("closed", std::bind(&sf::RenderWindow::close, &mWindow));
@@ -146,6 +148,7 @@ bool Box2DGame::OnInit()
 	mActionMap["onMoveObject"] = thor::Action(sf::Mouse::Right, thor::Action::Hold);
 	mActionMap["onCreateBox"] = thor::Action(sf::Mouse::Left, thor::Action::Hold);
 	mActionMap["onCreateCircle"] = thor::Action(sf::Keyboard::C, thor::Action::Hold);
+	mActionMap["onCreateRagdoll"] = thor::Action(sf::Keyboard::T, thor::Action::ReleaseOnce);
 	mActionMap["onCreateLamp"] = thor::Action(sf::Keyboard::L, thor::Action::ReleaseOnce);
 	mActionMap["onPin"] = thor::Action(sf::Keyboard::P, thor::Action::PressOnce);
 	mActionMap["onSplice"] = thor::Action(sf::Keyboard::S, thor::Action::Hold);
@@ -183,19 +186,23 @@ void Box2DGame::OnEvent()
 	// Déplacements du joueur
 	if (mActionMap.isActive("onJump"))
 	{
-		mLevel->GetPlayer()->GetEvent(Player::Jump);
+		if (mLevel->GetPlayer())
+			mLevel->GetPlayer()->GetEvent(Player::Jump);
 	}
 	if (mActionMap.isActive("onGoLeft"))
 	{
-		mLevel->GetPlayer()->GetEvent(Player::Left);
+		if (mLevel->GetPlayer())
+			mLevel->GetPlayer()->GetEvent(Player::Left);
 	}
 	if (mActionMap.isActive("onGoRight"))
 	{
-		mLevel->GetPlayer()->GetEvent(Player::Right);
+		if (mLevel->GetPlayer())
+			mLevel->GetPlayer()->GetEvent(Player::Right);
 	}
 	if (mActionMap.isActive("onCrawl"))
 	{
-		mLevel->GetPlayer()->GetEvent(Player::Crounch);
+		if (mLevel->GetPlayer())
+			mLevel->GetPlayer()->GetEvent(Player::Crounch);
 	}
 
 	// Gère le déplacement à la souris (clic molette)
@@ -209,32 +216,20 @@ void Box2DGame::OnEvent()
 	if (mActionMap.isActive("onCreateBox"))
 	{
 		std::string list[] = {"box", "box2", "caisse", "way", "tonneau"};
-		BasicBody *b = new BasicBody(&mPhysicMgr);
-		b->CreateDynBox(getVec3(mMp), mTextureMap[randomElement(list, 5)]);
-
-		EntityManager::GetInstance().RegisterEntity(b);
-		EntityManager::GetInstance().SortByLayer();
+		EntityFactory::CreateBox(&mPhysicMgr, getVec3(mMp), list, 5);
 	}
 	if (mActionMap.isActive("onCreateCircle"))
 	{
 		std::string list[] = {"ball", "circle"};
-		BasicBody *b = new BasicBody(&mPhysicMgr);
-		b->CreateDynCircle(getVec3(mMp), mTextureMap[randomElement(list, 2)], 1.f, 0.2f, 0.5f);
-
-		EntityManager::GetInstance().RegisterEntity(b);
-		EntityManager::GetInstance().SortByLayer();
+		EntityFactory::CreateCircle(&mPhysicMgr, getVec3(mMp), list, 2);
+	}
+	if (mActionMap.isActive("onCreateRagdoll"))
+	{
+		EntityFactory::CreateRagdoll(&mPhysicMgr, mMp);
 	}
 	if (mActionMap.isActive("onCreateLamp"))
 	{
-		BasicBody *b = new BasicBody(&mPhysicMgr);
-		b->CreateStaticBox(getVec3(mMp), mTextureMap["lampadere"], 0.1f, 0.05f);
-
-		EntityManager::GetInstance().RegisterEntity(b);
-		EntityManager::GetInstance().SortByLayer();
-
-		sf::Vector2f pos = mCurrentMousePosRV;
-		pos.y -= 1.2f * mPhysicMgr.GetPPM();
-		//mLightManager.AddLight(new PointLight(pos, 100.2f, true, true));
+		EntityFactory::CreateLamp(&mPhysicMgr, getVec3(mMp), -1);
 	}
 	
 	// Déplacements des objets

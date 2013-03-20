@@ -16,11 +16,11 @@
 #include "../Physics/Joints/WeldJoint.h"
 #include "../Physics/Joints/WheelJoint.h"
 
+#include "../Entities/EntityFactory.h"
 #include "../Entities/Entity.h"
 #include "../Entities/Deco.h"
 #include "../Entities/LivingBeing.h"
 #include "../Entities/Player.h"
-#include "../Entities/Ragdoll.h"
 #include "../Entities/BasicBody.h"
 
 //#include "../Lights/PointLight.h"
@@ -103,6 +103,8 @@ bool LevelLoader::Process()
 		Dialog::Error("Une erreur grave est survenue lors du chargement du niveau.\nLumières non valides (" + mPath + ").");
 		return false;
 	}*/
+
+	// TODO: Vérifier si Player existe
 
 	return true;
 }
@@ -277,9 +279,14 @@ bool LevelLoader::ProcessBasicBodies()
 			bb = new BasicBody(mLevel->mPhysicMgr, layer);
 			bb->CreateDynCircle(posRot, mLevel->mTextureMap[texture], density, friction, restitution);
 		}
+		else
+		{
+			Dialog::Error("BasicBody type inconnu ("+ type +") !");
+		}
 
 		// Crée l'Entity correspondante
-		mLevel->mEntityManager.RegisterEntity(bb);
+		if (bb)
+			mLevel->mEntityManager.RegisterEntity(bb);
 
 		// Propriétés de collision
 		body->QueryBoolAttribute("osp", &osp);
@@ -350,7 +357,7 @@ bool LevelLoader::ProcessEntities()
 		// Crée l'Entity
 		if (type == "ragdoll")
 		{
-			e = new Ragdoll(mLevel->mPhysicMgr, position, layer);
+			EntityFactory::CreateRagdoll(mLevel->mPhysicMgr, position, layer);
 		}
 		else if (type == "livingbeing")
 		{

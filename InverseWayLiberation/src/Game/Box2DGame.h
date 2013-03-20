@@ -13,7 +13,6 @@
 
 class Body;
 class World;
-class Ragdoll;
 class MouseJoint;
 class Box2DGame
 {
