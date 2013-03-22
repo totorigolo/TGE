@@ -29,21 +29,6 @@
     <ClCompile Include="src\Physics\Joint.cpp" />
     <ClCompile Include="src\Physics\PhysicManager.cpp" />
     <ClCompile Include="src\Resources\AnimatedSprite.cpp" />
-    <ClCompile Include="src\Scripting\add_on\contextmgr\contextmgr.cpp" />
-    <ClCompile Include="src\Scripting\add_on\debugger\debugger.cpp" />
-    <ClCompile Include="src\Scripting\add_on\scriptany\scriptany.cpp" />
-    <ClCompile Include="src\Scripting\add_on\scriptarray\scriptarray.cpp" />
-    <ClCompile Include="src\Scripting\add_on\scriptbuilder\scriptbuilder.cpp" />
-    <ClCompile Include="src\Scripting\add_on\scriptdictionary\scriptdictionary.cpp" />
-    <ClCompile Include="src\Scripting\add_on\scriptfile\scriptfile.cpp" />
-    <ClCompile Include="src\Scripting\add_on\scripthandle\scripthandle.cpp" />
-    <ClCompile Include="src\Scripting\add_on\scripthelper\scripthelper.cpp" />
-    <ClCompile Include="src\Scripting\add_on\scriptmath\scriptmath.cpp" />
-    <ClCompile Include="src\Scripting\add_on\scriptmath\scriptmathcomplex.cpp" />
-    <ClCompile Include="src\Scripting\add_on\scriptstdstring\scriptstdstring.cpp" />
-    <ClCompile Include="src\Scripting\add_on\scriptstdstring\scriptstdstring_utils.cpp" />
-    <ClCompile Include="src\Scripting\add_on\serializer\serializer.cpp" />
-    <ClCompile Include="src\Scripting\ScriptManager.cpp" />
     <ClCompile Include="src\Sounds\SoundManager.cpp" />
     <ClCompile Include="src\Tools\Dialog.cpp" />
     <ClCompile Include="src\Level\Level.cpp" />
@@ -91,20 +76,6 @@
     <ClInclude Include="src\resource.h" />
     <ClInclude Include="src\Resources\AnimatedSprite.h" />
     <ClInclude Include="src\Resources\ResourceManager.h" />
-    <ClInclude Include="src\Scripting\add_on\contextmgr\contextmgr.h" />
-    <ClInclude Include="src\Scripting\add_on\debugger\debugger.h" />
-    <ClInclude Include="src\Scripting\add_on\scriptany\scriptany.h" />
-    <ClInclude Include="src\Scripting\add_on\scriptarray\scriptarray.h" />
-    <ClInclude Include="src\Scripting\add_on\scriptbuilder\scriptbuilder.h" />
-    <ClInclude Include="src\Scripting\add_on\scriptdictionary\scriptdictionary.h" />
-    <ClInclude Include="src\Scripting\add_on\scriptfile\scriptfile.h" />
-    <ClInclude Include="src\Scripting\add_on\scripthandle\scripthandle.h" />
-    <ClInclude Include="src\Scripting\add_on\scripthelper\scripthelper.h" />
-    <ClInclude Include="src\Scripting\add_on\scriptmath\scriptmath.h" />
-    <ClInclude Include="src\Scripting\add_on\scriptmath\scriptmathcomplex.h" />
-    <ClInclude Include="src\Scripting\add_on\scriptstdstring\scriptstdstring.h" />
-    <ClInclude Include="src\Scripting\add_on\serializer\serializer.h" />
-    <ClInclude Include="src\Scripting\ScriptManager.h" />
     <ClInclude Include="src\Sounds\SoundManager.h" />
     <ClInclude Include="src\Tools\Loader.h" />
     <ClInclude Include="src\Tools\NonCopyable.h" />
@@ -134,7 +105,6 @@
     <None Include="lvls\1.xvl">
       <SubType>Designer</SubType>
     </None>
-    <None Include="scripts\test.as" />
     <None Include="src\_TODO.txt" />
   </ItemGroup>
   <ItemGroup>

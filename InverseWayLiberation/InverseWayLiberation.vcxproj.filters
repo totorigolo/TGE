@@ -88,21 +88,6 @@
     <Filter Include="Fichiers d%27en-tête\Physics\Callback">
       <UniqueIdentifier>{2906bf8d-863c-4dde-8e5b-491fc2734796}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Fichiers d%27en-tête\Scripting">
-      <UniqueIdentifier>{082f8453-9052-42cd-b637-d16d5a9b265d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Fichiers sources\Scripting">
-      <UniqueIdentifier>{1b2b1565-a20b-44dc-b18e-2dd8cbec84c6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Fichiers d%27en-tête\Scripting\add_on">
-      <UniqueIdentifier>{980d8feb-fa60-4d85-afe7-47205db0c7e0}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Fichiers sources\Scripting\add_on">
-      <UniqueIdentifier>{11190006-13bb-4246-b93d-92a39e5e03de}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Fichiers de ressources\Scripts">
-      <UniqueIdentifier>{b5d43ca6-738d-495b-90df-82045243db53}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\_TODO.txt" />
@@ -115,9 +100,6 @@
     </None>
     <None Include="anim\player.xim">
       <Filter>Fichiers de ressources\Anims</Filter>
-    </None>
-    <None Include="scripts\test.as">
-      <Filter>Fichiers de ressources\Scripts</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -231,51 +213,6 @@
     </ClCompile>
     <ClCompile Include="src\Entities\EntityFactory.cpp">
       <Filter>Fichiers sources\Entities</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Scripting\add_on\contextmgr\contextmgr.cpp">
-      <Filter>Fichiers sources\Scripting\add_on</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Scripting\add_on\debugger\debugger.cpp">
-      <Filter>Fichiers sources\Scripting\add_on</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Scripting\add_on\scriptany\scriptany.cpp">
-      <Filter>Fichiers sources\Scripting\add_on</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Scripting\add_on\scriptarray\scriptarray.cpp">
-      <Filter>Fichiers sources\Scripting\add_on</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Scripting\add_on\scriptbuilder\scriptbuilder.cpp">
-      <Filter>Fichiers sources\Scripting\add_on</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Scripting\add_on\scriptdictionary\scriptdictionary.cpp">
-      <Filter>Fichiers sources\Scripting\add_on</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Scripting\add_on\scriptfile\scriptfile.cpp">
-      <Filter>Fichiers sources\Scripting\add_on</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Scripting\add_on\scripthandle\scripthandle.cpp">
-      <Filter>Fichiers sources\Scripting\add_on</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Scripting\add_on\scripthelper\scripthelper.cpp">
-      <Filter>Fichiers sources\Scripting\add_on</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Scripting\add_on\scriptmath\scriptmath.cpp">
-      <Filter>Fichiers sources\Scripting\add_on</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Scripting\add_on\scriptmath\scriptmathcomplex.cpp">
-      <Filter>Fichiers sources\Scripting\add_on</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Scripting\add_on\scriptstdstring\scriptstdstring.cpp">
-      <Filter>Fichiers sources\Scripting\add_on</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Scripting\add_on\scriptstdstring\scriptstdstring_utils.cpp">
-      <Filter>Fichiers sources\Scripting\add_on</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Scripting\add_on\serializer\serializer.cpp">
-      <Filter>Fichiers sources\Scripting\add_on</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Scripting\ScriptManager.cpp">
-      <Filter>Fichiers sources\Scripting</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -419,48 +356,6 @@
     </ClInclude>
     <ClInclude Include="src\Entities\EntityFactory.h">
       <Filter>Fichiers d%27en-tête\Entities</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Scripting\add_on\contextmgr\contextmgr.h">
-      <Filter>Fichiers d%27en-tête\Scripting\add_on</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Scripting\add_on\debugger\debugger.h">
-      <Filter>Fichiers d%27en-tête\Scripting\add_on</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Scripting\add_on\scriptany\scriptany.h">
-      <Filter>Fichiers d%27en-tête\Scripting\add_on</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Scripting\add_on\scriptarray\scriptarray.h">
-      <Filter>Fichiers d%27en-tête\Scripting\add_on</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Scripting\add_on\scriptbuilder\scriptbuilder.h">
-      <Filter>Fichiers d%27en-tête\Scripting\add_on</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Scripting\add_on\scriptdictionary\scriptdictionary.h">
-      <Filter>Fichiers d%27en-tête\Scripting\add_on</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Scripting\add_on\scriptfile\scriptfile.h">
-      <Filter>Fichiers d%27en-tête\Scripting\add_on</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Scripting\add_on\scripthandle\scripthandle.h">
-      <Filter>Fichiers d%27en-tête\Scripting\add_on</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Scripting\add_on\scripthelper\scripthelper.h">
-      <Filter>Fichiers d%27en-tête\Scripting\add_on</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Scripting\add_on\scriptmath\scriptmath.h">
-      <Filter>Fichiers d%27en-tête\Scripting\add_on</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Scripting\add_on\scriptmath\scriptmathcomplex.h">
-      <Filter>Fichiers d%27en-tête\Scripting\add_on</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Scripting\add_on\scriptstdstring\scriptstdstring.h">
-      <Filter>Fichiers d%27en-tête\Scripting\add_on</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Scripting\add_on\serializer\serializer.h">
-      <Filter>Fichiers d%27en-tête\Scripting\add_on</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Scripting\ScriptManager.h">
-      <Filter>Fichiers d%27en-tête\Scripting</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

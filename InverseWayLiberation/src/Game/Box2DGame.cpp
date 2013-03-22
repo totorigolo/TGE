@@ -104,9 +104,6 @@ bool Box2DGame::OnInit()
 	if (!mLevel->IsCharged())
 		return false;
 
-	// Charge les scripts
-	mScriptManager.LoadScriptFromFile("test");
-
 	/* Fenêtrage */
 	// Crée la vue
 	mWindowView = mWindow.getDefaultView();
@@ -591,7 +588,6 @@ void Box2DGame::OnEvent()
 	// Scripts
 	if (mActionMap.isActive("onScriptHello"))
 	{
-		mScriptManager.ExecuteScript("test", "void hello()");
 	}
 }
 
