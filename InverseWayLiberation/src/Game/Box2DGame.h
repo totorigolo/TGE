@@ -11,8 +11,6 @@
 #include "../Physics/PhysicManager.h"
 #include "../Entities/Grapnel.h"
 
-class Body;
-class World;
 class MouseJoint;
 class Box2DGame
 {
