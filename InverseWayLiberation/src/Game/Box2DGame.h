@@ -1,5 +1,4 @@
 #pragma once
-#include <angelscript.h>
 #include <Thor/Resources.hpp>
 #include <SFML/Graphics.hpp>
 #include <Thor/Events.hpp>
