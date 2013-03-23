@@ -186,7 +186,7 @@ void Box2DGame::OnEvent()
 				if (staticBody) // Si il y en a un
 				{
 					b2Body* body = callback.GetFixture()->GetBody();
-					MouseJoint *j = new MouseJoint(&mPhysicMgr, body, staticBody, mMp, 10000000.f * body->GetMass());
+					j = new MouseJoint(&mPhysicMgr, body, staticBody, mMp, 10000000.f * body->GetMass());
 					mMouseJointID = j->GetID();
 				}
 			}
@@ -202,7 +202,8 @@ void Box2DGame::OnEvent()
 	if (mInputManager.KeyReleased(sf::Keyboard::R))
 	{
 		// Supprime les pointeurs
-		mGrapnel->Destroy();
+		EntityManager::GetInstance().DestroyEntity(mGrapnel);
+		mGrapnel = nullptr;
 		if (mPhysicMgr.JointExists(mMouseJointID))
 			mPhysicMgr.DestroyJoint(mMouseJointID);
 		mMouseJointID = -1;
@@ -263,7 +264,6 @@ void Box2DGame::OnEvent()
 				// Enregistre le body appuyé
 				mHookedSBody = callback.GetFixture()->GetBody();
 				mHookedSAnchor = mHookedSBody->GetLocalPoint(mMp);
-				//mHookedSAnchor = b2MulT(b2Rot(mHookedSBody->GetAngle()), mMp - mHookedSBody->GetPosition());
 			}
 		}
 	}

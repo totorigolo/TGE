@@ -284,29 +284,32 @@ bool LevelLoader::ProcessBasicBodies()
 			Dialog::Error("BasicBody type inconnu ("+ type +") !");
 		}
 
-		// Crée l'Entity correspondante
+		// Si le BasicBody a été créé
 		if (bb)
+		{
+			// Crée l'Entity correspondante
 			mLevel->mEntityManager.RegisterEntity(bb);
 
-		// Propriétés de collision
-		body->QueryBoolAttribute("osp", &osp);
-		body->QueryBoolAttribute("bullet", &bullet);
+			// Propriétés de collision
+			body->QueryBoolAttribute("osp", &osp);
+			body->QueryBoolAttribute("bullet", &bullet);
 
-		// Applique les propriétés
-		if (osp && bullet)
-			Dialog::Error("Impossible d'avoir osp et bullet en même temps !");
-		else if (osp)
-			bb->SetCollisionType(BasicBody::CollisionType::OneSidedPlatform);
-		else if (bullet)
-			bb->SetCollisionType(BasicBody::CollisionType::Bullet);
+			// Applique les propriétés
+			if (osp && bullet)
+				Dialog::Error("Impossible d'avoir osp et bullet en même temps !");
+			else if (osp)
+				bb->SetCollisionType(BasicBody::CollisionType::OneSidedPlatform);
+			else if (bullet)
+				bb->SetCollisionType(BasicBody::CollisionType::Bullet);
 
-		// Enregiste l'ID
-		if (bb != nullptr && hasID)
-		{
-			// On regarde si l'ID n'est pas déjà utilisé
-			if (mBodyIDMap.find(id) != mBodyIDMap.end())
-				Dialog::Error("L'ID " + Parser::int2string(id) + " n'est pas unique !", false);
-			mBodyIDMap[id] = bb->GetBody();
+			// Enregiste l'ID
+			if (hasID)
+			{
+				// On regarde si l'ID n'est pas déjà utilisé
+				if (mBodyIDMap.find(id) != mBodyIDMap.end())
+					Dialog::Error("L'ID " + Parser::int2string(id) + " n'est pas unique !", false);
+				mBodyIDMap[id] = bb->GetBody();
+			}
 		}
 
 		// On récupère le prochain body
