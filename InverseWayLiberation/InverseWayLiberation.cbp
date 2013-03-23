@@ -50,12 +50,10 @@
 		<Unit filename="src/Entities/LivingBeing.h" />
 		<Unit filename="src/Entities/Player.cpp" />
 		<Unit filename="src/Entities/Player.h" />
-		<Unit filename="src/Entities/Ragdoll.cpp" />
-		<Unit filename="src/Entities/Ragdoll.h" />
-		<Unit filename="src/Entities/RawBody.cpp" />
-		<Unit filename="src/Entities/RawBody.h" />
 		<Unit filename="src/Game/Box2DGame.cpp" />
 		<Unit filename="src/Game/Box2DGame.h" />
+		<Unit filename="src/Game/InputManager.cpp" />
+		<Unit filename="src/Game/InputManager.h" />
 		<Unit filename="src/Level/Level.cpp" />
 		<Unit filename="src/Level/Level.h" />
 		<Unit filename="src/Level/LevelLoader.cpp" />
@@ -125,7 +123,6 @@
 		<Unit filename="src/Tools/utils.h" />
 		<Unit filename="src/_TODO.txt" />
 		<Unit filename="src/main.cpp" />
-		<Unit filename="src/resource.h" />
 		<Extensions>
 			<code_completion />
 			<envvars />
