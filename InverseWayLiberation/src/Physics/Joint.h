@@ -49,6 +49,7 @@ public:
 
 	b2Joint* GetJoint() { return mJoint; }
 	b2Joint const* GetJoint() const { return mJoint; }
+	b2JointType GetJointType() const { return mJoint->GetType(); }
 	
 	b2Body* GetBodyA();
 	b2Body* GetBodyB();
