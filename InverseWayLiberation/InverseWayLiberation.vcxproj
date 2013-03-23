@@ -153,7 +153,7 @@
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>tinyxml2-d.lib;Box2D-d.lib;sfml-system-d.lib;sfml-window-d.lib;sfml-graphics-d.lib;thor-d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>luabindd.lib;lua51.lib;tinyxml2-d.lib;Box2D-d.lib;sfml-system-d.lib;sfml-window-d.lib;sfml-graphics-d.lib;thor-d.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <Bscmake>
       <PreserveSbr>true</PreserveSbr>
@@ -172,7 +172,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>tinyxml2.lib;Box2D.lib;sfml-system.lib;sfml-window.lib;sfml-graphics.lib;thor.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>luabind.lib;lua51.lib;tinyxml2.lib;Box2D.lib;sfml-system.lib;sfml-window.lib;sfml-graphics.lib;thor.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
