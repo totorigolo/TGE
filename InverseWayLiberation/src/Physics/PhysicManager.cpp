@@ -160,39 +160,6 @@ const Joint* PhysicManager::GetJoint(int jointID) const
 	return mJointList.at(jointID);
 }
 
-// Suppression retardé (utile par ex dans le ContactListener)
-/*void PhysicManager::ScheduleDestroyBody(b2Body *body)
-{
-	mScheduledBodiesToDestroy.push_back(body);
-}
-void PhysicManager::ScheduleDestroyb2Joint(b2Joint *joint)
-{
-	mScheduledJointsToDestroy.push_back(joint);
-}
-bool PhysicManager::DestroyScheduled()
-{
-	// Si le monde est en train de simuler (dans un Step()), on annule
-	if (mWorld.IsLocked())
-		return false;
-
-	// Supprime les bodies
-	for (unsigned int i = 0U; i < mScheduledBodiesToDestroy.size(); ++i)
-	{
-		DestroyBody(mScheduledBodiesToDestroy[i]);
-	}
-	mScheduledBodiesToDestroy.clear();
-	
-	// Supprime les joints
-	for (unsigned int i = 0U; i < mScheduledJointsToDestroy.size(); ++i)
-	{
-		Destroyb2Joint(mScheduledJointsToDestroy[i]);
-	}
-	mScheduledJointsToDestroy.clear();
-
-	// On a réussi
-	return true;
-}*/
-
 // Simulation
 void PhysicManager::SetTimeStep(float timeStep)
 {
@@ -208,7 +175,6 @@ void PhysicManager::Step(int velocityIt, int positionIt)
 {
 	// TODO: Fixer le Timestep
 	mWorld.Step(mTimeStep, velocityIt, positionIt);
-	//DestroyScheduled();
 }
 
 // Gestion des propriétés du monde

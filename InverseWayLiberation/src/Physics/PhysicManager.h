@@ -37,12 +37,6 @@ public:
 	Joint* GetJoint(int jointID);
 	const Joint* GetJoint(int jointID) const;
 
-	// Suppression retardée (utile par ex dans le ContactListener)
-	// Ils sont supprimés à la fin de Step() ou avec DestroyScheduled()
-	/*void ScheduleDestroyBody(b2Body *body);
-	void ScheduleDestroyb2Joint(b2Joint *joint);
-	bool DestroyScheduled();*/
-
 	// Simulation
 	void SetTimeStep(float timeStep);
 	float GetTimeStep() const;
