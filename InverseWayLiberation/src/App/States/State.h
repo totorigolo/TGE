@@ -1,5 +1,6 @@
 #pragma once
 #include "../../Tools/Singleton.h"
+#include "../../Tools/NonCopyable.h"
 #include "../App.h"
 
 // State prédéfini.
@@ -7,7 +8,7 @@
 #define Exit_State nullptr
 
 class App;
-class State
+class State : public NonCopyable
 {
 public:
 	// Ctor & Dtor

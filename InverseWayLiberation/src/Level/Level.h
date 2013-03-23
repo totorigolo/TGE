@@ -8,13 +8,14 @@
 #include <list>
 #include "LevelLoader.h"
 #include "../Tools/utils.h"
+#include "../Tools/NonCopyable.h"
 #include "../Entities/Player.h"
 #include "../Physics/PhysicManager.h"
 #include "../Entities/EntityManager.h"
 #include "../Resources/ResourceManager.h"
 
 class LevelLoader;
-class Level : public sf::Drawable
+class Level : public sf::Drawable, public NonCopyable
 {
 	friend class LevelLoader;
 

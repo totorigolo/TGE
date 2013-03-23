@@ -5,6 +5,7 @@
 #include <list>
 #include <map>
 #include "../Level/Level.h"
+#include "../Tools/NonCopyable.h"
 #include "../Physics/Joints/MouseJoint.h"
 #include "../Resources/ResourceManager.h"
 #include "../Physics/PhysicManager.h"
@@ -12,7 +13,7 @@
 #include "InputManager.h"
 
 class MouseJoint;
-class Box2DGame
+class Box2DGame : public NonCopyable
 {
 public:
 	// Ctor & dtor

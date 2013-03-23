@@ -1,4 +1,5 @@
 #pragma once
+#include "../Tools/NonCopyable.h"
 #include <SFML/Graphics.hpp>
 #include <list>
 
@@ -13,7 +14,7 @@ enum class EntityType
 	Grapnel
 };
 
-class Entity : public sf::Drawable
+class Entity : public sf::Drawable, public NonCopyable
 {
 public:
 	// Ctor & dtor

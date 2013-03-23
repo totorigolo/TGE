@@ -3,9 +3,10 @@
 #include <Thor/Resources.hpp>
 #include "PhysicManager.h"
 #include "../Entities/Entity.h"
+#include "../Tools/NonCopyable.h"
 
 class PhysicManager;
-class Joint
+class Joint : public NonCopyable
 {
 	friend class PhysicManager;
 

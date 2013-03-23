@@ -1,8 +1,9 @@
 #pragma once
+#include "../../Tools/NonCopyable.h"
 #include <Box2D/Box2D.h>
 
 // Classe appelée pour chaque fixture trouvé pendant la recherche de correspondance AABB <> fixtures dans le monde
-class PointCallback : public b2QueryCallback
+class PointCallback : public b2QueryCallback, public NonCopyable
 {
 public:
 	PointCallback(const b2Vec2& point, bool onlyDynamicsBody = true)

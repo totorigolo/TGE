@@ -1,4 +1,5 @@
 #pragma once
+#include "../Tools/NonCopyable.h"
 #include "ContactListener.h"
 #include "DebugDraw.h"
 #include "Joint.h"
@@ -9,7 +10,7 @@
 
 class Joint;
 class DebugDraw;
-class PhysicManager
+class PhysicManager : public NonCopyable
 {
 public:
 	// Ctor & dtor
