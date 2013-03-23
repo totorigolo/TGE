@@ -10,11 +10,11 @@ DebugDraw::DebugDraw(PhysicManager *physicMgr)
 {
 	assert(mPhysicMgr && "est invalide.");
 
-	AppendFlags(b2Draw::e_aabbBit);
-	AppendFlags(b2Draw::e_centerOfMassBit);
+	//AppendFlags(b2Draw::e_aabbBit);
+	//AppendFlags(b2Draw::e_centerOfMassBit);
 	AppendFlags(b2Draw::e_jointBit);
-	AppendFlags(b2Draw::e_pairBit);
-	AppendFlags(b2Draw::e_shapeBit);
+	//AppendFlags(b2Draw::e_pairBit);
+	//AppendFlags(b2Draw::e_shapeBit);
 }
 
 // Dessin

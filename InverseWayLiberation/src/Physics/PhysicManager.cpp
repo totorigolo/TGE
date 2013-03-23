@@ -234,7 +234,7 @@ const b2World* PhysicManager::GetWorld() const
 // DebugDraw
 void PhysicManager::DrawDebugData()
 {
-	//mWorld.DrawDebugData();
+	mWorld.DrawDebugData();
 	//mDebugDraw.DrawContacts();
 }
 void PhysicManager::SetDebugDrawTarget(sf::RenderTarget *target)
