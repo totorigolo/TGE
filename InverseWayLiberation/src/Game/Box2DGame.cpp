@@ -202,7 +202,8 @@ void Box2DGame::OnEvent()
 	if (mInputManager.KeyReleased(sf::Keyboard::R))
 	{
 		// Supprime les pointeurs
-		EntityManager::GetInstance().DestroyEntity(mGrapnel);
+		if (mGrapnel)
+			EntityManager::GetInstance().DestroyEntity(mGrapnel);
 		mGrapnel = nullptr;
 		if (mPhysicMgr.JointExists(mMouseJointID))
 			mPhysicMgr.DestroyJoint(mMouseJointID);
