@@ -1,7 +1,8 @@
 #pragma once
 #include <SFML/Graphics.hpp>
-#include "LivingBeing.h"
 #include <string>
+#include "LivingBeing.h"
+#include "../Game/InputManager.h"
 
 class Player : public LivingBeing
 {
@@ -22,8 +23,11 @@ public:
 	// Mise à jour
 	virtual void Update();
 
+private:
 	// Gestion des évènements
-	void GetEvent(const MovementEvent &playerEvent);
+	void UpdateEvents();
 
 private:
+	// Gestionnaire d'évènements
+	InputManager &mInputManager;
 };

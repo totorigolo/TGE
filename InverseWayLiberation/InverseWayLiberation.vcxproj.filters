@@ -214,6 +214,9 @@
     <ClCompile Include="src\Entities\EntityFactory.cpp">
       <Filter>Fichiers sources\Entities</Filter>
     </ClCompile>
+    <ClCompile Include="src\Game\InputManager.cpp">
+      <Filter>Fichiers sources\Game</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Physics\Joints\DistanceJoint.h">
@@ -356,6 +359,9 @@
     </ClInclude>
     <ClInclude Include="src\Entities\EntityFactory.h">
       <Filter>Fichiers d%27en-tête\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\InputManager.h">
+      <Filter>Fichiers d%27en-tête\Game</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

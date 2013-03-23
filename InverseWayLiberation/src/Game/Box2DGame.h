@@ -1,7 +1,6 @@
 #pragma once
 #include <Thor/Resources.hpp>
 #include <SFML/Graphics.hpp>
-#include <Thor/Events.hpp>
 #include <Box2D/Box2D.h>
 #include <list>
 #include <map>
@@ -10,6 +9,7 @@
 #include "../Resources/ResourceManager.h"
 #include "../Physics/PhysicManager.h"
 #include "../Entities/Grapnel.h"
+#include "InputManager.h"
 
 class MouseJoint;
 class Box2DGame
@@ -51,9 +51,6 @@ protected:
 	// Appelé quand le jeu se termine
 	inline void OnQuit();
 	
-	/* Pour la molette de la souris */
-	friend class OnMouseWheelMoved;
-
 private:
 	// Etats du jeu
 	bool mPaused;
@@ -61,13 +58,10 @@ private:
 	// Fenêtre
 	bool mQuit;
 	sf::RenderWindow & mWindow;
-	sf::View mWindowView;
-	float mCurrentZoom;
 	sf::Clock mFrameTime;
 	
 	// Evènements
-	thor::ActionMap<std::string> mActionMap;
-	thor::ActionMap<std::string>::CallbackSystem mActionCallbackSystem;
+	InputManager &mInputManager;
 
 	// Niveau
 	Level *mLevel;
@@ -81,10 +75,6 @@ private:
 	ResourceManager &mResourceManager;
 	TextureMap &mTextureMap;
 
-	// Lumières
-	//LightManager &mLightManager;
-	//PointLight mMouseLight;
-
 	// Variables pour les shaders
 	sf::RenderTexture mRenderTexture;
 	sf::RenderTexture mShadowRenderTexture;
@@ -92,18 +82,11 @@ private:
 	sf::Shader mShader;
 	sf::Clock mShaderTime;
 
-	// Positions de la souris
-	sf::Vector2f mCurrentMousePos;
-	sf::Vector2f mCurrentMousePosRV; // RV = relative to view
-	sf::Vector2f mLastMousePos;
-	sf::Vector2f mLastMousePosRV; // RV = relative to view
-
 	// Simulation physique
 	sf::Clock mElapsedTime;
 
 	// Positions de la souris (relative à la vue, en mètres et l'Y à la Box2D)
 	b2Vec2 mMp;
-	b2Vec2 mLMp;
 
 	// Grapin
 	b2Body *mHookedSBody;
@@ -127,15 +110,4 @@ private:
 	b2Body *mPinBodyB;
 	b2Vec2 mPinAnchorB;
 
-};
-
-/* Pour la molette de la souris */
-class OnMouseWheelMoved
-{
-public:
-	explicit OnMouseWheelMoved(Box2DGame *_game);
-	void operator() (thor::ActionContext<std::string> context);
-
-private:
-	Box2DGame *mGame;
 };

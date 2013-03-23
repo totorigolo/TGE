@@ -25,6 +25,7 @@
     <ClCompile Include="src\Entities\LivingBeing.cpp" />
     <ClCompile Include="src\Entities\Player.cpp" />
     <ClCompile Include="src\Game\Box2DGame.cpp" />
+    <ClCompile Include="src\Game\InputManager.cpp" />
     <ClCompile Include="src\Physics\DebugDraw.cpp" />
     <ClCompile Include="src\Physics\Joint.cpp" />
     <ClCompile Include="src\Physics\PhysicManager.cpp" />
@@ -65,6 +66,7 @@
     <ClInclude Include="src\Entities\LivingBeing.h" />
     <ClInclude Include="src\Entities\Player.h" />
     <ClInclude Include="src\Game\Box2DGame.h" />
+    <ClInclude Include="src\Game\InputManager.h" />
     <ClInclude Include="src\Level\Level.h" />
     <ClInclude Include="src\Level\LevelLoader.h" />
     <ClInclude Include="src\Physics\Callback\AABBCallback.h" />
