@@ -45,13 +45,15 @@ void Player::UpdateEvents()
 		assert(mBody && "n'est pas valide.");
 
 		/* Traite les différents mouvements */
+		bool moved = false;
 		// Gauche
 		if (mInputManager.GetKeyState(sf::Keyboard::Q))
 		{
 			if ((mCanJump && mBody->GetLinearVelocity().x >= -5.f)
 				|| mBody->GetLinearVelocity().x >= -3.f)
 			{
-				mBody->ApplyForceToCenter(b2Vec2(-5.f, 0.f));
+				mBody->ApplyForceToCenter(b2Vec2(-6.f, 0.f));
+				moved = true;
 			}
 		}
 
@@ -61,7 +63,8 @@ void Player::UpdateEvents()
 			if ((mCanJump && mBody->GetLinearVelocity().x <= 5.f)
 				|| mBody->GetLinearVelocity().x <= 3.f)
 			{
-				mBody->ApplyForceToCenter(b2Vec2(5.f, 0));
+				mBody->ApplyForceToCenter(b2Vec2(6.f, 0));
+				moved = true;
 			}
 		}
 
@@ -72,6 +75,12 @@ void Player::UpdateEvents()
 			{
 				mBody->ApplyForceToCenter(b2Vec2(0.f, 260.f)); // 300.f = un étage
 			}
+		}
+
+		// On évite que le Player soit une savonette
+		if (!moved)
+		{
+			mBody->ApplyForceToCenter(- 2.f * mBody->GetLinearVelocity());
 		}
 	}
 }
