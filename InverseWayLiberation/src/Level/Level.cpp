@@ -3,11 +3,18 @@
 // Ctor
 Level::Level(PhysicManager *physicMgr)
 	: mIsCharged(false),
+	// Monde
 	mPhysicMgr(physicMgr),
-	mBckgC(255, 255, 255),
+	// Entities
+	mEntityManager(EntityManager::GetInstance()),
+	// Config de la fenêtre de rendu
+	mBckgC(sf::Color::White),
+	mDefaulfZoom(1.f),
+	mOriginView(b2Vec2_zero),
+	// Textures
 	mResourceManager(ResourceManager::GetInstance()),
 	mTextureMap(mResourceManager.GetTextureMap()),
-	mEntityManager(EntityManager::GetInstance()),
+	// Joueur
 	mPlayer(nullptr)
 {
 	assert(mPhysicMgr && "n'est pas valide.");
