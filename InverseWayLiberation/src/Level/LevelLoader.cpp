@@ -94,8 +94,6 @@ bool LevelLoader::Process()
 		return false;
 	}
 
-	// TODO: Vérifier si Player existe
-
 	return true;
 }
 
@@ -366,6 +364,7 @@ bool LevelLoader::ProcessEntities()
 			animation = entity->Attribute("animation");
 			animation = entity->Attribute("texture");
 
+			// Enregistre le Player dans Level
 			e = new Player(mLevel->mPhysicMgr, position, mLevel->mTextureMap[animation], layer);
 			mLevel->mPlayer = (Player*) e;
 		}

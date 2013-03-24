@@ -7,7 +7,8 @@ Level::Level(PhysicManager *physicMgr)
 	mBckgC(255, 255, 255),
 	mResourceManager(ResourceManager::GetInstance()),
 	mTextureMap(mResourceManager.GetTextureMap()),
-	mEntityManager(EntityManager::GetInstance())
+	mEntityManager(EntityManager::GetInstance()),
+	mPlayer(nullptr)
 {
 	assert(mPhysicMgr && "n'est pas valide.");
 }
