@@ -199,7 +199,7 @@ KeyState InputManager::GetSpyedKeyState(const sf::Keyboard::Key &keyCode)
 }
 
 // Accès aux évènements
-bool InputManager::GetKeyState(const sf::Keyboard::Key &keyCode) const
+bool InputManager::IsKeyPressed(const sf::Keyboard::Key &keyCode) const
 {
 	return sf::Keyboard::isKeyPressed(keyCode);
 }

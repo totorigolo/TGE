@@ -8,6 +8,7 @@
 #include "../Entities/Grapnel.h"
 #include "../Level/Level.h"
 #include "InputManager.h"
+#include "LuaMachine.h"
 
 class Box2DGame : public NonCopyable
 {
@@ -69,6 +70,9 @@ private:
 	// Textures
 	ResourceManager &mResourceManager;
 	TextureMap &mTextureMap;
+
+	// Machine Lua
+	LuaMachine mConsole;
 
 	// Positions de la souris
 	b2Vec2 mMp;

@@ -46,7 +46,7 @@ void Player::UpdateEvents()
 		/* Traite les différents mouvements */
 		bool moved = false;
 		// Gauche
-		if (mInputManager.GetKeyState(sf::Keyboard::Q))
+		if (mInputManager.IsKeyPressed(sf::Keyboard::Q))
 		{
 			if ((mCanJump && mBody->GetLinearVelocity().x >= -5.f)
 				|| mBody->GetLinearVelocity().x >= -3.f)
@@ -57,7 +57,7 @@ void Player::UpdateEvents()
 		}
 
 		// Droite
-		if (mInputManager.GetKeyState(sf::Keyboard::D))
+		if (mInputManager.IsKeyPressed(sf::Keyboard::D))
 		{
 			if ((mCanJump && mBody->GetLinearVelocity().x <= 5.f)
 				|| mBody->GetLinearVelocity().x <= 3.f)

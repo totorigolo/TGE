@@ -7,6 +7,7 @@
 #include "../Physics/Joints/DistanceJoint.h"
 #include "../Physics/Callback/PointCallback.h"
 #include "../Tools/utils.h"
+#include <iostream>
 
 // Ctor
 Box2DGame::Box2DGame(sf::RenderWindow & window)
@@ -92,6 +93,12 @@ bool Box2DGame::OnInit()
 	if (!mLevel->IsCharged())
 		return false;
 
+	// Règle l'EntityFactory
+	EntityFactory::SetPhysicManager(&mPhysicMgr);
+
+	// Initialise la machine Lua
+	mConsole.RegisterEntityFactory();
+
 	/* Evènements */
 	// Enregistre la fênetre
 	mInputManager.SetWindow(&mWindow);
@@ -108,6 +115,7 @@ bool Box2DGame::OnInit()
 	mInputManager.AddSpyedKey(sf::Keyboard::R); // Reload
 	mInputManager.AddSpyedKey(sf::Keyboard::P); // Pin
 	mInputManager.AddSpyedKey(sf::Keyboard::H); // Hook
+	mInputManager.AddSpyedKey(sf::Keyboard::I); // Console
 
 	return true;
 }
@@ -130,25 +138,31 @@ void Box2DGame::OnEvent()
 		mQuit = true;
 
 	// Création d'objets
-	if (mInputManager.GetKeyState(sf::Keyboard::B))
+	if (mInputManager.IsKeyPressed(sf::Keyboard::B))
 	{
 		std::string list[] = {"box", "box2", "caisse", "way", "tonneau"};
-		EntityFactory::CreateBox(&mPhysicMgr, getVec3(mMp), list, 5);
+		EntityFactory::CreateBox(getVec3(mMp), randomElement(list, 5));
 	}
-	if (mInputManager.GetKeyState(sf::Keyboard::C))
+	if (mInputManager.IsKeyPressed(sf::Keyboard::C))
 	{
 		std::string list[] = {"ball", "circle"};
-		EntityFactory::CreateCircle(&mPhysicMgr, getVec3(mMp), list, 2);
+		EntityFactory::CreateCircle(getVec3(mMp), randomElement(list, 2));
 	}
 	if (mInputManager.KeyReleased(sf::Keyboard::T))
 	{
-		EntityFactory::CreateRagdoll(&mPhysicMgr, mMp);
+		EntityFactory::CreateRagdoll(mMp);
 	}
 	if (mInputManager.KeyReleased(sf::Keyboard::L))
 	{
-		EntityFactory::CreateLamp(&mPhysicMgr, getVec3(mMp), -1);
+		EntityFactory::CreateLamp(getVec3(mMp), -1);
 	}
 	
+	// Lua
+	if (mInputManager.KeyPressed(sf::Keyboard::I))
+	{
+		mConsole.DoFile("scripts/test1.lua");
+	}
+
 	// Déplacements des objets
 	if (mInputManager.GetRMBState())
 	{

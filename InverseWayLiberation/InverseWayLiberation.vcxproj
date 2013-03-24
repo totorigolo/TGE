@@ -25,6 +25,7 @@
     <ClCompile Include="src\Entities\LivingBeing.cpp" />
     <ClCompile Include="src\Entities\Player.cpp" />
     <ClCompile Include="src\Game\Box2DGame.cpp" />
+    <ClCompile Include="src\Game\LuaMachine.cpp" />
     <ClCompile Include="src\Game\InputManager.cpp" />
     <ClCompile Include="src\Physics\DebugDraw.cpp" />
     <ClCompile Include="src\Physics\Joint.cpp" />
@@ -66,6 +67,7 @@
     <ClInclude Include="src\Entities\LivingBeing.h" />
     <ClInclude Include="src\Entities\Player.h" />
     <ClInclude Include="src\Game\Box2DGame.h" />
+    <ClInclude Include="src\Game\LuaMachine.h" />
     <ClInclude Include="src\Game\InputManager.h" />
     <ClInclude Include="src\Level\Level.h" />
     <ClInclude Include="src\Level\LevelLoader.h" />
@@ -106,6 +108,7 @@
     <None Include="lvls\1.xvl">
       <SubType>Designer</SubType>
     </None>
+    <None Include="scripts\test1.lua" />
     <None Include="src\_TODO.txt" />
   </ItemGroup>
   <ItemGroup>

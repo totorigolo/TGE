@@ -88,6 +88,9 @@
     <Filter Include="Fichiers d%27en-tête\Physics\Callback">
       <UniqueIdentifier>{2906bf8d-863c-4dde-8e5b-491fc2734796}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Fichiers de ressources\Scripts">
+      <UniqueIdentifier>{5edf6274-fe55-45b9-bc64-db52bb465704}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\_TODO.txt" />
@@ -100,6 +103,9 @@
     </None>
     <None Include="anim\player.xim">
       <Filter>Fichiers de ressources\Anims</Filter>
+    </None>
+    <None Include="scripts\test1.lua">
+      <Filter>Fichiers de ressources\Scripts</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -215,6 +221,9 @@
       <Filter>Fichiers sources\Entities</Filter>
     </ClCompile>
     <ClCompile Include="src\Game\InputManager.cpp">
+      <Filter>Fichiers sources\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\LuaMachine.cpp">
       <Filter>Fichiers sources\Game</Filter>
     </ClCompile>
   </ItemGroup>
@@ -358,6 +367,9 @@
       <Filter>Fichiers d%27en-tête\Entities</Filter>
     </ClInclude>
     <ClInclude Include="src\Game\InputManager.h">
+      <Filter>Fichiers d%27en-tête\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\LuaMachine.h">
       <Filter>Fichiers d%27en-tête\Game</Filter>
     </ClInclude>
   </ItemGroup>

@@ -39,7 +39,7 @@ public:
 	// #1 => Réinitialise la touche
 
 	// Accès aux évènements
-	bool GetKeyState(const sf::Keyboard::Key &keyCode) const;
+	bool IsKeyPressed(const sf::Keyboard::Key &keyCode) const;
 	sf::Vector2i GetMousePos() const;
 	sf::Vector2f GetMousePosRV() const;
 	sf::Vector2i GetLastMousePos() const;
