@@ -174,11 +174,6 @@ namespace EntityFactory
 		// L'enregistre et trie les Entities
 		EntityManager::GetInstance().RegisterEntity(b);
 		EntityManager::GetInstance().SortByLayer();
-
-		// Crée la lumière
-		//sf::Vector2f pos = mCurrentMousePosRV;
-		//pos.y -= 1.2f * mPhysicMgr.GetPPM();
-		//mLightManager.AddLight(new PointLight(pos, 100.2f, true, true));
 	}
 
 } // namespace EntityFactory

@@ -23,10 +23,6 @@
 #include "../Entities/Player.h"
 #include "../Entities/BasicBody.h"
 
-//#include "../Lights/PointLight.h"
-//#include "../Lights/SpotLight.h"
-//#include "../Lights/LightManager.h"
-
 #include <Thor/Resources.hpp>
 #include <vector>
 
@@ -41,7 +37,6 @@ LevelLoader::LevelLoader(std::string const& path, Level *level)
 		if (mLevel->IsCharged())
 		{
 			mLevel->Clear();
-			//LightManager::GetInstance().DeleteAllLights(); // TODO: ...
 		}
 
 		// Analyse le fichier du niveau et crée le Level
@@ -98,11 +93,6 @@ bool LevelLoader::Process()
 		Dialog::Error("Une erreur grave est survenue lors du chargement du niveau.\nDeco invalide (" + mPath + ").");
 		return false;
 	}
-	/*if (!ProcessLights())
-	{
-		Dialog::Error("Une erreur grave est survenue lors du chargement du niveau.\nLumières non valides (" + mPath + ").");
-		return false;
-	}*/
 
 	// TODO: Vérifier si Player existe
 
@@ -122,7 +112,6 @@ bool LevelLoader::ProcessWorld()
 	sf::Color bckgColor = sf::Color::White;
 	b2Vec2 originView(0.f, 0.f);
 	float defaultZoom = 1.f;
-	bool defaultLightning = false;
 
 	// Récupère les valeurs
 	if (world)
@@ -132,7 +121,6 @@ bool LevelLoader::ProcessWorld()
 		if (world->Attribute("bckgcolor")) bckgColor = Parser::string2color(world->Attribute("bckgcolor"));
 		if (world->Attribute("originview")) originView = Parser::string2b2Vec2(world->Attribute("originview"));
 		world->QueryFloatAttribute("defaultzoom", &defaultZoom);
-		world->QueryBoolAttribute("defaultlightning", &defaultLightning);
 	}
 	// Si le monde n'est pas défini, on averti
 	else
@@ -146,7 +134,6 @@ bool LevelLoader::ProcessWorld()
 	mLevel->mBckgC = bckgColor;
 	mLevel->mOriginView = originView;
 	mLevel->mDefaulfZoom = defaultZoom;
-	mLevel->mLightning = defaultLightning;
 
 	return true;
 }
@@ -695,6 +682,12 @@ bool LevelLoader::ProcessDeco()
 }
 /*bool LevelLoader::ProcessLights()
 {
+
+//#include "../Lights/PointLight.h"
+//#include "../Lights/SpotLight.h"
+//#include "../Lights/LightManager.h"
+
+
 	// Récupère <lights>
 	tinyxml2::XMLHandle hdl(mFile);
 	tinyxml2::XMLHandle lights = hdl.FirstChildElement("level").FirstChildElement("lights");

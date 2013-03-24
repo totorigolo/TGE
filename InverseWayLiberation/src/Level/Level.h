@@ -2,14 +2,10 @@
 #include <SFML/Graphics.hpp>
 #include <Thor/Resources.hpp>
 #include <Box2D/Box2D.h>
-#include <string>
-#include <map>
-#include <utility>
-#include <list>
 #include "LevelLoader.h"
 #include "../Tools/utils.h"
-#include "../Tools/NonCopyable.h"
 #include "../Entities/Player.h"
+#include "../Tools/NonCopyable.h"
 #include "../Physics/PhysicManager.h"
 #include "../Entities/EntityManager.h"
 #include "../Resources/ResourceManager.h"
@@ -49,7 +45,6 @@ public:
 	float GetDefaultZoom() const { return mDefaulfZoom; }
 	sf::Color const& GetBckgColor() const { return mBckgC; }
 	b2Vec2 const& GetOriginView() const { return mOriginView; }
-	bool const& GetLightning() const { return mLightning; }
 
 private:
 	bool mIsCharged;
@@ -64,7 +59,6 @@ private:
 	sf::Color mBckgC;
 	float mDefaulfZoom;
 	b2Vec2 mOriginView;
-	bool mLightning;
 	
 	// Textures
 	ResourceManager &mResourceManager;

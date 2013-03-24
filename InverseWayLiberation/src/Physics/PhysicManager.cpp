@@ -1,4 +1,5 @@
 #include "PhysicManager.h"
+#include "../Entities/EntityManager.h"
 
 //Ctor
 PhysicManager::PhysicManager(b2Vec2 const& gravity, float ppm)
@@ -49,6 +50,33 @@ void PhysicManager::DestroyAllBody()
 		b = b->GetNext();
 
 		DestroyBody(bb);
+	}
+}
+void PhysicManager::DestroyBodiesOut(const b2Vec2 &topleft, const b2Vec2 &bottomright)
+{
+	// Destruction des bodies en dehors de la zone
+	b2Body *b = GetBodyList(), *bb = nullptr;
+	while (b)
+	{
+		// On supprime seulement les dynamicBodies
+		if (b->GetType() == b2_dynamicBody)
+		{
+			// Vérifie si l'objet est hors du monde
+			b2Vec2 pos = b->GetPosition();
+			if (pos.x < topleft.y || pos.x > bottomright.y || pos.y < bottomright.x || pos.y > bottomright.y)
+			{
+				bb = b;
+				b = b->GetNext();
+				EntityManager::GetInstance().DestroyEntity((Entity*) bb->GetUserData());
+			}
+
+			// Sinon passe simplement au suivant
+			else
+				b = b->GetNext();
+		}
+		// Le body n'est pas un dynamicBody
+		else
+			b = b->GetNext();
 	}
 }
 

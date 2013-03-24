@@ -1,16 +1,13 @@
 #include "Box2DGame.h"
+#include "../Entities/Player.h"
 #include "../Level/LevelLoader.h"
 #include "../Entities/BasicBody.h"
-#include "../Entities/Player.h"
 #include "../Entities/EntityFactory.h"
+#include "../Physics/Joints/MouseJoint.h"
 #include "../Physics/Joints/DistanceJoint.h"
 #include "../Physics/Callback/PointCallback.h"
 #include "../Physics/Callback/FirstBodyRaycastCallback.h"
 #include "../Tools/utils.h"
-#include <iostream>
-#include <vector>
-#include <list>
-#include <Thor/Animation.hpp>
 
 // Ctor
 Box2DGame::Box2DGame(sf::RenderWindow & window)
@@ -29,9 +26,6 @@ Box2DGame::Box2DGame(sf::RenderWindow & window)
 	mPinBodyA = nullptr;
 	mPinBodyB = nullptr;
 	mLevel = nullptr;
-	mSpliceL1 = mSpliceL2 = b2Vec2(0.f, 0.f);
-	mSpliceP1 = mSpliceP2 = b2Vec2(0.f, 0.f);
-	mSplice1Get = false;
 	mHookedSBody = nullptr;
 
 	// Grapin de test
@@ -98,11 +92,6 @@ bool Box2DGame::OnInit()
 	LevelLoader("lvls/1.xvl", mLevel);
 	if (!mLevel->IsCharged())
 		return false;
-
-	/* Fenêtrage */
-	// Initialise la renderTexture
-	mRenderTexture.create(mWindow.getSize().x, mWindow.getSize().y);
-	mShadowRenderTexture.create(mWindow.getSize().x, mWindow.getSize().y);
 
 	/* Evènements */
 	// Enregistre la fênetre
@@ -218,8 +207,6 @@ void Box2DGame::OnEvent()
 		// Centre la vue
 		mInputManager.SetDefaultZoom(mLevel->GetDefaultZoom());
 		mInputManager.SetDefaultCenter(b22sfVec(mLevel->GetOriginView(), mPhysicMgr.GetPPM()));
-		mRenderTextureView.setSize(u2f(mWindow.getSize()) * sf::Vector2f(mRenderTextureView.getViewport().width, mRenderTextureView.getViewport().height));
-		mRenderTextureView.setCenter(b22sfVec(mLevel->GetOriginView(), mPhysicMgr.GetPPM()));
 	}
 
 	// Grappin
@@ -327,50 +314,10 @@ void Box2DGame::OnLogic()
 /// Appelé pour la physique
 void Box2DGame::OnStepPhysics()
 {
-	mFrameTime.restart();
-
 	// Simule
 	mPhysicMgr.Step(10, 4);
 	mPhysicMgr.GetWorld()->ClearForces();
-
-	// Destruction des bodies en dehors de la zone
-	b2Body *b = mPhysicMgr.GetBodyList(), *bb = nullptr;
-	while (b)
-	{
-		// On supprime seulement les dynamicBodies
-		if (b->GetType() == b2_dynamicBody)
-		{
-			bool erase = false;
-
-			// Vérifie si l'objet est hors du monde
-			b2Vec2 pos = b->GetPosition();
-			if (pos.x < -200.f || pos.x > 200.f || pos.y < -200.f || pos.y > 1000.f)
-			{
-				erase = true;
-
-				// Vérifie si l'objet n'est pas accroché à la souris
-				MouseJoint *j = (MouseJoint*) mPhysicMgr.GetJoint(mMouseJointID);
-				if (j)
-					if (b == j->GetAttachedBody())
-						erase = false;
-			}
-
-			// Supprime l'Entity du body
-			if (erase)
-			{
-				bb = b;
-				b = b->GetNext();
-				EntityManager::GetInstance().DestroyEntity((Entity*) bb->GetUserData());
-			}
-
-			// Sinon passe simplement au suivant
-			else
-				b = b->GetNext();
-		}
-		// Le body n'est pas un dynamicBody
-		else
-			b = b->GetNext();
-	}
+	mPhysicMgr.DestroyBodiesOut(b2Vec2(1000.f, -200.f), b2Vec2(-200.f, 200.f));
 }
 
 /// Appelé pour les mises à jour
@@ -389,22 +336,15 @@ void Box2DGame::OnRender()
 	assert(mLevel && "est invalide.");
 
 	// Rendu
-	//mRenderTexture.clear(mLevel->GetBckgColor());
 	mWindow.clear(mLevel->GetBckgColor());
 	mWindow.setView(mInputManager.GetView());
-	//mRenderTexture.setView(mRenderTextureView);
 	
 	// Affichage du Level
-	//mRenderTexture.draw(*mLevel);
 	mWindow.draw(*mLevel);
 	
 	// Affichage du debug
 	mPhysicMgr.DrawDebugData();
 	
-	// Finalise le rendu des objets
-	//mRenderTexture.display();
-	//mWindow.draw(sf::Sprite(mRenderTexture.getTexture()));
-
 	// Affichage du tout
 	mWindow.display();
 }

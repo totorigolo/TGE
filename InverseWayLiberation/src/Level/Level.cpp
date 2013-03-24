@@ -1,10 +1,12 @@
 #include "Level.h"
-#include "../Tools/utils.h"
 
 // Ctor
 Level::Level(PhysicManager *physicMgr)
-	: mIsCharged(false), mPhysicMgr(physicMgr),  mBckgC(255, 255, 255), mLightning(false),
-	mResourceManager(ResourceManager::GetInstance()), mTextureMap(mResourceManager.GetTextureMap()),
+	: mIsCharged(false),
+	mPhysicMgr(physicMgr),
+	mBckgC(255, 255, 255),
+	mResourceManager(ResourceManager::GetInstance()),
+	mTextureMap(mResourceManager.GetTextureMap()),
 	mEntityManager(EntityManager::GetInstance())
 {
 	assert(mPhysicMgr && "n'est pas valide.");

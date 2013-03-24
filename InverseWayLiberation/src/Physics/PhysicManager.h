@@ -21,6 +21,7 @@ public:
 	b2Body* CreateBody(b2BodyDef const* bodyDef);
 	void DestroyBody(b2Body *body);
 	void DestroyAllBody();
+	void DestroyBodiesOut(const b2Vec2 &topleft, const b2Vec2 &bottomright);
 
 	// Gestion des joints
 	// Création / destruction

@@ -20,20 +20,35 @@ int main()
 	lua_State *L = luaL_newstate();
 	luaL_openlibs(L);
 
-	// Connecte LuaBind à ce Lua State
-	luabind::open(L);
+	try {
+		// Connecte LuaBind à ce Lua State
+		luabind::open(L);
 
-	luabind::module(L) [
-		luabind::def("print_hello", (void(*)(int)) &print_hello),
-		luabind::def("print_hello", (void(*)(const std::string&)) &print_hello)
-	];
+		// Enregistre les fonctions
+		luabind::module(L) [
+			luabind::def("print_hello", (void(*)(int)) &print_hello),
+			luabind::def("print_hello", (void(*)(const std::string&)) &print_hello)
+		];
 
-	// Define a lua function that we can call
-	luaL_dostring(
-		L,
-		"print_hello(42)\n"
-		"print_hello('world')\n"
-	);
+		// Exécute une fonction Lua
+		luaL_dostring(
+			L,
+			"print_hello(42)\n"
+			"print_hello('world')\n"
+		);
+
+		// Demande et exécute une fonction
+		std::string command;
+		std::getline(std::cin, command);
+		luaL_dostring(
+			L,
+			command.c_str()
+		);
+	}
+	catch (const std::exception &e)
+	{
+		std::cerr << e.what() << std::endl;
+	}
 
 	lua_close(L);
 
