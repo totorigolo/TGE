@@ -16,6 +16,9 @@ namespace EntityFactory
 	// Variables privés
 	namespace
 	{
+		// Physique
+		PhysicManager *mPhysicManager = nullptr;
+
 		// Entities
 		EntityManager &mEntityManager(EntityManager::GetInstance());
 
@@ -23,11 +26,17 @@ namespace EntityFactory
 		ResourceManager &mResourceManager(ResourceManager::GetInstance());
 		TextureMap &mTextureMap(mResourceManager.GetTextureMap());
 	}
+	
+	// Parametres de la Factory
+	void SetPhysicManager(PhysicManager *physicMgr)
+	{
+		mPhysicManager = physicMgr;
+	}
 
 	// Crée un Ragdoll
-	void CreateRagdoll(PhysicManager *physicMgr, const b2Vec2 &position, int layer)
+	void CreateRagdoll(const b2Vec2 &position, int layer)
 	{
-		assert(physicMgr && "n'est pas valide");
+		if (!mPhysicManager) return;
 
 		// Charge les textures
 		try {
@@ -63,67 +72,67 @@ namespace EntityFactory
 		std::map<std::string, BasicBody*> bodies;
 
 		// Jambe, bras et pied gauche
-		bodies["11_armL1"] = new BasicBody(physicMgr, layer);
+		bodies["11_armL1"] = new BasicBody(mPhysicManager, layer);
 		bodies["11_armL1"]->CreateDynBox(b2Vec3(0.f, 0.f, 0.f) + position, mTextureMap["hero_armL1"], 1.f, 0.2f, 0.f, -1);
-		bodies["11_armL2"] = new BasicBody(physicMgr, layer);
+		bodies["11_armL2"] = new BasicBody(mPhysicManager, layer);
 		bodies["11_armL2"]->CreateDynBox(b2Vec3(0.f, -0.2f, 0.f) + position, mTextureMap["hero_armL2"], 1.f, 0.2f, 0.f, -1);
-		bodies["12_legL1"] = new BasicBody(physicMgr, layer);
+		bodies["12_legL1"] = new BasicBody(mPhysicManager, layer);
 		bodies["12_legL1"]->CreateDynBox(b2Vec3(0.f, -0.3f, 0.f) + position, mTextureMap["hero_legL1"], 1.f, 0.2f, 0.f, -1);
-		bodies["12_legL2"] = new BasicBody(physicMgr, layer);
+		bodies["12_legL2"] = new BasicBody(mPhysicManager, layer);
 		bodies["12_legL2"]->CreateDynBox(b2Vec3(0.f, -0.6f, 0.f) + position, mTextureMap["hero_legL2"], 1.f, 0.2f, 0.f, -1);
-		bodies["13_footL"] = new BasicBody(physicMgr, layer);
+		bodies["13_footL"] = new BasicBody(mPhysicManager, layer);
 		bodies["13_footL"]->CreateDynBox(b2Vec3(0.05f, -0.75f, 0.f) + position, mTextureMap["hero_footL"], 1.f, 0.2f, 0.f, -1);
 
 		// Cou
-		bodies["20_neck"] = new BasicBody(physicMgr, layer);
+		bodies["20_neck"] = new BasicBody(mPhysicManager, layer);
 		bodies["20_neck"]->CreateDynBox(b2Vec3(0.f, 0.25f, 0.f) + position, mTextureMap["hero_neck"], 1.f, 0.2f, 0.f, -1);
 
 		// Torse
-		bodies["31_torso3"] = new BasicBody(physicMgr, layer);
+		bodies["31_torso3"] = new BasicBody(mPhysicManager, layer);
 		bodies["31_torso3"]->CreateDynBox(b2Vec3(0.f, -0.1f, 0.f) + position, mTextureMap["hero_torso3"], 1.f, 0.2f, 0.f, -1);
-		bodies["32_torso2"] = new BasicBody(physicMgr, layer);
+		bodies["32_torso2"] = new BasicBody(mPhysicManager, layer);
 		bodies["32_torso2"]->CreateDynBox(b2Vec3(0.f, 0.f, 0.f) + position, mTextureMap["hero_torso2"], 1.f, 0.2f, 0.f, -1);
-		bodies["33_torso1"] = new BasicBody(physicMgr, layer);
+		bodies["33_torso1"] = new BasicBody(mPhysicManager, layer);
 		bodies["33_torso1"]->CreateDynBox(b2Vec3(0.f, 0.15f, 0.f) + position, mTextureMap["hero_torso1"], 1.f, 0.2f, 0.f, -1);
 	
 		// Tête
-		bodies["40_head"] = new BasicBody(physicMgr, layer);
+		bodies["40_head"] = new BasicBody(mPhysicManager, layer);
 		bodies["40_head"]->CreateDynCircle(b2Vec3(0.f, 0.5f, 0.f) + position, mTextureMap["hero_head"], 1.f, 0.5f, 0.f, -1);
 
 		// Jambe, bras et pied droit
-		bodies["51_legR1"] = new BasicBody(physicMgr, layer);
+		bodies["51_legR1"] = new BasicBody(mPhysicManager, layer);
 		bodies["51_legR1"]->CreateDynBox(b2Vec3(0.f, -0.3f, 0.f) + position, mTextureMap["hero_legR1"], 1.f, 0.2f, 0.f, -1);
-		bodies["51_legR2"] = new BasicBody(physicMgr, layer);
+		bodies["51_legR2"] = new BasicBody(mPhysicManager, layer);
 		bodies["51_legR2"]->CreateDynBox(b2Vec3(0.f, -0.6f, 0.f) + position, mTextureMap["hero_legR2"], 1.f, 0.2f, 0.f, -1);
-		bodies["52_armR1"] = new BasicBody(physicMgr, layer);
+		bodies["52_armR1"] = new BasicBody(mPhysicManager, layer);
 		bodies["52_armR1"]->CreateDynBox(b2Vec3(0.f, 0.f, 0.f) + position, mTextureMap["hero_armR1"], 1.f, 0.2f, 0.f, -1);
-		bodies["52_armR2"] = new BasicBody(physicMgr, layer);
+		bodies["52_armR2"] = new BasicBody(mPhysicManager, layer);
 		bodies["52_armR2"]->CreateDynBox(b2Vec3(0.f, -0.2f, 0.f) + position, mTextureMap["hero_armR2"], 1.f, 0.2f, 0.f, -1);
-		bodies["53_footR"] = new BasicBody(physicMgr, layer);
+		bodies["53_footR"] = new BasicBody(mPhysicManager, layer);
 		bodies["53_footR"]->CreateDynBox(b2Vec3(0.05f, -0.75f, 0.f) + position, mTextureMap["hero_footR"], 1.f, 0.2f, 0.f, -1);
 
 		/* Jointe les bodies entre eux */
 		std::list<Joint*> joints;
-		joints.push_back(new RevoluteJoint(physicMgr, bodies["40_head"]->GetBody(), bodies["33_torso1"]->GetBody(), b2Vec2(0.f, -0.15f), true, -30.f, 50.f, false, 0.f, 0.004f));
-		joints.push_back(new WeldJoint(physicMgr, bodies["20_neck"]->GetBody(), bodies["33_torso1"]->GetBody(), b2Vec2(0.f, -0.05f), 0.f, 0.f));
+		joints.push_back(new RevoluteJoint(mPhysicManager, bodies["40_head"]->GetBody(), bodies["33_torso1"]->GetBody(), b2Vec2(0.f, -0.15f), true, -30.f, 50.f, false, 0.f, 0.004f));
+		joints.push_back(new WeldJoint(mPhysicManager, bodies["20_neck"]->GetBody(), bodies["33_torso1"]->GetBody(), b2Vec2(0.f, -0.05f), 0.f, 0.f));
 		
-		joints.push_back(new RevoluteJoint(physicMgr, bodies["33_torso1"]->GetBody(), bodies["32_torso2"]->GetBody(), b2Vec2(0.f, -0.1f), true, -10.f, 10.f, true, 0.f, 0.004f));
-		joints.push_back(new RevoluteJoint(physicMgr, bodies["32_torso2"]->GetBody(), bodies["31_torso3"]->GetBody(), b2Vec2(0.f, -0.1f), true, -10.f, 10.f, true, 0.f, 0.004f));
+		joints.push_back(new RevoluteJoint(mPhysicManager, bodies["33_torso1"]->GetBody(), bodies["32_torso2"]->GetBody(), b2Vec2(0.f, -0.1f), true, -10.f, 10.f, true, 0.f, 0.004f));
+		joints.push_back(new RevoluteJoint(mPhysicManager, bodies["32_torso2"]->GetBody(), bodies["31_torso3"]->GetBody(), b2Vec2(0.f, -0.1f), true, -10.f, 10.f, true, 0.f, 0.004f));
 		
-		joints.push_back(new RevoluteJoint(physicMgr, bodies["11_armL1"]->GetBody(), bodies["33_torso1"]->GetBody(), b2Vec2(0.f, 0.1f), true, -180.f, 0.f, true, 0.f, 0.004f));
-		joints.push_back(new RevoluteJoint(physicMgr, bodies["52_armR1"]->GetBody(), bodies["33_torso1"]->GetBody(), b2Vec2(0.f, 0.1f), true, -180.f, 0.f, true, 0.f, 0.004f));
+		joints.push_back(new RevoluteJoint(mPhysicManager, bodies["11_armL1"]->GetBody(), bodies["33_torso1"]->GetBody(), b2Vec2(0.f, 0.1f), true, -180.f, 0.f, true, 0.f, 0.004f));
+		joints.push_back(new RevoluteJoint(mPhysicManager, bodies["52_armR1"]->GetBody(), bodies["33_torso1"]->GetBody(), b2Vec2(0.f, 0.1f), true, -180.f, 0.f, true, 0.f, 0.004f));
 		
-		joints.push_back(new RevoluteJoint(physicMgr, bodies["12_legL1"]->GetBody(), bodies["31_torso3"]->GetBody(), b2Vec2(0.f, 0.1f), true, -110.f, 30.f, true, 0.f, 0.004f));
-		joints.push_back(new RevoluteJoint(physicMgr, bodies["51_legR1"]->GetBody(), bodies["31_torso3"]->GetBody(), b2Vec2(0.f, 0.1f), true, -110.f, 30.f, true, 0.f, 0.004f));
+		joints.push_back(new RevoluteJoint(mPhysicManager, bodies["12_legL1"]->GetBody(), bodies["31_torso3"]->GetBody(), b2Vec2(0.f, 0.1f), true, -110.f, 30.f, true, 0.f, 0.004f));
+		joints.push_back(new RevoluteJoint(mPhysicManager, bodies["51_legR1"]->GetBody(), bodies["31_torso3"]->GetBody(), b2Vec2(0.f, 0.1f), true, -110.f, 30.f, true, 0.f, 0.004f));
 		
-		joints.push_back(new RevoluteJoint(physicMgr, bodies["11_armL1"]->GetBody(), bodies["11_armL2"]->GetBody(), b2Vec2(0.f, -0.1f), true, 0.f, 150.f, true, 0.f, 0.004f));
-		joints.push_back(new RevoluteJoint(physicMgr, bodies["52_armR1"]->GetBody(), bodies["52_armR2"]->GetBody(), b2Vec2(0.f, -0.1f), true, 0.f, 150.f, true, 0.f, 0.004f));
+		joints.push_back(new RevoluteJoint(mPhysicManager, bodies["11_armL1"]->GetBody(), bodies["11_armL2"]->GetBody(), b2Vec2(0.f, -0.1f), true, 0.f, 150.f, true, 0.f, 0.004f));
+		joints.push_back(new RevoluteJoint(mPhysicManager, bodies["52_armR1"]->GetBody(), bodies["52_armR2"]->GetBody(), b2Vec2(0.f, -0.1f), true, 0.f, 150.f, true, 0.f, 0.004f));
 		
-		joints.push_back(new RevoluteJoint(physicMgr, bodies["12_legL1"]->GetBody(), bodies["12_legL2"]->GetBody(), b2Vec2(0.f, -0.1f), true, -90.f, 0.f, true, 0.f, 0.004f));
-		joints.push_back(new RevoluteJoint(physicMgr, bodies["51_legR1"]->GetBody(), bodies["51_legR2"]->GetBody(), b2Vec2(0.f, -0.1f), true, -90.f, 0.f, true, 0.f, 0.004f));
+		joints.push_back(new RevoluteJoint(mPhysicManager, bodies["12_legL1"]->GetBody(), bodies["12_legL2"]->GetBody(), b2Vec2(0.f, -0.1f), true, -90.f, 0.f, true, 0.f, 0.004f));
+		joints.push_back(new RevoluteJoint(mPhysicManager, bodies["51_legR1"]->GetBody(), bodies["51_legR2"]->GetBody(), b2Vec2(0.f, -0.1f), true, -90.f, 0.f, true, 0.f, 0.004f));
 
-		joints.push_back(new RevoluteJoint(physicMgr, bodies["12_legL2"]->GetBody(), bodies["13_footL"]->GetBody(), b2Vec2(-0.035f, -0.15f), true, -90.f, 0.f, true, 50.f, 0.03f));
-		joints.push_back(new RevoluteJoint(physicMgr, bodies["51_legR2"]->GetBody(), bodies["53_footR"]->GetBody(), b2Vec2(-0.035f, -0.15f), true, -90.f, 0.f, true, 50.f, 0.03f));
+		joints.push_back(new RevoluteJoint(mPhysicManager, bodies["12_legL2"]->GetBody(), bodies["13_footL"]->GetBody(), b2Vec2(-0.035f, -0.15f), true, -90.f, 0.f, true, 50.f, 0.03f));
+		joints.push_back(new RevoluteJoint(mPhysicManager, bodies["51_legR2"]->GetBody(), bodies["53_footR"]->GetBody(), b2Vec2(-0.035f, -0.15f), true, -90.f, 0.f, true, 50.f, 0.03f));
 	
 		// Définit la force des joint
 		for (auto it = bodies.begin(); it != bodies.end(); ++it)
@@ -141,11 +150,13 @@ namespace EntityFactory
 	}
 
 	// Crée une Box parmi la liste
-	void CreateBox(PhysicManager *physicMgr, const b2Vec3 &posRot, std::string list[], int list_size, int layer)
+	void CreateBox(const b2Vec3 &posRot, const std::string &texture, int layer)
 	{
+		if (!mPhysicManager) return;
+
 		// Crée le BasicBody / la Box
-		BasicBody *b = new BasicBody(physicMgr, layer);
-		b->CreateDynBox(posRot, mTextureMap[randomElement(list, list_size)]);
+		BasicBody *b = new BasicBody(mPhysicManager, layer);
+		b->CreateDynBox(posRot, mTextureMap[texture]);
 
 		// L'enregistre et trie les Entities
 		mEntityManager.RegisterEntity(b);
@@ -153,11 +164,13 @@ namespace EntityFactory
 	}
 
 	// Crée un cercle parmi la liste
-	void CreateCircle(PhysicManager *physicMgr, const b2Vec3 &posRot, std::string list[], int list_size, int layer)
+	void CreateCircle(const b2Vec3 &posRot, const std::string &texture, int layer)
 	{
+		if (!mPhysicManager) return;
+
 		// Crée le BasicBody / le cercle
-		BasicBody *b = new BasicBody(physicMgr, layer);
-		b->CreateDynCircle(posRot, mTextureMap[randomElement(list, list_size)]);
+		BasicBody *b = new BasicBody(mPhysicManager, layer);
+		b->CreateDynCircle(posRot, mTextureMap[texture]);
 
 		// L'enregistre et trie les Entities
 		mEntityManager.RegisterEntity(b);
@@ -165,10 +178,12 @@ namespace EntityFactory
 	}
 
 	// Crée un lampadaire
-	void CreateLamp(PhysicManager *physicMgr, const b2Vec3 &posRot, int layer)
+	void CreateLamp(const b2Vec3 &posRot, int layer)
 	{
+		if (!mPhysicManager) return;
+
 		// Crée le BasicBody / le lampadaire
-		BasicBody *b = new BasicBody(physicMgr, layer);
+		BasicBody *b = new BasicBody(mPhysicManager, layer);
 		b->CreateStaticBox(posRot, mTextureMap["lampadere"], 0.1f, 0.05f);
 		
 		// L'enregistre et trie les Entities

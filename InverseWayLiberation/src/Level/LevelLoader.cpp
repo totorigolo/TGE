@@ -307,6 +307,9 @@ bool LevelLoader::ProcessBasicBodies()
 }
 bool LevelLoader::ProcessEntities()
 {
+	// Initialise l'EntityFactory
+	EntityFactory::SetPhysicManager(mLevel->mPhysicMgr);
+
 	// Récupère <entities>
 	tinyxml2::XMLHandle hdl(mFile);
 	tinyxml2::XMLHandle entities = hdl.FirstChildElement("level").FirstChildElement("entities");
@@ -347,7 +350,7 @@ bool LevelLoader::ProcessEntities()
 		// Crée l'Entity
 		if (type == "ragdoll")
 		{
-			EntityFactory::CreateRagdoll(mLevel->mPhysicMgr, position, layer);
+			EntityFactory::CreateRagdoll(position, layer);
 		}
 		else if (type == "livingbeing")
 		{

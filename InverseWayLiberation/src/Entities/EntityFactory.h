@@ -5,15 +5,18 @@
 
 namespace EntityFactory
 {
+	// Parametres de la Factory
+	void SetPhysicManager(PhysicManager *physicMgr);
+
 	// Crée un Ragdoll
-	void CreateRagdoll(PhysicManager *physicMgr, const b2Vec2 &position, int layer = 1);
+	void CreateRagdoll(const b2Vec2 &position, int layer = 1);
 	
-	// Crée une Box parmi la liste
-	void CreateBox(PhysicManager *physicMgr, const b2Vec3 &posRot, std::string list[], int list_size, int layer = 1);
+	// Crée une Box
+	void CreateBox(const b2Vec3 &posRot, const std::string &texture, int layer = 1);
 	
-	// Crée un cercle parmi la liste
-	void CreateCircle(PhysicManager *physicMgr, const b2Vec3 &posRot, std::string list[], int list_size, int layer = 1);
+	// Crée un cercle
+	void CreateCircle(const b2Vec3 &posRot, const std::string &texture, int layer = 1);
 
 	// Crée un lampadaire
-	void CreateLamp(PhysicManager *physicMgr, const b2Vec3 &posRot, int layer = 1);
+	void CreateLamp(const b2Vec3 &posRot, int layer = 1);
 }
