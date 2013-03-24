@@ -6,7 +6,6 @@
 #include "../Physics/Joints/MouseJoint.h"
 #include "../Physics/Joints/DistanceJoint.h"
 #include "../Physics/Callback/PointCallback.h"
-#include "../Physics/Callback/FirstBodyRaycastCallback.h"
 #include "../Tools/utils.h"
 
 // Ctor

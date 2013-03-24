@@ -270,9 +270,6 @@
     <ClInclude Include="src\Tools\utils.h">
       <Filter>Fichiers d%27en-tête\Tools</Filter>
     </ClInclude>
-    <ClInclude Include="src\Tools\Segment.h">
-      <Filter>Fichiers d%27en-tête\Tools</Filter>
-    </ClInclude>
     <ClInclude Include="src\Level\Level.h">
       <Filter>Fichiers d%27en-tête\Level</Filter>
     </ClInclude>

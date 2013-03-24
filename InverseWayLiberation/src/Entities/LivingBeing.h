@@ -1,9 +1,7 @@
 #pragma once
 #include <Box2D/Box2D.h>
-#include <string>
 #include "Entity.h"
 #include "../Physics/PhysicManager.h"
-#include "../Resources/AnimatedSprite.h"
 
 class LivingBeing : public Entity
 {
@@ -21,8 +19,6 @@ public:
 	// Accesseurs
 	b2Body* GetCollisionBody();
 	const b2Body* GetCollisionBody() const;
-	//AnimatedSprite& GetAnimatedSprite();
-	//const AnimatedSprite& GetAnimatedSprite() const;
 	
 protected:
 	bool mIsDead;
@@ -34,6 +30,4 @@ protected:
 
 	sf::Sprite mSprite;
 	std::shared_ptr<sf::Texture> mTexture;
-
-	//AnimatedSprite mAnimatedSprite;
 };

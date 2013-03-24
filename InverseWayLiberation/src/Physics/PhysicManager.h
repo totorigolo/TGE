@@ -1,11 +1,9 @@
 #pragma once
 #include "../Tools/NonCopyable.h"
+#include "../Entities/Entity.h"
 #include "ContactListener.h"
 #include "DebugDraw.h"
-#include "Joint.h"
-#include "../Entities/Entity.h"
 #include <Box2D/Box2D.h>
-#include <vector>
 #include <map>
 
 class Joint;
@@ -95,8 +93,4 @@ protected:
 	// Liste des Joints
 	int mLastJointID;
 	std::map<int, Joint*> mJointList;
-
-	// Suppression retardée
-	std::vector<b2Body*> mScheduledBodiesToDestroy;
-	std::vector<b2Joint*> mScheduledJointsToDestroy;
 };

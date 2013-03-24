@@ -1,6 +1,5 @@
 #pragma once
 #include "../Tools/Singleton.h"
-#include "States/StateSystem.h"
 #include <SFML/Graphics.hpp>
 
 class StateSystem;

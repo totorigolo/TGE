@@ -2,7 +2,6 @@
 #include <Box2D/Box2D.h>
 #include <string>
 #include <map>
-#include "Level.h"
 #include "../Tools/Loader.h"
 
 class Level;

@@ -1,7 +1,5 @@
 #include "ContactListener.h"
-#include "Joint.h"
 #include "../Entities/Entity.h"
-#include "../Entities/Player.h"
 #include "../Entities/BasicBody.h"
 #include <iostream>
 
@@ -52,9 +50,10 @@ void ContactListener::EndContact(b2Contact* contact)
 // Après la détection de la collision, mais avant la résolution
 void ContactListener::PreSolve(b2Contact* contact, const b2Manifold* oldManifold)
 {
+	B2_NOT_USED(oldManifold);
+
 	// Récupère les bodies
 	Entity *entityA = (Entity*) contact->GetFixtureA()->GetBody()->GetUserData();
-	Entity *entityB = (Entity*) contact->GetFixtureB()->GetBody()->GetUserData();
 
 	// Traite les BasicBodies
 	if (entityA->GetType() == EntityType::BasicBody)

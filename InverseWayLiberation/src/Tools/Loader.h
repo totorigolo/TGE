@@ -1,7 +1,7 @@
 #pragma once
-#include "NonCopyable.h"
 #include <string>
 #include <tinyxml2.h>
+#include "NonCopyable.h"
 
 class Loader : public NonCopyable
 {

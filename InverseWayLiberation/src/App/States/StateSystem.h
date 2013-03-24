@@ -1,7 +1,5 @@
 #pragma once
 #include "../../Tools/Singleton.h"
-#include "State.h"
-#include "../App.h"
 
 class App;
 class State;

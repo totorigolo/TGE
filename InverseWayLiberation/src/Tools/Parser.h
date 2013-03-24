@@ -2,7 +2,6 @@
 #include <string>
 #include <SFML/Graphics.hpp>
 #include <Box2D/Box2D.h>
-#include "Dialog.h"
 
 namespace Parser
 {

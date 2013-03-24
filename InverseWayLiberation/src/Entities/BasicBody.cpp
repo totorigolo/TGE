@@ -1,5 +1,4 @@
 #include "BasicBody.h"
-#include "EntityManager.h"
 #include "../Tools/utils.h"
 #include <iostream>
 

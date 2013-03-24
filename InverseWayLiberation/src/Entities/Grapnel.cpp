@@ -1,5 +1,4 @@
 #include "Grapnel.h"
-#include "EntityManager.h"
 #include "../Tools/utils.h"
 
 // Ctor & dtor

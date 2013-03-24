@@ -1,5 +1,7 @@
 #include "PhysicManager.h"
+#include "DebugDraw.h"
 #include "../Entities/EntityManager.h"
+#include "Joint.h"
 
 //Ctor
 PhysicManager::PhysicManager(b2Vec2 const& gravity, float ppm)

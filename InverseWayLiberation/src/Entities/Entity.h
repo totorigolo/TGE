@@ -1,7 +1,6 @@
 #pragma once
-#include "../Tools/NonCopyable.h"
 #include <SFML/Graphics.hpp>
-#include <list>
+#include "../Tools/NonCopyable.h"
 
 enum class EntityType
 {

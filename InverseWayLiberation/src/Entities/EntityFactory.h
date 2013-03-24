@@ -1,7 +1,7 @@
 #pragma once
-#include "../Physics/PhysicManager.h"
 #include <Box2D/Box2D.h>
 #include <string>
+#include "../Physics/PhysicManager.h"
 
 namespace EntityFactory
 {

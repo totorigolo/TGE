@@ -1,6 +1,6 @@
 #pragma once
-#include "Entity.h"
 #include <SFML/Graphics.hpp>
+#include "Entity.h"
 
 class Deco : public Entity
 {

@@ -1,4 +1,5 @@
 #include "LevelLoader.h"
+#include "Level.h"
 
 #include "../Tools/utils.h"
 #include "../Tools/Dialog.h"
@@ -6,25 +7,24 @@
 
 #include "../Physics/PhysicManager.h"
 
-#include "../Physics/Joints/DistanceJoint.h"
-#include "../Physics/Joints/FrictionJoint.h"
-#include "../Physics/Joints/GearJoint.h"
-#include "../Physics/Joints/PrismaticJoint.h"
-#include "../Physics/Joints/PulleyJoint.h"
-#include "../Physics/Joints/RevoluteJoint.h"
 #include "../Physics/Joints/RopeJoint.h"
 #include "../Physics/Joints/WeldJoint.h"
+#include "../Physics/Joints/GearJoint.h"
 #include "../Physics/Joints/WheelJoint.h"
+#include "../Physics/Joints/PulleyJoint.h"
+#include "../Physics/Joints/DistanceJoint.h"
+#include "../Physics/Joints/FrictionJoint.h"
+#include "../Physics/Joints/RevoluteJoint.h"
+#include "../Physics/Joints/PrismaticJoint.h"
 
-#include "../Entities/EntityFactory.h"
 #include "../Entities/Entity.h"
 #include "../Entities/Deco.h"
-#include "../Entities/LivingBeing.h"
 #include "../Entities/Player.h"
 #include "../Entities/BasicBody.h"
+#include "../Entities/LivingBeing.h"
+#include "../Entities/EntityFactory.h"
 
 #include <Thor/Resources.hpp>
-#include <vector>
 
 // Ctor
 LevelLoader::LevelLoader(std::string const& path, Level *level)

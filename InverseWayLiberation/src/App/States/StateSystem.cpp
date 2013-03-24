@@ -1,4 +1,6 @@
 #include "StateSystem.h"
+#include "State.h"
+#include "../App.h"
 
 // Ctor & Dtor
 StateSystem::StateSystem()

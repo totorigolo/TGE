@@ -1,5 +1,4 @@
 #pragma once
-#include "../../Tools/Singleton.h"
 #include "../../Tools/NonCopyable.h"
 #include "../App.h"
 

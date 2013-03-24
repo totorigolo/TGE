@@ -1,7 +1,6 @@
 #pragma once
 #include <SFML/System.hpp>
 #include <Box2D/Box2D.h>
-#include <string>
 
 // Constantes de convertion Radians -> Degrés
 const float DEGREES_PER_RADIANS = 180.f / b2_pi;

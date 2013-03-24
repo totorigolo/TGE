@@ -1,7 +1,6 @@
 #include "LivingBeing.h"
 #include "EntityManager.h"
 #include "../Tools/utils.h"
-#include <iostream>
 
 // Ctor & dtor
 LivingBeing::LivingBeing(PhysicManager *physicMgr, b2Vec2 position, std::shared_ptr<sf::Texture> texture, int layer)
@@ -108,13 +107,3 @@ const b2Body* LivingBeing::GetCollisionBody() const
 {
 	return mBody;
 }
-/*
-AnimatedSprite& LivingBeing::GetAnimatedSprite()
-{
-	return mAnimatedSprite;
-}
-const AnimatedSprite& LivingBeing::GetAnimatedSprite() const
-{
-	return mAnimatedSprite;
-}
-//*/

@@ -83,7 +83,6 @@
     <ClInclude Include="src\Tools\NonCopyable.h" />
     <ClInclude Include="src\Tools\QuadTree\QuadTree.h" />
     <ClInclude Include="src\Tools\QuadTree\QuadTreeObject.h" />
-    <ClInclude Include="src\Tools\Segment.h" />
     <ClInclude Include="src\Tools\Singleton.h" />
     <ClInclude Include="src\Tools\Dialog.h" />
     <ClInclude Include="src\Tools\Parser.h" />

@@ -6,8 +6,8 @@
 #include "../Physics/Joints/WeldJoint.h"
 #include "../Physics/Joint.h"
 #include "../Tools/utils.h"
-#include <cassert>
 #include <iostream>
+#include <cassert>
 #include <list>
 #include <map>
 

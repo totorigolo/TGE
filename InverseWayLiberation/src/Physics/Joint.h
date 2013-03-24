@@ -1,6 +1,7 @@
 #pragma once
 #include <Box2D/Box2D.h>
 #include <Thor/Resources.hpp>
+#include <list>
 #include "PhysicManager.h"
 #include "../Entities/Entity.h"
 #include "../Tools/NonCopyable.h"
