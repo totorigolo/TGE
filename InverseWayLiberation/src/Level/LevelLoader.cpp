@@ -668,7 +668,7 @@ bool LevelLoader::ProcessDeco()
 			posRot.z = rotation;
 			
 			// Ajoute la déco
-			d = new Deco(z, &*mLevel->mTextureMap[texture], getVec3(b22sfVec(getVec2(posRot), mLevel->mPhysicMgr->GetPPM()), posRot.z));
+			d = new Deco(z, mLevel->mTextureMap[texture], getVec3(b22sfVec(getVec2(posRot), mLevel->mPhysicMgr->GetPPM()), posRot.z));
 			mLevel->mEntityManager.RegisterEntity(d);
 
 			// On récupère la prochaine image

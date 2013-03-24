@@ -3,11 +3,12 @@
 #include "../Tools/utils.h"
 
 // Ctor & dtor
-LivingBeing::LivingBeing(PhysicManager *physicMgr, b2Vec2 position, std::shared_ptr<sf::Texture> texture, int layer)
+LivingBeing::LivingBeing(PhysicManager *physicMgr, b2Vec2 position, const std::shared_ptr<sf::Texture> &texture, int layer)
 	: Entity(layer), mBody(nullptr), mTexture(texture), mPhysicMgr(physicMgr), mIsDead(true), mCanJump(false),
 	mBodyIsCreated(false)
 {
 	assert(mPhysicMgr && "n'est pas valide.");
+	assert(mTexture.get() && "n'est pas valide.");
 
 	// Change le type
 	mType = EntityType::LivingBeing;
@@ -24,8 +25,8 @@ LivingBeing::LivingBeing(PhysicManager *physicMgr, b2Vec2 position, std::shared_
 	mBody = mPhysicMgr->CreateBody(&bodyDef);
 	
 	// Shape & Fixture du corps
-	float x = (texture->getSize().x / 2) * mPhysicMgr->GetMPP();
-	float y = (texture->getSize().y / 2) * mPhysicMgr->GetMPP();
+	float x = (mTexture->getSize().x / 2) * mPhysicMgr->GetMPP();
+	float y = (mTexture->getSize().y / 2) * mPhysicMgr->GetMPP();
 	b2PolygonShape shape1;
 	shape1.SetAsBox(x, y);
 	shape1.m_radius = 0.f;

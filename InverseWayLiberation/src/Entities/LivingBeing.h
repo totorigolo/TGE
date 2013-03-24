@@ -1,5 +1,6 @@
 #pragma once
 #include <Box2D/Box2D.h>
+#include <memory>
 #include "Entity.h"
 #include "../Physics/PhysicManager.h"
 
@@ -7,7 +8,7 @@ class LivingBeing : public Entity
 {
 public:
 	// Ctor & dtor
-	LivingBeing(PhysicManager *physicMgr, b2Vec2 position, std::shared_ptr<sf::Texture> texture, int layer = 1);
+	LivingBeing(PhysicManager *physicMgr, b2Vec2 position, const std::shared_ptr<sf::Texture> &texture, int layer = 1);
 	virtual ~LivingBeing();
 
 	// Mise à jour

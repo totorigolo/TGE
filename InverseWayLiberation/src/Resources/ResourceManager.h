@@ -10,9 +10,7 @@ typedef std::map<std::string, std::shared_ptr<sf::Texture>> TextureMap;
 class ResourceManager : public thor::MultiResourceCache, public Singleton<ResourceManager>
 {
 public:
-	ResourceManager() {}
-	virtual ~ResourceManager() {}
-
+	// Obtient la TextureMap
 	TextureMap &GetTextureMap()
 	{
 		return mTextureMap;

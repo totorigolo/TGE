@@ -4,7 +4,8 @@
 
 // Ctor & dtor
 BasicBody::BasicBody(PhysicManager *mgr, int layer)
-	: Entity(layer), mBasicBodyType(Type::Null), mCollisionType(CollisionType::Default), mPhysicMgr(mgr), mBody(nullptr), mBodyIsCreated(false)
+	: Entity(layer), mBasicBodyType(Type::Null), mCollisionType(CollisionType::Default),
+	mPhysicMgr(mgr), mBody(nullptr), mBodyIsCreated(false)
 {
 	assert(mPhysicMgr && "n'est pas valide.");
 
@@ -17,15 +18,17 @@ BasicBody::~BasicBody()
 }
 
 // Création du body
-bool BasicBody::CreateDynBox(b2Vec3 posRot, std::shared_ptr<sf::Texture> texture, float density, float friction, float restitution
-																				, int groupIndex, uint16 categoryBits, uint16 maskBits)
+bool BasicBody::CreateDynBox(b2Vec3 posRot, const std::shared_ptr<sf::Texture> &texture,
+							 float density, float friction, float restitution, int groupIndex, uint16 categoryBits, uint16 maskBits)
 {
 	// On n'en crée pas de nouveau si il y en a déjà un
 	if (mBodyIsCreated)
 		return false;
 
 	// Change la texture
-	mSprite.setTexture(*texture);
+	mTexture = texture;
+	assert(mTexture.get() && "n'est pas valide.");
+	mSprite.setTexture(*mTexture);
 	mSprite.setOrigin(mSprite.getTextureRect().width / 2.f, mSprite.getTextureRect().height / 2.f);
 
 	// BodyDef
@@ -37,7 +40,7 @@ bool BasicBody::CreateDynBox(b2Vec3 posRot, std::shared_ptr<sf::Texture> texture
 
 	// Shape
 	b2PolygonShape shape;
-	shape.SetAsBox((texture->getSize().x / 2) * mPhysicMgr->GetMPP(), (texture->getSize().y / 2) * mPhysicMgr->GetMPP());
+	shape.SetAsBox((mTexture->getSize().x / 2) * mPhysicMgr->GetMPP(), (mTexture->getSize().y / 2) * mPhysicMgr->GetMPP());
 	shape.m_radius = 0.f;
 
 	// Fixture
@@ -58,15 +61,17 @@ bool BasicBody::CreateDynBox(b2Vec3 posRot, std::shared_ptr<sf::Texture> texture
 
 	return true;
 }
-bool BasicBody::CreateDynCircle(b2Vec3 posRot, std::shared_ptr<sf::Texture> texture, float density, float friction, float restitution
-																				   , int groupIndex, uint16 categoryBits, uint16 maskBits)
+bool BasicBody::CreateDynCircle(b2Vec3 posRot, const std::shared_ptr<sf::Texture> &texture,
+								float density, float friction, float restitution, int groupIndex, uint16 categoryBits, uint16 maskBits)
 {
 	// On n'en crée pas de nouveau si il y en a déjà un
 	if (mBodyIsCreated)
 		return false;
 
 	// Change la texture
-	mSprite.setTexture(*texture);
+	mTexture = texture;
+	assert(mTexture.get() && "n'est pas valide.");
+	mSprite.setTexture(*mTexture);
 	mSprite.setOrigin(mSprite.getTextureRect().width / 2.f, mSprite.getTextureRect().height / 2.f);
 
 	// BodyDef
@@ -98,15 +103,17 @@ bool BasicBody::CreateDynCircle(b2Vec3 posRot, std::shared_ptr<sf::Texture> text
 
 	return true;
 }
-bool BasicBody::CreateStaticBox(b2Vec3 posRot, std::shared_ptr<sf::Texture> texture, float friction, float restitution
-																				   , int groupIndex, uint16 categoryBits, uint16 maskBits)
+bool BasicBody::CreateStaticBox(b2Vec3 posRot, const std::shared_ptr<sf::Texture> &texture,
+								float friction, float restitution, int groupIndex, uint16 categoryBits, uint16 maskBits)
 {
 	// On n'en crée pas de nouveau si il y en a déjà un
 	if (mBodyIsCreated)
 		return false;
 
 	// Change la texture
-	mSprite.setTexture(*texture);
+	mTexture = texture;
+	assert(mTexture.get() && "n'est pas valide.");
+	mSprite.setTexture(*mTexture);
 	mSprite.setOrigin(mSprite.getTextureRect().width / 2.f, mSprite.getTextureRect().height / 2.f);
 
 	// BodyDef
@@ -165,6 +172,7 @@ void BasicBody::Destroy()
 	mBasicBodyType = Type::Null;
 	mBodyIsCreated = false;
 	mIsAlive = false;
+	mTexture.reset();
 }
 
 // Pour le rendu

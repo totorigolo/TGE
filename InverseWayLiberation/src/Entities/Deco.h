@@ -1,13 +1,13 @@
 #pragma once
 #include <SFML/Graphics.hpp>
+#include <memory>
 #include "Entity.h"
 
 class Deco : public Entity
 {
 public:
 	// Ctor & dtor
-	Deco(int layer, sf::Sprite *sprite);
-	Deco(int layer, sf::Texture *texture, sf::Vector3f posRot); // PosRot pixel / degrés
+	Deco(int layer, const std::shared_ptr<sf::Texture> &texture, sf::Vector3f posRot); // PosRot pixel / degrés
 	virtual ~Deco();
 
 	// Mise à jour
@@ -17,10 +17,10 @@ public:
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
 	// Accesseurs
-	bool IsItMySprite() const;
-	const sf::Sprite* GetSprite() const;
+	sf::Sprite& GetSprite();
+	const sf::Sprite& GetSprite() const;
 
 private:
-	bool mSpriteIsMine;
-	sf::Sprite *mSprite;
+	sf::Sprite mSprite;
+	std::shared_ptr<sf::Texture> mTexture;
 };

@@ -1,5 +1,6 @@
 #pragma once
 #include <Box2D/Box2D.h>
+#include <memory>
 #include "Entity.h"
 #include "../Physics/PhysicManager.h"
 
@@ -29,14 +30,17 @@ public:
 	virtual ~BasicBody();
 
 	// Création du body
-	bool CreateDynBox(b2Vec3 posRot, std::shared_ptr<sf::Texture> texture, float density = 1.f, float friction = 0.2f, float restitution = 0.0f
-																		 , int groupIndex = 0, uint16 categoryBits = 0x0001, uint16 maskBits = 0xFFFF);
+	bool CreateDynBox(b2Vec3 posRot, const std::shared_ptr<sf::Texture> &texture,
+					  float density = 1.f, float friction = 0.2f, float restitution = 0.0f,
+					  int groupIndex = 0, uint16 categoryBits = 0x0001, uint16 maskBits = 0xFFFF);
 
-	bool CreateDynCircle(b2Vec3 posRot, std::shared_ptr<sf::Texture> texture, float density = 1.f, float friction = 0.2f, float restitution = 0.f
-																			, int groupIndex = 0, uint16 categoryBits = 0x0001, uint16 maskBits = 0xFFFF);
+	bool CreateDynCircle(b2Vec3 posRot, const std::shared_ptr<sf::Texture> &texture,
+						 float density = 1.f, float friction = 0.2f, float restitution = 0.f,
+						 int groupIndex = 0, uint16 categoryBits = 0x0001, uint16 maskBits = 0xFFFF);
 
-	bool CreateStaticBox(b2Vec3 posRot, std::shared_ptr<sf::Texture> texture, float friction = 0.2f, float restitution = 0.0f
-																			, int groupIndex = 0, uint16 categoryBits = 0x0001, uint16 maskBits = 0xFFFF);
+	bool CreateStaticBox(b2Vec3 posRot, const std::shared_ptr<sf::Texture> &texture,
+						 float friction = 0.2f, float restitution = 0.0f,
+						 int groupIndex = 0, uint16 categoryBits = 0x0001, uint16 maskBits = 0xFFFF);
 
 	// Mise à jour
 	virtual void Update();
@@ -80,4 +84,5 @@ private:
 
 	// Sprite SFML
 	sf::Sprite mSprite;
+	std::shared_ptr<sf::Texture> mTexture;
 };

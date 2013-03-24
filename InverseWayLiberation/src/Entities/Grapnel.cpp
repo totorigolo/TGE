@@ -16,18 +16,21 @@ Grapnel::~Grapnel()
 }
 
 // Création du body
-bool Grapnel::Create(std::shared_ptr<sf::Texture> textureHook, b2Body *bodyA, b2Vec2 ptA, b2Body *bodyB, b2Vec2 ptB)
+bool Grapnel::Create(const std::shared_ptr<sf::Texture> &textureHook, b2Body *bodyA, b2Vec2 ptA, b2Body *bodyB, b2Vec2 ptB)
 {
 	// On n'en crée pas de nouveau si il y en a déjà un
 	if (mPhysicMgr->JointExists(mJointID))
 		return false;
 
 	// On vérifie les bodies et la texture
-	assert(bodyA && bodyB && textureHook.get() && "ne sont pas valides.");
+	assert(bodyA && "n'est pas valide.");
+	assert(bodyB && "n'est pas valide.");
 
 	// Change la texture du crochet
-	mSpriteHook.setTexture(*textureHook);
-	mSpriteHook.setOrigin(textureHook->getSize().x / 2.f, textureHook->getSize().y / 2.f);
+	mTexture = textureHook;
+	assert(mTexture.get() && "n'est pas valide.");
+	mSpriteHook.setTexture(*mTexture);
+	mSpriteHook.setOrigin(mTexture->getSize().x / 2.f, mTexture->getSize().y / 2.f);
 
 	// Création du Joint
 	mJoint = new DistanceJoint(mPhysicMgr, bodyA, ptA, bodyB, ptB);
@@ -53,6 +56,7 @@ void Grapnel::Destroy()
 		mJointID = -1;
 	}
 	mIsAlive = false;
+	mTexture.reset();
 }
 
 // Mise à jour
@@ -91,7 +95,6 @@ void Grapnel::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
 	if (mPhysicMgr->JointExists(mJointID))
 	{
-		//target.draw(*mJoint);
 		target.draw(mSpriteHook, states);
 	}
 }
