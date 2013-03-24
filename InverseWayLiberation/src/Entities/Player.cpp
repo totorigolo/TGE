@@ -14,10 +14,16 @@ Player::Player(PhysicManager *physicMgr, b2Vec2 position, std::shared_ptr<sf::Te
 	// Tout est Ok
 	mIsAlive = true;
 	mIsDead = false;
+
+	// Demande l'espionnage de touches
+	mInputManager.AddSpyedKey(sf::Keyboard::Space);
 }
 Player::~Player()
 {
 	mIsAlive = false;
+
+	// Arrête l'espionnage de touches
+	mInputManager.RemoveSpyedKey(sf::Keyboard::Space);
 }
 
 // Mise à jour
@@ -39,6 +45,7 @@ void Player::UpdateEvents()
 		assert(mBody && "n'est pas valide.");
 
 		/* Traite les différents mouvements */
+		// Gauche
 		if (mInputManager.GetKeyState(sf::Keyboard::Q))
 		{
 			if ((mCanJump && mBody->GetLinearVelocity().x >= -5.f)
@@ -47,7 +54,9 @@ void Player::UpdateEvents()
 				mBody->ApplyForceToCenter(b2Vec2(-5.f, 0.f));
 			}
 		}
-		else if (mInputManager.GetKeyState(sf::Keyboard::D))
+
+		// Droite
+		if (mInputManager.GetKeyState(sf::Keyboard::D))
 		{
 			if ((mCanJump && mBody->GetLinearVelocity().x <= 5.f)
 				|| mBody->GetLinearVelocity().x <= 3.f)
@@ -55,15 +64,14 @@ void Player::UpdateEvents()
 				mBody->ApplyForceToCenter(b2Vec2(5.f, 0));
 			}
 		}
-		else if (mInputManager.GetKeyState(sf::Keyboard::Space))
+
+		// Saut
+		if (mInputManager.KeyPressed(sf::Keyboard::Space))
 		{
 			if (mCanJump)
 			{
 				mBody->ApplyForceToCenter(b2Vec2(0.f, 260.f)); // 300.f = un étage
 			}
-		}
-		else if (mInputManager.GetKeyState(sf::Keyboard::LControl))
-		{
 		}
 	}
 }
