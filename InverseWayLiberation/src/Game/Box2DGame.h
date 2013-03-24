@@ -13,7 +13,7 @@ class Box2DGame : public NonCopyable
 {
 public:
 	// Ctor & dtor
-	Box2DGame(sf::RenderWindow & window);
+	Box2DGame(sf::RenderWindow &window);
 	virtual ~Box2DGame(void);
 	
 	/// Boucle de jeu
