@@ -1,7 +1,8 @@
 #include "LuaMachine.h"
-#include "../Tools/utils.h"
+#include "Box2DGame.h"
+#include "../Level/Level.h"
 #include "../Entities/EntityFactory.h"
-#include <luabind/luabind.hpp>
+#include "../Physics/JointFactory.h"
 #include <luabind/operator.hpp>
 #include <iostream>
 #include <exception>
@@ -35,10 +36,19 @@ void LuaMachine::RegisterEntityFactory()
 		// Enregistre les fonctions
 		luabind::module(mLuaState) [
 			luabind::namespace_("EntityFactory") [
-				luabind::def("CreateBox", EntityFactory::CreateBox),
-				luabind::def("CreateLamp", EntityFactory::CreateLamp),
-				luabind::def("CreateCircle", EntityFactory::CreateCircle),
-				luabind::def("CreateRagdoll", EntityFactory::CreateRagdoll)
+				luabind::def("LoadTexture", EntityFactory::LoadTexture),
+				luabind::def("CreateDeco", (void(*)(const b2Vec3&, const std::string&)) EntityFactory::CreateDeco),
+				luabind::def("CreateDeco", (void(*)(const b2Vec3&, const std::string&, int)) EntityFactory::CreateDeco),
+				luabind::def("CreateDynamicBox", (void(*)(const b2Vec3&, const std::string&)) EntityFactory::CreateDynamicBox),
+				luabind::def("CreateDynamicBox", (void(*)(const b2Vec3&, const std::string&, int)) EntityFactory::CreateDynamicBox),
+				luabind::def("CreateStaticBox", (void(*)(const b2Vec3&, const std::string&)) EntityFactory::CreateStaticBox),
+				luabind::def("CreateStaticBox", (void(*)(const b2Vec3&, const std::string&, int)) EntityFactory::CreateStaticBox),
+				luabind::def("CreateLamp", (void(*)(const b2Vec3&, const std::string&)) EntityFactory::CreateLamp),
+				luabind::def("CreateLamp", (void(*)(const b2Vec3&, const std::string&, int)) EntityFactory::CreateLamp),
+				luabind::def("CreateDynamicCircle", (void(*)(const b2Vec3&, const std::string&)) EntityFactory::CreateDynamicCircle),
+				luabind::def("CreateDynamicCircle", (void(*)(const b2Vec3&, const std::string&, int)) EntityFactory::CreateDynamicCircle),
+				luabind::def("CreateRagdoll", (void(*)(const b2Vec3&)) EntityFactory::CreateRagdoll),
+				luabind::def("CreateRagdoll", (void(*)(const b2Vec3&, int)) EntityFactory::CreateRagdoll)
 			]
 		];
 	}
@@ -46,6 +56,61 @@ void LuaMachine::RegisterEntityFactory()
 	{
 		std::cerr << e.what() << std::endl;
 	}
+}
+void LuaMachine::RegisterJointFactory()
+{
+	/*
+	// Crée un DistanceJoint
+	void CreateDistanceJoint(b2Body *b1, b2Vec2 pt1, b2Body *b2, b2Vec2 pt2, float frequencyHz = 4.f, float damping = 0.5f, bool collideconnected = true);
+	*/
+	/*
+	try
+	{
+		// Enregistre les fonctions
+		luabind::module(mLuaState) [
+			luabind::namespace_("JointFactory") [
+				luabind::def("CreateDistanceJoint", (void(*)(const b2Vec3&, const std::string&)) EntityFactory::CreateDistanceJoint),
+				luabind::def("CreateDistanceJoint", (void(*)(const b2Vec3&, const std::string&, int)) EntityFactory::CreateDistanceJoint),
+			]
+		];
+	}
+	catch (const std::exception &e)
+	{
+		std::cerr << e.what() << std::endl;
+	}*/
+}
+void LuaMachine::RegisterLevel()
+{
+	try
+	{
+		// Enregistrement
+		luabind::module(mLuaState) [
+			// Level
+			luabind::class_<Level>("Level")
+				// Fxs
+				.def("LoadFromFile", &Level::LoadFromFile)
+				.def("SetViewPosition", &Level::SetViewPosition)
+				.def("SetZoom", &Level::SetZoom)
+				.def("GetPlayer", &Level::GetPlayer)
+				// Attributs
+				.property("charged", &Level::IsCharged, &Level::SetCharged)
+				.property("gravity", &Level::GetGravity, &Level::SetGravity)
+				.property("PPM", &Level::GetPPM, &Level::SetPPM)
+				.property("bckgcolor", &Level::GetBckgColor, &Level::SetBckgColor)
+				.property("originview", &Level::GetOriginView, &Level::SetOriginView)
+				.property("defaultzoom", &Level::GetDefaultZoom, &Level::SetDefaultZoom)
+		];
+	}
+	catch (const std::exception &e)
+	{
+		std::cerr << e.what() << std::endl;
+	}
+}
+
+// Enregistrement des attributs
+void LuaMachine::UnregisterGlobalLuaVar(const std::string &name)
+{
+	luabind::globals(mLuaState)[name] = luabind::nil;
 }
 
 // Exécution
@@ -65,9 +130,9 @@ int LuaMachine::DoString(const std::string &command)
 // Enregistrements privés
 void LuaMachine::RegisterBox2D()
 {
+	/* Enregistre les classes */
 	try
 	{
-		/* Enregistre les classes */
 		// b2Vec2
 		luabind::module(mLuaState) [
 			// La classe
@@ -134,9 +199,9 @@ void LuaMachine::RegisterBox2D()
 }
 void LuaMachine::RegisterSFML()
 {
+	/* Enregistre les classes */
 	try
 	{
-		/* Enregistre les classes */
 		// sf::Vector2f
 		luabind::module(mLuaState) [
 			// La classe
@@ -175,6 +240,25 @@ void LuaMachine::RegisterSFML()
 				// Attributs
 				.def_readwrite("x", &sf::Vector2i::x)
 				.def_readwrite("y", &sf::Vector2i::y)
+		];
+
+		// sf::Color
+		luabind::module(mLuaState) [
+			// La classe
+			luabind::class_<sf::Color>("Color")
+				// Ctors
+				.def(luabind::constructor<>())
+				.def(luabind::constructor<sf::Uint8, sf::Uint8, sf::Uint8>())
+				.def(luabind::constructor<sf::Uint8, sf::Uint8, sf::Uint8, sf::Uint8>())
+				// Ops
+				.def(luabind::const_self + sf::Color())
+				.def(luabind::const_self * sf::Color())
+				.def(luabind::const_self == sf::Color())
+				// Attributs
+				.def_readwrite("r", &sf::Color::r)
+				.def_readwrite("g", &sf::Color::g)
+				.def_readwrite("b", &sf::Color::b)
+				.def_readwrite("a", &sf::Color::a)
 		];
 	}
 	catch (const std::exception &e)
@@ -215,3 +299,9 @@ int LuaMachine::ReportLuaError(int errorCode)
 
 	return errorCode;
 }
+
+/*
+LoadTexture("way",			"tex/way.png")
+JointFactory.CreatePulleyJoint(1, b2Vec2(0.f, 0.f), 2, b2Vec2(0.f, 0.f), b2Vec2(-2.f, 0.5f), b2Vec2(1.9f, 4.f), 1.5f)
+JointFactory.CreateRopeJoint(3, b2Vec2(0.f, 0.f), 4, b2Vec2(0.f, 0.f), 1.f, true, (0, 255, 255))
+*/

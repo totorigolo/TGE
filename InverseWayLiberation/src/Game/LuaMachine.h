@@ -1,6 +1,10 @@
 #pragma once
 #include <lua.hpp>
+// Désactive les warning "warning C4251: ...nécessite une interface DLL pour être utilisé(e) par les clients..."
+#pragma warning (disable : 4251)
+#include <luabind/luabind.hpp>
 #include <string>
+#include "../Level/Level.h"
 
 class LuaMachine
 {
@@ -12,6 +16,23 @@ public:
 	// Enregistrements
 	// HACK: Déplacer ça dans les classes respectives ?
 	void RegisterEntityFactory();
+	void RegisterJointFactory();
+	void RegisterLevel();
+
+	// Enregistrement des attributs
+	template <typename T>
+	void RegisterGlobalLuaVar(const std::string &name, T *var)
+	{
+		try
+		{
+			luabind::globals(mLuaState)[name] = var;
+		}
+		catch (const std::exception &e)
+		{
+			std::cerr << e.what() << std::endl;
+		}
+	}
+	void UnregisterGlobalLuaVar(const std::string &name);
 
 	// Exécution
 	int DoFile(const std::string &path);
@@ -30,4 +51,7 @@ private:
 private:
 	// State Lua
 	lua_State *mLuaState;
+
+	// Level
+	Level *mLevel;
 };

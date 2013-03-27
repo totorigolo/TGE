@@ -2,6 +2,7 @@
 #include "../Resources/ResourceManager.h"
 #include "EntityManager.h"
 #include "BasicBody.h"
+#include "Deco.h"
 #include "../Physics/Joints/RevoluteJoint.h"
 #include "../Physics/Joints/WeldJoint.h"
 #include "../Physics/Joint.h"
@@ -31,6 +32,87 @@ namespace EntityFactory
 	void SetPhysicManager(PhysicManager *physicMgr)
 	{
 		mPhysicManager = physicMgr;
+	}
+	
+	// Charge une texture
+	void LoadTexture(const std::string &name, const std::string &path)
+	{
+		try {
+			mTextureMap[name] = mResourceManager.acquire(thor::Resources::fromFile<sf::Texture>(path));
+		}
+		catch (const thor::ResourceLoadingException &e)
+		{
+			std::cout << e.what() << std::endl;
+		}
+	}
+
+	// Crée une déco
+	void CreateDeco(const b2Vec3 &posRot, const std::string &texture, int layer)
+	{
+		if (!mPhysicManager) return;
+
+		// Crée le BasicBody / la Box
+		Deco *d = new Deco(layer, mTextureMap[texture], b32sfVec(posRot, mPhysicManager->GetPPM()));
+
+		// L'enregistre et trie les Entities
+		mEntityManager.RegisterEntity(d);
+		mEntityManager.SortByLayer();
+	}
+
+	// Crée une Box parmi la liste
+	void CreateDynamicBox(const b2Vec3 &posRot, const std::string &texture, int layer)
+	{
+		if (!mPhysicManager) return;
+
+		// Crée le BasicBody / la Box
+		BasicBody *b = new BasicBody(mPhysicManager, layer);
+		b->CreateDynBox(posRot, mTextureMap[texture]);
+
+		// L'enregistre et trie les Entities
+		mEntityManager.RegisterEntity(b);
+		mEntityManager.SortByLayer();
+	}
+
+	// Crée un StaticBox
+	void CreateStaticBox(const b2Vec3 &posRot, const std::string &texture, int layer)
+	{
+		if (!mPhysicManager) return;
+
+		// Crée le BasicBody / la Box
+		BasicBody *b = new BasicBody(mPhysicManager, layer);
+		b->CreateStaticBox(posRot, mTextureMap[texture]);
+
+		// L'enregistre et trie les Entities
+		mEntityManager.RegisterEntity(b);
+		mEntityManager.SortByLayer();
+	}
+	
+	// Crée un cercle parmi la liste
+	void CreateDynamicCircle(const b2Vec3 &posRot, const std::string &texture, int layer)
+	{
+		if (!mPhysicManager) return;
+
+		// Crée le BasicBody / le cercle
+		BasicBody *b = new BasicBody(mPhysicManager, layer);
+		b->CreateDynCircle(posRot, mTextureMap[texture]);
+
+		// L'enregistre et trie les Entities
+		mEntityManager.RegisterEntity(b);
+		mEntityManager.SortByLayer();
+	}
+
+	// Crée un lampadaire
+	void CreateLamp(const b2Vec3 &posRot, int layer)
+	{
+		if (!mPhysicManager) return;
+
+		// Crée le BasicBody / le lampadaire
+		BasicBody *b = new BasicBody(mPhysicManager, layer);
+		b->CreateStaticBox(posRot, mTextureMap["lampadere"], 0.1f, 0.05f);
+		
+		// L'enregistre et trie les Entities
+		EntityManager::GetInstance().RegisterEntity(b);
+		EntityManager::GetInstance().SortByLayer();
 	}
 
 	// Crée un Ragdoll
@@ -147,48 +229,6 @@ namespace EntityFactory
 	
 		// Prévient l'EntityManager qu'on a ajouté des Entities
 		mEntityManager.SortByLayer();
-	}
-
-	// Crée une Box parmi la liste
-	void CreateBox(const b2Vec3 &posRot, const std::string &texture, int layer)
-	{
-		if (!mPhysicManager) return;
-
-		// Crée le BasicBody / la Box
-		BasicBody *b = new BasicBody(mPhysicManager, layer);
-		b->CreateDynBox(posRot, mTextureMap[texture]);
-
-		// L'enregistre et trie les Entities
-		mEntityManager.RegisterEntity(b);
-		mEntityManager.SortByLayer();
-	}
-
-	// Crée un cercle parmi la liste
-	void CreateCircle(const b2Vec3 &posRot, const std::string &texture, int layer)
-	{
-		if (!mPhysicManager) return;
-
-		// Crée le BasicBody / le cercle
-		BasicBody *b = new BasicBody(mPhysicManager, layer);
-		b->CreateDynCircle(posRot, mTextureMap[texture]);
-
-		// L'enregistre et trie les Entities
-		mEntityManager.RegisterEntity(b);
-		mEntityManager.SortByLayer();
-	}
-
-	// Crée un lampadaire
-	void CreateLamp(const b2Vec3 &posRot, int layer)
-	{
-		if (!mPhysicManager) return;
-
-		// Crée le BasicBody / le lampadaire
-		BasicBody *b = new BasicBody(mPhysicManager, layer);
-		b->CreateStaticBox(posRot, mTextureMap["lampadere"], 0.1f, 0.05f);
-		
-		// L'enregistre et trie les Entities
-		EntityManager::GetInstance().RegisterEntity(b);
-		EntityManager::GetInstance().SortByLayer();
 	}
 
 } // namespace EntityFactory

@@ -12,7 +12,7 @@ class PhysicManager : public NonCopyable
 {
 public:
 	// Ctor & dtor
-	PhysicManager(b2Vec2 const& gravity, float ppm = 30.f);
+	PhysicManager(b2Vec2 const& gravity, float ppm = 100.f);
 	virtual ~PhysicManager(void);
 	
 	// Gestion des body

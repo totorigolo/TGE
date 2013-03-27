@@ -226,6 +226,9 @@
     <ClCompile Include="src\Game\LuaMachine.cpp">
       <Filter>Fichiers sources\Game</Filter>
     </ClCompile>
+    <ClCompile Include="src\Physics\JointFactory.cpp">
+      <Filter>Fichiers sources\Physics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Physics\Joints\DistanceJoint.h">
@@ -371,6 +374,9 @@
     </ClInclude>
     <ClInclude Include="src\Game\LuaMachine.h">
       <Filter>Fichiers d%27en-tête\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Physics\JointFactory.h">
+      <Filter>Fichiers d%27en-tête\Physics</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

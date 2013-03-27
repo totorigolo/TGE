@@ -22,10 +22,11 @@ Box2DGame::Box2DGame(sf::RenderWindow & window)
 	// Etats du jeu
 	mPaused = false;
 
+	mLevel = nullptr;
+	mMouseJointCreated = false;
 	mMouseJointID = -1;
 	mPinBodyA = nullptr;
 	mPinBodyB = nullptr;
-	mLevel = nullptr;
 	mHookedSBody = nullptr;
 
 	// Grapin de test
@@ -92,12 +93,14 @@ bool Box2DGame::OnInit()
 	LevelLoader("lvls/1.xvl", mLevel);
 	if (!mLevel->IsCharged())
 		return false;
-
+	
 	// Règle l'EntityFactory
 	EntityFactory::SetPhysicManager(&mPhysicMgr);
 
 	// Initialise la machine Lua
 	mConsole.RegisterEntityFactory();
+	mConsole.RegisterLevel();
+	mConsole.RegisterGlobalLuaVar("level", mLevel);
 
 	/* Evènements */
 	// Enregistre la fênetre
@@ -116,6 +119,7 @@ bool Box2DGame::OnInit()
 	mInputManager.AddSpyedKey(sf::Keyboard::P); // Pin
 	mInputManager.AddSpyedKey(sf::Keyboard::H); // Hook
 	mInputManager.AddSpyedKey(sf::Keyboard::I); // Console
+	mInputManager.AddSpyedKey(sf::Keyboard::X); // test
 
 	return true;
 }
@@ -141,12 +145,12 @@ void Box2DGame::OnEvent()
 	if (mInputManager.IsKeyPressed(sf::Keyboard::B))
 	{
 		std::string list[] = {"box", "box2", "caisse", "way", "tonneau"};
-		EntityFactory::CreateBox(getVec3(mMp), randomElement(list, 5));
+		EntityFactory::CreateDynamicBox(getVec3(mMp), randomElement(list, 5));
 	}
 	if (mInputManager.IsKeyPressed(sf::Keyboard::C))
 	{
 		std::string list[] = {"ball", "circle"};
-		EntityFactory::CreateCircle(getVec3(mMp), randomElement(list, 2));
+		EntityFactory::CreateDynamicCircle(getVec3(mMp), randomElement(list, 2));
 	}
 	if (mInputManager.KeyReleased(sf::Keyboard::T))
 	{
@@ -160,17 +164,34 @@ void Box2DGame::OnEvent()
 	// Lua
 	if (mInputManager.KeyPressed(sf::Keyboard::I))
 	{
+		sf::Clock c;
 		mConsole.DoFile("scripts/test1.lua");
+		std::cout << c.getElapsedTime().asSeconds() << " sec" << std::endl;
+	}
+	if (mInputManager.KeyPressed(sf::Keyboard::X))
+	{
+		sf::Clock c;
+		mConsole.DoFile("scripts/lvl1.lua");
+		std::cout << c.getElapsedTime().asSeconds() << " sec" << std::endl;
 	}
 
 	// Déplacements des objets
 	if (mInputManager.GetRMBState())
 	{
 		// Si la souris est déjà attachée, on met à jour la position
-		MouseJoint *j = ((MouseJoint*) mPhysicMgr.GetJoint(mMouseJointID));
-		if (j)
+		if (mMouseJointCreated)
 		{
-			j->SetTarget(mMp);
+			MouseJoint *j = ((MouseJoint*) mPhysicMgr.GetJoint(mMouseJointID));
+			if (j)
+			{
+				j->SetTarget(mMp);
+			}
+			// Le joint n'existe plus
+			else
+			{
+				mMouseJointCreated = false;
+				mMouseJointID = -1;
+			}
 		}
 
 		// Sinon on recherche l'objet sous la souris et on l'attache
@@ -188,28 +209,38 @@ void Box2DGame::OnEvent()
 				if (staticBody) // Si il y en a un
 				{
 					b2Body* body = callback.GetFixture()->GetBody();
-					j = new MouseJoint(&mPhysicMgr, body, staticBody, mMp, 10000000.f * body->GetMass());
+					MouseJoint *j = new MouseJoint(&mPhysicMgr, body, staticBody, mMp, 10000000.f * body->GetMass());
 					mMouseJointID = j->GetID();
+					mMouseJointCreated = true;
 				}
 			}
 		}
 	}
-	else if (mPhysicMgr.JointExists(mMouseJointID))
+	else if (mMouseJointCreated)
 	{
-		mPhysicMgr.DestroyJoint(mMouseJointID);
-		mMouseJointID = -1;
+		if (mPhysicMgr.JointExists(mMouseJointID))
+		{
+			mPhysicMgr.DestroyJoint(mMouseJointID);
+			mMouseJointID = -1;
+		}
+		// Le joint n'existe plus
+		else
+		{
+			mMouseJointCreated = false;
+			mMouseJointID = -1;
+		}
 	}
 
 	// Charge un niveau
 	if (mInputManager.KeyReleased(sf::Keyboard::R))
 	{
 		// Supprime les pointeurs
-		if (mGrapnel)
+		/*if (mGrapnel)
 			EntityManager::GetInstance().DestroyEntity(mGrapnel);
 		mGrapnel = nullptr;
 		if (mPhysicMgr.JointExists(mMouseJointID))
 			mPhysicMgr.DestroyJoint(mMouseJointID);
-		mMouseJointID = -1;
+		mMouseJointID = -1;*/
 		mHookedSBody = nullptr;
 		mPinBodyA = nullptr;
 		mPinBodyB = nullptr;
@@ -246,6 +277,8 @@ void Box2DGame::OnEvent()
 			// Il y a un objet, on le retient
 			if (callback.GetFixture() && callback.GetFixture()->GetBody() != mHookedSBody)
 			{
+				EntityFactory::LoadTexture("hook", "tex/hook.png");
+
 				b2Body *b = callback.GetFixture()->GetBody();
 				mGrapnel->Create(mTextureMap["hook"], b, b->GetLocalPoint(mMp), mHookedSBody, mHookedSAnchor);
 			}
@@ -374,10 +407,7 @@ void Box2DGame::OnQuit()
 	mWindow.setView(mWindow.getDefaultView());
 
 	// Supprime le joint de la souris
-	if (mPhysicMgr.JointExists(mMouseJointID))
-	{
-		mPhysicMgr.DestroyJoint(mMouseJointID);
-	}
+	mMouseJointCreated = false; // Suppr auto
 	mMouseJointID = -1;
 
 	// Supprime le niveau

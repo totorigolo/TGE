@@ -84,6 +84,7 @@ private:
 	sf::Clock mHookClock;
 
 	// Déplacement des objets
+	bool mMouseJointCreated;
 	int mMouseJointID;
 
 	// Variables pour la création de joints

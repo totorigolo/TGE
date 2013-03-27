@@ -102,6 +102,14 @@ inline sf::Vector2f b22sfVec(b2Vec2 const& vector, float ppm)
 {
 	return sf::Vector2f(vector.x, - vector.y) * ppm;
 }
+inline b2Vec3 sf3b2Vec(sf::Vector3f const& vector, float mpp)
+{
+	return b2Vec3(vector.x * mpp, - vector.y * mpp, vector.z);
+}
+inline sf::Vector3f b32sfVec(b2Vec3 const& vector, float ppm)
+{
+	return sf::Vector3f(vector.x * ppm, - vector.y * ppm, vector.z);
+}
 
 // Convertion b2Vec2 <> b2Vec3
 inline b2Vec2 getVec2(b2Vec3 const& vec3)

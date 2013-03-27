@@ -1,20 +1,59 @@
+-----------------------------
+-- Création de plein d'objets
+-----------------------------
+
+-- Création de randfcbcc
+if (randf == nil) then
+	rand = math.random
+	randf = function(min, max)
+		return rand(min * 100000, max * 100000) / 100000
+	end
+	print "Fonction randf creee."
+end
+
+-- Mumuse avec le level
+level.bckgcolor = Color(rand(200, 255), rand(200, 255), rand(200, 255))
+
+-- Charge
+level:LoadFromFile("lvls/2.xvl")
+
+-- Charge une petite déco
+if (tex_loaded == nil) then
+	EntityFactory.LoadTexture("skyrim", "tex/skyrim.jpg")
+	tex_loaded = true
+	print "Texture Skyrim chargee."
+end
 
 -- Crée les variables
-posRot = b2Vec3(0, 10, 0)
-posRot2 = b2Vec2(0, 12)
-textures = {"box", "box2", "way", "caisse", "tonneau"}
-layer = -1
+posRotB = b2Vec3(0, 10, 0)
+posRotC = b2Vec3(0, 11, 0)
+texturesB = {"box", "box2", "way", "caisse", "tonneau"}
+texturesC = {"ball", "circle"}
 
--- Crée la box
-v = -50
-while v < 50 do
-	posRot.x = v
-	posRot2.x = v
+-- Boucle de création
+xmin, xmax, y = -20, 20, 20
+x = xmin
+while x < xmax do
+	-- Met à your les coordonnées
+	posRotB:Set(x, y - 0.5, 0)
+	posRotC:Set(x, y + 0.5, 0)
 	
-	texture = textures[math.random(1, 5)]
-	EntityFactory.CreateBox(posRot, texture, layer)
+	-- Crée des skyrim à la nawak
+	posRotS = b2Vec3(randf(-20, 20), randf(-20, 20), randf(0, 360))
+	--EntityFactory.CreateDeco(posRotS, "skyrim", 20)
 	
-	EntityFactory.CreateRagdoll(posRot2, layer)
+	-- Crée des lampadaires à la nawak
+	posRotD = b2Vec3(randf(-20, 20), randf(0, 20), randf(0, 360))
+	EntityFactory.CreateStaticBox(posRotD, "lampadere", 1)
+
+	-- Crée la Box
+	texture = texturesB[rand(1, 5)]
+	EntityFactory.CreateDynamicBox(posRotB, texture, 1)
 	
-	v = v + 1
+	-- Crée le Circle
+	texture = texturesC[rand(1, 2)]
+	EntityFactory.CreateDynamicCircle(posRotC, texture, 1)
+	
+	-- Incrémente x
+	x = x + 1
 end

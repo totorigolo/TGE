@@ -24,6 +24,7 @@ public:
 	void SetZoom(float zoom);
 	void SetDefaultZoom(float zoom);
 	void SetView(const sf::View &view);
+	void SetCenter(const sf::Vector2f &center);
 	void SetDefaultCenter(const sf::Vector2f &center);
 
 	// Ajout d'évènement

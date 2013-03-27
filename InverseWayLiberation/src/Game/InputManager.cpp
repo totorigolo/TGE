@@ -47,6 +47,10 @@ void InputManager::SetView(const sf::View &view)
 {
 	mView = view;
 }
+void InputManager::SetCenter(const sf::Vector2f &center)
+{
+	mView.setCenter(center);
+}
 void InputManager::SetDefaultCenter(const sf::Vector2f &center)
 {
 	mDefaultCenter = center;
