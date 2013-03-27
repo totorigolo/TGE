@@ -19,7 +19,12 @@ int main()
 	}
 	catch (const std::exception &e)
 	{
+		std::cerr << "Une erreur fatale est survenue :" << std::endl;
 		std::cerr << e.what() << std::endl;
+
+#ifdef _WIN32
+		system("PAUSE");
+#endif
 	}
 #endif
 
