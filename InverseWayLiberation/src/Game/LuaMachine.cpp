@@ -1,12 +1,14 @@
 #include "LuaMachine.h"
 #include "Box2DGame.h"
-#include "../Level/Level.h"
+#include "../Level/LevelManager.h"
 #include "../Entities/EntityFactory.h"
 #include "../Physics/JointFactory.h"
+#include "../Physics/PhysicManager.h"
 #include <luabind/operator.hpp>
 #include <iostream>
 #include <exception>
 #include <Box2D/Box2D.h>
+#include <SFML/System.hpp>
 
 // Ctor & dtor
 LuaMachine::LuaMachine()
@@ -35,8 +37,11 @@ void LuaMachine::RegisterEntityFactory()
 	{
 		// Enregistre les fonctions
 		luabind::module(mLuaState) [
+			// Fxs
+			luabind::def("LoadTexture", EntityFactory::LoadTexture),
+
+			// Fxs dans EntityFactory
 			luabind::namespace_("EntityFactory") [
-				luabind::def("LoadTexture", EntityFactory::LoadTexture),
 				luabind::def("CreateDeco", (void(*)(const b2Vec3&, const std::string&)) EntityFactory::CreateDeco),
 				luabind::def("CreateDeco", (void(*)(const b2Vec3&, const std::string&, int)) EntityFactory::CreateDeco),
 				luabind::def("CreateDynamicBox", (void(*)(const b2Vec3&, const std::string&)) EntityFactory::CreateDynamicBox),
@@ -47,8 +52,8 @@ void LuaMachine::RegisterEntityFactory()
 				luabind::def("CreateLamp", (void(*)(const b2Vec3&, const std::string&, int)) EntityFactory::CreateLamp),
 				luabind::def("CreateDynamicCircle", (void(*)(const b2Vec3&, const std::string&)) EntityFactory::CreateDynamicCircle),
 				luabind::def("CreateDynamicCircle", (void(*)(const b2Vec3&, const std::string&, int)) EntityFactory::CreateDynamicCircle),
-				luabind::def("CreateRagdoll", (void(*)(const b2Vec3&)) EntityFactory::CreateRagdoll),
-				luabind::def("CreateRagdoll", (void(*)(const b2Vec3&, int)) EntityFactory::CreateRagdoll)
+				luabind::def("CreateRagdoll", (void(*)(const b2Vec2&)) EntityFactory::CreateRagdoll),
+				luabind::def("CreateRagdoll", (void(*)(const b2Vec2&, int)) EntityFactory::CreateRagdoll)
 			]
 		];
 	}
@@ -79,26 +84,51 @@ void LuaMachine::RegisterJointFactory()
 		std::cerr << e.what() << std::endl;
 	}*/
 }
-void LuaMachine::RegisterLevel()
+void LuaMachine::RegisterLevelManager()
 {
 	try
 	{
 		// Enregistrement
 		luabind::module(mLuaState) [
 			// Level
-			luabind::class_<Level>("Level")
+			luabind::class_<LevelManager>("LevelManager")
 				// Fxs
-				.def("LoadFromFile", &Level::LoadFromFile)
-				.def("SetViewPosition", &Level::SetViewPosition)
-				.def("SetZoom", &Level::SetZoom)
-				.def("GetPlayer", &Level::GetPlayer)
+				.def("LoadFromFile", &LevelManager::LoadFromFile)
+				.def("SetViewPosition", &LevelManager::SetViewPosition)
+				.def("SetZoom", &LevelManager::SetZoom)
+				.def("GetPlayer", &LevelManager::GetPlayer, luabind::dependency(luabind::result, _1))
+				.def("PrepareForGame", &LevelManager::PrepareForGame)
+				.def("Clear", &LevelManager::Clear)
 				// Attributs
-				.property("charged", &Level::IsCharged, &Level::SetCharged)
-				.property("gravity", &Level::GetGravity, &Level::SetGravity)
-				.property("PPM", &Level::GetPPM, &Level::SetPPM)
-				.property("bckgcolor", &Level::GetBckgColor, &Level::SetBckgColor)
-				.property("originview", &Level::GetOriginView, &Level::SetOriginView)
-				.property("defaultzoom", &Level::GetDefaultZoom, &Level::SetDefaultZoom)
+				.property("charged", &LevelManager::IsCharged, &LevelManager::SetCharged)
+				.property("bckgcolor", &LevelManager::GetBckgColor, &LevelManager::SetBckgColor)
+				.property("originview", &LevelManager::GetOriginView, &LevelManager::SetOriginView)
+				.property("defaultzoom", &LevelManager::GetDefaultZoom, &LevelManager::SetDefaultZoom)
+		];
+	}
+	catch (const std::exception &e)
+	{
+		std::cerr << e.what() << std::endl;
+	}
+}
+void LuaMachine::RegisterPhysicManager()
+{
+	try
+	{
+		// Enregistrement
+		luabind::module(mLuaState) [
+			// Level
+			luabind::class_<PhysicManager>("PhysicManager")
+				// Fxs
+				.def("DestroyAllBody", &PhysicManager::DestroyAllBody)
+				.def("DestroyBodiesOut", &PhysicManager::DestroyBodiesOut)
+				.def("DestroyAllJoints", &PhysicManager::DestroyAllJoints)
+				.def("GetBodyCount", &PhysicManager::GetBodyCount)
+				.def("GetJointCount", &PhysicManager::GetJointCount)
+				// Attributs
+				.property("timestep", &PhysicManager::GetTimeStep, &PhysicManager::SetTimeStep)
+				.property("gravity", &PhysicManager::GetGravity, &PhysicManager::SetGravity)
+				.property("PPM", &PhysicManager::GetPPM, &PhysicManager::SetPPM)
 		];
 	}
 	catch (const std::exception &e)
@@ -116,15 +146,39 @@ void LuaMachine::UnregisterGlobalLuaVar(const std::string &name)
 // Exécution
 int LuaMachine::DoFile(const std::string &path)
 {
+#ifdef _DEBUG
+	sf::Clock c;
+	int r = ReportLuaError(luaL_dofile(mLuaState, path.c_str()));
+	std::cout << "Script \"" << path << "\" ex\x82""cut\x82 en : "
+		<< c.getElapsedTime().asSeconds() << " sec" << std::endl;
+	return r;
+#elif
 	return ReportLuaError(luaL_dofile(mLuaState, path.c_str()));
+#endif
 }
 int LuaMachine::LoadFile(const std::string &path)
 {
+#ifdef _DEBUG
+	sf::Clock c;
+	int r = ReportLuaError(luaL_loadfile(mLuaState, path.c_str()));
+	std::cout << "Script \"" << path << "\" ex\x82""cut\x82 en : "
+		<< c.getElapsedTime().asSeconds() << " sec" << std::endl;
+	return r;
+#elif
 	return ReportLuaError(luaL_loadfile(mLuaState, path.c_str()));
+#endif
 }
 int LuaMachine::DoString(const std::string &command)
 {
+#ifdef _DEBUG
+	sf::Clock c;
+	int r = ReportLuaError(luaL_dostring(mLuaState, command.c_str()));
+	std::cout << "Commande \"" << command << "\" ex\x82""cut\x82 en : "
+		<< c.getElapsedTime().asSeconds() << " sec" << std::endl;
+	return r;
+#elif
 	return ReportLuaError(luaL_dostring(mLuaState, command.c_str()));
+#endif
 }
 
 // Enregistrements privés

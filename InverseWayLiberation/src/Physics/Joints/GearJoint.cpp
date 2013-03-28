@@ -2,29 +2,31 @@
 #include "../../Tools/utils.h"
 
 //Ctor
-GearJoint::GearJoint(PhysicManager *physicMgr, b2Body *b1, b2Body *b2, int j1, int j2, float ratio, bool collideconnected)
-	: Joint(physicMgr)
+GearJoint::GearJoint(b2Body *b1, b2Body *b2, int j1, int j2, float ratio, bool collideconnected)
 {
-	assert(mPhysicMgr && "n'est pas valide.");
 	assert(b1 && "n'est pas valide.");
 	assert(b2 && "n'est pas valide.");
-	assert(mPhysicMgr->JointExists(j1) && "le joint n'existe pas.");
-	assert(mPhysicMgr->JointExists(j2) && "le joint n'existe pas.");
 
-	mPhysicMgr->RegisterJoint(this);
+	Joint *joint1 = mPhysicMgr.GetJoint(j1);
+	Joint *joint2 = mPhysicMgr.GetJoint(j2);
+
+	assert(joint1 && "le joint n'existe pas.");
+	assert(joint2 && "le joint n'existe pas.");
+
+	mPhysicMgr.RegisterJoint(this);
 
 	b2GearJointDef jointDef;
 	jointDef.bodyA = b1;
 	jointDef.bodyB = b2;
-	jointDef.joint1 = mPhysicMgr->GetJoint(j1)->GetJoint();
-	jointDef.joint2 = mPhysicMgr->GetJoint(j2)->GetJoint();
+	jointDef.joint1 = joint1->GetJoint();
+	jointDef.joint2 = joint2->GetJoint();
 	jointDef.ratio = ratio;
 	jointDef.collideConnected = collideconnected;
-	mJoint = mPhysicMgr->Createb2Joint(&jointDef);
+	mJoint = mPhysicMgr.Createb2Joint(&jointDef);
 	mJoint->SetUserData(this);
 	
-	mPhysicMgr->GetJoint(j1)->RegisterLinkedJoint(mID);
-	mPhysicMgr->GetJoint(j2)->RegisterLinkedJoint(mID);
+	joint1->RegisterLinkedJoint(mID);
+	joint2->RegisterLinkedJoint(mID);
 
 	mIsAlive = false;
 	

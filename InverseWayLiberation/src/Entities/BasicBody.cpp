@@ -1,14 +1,14 @@
 #include "BasicBody.h"
 #include "../Tools/utils.h"
+#include "../Physics/PhysicManager.h"
 #include <iostream>
 
 // Ctor & dtor
-BasicBody::BasicBody(PhysicManager *mgr, int layer)
+BasicBody::BasicBody(int layer)
 	: Entity(layer), mBasicBodyType(Type::Null), mCollisionType(CollisionType::Default),
-	mPhysicMgr(mgr), mBody(nullptr), mBodyIsCreated(false)
+	mBody(nullptr), mBodyIsCreated(false),
+	mPhysicMgr(PhysicManager::GetInstance())
 {
-	assert(mPhysicMgr && "n'est pas valide.");
-
 	// Défini le type de l'Entity
 	mType = EntityType::BasicBody;
 }
@@ -36,11 +36,11 @@ bool BasicBody::CreateDynBox(b2Vec3 posRot, const std::shared_ptr<sf::Texture> &
 	bodyDef.angle = posRot.z * RPD;
 	bodyDef.position = getVec2(posRot);
 	bodyDef.type = b2_dynamicBody;
-	mBody = mPhysicMgr->CreateBody(&bodyDef);
+	mBody = mPhysicMgr.CreateBody(&bodyDef);
 
 	// Shape
 	b2PolygonShape shape;
-	shape.SetAsBox((mTexture->getSize().x / 2) * mPhysicMgr->GetMPP(), (mTexture->getSize().y / 2) * mPhysicMgr->GetMPP());
+	shape.SetAsBox((mTexture->getSize().x / 2) * mPhysicMgr.GetMPP(), (mTexture->getSize().y / 2) * mPhysicMgr.GetMPP());
 	shape.m_radius = 0.f;
 
 	// Fixture
@@ -79,11 +79,11 @@ bool BasicBody::CreateDynCircle(b2Vec3 posRot, const std::shared_ptr<sf::Texture
 	bodyDef.angle = posRot.z * RPD;
 	bodyDef.position = getVec2(posRot);
 	bodyDef.type = b2_dynamicBody;
-	mBody = mPhysicMgr->CreateBody(&bodyDef);
+	mBody = mPhysicMgr.CreateBody(&bodyDef);
 
 	// Shape
 	b2CircleShape* shape = new b2CircleShape;
-	shape->m_radius = mSprite.getTexture()->getSize().x / 2.f * mPhysicMgr->GetMPP();
+	shape->m_radius = mSprite.getTexture()->getSize().x / 2.f * mPhysicMgr.GetMPP();
 
 	// Fixture
 	b2FixtureDef fixtureDef;
@@ -121,12 +121,12 @@ bool BasicBody::CreateStaticBox(b2Vec3 posRot, const std::shared_ptr<sf::Texture
 	bodyDef.angle = posRot.z * RPD;
 	bodyDef.position = getVec2(posRot);
 	bodyDef.type = b2_staticBody;
-	mBody = mPhysicMgr->CreateBody(&bodyDef);
+	mBody = mPhysicMgr.CreateBody(&bodyDef);
 
 	// Shape
 	b2PolygonShape* shape = new b2PolygonShape;
-	shape->SetAsBox((mSprite.getTexture()->getSize().x / 2) * mPhysicMgr->GetMPP(),
-										(mSprite.getTexture()->getSize().y / 2) * mPhysicMgr->GetMPP());
+	shape->SetAsBox((mSprite.getTexture()->getSize().x / 2) * mPhysicMgr.GetMPP(),
+										(mSprite.getTexture()->getSize().y / 2) * mPhysicMgr.GetMPP());
 	shape->m_radius = 0.f;
 
 	// Fixture
@@ -155,7 +155,7 @@ void BasicBody::Update()
 	if (mBody)
 	{
 		// Mise à jour de la texture
-		mSprite.setPosition(b22sfVec(mBody->GetPosition(), mPhysicMgr->GetPPM()));
+		mSprite.setPosition(b22sfVec(mBody->GetPosition(), mPhysicMgr.GetPPM()));
 		mSprite.setRotation(- mBody->GetAngle() * DPR);
 	}
 }
@@ -166,7 +166,7 @@ void BasicBody::Destroy()
 	if (mBody)
 	{
 		// Supprime le Body
-		mPhysicMgr->DestroyBody(mBody);
+		mPhysicMgr.DestroyBody(mBody);
 		mBody = nullptr;
 	}
 	mBasicBodyType = Type::Null;
@@ -214,13 +214,4 @@ b2Body* BasicBody::GetBody()
 const b2Body* BasicBody::GetBody() const
 {
 	return mBody;
-}
-// PhysicManager
-PhysicManager* BasicBody::GetPhysicManager()
-{
-	return mPhysicMgr;
-}
-const PhysicManager* BasicBody::GetPhysicManager() const
-{
-	return mPhysicMgr;
 }

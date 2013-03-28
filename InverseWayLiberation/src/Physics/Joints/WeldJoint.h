@@ -9,8 +9,7 @@ class WeldJoint : public Joint
 {
 public:
 	// Ctor & dtor										   Anchor relative to bodyA
-	WeldJoint(PhysicManager *physicMgr, b2Body *b1, b2Body *b2, b2Vec2 anchor, float frequencyHz = 4.f, float damping = 0.5f
-											  , bool collideconnected = false);
+	WeldJoint(b2Body *b1, b2Body *b2, b2Vec2 anchor, float frequencyHz = 4.f, float damping = 0.5f, bool collideconnected = false);
 	virtual ~WeldJoint(void);
 	
 	// Accesseurs

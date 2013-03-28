@@ -9,9 +9,9 @@ class WheelJoint : public Joint
 {
 public:
 	// Ctor & dtor												Anchor relative to wheel
-	WheelJoint(PhysicManager *physicMgr, b2Body *car, b2Body *wheel, b2Vec2 pWheel, b2Vec2 axis, float frequencyHz = 2.f, float damping = 0.7f
-																	, bool enableMotor = false, float motorSpeed = 0.f, float maxMotorTorque = 10.f
-																	, bool collideconnected = false);
+	WheelJoint(b2Body *car, b2Body *wheel, b2Vec2 pWheel, b2Vec2 axis, float frequencyHz = 2.f, float damping = 0.7f
+																	 , bool enableMotor = false, float motorSpeed = 0.f, float maxMotorTorque = 10.f
+																	 , bool collideconnected = false);
 	virtual ~WheelJoint(void);
 	
 	// Accesseurs

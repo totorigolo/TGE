@@ -2,14 +2,12 @@
 #include "../../Tools/utils.h"
 
 //Ctor
-MouseJoint::MouseJoint(PhysicManager *physicMgr, b2Body *body, b2Body *ground, b2Vec2 target, float maxForce, float frequencyHz, float damping)
-	: Joint(physicMgr)
+MouseJoint::MouseJoint(b2Body *body, b2Body *ground, b2Vec2 target, float maxForce, float frequencyHz, float damping)
 {
-	assert(mPhysicMgr && "n'est pas valide.");
 	assert(body && "n'est pas valide.");
 	assert(ground && "n'est pas valide.");
 	
-	mPhysicMgr->RegisterJoint(this);
+	mPhysicMgr.RegisterJoint(this);
 
 	b2MouseJointDef jointDef;
 	jointDef.bodyA = ground; // Le body A ne sert pas, mais doit exister
@@ -19,7 +17,7 @@ MouseJoint::MouseJoint(PhysicManager *physicMgr, b2Body *body, b2Body *ground, b
 	jointDef.frequencyHz = frequencyHz;
 	jointDef.collideConnected = true;
 	jointDef.maxForce = maxForce;
-	mJoint = mPhysicMgr->Createb2Joint(&jointDef);
+	mJoint = mPhysicMgr.Createb2Joint(&jointDef);
 	mJoint->SetUserData(this);
 
 	body->SetAwake(true);

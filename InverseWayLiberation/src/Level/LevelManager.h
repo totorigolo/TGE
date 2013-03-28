@@ -3,23 +3,22 @@
 #include <Thor/Resources.hpp>
 #include <Box2D/Box2D.h>
 #include <string>
-#include "LevelLoader.h"
 #include "../Tools/utils.h"
 #include "../Entities/Player.h"
-#include "../Tools/NonCopyable.h"
+#include "../Tools/Singleton.h"
 #include "../Physics/PhysicManager.h"
 #include "../Entities/EntityManager.h"
 #include "../Resources/ResourceManager.h"
 
 class LevelLoader;
-class Level : public sf::Drawable, public NonCopyable
+class LevelManager : public sf::Drawable, public Singleton<LevelManager>
 {
 	friend class LevelLoader;
 
 public:
 	// Ctor & dtor
-	Level(PhysicManager *physicMgr);
-	virtual ~Level(void);
+	LevelManager();
+	virtual ~LevelManager(void);
 
 	// Charge un niveau à partir d'un XVL
 	void LoadFromFile(const std::string &path);
@@ -41,21 +40,9 @@ public:
 	bool IsCharged() const;
 	void SetCharged(bool charged);
 
-	// PPM
-	void SetPPM(float ppm);
-	const float GetPPM() const;
-
-	// Gravité
-	void SetGravity(const b2Vec2 &gravity);
-	const b2Vec2& GetGravity() const;
-
 	// Player
 	void SetPlayer(Player *player);
 	Player* GetPlayer();
-
-	// EntityManager
-	EntityManager* GetEntityManager();
-	const EntityManager* GetEntityManager() const;
 
 	// Zoom par défaut & zoom
 	void SetZoom(float zoom);
@@ -76,7 +63,7 @@ private:
 
 	// Monde
 	b2Vec2 mGravity;
-	PhysicManager *mPhysicMgr;
+	PhysicManager &mPhysicMgr;
 
 	// Entities
 	EntityManager &mEntityManager;

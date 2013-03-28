@@ -1,5 +1,5 @@
 #pragma once
-#include "../Tools/NonCopyable.h"
+#include "../Tools/Singleton.h"
 #include "../Entities/Entity.h"
 #include "ContactListener.h"
 #include "DebugDraw.h"
@@ -8,11 +8,11 @@
 
 class Joint;
 class DebugDraw;
-class PhysicManager : public NonCopyable
+class PhysicManager : public Singleton<PhysicManager>
 {
 public:
 	// Ctor & dtor
-	PhysicManager(b2Vec2 const& gravity, float ppm = 100.f);
+	PhysicManager();
 	virtual ~PhysicManager(void);
 	
 	// Gestion des body
@@ -43,7 +43,7 @@ public:
 
 	// Gestion des propriétés du monde (gravité)
 	void SetGravity(const b2Vec2 &gravity);
-	b2Vec2 GetGravity();
+	b2Vec2 GetGravity() const;
 
 	// Gestion des pixels / metre
 	void SetPPM(float ppm) { mPPM = ppm; }

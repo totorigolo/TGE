@@ -9,7 +9,7 @@ class GearJoint : public Joint
 {
 public:
 	// Ctor & dtor
-	GearJoint(PhysicManager *physicMgr, b2Body *b1, b2Body *b2, int j1, int j2 , float ratio = 1.f, bool collideconnected = true);
+	GearJoint(b2Body *b1, b2Body *b2, int j1, int j2 , float ratio = 1.f, bool collideconnected = true);
 	virtual ~GearJoint(void);
 	
 	// Accesseurs

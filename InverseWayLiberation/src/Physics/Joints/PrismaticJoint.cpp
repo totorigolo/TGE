@@ -2,16 +2,14 @@
 #include "../../Tools/utils.h"
 
 //Ctor
-PrismaticJoint::PrismaticJoint(PhysicManager *physicMgr, b2Body *b1, b2Body *b2, b2Vec2 anchor, b2Vec2 axis, bool enableLimit, float lowerTranslation, float upperTranslation
-																						   , bool enableMotor, float motorSpeed, float maxMotorForce
-																						   , bool collideconnected)
-	: Joint(physicMgr)
+PrismaticJoint::PrismaticJoint(b2Body *b1, b2Body *b2, b2Vec2 anchor, b2Vec2 axis, bool enableLimit, float lowerTranslation, float upperTranslation
+																				 , bool enableMotor, float motorSpeed, float maxMotorForce
+																				 , bool collideconnected)
 {
-	assert(mPhysicMgr && "n'est pas valide.");
 	assert(b1 && "n'est pas valide.");
 	assert(b2 && "n'est pas valide.");
 	
-	mPhysicMgr->RegisterJoint(this);
+	mPhysicMgr.RegisterJoint(this);
 
 	b2PrismaticJointDef jointDef;
 	jointDef.Initialize(b1, b2, b1->GetWorldPoint(anchor), axis);
@@ -22,7 +20,7 @@ PrismaticJoint::PrismaticJoint(PhysicManager *physicMgr, b2Body *b1, b2Body *b2,
 	jointDef.enableMotor = enableMotor;
 	jointDef.motorSpeed = motorSpeed * RPD;
 	jointDef.maxMotorForce = maxMotorForce;
-	mJoint = mPhysicMgr->Createb2Joint(&jointDef);
+	mJoint = mPhysicMgr.Createb2Joint(&jointDef);
 	mJoint->SetUserData(this);
 	
 	mIsAlive = true;

@@ -145,9 +145,6 @@
     <ClCompile Include="src\Tools\Dialog.cpp">
       <Filter>Fichiers sources\Tools</Filter>
     </ClCompile>
-    <ClCompile Include="src\Level\Level.cpp">
-      <Filter>Fichiers sources\Level</Filter>
-    </ClCompile>
     <ClCompile Include="src\Level\LevelLoader.cpp">
       <Filter>Fichiers sources\Level</Filter>
     </ClCompile>
@@ -229,6 +226,9 @@
     <ClCompile Include="src\Physics\JointFactory.cpp">
       <Filter>Fichiers sources\Physics</Filter>
     </ClCompile>
+    <ClCompile Include="src\Level\LevelManager.cpp">
+      <Filter>Fichiers sources\Level</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Physics\Joints\DistanceJoint.h">
@@ -281,9 +281,6 @@
     </ClInclude>
     <ClInclude Include="src\Tools\utils.h">
       <Filter>Fichiers d%27en-tête\Tools</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Level\Level.h">
-      <Filter>Fichiers d%27en-tête\Level</Filter>
     </ClInclude>
     <ClInclude Include="src\Level\LevelLoader.h">
       <Filter>Fichiers d%27en-tête\Level</Filter>
@@ -377,6 +374,9 @@
     </ClInclude>
     <ClInclude Include="src\Physics\JointFactory.h">
       <Filter>Fichiers d%27en-tête\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Level\LevelManager.h">
+      <Filter>Fichiers d%27en-tête\Level</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

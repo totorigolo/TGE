@@ -9,7 +9,7 @@ class MouseJoint : public Joint
 {
 public:
 	// Ctor & dtor
-	MouseJoint(PhysicManager *physicMgr, b2Body *body, b2Body *ground, b2Vec2 target, float maxForce, float frequencyHz = 4.f, float damping = 0.5f);
+	MouseJoint(b2Body *body, b2Body *ground, b2Vec2 target, float maxForce, float frequencyHz = 4.f, float damping = 0.5f);
 	virtual ~MouseJoint(void);
 
 	// Accesseurs

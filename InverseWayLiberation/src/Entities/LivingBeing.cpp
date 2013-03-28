@@ -1,13 +1,14 @@
 #include "LivingBeing.h"
 #include "EntityManager.h"
+#include "../Physics/PhysicManager.h"
 #include "../Tools/utils.h"
 
 // Ctor & dtor
-LivingBeing::LivingBeing(PhysicManager *physicMgr, b2Vec2 position, const std::shared_ptr<sf::Texture> &texture, int layer)
-	: Entity(layer), mBody(nullptr), mTexture(texture), mPhysicMgr(physicMgr), mIsDead(true), mCanJump(false),
-	mBodyIsCreated(false)
+LivingBeing::LivingBeing(b2Vec2 position, const std::shared_ptr<sf::Texture> &texture, int layer)
+	: Entity(layer), mBody(nullptr), mTexture(texture), mIsDead(true), mCanJump(false),
+	mBodyIsCreated(false),
+	mPhysicMgr(PhysicManager::GetInstance())
 {
-	assert(mPhysicMgr && "n'est pas valide.");
 	assert(mTexture.get() && "n'est pas valide.");
 
 	// Change le type
@@ -22,11 +23,11 @@ LivingBeing::LivingBeing(PhysicManager *physicMgr, b2Vec2 position, const std::s
 	bodyDef.angle = 0.f;
 	bodyDef.position = position;
 	bodyDef.type = b2_dynamicBody;
-	mBody = mPhysicMgr->CreateBody(&bodyDef);
+	mBody = mPhysicMgr.CreateBody(&bodyDef);
 	
 	// Shape & Fixture du corps
-	float x = (mTexture->getSize().x / 2) * mPhysicMgr->GetMPP();
-	float y = (mTexture->getSize().y / 2) * mPhysicMgr->GetMPP();
+	float x = (mTexture->getSize().x / 2) * mPhysicMgr.GetMPP();
+	float y = (mTexture->getSize().y / 2) * mPhysicMgr.GetMPP();
 	b2PolygonShape shape1;
 	shape1.SetAsBox(x, y);
 	shape1.m_radius = 0.f;
@@ -56,7 +57,7 @@ LivingBeing::~LivingBeing()
 	// Supprime le Body
 	if (mBody)
 	{
-		mPhysicMgr->DestroyBody(mBody);
+		mPhysicMgr.DestroyBody(mBody);
 		mBody = nullptr;
 	}
 	mBodyIsCreated = false;
@@ -70,7 +71,7 @@ void LivingBeing::Update()
 	if (mBody)
 	{
 		// On récupère sa position
-		mSprite.setPosition(b22sfVec(mBody->GetPosition(), mPhysicMgr->GetPPM()));
+		mSprite.setPosition(b22sfVec(mBody->GetPosition(), mPhysicMgr.GetPPM()));
 
 		// Vérifie le saut
 		mCanJump = false;

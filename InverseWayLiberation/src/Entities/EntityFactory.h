@@ -1,13 +1,9 @@
 #pragma once
 #include <Box2D/Box2D.h>
 #include <string>
-#include "../Physics/PhysicManager.h"
 
 namespace EntityFactory
 {
-	// Parametres de la Factory
-	void SetPhysicManager(PhysicManager *physicMgr);
-
 	// Charge une texture
 	void LoadTexture(const std::string &name, const std::string &path);
 

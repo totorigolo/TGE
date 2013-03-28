@@ -2,16 +2,14 @@
 #include "../../Tools/utils.h"
 
 //Ctor
-RevoluteJoint::RevoluteJoint(PhysicManager *physicMgr, b2Body *b1, b2Body *b2, b2Vec2 anchor, bool enableLimit, float lowerAngle, float upperAngle
+RevoluteJoint::RevoluteJoint(b2Body *b1, b2Body *b2, b2Vec2 anchor, bool enableLimit, float lowerAngle, float upperAngle
 																			, bool enableMotor, float motorSpeed, float maxMotorTorque
 																			, bool collideconnected)
-	: Joint(physicMgr)
 {
-	assert(mPhysicMgr && "n'est pas valide.");
 	assert(b1 && "n'est pas valide.");
 	assert(b2 && "n'est pas valide.");
 	
-	mPhysicMgr->RegisterJoint(this);
+	mPhysicMgr.RegisterJoint(this);
 
 	b2RevoluteJointDef jointDef;
 	jointDef.Initialize(b1, b2, b1->GetWorldPoint(anchor));
@@ -22,7 +20,7 @@ RevoluteJoint::RevoluteJoint(PhysicManager *physicMgr, b2Body *b1, b2Body *b2, b
 	jointDef.enableMotor = enableMotor;
 	jointDef.motorSpeed = motorSpeed * RPD;
 	jointDef.maxMotorTorque = maxMotorTorque;
-	mJoint = mPhysicMgr->Createb2Joint(&jointDef);
+	mJoint = mPhysicMgr.Createb2Joint(&jointDef);
 	mJoint->SetUserData(this);
 		
 	mIsAlive = true;

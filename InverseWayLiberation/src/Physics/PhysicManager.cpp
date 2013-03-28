@@ -4,8 +4,13 @@
 #include "Joint.h"
 
 //Ctor
-PhysicManager::PhysicManager(b2Vec2 const& gravity, float ppm)
-	: mWorld(gravity), mPPM(ppm), mTimeStep(1.f / 60.f), mLastJointID(0), mDebugDraw(this)
+PhysicManager::PhysicManager()
+	: // Valeurs par défaut
+	mWorld(b2Vec2(0.f, 0.f)),
+	mPPM(100.f),
+	mTimeStep(1.f / 60.f),
+	// Autres
+	mLastJointID(0), mDebugDraw(this)
 {
 	// Défini le ContactListener du monde
 	mWorld.SetContactListener(&mContactListener);
@@ -212,7 +217,7 @@ void PhysicManager::SetGravity(const b2Vec2 &gravity)
 {
 	mWorld.SetGravity(gravity);
 }
-b2Vec2 PhysicManager::GetGravity()
+b2Vec2 PhysicManager::GetGravity() const
 {
 	return mWorld.GetGravity();
 }

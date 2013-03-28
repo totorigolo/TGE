@@ -2,21 +2,19 @@
 #include "../../Tools/utils.h"
 
 //Ctor
-WeldJoint::WeldJoint(PhysicManager *physicMgr, b2Body *b1, b2Body *b2, b2Vec2 anchor, float frequencyHz, float damping, bool collideconnected)
-	: Joint(physicMgr)
+WeldJoint::WeldJoint(b2Body *b1, b2Body *b2, b2Vec2 anchor, float frequencyHz, float damping, bool collideconnected)
 {
-	assert(mPhysicMgr && "n'est pas valide.");
 	assert(b1 && "n'est pas valide.");
 	assert(b2 && "n'est pas valide.");
 	
-	mPhysicMgr->RegisterJoint(this);
+	mPhysicMgr.RegisterJoint(this);
 
 	b2WeldJointDef jointDef;
 	jointDef.Initialize(b1, b2, b1->GetWorldPoint(anchor));
 	jointDef.frequencyHz = frequencyHz;
 	jointDef.dampingRatio = damping;
 	jointDef.collideConnected = collideconnected;
-	mJoint = (b2WeldJoint*) mPhysicMgr->Createb2Joint(&jointDef);
+	mJoint = (b2WeldJoint*) mPhysicMgr.Createb2Joint(&jointDef);
 	mJoint->SetUserData(this);
 	
 	mIsAlive = true;

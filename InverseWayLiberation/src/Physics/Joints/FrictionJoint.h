@@ -9,8 +9,7 @@ class FrictionJoint : public Joint
 {
 public:
 	// Ctor & dtor
-	FrictionJoint(PhysicManager *physicMgr, b2Body *b1, b2Vec2 pt1, b2Body *b2, b2Vec2 p2, float maxForce = 0.f, float maxTorque = 0.f
-																									  , bool collideconnected = true);
+	FrictionJoint(b2Body *b1, b2Vec2 pt1, b2Body *b2, b2Vec2 p2, float maxForce = 0.f, float maxTorque = 0.f, bool collideconnected = true);
 	virtual ~FrictionJoint(void);
 	
 	// Accesseurs

@@ -9,8 +9,7 @@ class PulleyJoint : public Joint
 {
 public:
 	// Ctor & dtor
-	PulleyJoint(PhysicManager *physicMgr, b2Body *b1, b2Vec2 pt1, b2Body *b2, b2Vec2 p2, b2Vec2 groundP1, b2Vec2 groundP2
-																	  , float ratio = 1.f, bool collideconnected = true);
+	PulleyJoint(b2Body *b1, b2Vec2 pt1, b2Body *b2, b2Vec2 p2, b2Vec2 groundP1, b2Vec2 groundP2, float ratio = 1.f, bool collideconnected = true);
 	virtual ~PulleyJoint(void);
 	
 	// Accesseurs

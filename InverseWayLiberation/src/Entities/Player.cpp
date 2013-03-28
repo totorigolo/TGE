@@ -4,8 +4,8 @@
 #include <cassert>
 
 // Ctor & dtor
-Player::Player(PhysicManager *physicMgr, b2Vec2 position, std::shared_ptr<sf::Texture> texture, int layer)
-	: LivingBeing(physicMgr, position, texture, layer), mInputManager(InputManager::GetInstance())
+Player::Player(b2Vec2 position, std::shared_ptr<sf::Texture> texture, int layer)
+	: LivingBeing(position, texture, layer), mInputManager(InputManager::GetInstance())
 {
 	// Change le type
 	mType = EntityType::Player;

@@ -1,5 +1,5 @@
 #include "LevelLoader.h"
-#include "Level.h"
+#include "LevelManager.h"
 
 #include "../Tools/utils.h"
 #include "../Tools/Dialog.h"
@@ -27,21 +27,21 @@
 #include <Thor/Resources.hpp>
 
 // Ctor
-LevelLoader::LevelLoader(std::string const& path, Level *level)
-	: Loader(path), mLevel(level)
+LevelLoader::LevelLoader(const std::string& path)
+	: Loader(path), mLevel(LevelManager::GetInstance())
 {
 	// Si loader n'est pas valide, on ne fait rien
 	if (mIsValid)
 	{
 		// Vide le niveau si il est déjà chargé
-		if (mLevel->IsCharged())
+		if (mLevel.IsCharged())
 		{
-			mLevel->Clear();
+			mLevel.Clear();
 		}
 
 		// Analyse le fichier du niveau et crée le Level
-		mLevel->mIsCharged = Process();
-		mLevel->PrepareForGame();
+		mLevel.mIsCharged = Process();
+		mLevel.PrepareForGame();
 	}
 }
 
@@ -127,11 +127,11 @@ bool LevelLoader::ProcessWorld()
 	}
 
 	// Change les attributs
-	mLevel->mPhysicMgr->SetGravity(gravity);
-	mLevel->mPhysicMgr->SetPPM(PPM);
-	mLevel->mBckgC = bckgColor;
-	mLevel->mOriginView = originView;
-	mLevel->mDefaulfZoom = defaultZoom;
+	mLevel.mPhysicMgr.SetGravity(gravity);
+	mLevel.mPhysicMgr.SetPPM(PPM);
+	mLevel.mBckgC = bckgColor;
+	mLevel.mOriginView = originView;
+	mLevel.mDefaulfZoom = defaultZoom;
 
 	return true;
 }
@@ -161,7 +161,7 @@ bool LevelLoader::ProcessTextures()
 
 		// Charge la texture
 		try {
-			mLevel->mTextureMap[name] = mLevel->mResourceManager.acquire(thor::Resources::fromFile<sf::Texture>(path));
+			mLevel.mTextureMap[name] = mLevel.mResourceManager.acquire(thor::Resources::fromFile<sf::Texture>(path));
 		}
 		catch (thor::ResourceLoadingException const& e)
 		{
@@ -219,7 +219,7 @@ bool LevelLoader::ProcessBasicBodies()
 
 		// Récupère la texture et vérifie si elle existe
 		if (body->Attribute("texture")) texture = body->Attribute("texture");
-		if (mLevel->mTextureMap.find(texture) == mLevel->mTextureMap.end())
+		if (mLevel.mTextureMap.find(texture) == mLevel.mTextureMap.end())
 		{
 			Dialog::Error("Texture \"" + texture + "\" inconnue. Body ignoré !");
 
@@ -251,18 +251,18 @@ bool LevelLoader::ProcessBasicBodies()
 		// Crée le body
 		if (type == "staticbox")
 		{
-			bb = new BasicBody(mLevel->mPhysicMgr, layer);
-			bb->CreateStaticBox(posRot, mLevel->mTextureMap[texture], friction, restitution);
+			bb = new BasicBody(layer);
+			bb->CreateStaticBox(posRot, mLevel.mTextureMap[texture], friction, restitution);
 		}
 		else if (type == "dynamicbox")
 		{
-			bb = new BasicBody(mLevel->mPhysicMgr, layer);
-			bb->CreateDynBox(posRot, mLevel->mTextureMap[texture], density, friction, restitution);
+			bb = new BasicBody(layer);
+			bb->CreateDynBox(posRot, mLevel.mTextureMap[texture], density, friction, restitution);
 		}
 		else if (type == "dynamiccircle")
 		{
-			bb = new BasicBody(mLevel->mPhysicMgr, layer);
-			bb->CreateDynCircle(posRot, mLevel->mTextureMap[texture], density, friction, restitution);
+			bb = new BasicBody(layer);
+			bb->CreateDynCircle(posRot, mLevel.mTextureMap[texture], density, friction, restitution);
 		}
 		else
 		{
@@ -273,7 +273,7 @@ bool LevelLoader::ProcessBasicBodies()
 		if (bb)
 		{
 			// Crée l'Entity correspondante
-			mLevel->mEntityManager.RegisterEntity(bb);
+			mLevel.mEntityManager.RegisterEntity(bb);
 
 			// Propriétés de collision
 			body->QueryBoolAttribute("osp", &osp);
@@ -305,9 +305,6 @@ bool LevelLoader::ProcessBasicBodies()
 }
 bool LevelLoader::ProcessEntities()
 {
-	// Initialise l'EntityFactory
-	EntityFactory::SetPhysicManager(mLevel->mPhysicMgr);
-
 	// Récupère <entities>
 	tinyxml2::XMLHandle hdl(mFile);
 	tinyxml2::XMLHandle entities = hdl.FirstChildElement("level").FirstChildElement("entities");
@@ -356,7 +353,7 @@ bool LevelLoader::ProcessEntities()
 			animation = entity->Attribute("animation");
 			animation = entity->Attribute("texture");
 
-			e = new LivingBeing(mLevel->mPhysicMgr, position, mLevel->mTextureMap[animation], layer);
+			e = new LivingBeing(position, mLevel.mTextureMap[animation], layer);
 		}
 		else if (type == "player")
 		{
@@ -365,8 +362,8 @@ bool LevelLoader::ProcessEntities()
 			animation = entity->Attribute("texture");
 
 			// Enregistre le Player dans Level
-			e = new Player(mLevel->mPhysicMgr, position, mLevel->mTextureMap[animation], layer);
-			mLevel->mPlayer = (Player*) e;
+			e = new Player(position, mLevel.mTextureMap[animation], layer);
+			mLevel.mPlayer = (Player*) e;
 		}
 		else
 		{
@@ -375,7 +372,7 @@ bool LevelLoader::ProcessEntities()
 
 		// Crée l'Entity correspondante
 		if (e)
-			mLevel->mEntityManager.RegisterEntity(e);
+			mLevel.mEntityManager.RegisterEntity(e);
 
 		// On récupère la prochaine entity
 		entity = entity->NextSiblingElement();
@@ -491,7 +488,7 @@ bool LevelLoader::ProcessJoints()
 			// Crée le joint
 			int j1ID = ((Joint*) j1->GetUserData())->GetID();
 			int j2ID = ((Joint*) j2->GetUserData())->GetID();
-			j = new GearJoint(mLevel->mPhysicMgr, b1, b2, j1ID, j2ID, ratio, colision);
+			j = new GearJoint(b1, b2, j1ID, j2ID, ratio, colision);
 		}
 		else if (type == "distance")
 		{
@@ -502,7 +499,7 @@ bool LevelLoader::ProcessJoints()
 			joint->QueryFloatAttribute("damping", &damping);
 
 			// Crée le joint
-			j = new DistanceJoint(mLevel->mPhysicMgr, b1, pt1, b2, pt2, frequency, damping, colision);
+			j = new DistanceJoint(b1, pt1, b2, pt2, frequency, damping, colision);
 		}
 		else if (type == "friction")
 		{
@@ -513,7 +510,7 @@ bool LevelLoader::ProcessJoints()
 			joint->QueryFloatAttribute("maxTorque", &maxTorque);
 
 			// Crée le joint
-			j = new FrictionJoint(mLevel->mPhysicMgr, b1, pt1, b2, pt2, maxForce, maxTorque, colision);
+			j = new FrictionJoint(b1, pt1, b2, pt2, maxForce, maxTorque, colision);
 		}
 		else if (type == "rope")
 		{
@@ -523,7 +520,7 @@ bool LevelLoader::ProcessJoints()
 			joint->QueryFloatAttribute("maxlength", &maxlength);
 
 			// Crée le joint
-			j = new RopeJoint(mLevel->mPhysicMgr, b1, pt1, b2, pt2, maxlength, colision);
+			j = new RopeJoint(b1, pt1, b2, pt2, maxlength, colision);
 		}
 		else if (type == "weld")
 		{
@@ -534,7 +531,7 @@ bool LevelLoader::ProcessJoints()
 			joint->QueryFloatAttribute("damping", &damping);
 
 			// Crée le joint
-			j = new WeldJoint(mLevel->mPhysicMgr, b1, b2, anchor, frequency, damping, colision);
+			j = new WeldJoint(b1, b2, anchor, frequency, damping, colision);
 		}
 		else if (type == "pulley")
 		{
@@ -547,7 +544,7 @@ bool LevelLoader::ProcessJoints()
 			if (joint->Attribute("groundpt2")) groundpt2 = Parser::string2b2Vec2(joint->Attribute("groundpt2"));
 
 			// Crée le joint
-			j = new PulleyJoint(mLevel->mPhysicMgr, b1, pt1, b2, pt2, groundpt1, groundpt2, ratio, colision);
+			j = new PulleyJoint(b1, pt1, b2, pt2, groundpt1, groundpt2, ratio, colision);
 		}
 		else if (type == "prismatic")
 		{
@@ -567,7 +564,7 @@ bool LevelLoader::ProcessJoints()
 			joint->QueryFloatAttribute("maxForce", &maxForce);
 
 			// Crée le joint
-			j = new PrismaticJoint(mLevel->mPhysicMgr, b1, b2, anchor, axis, enableLimits, lower, upper, enableMotor, speed, maxForce, colision);
+			j = new PrismaticJoint(b1, b2, anchor, axis, enableLimits, lower, upper, enableMotor, speed, maxForce, colision);
 		}
 		else if (type == "revolute")
 		{
@@ -585,7 +582,7 @@ bool LevelLoader::ProcessJoints()
 			joint->QueryFloatAttribute("maxTorque", &maxTorque);
 
 			// Crée le joint
-			j = new RevoluteJoint(mLevel->mPhysicMgr, b1, b2, anchor, enableLimits, lower, upper, enableMotor, speed, maxTorque, colision);
+			j = new RevoluteJoint(b1, b2, anchor, enableLimits, lower, upper, enableMotor, speed, maxTorque, colision);
 		}
 		else if (type == "wheel")
 		{
@@ -603,7 +600,7 @@ bool LevelLoader::ProcessJoints()
 			joint->QueryFloatAttribute("maxTorque", &maxTorque);
 
 			// Crée le joint
-			j = new WheelJoint(mLevel->mPhysicMgr, b1, b2, anchor, axis, frequency, damping, enableMotor, speed, maxTorque, colision);
+			j = new WheelJoint(b1, b2, anchor, axis, frequency, damping, enableMotor, speed, maxTorque, colision);
 		}
 
 		// Enregiste l'ID
@@ -670,8 +667,8 @@ bool LevelLoader::ProcessDeco()
 			posRot.z = rotation;
 			
 			// Ajoute la déco
-			d = new Deco(z, mLevel->mTextureMap[texture], getVec3(b22sfVec(getVec2(posRot), mLevel->mPhysicMgr->GetPPM()), posRot.z));
-			mLevel->mEntityManager.RegisterEntity(d);
+			d = new Deco(z, mLevel.mTextureMap[texture], getVec3(b22sfVec(getVec2(posRot), mLevel.mPhysicMgr.GetPPM()), posRot.z));
+			mLevel.mEntityManager.RegisterEntity(d);
 
 			// On récupère la prochaine image
 			img = img->NextSiblingElement();
@@ -719,7 +716,7 @@ bool LevelLoader::ProcessDeco()
 		if (light->Attribute("parent")) parent = light->Attribute("parent");
 
 		// Récupère l'ID de l'objet associé
-		if (light->Attribute("pos")) position = b22sfVec(Parser::string2b2Vec2(light->Attribute("pos")), mLevel->mPhysicMgr->GetPPM());
+		if (light->Attribute("pos")) position = b22sfVec(Parser::string2b2Vec2(light->Attribute("pos")), mLevel.mPhysicMgr->GetPPM());
 		if (parent == "body")
 		{
 			light->QueryUnsignedAttribute("id", &id);
@@ -744,7 +741,7 @@ bool LevelLoader::ProcessDeco()
 			light->QueryBoolAttribute("static", &isStatic);
 			light->QueryBoolAttribute("activated", &activated);
 
-			radius *= mLevel->mPhysicMgr->GetPPM();
+			radius *= mLevel.mPhysicMgr->GetPPM();
 
 			//LightManager::GetInstance().AddLight(new PointLight(position, radius, isStatic, activated, b));
 		}

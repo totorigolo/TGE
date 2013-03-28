@@ -17,12 +17,13 @@ Box2DGame::Box2DGame(sf::RenderWindow & window)
 	mTextureMap(mResourceManager.GetTextureMap()),
 	mInputManager(InputManager::GetInstance()),
 	// Physique
-	mGravity(0.0f, -9.8f), mPhysicMgr(mGravity)
+	mPhysicMgr(PhysicManager::GetInstance()),
+	// Level
+	mLevel(LevelManager::GetInstance())
 {
 	// Etats du jeu
 	mPaused = false;
 
-	mLevel = nullptr;
 	mMouseJointCreated = false;
 	mMouseJointID = -1;
 	mPinBodyA = nullptr;
@@ -30,15 +31,14 @@ Box2DGame::Box2DGame(sf::RenderWindow & window)
 	mHookedSBody = nullptr;
 
 	// Grapin de test
-	mGrapnel = new Grapnel(&mPhysicMgr, -1);
+	mGrapnel = new Grapnel(-1);
 	EntityManager::GetInstance().RegisterEntity(mGrapnel);
 }
 
 // Dtor
 Box2DGame::~Box2DGame(void)
 {
-	delete mLevel;
-	mLevel = nullptr;
+	mLevel.Clear();
 }
 
 // Boucle de jeu
@@ -89,18 +89,16 @@ bool Box2DGame::OnInit()
 	mPhysicMgr.SetDebugDrawTarget(&mWindow);
 
 	// Charge un niveau
-	mLevel = new Level(&mPhysicMgr);
-	LevelLoader("lvls/1.xvl", mLevel);
-	if (!mLevel->IsCharged())
+	LevelLoader("lvls/1.xvl");
+	if (!mLevel.IsCharged())
 		return false;
 	
-	// Règle l'EntityFactory
-	EntityFactory::SetPhysicManager(&mPhysicMgr);
-
 	// Initialise la machine Lua
 	mConsole.RegisterEntityFactory();
-	mConsole.RegisterLevel();
-	mConsole.RegisterGlobalLuaVar("level", mLevel);
+	mConsole.RegisterLevelManager();
+	mConsole.RegisterGlobalLuaVar("level", &mLevel);
+	mConsole.RegisterPhysicManager();
+	mConsole.RegisterGlobalLuaVar("physicMgr", &mPhysicMgr);
 
 	/* Evènements */
 	// Enregistre la fênetre
@@ -109,8 +107,8 @@ bool Box2DGame::OnInit()
 
 	// Centre la vue
 	mInputManager.SetView(mWindow.getDefaultView());
-	mInputManager.SetDefaultZoom(mLevel->GetDefaultZoom());
-	mInputManager.SetDefaultCenter(b22sfVec(mLevel->GetOriginView(), mPhysicMgr.GetPPM()));
+	mInputManager.SetDefaultZoom(mLevel.GetDefaultZoom());
+	mInputManager.SetDefaultCenter(b22sfVec(mLevel.GetOriginView(), mPhysicMgr.GetPPM()));
 
 	// Demande l'espionnage de touches
 	mInputManager.AddSpyedKey(sf::Keyboard::T); // Ragdoll
@@ -164,15 +162,11 @@ void Box2DGame::OnEvent()
 	// Lua
 	if (mInputManager.KeyPressed(sf::Keyboard::I))
 	{
-		sf::Clock c;
 		mConsole.DoFile("scripts/test1.lua");
-		std::cout << c.getElapsedTime().asSeconds() << " sec" << std::endl;
 	}
 	if (mInputManager.KeyPressed(sf::Keyboard::X))
 	{
-		sf::Clock c;
 		mConsole.DoFile("scripts/lvl1.lua");
-		std::cout << c.getElapsedTime().asSeconds() << " sec" << std::endl;
 	}
 
 	// Déplacements des objets
@@ -209,7 +203,7 @@ void Box2DGame::OnEvent()
 				if (staticBody) // Si il y en a un
 				{
 					b2Body* body = callback.GetFixture()->GetBody();
-					MouseJoint *j = new MouseJoint(&mPhysicMgr, body, staticBody, mMp, 10000000.f * body->GetMass());
+					MouseJoint *j = new MouseJoint(body, staticBody, mMp, 10000000.f * body->GetMass());
 					mMouseJointID = j->GetID();
 					mMouseJointCreated = true;
 				}
@@ -241,11 +235,11 @@ void Box2DGame::OnEvent()
 		mPinBodyB = nullptr;
 
 		// Charge le niveau
-		LevelLoader("lvls/1.xvl", mLevel);
+		LevelLoader("lvls/1.xvl");
 
 		// Centre la vue
-		mInputManager.SetDefaultZoom(mLevel->GetDefaultZoom());
-		mInputManager.SetDefaultCenter(b22sfVec(mLevel->GetOriginView(), mPhysicMgr.GetPPM()));
+		mInputManager.SetDefaultZoom(mLevel.GetDefaultZoom());
+		mInputManager.SetDefaultCenter(b22sfVec(mLevel.GetOriginView(), mPhysicMgr.GetPPM()));
 	}
 
 	// Grappin
@@ -254,7 +248,7 @@ void Box2DGame::OnEvent()
 		// Si le grapin n'existe pas, on le crée
 		if (!mGrapnel)
 		{
-			mGrapnel = new Grapnel(&mPhysicMgr, -1);
+			mGrapnel = new Grapnel(-1);
 			EntityManager::GetInstance().RegisterEntity(mGrapnel);
 		}
 
@@ -339,7 +333,7 @@ void Box2DGame::OnEvent()
 		// Crée le joint
 		if (mPinBodyA && mPinBodyB)
 		{
-			new DistanceJoint(&mPhysicMgr, mPinBodyA, mPinAnchorA, mPinBodyB, mPinAnchorB);
+			new DistanceJoint(mPinBodyA, mPinAnchorA, mPinBodyB, mPinAnchorB);
 
 			mPinBodyA = nullptr;
 			mPinBodyB = nullptr;
@@ -368,20 +362,18 @@ void Box2DGame::OnUpdate()
 	mPhysicMgr.UpdateJoints();
 
 	// Met à jour le niveau
-	mLevel->Update();
+	mLevel.Update();
 }
 
 /// Appelé pour le rendu
 void Box2DGame::OnRender()
 {
-	assert(mLevel && "est invalide.");
-
 	// Rendu
-	mWindow.clear(mLevel->GetBckgColor());
+	mWindow.clear(mLevel.GetBckgColor());
 	mWindow.setView(mInputManager.GetView());
 	
 	// Affichage du Level
-	mWindow.draw(*mLevel);
+	mWindow.draw(mLevel);
 	
 	// Affichage du debug
 	mPhysicMgr.DrawDebugData();
@@ -405,11 +397,10 @@ void Box2DGame::OnQuit()
 	mMouseJointCreated = false; // Suppr auto
 	mMouseJointID = -1;
 
-	// Supprime le niveau
-	delete mLevel;
+	// Vide le niveau
+	mLevel.Clear();
 
 	// Nullifie les pointeurs
-	mLevel = nullptr;
 	mGrapnel = nullptr;
 	mHookedSBody = nullptr;
 	mPinBodyA = nullptr;

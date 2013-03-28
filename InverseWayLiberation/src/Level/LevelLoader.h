@@ -4,12 +4,12 @@
 #include <map>
 #include "../Tools/Loader.h"
 
-class Level;
+class LevelManager;
 class LevelLoader : public Loader
 {
 public:
 	// Ctor & dtor
-	LevelLoader(std::string const& path, Level *level);
+	LevelLoader(const std::string &path);
 	virtual ~LevelLoader(void);
 	
 private:
@@ -26,8 +26,8 @@ private:
 	//bool ProcessLights();
 
 private:
-	Level *mLevel;
-	
+	LevelManager &mLevel;
+
 	std::map<unsigned int, b2Body*> mBodyIDMap;
 	std::map<unsigned int, b2Joint*> mJointIDMap;
 };

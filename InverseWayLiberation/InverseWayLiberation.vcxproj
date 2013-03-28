@@ -34,7 +34,7 @@
     <ClCompile Include="src\Resources\AnimatedSprite.cpp" />
     <ClCompile Include="src\Sounds\SoundManager.cpp" />
     <ClCompile Include="src\Tools\Dialog.cpp" />
-    <ClCompile Include="src\Level\Level.cpp" />
+    <ClCompile Include="src\Level\LevelManager.cpp" />
     <ClCompile Include="src\Level\LevelLoader.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\Tools\Parser.cpp" />
@@ -70,7 +70,7 @@
     <ClInclude Include="src\Game\Box2DGame.h" />
     <ClInclude Include="src\Game\LuaMachine.h" />
     <ClInclude Include="src\Game\InputManager.h" />
-    <ClInclude Include="src\Level\Level.h" />
+    <ClInclude Include="src\Level\LevelManager.h" />
     <ClInclude Include="src\Level\LevelLoader.h" />
     <ClInclude Include="src\Physics\Callback\AABBCallback.h" />
     <ClInclude Include="src\Physics\Callback\FirstBodyRaycastCallback.h" />

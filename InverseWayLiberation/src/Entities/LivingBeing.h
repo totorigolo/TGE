@@ -2,13 +2,13 @@
 #include <Box2D/Box2D.h>
 #include <memory>
 #include "Entity.h"
-#include "../Physics/PhysicManager.h"
 
+class PhysicManager;
 class LivingBeing : public Entity
 {
 public:
 	// Ctor & dtor
-	LivingBeing(PhysicManager *physicMgr, b2Vec2 position, const std::shared_ptr<sf::Texture> &texture, int layer = 1);
+	LivingBeing(b2Vec2 position, const std::shared_ptr<sf::Texture> &texture, int layer = 1);
 	virtual ~LivingBeing();
 
 	// Mise à jour
@@ -25,7 +25,7 @@ protected:
 	bool mIsDead;
 	bool mCanJump;
 
-	PhysicManager *mPhysicMgr;
+	PhysicManager &mPhysicMgr;
 	b2Body *mBody;
 	bool mBodyIsCreated;
 

@@ -2,16 +2,14 @@
 #include "../../Tools/utils.h"
 
 //Ctor
-WheelJoint::WheelJoint(PhysicManager *physicMgr, b2Body *car, b2Body *wheel, b2Vec2 pWheel, b2Vec2 axis, float frequencyHz, float damping
-																					   , bool enableMotor, float motorSpeed, float maxMotorTorque
-																					   , bool collideconnected)
-	: Joint(physicMgr)
+WheelJoint::WheelJoint(b2Body *car, b2Body *wheel, b2Vec2 pWheel, b2Vec2 axis, float frequencyHz, float damping
+																			 , bool enableMotor, float motorSpeed, float maxMotorTorque
+																			 , bool collideconnected)
 {
-	assert(mPhysicMgr && "n'est pas valide.");
 	assert(car && "n'est pas valide.");
 	assert(wheel && "n'est pas valide.");
 	
-	mPhysicMgr->RegisterJoint(this);
+	mPhysicMgr.RegisterJoint(this);
 
 	b2WheelJointDef jointDef;
 	jointDef.Initialize(car, wheel, wheel->GetWorldPoint(pWheel), axis);
@@ -21,7 +19,7 @@ WheelJoint::WheelJoint(PhysicManager *physicMgr, b2Body *car, b2Body *wheel, b2V
 	jointDef.frequencyHz = frequencyHz;
 	jointDef.dampingRatio = damping;
 	jointDef.collideConnected = collideconnected;
-	mJoint = mPhysicMgr->Createb2Joint(&jointDef);
+	mJoint = mPhysicMgr.Createb2Joint(&jointDef);
 	mJoint->SetUserData(this);
 	
 	mIsAlive = true;

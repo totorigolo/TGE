@@ -8,11 +8,10 @@ class Joint;
 class PrismaticJoint : public Joint
 {
 public:
-	// Ctor & dtor											   Anchor relative to bodyA
-	PrismaticJoint(PhysicManager *physicMgr, b2Body *b1, b2Body *b2, b2Vec2 anchor, b2Vec2 axis
-											, bool enableLimit = false, float lowerTranslation = 0.f, float upperTranslation = 0.f
-											, bool enableMotor = false, float motorSpeed = 0.f, float maxMotorForce = 10.f
-											, bool collideconnected = false);
+	// Ctor & dtor							Anchor relative to bodyA
+	PrismaticJoint(b2Body *b1, b2Body *b2, b2Vec2 anchor, b2Vec2 axis, bool enableLimit = false, float lowerTranslation = 0.f, float upperTranslation = 0.f
+																	 , bool enableMotor = false, float motorSpeed = 0.f, float maxMotorForce = 10.f
+																	 , bool collideconnected = false);
 	virtual ~PrismaticJoint(void);
 	
 	// Accesseurs

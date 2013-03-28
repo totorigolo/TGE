@@ -2,8 +2,8 @@
 #include <Box2D/Box2D.h>
 #include <memory>
 #include "Entity.h"
-#include "../Physics/PhysicManager.h"
 
+class PhysicManager;
 class BasicBody : public Entity
 {
 public:
@@ -26,7 +26,7 @@ public:
 
 public:
 	// Ctor & dtor
-	BasicBody(PhysicManager *mgr, int layer = 1);
+	BasicBody(int layer = 1);
 	virtual ~BasicBody();
 
 	// Création du body
@@ -60,9 +60,6 @@ public:
 	// Body
 	b2Body* GetBody();
 	const b2Body* GetBody() const;
-	// PhysicManager
-	PhysicManager* GetPhysicManager();
-	const PhysicManager* GetPhysicManager() const;
 
 protected:
 	// Pour le rendu
@@ -76,7 +73,7 @@ private:
 	CollisionType mCollisionType;
 
 	// PhysicManager
-	PhysicManager *mPhysicMgr;
+	PhysicManager &mPhysicMgr;
 
 	// Le body Box2D
 	bool mBodyIsCreated;

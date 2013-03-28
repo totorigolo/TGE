@@ -13,7 +13,7 @@ class Joint : public NonCopyable
 
 public:
 	// Ctor & dtor
-	Joint(PhysicManager *physicMgr);
+	Joint();
 	virtual ~Joint(void);
 
 	// Destruction de ce joint
@@ -44,9 +44,6 @@ public:
 	bool IsAlive() const { return mIsAlive; }
 	bool ToDestroy() const { return mToDestroy; }
 
-	PhysicManager* GetPhysicManager() { return mPhysicMgr; }
-	PhysicManager const* GetPhysicManager() const { return mPhysicMgr; }
-
 	int GetID() const { return mID; }
 
 	b2Joint* GetJoint() { return mJoint; }
@@ -69,7 +66,7 @@ protected:
 
 	// Objets physiques
 	int mID;
-	PhysicManager *mPhysicMgr;
+	PhysicManager &mPhysicMgr;
 	b2Joint *mJoint;
 
 	// Propriétés cassable

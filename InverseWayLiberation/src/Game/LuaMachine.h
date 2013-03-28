@@ -4,7 +4,6 @@
 #pragma warning (disable : 4251)
 #include <luabind/luabind.hpp>
 #include <string>
-#include "../Level/Level.h"
 
 class LuaMachine
 {
@@ -17,7 +16,8 @@ public:
 	// HACK: Déplacer ça dans les classes respectives ?
 	void RegisterEntityFactory();
 	void RegisterJointFactory();
-	void RegisterLevel();
+	void RegisterLevelManager();
+	void RegisterPhysicManager();
 
 	// Enregistrement des attributs
 	template <typename T>
@@ -51,7 +51,4 @@ private:
 private:
 	// State Lua
 	lua_State *mLuaState;
-
-	// Level
-	Level *mLevel;
 };

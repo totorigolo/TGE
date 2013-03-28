@@ -3,14 +3,12 @@
 // TODO: Classe de communication / erreur
 
 //Ctor
-DistanceJoint::DistanceJoint(PhysicManager *physicMgr, b2Body *b1, b2Vec2 pt1, b2Body *b2, b2Vec2 pt2, float frequencyHz, float damping, bool collideconnected)
-	: Joint(physicMgr)
+DistanceJoint::DistanceJoint(b2Body *b1, b2Vec2 pt1, b2Body *b2, b2Vec2 pt2, float frequencyHz, float damping, bool collideconnected)
 {
-	assert(mPhysicMgr && "n'est pas valide.");
 	assert(b1 && "n'est pas valide.");
 	assert(b2 && "n'est pas valide.");
 	
-	mPhysicMgr->RegisterJoint(this);
+	mPhysicMgr.RegisterJoint(this);
 
 	b2DistanceJointDef jointDef;
 	jointDef.bodyA = b1;
@@ -22,7 +20,7 @@ DistanceJoint::DistanceJoint(PhysicManager *physicMgr, b2Body *b1, b2Vec2 pt1, b
 	jointDef.collideConnected = collideconnected;
 	jointDef.frequencyHz = frequencyHz;
 	jointDef.dampingRatio = damping;
-	mJoint = mPhysicMgr->Createb2Joint(&jointDef);
+	mJoint = mPhysicMgr.Createb2Joint(&jointDef);
 	mJoint->SetUserData(this);
 	
 	mIsAlive = true;

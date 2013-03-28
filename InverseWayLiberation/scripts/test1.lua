@@ -19,7 +19,7 @@ level:LoadFromFile("lvls/2.xvl")
 
 -- Charge une petite déco
 if (tex_loaded == nil) then
-	EntityFactory.LoadTexture("skyrim", "tex/skyrim.jpg")
+	LoadTexture("skyrim", "tex/skyrim.jpg")
 	tex_loaded = true
 	print "Texture Skyrim chargee."
 end

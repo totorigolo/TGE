@@ -6,7 +6,7 @@
 #include "../Physics/PhysicManager.h"
 #include "../Tools/NonCopyable.h"
 #include "../Entities/Grapnel.h"
-#include "../Level/Level.h"
+#include "../Level/LevelManager.h"
 #include "InputManager.h"
 #include "LuaMachine.h"
 
@@ -55,17 +55,16 @@ private:
 
 	// Fenêtre
 	bool mQuit;
-	sf::RenderWindow & mWindow;
+	sf::RenderWindow &mWindow;
 	
 	// Evènements
 	InputManager &mInputManager;
 
 	// Niveau
-	Level *mLevel;
+	LevelManager &mLevel;
 
 	// Monde physique
-	b2Vec2 mGravity;
-	PhysicManager mPhysicMgr;
+	PhysicManager &mPhysicMgr;
 
 	// Textures
 	ResourceManager &mResourceManager;

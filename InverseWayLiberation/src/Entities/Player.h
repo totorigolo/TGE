@@ -17,7 +17,7 @@ public:
 
 public:
 	// Ctor & dtor
-	Player(PhysicManager *physicMgr, b2Vec2 position, std::shared_ptr<sf::Texture> texture, int layer = 1);
+	Player(b2Vec2 position, std::shared_ptr<sf::Texture> texture, int layer = 1);
 	virtual ~Player();
 
 	// Mise à jour

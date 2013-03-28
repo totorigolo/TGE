@@ -1,13 +1,14 @@
 #include "Joint.h"
 #include "../Tools/utils.h"
+#include "PhysicManager.h"
 
 //Ctor
-Joint::Joint(PhysicManager *physicMgr)
-	: mPhysicMgr(physicMgr), mJoint(nullptr), mID(-1),
+Joint::Joint()
+	: mJoint(nullptr), mID(-1),
 	mToDestroy(false), mIsAlive(false),
-	mIsBreakableMaxForce(false), mIsBreakableMaxTorque(false), mMaxForceType(Null), mMaxForce(0.f), mMaxTorque(0.f)
+	mIsBreakableMaxForce(false), mIsBreakableMaxTorque(false), mMaxForceType(Null), mMaxForce(0.f), mMaxTorque(0.f),
+	mPhysicMgr(PhysicManager::GetInstance())
 {
-	assert(mPhysicMgr && "n'est pas valide.");
 }
 
 // Dtor
@@ -22,7 +23,7 @@ Joint::~Joint(void)
 	// Supprime le joint
 	if (mJoint)
 	{
-		mPhysicMgr->Destroyb2Joint(mJoint);
+		mPhysicMgr.Destroyb2Joint(mJoint);
 		mJoint = nullptr;
 	}
 
@@ -47,7 +48,7 @@ void Joint::Update()
 	// Gestion du joint cassable par Force
 	if (mIsBreakableMaxForce)
 	{
-		b2Vec2 mf = mJoint->GetReactionForce(1.f / mPhysicMgr->GetTimeStep());
+		b2Vec2 mf = mJoint->GetReactionForce(1.f / mPhysicMgr.GetTimeStep());
 		
 		if (mMaxForceType == Vector)
 		{
@@ -64,7 +65,7 @@ void Joint::Update()
 	// Gestion du joint cassable par Torque
 	if (mIsBreakableMaxTorque && mIsAlive)
 	{
-		float mt = mJoint->GetReactionTorque(1.f / mPhysicMgr->GetTimeStep());
+		float mt = mJoint->GetReactionTorque(1.f / mPhysicMgr.GetTimeStep());
 		
 		if (mMaxTorque > mt)
 				Destroy();
@@ -157,7 +158,7 @@ const b2Body* Joint::GetBodyB() const
 // Gestion des joints à supprimer avant celui-ci
 void Joint::RegisterLinkedJoint(int jointID)
 {
-	assert(mPhysicMgr->JointExists(jointID) && "le joint n'existe pas.");
+	assert(mPhysicMgr.JointExists(jointID) && "le joint n'existe pas.");
 
 	mLinkedJointList.push_back(jointID);
 }
@@ -168,13 +169,13 @@ void Joint::RemoveLinkedJoint(int jointID)
 void Joint::DestroyLinkedJoint(int jointID)
 {
 	mLinkedJointList.remove(jointID);
-	mPhysicMgr->DestroyJoint(jointID);
+	mPhysicMgr.DestroyJoint(jointID);
 }
 void Joint::DestroyAllLinkedJoints()
 {
 	for (auto it = mLinkedJointList.begin(); it != mLinkedJointList.end(); ++it)
 	{
-		mPhysicMgr->DestroyJoint(*it);
+		mPhysicMgr.DestroyJoint(*it);
 	}
 	mLinkedJointList.clear();
 }

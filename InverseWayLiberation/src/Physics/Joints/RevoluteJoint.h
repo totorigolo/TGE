@@ -9,10 +9,9 @@ class RevoluteJoint : public Joint
 {
 public:
 	// Ctor & dtor											 Anchor relative to bodyA
-	RevoluteJoint(PhysicManager *physicMgr, b2Body *b1, b2Body *b2, b2Vec2 anchor
-																, bool enableLimit = false, float lowerAngle = 0.f, float upperAngle = 0.f
-																, bool enableMotor = false, float motorSpeed = 0.f, float maxMotorTorque = 10.f
-																, bool collideconnected = false);
+	RevoluteJoint(b2Body *b1, b2Body *b2, b2Vec2 anchor, bool enableLimit = false, float lowerAngle = 0.f, float upperAngle = 0.f
+													   , bool enableMotor = false, float motorSpeed = 0.f, float maxMotorTorque = 10.f
+													   , bool collideconnected = false);
 	virtual ~RevoluteJoint(void);
 	
 	// Accesseurs

@@ -2,14 +2,14 @@
 #include <Box2D/Box2D.h>
 #include <memory>
 #include "Entity.h"
-#include "../Physics/PhysicManager.h"
 #include "../Physics/Joints/DistanceJoint.h"
 
+class PhysicManager;
 class Grapnel : public Entity
 {
 public:
 	// Ctor & dtor
-	Grapnel(PhysicManager *mgr, int layer = 1);
+	Grapnel(int layer = 1);
 	virtual ~Grapnel();
 
 	// Création du grapin
@@ -33,7 +33,7 @@ protected:
 
 private:
 	// PhysicManager
-	PhysicManager *mPhysicMgr;
+	PhysicManager &mPhysicMgr;
 
 	// Le joint Box2D
 	int mJointID;

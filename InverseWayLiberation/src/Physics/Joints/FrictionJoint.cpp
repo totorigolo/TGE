@@ -2,14 +2,12 @@
 #include "../../Tools/utils.h"
 
 //Ctor
-FrictionJoint::FrictionJoint(PhysicManager *physicMgr, b2Body *b1, b2Vec2 pt1, b2Body *b2, b2Vec2 p2, float maxForce, float maxTorque, bool collideconnected)
-	: Joint(physicMgr)
+FrictionJoint::FrictionJoint(b2Body *b1, b2Vec2 pt1, b2Body *b2, b2Vec2 p2, float maxForce, float maxTorque, bool collideconnected)
 {
-	assert(mPhysicMgr && "n'est pas valide.");
 	assert(b1 && "n'est pas valide.");
 	assert(b2 && "n'est pas valide.");
 	
-	mPhysicMgr->RegisterJoint(this);
+	mPhysicMgr.RegisterJoint(this);
 
 	b2FrictionJointDef jointDef;
 	jointDef.bodyA = b1;
@@ -19,7 +17,7 @@ FrictionJoint::FrictionJoint(PhysicManager *physicMgr, b2Body *b1, b2Vec2 pt1, b
 	jointDef.maxForce = maxForce;
 	jointDef.maxTorque = maxTorque;
 	jointDef.collideConnected = collideconnected;
-	mJoint = mPhysicMgr->Createb2Joint(&jointDef);
+	mJoint = mPhysicMgr.Createb2Joint(&jointDef);
 	mJoint->SetUserData(this);
 	
 	mIsAlive = true;
