@@ -5,11 +5,14 @@
 class StateSystem;
 class App : public Singleton<App>
 {
-public:
+protected:
+	friend class Singleton<App>;
+
 	// Ctor & Dtor
 	App();
 	virtual ~App();
 	
+public:
 	// Exécute l'application
 	int Execute();
 

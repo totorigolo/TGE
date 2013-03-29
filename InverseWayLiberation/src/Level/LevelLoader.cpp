@@ -5,6 +5,7 @@
 #include "../Tools/Dialog.h"
 #include "../Tools/Parser.h"
 
+#include "../Game/InputManager.h"
 #include "../Physics/PhysicManager.h"
 
 #include "../Physics/Joints/RopeJoint.h"
@@ -28,7 +29,10 @@
 
 // Ctor
 LevelLoader::LevelLoader(const std::string& path)
-	: Loader(path), mLevel(LevelManager::GetInstance())
+	: Loader(path),
+	mLevel(LevelManager::GetInstance()),
+	mInputManager(InputManager::GetInstance()),
+	mPhysicManager(PhysicManager::GetInstance())
 {
 	// Si loader n'est pas valide, on ne fait rien
 	if (mIsValid)
@@ -127,11 +131,11 @@ bool LevelLoader::ProcessWorld()
 	}
 
 	// Change les attributs
-	mLevel.mPhysicMgr.SetGravity(gravity);
-	mLevel.mPhysicMgr.SetPPM(PPM);
 	mLevel.mBckgC = bckgColor;
-	mLevel.mOriginView = originView;
-	mLevel.mDefaulfZoom = defaultZoom;
+	mPhysicManager.SetGravity(gravity);
+	mPhysicManager.SetPPM(PPM);
+	mInputManager.SetDefaultZoom(defaultZoom);
+	mInputManager.SetDefaultCenter(b22sfVec(originView, mPhysicManager.GetPPM()));
 
 	return true;
 }
@@ -667,7 +671,7 @@ bool LevelLoader::ProcessDeco()
 			posRot.z = rotation;
 			
 			// Ajoute la déco
-			d = new Deco(z, mLevel.mTextureMap[texture], getVec3(b22sfVec(getVec2(posRot), mLevel.mPhysicMgr.GetPPM()), posRot.z));
+			d = new Deco(z, mLevel.mTextureMap[texture], getVec3(b22sfVec(getVec2(posRot), mPhysicManager.GetPPM()), posRot.z));
 			mLevel.mEntityManager.RegisterEntity(d);
 
 			// On récupère la prochaine image
@@ -716,7 +720,7 @@ bool LevelLoader::ProcessDeco()
 		if (light->Attribute("parent")) parent = light->Attribute("parent");
 
 		// Récupère l'ID de l'objet associé
-		if (light->Attribute("pos")) position = b22sfVec(Parser::string2b2Vec2(light->Attribute("pos")), mLevel.mPhysicMgr->GetPPM());
+		if (light->Attribute("pos")) position = b22sfVec(Parser::string2b2Vec2(light->Attribute("pos")), mPhysicManager->GetPPM());
 		if (parent == "body")
 		{
 			light->QueryUnsignedAttribute("id", &id);
@@ -741,7 +745,7 @@ bool LevelLoader::ProcessDeco()
 			light->QueryBoolAttribute("static", &isStatic);
 			light->QueryBoolAttribute("activated", &activated);
 
-			radius *= mLevel.mPhysicMgr->GetPPM();
+			radius *= mPhysicManager->GetPPM();
 
 			//LightManager::GetInstance().AddLight(new PointLight(position, radius, isStatic, activated, b));
 		}

@@ -11,9 +11,8 @@ int main()
 	try {
 #endif
 
-		// Crée et lance l'App
-		App app;
-		r = app.Execute();
+		// Exécute l'App
+		r = App::GetInstance().Execute();
 
 #ifndef _DEBUG
 	}

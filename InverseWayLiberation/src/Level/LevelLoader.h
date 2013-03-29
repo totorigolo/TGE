@@ -4,7 +4,9 @@
 #include <map>
 #include "../Tools/Loader.h"
 
+class InputManager;
 class LevelManager;
+class PhysicManager;
 class LevelLoader : public Loader
 {
 public:
@@ -27,6 +29,8 @@ private:
 
 private:
 	LevelManager &mLevel;
+	InputManager &mInputManager;
+	PhysicManager &mPhysicManager;
 
 	std::map<unsigned int, b2Body*> mBodyIDMap;
 	std::map<unsigned int, b2Joint*> mJointIDMap;

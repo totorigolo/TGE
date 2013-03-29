@@ -12,8 +12,6 @@ LevelManager::LevelManager()
 	mEntityManager(EntityManager::GetInstance()),
 	// Config de la fenêtre de rendu
 	mBckgC(sf::Color::White),
-	mDefaulfZoom(1.f),
-	mOriginView(b2Vec2_zero),
 	// Textures
 	mResourceManager(ResourceManager::GetInstance()),
 	mTextureMap(mResourceManager.GetTextureMap()),
@@ -88,21 +86,6 @@ Player* LevelManager::GetPlayer()
 	return mPlayer;
 }
 
-// Zoom par défaut & zoom
-void LevelManager::SetZoom(float zoom)
-{
-	InputManager::GetInstance().SetZoom(zoom);
-}
-void LevelManager::SetDefaultZoom(float zoom)
-{
-	mDefaulfZoom = zoom;
-	InputManager::GetInstance().SetDefaultZoom(mDefaulfZoom);
-}
-float LevelManager::GetDefaultZoom() const
-{
-	return mDefaulfZoom;
-}
-
 // Couleur de fond
 void LevelManager::SetBckgColor(const sf::Color &color)
 {
@@ -111,19 +94,4 @@ void LevelManager::SetBckgColor(const sf::Color &color)
 sf::Color const& LevelManager::GetBckgColor() const
 {
 	return mBckgC;
-}
-
-// Position de la vue
-void LevelManager::SetViewPosition(const b2Vec2 &pos)
-{
-	InputManager::GetInstance().SetCenter(b22sfVec(pos, mPhysicMgr.GetPPM()));
-}
-void LevelManager::SetOriginView(const b2Vec2 &origin)
-{
-	mOriginView = origin;
-	InputManager::GetInstance().SetCenter(b22sfVec(mOriginView, mPhysicMgr.GetPPM()));
-}
-b2Vec2 const& LevelManager::GetOriginView() const
-{
-	return mOriginView;
 }

@@ -88,27 +88,13 @@ bool Box2DGame::OnInit()
 	mPhysicMgr.SetTimeStep(1.f / 60.f);
 	mPhysicMgr.SetDebugDrawTarget(&mWindow);
 
-	// Charge un niveau
-	LevelLoader("lvls/1.xvl");
-	if (!mLevel.IsCharged())
-		return false;
-	
-	// Initialise la machine Lua
-	mConsole.RegisterEntityFactory();
-	mConsole.RegisterLevelManager();
-	mConsole.RegisterGlobalLuaVar("level", &mLevel);
-	mConsole.RegisterPhysicManager();
-	mConsole.RegisterGlobalLuaVar("physicMgr", &mPhysicMgr);
-
 	/* Evènements */
 	// Enregistre la fênetre
 	mInputManager.SetWindow(&mWindow);
 	mWindow.setKeyRepeatEnabled(false);
 
-	// Centre la vue
+	// Enregistre la vue
 	mInputManager.SetView(mWindow.getDefaultView());
-	mInputManager.SetDefaultZoom(mLevel.GetDefaultZoom());
-	mInputManager.SetDefaultCenter(b22sfVec(mLevel.GetOriginView(), mPhysicMgr.GetPPM()));
 
 	// Demande l'espionnage de touches
 	mInputManager.AddSpyedKey(sf::Keyboard::T); // Ragdoll
@@ -119,6 +105,20 @@ bool Box2DGame::OnInit()
 	mInputManager.AddSpyedKey(sf::Keyboard::I); // Console
 	mInputManager.AddSpyedKey(sf::Keyboard::X); // test
 
+	// Initialise la machine Lua
+	mConsole.RegisterEntityFactory();
+	mConsole.RegisterLevelManager();
+	mConsole.RegisterGlobalLuaVar("level", &mLevel);
+	mConsole.RegisterPhysicManager();
+	mConsole.RegisterGlobalLuaVar("physicMgr", &mPhysicMgr);
+	mConsole.RegisterInputManager();
+	mConsole.RegisterGlobalLuaVar("inputMgr", &mInputManager);
+
+	// Charge un niveau
+	LevelLoader("lvls/1.xvl");
+	if (!mLevel.IsCharged())
+		return false;
+	
 	return true;
 }
 
@@ -236,10 +236,6 @@ void Box2DGame::OnEvent()
 
 		// Charge le niveau
 		LevelLoader("lvls/1.xvl");
-
-		// Centre la vue
-		mInputManager.SetDefaultZoom(mLevel.GetDefaultZoom());
-		mInputManager.SetDefaultCenter(b22sfVec(mLevel.GetOriginView(), mPhysicMgr.GetPPM()));
 	}
 
 	// Grappin
@@ -405,6 +401,11 @@ void Box2DGame::OnQuit()
 	mHookedSBody = nullptr;
 	mPinBodyA = nullptr;
 	mPinBodyB = nullptr;
+	
+	// Vide
+	mConsole.UnregisterGlobalLuaVar("level");
+	mConsole.UnregisterGlobalLuaVar("physicMgr");
+	mConsole.UnregisterGlobalLuaVar("inputMgr");
 
 	// Arrête l'espionnage des touches
 	mInputManager.RemoveSpyedKey(sf::Keyboard::T); // Ragdoll

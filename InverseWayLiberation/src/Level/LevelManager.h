@@ -15,11 +15,14 @@ class LevelManager : public sf::Drawable, public Singleton<LevelManager>
 {
 	friend class LevelLoader;
 
-public:
+protected:
+	friend class Singleton<LevelManager>;
+
 	// Ctor & dtor
 	LevelManager();
 	virtual ~LevelManager(void);
 
+public:
 	// Charge un niveau à partir d'un XVL
 	void LoadFromFile(const std::string &path);
 
@@ -44,19 +47,9 @@ public:
 	void SetPlayer(Player *player);
 	Player* GetPlayer();
 
-	// Zoom par défaut & zoom
-	void SetZoom(float zoom);
-	void SetDefaultZoom(float zoom);
-	float GetDefaultZoom() const;
-
 	// Couleur de fond
 	void SetBckgColor(const sf::Color &color);
 	sf::Color const& GetBckgColor() const;
-
-	// Position de la vue
-	void SetViewPosition(const b2Vec2 &pos);
-	void SetOriginView(const b2Vec2 &origin);
-	b2Vec2 const& GetOriginView() const;
 
 private:
 	bool mIsCharged;
@@ -70,9 +63,7 @@ private:
 
 	// Config de la fenêtre de rendu
 	sf::Color mBckgC;
-	float mDefaulfZoom;
-	b2Vec2 mOriginView;
-	
+
 	// Textures
 	ResourceManager &mResourceManager;
 	TextureMap &mTextureMap;

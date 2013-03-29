@@ -5,11 +5,14 @@ class App;
 class State;
 class StateSystem : public Singleton<StateSystem>
 {
-public:
+protected:
+	friend class Singleton<StateSystem>;
+
 	// Ctor & Dtor
 	StateSystem();
 	virtual ~StateSystem();
 
+public:
 	// Change le state actuel
 	void ChangeState(State *state);
 

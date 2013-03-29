@@ -5,11 +5,14 @@
 
 class EntityManager : public Singleton<EntityManager>, public sf::Drawable
 {
-public:
+protected:
+	friend class Singleton<EntityManager>;
+
 	// Ctor & dtor
 	EntityManager();
 	virtual ~EntityManager();
 
+public:
 	// Mise à jour
 	void Update();
 

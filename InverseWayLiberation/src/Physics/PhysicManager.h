@@ -10,11 +10,14 @@ class Joint;
 class DebugDraw;
 class PhysicManager : public Singleton<PhysicManager>
 {
-public:
+protected:
+	friend class Singleton<PhysicManager>;
+
 	// Ctor & dtor
 	PhysicManager();
 	virtual ~PhysicManager(void);
 	
+public:
 	// Gestion des body
 	b2Body* CreateBody(b2BodyDef const* bodyDef);
 	void DestroyBody(b2Body *body);

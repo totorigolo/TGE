@@ -10,7 +10,8 @@ PhysicManager::PhysicManager()
 	mPPM(100.f),
 	mTimeStep(1.f / 60.f),
 	// Autres
-	mLastJointID(0), mDebugDraw(this)
+	mLastJointID(0),
+	mDebugDraw(this)
 {
 	// Défini le ContactListener du monde
 	mWorld.SetContactListener(&mContactListener);

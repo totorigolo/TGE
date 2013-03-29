@@ -108,9 +108,8 @@ void InputManager::AddEvent(const sf::Event &event)
 	}
 	else if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Numpad0)
 	{
-		mCurrentZoom = mDefaultZoom;
-		mView.setSize(u2f(mWindow->getSize()) * sf::Vector2f(mView.getViewport().width, mView.getViewport().height));
-		mView.setCenter(mDefaultCenter);
+		SetZoom(mDefaultZoom);
+		SetCenter(mDefaultCenter);
 	}
 	else if (event.type == sf::Event::Resized)
 	{
@@ -159,10 +158,10 @@ void InputManager::AddEvent(const sf::Event &event)
 		if (it != mSpyedKeyMap.end())
 		{
 			if (event.type == sf::Event::KeyPressed)
-				it->second = KeyState::Pressed;
+				it->second = Pressed;
 
 			else if (event.type == sf::Event::KeyReleased)
-				it->second = KeyState::Released;
+				it->second = Released;
 		}
 	}
 }
@@ -170,7 +169,7 @@ void InputManager::AddEvent(const sf::Event &event)
 // Gestion des touches espionnées
 void InputManager::AddSpyedKey(const sf::Keyboard::Key &keyCode)
 {
-	mSpyedKeyMap[keyCode] = KeyState::None;
+	mSpyedKeyMap[keyCode] = None;
 }
 void InputManager::RemoveSpyedKey(const sf::Keyboard::Key &keyCode)
 {
@@ -178,13 +177,13 @@ void InputManager::RemoveSpyedKey(const sf::Keyboard::Key &keyCode)
 }
 bool InputManager::KeyPressed(const sf::Keyboard::Key &keyCode)
 {
-	if (GetSpyedKeyState(keyCode) == KeyState::Pressed)
+	if (GetSpyedKeyState(keyCode) == Pressed)
 		return true;
 	return false;
 }
 bool InputManager::KeyReleased(const sf::Keyboard::Key &keyCode)
 {
-	if (GetSpyedKeyState(keyCode) == KeyState::Released)
+	if (GetSpyedKeyState(keyCode) == Released)
 		return true;
 	return false;
 }
@@ -195,11 +194,11 @@ KeyState InputManager::GetSpyedKeyState(const sf::Keyboard::Key &keyCode)
 	if (it != mSpyedKeyMap.end())
 	{
 		auto r = it->second;
-		it->second = KeyState::None;
+		it->second = None;
 		return r;
 	}
 
-	return KeyState::None;
+	return None;
 }
 
 // Accès aux évènements

@@ -3,7 +3,7 @@
 #include <map>
 #include "../Tools/Singleton.h"
 
-enum class KeyState
+enum KeyState
 {
 	None,
 	Pressed,
@@ -14,11 +14,14 @@ enum class KeyState
 //? -> window dans le ctor
 class InputManager : public Singleton<InputManager>
 {
-public:
+protected:
+	friend class Singleton<InputManager>;
+
 	// Ctor & dtor
 	InputManager();
 	~InputManager();
 
+public:
 	// Réglages des propriétés
 	void SetWindow(sf::RenderWindow *window);
 	void SetZoom(float zoom);

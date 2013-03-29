@@ -18,6 +18,7 @@ public:
 	void RegisterJointFactory();
 	void RegisterLevelManager();
 	void RegisterPhysicManager();
+	void RegisterInputManager();
 
 	// Enregistrement des attributs
 	template <typename T>
