@@ -143,9 +143,9 @@ void LuaMachine::RegisterInputManager()
 				// Enum
 				.enum_("KeyState")
 				[
-					luabind::value("None", 1),
-					luabind::value("Pressed", 2),
-					luabind::value("Released", 3)
+					luabind::value("None", KeyState::None),
+					luabind::value("Pressed", KeyState::Pressed),
+					luabind::value("Released", KeyState::Released)
 				]
 				/* Fxs */
 				// Vue et zoom
