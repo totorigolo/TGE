@@ -43,43 +43,45 @@ void Player::UpdateEvents()
 	{
 		myAssert(mBody, "La b2Body n'est pas valide.");
 
-		/* Traite les différents mouvements */
+		/* Traite les différents mouvements (http://www.iforce2d.net/b2dtut/constant-speed) */
+		// Calcule la vitesse max
+		float maxVspeed = 4.f;
+		float desiredVel = 0.f;
+
+		// Obtient la vitesse actuelle
+		b2Vec2 vel = mBody->GetLinearVelocity();
+
 		bool moved = false;
 		// Gauche
 		if (mInputManager.IsKeyPressed(sf::Keyboard::Q))
 		{
-			if ((mCanJump && mBody->GetLinearVelocity().x >= -5.f)
-				|| mBody->GetLinearVelocity().x >= -3.f)
-			{
-				mBody->ApplyForceToCenter(b2Vec2(-6.f, 0.f));
-				moved = true;
-			}
+			desiredVel = b2Max(vel.x - 0.1f, -maxVspeed);
+			moved = true;
 		}
-
 		// Droite
 		if (mInputManager.IsKeyPressed(sf::Keyboard::D))
 		{
-			if ((mCanJump && mBody->GetLinearVelocity().x <= 5.f)
-				|| mBody->GetLinearVelocity().x <= 3.f)
-			{
-				mBody->ApplyForceToCenter(b2Vec2(6.f, 0));
-				moved = true;
-			}
+			desiredVel = b2Min(vel.x + 0.1f, maxVspeed);
+			moved = true;
 		}
+		// On évite que le Player soit une savonette
+		if (!moved)
+		{
+			desiredVel = vel.x * 0.8f;
+		}
+
+		// Applique le déplacement
+		float velChange = desiredVel - vel.x;
+		float impulse = mBody->GetMass() * velChange * 100;
+		mBody->ApplyForceToCenter(b2Vec2(impulse, 0.f));
 
 		// Saut
 		if (mInputManager.KeyPressed(sf::Keyboard::Space))
 		{
 			if (mCanJump)
 			{
-				mBody->ApplyForceToCenter(b2Vec2(0.f, 260.f)); // 300.f = un étage
+				mBody->ApplyForceToCenter(b2Vec2(0.f, 370.f));
 			}
-		}
-
-		// On évite que le Player soit une savonette
-		if (!moved)
-		{
-			mBody->ApplyForceToCenter(- 2.f * mBody->GetLinearVelocity());
 		}
 	}
 }
