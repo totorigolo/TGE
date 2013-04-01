@@ -38,8 +38,8 @@ LivingBeing::LivingBeing(b2Vec2 position, const std::shared_ptr<sf::Texture> &te
 
 	// Shape & Fixture pour la détection du saut
 	b2PolygonShape shape2;
-	b2Vec2 center(0.f, - y - 0.02f);
-	shape2.SetAsBox(x - 0.015f, 0.02f, center, 0.f);
+	b2Vec2 center(0.f, - y - 0.03f);
+	shape2.SetAsBox(x - 0.02f, 0.03f, center, 0.f);
 	b2FixtureDef fixtureDef2;
 	fixtureDef2.shape = &shape2;
 	fixtureDef2.isSensor = true;

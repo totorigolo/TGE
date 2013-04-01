@@ -24,7 +24,7 @@
     <img name="lampadere" src="tex/lampadere.png"/>
     <img name="volcan" src="tex/volcan.png"/>
 
-    <img name="hero" src="tex/hero/test2.png"/>
+    <img name="hero" src="tex/hero/test.png"/>
     <img name="hook" src="tex/hook.png"/>
   </textures>
 
