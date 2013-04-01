@@ -1,7 +1,11 @@
 #include "LevelManager.h"
 #include "LevelLoader.h"
-#include "../Game/InputManager.h"
 #include "../Tools/utils.h"
+#include "../Entities/Player.h"
+#include "../Game/InputManager.h"
+#include "../Physics/PhysicManager.h"
+#include "../Entities/EntityManager.h"
+
 
 // Ctor
 LevelManager::LevelManager()

@@ -1,10 +1,14 @@
 #include "Box2DGame.h"
-#include "../Entities/Player.h"
+#include "LuaMachine.h"
+#include "InputManager.h"
+#include "../Entities/Grapnel.h"
 #include "../Level/LevelLoader.h"
-#include "../Entities/BasicBody.h"
+#include "../Level/LevelManager.h"
+#include "../Physics/PhysicManager.h"
 #include "../Entities/EntityFactory.h"
+#include "../Entities/EntityManager.h"
 #include "../Physics/Joints/MouseJoint.h"
-#include "../Physics/Joints/DistanceJoint.h"
+#include "../Physics/Joints/DistanceJoint.h" // TODO: JointFactory
 #include "../Physics/Callback/PointCallback.h"
 #include "../Tools/utils.h"
 #include <iostream>

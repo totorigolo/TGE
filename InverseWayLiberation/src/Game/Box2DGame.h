@@ -2,14 +2,14 @@
 #include <Thor/Resources.hpp>
 #include <SFML/Graphics.hpp>
 #include <Box2D/Box2D.h>
-#include "../Resources/ResourceManager.h"
-#include "../Physics/PhysicManager.h"
-#include "../Tools/NonCopyable.h"
-#include "../Entities/Grapnel.h"
-#include "../Level/LevelManager.h"
-#include "InputManager.h"
 #include "LuaMachine.h"
+#include "../Tools/NonCopyable.h"
+#include "../Resources/ResourceManager.h"
 
+class PhysicManager;
+class LevelManager;
+class InputManager;
+class Grapnel;
 class Box2DGame : public NonCopyable
 {
 public:

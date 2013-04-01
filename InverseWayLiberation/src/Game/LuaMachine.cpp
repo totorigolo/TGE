@@ -1,14 +1,16 @@
 #include "LuaMachine.h"
 #include "Box2DGame.h"
+#include "InputManager.h"
 #include "../Level/LevelManager.h"
-#include "../Entities/EntityFactory.h"
 #include "../Physics/JointFactory.h"
 #include "../Physics/PhysicManager.h"
-#include <luabind/operator.hpp>
+#include "../Entities/EntityFactory.h"
+#include "../Entities/Player.h"
 #include <iostream>
 #include <exception>
 #include <Box2D/Box2D.h>
-#include <SFML/System.hpp>
+#include <SFML/Graphics.hpp>
+#include <luabind/operator.hpp>
 
 // Ctor & dtor
 LuaMachine::LuaMachine()
@@ -513,7 +515,6 @@ int LuaMachine::ReportLuaError(int errorCode)
 }
 
 /*
-LoadTexture("way",			"tex/way.png")
 JointFactory.CreatePulleyJoint(1, b2Vec2(0.f, 0.f), 2, b2Vec2(0.f, 0.f), b2Vec2(-2.f, 0.5f), b2Vec2(1.9f, 4.f), 1.5f)
 JointFactory.CreateRopeJoint(3, b2Vec2(0.f, 0.f), 4, b2Vec2(0.f, 0.f), 1.f, true, (0, 255, 255))
 */

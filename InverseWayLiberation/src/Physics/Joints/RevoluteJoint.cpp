@@ -1,13 +1,15 @@
 #include "RevoluteJoint.h"
+#include "../PhysicManager.h"
 #include "../../Tools/utils.h"
+#include "../../Tools/Error.h"
 
 //Ctor
 RevoluteJoint::RevoluteJoint(b2Body *b1, b2Body *b2, b2Vec2 anchor, bool enableLimit, float lowerAngle, float upperAngle
 																			, bool enableMotor, float motorSpeed, float maxMotorTorque
 																			, bool collideconnected)
 {
-	assert(b1 && "n'est pas valide.");
-	assert(b2 && "n'est pas valide.");
+	myAssert(b1, "Le b2Body n'existe pas.");
+	myAssert(b2, "Le b2Body n'existe pas.");
 	
 	mPhysicMgr.RegisterJoint(this);
 

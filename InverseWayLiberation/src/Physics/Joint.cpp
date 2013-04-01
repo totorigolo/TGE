@@ -1,5 +1,6 @@
 #include "Joint.h"
 #include "../Tools/utils.h"
+#include "../Tools/Error.h"
 #include "PhysicManager.h"
 
 //Ctor
@@ -158,7 +159,7 @@ const b2Body* Joint::GetBodyB() const
 // Gestion des joints à supprimer avant celui-ci
 void Joint::RegisterLinkedJoint(int jointID)
 {
-	assert(mPhysicMgr.JointExists(jointID) && "le joint n'existe pas.");
+	myAssert(mPhysicMgr.JointExists(jointID), "Le joint n'existe pas.");
 
 	mLinkedJointList.push_back(jointID);
 }

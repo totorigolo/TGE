@@ -1,16 +1,15 @@
 #pragma once
-#include <SFML/Graphics.hpp>
 #include <Thor/Resources.hpp>
+#include <SFML/Graphics.hpp>
 #include <Box2D/Box2D.h>
 #include <string>
-#include "../Tools/utils.h"
-#include "../Entities/Player.h"
 #include "../Tools/Singleton.h"
-#include "../Physics/PhysicManager.h"
-#include "../Entities/EntityManager.h"
 #include "../Resources/ResourceManager.h"
 
+class Player;
 class LevelLoader;
+class EntityManager;
+class PhysicManager;
 class LevelManager : public sf::Drawable, public Singleton<LevelManager>
 {
 	friend class LevelLoader;

@@ -25,5 +25,5 @@ State* DevGame_State::Run(App *app)
 	game->Run();
 	delete game;
 
-	return MainMenu_State::GetPInstance();
+	return &MainMenu_State::GetInstance();
 }

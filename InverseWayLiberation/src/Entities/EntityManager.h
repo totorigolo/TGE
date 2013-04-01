@@ -1,8 +1,9 @@
 #pragma once
-#include "Entity.h"
 #include "../Tools/Singleton.h"
 #include <list>
+#include <SFML/Graphics.hpp>
 
+class Entity;
 class EntityManager : public Singleton<EntityManager>, public sf::Drawable
 {
 protected:

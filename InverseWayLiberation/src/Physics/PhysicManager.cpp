@@ -1,7 +1,10 @@
 #include "PhysicManager.h"
-#include "DebugDraw.h"
-#include "../Entities/EntityManager.h"
 #include "Joint.h"
+#include "DebugDraw.h"
+#include "ContactListener.h"
+#include "../Tools/Error.h"
+#include "../Entities/Entity.h"
+#include "../Entities/EntityManager.h"
 
 //Ctor
 PhysicManager::PhysicManager()
@@ -11,7 +14,7 @@ PhysicManager::PhysicManager()
 	mTimeStep(1.f / 60.f),
 	// Autres
 	mLastJointID(0),
-	mDebugDraw(this)
+	mDebugDraw(*this)
 {
 	// Défini le ContactListener du monde
 	mWorld.SetContactListener(&mContactListener);
@@ -25,6 +28,7 @@ PhysicManager::~PhysicManager(void)
 {
 	DestroyAllJoints();
 	DestroyAllBody();
+	mWorld.Dump();
 }
 
 // Gestion des body
@@ -34,7 +38,7 @@ b2Body* PhysicManager::CreateBody(b2BodyDef const* bodyDef)
 }
 void PhysicManager::DestroyBody(b2Body *body)
 {
-	assert(body && "est invalide.");
+	myAssert(body, "Le b2Body est invalide.");
 
 	// Supprime les joints attachés
 	b2JointEdge *je = body->GetJointList();
@@ -100,14 +104,14 @@ int PhysicManager::RegisterJoint(Joint *joint)
 void PhysicManager::DestroyJoint(int jointID)
 {
 	// Vérifie que l'ID soit cohérent
-	assert(jointID >= 0 && "l'ID est impossible.");
+	myAssert(jointID >= 0, "L'ID est impossible (< 0).");
 
 	// Vérifie que la liste ne soit pas vide
-	assert(mJointList.size() != 0 && "la liste des joints est vide.");
+	myAssert(mJointList.size() != 0, "La liste des joints est vide.");
 
 	// Récupère le joint
 	auto itJoint = mJointList.find(jointID);
-	assert(itJoint != mJointList.end() && "le joint n'existe pas.");
+	myAssert(itJoint != mJointList.end(), "Le joint n'existe pas.");
 	Joint *joint = itJoint->second;
 
 	// Supprime le joint
@@ -124,7 +128,7 @@ void PhysicManager::DestroyAllJoints()
 	}
 	mJointList.clear();
 
-	assert(mWorld.GetJointCount() == 0 && "il ne devrait plus rester de joints.");
+	myAssert(mWorld.GetJointCount() == 0, "Il ne devrait plus rester de joints.");
 }
 // b2Joint
 b2Joint* PhysicManager::Createb2Joint(b2JointDef const* jointDef)
@@ -133,7 +137,7 @@ b2Joint* PhysicManager::Createb2Joint(b2JointDef const* jointDef)
 }
 void PhysicManager::Destroyb2Joint(b2Joint *joint)
 {
-	assert(joint && "n'est pas valide.");
+	myAssert(joint, " Le joint n'est pas valide.");
 	mWorld.DestroyJoint(joint);
 }
 // Mide à jour
@@ -199,7 +203,7 @@ const Joint* PhysicManager::GetJoint(int jointID) const
 // Simulation
 void PhysicManager::SetTimeStep(float timeStep)
 {
-	assert(timeStep > 0 && "un timeStep ne peut pas être négatif.");
+	myAssert(timeStep > 0, "Un timeStep ne peut pas être négatif.");
 
 	mTimeStep = mTimeStep;
 }

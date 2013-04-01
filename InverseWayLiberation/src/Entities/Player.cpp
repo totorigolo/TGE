@@ -1,7 +1,7 @@
 #include "Player.h"
 #include "EntityManager.h"
-#include "../Tools/utils.h"
-#include <cassert>
+#include "../Tools/Error.h"
+#include "../Game/InputManager.h"
 
 // Ctor & dtor
 Player::Player(b2Vec2 position, std::shared_ptr<sf::Texture> texture, int layer)
@@ -41,7 +41,7 @@ void Player::UpdateEvents()
 	// Si on est vivant
 	if (mIsAlive && !mIsDead)
 	{
-		assert(mBody && "n'est pas valide.");
+		myAssert(mBody, "La b2Body n'est pas valide.");
 
 		/* Traite les différents mouvements */
 		bool moved = false;

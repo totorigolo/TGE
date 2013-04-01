@@ -1,31 +1,25 @@
 #include "App/App.h"
+#include "Tools/Dialog.h"
 #include <iostream>
+#include <exception>
 
 int main()
 {
 	// Valeur de retour
 	int r = 0;
 
-	// Pas de gestion des exceptions globales en debug
-#ifndef _DEBUG
 	try {
-#endif
-
 		// Exécute l'App
 		r = App::GetInstance().Execute();
-
-#ifndef _DEBUG
 	}
 	catch (const std::exception &e)
 	{
-		std::cerr << "Une erreur fatale est survenue :" << std::endl;
-		std::cerr << e.what() << std::endl;
-
-#ifdef _WIN32
-		system("PAUSE");
-#endif
+		Dialog::Error("Erreur fatale :\n" + std::string(e.what()), true);
 	}
-#endif
+	catch (...)
+	{
+		Dialog::Error("Erreur fatale inconnue.", true);
+	}
 
 	// Termine l'application
     return r;

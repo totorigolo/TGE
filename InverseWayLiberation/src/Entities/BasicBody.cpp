@@ -1,5 +1,6 @@
 #include "BasicBody.h"
 #include "../Tools/utils.h"
+#include "../Tools/Error.h"
 #include "../Physics/PhysicManager.h"
 #include <iostream>
 
@@ -27,7 +28,7 @@ bool BasicBody::CreateDynBox(b2Vec3 posRot, const std::shared_ptr<sf::Texture> &
 
 	// Change la texture
 	mTexture = texture;
-	assert(mTexture.get() && "n'est pas valide.");
+	myAssert(mTexture.get(), "La texture n'est pas chargée.");
 	mSprite.setTexture(*mTexture);
 	mSprite.setOrigin(mSprite.getTextureRect().width / 2.f, mSprite.getTextureRect().height / 2.f);
 
@@ -70,7 +71,7 @@ bool BasicBody::CreateDynCircle(b2Vec3 posRot, const std::shared_ptr<sf::Texture
 
 	// Change la texture
 	mTexture = texture;
-	assert(mTexture.get() && "n'est pas valide.");
+	myAssert(mTexture.get(), "La texture n'est pas chargée.");
 	mSprite.setTexture(*mTexture);
 	mSprite.setOrigin(mSprite.getTextureRect().width / 2.f, mSprite.getTextureRect().height / 2.f);
 
@@ -112,7 +113,7 @@ bool BasicBody::CreateStaticBox(b2Vec3 posRot, const std::shared_ptr<sf::Texture
 
 	// Change la texture
 	mTexture = texture;
-	assert(mTexture.get() && "n'est pas valide.");
+	myAssert(mTexture.get(), "La texture n'est pas chargée.");
 	mSprite.setTexture(*mTexture);
 	mSprite.setOrigin(mSprite.getTextureRect().width / 2.f, mSprite.getTextureRect().height / 2.f);
 

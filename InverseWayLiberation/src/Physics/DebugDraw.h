@@ -8,7 +8,7 @@ class DebugDraw : public b2Draw, public NonCopyable
 {
 public:
 	// Ctor
-	DebugDraw(PhysicManager *physicMgr);
+	DebugDraw(PhysicManager &physicMgr);
 
 	// Dessin
 	virtual void DrawPolygon(const b2Vec2* vertices, int32 vertexCount, const b2Color& color);
@@ -32,15 +32,12 @@ public:
 	sf::RenderTarget* GetRenderTarget() { return mTarget; }
 	const sf::RenderTarget* GetRenderTarget() const { return mTarget; }
 
-	PhysicManager* GetPhysicManager() { return mPhysicMgr; }
-	const PhysicManager* GetPhysicManager() const { return mPhysicMgr; }
-
 private:
 	// Convertion
 	sf::Vector2f sfVertex(const b2Vec2& vertex);
 	sf::Color sfColor(const b2Color& color);
 
 private:
-	PhysicManager *mPhysicMgr;
+	PhysicManager &mPhysicMgr;
 	sf::RenderTarget *mTarget;
 };

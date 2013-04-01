@@ -2,12 +2,6 @@
 -- Création de plein d'objets
 -----------------------------
 
--- Test des évènements
-if (eventCreated == nil) then
-	inputMgr:AddSpyedKey(Keyboard.O)
-	eventCreated = true
-end
-
 -- Création de randf
 if (randf == nil) then
 	rand = math.random
@@ -15,6 +9,31 @@ if (randf == nil) then
 		return rand(min * 100000, max * 100000) / 100000
 	end
 	print "Fonction randf creee."
+end
+
+-- Boucle de création
+texturesB = {"box", "box2", "way", "caisse", "tonneau"}
+texturesC = {"ball", "circle"}
+posRotB = b2Vec3(0, 100, 0)
+x = 0
+while x < 100 do
+	-- Crée la Box
+	texture = texturesB[rand(1, 5)]
+	EntityFactory.CreateDynamicBox(posRotB, texture, 1)
+	
+	-- Crée le Circle
+	texture = texturesC[rand(1, 2)]
+	EntityFactory.CreateDynamicCircle(posRotB, texture, 1)
+	
+	-- Incrémente x
+	x = x + 1
+end
+
+--[[
+-- Test des évènements
+if (eventCreated == nil) then
+	inputMgr:AddSpyedKey(Keyboard.O)
+	eventCreated = true
 end
 
 -- Mumuse avec le level
@@ -67,3 +86,4 @@ else
 		x = x + 1
 	end
 end
+]]

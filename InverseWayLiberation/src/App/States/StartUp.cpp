@@ -25,11 +25,11 @@ State* StartUp_State::Run(App *app)
 	std::vector<sf::Texture*> textures;
 	sf::Texture t1;
 	if (!t1.loadFromFile("tex/splash_libs.jpg"))
-		return MainMenu_State::GetPInstance();
+		return &MainMenu_State::GetInstance();
 	textures.push_back(&t1);
 	sf::Texture t2;
 	if (!t2.loadFromFile("tex/splash_totorigolo.jpg"))
-		return MainMenu_State::GetPInstance();
+		return &MainMenu_State::GetInstance();
 	textures.push_back(&t2);
 
 	// Crée le sprite
@@ -119,5 +119,5 @@ State* StartUp_State::Run(App *app)
 	}
 
 	// Passe au menu principal
-	return MainMenu_State::GetPInstance();
+	return &MainMenu_State::GetInstance();
 }

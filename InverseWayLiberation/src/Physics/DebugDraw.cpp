@@ -1,15 +1,13 @@
 #include "DebugDraw.h"
 #include "PhysicManager.h"
 #include "../Tools/utils.h"
-#include <cassert>
+#include "../Tools/Error.h"
 #include <iostream>
 
 // Ctor
-DebugDraw::DebugDraw(PhysicManager *physicMgr)
- : mPhysicMgr(physicMgr)
+DebugDraw::DebugDraw(PhysicManager &physicMgr)
+	: mPhysicMgr(physicMgr)
 {
-	assert(mPhysicMgr && "est invalide.");
-
 	//AppendFlags(b2Draw::e_aabbBit);
 	//AppendFlags(b2Draw::e_centerOfMassBit);
 	AppendFlags(b2Draw::e_jointBit);
@@ -47,14 +45,14 @@ void DebugDraw::DrawCircle(const b2Vec2& center, float32 radius, const b2Color& 
 {
 	if (!mTarget) return;
 
-	float r = radius * mPhysicMgr->GetPPM() - 1.f; // 1.f = bordure
+	float r = radius * mPhysicMgr.GetPPM() - 1.f; // 1.f = bordure
 	sf::CircleShape cs;
 	cs.setRadius(r);
 	cs.setOutlineThickness(1.f);
 	cs.setOrigin(sf::Vector2f(r, r));
 	cs.setOutlineColor(sfColor(color));
 	cs.setFillColor(sf::Color::Transparent);
-	cs.setPosition(b22sfVec(center, mPhysicMgr->GetPPM()));
+	cs.setPosition(b22sfVec(center, mPhysicMgr.GetPPM()));
 
 	mTarget->draw(cs);
 }
@@ -63,22 +61,13 @@ void DebugDraw::DrawSolidCircle(const b2Vec2& center, float32 radius, const b2Ve
 {
 	if (!mTarget) return;
 
-	// Affichage d'un disque
-	/*float r = radius * mPhysicMgr->GetPPM() - 1.f; // 1.f = bordure
-	sf::CircleShape cs;
-	cs.setRadius(r);
-	cs.setFillColor(sfColor(color));
-	cs.setOrigin(sf::Vector2f(r, r));
-	cs.setPosition(b22sfVec(center, mPhysicMgr->GetPPM()));
-	mTarget->draw(cs);*/
-
 	DrawCircle(center, radius, color);
 	DrawSegment(center, center + radius * axis, color);
 }
 
 void DebugDraw::DrawSegment(const b2Vec2& p1, const b2Vec2& p2, const b2Color& color)
 {
-	mPhysicMgr->GetWorld()->GetContactList();
+	mPhysicMgr.GetWorld()->GetContactList();
 
 	if (!mTarget) return;
 
@@ -115,14 +104,14 @@ void DebugDraw::DrawPoint(const b2Vec2& p, const b2Color& color)
 	cs.setRadius(2.f);
 	cs.setFillColor(sfColor(color));
 	cs.setOrigin(sf::Vector2f(2.f, 2.f));
-	cs.setPosition(b22sfVec(p, mPhysicMgr->GetPPM()));
+	cs.setPosition(b22sfVec(p, mPhysicMgr.GetPPM()));
 	mTarget->draw(cs);
 }
 
 void DebugDraw::DrawContacts()
 {
 	// Récupère les contacts
-	b2Contact *contact = mPhysicMgr->GetWorld()->GetContactList();
+	b2Contact *contact = mPhysicMgr.GetWorld()->GetContactList();
 
 	// Affiche les contacts
 	for (; contact; contact = contact->GetNext())
@@ -166,7 +155,7 @@ void DebugDraw::DrawContacts()
 // Convertion
 sf::Vector2f DebugDraw::sfVertex(const b2Vec2& vertex)
 {
-	return b22sfVec(vertex, mPhysicMgr->GetPPM());
+	return b22sfVec(vertex, mPhysicMgr.GetPPM());
 }
 sf::Color DebugDraw::sfColor(const b2Color& color)
 {

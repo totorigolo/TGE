@@ -1,43 +1,23 @@
 #pragma once
 #include "NonCopyable.h"
+#include <mutex>
 
 template <class T>
 class Singleton : public NonCopyable
 {
 public:
-
 	// Renvoie l'instance unique de la classe
     static T& GetInstance()
     {
-        if (!mInst)
-            mInst = new T;
+		// Pas de multithread ici
+		static std::mutex mutex;
+		std::lock_guard<std::mutex> lock(mutex);
 
-        return *mInst;
-    }
-    static T* GetPInstance()
-    {
-        if (!mInst)
-			mInst = new T;
-	
-        return mInst;
-    }
+		static T* inst = nullptr;
 
-	// Détruit l'instance unique de la classe (attention aux autres références !)
-    static void Destroy()
-    {
-        delete mInst;
-        mInst = nullptr;
-    }
+        if (!inst)
+            inst = new T;
 
-protected:
-	// Ctor & Dtor
-    Singleton() {}
-    virtual ~Singleton() {}
-
-private :
-	// Instance de la classe
-    static T* mInst;
+        return *inst;
+	}
 };
-
-// Déclaration de l'instance que est statique
-template <class T> T* Singleton<T>::mInst = nullptr;

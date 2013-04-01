@@ -1,5 +1,8 @@
 #include "Grapnel.h"
 #include "../Tools/utils.h"
+#include "../Tools/Error.h"
+#include "../Physics/PhysicManager.h"
+#include "../Physics/Joints/DistanceJoint.h"
 
 // Ctor & dtor
 Grapnel::Grapnel(int layer)
@@ -22,12 +25,12 @@ bool Grapnel::Create(const std::shared_ptr<sf::Texture> &textureHook, b2Body *bo
 		return false;
 
 	// On vérifie les bodies et la texture
-	assert(bodyA && "n'est pas valide.");
-	assert(bodyB && "n'est pas valide.");
+	myAssert(bodyA, "Le b2Body n'est pas valide !");
+	myAssert(bodyB, "Le b2Body n'est pas valide !");
 
 	// Change la texture du crochet
 	mTexture = textureHook;
-	assert(mTexture.get() && "n'est pas valide.");
+	myAssert(mTexture.get(), "La texture n'est pas chargée.");
 	mSpriteHook.setTexture(*mTexture);
 	mSpriteHook.setOrigin(mTexture->getSize().x / 2.f, mTexture->getSize().y / 2.f);
 

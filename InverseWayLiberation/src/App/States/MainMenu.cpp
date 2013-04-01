@@ -92,7 +92,7 @@ State* MainMenu_State::Run(App *app)
 				switch (index)
 				{
 				case 0:
-					return DevGame_State::GetPInstance();
+					return &DevGame_State::GetInstance();
 					break;
 				case 1:
 					//return Editor_State::GetPInstance();

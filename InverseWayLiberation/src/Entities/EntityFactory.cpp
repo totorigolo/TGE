@@ -1,14 +1,14 @@
 #include "EntityFactory.h"
 #include "../Resources/ResourceManager.h"
+#include "../Physics/Joints/RevoluteJoint.h"
+#include "../Physics/Joints/WeldJoint.h"
+#include "../Physics/PhysicManager.h"
+#include "../Physics/Joint.h"
+#include "../Tools/utils.h"
 #include "EntityManager.h"
 #include "BasicBody.h"
 #include "Deco.h"
-#include "../Physics/Joints/RevoluteJoint.h"
-#include "../Physics/Joints/WeldJoint.h"
-#include "../Physics/Joint.h"
-#include "../Tools/utils.h"
 #include <iostream>
-#include <cassert>
 #include <list>
 #include <map>
 

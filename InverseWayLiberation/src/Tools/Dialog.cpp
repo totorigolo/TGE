@@ -24,7 +24,15 @@ namespace Dialog
 
 		// Création du texte
 		sf::Font f;
-		f.loadFromFile("tex/calibri.ttf");
+		if (!f.loadFromFile("tex/calibri.ttf"))
+		{
+#ifdef _WIN32
+			f.loadFromFile("C:/Windows/Fonts/calibri.ttf");
+#else
+			// TODO: Linux, vérifier le dossier des polices
+			f.loadFromFile("/usr/share/fonts/truetype/calibri.ttf");
+#endif
+		}
 		sf::Text text(message, f);
 		text.scale(0.8f, 0.8f);
 		text.setColor(sf::Color::Black);
@@ -52,9 +60,11 @@ namespace Dialog
 		txtButton.setColor(sf::Color::Black);
 		txtButton.setPosition(x + 5.f, y + 2.f);
 
-		// Taille de la fenêtre par rapport à la taille du bouton
-		window->setSize(sf::Vector2u(window->getSize().x,
+		// Taille de la fenêtre par rapport à la taille du bouton et du texte
+		window->setSize(sf::Vector2u(text.getGlobalBounds().left + text.getGlobalBounds().width + 20.f,
 									static_cast<unsigned int>(button.getGlobalBounds().top + button.getGlobalBounds().height + 20.f)));
+		window->setPosition(sf::Vector2i(static_cast<int>(sf::VideoMode::getDesktopMode().width / 2U - window->getSize().x / 2U),
+										 static_cast<int>(sf::VideoMode::getDesktopMode().height / 2U - window->getSize().y / 2U)));
 
 		// Création du fond de survol
 		sf::RectangleShape backgroung(sf::Vector2f(140.f, 30.f));
@@ -127,7 +137,7 @@ namespace Dialog
 	{
 		Dialog("tex/erreur.png", "Erreur", message, quit, output);
 	}
-
+	
 	void Information(const sf::String &message)
 	{
 		Dialog("tex/information.png", "Info", message);

@@ -1,11 +1,13 @@
 #include "MouseJoint.h"
+#include "../PhysicManager.h"
 #include "../../Tools/utils.h"
+#include "../../Tools/Error.h"
 
 //Ctor
 MouseJoint::MouseJoint(b2Body *body, b2Body *ground, b2Vec2 target, float maxForce, float frequencyHz, float damping)
 {
-	assert(body && "n'est pas valide.");
-	assert(ground && "n'est pas valide.");
+	myAssert(body, "Le b2Body n'existe pas.");
+	myAssert(ground, "Le b2Body n'existe pas.");
 	
 	mPhysicMgr.RegisterJoint(this);
 

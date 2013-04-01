@@ -28,7 +28,7 @@ bool App::Init()
 	mRenderWindow->setFramerateLimit(60U);
 
 	// Change le state
-	mStateSystem.ChangeState(StartUp_State::GetPInstance());
+	mStateSystem.ChangeState(&StartUp_State::GetInstance());
 
 	// Plante la graine
 	srand(static_cast<unsigned int>(time(NULL)));

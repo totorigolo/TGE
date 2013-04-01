@@ -2,6 +2,7 @@
 #include "LevelManager.h"
 
 #include "../Tools/utils.h"
+#include "../Tools/Error.h"
 #include "../Tools/Dialog.h"
 #include "../Tools/Parser.h"
 
@@ -24,6 +25,7 @@
 #include "../Entities/BasicBody.h"
 #include "../Entities/LivingBeing.h"
 #include "../Entities/EntityFactory.h"
+#include "../Entities/EntityManager.h"
 
 #include <Thor/Resources.hpp>
 
@@ -37,11 +39,8 @@ LevelLoader::LevelLoader(const std::string& path)
 	// Si loader n'est pas valide, on ne fait rien
 	if (mIsValid)
 	{
-		// Vide le niveau si il est déjà chargé
-		if (mLevel.IsCharged())
-		{
-			mLevel.Clear();
-		}
+		// Vide le niveau
+		mLevel.Clear();
 
 		// Analyse le fichier du niveau et crée le Level
 		mLevel.mIsCharged = Process();
@@ -486,8 +485,8 @@ bool LevelLoader::ProcessJoints()
 			j2 = mJointIDMap[IDj2];
 
 			// Vérifie qu'il soient bien construits
-			assert(j1->GetUserData() && "n'est pas valide.");
-			assert(j2->GetUserData() && "n'est pas valide.");
+			myAssert(j1->GetUserData(), "Le joint n'existe pas.");
+			myAssert(j2->GetUserData(), "Le joint n'existe pas.");
 
 			// Crée le joint
 			int j1ID = ((Joint*) j1->GetUserData())->GetID();

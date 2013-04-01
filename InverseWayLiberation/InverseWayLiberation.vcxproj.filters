@@ -229,6 +229,9 @@
     <ClCompile Include="src\Level\LevelManager.cpp">
       <Filter>Fichiers sources\Level</Filter>
     </ClCompile>
+    <ClCompile Include="src\Tools\Error.cpp">
+      <Filter>Fichiers sources\Tools</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Physics\Joints\DistanceJoint.h">
@@ -377,6 +380,9 @@
     </ClInclude>
     <ClInclude Include="src\Level\LevelManager.h">
       <Filter>Fichiers d%27en-tête\Level</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Tools\Error.h">
+      <Filter>Fichiers d%27en-tête\Tools</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

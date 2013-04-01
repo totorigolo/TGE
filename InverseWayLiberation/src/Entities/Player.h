@@ -2,8 +2,8 @@
 #include <SFML/Graphics.hpp>
 #include <string>
 #include "LivingBeing.h"
-#include "../Game/InputManager.h"
 
+class InputManager;
 class Player : public LivingBeing
 {
 public:

@@ -1,10 +1,12 @@
 #pragma once
+#include <SFML/System.hpp>
 #include <Box2D/Box2D.h>
 #include <memory>
 #include "Entity.h"
-#include "../Physics/Joints/DistanceJoint.h"
 
+class Joint;
 class PhysicManager;
+class DistanceJoint;
 class Grapnel : public Entity
 {
 public:

@@ -37,6 +37,7 @@
     <ClCompile Include="src\Level\LevelManager.cpp" />
     <ClCompile Include="src\Level\LevelLoader.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\Tools\Error.cpp" />
     <ClCompile Include="src\Tools\Parser.cpp" />
     <ClCompile Include="src\Physics\ContactListener.cpp" />
     <ClCompile Include="src\Physics\Joints\DistanceJoint.cpp" />
@@ -83,6 +84,7 @@
     <ClInclude Include="src\Resources\AnimatedSprite.h" />
     <ClInclude Include="src\Resources\ResourceManager.h" />
     <ClInclude Include="src\Sounds\SoundManager.h" />
+    <ClInclude Include="src\Tools\Error.h" />
     <ClInclude Include="src\Tools\Loader.h" />
     <ClInclude Include="src\Tools\NonCopyable.h" />
     <ClInclude Include="src\Tools\QuadTree\QuadTree.h" />

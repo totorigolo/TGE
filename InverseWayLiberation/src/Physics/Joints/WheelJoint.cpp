@@ -1,13 +1,15 @@
 #include "WheelJoint.h"
+#include "../PhysicManager.h"
 #include "../../Tools/utils.h"
+#include "../../Tools/Error.h"
 
 //Ctor
 WheelJoint::WheelJoint(b2Body *car, b2Body *wheel, b2Vec2 pWheel, b2Vec2 axis, float frequencyHz, float damping
 																			 , bool enableMotor, float motorSpeed, float maxMotorTorque
 																			 , bool collideconnected)
 {
-	assert(car && "n'est pas valide.");
-	assert(wheel && "n'est pas valide.");
+	myAssert(car, "Le b2Body n'existe pas.");
+	myAssert(wheel, "Le b2Body n'existe pas.");
 	
 	mPhysicMgr.RegisterJoint(this);
 

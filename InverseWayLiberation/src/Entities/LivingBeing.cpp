@@ -2,6 +2,7 @@
 #include "EntityManager.h"
 #include "../Physics/PhysicManager.h"
 #include "../Tools/utils.h"
+#include "../Tools/Error.h"
 
 // Ctor & dtor
 LivingBeing::LivingBeing(b2Vec2 position, const std::shared_ptr<sf::Texture> &texture, int layer)
@@ -9,7 +10,7 @@ LivingBeing::LivingBeing(b2Vec2 position, const std::shared_ptr<sf::Texture> &te
 	mBodyIsCreated(false),
 	mPhysicMgr(PhysicManager::GetInstance())
 {
-	assert(mTexture.get() && "n'est pas valide.");
+	myAssert(mTexture.get(), "La texture n'est pas chargée.");
 
 	// Change le type
 	mType = EntityType::LivingBeing;

@@ -1,13 +1,12 @@
 #pragma once
 #include "../Tools/Singleton.h"
-#include "../Entities/Entity.h"
-#include "ContactListener.h"
 #include "DebugDraw.h"
+#include "ContactListener.h"
 #include <Box2D/Box2D.h>
 #include <map>
 
 class Joint;
-class DebugDraw;
+class Entity;
 class PhysicManager : public Singleton<PhysicManager>
 {
 protected:

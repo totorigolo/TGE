@@ -1,11 +1,12 @@
 #include "Deco.h"
 #include "../Tools/utils.h"
+#include "../Tools/Error.h"
 
 // Ctor & dtor
 Deco::Deco(int layer, const std::shared_ptr<sf::Texture> &texture, sf::Vector3f posRot)
 	: Entity(layer), mTexture(texture)
 {
-	assert(mTexture.get() && "n'est pas valide.");
+	myAssert(mTexture.get(), "La texture n'est pas chargée.");
 
 	mType = EntityType::Deco;
 

@@ -1,5 +1,6 @@
 #include "EntityManager.h"
-#include <cassert>
+#include "Entity.h"
+#include "../Tools/Error.h"
 
 // Ctor & dtor
 EntityManager::EntityManager()
@@ -23,7 +24,7 @@ void EntityManager::Update()
 void EntityManager::RegisterEntity(Entity *entity)
 {
 	// Vérifie que le pointeur soit valide
-	assert(entity && "n'est pas valide !");
+	myAssert(entity, "L'entity n'est pas valide !");
 
 	// Ajoute l'Entity à la liste
 	mEntities.push_back(entity);
@@ -31,7 +32,7 @@ void EntityManager::RegisterEntity(Entity *entity)
 void EntityManager::DestroyEntity(Entity *entity)
 {
 	// Vérifie que le pointeur soit valide
-	assert(entity && "n'est pas valide !");
+	myAssert(entity, "L'entity n'est pas valide !");
 
 	mEntities.remove(entity);
 	delete entity;
@@ -44,6 +45,7 @@ void EntityManager::DestroyAllEntities()
 		delete *it;
 		it = mEntities.erase(it);
 	}
+	mEntities.clear();
 }
 bool compareEntities(Entity *a, Entity *b) // Compare deux Entities avec leur Layer
 {
