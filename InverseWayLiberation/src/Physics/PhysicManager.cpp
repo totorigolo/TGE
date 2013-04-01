@@ -28,7 +28,6 @@ PhysicManager::~PhysicManager(void)
 {
 	DestroyAllJoints();
 	DestroyAllBody();
-	mWorld.Dump();
 }
 
 // Gestion des body
