@@ -15,6 +15,7 @@ State* StartUp_State::Run(App *app)
 {
 	// Récupère la fenêtre
 	sf::RenderWindow *window = app->GetRenderWindow();
+	window->setFramerateLimit(30U);
 
 	// Change le titre de la fenêtre
 	window->setTitle("Inverse Way Liberation - Splash");

@@ -15,6 +15,7 @@ State* DevGame_State::Run(App *app)
 {
 	// Obtient un pointeur vers la fenêtre
 	sf::RenderWindow *window = app->GetRenderWindow();
+	window->setFramerateLimit(60U);
 
 	// Change le titre de la fenêtre
 	window->setTitle("Inverse Way Liberation - DevGame");

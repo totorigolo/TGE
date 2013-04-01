@@ -54,26 +54,42 @@ void Box2DGame::Run()
 		// Tant que la fenêtre est ouverte
 		while (mWindow.isOpen() && !mQuit)
 		{
-			// La boucle commence
-			this->OnLoopBegin();
+			// Gestion du focus
+			bool focus = mInputManager.HasFocus();
+			if (!focus)
+				mWindow.setFramerateLimit(20U);
+			else
+				mWindow.setFramerateLimit(60U);
+
+			if (focus)
+			{
+				// La boucle commence
+				this->OnLoopBegin();
+			}
 
 			// Appel des évènements
 			this->OnEvent();
-		
-			// Appel de la logique
-			this->OnLogic();
 
-			// Gestion de la physique
-			this->OnStepPhysics();
+			if (focus)
+			{
+				// Appel de la logique
+				this->OnLogic();
 
-			// Appel des mises à jour
-			this->OnUpdate();
+				// Gestion de la physique
+				this->OnStepPhysics();
+
+				// Appel des mises à jour
+				this->OnUpdate();
+			}
 
 			// Rendu
 			this->OnRender();
 
-			// La boucle se termine
-			this->OnLoopEnd();
+			if (focus)
+			{
+				// La boucle se termine
+				this->OnLoopEnd();
+			}
 		}
 	}
 
@@ -122,7 +138,7 @@ bool Box2DGame::OnInit()
 	LevelLoader("lvls/1.xvl");
 	if (!mLevel.IsCharged())
 		return false;
-	
+
 	return true;
 }
 
@@ -142,6 +158,8 @@ void Box2DGame::OnEvent()
 	// Vérifie les évènements
 	if (mInputManager.HasQuitted())
 		mQuit = true;
+	if (!mInputManager.HasFocus())
+		return;
 
 	// Création d'objets
 	if (mInputManager.IsKeyPressed(sf::Keyboard::B))
@@ -162,7 +180,7 @@ void Box2DGame::OnEvent()
 	{
 		EntityFactory::CreateLamp(getVec3(mMp), -1);
 	}
-	
+
 	// Lua
 	if (mInputManager.KeyPressed(sf::Keyboard::I))
 	{
@@ -374,10 +392,28 @@ void Box2DGame::OnRender()
 	
 	// Affichage du Level
 	mWindow.draw(mLevel);
-	
+
 	// Affichage du debug
 	mPhysicMgr.DrawDebugData();
-	
+
+	// Si on n'a pas le focus
+	if (!mInputManager.HasFocus())
+	{
+		static sf::Font f;
+		static bool fontLoaded = false;
+		if (!fontLoaded)
+		{
+			f.loadFromFile("tex/calibri.ttf"); // TODO: ResourceMgr
+			fontLoaded = true;
+		}
+		sf::Text pause("Pause", f, 50U);
+		pause.setPosition(mWindow.getSize().x / 2.f - pause.getGlobalBounds().width / 2.f, 0.f);
+
+		mWindow.setView(mWindow.getDefaultView());
+		mWindow.draw(pause);
+		mWindow.setView(mInputManager.GetView());
+	}
+
 	// Affichage du tout
 	mWindow.display();
 }
@@ -405,7 +441,7 @@ void Box2DGame::OnQuit()
 	mHookedSBody = nullptr;
 	mPinBodyA = nullptr;
 	mPinBodyB = nullptr;
-	
+
 	// Vide
 	mConsole.UnregisterGlobalLuaVar("level");
 	mConsole.UnregisterGlobalLuaVar("physicMgr");

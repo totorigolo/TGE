@@ -6,6 +6,7 @@ InputManager::InputManager()
 {
 	// Etat
 	mHasQuitted = false;
+	mHasFocus = true;
 
 	// View et Zoom
 	mCurrentZoom = 1.f;
@@ -68,6 +69,9 @@ void InputManager::Update()
 		// Traite l'évènement
 		AddEvent(mEvent);
 	}
+
+	if (!mHasFocus)
+		return;
 	
 	// Retient les infos sur la souris
 	mLastMousePos = mMousePos;
@@ -93,6 +97,14 @@ void InputManager::AddEvent(const sf::Event &event)
 		(event.type == sf::Event::KeyReleased && event.key.code == sf::Keyboard::Escape))
 	{
 		mHasQuitted = true;
+	}
+	else if (event.type == sf::Event::GainedFocus)
+	{
+		mHasFocus = true;
+	}
+	else if (event.type == sf::Event::LostFocus)
+	{
+		mHasFocus = false;
 	}
 		
 	// Gestion du zoom et du resize
@@ -242,6 +254,10 @@ bool InputManager::HasQuitted()
 		return true;
 	}
 	return false;
+}
+bool InputManager::HasFocus() const
+{
+	return mHasFocus;
 }
 
 // Accesseurs

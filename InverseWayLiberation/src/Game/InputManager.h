@@ -52,6 +52,7 @@ public:
 	bool GetRMBState() const;
 	bool GetMMBState() const;
 	bool HasQuitted(); // Réinitialise après appel
+	bool HasFocus() const;
 
 	// Accesseurs
 	float GetDefaultZoom() const;
@@ -65,6 +66,7 @@ public:
 private:
 	// Etat
 	bool mHasQuitted;
+	bool mHasFocus;
 
 	// Fenêtre
 	sf::RenderWindow *mWindow;
