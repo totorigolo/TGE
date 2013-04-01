@@ -6,7 +6,6 @@
 #include "../Physics/PhysicManager.h"
 #include "../Entities/EntityManager.h"
 
-
 // Ctor
 LevelManager::LevelManager()
 	: mIsCharged(false),

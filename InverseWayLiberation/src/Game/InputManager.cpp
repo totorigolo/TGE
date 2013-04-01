@@ -19,7 +19,6 @@ InputManager::InputManager()
 
 	// Pour l'édition de texte
 	mTipingText = false;
-
 }
 InputManager::~InputManager()
 {

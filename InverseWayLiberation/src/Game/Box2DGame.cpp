@@ -11,7 +11,6 @@
 #include "../Physics/Joints/DistanceJoint.h" // TODO: JointFactory
 #include "../Physics/Callback/PointCallback.h"
 #include "../Tools/utils.h"
-#include <iostream>
 
 // Ctor
 Box2DGame::Box2DGame(sf::RenderWindow & window)
