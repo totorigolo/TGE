@@ -138,6 +138,8 @@ bool Box2DGame::OnInit()
 	if (!mLevel.IsCharged())
 		return false;
 
+	mLevel.SetLuaConsole(&mConsole);
+
 	return true;
 }
 

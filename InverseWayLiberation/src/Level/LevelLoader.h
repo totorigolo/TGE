@@ -25,13 +25,15 @@ private:
 	bool ProcessEntities();
 	bool ProcessJoints();
 	bool ProcessDeco();
+	bool ProcessActions();
+	bool ProcessTriggers();
 	//bool ProcessLights();
 
 private:
 	LevelManager &mLevel;
 	InputManager &mInputManager;
 	PhysicManager &mPhysicManager;
-
+	
 	std::map<unsigned int, b2Body*> mBodyIDMap;
 	std::map<unsigned int, b2Joint*> mJointIDMap;
 };

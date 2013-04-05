@@ -3,6 +3,7 @@
 #include <SFML/Graphics.hpp>
 #include <Box2D/Box2D.h>
 #include <string>
+#include "TriggersManager.h"
 #include "../Tools/Singleton.h"
 #include "../Resources/ResourceManager.h"
 
@@ -10,6 +11,7 @@ class Player;
 class LevelLoader;
 class EntityManager;
 class PhysicManager;
+class LuaMachine; // TODO:
 class LevelManager : public sf::Drawable, public Singleton<LevelManager>
 {
 	friend class LevelLoader;
@@ -50,6 +52,9 @@ public:
 	void SetBckgColor(const sf::Color &color);
 	sf::Color const& GetBckgColor() const;
 
+	// TODO
+	void SetLuaConsole(LuaMachine *machine);
+
 private:
 	bool mIsCharged;
 
@@ -59,6 +64,9 @@ private:
 
 	// Entities
 	EntityManager &mEntityManager;
+
+	// Triggers
+	TriggersManager mTriggersManager;
 
 	// Config de la fenêtre de rendu
 	sf::Color mBckgC;

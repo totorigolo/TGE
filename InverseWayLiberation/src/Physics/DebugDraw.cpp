@@ -12,7 +12,7 @@ DebugDraw::DebugDraw(PhysicManager &physicMgr)
 	//AppendFlags(b2Draw::e_centerOfMassBit);
 	AppendFlags(b2Draw::e_jointBit);
 	//AppendFlags(b2Draw::e_pairBit);
-	//AppendFlags(b2Draw::e_shapeBit);
+	AppendFlags(b2Draw::e_shapeBit);
 }
 
 // Dessin

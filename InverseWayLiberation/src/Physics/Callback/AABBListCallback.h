@@ -1,18 +1,18 @@
 #pragma once
 #include "../../Tools/NonCopyable.h"
 #include <Box2D/Box2D.h>
+#include <list>
 
 // Classe appelée pour chaque fixture trouvé pendant la recherche de correspondance AABB <> fixtures dans le monde
-class AABBCallback : public b2QueryCallback, public NonCopyable
+class AABBListCallback : public b2QueryCallback, public NonCopyable
 {
 public:
-	AABBCallback(bool onlyDynamicsBody = true, const b2Body* bodyToAvoid = nullptr)
+	AABBListCallback(bool onlyDynamicsBody = true, const b2Body* bodyToAvoid = nullptr)
 		: mBodyToAvoid(bodyToAvoid)
 	{
 		mOnlyDynamicsBody = onlyDynamicsBody;
-		mFixture = nullptr;
 	}
-	virtual ~AABBCallback()
+	virtual ~AABBListCallback()
 	{
 	}
 
@@ -21,22 +21,19 @@ public:
 		b2Body* body = fixture->GetBody();
 		if ((body->GetType() == b2_dynamicBody || !mOnlyDynamicsBody) && mBodyToAvoid != body)
 		{
-			mFixture = fixture;
-
-			// On a trouvé donc on demande d'arreter la recherche
-			return false;
+			mFixtureList.push_back(fixture);
 		}
 
 		// Continue la recherche
 		return true;
 	}
 
-	b2Fixture* GetFixture() { return mFixture; }
+	std::list<b2Fixture*> GetFixtureList() { return mFixtureList; }
 
-	void Clear() { mFixture = nullptr; }
+	void ClearList() { mFixtureList.clear(); }
 
 private:
-	b2Fixture* mFixture;
+	std::list<b2Fixture*> mFixtureList;
 	bool mOnlyDynamicsBody;
 	const b2Body* mBodyToAvoid;
 };

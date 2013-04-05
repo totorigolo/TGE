@@ -117,21 +117,32 @@ ex : (La rotation est en degré, et est facultative.)
     </level>
   </deco>
 
+  <!-- Défini les actions -->
+  <actions>
+    <!-- Fichiers -->
+    <file name="test1" path="scripts/test1.lua"/>
+    
+    <!-- Fonctions -->
+    <function name="hello" func="hello" file="scripts/contact.lua"/>
+    <function name="createObjects1" func="createObjects1" file="scripts/test1.lua"/>
+  </actions>
+  
   <!-- Défini les évènements -->
   <events>
     <!-- Déclencheurs -->
     <triggers>
       <!-- Zone -->
-      <area top="" left="" bottom="" right="" scriptF=""/>
+      <area top="30.f" left="  0.f" bottom="20.f" right="10.f" action="createObjects1"/>
+      <area top="30.f" left="-10.f" bottom="20.f" right=" 0.f" action="hello"/>
       
-      <!-- Limite -->
+      <!-- Limite ->
       <limit top="100.f" scriptT="print 'Si haut ?'"/>
       <limit left="" scriptF=""/>
       <limit bottom="" scriptF=""/>
       <limit right="" scriptF=""/>
       
-      <!-- Temps -->
-      <time max="" scriptF=""/>
+      <!- Temps ->
+      <time max="" scriptF=""/-->
     </triggers>
   </events>
   

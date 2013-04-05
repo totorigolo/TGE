@@ -3,6 +3,7 @@
 #include "../Tools/utils.h"
 #include "../Entities/Player.h"
 #include "../Game/InputManager.h"
+#include "../Game/LuaMachine.h" // TODO
 #include "../Physics/PhysicManager.h"
 #include "../Entities/EntityManager.h"
 
@@ -43,6 +44,7 @@ void LevelManager::Clear()
 {
 	// Vide tous les objets du jeu
 	// TODO: Vider les textures ? (-> faire un système pour ne vider que les textures inutilisées)
+	mTriggersManager.Clear();
 	mPhysicMgr.DestroyAllJoints();
 	mEntityManager.DestroyAllEntities();
 	mPhysicMgr.DestroyAllBody();
@@ -52,6 +54,7 @@ void LevelManager::Clear()
 void LevelManager::Update()
 {
 	mEntityManager.Update();
+	mTriggersManager.Update();
 }
 
 // Appelé juste avant la boucle de jeu, après son remplissage
@@ -66,6 +69,7 @@ void LevelManager::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
 	// Affiche les Entities
 	target.draw(mEntityManager, states);
+	mTriggersManager.DebugDraw(target);
 }
 
 /* Accesseurs */
@@ -97,4 +101,10 @@ void LevelManager::SetBckgColor(const sf::Color &color)
 sf::Color const& LevelManager::GetBckgColor() const
 {
 	return mBckgC;
+}
+
+// TODO
+void LevelManager::SetLuaConsole(LuaMachine *machine)
+{
+	mTriggersManager.SetLuaMachine(machine);
 }

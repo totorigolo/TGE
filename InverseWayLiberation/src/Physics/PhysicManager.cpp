@@ -3,6 +3,7 @@
 #include "DebugDraw.h"
 #include "ContactListener.h"
 #include "../Tools/Error.h"
+#include "../Tools/Parser.h"
 #include "../Entities/Entity.h"
 #include "../Entities/EntityManager.h"
 
@@ -103,14 +104,14 @@ int PhysicManager::RegisterJoint(Joint *joint)
 void PhysicManager::DestroyJoint(int jointID)
 {
 	// Vérifie que l'ID soit cohérent
-	myAssert(jointID >= 0, "L'ID est impossible (< 0).");
+	myAssert(jointID >= 0, "L'ID \""+ Parser::int2string(jointID) +"\" est impossible (< 0).");
 
 	// Vérifie que la liste ne soit pas vide
 	myAssert(mJointList.size() != 0, "La liste des joints est vide.");
 
 	// Récupère le joint
 	auto itJoint = mJointList.find(jointID);
-	myAssert(itJoint != mJointList.end(), "Le joint n'existe pas.");
+	myAssert(itJoint != mJointList.end(), "Le joint #\""+ Parser::int2string(jointID) +"\" n'existe pas.");
 	Joint *joint = itJoint->second;
 
 	// Supprime le joint
@@ -202,7 +203,7 @@ const Joint* PhysicManager::GetJoint(int jointID) const
 // Simulation
 void PhysicManager::SetTimeStep(float timeStep)
 {
-	myAssert(timeStep > 0, "Un timeStep ne peut pas être négatif.");
+	myAssert(timeStep > 0, "Un timeStep ne peut pas être négatif ("+ Parser::float2string(timeStep) +").");
 
 	mTimeStep = mTimeStep;
 }

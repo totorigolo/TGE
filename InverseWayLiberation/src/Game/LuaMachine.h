@@ -40,6 +40,9 @@ public:
 	int LoadFile(const std::string &path);
 	int DoString(const std::string &command);
 
+	// Accesseur
+	lua_State* GetLuaState();
+
 protected:
 	// Enregistrements privés
 	void RegisterBox2D();

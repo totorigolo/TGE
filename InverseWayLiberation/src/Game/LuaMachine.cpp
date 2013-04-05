@@ -183,45 +183,88 @@ void LuaMachine::RegisterInputManager()
 // Enregistrement des attributs
 void LuaMachine::UnregisterGlobalLuaVar(const std::string &name)
 {
-	luabind::globals(mLuaState)[name] = luabind::nil;
+	try
+	{
+		luabind::globals(mLuaState)[name] = luabind::nil;
+	}
+	catch (const std::exception &e)
+	{
+		std::cerr << e.what() << std::endl;
+	}
 }
 
 // Exécution
 int LuaMachine::DoFile(const std::string &path)
 {
+	try
+	{
 #ifdef _DEBUG
-	sf::Clock c;
-	int r = ReportLuaError(luaL_dofile(mLuaState, path.c_str()));
-	std::cout << "Script \"" << path << "\" ex\x82""cut\x82 en : "
-		<< c.getElapsedTime().asSeconds() << " sec" << std::endl;
-	return r;
+		sf::Clock c;
+		int r = ReportLuaError(luaL_dofile(mLuaState, path.c_str()));
+		std::cout << "Script \"" << path << "\" ex\x82""cut\x82 en : "
+			<< c.getElapsedTime().asSeconds() << " sec" << std::endl << std::endl;
+		return r;
 #else
-	return ReportLuaError(luaL_dofile(mLuaState, path.c_str()));
+		return ReportLuaError(luaL_dofile(mLuaState, path.c_str()));
 #endif
+	}
+	catch (const std::exception &e)
+	{
+		std::cerr << e.what() << std::endl;
+	}
+
+	// Si on est là, c'est à cause d'une erreur
+	return -1;
 }
 int LuaMachine::LoadFile(const std::string &path)
 {
+	try
+	{
 #ifdef _DEBUG
-	sf::Clock c;
-	int r = ReportLuaError(luaL_loadfile(mLuaState, path.c_str()));
-	std::cout << "Script \"" << path << "\" ex\x82""cut\x82 en : "
-		<< c.getElapsedTime().asSeconds() << " sec" << std::endl;
-	return r;
+		sf::Clock c;
+		int r = ReportLuaError(luaL_loadfile(mLuaState, path.c_str()));
+		std::cout << "Fichier \"" << path << "\" charg\x82 en : "
+			<< c.getElapsedTime().asSeconds() << " sec" << std::endl << std::endl;
+		return r;
 #else
-	return ReportLuaError(luaL_loadfile(mLuaState, path.c_str()));
+		return ReportLuaError(luaL_loadfile(mLuaState, path.c_str()));
 #endif
+	}
+	catch (const std::exception &e)
+	{
+		std::cerr << e.what() << std::endl;
+	}
+
+	// Si on est là, c'est à cause d'une erreur
+	return -1;
 }
 int LuaMachine::DoString(const std::string &command)
 {
+	try
+	{
 #ifdef _DEBUG
-	sf::Clock c;
-	int r = ReportLuaError(luaL_dostring(mLuaState, command.c_str()));
-	std::cout << "Commande \"" << command << "\" ex\x82""cut\x82 en : "
-		<< c.getElapsedTime().asSeconds() << " sec" << std::endl;
-	return r;
+		sf::Clock c;
+		int r = ReportLuaError(luaL_dostring(mLuaState, command.c_str()));
+		std::cout << "Commande \"" << command << "\" ex\x82""cut\x82 en : "
+			<< c.getElapsedTime().asSeconds() << " sec" << std::endl << std::endl;
+		return r;
 #else
-	return ReportLuaError(luaL_dostring(mLuaState, command.c_str()));
+		return ReportLuaError(luaL_dostring(mLuaState, command.c_str()));
 #endif
+	}
+	catch (const std::exception &e)
+	{
+		std::cerr << e.what() << std::endl;
+	}
+
+	// Si on est là, c'est à cause d'une erreur
+	return -1;
+}
+
+// Accesseur
+lua_State* LuaMachine::GetLuaState()
+{
+	return mLuaState;
 }
 
 // Enregistrements privés

@@ -36,14 +36,8 @@
     <Filter Include="Fichiers sources\Level">
       <UniqueIdentifier>{8c1ee394-4fa2-4a92-b83f-eb3cb0920f6f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Fichiers sources\Tools\QuadTree">
-      <UniqueIdentifier>{0806d5ed-b91a-4321-b8f0-67618585e2a9}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Fichiers d%27en-tête\Level">
       <UniqueIdentifier>{3dfebfa7-8d81-41b4-9986-d8dc2d1b8c09}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Fichiers d%27en-tête\Tools\QuadTree">
-      <UniqueIdentifier>{057201a5-f12d-42c4-9556-4af391e5c445}</UniqueIdentifier>
     </Filter>
     <Filter Include="Fichiers d%27en-tête\Sounds">
       <UniqueIdentifier>{36d65d69-69a8-4868-8155-70b3dd40314a}</UniqueIdentifier>
@@ -107,6 +101,12 @@
     <None Include="scripts\test1.lua">
       <Filter>Fichiers de ressources\Scripts</Filter>
     </None>
+    <None Include="scripts\contact.lua">
+      <Filter>Fichiers de ressources\Scripts</Filter>
+    </None>
+    <None Include="scripts\lvl1.lua">
+      <Filter>Fichiers de ressources\Scripts</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Physics\Joints\DistanceJoint.cpp">
@@ -153,9 +153,6 @@
     </ClCompile>
     <ClCompile Include="src\Tools\Parser.cpp">
       <Filter>Fichiers sources\Tools</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Tools\QuadTree\QuadTree.cpp">
-      <Filter>Fichiers sources\Tools\QuadTree</Filter>
     </ClCompile>
     <ClCompile Include="src\Sounds\SoundManager.cpp">
       <Filter>Fichiers sources\Sounds</Filter>
@@ -232,6 +229,9 @@
     <ClCompile Include="src\Tools\Error.cpp">
       <Filter>Fichiers sources\Tools</Filter>
     </ClCompile>
+    <ClCompile Include="src\Level\TriggersManager.cpp">
+      <Filter>Fichiers sources\Level</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Physics\Joints\DistanceJoint.h">
@@ -275,12 +275,6 @@
     </ClInclude>
     <ClInclude Include="src\Resources\ResourceManager.h">
       <Filter>Fichiers d%27en-tête\Resources</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Tools\QuadTree\QuadTree.h">
-      <Filter>Fichiers d%27en-tête\Tools\QuadTree</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Tools\QuadTree\QuadTreeObject.h">
-      <Filter>Fichiers d%27en-tête\Tools\QuadTree</Filter>
     </ClInclude>
     <ClInclude Include="src\Tools\utils.h">
       <Filter>Fichiers d%27en-tête\Tools</Filter>
@@ -383,6 +377,12 @@
     </ClInclude>
     <ClInclude Include="src\Tools\Error.h">
       <Filter>Fichiers d%27en-tête\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Level\TriggersManager.h">
+      <Filter>Fichiers d%27en-tête\Level</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Physics\Callback\AABBListCallback.h">
+      <Filter>Fichiers d%27en-tête\Physics\Callback</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

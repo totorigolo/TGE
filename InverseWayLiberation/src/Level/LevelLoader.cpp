@@ -96,6 +96,16 @@ bool LevelLoader::Process()
 		Dialog::Error("Une erreur grave est survenue lors du chargement du niveau.\nDeco invalide (" + mPath + ").");
 		return false;
 	}
+	if (!ProcessActions())
+	{
+		Dialog::Error("Une erreur grave est survenue lors du chargement du niveau.\nActions invalide (" + mPath + ").");
+		return false;
+	}
+	if (!ProcessTriggers())
+	{
+		Dialog::Error("Une erreur grave est survenue lors du chargement du niveau.\nTriggers invalide (" + mPath + ").");
+		return false;
+	}
 
 	return true;
 }
@@ -678,6 +688,140 @@ bool LevelLoader::ProcessDeco()
 		}
 		// On récupère le prochain level
 		level = level.NextSiblingElement();
+	}
+
+	return true;
+}
+bool LevelLoader::ProcessActions()
+{
+	// Récupère <actions>
+	tinyxml2::XMLHandle hdl(mFile);
+	tinyxml2::XMLHandle actions = hdl.FirstChildElement("level").FirstChildElement("actions");
+	// Vérifie que <actions> existe
+	if (!actions.ToElement())
+	{
+		// Il n'y a tout simplement pas d'events...
+		return true;
+	}
+
+	// On crée les attributs
+	std::string name;
+	std::string file;
+	std::string function;
+	std::string type;
+
+	// Pour toutes les triggers
+	tinyxml2::XMLElement *action = actions.FirstChildElement().ToElement();
+	while (action)
+	{
+		// Réinitialise les attributs
+		name.clear();
+		file.clear();
+		function.clear();
+		type.clear();
+
+		// Obtient le type
+		type = action->Name();
+		
+		// Traite les différents types
+		if (type == "file")
+		{
+			// Récupère les attributs
+			if (action->Attribute("name")) name = action->Attribute("name");
+			if (action->Attribute("path")) file = action->Attribute("path");
+
+			// Crée l'action
+			LuaAction *a = new LuaAction(name, file);
+			mLevel.mTriggersManager.AddAction(a);
+		}
+		else if (type == "function")
+		{
+			// Récupère les attributs
+			// TODO: utiliser myCheck
+			if (action->Attribute("name")) name = action->Attribute("name");
+			if (action->Attribute("file")) file = action->Attribute("file");
+			if (action->Attribute("func")) function = action->Attribute("func");
+
+			// Crée l'action
+			LuaAction *a = new LuaAction(name, file, function);
+			mLevel.mTriggersManager.AddAction(a);
+		}
+		else
+		{
+			// TODO: myCheck -> Affiche un message, mais ne quitte pas
+			Dialog::Error("Action type inconnu ("+ type +") !");
+		}
+
+		// On récupère le prochain level
+		action = action->NextSiblingElement();
+	}
+
+	return true;
+}
+bool LevelLoader::ProcessTriggers()
+{
+	// Récupère <events>
+	tinyxml2::XMLHandle hdl(mFile);
+	tinyxml2::XMLHandle events = hdl.FirstChildElement("level").FirstChildElement("events");
+	// Vérifie que <events> existe
+	if (!events.ToElement())
+	{
+		// Il n'y a tout simplement pas d'events...
+		return true;
+	}
+
+	// Récupère <triggers>
+	tinyxml2::XMLHandle triggers = events.FirstChildElement("triggers");
+	// Vérifie que <triggers> existe
+	if (!triggers.ToElement())
+	{
+		// Il n'y a tout simplement pas de triggers...
+		return true;
+	}
+	
+	// On crée les attributs
+	b2AABB rect;
+	std::string action;
+	std::string type;
+
+	// Pour toutes les triggers
+	tinyxml2::XMLElement *trigger = triggers.FirstChildElement().ToElement();
+	while (trigger)
+	{
+		// Réinitialise les attributs
+		rect.lowerBound = b2Vec2_zero;
+		rect.upperBound = b2Vec2_zero;
+		action.clear();
+		type.clear();
+
+		// Obtient le type
+		type = trigger->Name();
+
+		// Récupère l'action
+		if (trigger->Attribute("action")) action = trigger->Attribute("action");
+
+		// Traite les différents types
+		if (type == "area")
+		{
+			// Récupère la zone
+			trigger->QueryFloatAttribute("top", &rect.upperBound.y);
+			trigger->QueryFloatAttribute("bottom", &rect.lowerBound.y);
+			trigger->QueryFloatAttribute("left", &rect.lowerBound.x);
+			trigger->QueryFloatAttribute("right", &rect.upperBound.x);
+
+			// Crée le trigger
+			mLevel.mTriggersManager.CreateArea(rect, action);
+		}
+
+		/*/ Récupère les attributs
+		if (img->Attribute("texture")) texture = img->Attribute("texture");
+		img->QueryIntAttribute("z-index", &zindex);
+		if (img->Attribute("position")) posRot = Parser::string2b2Vec3(img->Attribute("position"));
+		img->QueryFloatAttribute("rotation", &rotation);
+		posRot.z = rotation;*/
+
+		// On récupère le prochain level
+		trigger = trigger->NextSiblingElement();
 	}
 
 	return true;
