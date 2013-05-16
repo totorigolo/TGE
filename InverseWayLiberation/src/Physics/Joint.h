@@ -4,6 +4,35 @@
 #include <list>
 #include "../Tools/NonCopyable.h"
 
+enum ForceType
+{
+	Null,
+	Float,
+	Vector
+};
+
+struct JointDef
+{
+	// Ctor
+	JointDef()
+	{
+		isBreakableMaxForce = false;
+		maxForceType = Null;
+		maxForce = 0.f;
+		maxVecForce = b2Vec2_zero;
+		isBreakableMaxTorque = false;
+		maxTorque = 0.f;
+	}
+
+	// Propriétés cassable
+	bool isBreakableMaxForce;
+	ForceType maxForceType;
+	float maxForce;
+	b2Vec2 maxVecForce;
+	bool isBreakableMaxTorque;
+	float maxTorque;
+};
+
 class PhysicManager;
 class Joint : public NonCopyable
 {
@@ -12,6 +41,7 @@ class Joint : public NonCopyable
 public:
 	// Ctor & dtor
 	Joint();
+	Joint(const JointDef &def);
 	virtual ~Joint(void);
 
 	// Destruction de ce joint
@@ -69,7 +99,7 @@ protected:
 
 	// Propriétés cassable
 	bool mIsBreakableMaxForce;
-	enum { Null, Float, Vector } mMaxForceType;
+	ForceType mMaxForceType;
 	float mMaxForce;
 	b2Vec2 mMaxVecForce;
 	bool mIsBreakableMaxTorque;

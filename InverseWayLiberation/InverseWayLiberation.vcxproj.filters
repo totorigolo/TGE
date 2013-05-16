@@ -85,6 +85,9 @@
     <Filter Include="Fichiers de ressources\Scripts">
       <UniqueIdentifier>{5edf6274-fe55-45b9-bc64-db52bb465704}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Fichiers sources\Game\Lua">
+      <UniqueIdentifier>{3d60c0ae-f299-4733-99fc-7ce752fe5255}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\_TODO.txt" />
@@ -231,6 +234,27 @@
     </ClCompile>
     <ClCompile Include="src\Level\TriggersManager.cpp">
       <Filter>Fichiers sources\Level</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\Lua\RegisterEntityFactory.cpp">
+      <Filter>Fichiers sources\Game\Lua</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\Lua\RegisterJointFactory.cpp">
+      <Filter>Fichiers sources\Game\Lua</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\Lua\RegisterLevelManager.cpp">
+      <Filter>Fichiers sources\Game\Lua</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\Lua\RegisterPhysicManager.cpp">
+      <Filter>Fichiers sources\Game\Lua</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\Lua\RegisterInputManager.cpp">
+      <Filter>Fichiers sources\Game\Lua</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\Lua\RegisterBox2D.cpp">
+      <Filter>Fichiers sources\Game\Lua</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\Lua\RegisterSFML.cpp">
+      <Filter>Fichiers sources\Game\Lua</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

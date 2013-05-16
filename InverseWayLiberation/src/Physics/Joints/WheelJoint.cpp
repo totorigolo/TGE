@@ -4,30 +4,28 @@
 #include "../../Tools/Error.h"
 
 //Ctor
-WheelJoint::WheelJoint(b2Body *car, b2Body *wheel, b2Vec2 pWheel, b2Vec2 axis, float frequencyHz, float damping
-																			 , bool enableMotor, float motorSpeed, float maxMotorTorque
-																			 , bool collideconnected)
+WheelJoint::WheelJoint(const WheelJointDef &def)
 {
-	myAssert(car, "Le b2Body n'existe pas.");
-	myAssert(wheel, "Le b2Body n'existe pas.");
+	myAssert(def.car, "Le b2Body n'existe pas.");
+	myAssert(def.wheel, "Le b2Body n'existe pas.");
 	
 	mPhysicMgr.RegisterJoint(this);
 
 	b2WheelJointDef jointDef;
-	jointDef.Initialize(car, wheel, wheel->GetWorldPoint(pWheel), axis);
-	jointDef.motorSpeed = motorSpeed;
-	jointDef.maxMotorTorque = maxMotorTorque;
-	jointDef.enableMotor = enableMotor;
-	jointDef.frequencyHz = frequencyHz;
-	jointDef.dampingRatio = damping;
-	jointDef.collideConnected = collideconnected;
+	jointDef.Initialize(def.car, def.wheel, def.wheel->GetWorldPoint(def.pWheel), def.axis);
+	jointDef.motorSpeed = def.motorSpeed;
+	jointDef.maxMotorTorque = def.maxMotorTorque;
+	jointDef.enableMotor = def.enableMotor;
+	jointDef.frequencyHz = def.frequencyHz;
+	jointDef.dampingRatio = def.damping;
+	jointDef.collideConnected = def.collideconnected;
 	mJoint = mPhysicMgr.Createb2Joint(&jointDef);
 	mJoint->SetUserData(this);
 	
 	mIsAlive = true;
 	
-	car->SetAwake(true);
-	wheel->SetAwake(true);
+	def.car->SetAwake(true);
+	def.wheel->SetAwake(true);
 }
 
 // Dtor

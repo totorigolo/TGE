@@ -35,7 +35,8 @@ bool Grapnel::Create(const std::shared_ptr<sf::Texture> &textureHook, b2Body *bo
 	mSpriteHook.setOrigin(mTexture->getSize().x / 2.f, mTexture->getSize().y / 2.f);
 
 	// Création du Joint
-	mJoint = new DistanceJoint(bodyA, ptA, bodyB, ptB);
+	DistanceJointDef def(bodyA, ptA, bodyB, ptB);
+	mJoint = new DistanceJoint(def);
 	mJointID = mJoint->GetID();
 	mIsAlive = true;
 	mClock.restart();

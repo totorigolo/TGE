@@ -226,7 +226,8 @@ void Box2DGame::OnEvent()
 				if (staticBody) // Si il y en a un
 				{
 					b2Body* body = callback.GetFixture()->GetBody();
-					MouseJoint *j = new MouseJoint(body, staticBody, mMp, 10000000.f * body->GetMass());
+					MouseJointDef def(body, staticBody, mMp, 10000000.f * body->GetMass());
+					MouseJoint *j = new MouseJoint(def);
 					mMouseJointID = j->GetID();
 					mMouseJointCreated = true;
 				}
@@ -352,7 +353,8 @@ void Box2DGame::OnEvent()
 		// Crée le joint
 		if (mPinBodyA && mPinBodyB)
 		{
-			new DistanceJoint(mPinBodyA, mPinAnchorA, mPinBodyB, mPinAnchorB);
+			DistanceJointDef def(mPinBodyA, mPinAnchorA, mPinBodyB, mPinAnchorB);
+			new DistanceJoint(def);
 
 			mPinBodyA = nullptr;
 			mPinBodyB = nullptr;

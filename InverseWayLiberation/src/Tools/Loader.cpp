@@ -9,13 +9,36 @@ Loader::Loader(std::string const& path)
 	// Gestion de crise
 	if (mFile.LoadFile(mPath.c_str()))
 	{
-		Dialog::Error("Impossible d'ouvrir le niveau :\n\""+ mPath + "\"\n"
-			+ "Erreur #" + Parser::int2string(mFile.ErrorID()) + "\n"
-			+ "\"" + mFile.GetErrorStr1() + "\". Plus précisément :\n"
-			+ mFile.GetErrorStr2(), true);
+		// Crée le message d'erreur
+		std::string msg = "Impossible d'ouvrir le niveau \""+ mPath + "\".\n";
+		msg += "Erreur #" + Parser::int2string(mFile.ErrorID()) + ".\n";
+
+		// Ajoute l'explication 1 si elle existe
+		if (mFile.GetErrorStr1())
+		{
+			msg += "Raison : \"";
+			msg += mFile.GetErrorStr1();
+			msg += "\".";
+		}
+
+		// Ajoute l'explication 1 si elle existe
+		if (mFile.GetErrorStr2())
+		{
+			msg += "\nPlus précisément : \"";
+			msg += mFile.GetErrorStr2();
+			msg += "\".";
+		}
+
+		// Affiche l'erreur
+		Dialog::Error(msg);
+
+		// Le fichier n'est pas valide
+		mIsValid = false;
 	}
 
-	mIsValid = true;
+	// Le fichier est valide
+	else
+		mIsValid = true;
 }
 
 // Dtor

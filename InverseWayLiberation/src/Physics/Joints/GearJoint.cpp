@@ -4,13 +4,13 @@
 #include "../../Tools/Error.h"
 
 //Ctor
-GearJoint::GearJoint(b2Body *b1, b2Body *b2, int j1, int j2, float ratio, bool collideconnected)
+GearJoint::GearJoint(const GearJointDef &def)
 {
-	myAssert(b1, "Le b2Body n'existe pas.");
-	myAssert(b2, "Le b2Body n'existe pas.");
+	myAssert(def.body1, "Le b2Body n'existe pas.");
+	myAssert(def.body2, "Le b2Body n'existe pas.");
 
-	Joint *joint1 = mPhysicMgr.GetJoint(j1);
-	Joint *joint2 = mPhysicMgr.GetJoint(j2);
+	Joint *joint1 = mPhysicMgr.GetJoint(def.joint1);
+	Joint *joint2 = mPhysicMgr.GetJoint(def.joint2);
 	
 	myAssert(joint1, "Le joint n'existe pas.");
 	myAssert(joint2, "Le joint n'existe pas.");
@@ -18,12 +18,12 @@ GearJoint::GearJoint(b2Body *b1, b2Body *b2, int j1, int j2, float ratio, bool c
 	mPhysicMgr.RegisterJoint(this);
 
 	b2GearJointDef jointDef;
-	jointDef.bodyA = b1;
-	jointDef.bodyB = b2;
+	jointDef.bodyA = def.body1;
+	jointDef.bodyB = def.body2;
 	jointDef.joint1 = joint1->GetJoint();
 	jointDef.joint2 = joint2->GetJoint();
-	jointDef.ratio = ratio;
-	jointDef.collideConnected = collideconnected;
+	jointDef.ratio = def.ratio;
+	jointDef.collideConnected = def.collideconnected;
 	mJoint = mPhysicMgr.Createb2Joint(&jointDef);
 	mJoint->SetUserData(this);
 	
@@ -32,8 +32,8 @@ GearJoint::GearJoint(b2Body *b1, b2Body *b2, int j1, int j2, float ratio, bool c
 
 	mIsAlive = false;
 	
-	b1->SetAwake(true);
-	b2->SetAwake(true);
+	def.body1->SetAwake(true);
+	def.body2->SetAwake(true);
 }
 
 // Dtor

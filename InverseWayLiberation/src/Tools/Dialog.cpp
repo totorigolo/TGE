@@ -61,8 +61,8 @@ namespace Dialog
 		txtButton.setPosition(x + 5.f, y + 2.f);
 
 		// Taille de la fenêtre par rapport à la taille du bouton et du texte
-		window->setSize(sf::Vector2u(text.getGlobalBounds().left + text.getGlobalBounds().width + 20.f,
-									static_cast<unsigned int>(button.getGlobalBounds().top + button.getGlobalBounds().height + 20.f)));
+		window->setSize(sf::Vector2u(static_cast<unsigned int>(text.getGlobalBounds().left + text.getGlobalBounds().width) + 20U,
+									 static_cast<unsigned int>(button.getGlobalBounds().top + button.getGlobalBounds().height) + 20U));
 		window->setPosition(sf::Vector2i(static_cast<int>(sf::VideoMode::getDesktopMode().width / 2U - window->getSize().x / 2U),
 										 static_cast<int>(sf::VideoMode::getDesktopMode().height / 2U - window->getSize().y / 2U)));
 

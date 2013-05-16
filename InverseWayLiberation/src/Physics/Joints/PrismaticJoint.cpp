@@ -4,31 +4,29 @@
 #include "../../Tools/Error.h"
 
 //Ctor
-PrismaticJoint::PrismaticJoint(b2Body *b1, b2Body *b2, b2Vec2 anchor, b2Vec2 axis, bool enableLimit, float lowerTranslation, float upperTranslation
-																				 , bool enableMotor, float motorSpeed, float maxMotorForce
-																				 , bool collideconnected)
+PrismaticJoint::PrismaticJoint(const PrismaticJointDef &def)
 {
-	myAssert(b1, "Le b2Body n'existe pas.");
-	myAssert(b2, "Le b2Body n'existe pas.");
+	myAssert(def.body1, "Le b2Body n'existe pas.");
+	myAssert(def.body2, "Le b2Body n'existe pas.");
 	
 	mPhysicMgr.RegisterJoint(this);
 
 	b2PrismaticJointDef jointDef;
-	jointDef.Initialize(b1, b2, b1->GetWorldPoint(anchor), axis);
-	jointDef.collideConnected = collideconnected;
-	jointDef.enableLimit = enableLimit;
-	jointDef.lowerTranslation = lowerTranslation;
-	jointDef.upperTranslation = upperTranslation;
-	jointDef.enableMotor = enableMotor;
-	jointDef.motorSpeed = motorSpeed * RPD;
-	jointDef.maxMotorForce = maxMotorForce;
+	jointDef.Initialize(def.body1, def.body2, def.body1->GetWorldPoint(def.anchor), def.axis);
+	jointDef.collideConnected = def.collideconnected;
+	jointDef.enableLimit = def.enableLimit;
+	jointDef.lowerTranslation = def.lowerTranslation;
+	jointDef.upperTranslation = def.upperTranslation;
+	jointDef.enableMotor = def.enableMotor;
+	jointDef.motorSpeed = def.motorSpeed * RPD;
+	jointDef.maxMotorForce = def.maxMotorForce;
 	mJoint = mPhysicMgr.Createb2Joint(&jointDef);
 	mJoint->SetUserData(this);
 	
 	mIsAlive = true;
 	
-	b1->SetAwake(true);
-	b2->SetAwake(true);
+	def.body1->SetAwake(true);
+	def.body2->SetAwake(true);
 }
 
 // Dtor

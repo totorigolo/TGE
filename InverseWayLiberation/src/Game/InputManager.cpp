@@ -76,7 +76,7 @@ void InputManager::Update()
 	mLastMousePos = mMousePos;
 	mLastMousePosRV = mMousePosRV;
 	mMousePos = sf::Mouse::getPosition(*mWindow);
-	mMousePosRV = mWindow->convertCoords(mMousePos, mView);
+	mMousePosRV = mWindow->mapPixelToCoords(mMousePos, mView);
 	mLMBIsDown = sf::Mouse::isButtonPressed(sf::Mouse::Left);
 	mRMBIsDown = sf::Mouse::isButtonPressed(sf::Mouse::Right);
 	mMMBIsDown = sf::Mouse::isButtonPressed(sf::Mouse::Middle);
@@ -103,7 +103,7 @@ void InputManager::AddEvent(const sf::Event &event)
 	}
 	else if (event.type == sf::Event::LostFocus)
 	{
-		mHasFocus = false;
+		//mHasFocus = false;
 	}
 		
 	// Gestion du zoom et du resize

@@ -22,7 +22,6 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
-		<Unit filename="../README.txt" />
 		<Unit filename="src/App/App.cpp" />
 		<Unit filename="src/App/App.h" />
 		<Unit filename="src/App/States/DevGame.cpp" />
@@ -54,25 +53,26 @@
 		<Unit filename="src/Game/Box2DGame.h" />
 		<Unit filename="src/Game/InputManager.cpp" />
 		<Unit filename="src/Game/InputManager.h" />
-		<Unit filename="src/Level/Level.cpp" />
-		<Unit filename="src/Level/Level.h" />
+		<Unit filename="src/Game/LuaMachine.cpp" />
+		<Unit filename="src/Game/LuaMachine.h" />
+		<Unit filename="src/Game/Lua/RegisterBox2D.cpp" />
+		<Unit filename="src/Game/Lua/RegisterEntityFactory.cpp" />
+		<Unit filename="src/Game/Lua/RegisterInputManager.cpp" />
+		<Unit filename="src/Game/Lua/RegisterJointFactory.cpp" />
+		<Unit filename="src/Game/Lua/RegisterLevelManager.cpp" />
+		<Unit filename="src/Game/Lua/RegisterPhysicManager.cpp" />
+		<Unit filename="src/Game/Lua/RegisterSFML.cpp" />
+		<Unit filename="src/InverseWayLiberation.rc">
+			<Option compilerVar="WINDRES" />
+		</Unit>
 		<Unit filename="src/Level/LevelLoader.cpp" />
 		<Unit filename="src/Level/LevelLoader.h" />
-		<Unit filename="src/Lights/CircleHull.cpp" />
-		<Unit filename="src/Lights/CircleHull.h" />
-		<Unit filename="src/Lights/ConvexHull.cpp" />
-		<Unit filename="src/Lights/ConvexHull.h" />
-		<Unit filename="src/Lights/Hull.cpp" />
-		<Unit filename="src/Lights/Hull.h" />
-		<Unit filename="src/Lights/Light.cpp" />
-		<Unit filename="src/Lights/Light.h" />
-		<Unit filename="src/Lights/LightManager.cpp" />
-		<Unit filename="src/Lights/LightManager.h" />
-		<Unit filename="src/Lights/PointLight.cpp" />
-		<Unit filename="src/Lights/PointLight.h" />
-		<Unit filename="src/Lights/SpotLight.cpp" />
-		<Unit filename="src/Lights/SpotLight.h" />
+		<Unit filename="src/Level/LevelManager.cpp" />
+		<Unit filename="src/Level/LevelManager.h" />
+		<Unit filename="src/Level/TriggersManager.cpp" />
+		<Unit filename="src/Level/TriggersManager.h" />
 		<Unit filename="src/Physics/Callback/AABBCallback.h" />
+		<Unit filename="src/Physics/Callback/AABBListCallback.h" />
 		<Unit filename="src/Physics/Callback/FirstBodyRaycastCallback.h" />
 		<Unit filename="src/Physics/Callback/PointCallback.h" />
 		<Unit filename="src/Physics/ContactListener.cpp" />
@@ -81,6 +81,8 @@
 		<Unit filename="src/Physics/DebugDraw.h" />
 		<Unit filename="src/Physics/Joint.cpp" />
 		<Unit filename="src/Physics/Joint.h" />
+		<Unit filename="src/Physics/JointFactory.cpp" />
+		<Unit filename="src/Physics/JointFactory.h" />
 		<Unit filename="src/Physics/Joints/DistanceJoint.cpp" />
 		<Unit filename="src/Physics/Joints/DistanceJoint.h" />
 		<Unit filename="src/Physics/Joints/FrictionJoint.cpp" />
@@ -110,19 +112,18 @@
 		<Unit filename="src/Sounds/SoundManager.h" />
 		<Unit filename="src/Tools/Dialog.cpp" />
 		<Unit filename="src/Tools/Dialog.h" />
+		<Unit filename="src/Tools/Error.cpp" />
+		<Unit filename="src/Tools/Error.h" />
 		<Unit filename="src/Tools/Loader.cpp" />
 		<Unit filename="src/Tools/Loader.h" />
 		<Unit filename="src/Tools/NonCopyable.h" />
 		<Unit filename="src/Tools/Parser.cpp" />
 		<Unit filename="src/Tools/Parser.h" />
-		<Unit filename="src/Tools/QuadTree/QuadTree.cpp" />
-		<Unit filename="src/Tools/QuadTree/QuadTree.h" />
-		<Unit filename="src/Tools/QuadTree/QuadTreeObject.h" />
 		<Unit filename="src/Tools/Segment.h" />
 		<Unit filename="src/Tools/Singleton.h" />
 		<Unit filename="src/Tools/utils.h" />
-		<Unit filename="src/_TODO.txt" />
 		<Unit filename="src/main.cpp" />
+		<Unit filename="src/resource.h" />
 		<Extensions>
 			<code_completion />
 			<envvars />

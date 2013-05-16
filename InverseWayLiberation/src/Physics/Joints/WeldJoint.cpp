@@ -4,25 +4,25 @@
 #include "../../Tools/Error.h"
 
 //Ctor
-WeldJoint::WeldJoint(b2Body *b1, b2Body *b2, b2Vec2 anchor, float frequencyHz, float damping, bool collideconnected)
+WeldJoint::WeldJoint(const WeldJointDef &def)
 {
-	myAssert(b1, "Le b2Body n'existe pas.");
-	myAssert(b2, "Le b2Body n'existe pas.");
+	myAssert(def.body1, "Le b2Body n'existe pas.");
+	myAssert(def.body2, "Le b2Body n'existe pas.");
 	
 	mPhysicMgr.RegisterJoint(this);
 
 	b2WeldJointDef jointDef;
-	jointDef.Initialize(b1, b2, b1->GetWorldPoint(anchor));
-	jointDef.frequencyHz = frequencyHz;
-	jointDef.dampingRatio = damping;
-	jointDef.collideConnected = collideconnected;
+	jointDef.Initialize(def.body1, def.body2, def.body1->GetWorldPoint(def.anchor));
+	jointDef.frequencyHz = def.frequencyHz;
+	jointDef.dampingRatio = def.damping;
+	jointDef.collideConnected = def.collideconnected;
 	mJoint = (b2WeldJoint*) mPhysicMgr.Createb2Joint(&jointDef);
 	mJoint->SetUserData(this);
 	
 	mIsAlive = true;
 	
-	b1->SetAwake(true);
-	b2->SetAwake(true);
+	def.body1->SetAwake(true);
+	def.body2->SetAwake(true);
 }
 
 // Dtor

@@ -79,28 +79,28 @@ ex: (NB = les valeurs mises sont celles par défaut) (osp = one sided platform)
     <!--
 Certains attributs (après le "||" dans l'exemple) sont facultatifs. Les "color" sont pour le debug.
 Il est possible de définir des ID afin de reconnaitre les joints plus loin dans le chargement.
- -> "colision" : Est-ce que les deux bodies attachés se colisionnent ?
+ -> "collision" : Est-ce que les deux bodies attachés se collisionnent ?
 ex: (NB = les valeurs mises pour les facultatifs sont celles par défaut)
 
-<gear body1="0" body2="0" joint1="0" joint2="0" || ratio="1.f" colision="true" color="(80, 0, 200)"/>
-<distance body1="0" pt1="(0.f, 0.f)" body2="0" pt2="(0.f, 0.f)" || frequency="4.0f" damping="0.5f" colision="true" color="(255, 0, 255)"/>
-<friction body1="0" pt1="(0.f, 0.f)" body2="0" pt2="(0.f, 0.f)" || maxForce="0.f" maxTorque="0.f" colision="true" color="(255, 0, 255)"/>
-<rope body1="0" pt1="(0.f, 0.f)" body2="0" pt2="(0.f, 0.f)" maxLength="0.f" || colision="true" color="255, 0, 255"/>
-<weld body1="0" anchor="(0.f, 0.f)" body2="0" || frequency="4.f" damping="0.5f" colision="false" color="(255, 0, 255)"/>
+<gear body1="0" body2="0" joint1="0" joint2="0" || ratio="1.f" collision="true" color="(80, 0, 200)"/>
+<distance body1="0" pt1="(0.f, 0.f)" body2="0" pt2="(0.f, 0.f)" || frequency="4.0f" damping="0.5f" collision="true" color="(255, 0, 255)"/>
+<friction body1="0" pt1="(0.f, 0.f)" body2="0" pt2="(0.f, 0.f)" || maxForce="0.f" maxTorque="0.f" collision="true" color="(255, 0, 255)"/>
+<rope body1="0" pt1="(0.f, 0.f)" body2="0" pt2="(0.f, 0.f)" maxLength="0.f" || collision="true" color="255, 0, 255"/>
+<weld body1="0" anchor="(0.f, 0.f)" body2="0" || frequency="4.f" damping="0.5f" collision="false" color="(255, 0, 255)"/>
 <pulley body1="0" pt1="(0.f, 0.f)" body2="0" pt2="(0.f, 0.f)" groundpt1="(0.f, 0.f)" groundpt2="(0.f, 0.f)" ratio="1.f" color="(170, 80, 0)"/>
 <prismatic body1="0" anchor="(0.f, 0.f)" body2="0" axis="(0.f, 0.f)" || enableLimits="false" lower="0.f" upper="0.f"
 																					 enableMotor="false" speed="0.f" maxForce="10.f"
-																					 colision="false" color="green"/>
+																					 collision="false" color="green"/>
 <revolute body1="0" anchor="(0.f, 0.f)" body2="0" || enableLimits="false" lower="0.f" upper="0.f"
 																  enableMotor="false" speed="0.f" maxTorque="10.f"
-																  colision="false" color="(0, 255, 0)"/>
+																  collision="false" color="(0, 255, 0)"/>
 <wheel body1="0" body2="0" anchor="(0.f, 0.f)" axis="(0.f, 0.f)" || frequency="4.f" damping="0.5f"
 																					enableMotor="false" speed="0.f" maxTorque="10.f"
-																					colision="false" color="(255, 0, 255)"/>
+																					collision="false" color="(255, 0, 255)"/>
 -->
     <pulley body1="1" pt1="(0.f, 0.f)" body2="2" pt2="(0.f, 0.f)" groundpt1="(-2.f, 0.5f)" groundpt2="(1.9f, 4.f)" ratio="1.5f"/>
 
-    <rope body1="3" pt1="(0.f, 0.f)" body2="4" pt2="(0.f, 0.f)" maxlength="1.f" colision="true" color="(0, 255, 255)"/>
+    <rope body1="3" pt1="(0.f, 0.f)" body2="4" pt2="(0.f, 0.f)" maxlength="1.f" collision="true" color="(0, 255, 255)"/>
   </joints>
 
   <!-- Crée la déco -->

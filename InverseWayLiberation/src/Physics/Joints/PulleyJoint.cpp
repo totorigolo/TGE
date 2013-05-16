@@ -4,23 +4,23 @@
 #include "../../Tools/Error.h"
 
 //Ctor
-PulleyJoint::PulleyJoint(b2Body *b1, b2Vec2 pt1, b2Body *b2, b2Vec2 p2, b2Vec2 groundP1, b2Vec2 groundP2, float ratio, bool collideconnected)
+PulleyJoint::PulleyJoint(const PulleyJointDef &def)
 {
-	myAssert(b1, "Le b2Body n'existe pas.");
-	myAssert(b2, "Le b2Body n'existe pas.");
+	myAssert(def.body1, "Le b2Body n'existe pas.");
+	myAssert(def.body2, "Le b2Body n'existe pas.");
 	
 	mPhysicMgr.RegisterJoint(this);
 
 	b2PulleyJointDef jointDef;
-	jointDef.Initialize(b1, b2, groundP1, groundP2, b1->GetWorldPoint(pt1), b2->GetWorldPoint(p2), ratio);
-	jointDef.collideConnected = collideconnected;
+	jointDef.Initialize(def.body1, def.body2, def.groundP1, def.groundP2, def.body1->GetWorldPoint(def.point1), def.body2->GetWorldPoint(def.point2), def.ratio);
+	jointDef.collideConnected = def.collideconnected;
 	mJoint = mPhysicMgr.Createb2Joint(&jointDef);
 	mJoint->SetUserData(this);
 	
 	mIsAlive = true;
 	
-	b1->SetAwake(true);
-	b2->SetAwake(true);
+	def.body1->SetAwake(true);
+	def.body2->SetAwake(true);
 }
 
 // Dtor

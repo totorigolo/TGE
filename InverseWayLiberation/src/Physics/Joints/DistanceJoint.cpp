@@ -4,30 +4,30 @@
 #include "../../Tools/Error.h"
 
 //Ctor
-DistanceJoint::DistanceJoint(b2Body *b1, b2Vec2 pt1, b2Body *b2, b2Vec2 pt2, float frequencyHz, float damping, bool collideconnected)
+DistanceJoint::DistanceJoint(const DistanceJointDef &def)
 {
-	myAssert(b1, "Le b2Body n'existe pas.");
-	myAssert(b2, "Le b2Body n'existe pas.");
+	myAssert(def.body1, "Le b2Body n'existe pas.");
+	myAssert(def.body2, "Le b2Body n'existe pas.");
 	
 	mPhysicMgr.RegisterJoint(this);
 
 	b2DistanceJointDef jointDef;
-	jointDef.bodyA = b1;
-	jointDef.bodyB = b2;
-	jointDef.localAnchorA = pt1;
-	jointDef.localAnchorB = pt2;
-	b2Vec2 d = b2->GetWorldPoint(pt2) - b1->GetWorldPoint(pt1);
+	jointDef.bodyA = def.body1;
+	jointDef.bodyB = def.body2;
+	jointDef.localAnchorA = def.point1;
+	jointDef.localAnchorB = def.point2;
+	b2Vec2 d = def.body2->GetWorldPoint(def.point2) - def.body1->GetWorldPoint(def.point1);
 	jointDef.length = d.Length();
-	jointDef.collideConnected = collideconnected;
-	jointDef.frequencyHz = frequencyHz;
-	jointDef.dampingRatio = damping;
+	jointDef.collideConnected = def.collideconnected;
+	jointDef.frequencyHz = def.frequencyHz;
+	jointDef.dampingRatio = def.damping;
 	mJoint = mPhysicMgr.Createb2Joint(&jointDef);
 	mJoint->SetUserData(this);
 	
 	mIsAlive = true;
 	
-	b1->SetAwake(true);
-	b2->SetAwake(true);
+	def.body1->SetAwake(true);
+	def.body2->SetAwake(true);
 }
 
 // Dtor

@@ -196,7 +196,8 @@ bool AnimatedSprite::Process()
 // Accesseurs
 const std::string& AnimatedSprite::GetFilePath() const
 {
-	return GetFilePath();
+	return std::string();
+	//return GetFilePath();
 }
 const std::map<std::string, Animation>& AnimatedSprite::GetAnimationMap() const
 {

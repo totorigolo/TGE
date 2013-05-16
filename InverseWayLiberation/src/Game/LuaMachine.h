@@ -13,7 +13,6 @@ public:
 	virtual ~LuaMachine();
 
 	// Enregistrements
-	// HACK: Déplacer ça dans les classes respectives ?
 	void RegisterEntityFactory();
 	void RegisterJointFactory();
 	void RegisterLevelManager();

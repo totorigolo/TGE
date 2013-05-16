@@ -4,12 +4,45 @@
 #include <Thor/Resources.hpp>
 #include "../Joint.h"
 
+struct GearJointDef : public JointDef
+{
+	// Ctor
+	GearJointDef()
+	{
+		body1 = nullptr;
+		body2 = nullptr;
+		joint1 = -1;
+		joint2 = -1;
+		ratio = 1.f;
+		collideconnected = true;
+	}
+	
+	// Initialisation
+	GearJointDef(b2Body *b1, b2Body *b2, int j1, int j2, float _ratio = 1.f, bool _collideconnected = true)
+	{
+		body1 = b1;
+		body2 = b2;
+		joint1 = j1;
+		joint2 = j2;
+		ratio = _ratio;
+		collideconnected = _collideconnected;
+	}
+	
+	// Attributs
+	b2Body *body1;
+	b2Body *body2;
+	int joint1;
+	int joint2;
+	float ratio;
+	bool collideconnected;
+};
+
 class Joint;
 class GearJoint : public Joint
 {
 public:
 	// Ctor & dtor
-	GearJoint(b2Body *b1, b2Body *b2, int j1, int j2 , float ratio = 1.f, bool collideconnected = true);
+	GearJoint(const GearJointDef &def);
 	virtual ~GearJoint(void);
 	
 	// Accesseurs

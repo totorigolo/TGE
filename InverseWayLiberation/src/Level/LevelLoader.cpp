@@ -59,53 +59,41 @@ bool LevelLoader::Process()
 	// Vérifie que <level> existe dans le fichier
 	tinyxml2::XMLHandle hdl(mFile);
 	tinyxml2::XMLElement *elem = hdl.FirstChildElement("level").ToElement();
-	if (!elem)
-	{
-		Dialog::Error("Une erreur grave est survenue lors du chargement du niveau.\nFichier invalide (" + mPath + ").");
-		return false;
-	}
+	myCheckError(elem, "Une erreur est survenue lors du chargement du niveau.\n"
+					   "<level> n'existe pas, fichier invalide (" + mPath + ").");
 
-	// Charge tout
-	if (!ProcessWorld())
-	{
-		Dialog::Error("Une erreur grave est survenue lors du chargement du niveau.\nMonde non trouvé (" + mPath + ").");
-		return false;
-	}
-	if (!ProcessTextures())
-	{
-		Dialog::Error("Une erreur grave est survenue lors du chargement du niveau.\nTextures invalides (" + mPath + ").");
-		return false;
-	}
-	if (!ProcessBasicBodies())
-	{
-		Dialog::Error("Une erreur grave est survenue lors du chargement du niveau.\nBasicBodies invalides (" + mPath + ").");
-		return false;
-	}
-	if (!ProcessEntities())
-	{
-		Dialog::Error("Une erreur grave est survenue lors du chargement du niveau.\nEntities invalide (" + mPath + ").");
-		return false;
-	}
-	if (!ProcessJoints())
-	{
-		Dialog::Error("Une erreur grave est survenue lors du chargement du niveau.\nJoints invalides (" + mPath + ").");
-		return false;
-	}
-	if (!ProcessDeco())
-	{
-		Dialog::Error("Une erreur grave est survenue lors du chargement du niveau.\nDeco invalide (" + mPath + ").");
-		return false;
-	}
-	if (!ProcessActions())
-	{
-		Dialog::Error("Une erreur grave est survenue lors du chargement du niveau.\nActions invalide (" + mPath + ").");
-		return false;
-	}
-	if (!ProcessTriggers())
-	{
-		Dialog::Error("Une erreur grave est survenue lors du chargement du niveau.\nTriggers invalide (" + mPath + ").");
-		return false;
-	}
+	/* Charge tout */
+	// Le Monde
+	myCheckError(ProcessWorld(), "Une erreur est survenue lors du chargement du niveau.\n"
+								 "Le chargement de World a échoué (" + mPath + ").");
+
+	// Les textures
+	myCheckError(ProcessTextures(), "Une erreur est survenue lors du chargement du niveau.\n"
+									"Le chargement des textures a échoué (" + mPath + ").");
+
+	// Les Bodies basiques
+	myCheckError(ProcessBasicBodies(), "Une erreur est survenue lors du chargement du niveau.\n"
+									   "Le chargement des BasicBodies a échoué (" + mPath + ").");
+
+	// Les Entities
+	myCheckError(ProcessEntities(), "Une erreur est survenue lors du chargement du niveau.\n"
+									"Le chargement des Entities a échoué (" + mPath + ").");
+
+	// Les joints
+	myCheckError(ProcessJoints(), "Une erreur est survenue lors du chargement du niveau.\n"
+								  "Le chargement des joints a échoué (" + mPath + ").");
+
+	// La déco
+	myCheckError(ProcessDeco(), "Une erreur est survenue lors du chargement du niveau.\n"
+									"Le chargement de la déco a échoué (" + mPath + ").");
+
+	// Les actions
+	myCheckError(ProcessActions(), "Une erreur est survenue lors du chargement du niveau.\n"
+									"Le chargement des actions a échoué (" + mPath + ").");
+
+	// Les déclencheurs
+	myCheckError(ProcessTriggers(), "Une erreur est survenue lors du chargement du niveau.\n"
+									"Le chargement des triggers a échoué (" + mPath + ").");
 
 	return true;
 }
@@ -133,6 +121,7 @@ bool LevelLoader::ProcessWorld()
 		if (world->Attribute("originview")) originView = Parser::string2b2Vec2(world->Attribute("originview"));
 		world->QueryFloatAttribute("defaultzoom", &defaultZoom);
 	}
+
 	// Si le monde n'est pas défini, on averti
 	else
 	{
@@ -155,11 +144,7 @@ bool LevelLoader::ProcessTextures()
 	tinyxml2::XMLHandle textures = hdl.FirstChildElement("level").FirstChildElement("textures");
 
 	// Vérifie que <textures> existe
-	if (!textures.ToElement())
-	{
-		Dialog::Error("Une erreur fatale est survenue lors du chargement du niveau.\n<textures> non trouvé (" + mPath + ").", true);
-		return false;
-	}
+	myCheckError(textures.ToElement(), "Une erreur est survenue lors du chargement du niveau.\n<textures> non trouvé (" + mPath + ").");
 	
 	// On crée les attributs
 	std::string path, name;
@@ -189,16 +174,12 @@ bool LevelLoader::ProcessTextures()
 }
 bool LevelLoader::ProcessBasicBodies()
 {
-	// Récupère <bodies>
+	// Récupère <basicbodies>
 	tinyxml2::XMLHandle hdl(mFile);
 	tinyxml2::XMLHandle bodies = hdl.FirstChildElement("level").FirstChildElement("basicbodies");
 
-	// Vérifie que <bodies> existe
-	if (!bodies.ToElement())
-	{
-		Dialog::Error("Une erreur fatale est survenue lors du chargement du niveau.\n<basicbodies> non trouvé (" + mPath + ").", true);
-		return false;
-	}
+	// Vérifie que <basicbodies> existe
+	myCheckError(bodies.ToElement(), "Une erreur est survenue lors du chargement du niveau.\n<basicbodies> non trouvé (" + mPath + ").");
 
 	// On crée les attributs
 	BasicBody *bb = nullptr;
@@ -323,11 +304,7 @@ bool LevelLoader::ProcessEntities()
 	tinyxml2::XMLHandle entities = hdl.FirstChildElement("level").FirstChildElement("entities");
 
 	// Vérifie que <entities> existe
-	if (!entities.ToElement())
-	{
-		Dialog::Error("Une erreur fatale est survenue lors du chargement du niveau.\n<entities> non trouvé (" + mPath + ").", true);
-		return false;
-	}
+	myCheckError(entities.ToElement(), "Une erreur est survenue lors du chargement du niveau.\n<entities> non trouvé (" + mPath + ").");
 
 	// On crée les attributs
 	Entity *e = nullptr;
@@ -395,15 +372,15 @@ bool LevelLoader::ProcessEntities()
 }
 bool LevelLoader::ProcessJoints()
 {
-	// Récupère <bodies>
+	// Récupère <joints>
 	tinyxml2::XMLHandle hdl(mFile);
 	tinyxml2::XMLHandle joints = hdl.FirstChildElement("level").FirstChildElement("joints");
 
-	// Vérifie que <bodies> existe
+	// Vérifie que <joints> existe
 	if (!joints.ToElement())
 	{
-		Dialog::Error("Une erreur fatale est survenue lors du chargement du niveau.\n<joints> non trouvé (" + mPath + ").", true);
-		return false;
+		// Il n'y a tout simplement pas de joint...
+		return true;
 	}
 
 	// On crée les attributs
@@ -414,7 +391,7 @@ bool LevelLoader::ProcessJoints()
 	unsigned int IDb1 = 0U, IDb2 = 0U;
 	b2Body *b1 = nullptr, *b2 = nullptr;
 	b2Vec2 pt1, pt2, anchor;
-	bool colision = true;
+	bool collision = true;
 
 	// Pour tous les joints
 	tinyxml2::XMLElement *joint = joints.FirstChildElement().ToElement();
@@ -426,7 +403,7 @@ bool LevelLoader::ProcessJoints()
 		id = 0U;
 		IDb1 = 0U, IDb2 = 0U;
 		b1 = nullptr, b2 = nullptr;
-		colision = true;
+		collision = true;
 
 		// Récupère l'ID
 		if (joint->Attribute("id"))
@@ -438,10 +415,10 @@ bool LevelLoader::ProcessJoints()
 		// Récupère le type
 		type = joint->Name();
 
-		// Change la valeur de colision par défaut
+		// Change la valeur de collision par défaut
 		if (type == "weld" || type == "prismatic" || type == "revolute" || type == "wheel")
 		{
-			colision = false;
+			collision = false;
 		}
 
 		// Récupère les attributs suivant le type
@@ -450,7 +427,7 @@ bool LevelLoader::ProcessJoints()
 		if (joint->Attribute("pt1")) pt1 = Parser::string2b2Vec2(joint->Attribute("pt1"));
 		if (joint->Attribute("pt2")) pt2 = Parser::string2b2Vec2(joint->Attribute("pt2"));
 		if (joint->Attribute("anchor")) anchor = Parser::string2b2Vec2(joint->Attribute("anchor"));
-		joint->QueryBoolAttribute("colision", &colision);
+		joint->QueryBoolAttribute("collision", &collision);
 		
 		// Récupère les bodies
 		if (mBodyIDMap.find(IDb1) == mBodyIDMap.end())
@@ -471,12 +448,15 @@ bool LevelLoader::ProcessJoints()
 		{
 			b2Joint *j1 = nullptr, *j2 = nullptr;
 			unsigned int IDj1 = 0U, IDj2 = 0U;
-			float ratio;
+			GearJointDef def;
+			def.body1 = b1;
+			def.body2 = b2;
+			def.collideconnected = collision;
 
 			// Récupère les attributs
 			joint->QueryUnsignedAttribute("joint1", &IDj1);
 			joint->QueryUnsignedAttribute("joint2", &IDj2);
-			joint->QueryFloatAttribute("ratio", &ratio);
+			joint->QueryFloatAttribute("ratio", &def.ratio);
 
 			// Récupère les joints
 			if (mJointIDMap.find(IDj1) == mJointIDMap.end())
@@ -499,121 +479,134 @@ bool LevelLoader::ProcessJoints()
 			myAssert(j2->GetUserData(), "Le joint n'existe pas.");
 
 			// Crée le joint
-			int j1ID = ((Joint*) j1->GetUserData())->GetID();
-			int j2ID = ((Joint*) j2->GetUserData())->GetID();
-			j = new GearJoint(b1, b2, j1ID, j2ID, ratio, colision);
+			def.joint1 = ((Joint*) j1->GetUserData())->GetID();
+			def.joint2 = ((Joint*) j2->GetUserData())->GetID();
+			j = new GearJoint(def);
 		}
 		else if (type == "distance")
 		{
-			float frequency = 4.0f, damping = 0.5f;
+			DistanceJointDef def;
+			def.body1 = b1;
+			def.body2 = b2;
+			def.collideconnected = collision;
 
 			// Récupère les attributs
-			joint->QueryFloatAttribute("frequency", &frequency);
-			joint->QueryFloatAttribute("damping", &damping);
+			joint->QueryFloatAttribute("frequency", &def.frequencyHz);
+			joint->QueryFloatAttribute("damping", &def.damping);
 
 			// Crée le joint
-			j = new DistanceJoint(b1, pt1, b2, pt2, frequency, damping, colision);
+			j = new DistanceJoint(def);
 		}
 		else if (type == "friction")
 		{
-			float maxForce = 0.f, maxTorque = 0.f;
+			FrictionJointDef def;
+			def.body1 = b1;
+			def.body2 = b2;
+			def.collideconnected = collision;
 
 			// Récupère les attributs
-			joint->QueryFloatAttribute("maxForce", &maxForce);
-			joint->QueryFloatAttribute("maxTorque", &maxTorque);
+			joint->QueryFloatAttribute("maxForce", &def.maxForce);
+			joint->QueryFloatAttribute("maxTorque", &def.maxTorque);
 
 			// Crée le joint
-			j = new FrictionJoint(b1, pt1, b2, pt2, maxForce, maxTorque, colision);
+			j = new FrictionJoint(def);
 		}
 		else if (type == "rope")
 		{
-			float maxlength = 0.f;
+			RopeJointDef def;
+			def.body1 = b1;
+			def.body2 = b2;
+			def.collideconnected = collision;
 
 			// Récupère les attributs
-			joint->QueryFloatAttribute("maxlength", &maxlength);
+			joint->QueryFloatAttribute("maxlength", &def.maxLength);
 
 			// Crée le joint
-			j = new RopeJoint(b1, pt1, b2, pt2, maxlength, colision);
+			j = new RopeJoint(def);
 		}
 		else if (type == "weld")
 		{
-			float frequency = 4.f, damping = 0.5f;
+			WeldJointDef def;
+			def.body1 = b1;
+			def.body2 = b2;
+			def.collideconnected = collision;
 
 			// Récupère les attributs
-			joint->QueryFloatAttribute("frequency", &frequency);
-			joint->QueryFloatAttribute("damping", &damping);
+			joint->QueryFloatAttribute("frequency", &def.frequencyHz);
+			joint->QueryFloatAttribute("damping", &def.damping);
 
 			// Crée le joint
-			j = new WeldJoint(b1, b2, anchor, frequency, damping, colision);
+			j = new WeldJoint(def);
 		}
 		else if (type == "pulley")
 		{
-			b2Vec2 groundpt1, groundpt2;
-			float ratio = 1.f;
+			PulleyJointDef def;
+			def.body1 = b1;
+			def.body2 = b2;
+			def.collideconnected = collision;
 
 			// Récupère les attributs
-			joint->QueryFloatAttribute("ratio", &ratio);
-			if (joint->Attribute("groundpt1")) groundpt1 = Parser::string2b2Vec2(joint->Attribute("groundpt1"));
-			if (joint->Attribute("groundpt2")) groundpt2 = Parser::string2b2Vec2(joint->Attribute("groundpt2"));
+			joint->QueryFloatAttribute("ratio", &def.ratio);
+			if (joint->Attribute("groundpt1")) def.groundP1 = Parser::string2b2Vec2(joint->Attribute("groundpt1"));
+			if (joint->Attribute("groundpt2")) def.groundP2 = Parser::string2b2Vec2(joint->Attribute("groundpt2"));
 
 			// Crée le joint
-			j = new PulleyJoint(b1, pt1, b2, pt2, groundpt1, groundpt2, ratio, colision);
+			j = new PulleyJoint(def);
 		}
 		else if (type == "prismatic")
 		{
-			b2Vec2 axis;
-			bool enableLimits = false;
-			float lower = 0.f, upper = 0.f;
-			bool enableMotor = false;
-			float speed = 0.f, maxForce = 10.f;
+			PrismaticJointDef def;
+			def.body1 = b1;
+			def.body2 = b2;
+			def.collideconnected = collision;
 
 			// Récupère les attributs
-			axis = Parser::string2b2Vec2(joint->Attribute("axis"));
-			joint->QueryBoolAttribute("enableLimits", &enableLimits);
-			joint->QueryFloatAttribute("lower", &lower);
-			joint->QueryFloatAttribute("upper", &upper);
-			joint->QueryBoolAttribute("enableMotor", &enableMotor);
-			joint->QueryFloatAttribute("speed", &speed);
-			joint->QueryFloatAttribute("maxForce", &maxForce);
+			if (joint->Attribute("axis")) def.axis = Parser::string2b2Vec2(joint->Attribute("axis"));
+			joint->QueryBoolAttribute("enableLimits", &def.enableLimit);
+			joint->QueryFloatAttribute("lower", &def.lowerTranslation);
+			joint->QueryFloatAttribute("upper", &def.upperTranslation);
+			joint->QueryBoolAttribute("enableMotor", &def.enableMotor);
+			joint->QueryFloatAttribute("speed", &def.motorSpeed);
+			joint->QueryFloatAttribute("maxForce", &def.maxForce);
 
 			// Crée le joint
-			j = new PrismaticJoint(b1, b2, anchor, axis, enableLimits, lower, upper, enableMotor, speed, maxForce, colision);
+			j = new PrismaticJoint(def);
 		}
 		else if (type == "revolute")
 		{
-			bool enableLimits = false;
-			float lower = 0.f, upper = 0.f;
-			bool enableMotor = false;
-			float speed = 0.f, maxTorque = 10.f;
+			RevoluteJointDef def;
+			def.body1 = b1;
+			def.body2 = b2;
+			def.collideconnected = collision;
 
 			// Récupère les attributs
-			joint->QueryBoolAttribute("enableLimits", &enableLimits);
-			joint->QueryFloatAttribute("lower", &lower);
-			joint->QueryFloatAttribute("upper", &upper);
-			joint->QueryBoolAttribute("enableMotor", &enableMotor);
-			joint->QueryFloatAttribute("speed", &speed);
-			joint->QueryFloatAttribute("maxTorque", &maxTorque);
+			joint->QueryBoolAttribute("enableLimits", &def.enableLimit);
+			joint->QueryFloatAttribute("lower", &def.lowerAngle);
+			joint->QueryFloatAttribute("upper", &def.upperAngle);
+			joint->QueryBoolAttribute("enableMotor", &def.enableMotor);
+			joint->QueryFloatAttribute("speed", &def.motorSpeed);
+			joint->QueryFloatAttribute("maxTorque", &def.maxTorque);
 
 			// Crée le joint
-			j = new RevoluteJoint(b1, b2, anchor, enableLimits, lower, upper, enableMotor, speed, maxTorque, colision);
+			j = new RevoluteJoint(def);
 		}
 		else if (type == "wheel")
 		{
-			b2Vec2 axis;
-			float frequency = 4.f, damping = 0.5f;
-			bool enableMotor = false;
-			float speed = 0.f, maxTorque = 10.f;
+			WheelJointDef def;
+			def.car = b1;
+			def.wheel = b2;
+			def.collideconnected = collision;
 
 			// Récupère les attributs
-			if (joint->Attribute("axis")) axis = Parser::string2b2Vec2(joint->Attribute("axis"));
-			joint->QueryFloatAttribute("frequency", &frequency);
-			joint->QueryFloatAttribute("damping", &damping);
-			joint->QueryBoolAttribute("enableMotor", &enableMotor);
-			joint->QueryFloatAttribute("speed", &speed);
-			joint->QueryFloatAttribute("maxTorque", &maxTorque);
+			if (joint->Attribute("axis")) def.axis = Parser::string2b2Vec2(joint->Attribute("axis"));
+			joint->QueryFloatAttribute("frequency", &def.frequencyHz);
+			joint->QueryFloatAttribute("damping", &def.damping);
+			joint->QueryBoolAttribute("enableMotor", &def.enableMotor);
+			joint->QueryFloatAttribute("speed", &def.motorSpeed);
+			joint->QueryFloatAttribute("maxTorque", &def.maxTorque);
 
 			// Crée le joint
-			j = new WheelJoint(b1, b2, anchor, axis, frequency, damping, enableMotor, speed, maxTorque, colision);
+			j = new WheelJoint(def);
 		}
 
 		// Enregiste l'ID
@@ -826,80 +819,3 @@ bool LevelLoader::ProcessTriggers()
 
 	return true;
 }
-/*bool LevelLoader::ProcessLights()
-{
-
-//#include "../Lights/PointLight.h"
-//#include "../Lights/SpotLight.h"
-//#include "../Lights/LightManager.h"
-
-
-	// Récupère <lights>
-	tinyxml2::XMLHandle hdl(mFile);
-	tinyxml2::XMLHandle lights = hdl.FirstChildElement("level").FirstChildElement("lights");
-	
-	// Vérifie que <lights> existe
-	if (!lights.ToElement())
-	{
-		Dialog::Error("Une erreur fatale est survenue lors du chargement du niveau.\n<lights> non trouvé (" + mPath + ").", true);
-		return false;
-	}
-	
-	// On crée les attributs
-	unsigned int id = 0U;
-	std::string parent, type;
-	sf::Vector2f position;
-	b2Body *b = nullptr;
-
-	// Pour chaque lumière
-	tinyxml2::XMLElement *light = lights.FirstChildElement().ToElement();
-	while (light)
-	{
-		// Réinitialise les attributs
-		id = 0U;
-		b = nullptr;
-		
-		// Récupère le type de parent
-		if (light->Attribute("parent")) parent = light->Attribute("parent");
-
-		// Récupère l'ID de l'objet associé
-		if (light->Attribute("pos")) position = b22sfVec(Parser::string2b2Vec2(light->Attribute("pos")), mPhysicManager->GetPPM());
-		if (parent == "body")
-		{
-			light->QueryUnsignedAttribute("id", &id);
-			if (mBodyIDMap.find(id) == mBodyIDMap.end())
-			{
-				Dialog::Error("Le body #"+ Parser::uint2string(id) +" est introuvable !");
-				continue;
-			}
-			b = mBodyIDMap[id];
-		}
-
-		// Récupère le type de lampe
-		if (light->Attribute("type")) type = light->Attribute("type");
-			
-		// Ajoute la lampe
-		if (type == "point")
-		{
-			float radius = 0.f;
-			bool isStatic = true, activated = true;
-
-			light->QueryFloatAttribute("radius", &radius);
-			light->QueryBoolAttribute("static", &isStatic);
-			light->QueryBoolAttribute("activated", &activated);
-
-			radius *= mPhysicManager->GetPPM();
-
-			//LightManager::GetInstance().AddLight(new PointLight(position, radius, isStatic, activated, b));
-		}
-		else if (type == "spot")
-		{
-			// TODO
-		}
-
-		// On récupère la prochaine image
-		light = light->NextSiblingElement();
-	}
-
-	return true;
-}*/

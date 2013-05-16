@@ -11,6 +11,17 @@ Joint::Joint()
 	mPhysicMgr(PhysicManager::GetInstance())
 {
 }
+Joint::Joint(const JointDef &def)
+	: mJoint(nullptr),
+	mPhysicMgr(PhysicManager::GetInstance())
+{
+	mIsBreakableMaxForce = def.isBreakableMaxForce;
+	mMaxForceType = def.maxForceType;
+	mMaxForce = def.maxForce;
+	mMaxVecForce = def.maxVecForce;
+	mIsBreakableMaxTorque = def.isBreakableMaxTorque;
+	mMaxTorque = def.maxTorque;
+}
 
 // Dtor
 Joint::~Joint(void)

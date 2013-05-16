@@ -81,6 +81,7 @@ void Player::UpdateEvents()
 			if (mCanJump)
 			{
 				mBody->ApplyForceToCenter(b2Vec2(0.f, 370.f));
+				mCanJump = false;
 			}
 		}
 	}

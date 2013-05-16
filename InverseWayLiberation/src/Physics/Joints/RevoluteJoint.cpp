@@ -4,31 +4,29 @@
 #include "../../Tools/Error.h"
 
 //Ctor
-RevoluteJoint::RevoluteJoint(b2Body *b1, b2Body *b2, b2Vec2 anchor, bool enableLimit, float lowerAngle, float upperAngle
-																			, bool enableMotor, float motorSpeed, float maxMotorTorque
-																			, bool collideconnected)
+RevoluteJoint::RevoluteJoint(const RevoluteJointDef &def)
 {
-	myAssert(b1, "Le b2Body n'existe pas.");
-	myAssert(b2, "Le b2Body n'existe pas.");
+	myAssert(def.body1, "Le b2Body n'existe pas.");
+	myAssert(def.body2, "Le b2Body n'existe pas.");
 	
 	mPhysicMgr.RegisterJoint(this);
 
 	b2RevoluteJointDef jointDef;
-	jointDef.Initialize(b1, b2, b1->GetWorldPoint(anchor));
-	jointDef.collideConnected = collideconnected;
-	jointDef.enableLimit = enableLimit;
-	jointDef.lowerAngle = lowerAngle * RPD;
-	jointDef.upperAngle = upperAngle * RPD;
-	jointDef.enableMotor = enableMotor;
-	jointDef.motorSpeed = motorSpeed * RPD;
-	jointDef.maxMotorTorque = maxMotorTorque;
+	jointDef.Initialize(def.body1, def.body2, def.body1->GetWorldPoint(def.anchor));
+	jointDef.collideConnected = def.collideconnected;
+	jointDef.enableLimit = def.enableLimit;
+	jointDef.lowerAngle = def.lowerAngle * RPD;
+	jointDef.upperAngle = def.upperAngle * RPD;
+	jointDef.enableMotor = def.enableMotor;
+	jointDef.motorSpeed = def.motorSpeed * RPD;
+	jointDef.maxMotorTorque = def.maxMotorTorque;
 	mJoint = mPhysicMgr.Createb2Joint(&jointDef);
 	mJoint->SetUserData(this);
 		
 	mIsAlive = true;
 	
-	b1->SetAwake(true);
-	b2->SetAwake(true);
+	def.body1->SetAwake(true);
+	def.body2->SetAwake(true);
 }
 
 // Dtor

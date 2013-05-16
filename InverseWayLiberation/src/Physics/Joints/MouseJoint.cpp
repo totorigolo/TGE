@@ -4,26 +4,26 @@
 #include "../../Tools/Error.h"
 
 //Ctor
-MouseJoint::MouseJoint(b2Body *body, b2Body *ground, b2Vec2 target, float maxForce, float frequencyHz, float damping)
+MouseJoint::MouseJoint(const MouseJointDef &def)
 {
-	myAssert(body, "Le b2Body n'existe pas.");
-	myAssert(ground, "Le b2Body n'existe pas.");
+	myAssert(def.body, "Le b2Body n'existe pas.");
+	myAssert(def.ground, "Le b2Body n'existe pas.");
 	
 	mPhysicMgr.RegisterJoint(this);
 
 	b2MouseJointDef jointDef;
-	jointDef.bodyA = ground; // Le body A ne sert pas, mais doit exister
-	jointDef.bodyB = body; // Le body utilisé est le B
-	jointDef.target = target;
-	jointDef.dampingRatio = damping;
-	jointDef.frequencyHz = frequencyHz;
+	jointDef.bodyA = def.ground; // Le body A ne sert pas, mais doit exister
+	jointDef.bodyB = def.body; // Le body utilisé est le B
+	jointDef.target = def.target;
+	jointDef.dampingRatio = def.damping;
+	jointDef.frequencyHz = def.frequencyHz;
 	jointDef.collideConnected = true;
-	jointDef.maxForce = maxForce;
+	jointDef.maxForce = def.maxForce;
 	mJoint = mPhysicMgr.Createb2Joint(&jointDef);
 	mJoint->SetUserData(this);
 
-	body->SetAwake(true);
-	body->SetBullet(true);
+	def.body->SetAwake(true);
+	def.body->SetBullet(true);
 
 	mIsAlive = true;
 }
