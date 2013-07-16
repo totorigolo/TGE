@@ -12,25 +12,22 @@ if (randf == nil) then
 end
 
 function createObjects1()
-	if once_createObjects1 == nil then
-		-- Boucle de création
-		texturesB = {"box", "box2", "way", "caisse", "tonneau"}
-		texturesC = {"ball", "circle"}
-		posRotB = b2Vec3(0, 100, 0)
-		x, xmax = 0, 2
-		while x < xmax do
-			-- Crée la Box
-			texture = texturesB[rand(1, 5)]
-			EntityFactory.CreateDynamicBox(posRotB, texture, 1)
-			
-			-- Crée le Circle
-			texture = texturesC[rand(1, 2)]
-			EntityFactory.CreateDynamicCircle(posRotB, texture, 1)
-			
-			-- Incrémente x
-			x = x + 1
-		end
-		once_createObjects1 = true
+	-- Boucle de création
+	texturesB = {"box", "box2", "way", "caisse", "tonneau"}
+	texturesC = {"ball", "circle"}
+	posRotB = b2Vec3(0, 100, 0)
+	x, xmax = 0, 2
+	while x < xmax do
+		-- Crée la Box
+		texture = texturesB[rand(1, 5)]
+		EntityFactory.CreateDynamicBox(posRotB, texture, 1)
+		
+		-- Crée le Circle
+		texture = texturesC[rand(1, 2)]
+		EntityFactory.CreateDynamicCircle(posRotB, texture, 1)
+		
+		-- Incrémente x
+		x = x + 1
 	end
 end
 

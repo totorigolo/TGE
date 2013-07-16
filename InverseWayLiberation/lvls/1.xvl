@@ -132,7 +132,7 @@ ex : (La rotation est en degré, et est facultative.)
     <!-- Déclencheurs -->
     <triggers>
       <!-- Zone -->
-      <area top="30.f" left="  0.f" bottom="20.f" right="10.f" action="createObjects1"/>
+      <area top="20.f" left=" 20.f" bottom="10.f" right="30.f" action="createObjects1"/>
       <area top="30.f" left="-10.f" bottom="20.f" right=" 0.f" action="hello"/>
       
       <!-- Limite ->
