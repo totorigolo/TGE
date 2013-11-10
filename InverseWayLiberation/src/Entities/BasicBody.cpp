@@ -2,11 +2,12 @@
 #include "../Tools/utils.h"
 #include "../Tools/Error.h"
 #include "../Physics/PhysicManager.h"
+
 #include <iostream>
 
 // Ctor & dtor
-BasicBody::BasicBody(int layer)
-	: Entity(layer), mBasicBodyType(Type::Null), mCollisionType(CollisionType::Default),
+BasicBody::BasicBody(int layer, unsigned int ID)
+	: Entity(layer, ID), mBasicBodyType(Type::Null), mCollisionType(CollisionType::Default),
 	mBody(nullptr), mBodyIsCreated(false),
 	mPhysicMgr(PhysicManager::GetInstance())
 {
@@ -19,7 +20,7 @@ BasicBody::~BasicBody()
 }
 
 // Création du body
-bool BasicBody::CreateDynBox(b2Vec3 posRot, const std::shared_ptr<sf::Texture> &texture,
+bool BasicBody::CreateDynBox(b2Vec3 posRot, const std::shared_ptr<Texture> &texture,
 							 float density, float friction, float restitution, int groupIndex, uint16 categoryBits, uint16 maskBits)
 {
 	// On n'en crée pas de nouveau si il y en a déjà un
@@ -62,7 +63,7 @@ bool BasicBody::CreateDynBox(b2Vec3 posRot, const std::shared_ptr<sf::Texture> &
 
 	return true;
 }
-bool BasicBody::CreateDynCircle(b2Vec3 posRot, const std::shared_ptr<sf::Texture> &texture,
+bool BasicBody::CreateDynCircle(b2Vec3 posRot, const std::shared_ptr<Texture> &texture,
 								float density, float friction, float restitution, int groupIndex, uint16 categoryBits, uint16 maskBits)
 {
 	// On n'en crée pas de nouveau si il y en a déjà un
@@ -83,8 +84,8 @@ bool BasicBody::CreateDynCircle(b2Vec3 posRot, const std::shared_ptr<sf::Texture
 	mBody = mPhysicMgr.CreateBody(&bodyDef);
 
 	// Shape
-	b2CircleShape* shape = new b2CircleShape;
-	shape->m_radius = mSprite.getTexture()->getSize().x / 2.f * mPhysicMgr.GetMPP();
+	b2CircleShape shape;
+	shape.m_radius = mSprite.getTexture()->getSize().x / 2.f * mPhysicMgr.GetMPP();
 
 	// Fixture
 	b2FixtureDef fixtureDef;
@@ -94,7 +95,7 @@ bool BasicBody::CreateDynCircle(b2Vec3 posRot, const std::shared_ptr<sf::Texture
 	fixtureDef.filter.groupIndex = static_cast<int16>(groupIndex);
 	fixtureDef.filter.categoryBits = categoryBits;
 	fixtureDef.filter.maskBits = maskBits;
-	fixtureDef.shape = shape;
+	fixtureDef.shape = &shape;
 	mBody->CreateFixture(&fixtureDef);
 
 	// Enregistrements
@@ -104,7 +105,7 @@ bool BasicBody::CreateDynCircle(b2Vec3 posRot, const std::shared_ptr<sf::Texture
 
 	return true;
 }
-bool BasicBody::CreateStaticBox(b2Vec3 posRot, const std::shared_ptr<sf::Texture> &texture,
+bool BasicBody::CreateStaticBox(b2Vec3 posRot, const std::shared_ptr<Texture> &texture,
 								float friction, float restitution, int groupIndex, uint16 categoryBits, uint16 maskBits)
 {
 	// On n'en crée pas de nouveau si il y en a déjà un
@@ -125,10 +126,10 @@ bool BasicBody::CreateStaticBox(b2Vec3 posRot, const std::shared_ptr<sf::Texture
 	mBody = mPhysicMgr.CreateBody(&bodyDef);
 
 	// Shape
-	b2PolygonShape* shape = new b2PolygonShape;
-	shape->SetAsBox((mSprite.getTexture()->getSize().x / 2) * mPhysicMgr.GetMPP(),
+	b2PolygonShape shape;
+	shape.SetAsBox((mSprite.getTexture()->getSize().x / 2) * mPhysicMgr.GetMPP(),
 										(mSprite.getTexture()->getSize().y / 2) * mPhysicMgr.GetMPP());
-	shape->m_radius = 0.f;
+	shape.m_radius = 0.f;
 
 	// Fixture
 	b2FixtureDef fixtureDef;
@@ -138,7 +139,7 @@ bool BasicBody::CreateStaticBox(b2Vec3 posRot, const std::shared_ptr<sf::Texture
 	fixtureDef.filter.groupIndex = static_cast<int16>(groupIndex);
 	fixtureDef.filter.categoryBits = categoryBits;
 	fixtureDef.filter.maskBits = maskBits;
-	fixtureDef.shape = shape;
+	fixtureDef.shape = &shape;
 	mBody->CreateFixture(&fixtureDef);
 	
 	// Enregistrements
@@ -215,4 +216,13 @@ b2Body* BasicBody::GetBody()
 const b2Body* BasicBody::GetBody() const
 {
 	return mBody;
+}
+// Position et rotation (en degrés)
+const b2Vec2 BasicBody::GetPosition() const
+{
+	return mBody->GetPosition();
+}
+const float BasicBody::GetRotation() const
+{
+	return mBody->GetAngle() * DPR;
 }

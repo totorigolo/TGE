@@ -1,8 +1,9 @@
 #include "../LuaMachine.h"
-#include <iostream>
-#include <exception>
-#include <Box2D/Box2D.h>
+
 #include <luabind/operator.hpp>
+#include <Box2D/Box2D.h>
+#include <exception>
+#include <iostream>
 
 // Enregistrements privés
 void LuaMachine::RegisterBox2D()

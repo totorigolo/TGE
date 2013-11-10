@@ -1,7 +1,8 @@
 #include "App/App.h"
 #include "Tools/Dialog.h"
-#include <iostream>
+
 #include <exception>
+#include <iostream>
 
 int main()
 {
@@ -22,5 +23,5 @@ int main()
 	}
 
 	// Termine l'application
-    return r;
+	return r;
 }

@@ -12,7 +12,8 @@ Joint::Joint()
 {
 }
 Joint::Joint(const JointDef &def)
-	: mJoint(nullptr),
+	: mJoint(nullptr), mID(-1),
+	mToDestroy(false), mIsAlive(false),
 	mPhysicMgr(PhysicManager::GetInstance())
 {
 	mIsBreakableMaxForce = def.isBreakableMaxForce;

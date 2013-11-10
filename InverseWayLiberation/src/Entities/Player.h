@@ -1,7 +1,9 @@
 #pragma once
+#include "LivingBeing.h"
+#include "../Resources/Texture.h"
+
 #include <SFML/Graphics.hpp>
 #include <string>
-#include "LivingBeing.h"
 
 class InputManager;
 class Player : public LivingBeing
@@ -17,7 +19,7 @@ public:
 
 public:
 	// Ctor & dtor
-	Player(b2Vec2 position, std::shared_ptr<sf::Texture> texture, int layer = 1);
+	Player(b2Vec2 position, std::shared_ptr<Texture> texture, int layer = 1, unsigned int ID = 0U);
 	virtual ~Player();
 
 	// Mise à jour

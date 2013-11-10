@@ -1,12 +1,12 @@
 #pragma once
-#include <SFML/Graphics.hpp>
 #include "../Tools/NonCopyable.h"
+
+#include <SFML/Graphics.hpp>
 
 enum class EntityType
 {
 	Entity,
 	Deco,
-	RawBody,
 	LivingBeing,
 	Player,
 	BasicBody,
@@ -17,7 +17,7 @@ class Entity : public sf::Drawable, public NonCopyable
 {
 public:
 	// Ctor & dtor
-	Entity(int layer = 0);
+	Entity(int layer = 0, unsigned int ID = 0U);
 	virtual ~Entity();
 
 	// Mise à jour
@@ -28,6 +28,7 @@ public:
 
 	// Accesseurs
 	bool IsAlive() const;
+	unsigned int GetID() const;
 	int GetLayer() const;
 	EntityType GetType() const { return mType; }
 
@@ -38,6 +39,10 @@ public:
 protected:
 	// Etat
 	bool mIsAlive;
+
+	// Identifiant
+	// Les ID ne sont pas uniques. 0 est l'ID par défaut
+	unsigned int mID;
 
 	// Propriétés
 	int mLayer;

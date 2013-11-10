@@ -57,6 +57,12 @@ void EntityManager::SortByLayer()
 	mEntities.sort(compareEntities);
 }
 
+// Accès aux Entities
+const std::list<Entity*>& EntityManager::GetEntities() const
+{
+	return mEntities;
+}
+
 // Pour le rendu
 void EntityManager::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {

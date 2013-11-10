@@ -256,6 +256,18 @@
     <ClCompile Include="src\Game\Lua\RegisterSFML.cpp">
       <Filter>Fichiers sources\Game\Lua</Filter>
     </ClCompile>
+    <ClCompile Include="src\Level\LevelSaver.cpp">
+      <Filter>Fichiers sources\Level</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Tools\Saver.cpp">
+      <Filter>Fichiers sources\Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Resources\ResourceManager.cpp">
+      <Filter>Fichiers sources\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\Lua\RegisterResourceManager.cpp">
+      <Filter>Fichiers sources\Game\Lua</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Physics\Joints\DistanceJoint.h">
@@ -357,9 +369,6 @@
     <ClInclude Include="src\Entities\Player.h">
       <Filter>Fichiers d%27en-tête\Entities</Filter>
     </ClInclude>
-    <ClInclude Include="src\resource.h">
-      <Filter>Fichiers de ressources</Filter>
-    </ClInclude>
     <ClInclude Include="src\Physics\Joint.h">
       <Filter>Fichiers d%27en-tête\Physics</Filter>
     </ClInclude>
@@ -408,10 +417,14 @@
     <ClInclude Include="src\Physics\Callback\AABBListCallback.h">
       <Filter>Fichiers d%27en-tête\Physics\Callback</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="src\InverseWayLiberation.rc">
-      <Filter>Fichiers de ressources</Filter>
-    </ResourceCompile>
+    <ClInclude Include="src\Level\LevelSaver.h">
+      <Filter>Fichiers d%27en-tête\Level</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Tools\Saver.h">
+      <Filter>Fichiers d%27en-tête\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Resources\Texture.h">
+      <Filter>Fichiers d%27en-tête\Resources</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

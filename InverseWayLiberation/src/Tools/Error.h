@@ -1,9 +1,10 @@
 #pragma once
+#include "Parser.h"
+#include "Dialog.h"
+
 #include <exception>
 #include <sstream>
 #include <string>
-#include "Parser.h"
-#include "Dialog.h"
 
 class Error : public std::exception
 {
@@ -24,3 +25,4 @@ private:
 
 // Vérification d'erreur
 #define myCheckError(exp, msg) if(!(exp)) { Dialog::Error(msg); return false; }
+#define myCheckError_c(exp, msg) if(!(exp)) { Dialog::Error(msg); } // For constructors

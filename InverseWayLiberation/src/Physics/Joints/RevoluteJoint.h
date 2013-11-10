@@ -1,8 +1,8 @@
 #pragma once
+#include "../Joint.h"
+
 #include <SFML/Graphics.hpp>
 #include <Box2D/Box2D.h>
-#include <Thor/Resources.hpp>
-#include "../Joint.h"
 
 struct RevoluteJointDef : public JointDef
 {
@@ -56,6 +56,7 @@ class RevoluteJoint : public Joint
 {
 public:
 	// Ctor & dtor
+	RevoluteJoint(RevoluteJointDef &&def);
 	RevoluteJoint(const RevoluteJointDef &def);
 	virtual ~RevoluteJoint(void);
 	

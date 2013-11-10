@@ -6,30 +6,29 @@
 #include "../Physics/PhysicManager.h"
 #include "../Entities/EntityFactory.h"
 #include "../Entities/Player.h"
-#include <iostream>
-#include <exception>
-#include <Box2D/Box2D.h>
-#include <SFML/Graphics.hpp>
+
 #include <luabind/operator.hpp>
+#include <SFML/Graphics.hpp>
+#include <Box2D/Box2D.h>
+#include <exception>
+#include <iostream>
 
 // Ctor & dtor
 LuaMachine::LuaMachine()
 {
-	// Crée un Lua State
-	mLuaState = luaL_newstate();
-	luaL_openlibs(mLuaState);
-
-	// Connecte LuaBind à ce Lua State
-	luabind::open(mLuaState);
-
-	// Enregistre les classes
-	RegisterBox2D();
-	RegisterSFML();
+	// Initialise le Lua
+	InitLua();
 }
 LuaMachine::~LuaMachine()
 {
 	// Ferme le State Lua
 	lua_close(mLuaState);
+}
+
+// Réinitialisation
+void LuaMachine::Reset()
+{
+	// TODO
 }
 
 // Enregistrement des attributs
@@ -117,6 +116,21 @@ int LuaMachine::DoString(const std::string &command)
 lua_State* LuaMachine::GetLuaState()
 {
 	return mLuaState;
+}
+
+// Initialisation
+void LuaMachine::InitLua()
+{
+	// Crée un Lua State
+	mLuaState = luaL_newstate();
+	luaL_openlibs(mLuaState);
+
+	// Connecte LuaBind à ce Lua State
+	luabind::open(mLuaState);
+
+	// Enregistre les classes
+	RegisterBox2D();
+	RegisterSFML();
 }
 
 // Affichage des erreurs

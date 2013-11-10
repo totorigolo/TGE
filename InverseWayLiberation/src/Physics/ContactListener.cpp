@@ -1,6 +1,7 @@
 #include "ContactListener.h"
 #include "../Entities/Entity.h"
 #include "../Entities/BasicBody.h"
+
 #include <iostream>
 
 // Début du contact (début du AABB overlap)

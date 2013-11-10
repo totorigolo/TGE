@@ -1,5 +1,6 @@
 #pragma once
 #include "../../Tools/NonCopyable.h"
+
 #include <Box2D/Box2D.h>
 
 // Classe appelée pour chaque fixture trouvé pendant la recherche de correspondance AABB <> fixtures dans le monde

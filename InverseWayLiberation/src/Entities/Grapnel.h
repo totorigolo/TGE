@@ -1,8 +1,10 @@
 #pragma once
+#include "Entity.h"
+#include "../Resources/Texture.h"
+
 #include <SFML/System.hpp>
 #include <Box2D/Box2D.h>
 #include <memory>
-#include "Entity.h"
 
 class Joint;
 class PhysicManager;
@@ -11,11 +13,11 @@ class Grapnel : public Entity
 {
 public:
 	// Ctor & dtor
-	Grapnel(int layer = 1);
+	Grapnel(int layer = 1, unsigned int ID = 0U);
 	virtual ~Grapnel();
 
 	// Création du grapin
-	bool Create(const std::shared_ptr<sf::Texture> &textureHook, b2Body *bodyA, b2Vec2 ptA, b2Body *bodyB, b2Vec2 ptB);
+	bool Create(const std::shared_ptr<Texture> &textureHook, b2Body *bodyA, b2Vec2 ptA, b2Body *bodyB, b2Vec2 ptB);
 
 	// Destruction du grappin
 	void Destroy();
@@ -47,5 +49,5 @@ private:
 
 	// Ressources SFML
 	sf::Sprite mSpriteHook;
-	std::shared_ptr<sf::Texture> mTexture;
+	std::shared_ptr<Texture> mTexture;
 };

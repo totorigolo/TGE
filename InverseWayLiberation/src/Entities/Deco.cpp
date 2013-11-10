@@ -1,10 +1,11 @@
 #include "Deco.h"
 #include "../Tools/utils.h"
 #include "../Tools/Error.h"
+#include "../Physics/PhysicManager.h"
 
 // Ctor & dtor
-Deco::Deco(int layer, const std::shared_ptr<sf::Texture> &texture, sf::Vector3f posRot)
-	: Entity(layer), mTexture(texture)
+Deco::Deco(int layer, const std::shared_ptr<Texture> &texture, sf::Vector3f posRot, unsigned int ID)
+	: Entity(layer, ID), mTexture(texture)
 {
 	myAssert(mTexture.get(), "La texture n'est pas chargée.");
 
@@ -33,11 +34,19 @@ void Deco::draw(sf::RenderTarget& target, sf::RenderStates states) const
 }
 
 // Accesseurs
-sf::Sprite& Deco::GetSprite()
+sf::Sprite* Deco::GetSprite()
 {
-	return mSprite;
+	return &mSprite;
 }
-const sf::Sprite& Deco::GetSprite() const
+const sf::Sprite* Deco::GetSprite() const
 {
-	return mSprite;
+	return &mSprite;
+}
+const b2Vec2 Deco::GetPosition() const
+{
+	return sf2b2Vec(mSprite.getPosition(), PhysicManager::GetInstance().GetMPP());
+}
+const float Deco::GetRotation() const
+{
+	return mSprite.getRotation();
 }

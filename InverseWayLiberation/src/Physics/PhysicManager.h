@@ -2,7 +2,9 @@
 #include "../Tools/Singleton.h"
 #include "DebugDraw.h"
 #include "ContactListener.h"
+
 #include <Box2D/Box2D.h>
+#include <utility>
 #include <map>
 
 class Joint;
@@ -69,8 +71,8 @@ public:
 
 	// La liste des Joints
 	unsigned int GetJointCount();
-	std::map<int, Joint*>& GetJointList();
-	const std::map<int, Joint*>& GetJointList() const;
+	std::map<int, std::unique_ptr<Joint>>& GetJointList();
+	const std::map<int, std::unique_ptr<Joint>>& GetJointList() const;
 
 	// Obtient un StaticBody au hasard
 	b2Body* GetAnyStaticBody();
@@ -92,7 +94,10 @@ protected:
 	// Contact Listener
 	ContactListener mContactListener;
 
+	// Gestion des IDs des BasicBodies
+	unsigned int lastBasicBodiesID;
+
 	// Liste des Joints
 	int mLastJointID;
-	std::map<int, Joint*> mJointList;
+	std::map<int, std::unique_ptr<Joint>> mJointList; // <id, unique_ptr<joint>>
 };

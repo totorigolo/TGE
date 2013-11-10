@@ -1,5 +1,6 @@
 #pragma once
 #include "NonCopyable.h"
+
 #include <mutex>
 
 template <class T>

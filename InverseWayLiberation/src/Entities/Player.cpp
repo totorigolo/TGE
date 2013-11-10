@@ -4,8 +4,8 @@
 #include "../Game/InputManager.h"
 
 // Ctor & dtor
-Player::Player(b2Vec2 position, std::shared_ptr<sf::Texture> texture, int layer)
-	: LivingBeing(position, texture, layer), mInputManager(InputManager::GetInstance())
+Player::Player(b2Vec2 position, std::shared_ptr<Texture> texture, int layer, unsigned int ID)
+	: LivingBeing(position, texture, layer, ID), mInputManager(InputManager::GetInstance())
 {
 	// Change le type
 	mType = EntityType::Player;
@@ -80,7 +80,9 @@ void Player::UpdateEvents()
 		{
 			if (mCanJump)
 			{
-				mBody->ApplyForceToCenter(b2Vec2(0.f, 370.f));
+				//mBody->ApplyForceToCenter(b2Vec2(0.f, 370.f));
+				float impulse = mBody->GetMass() * 6.3f;
+				mBody->ApplyLinearImpulse(b2Vec2(0,impulse), mBody->GetWorldCenter());
 				mCanJump = false;
 			}
 		}

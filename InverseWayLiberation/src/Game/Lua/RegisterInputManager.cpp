@@ -1,7 +1,8 @@
 #include "../LuaMachine.h"
 #include "../InputManager.h"
-#include <exception>
+
 #include <luabind/operator.hpp>
+#include <exception>
 
 // Enregistrements
 void LuaMachine::RegisterInputManager()

@@ -1,19 +1,22 @@
 #pragma once
-#include <Thor/Resources.hpp>
-#include <SFML/Graphics.hpp>
-#include <Box2D/Box2D.h>
-#include <string>
 #include "TriggersManager.h"
 #include "../Tools/Singleton.h"
 #include "../Resources/ResourceManager.h"
 
+#include <SFML/Graphics.hpp>
+#include <Box2D/Box2D.h>
+#include <string>
+#include <list>
+
 class Player;
+class LevelSaver;
 class LevelLoader;
 class EntityManager;
 class PhysicManager;
-class LuaMachine; // TODO:
+class LuaMachine;
 class LevelManager : public sf::Drawable, public Singleton<LevelManager>
 {
+	friend class LevelSaver;
 	friend class LevelLoader;
 
 protected:
@@ -52,6 +55,10 @@ public:
 	void SetBckgColor(const sf::Color &color);
 	sf::Color const& GetBckgColor() const;
 
+	// TriggersManager
+	TriggersManager& GetTriggersMgr();
+	const TriggersManager& GetTriggersMgr() const;
+
 	// TODO
 	void SetLuaConsole(LuaMachine *machine);
 
@@ -73,7 +80,6 @@ private:
 
 	// Textures
 	ResourceManager &mResourceManager;
-	TextureMap &mTextureMap;
 
 	// Joueur
 	Player *mPlayer;

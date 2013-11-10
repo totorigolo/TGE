@@ -35,7 +35,6 @@ Remerciements :
 ==============
 
 Laurent Gomila pour sa SFML.
-Nexus pour sa librairie Thor.
 Erin Catto pour son formidable Box2D (et "Tomb Raider : Legend" :D).
 
 

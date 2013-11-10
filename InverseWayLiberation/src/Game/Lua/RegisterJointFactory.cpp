@@ -9,9 +9,10 @@
 #include "../../Physics/Joints/RopeJoint.h"
 #include "../../Physics/Joints/WeldJoint.h"
 #include "../../Physics/Joints/WheelJoint.h"
-#include <iostream>
-#include <exception>
+
 #include <Box2D/Box2D.h>
+#include <exception>
+#include <iostream>
 
 // Enregistrements
 void LuaMachine::RegisterJointFactory()

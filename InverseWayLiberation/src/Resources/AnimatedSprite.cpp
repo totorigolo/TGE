@@ -165,7 +165,7 @@ bool AnimatedSprite::Process()
 		type = entity->Name();
 
 		// Récupère la position et la rotation
-		if (entity->Attribute("position")) position = Parser::string2b2Vec2(entity->Attribute("position"));
+		if (entity->Attribute("position")) position = Parser::stringToB2Vec2(entity->Attribute("position"));
 		
 		// Récupère le layer
 		entity->QueryIntAttribute("layer", &layer);

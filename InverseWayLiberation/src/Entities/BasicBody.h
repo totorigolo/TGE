@@ -1,7 +1,9 @@
 #pragma once
+#include "Entity.h"
+#include "../Resources/Texture.h"
+
 #include <Box2D/Box2D.h>
 #include <memory>
-#include "Entity.h"
 
 class PhysicManager;
 class BasicBody : public Entity
@@ -26,19 +28,19 @@ public:
 
 public:
 	// Ctor & dtor
-	BasicBody(int layer = 1);
+	BasicBody(int layer = 1, unsigned int ID = 0U);
 	virtual ~BasicBody();
 
 	// Création du body
-	bool CreateDynBox(b2Vec3 posRot, const std::shared_ptr<sf::Texture> &texture,
+	bool CreateDynBox(b2Vec3 posRot, const std::shared_ptr<Texture> &texture,
 					  float density = 1.f, float friction = 0.2f, float restitution = 0.0f,
 					  int groupIndex = 0, uint16 categoryBits = 0x0001, uint16 maskBits = 0xFFFF);
 
-	bool CreateDynCircle(b2Vec3 posRot, const std::shared_ptr<sf::Texture> &texture,
+	bool CreateDynCircle(b2Vec3 posRot, const std::shared_ptr<Texture> &texture,
 						 float density = 1.f, float friction = 0.2f, float restitution = 0.f,
 						 int groupIndex = 0, uint16 categoryBits = 0x0001, uint16 maskBits = 0xFFFF);
 
-	bool CreateStaticBox(b2Vec3 posRot, const std::shared_ptr<sf::Texture> &texture,
+	bool CreateStaticBox(b2Vec3 posRot, const std::shared_ptr<Texture> &texture,
 						 float friction = 0.2f, float restitution = 0.0f,
 						 int groupIndex = 0, uint16 categoryBits = 0x0001, uint16 maskBits = 0xFFFF);
 
@@ -60,6 +62,9 @@ public:
 	// Body
 	b2Body* GetBody();
 	const b2Body* GetBody() const;
+	// Position & rotation (en degrés)
+	const b2Vec2 GetPosition() const;
+	const float GetRotation() const;
 
 protected:
 	// Pour le rendu
@@ -81,5 +86,5 @@ private:
 
 	// Sprite SFML
 	sf::Sprite mSprite;
-	std::shared_ptr<sf::Texture> mTexture;
+	std::shared_ptr<Texture> mTexture;
 };

@@ -1,12 +1,16 @@
 #pragma once
 #include "../Game/LuaMachine.h"
 #include "../Tools/NonCopyable.h"
+
 #include <SFML/Graphics.hpp>
 #include <Box2D/Box2D.h>
+#include <iostream>
+#include <memory>
 #include <string>
 #include <list>
 #include <map>
 
+class TriggersManager;
 class LuaAction
 {
 public:
@@ -76,7 +80,6 @@ public:
 	void AddAction(LuaAction *action);
 	void DeleteAction(LuaAction *action);
 	void DeleteAction(const std::string &name);
-	LuaAction* GetAction(const std::string &name);
 
 	// Gère les Areas
 	void CreateArea(b2AABB area, const std::string &action);
@@ -91,11 +94,11 @@ public:
 
 private:
 	// Liste d'actions
-	std::map<std::string, LuaAction*> mActionMap;
+	std::map<std::string, std::shared_ptr<LuaAction>> mActionMap;
 
 	// Liste de zones
 	// TODO: Créer une table de correspondance string <> unsigned int
-	std::list<std::pair<b2AABB, std::string>> mAreas;
+	std::list<std::pair<b2AABB, std::string>> mAreas; // TODO: multi-map
 
 	// Machine Lua
 	LuaMachine *mLuaMachine;

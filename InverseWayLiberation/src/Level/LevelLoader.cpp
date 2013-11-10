@@ -27,8 +27,6 @@
 #include "../Entities/EntityFactory.h"
 #include "../Entities/EntityManager.h"
 
-#include <Thor/Resources.hpp>
-
 // Ctor
 LevelLoader::LevelLoader(const std::string& path)
 	: Loader(path),
@@ -115,10 +113,10 @@ bool LevelLoader::ProcessWorld()
 	// Récupère les valeurs
 	if (world)
 	{
-		if (world->Attribute("gravity")) gravity = Parser::string2b2Vec2(world->Attribute("gravity"));
+		if (world->Attribute("gravity")) gravity = Parser::stringToB2Vec2(world->Attribute("gravity"));
 		world->QueryFloatAttribute("PPM", &PPM);
-		if (world->Attribute("bckgcolor")) bckgColor = Parser::string2color(world->Attribute("bckgcolor"));
-		if (world->Attribute("originview")) originView = Parser::string2b2Vec2(world->Attribute("originview"));
+		if (world->Attribute("bckgcolor")) bckgColor = Parser::stringToColor(world->Attribute("bckgcolor"));
+		if (world->Attribute("originview")) originView = Parser::stringToB2Vec2(world->Attribute("originview"));
 		world->QueryFloatAttribute("defaultzoom", &defaultZoom);
 	}
 
@@ -158,13 +156,7 @@ bool LevelLoader::ProcessTextures()
 		if (texture->Attribute("src")) path = texture->Attribute("src");
 
 		// Charge la texture
-		try {
-			mLevel.mTextureMap[name] = mLevel.mResourceManager.acquire(thor::Resources::fromFile<sf::Texture>(path));
-		}
-		catch (thor::ResourceLoadingException const& e)
-		{
-			Dialog::Error("Erreur lors du chargement d'une texture du niveau !\n" + std::string(e.what()), true);
-		}
+		mLevel.mResourceManager.LoadTexture(name, path);
 
 		// On récupère la prochaine texture
 		texture = texture->NextSiblingElement();
@@ -184,7 +176,6 @@ bool LevelLoader::ProcessBasicBodies()
 	// On crée les attributs
 	BasicBody *bb = nullptr;
 	int layer = 1;
-	bool hasID = false;
 	bool bullet = false, osp = false;
 	float density = 1.f, friction = 0.2f, restitution = 0.0f;
 	float rotation = 0.f;
@@ -204,7 +195,6 @@ bool LevelLoader::ProcessBasicBodies()
 		density = 1.f;
 		friction = 0.2f;
 		restitution = 0.0f;
-		hasID = false;
 		osp = false;
 		bullet = false;
 
@@ -213,7 +203,7 @@ bool LevelLoader::ProcessBasicBodies()
 
 		// Récupère la texture et vérifie si elle existe
 		if (body->Attribute("texture")) texture = body->Attribute("texture");
-		if (mLevel.mTextureMap.find(texture) == mLevel.mTextureMap.end())
+		if (!mLevel.mResourceManager.TextureExists(texture))
 		{
 			Dialog::Error("Texture \"" + texture + "\" inconnue. Body ignoré !");
 
@@ -224,14 +214,11 @@ bool LevelLoader::ProcessBasicBodies()
 
 		// Récupère l'ID
 		if (body->Attribute("id"))
-		{
 			body->QueryUnsignedAttribute("id", &id);
-			hasID = true;
-		}
 
 		// Récupère la position et la rotation
 		body->QueryFloatAttribute("rotation", &rotation);
-		if (body->Attribute("pos")) posRot = Parser::string2b2Vec3(body->Attribute("pos"));
+		if (body->Attribute("pos")) posRot = Parser::stringToB2Vec3(body->Attribute("pos"));
 		posRot.z = rotation;
 
 		// Récupère le layer
@@ -245,18 +232,18 @@ bool LevelLoader::ProcessBasicBodies()
 		// Crée le body
 		if (type == "staticbox")
 		{
-			bb = new BasicBody(layer);
-			bb->CreateStaticBox(posRot, mLevel.mTextureMap[texture], friction, restitution);
+			bb = new BasicBody(layer, id);
+			bb->CreateStaticBox(posRot, mLevel.mResourceManager.GetTexture(texture), friction, restitution);
 		}
 		else if (type == "dynamicbox")
 		{
-			bb = new BasicBody(layer);
-			bb->CreateDynBox(posRot, mLevel.mTextureMap[texture], density, friction, restitution);
+			bb = new BasicBody(layer, id);
+			bb->CreateDynBox(posRot, mLevel.mResourceManager.GetTexture(texture), density, friction, restitution);
 		}
 		else if (type == "dynamiccircle")
 		{
-			bb = new BasicBody(layer);
-			bb->CreateDynCircle(posRot, mLevel.mTextureMap[texture], density, friction, restitution);
+			bb = new BasicBody(layer, id);
+			bb->CreateDynCircle(posRot, mLevel.mResourceManager.GetTexture(texture), density, friction, restitution);
 		}
 		else
 		{
@@ -282,11 +269,11 @@ bool LevelLoader::ProcessBasicBodies()
 				bb->SetCollisionType(BasicBody::CollisionType::Bullet);
 
 			// Enregiste l'ID
-			if (hasID)
+			if (id != 0)
 			{
 				// On regarde si l'ID n'est pas déjà utilisé
 				if (mBodyIDMap.find(id) != mBodyIDMap.end())
-					Dialog::Error("L'ID " + Parser::int2string(id) + " n'est pas unique !", false);
+					Dialog::Error("L'ID " + Parser::intToString(id) + " n'est pas unique !");
 				mBodyIDMap[id] = bb->GetBody();
 			}
 		}
@@ -327,7 +314,7 @@ bool LevelLoader::ProcessEntities()
 		type = entity->Name();
 
 		// Récupère la position et la rotation
-		if (entity->Attribute("position")) position = Parser::string2b2Vec2(entity->Attribute("position"));
+		if (entity->Attribute("position")) position = Parser::stringToB2Vec2(entity->Attribute("position"));
 		
 		// Récupère le layer
 		entity->QueryIntAttribute("layer", &layer);
@@ -343,7 +330,7 @@ bool LevelLoader::ProcessEntities()
 			animation = entity->Attribute("animation");
 			animation = entity->Attribute("texture");
 
-			e = new LivingBeing(position, mLevel.mTextureMap[animation], layer);
+			e = new LivingBeing(position, mLevel.mResourceManager.GetTexture(animation), layer);
 		}
 		else if (type == "player")
 		{
@@ -352,7 +339,7 @@ bool LevelLoader::ProcessEntities()
 			animation = entity->Attribute("texture");
 
 			// Enregistre le Player dans Level
-			e = new Player(position, mLevel.mTextureMap[animation], layer);
+			e = new Player(position, mLevel.mResourceManager.GetTexture(animation), layer);
 			mLevel.mPlayer = (Player*) e;
 		}
 		else
@@ -424,20 +411,20 @@ bool LevelLoader::ProcessJoints()
 		// Récupère les attributs suivant le type
 		joint->QueryUnsignedAttribute("body1", &IDb1);
 		joint->QueryUnsignedAttribute("body2", &IDb2);
-		if (joint->Attribute("pt1")) pt1 = Parser::string2b2Vec2(joint->Attribute("pt1"));
-		if (joint->Attribute("pt2")) pt2 = Parser::string2b2Vec2(joint->Attribute("pt2"));
-		if (joint->Attribute("anchor")) anchor = Parser::string2b2Vec2(joint->Attribute("anchor"));
+		if (joint->Attribute("pt1")) pt1 = Parser::stringToB2Vec2(joint->Attribute("pt1"));
+		if (joint->Attribute("pt2")) pt2 = Parser::stringToB2Vec2(joint->Attribute("pt2"));
+		if (joint->Attribute("anchor")) anchor = Parser::stringToB2Vec2(joint->Attribute("anchor"));
 		joint->QueryBoolAttribute("collision", &collision);
 		
 		// Récupère les bodies
 		if (mBodyIDMap.find(IDb1) == mBodyIDMap.end())
 		{
-			Dialog::Error("Le body #"+ Parser::uint2string(IDb1) +" est introuvable !");
+			Dialog::Error("Le body #"+ Parser::uintToString(IDb1) +" est introuvable !");
 			continue;
 		}
 		if (mBodyIDMap.find(IDb2) == mBodyIDMap.end())
 		{
-			Dialog::Error("Le body #"+ Parser::uint2string(IDb1) +" est introuvable !");
+			Dialog::Error("Le body #"+ Parser::uintToString(IDb1) +" est introuvable !");
 			continue;
 		}
 		b1 = mBodyIDMap[IDb1];
@@ -461,13 +448,13 @@ bool LevelLoader::ProcessJoints()
 			// Récupère les joints
 			if (mJointIDMap.find(IDj1) == mJointIDMap.end())
 			{
-				Dialog::Error("Le joint #"+ Parser::uint2string(IDj1) +" est introuvable !\n"
+				Dialog::Error("Le joint #"+ Parser::uintToString(IDj1) +" est introuvable !\n"
 							  "Il doit être construit avant.");
 				continue;
 			}
 			if (mJointIDMap.find(IDj2) == mJointIDMap.end())
 			{
-				Dialog::Error("Le joint #"+ Parser::uint2string(IDj2) +" est introuvable !\n"
+				Dialog::Error("Le joint #"+ Parser::uintToString(IDj2) +" est introuvable !\n"
 							  "Il doit être construit avant.");
 				continue;
 			}
@@ -547,8 +534,8 @@ bool LevelLoader::ProcessJoints()
 
 			// Récupère les attributs
 			joint->QueryFloatAttribute("ratio", &def.ratio);
-			if (joint->Attribute("groundpt1")) def.groundP1 = Parser::string2b2Vec2(joint->Attribute("groundpt1"));
-			if (joint->Attribute("groundpt2")) def.groundP2 = Parser::string2b2Vec2(joint->Attribute("groundpt2"));
+			if (joint->Attribute("groundpt1")) def.groundP1 = Parser::stringToB2Vec2(joint->Attribute("groundpt1"));
+			if (joint->Attribute("groundpt2")) def.groundP2 = Parser::stringToB2Vec2(joint->Attribute("groundpt2"));
 
 			// Crée le joint
 			j = new PulleyJoint(def);
@@ -561,7 +548,7 @@ bool LevelLoader::ProcessJoints()
 			def.collideconnected = collision;
 
 			// Récupère les attributs
-			if (joint->Attribute("axis")) def.axis = Parser::string2b2Vec2(joint->Attribute("axis"));
+			if (joint->Attribute("axis")) def.axis = Parser::stringToB2Vec2(joint->Attribute("axis"));
 			joint->QueryBoolAttribute("enableLimits", &def.enableLimit);
 			joint->QueryFloatAttribute("lower", &def.lowerTranslation);
 			joint->QueryFloatAttribute("upper", &def.upperTranslation);
@@ -598,7 +585,7 @@ bool LevelLoader::ProcessJoints()
 			def.collideconnected = collision;
 
 			// Récupère les attributs
-			if (joint->Attribute("axis")) def.axis = Parser::string2b2Vec2(joint->Attribute("axis"));
+			if (joint->Attribute("axis")) def.axis = Parser::stringToB2Vec2(joint->Attribute("axis"));
 			joint->QueryFloatAttribute("frequency", &def.frequencyHz);
 			joint->QueryFloatAttribute("damping", &def.damping);
 			joint->QueryBoolAttribute("enableMotor", &def.enableMotor);
@@ -614,7 +601,7 @@ bool LevelLoader::ProcessJoints()
 		{
 			// On regarde si l'ID n'est pas déjà utilisé
 			if (mBodyIDMap.find(id) != mBodyIDMap.end())
-				Dialog::Error("L'ID " + Parser::int2string(id) + " n'est pas unique !", false);
+				Dialog::Error("L'ID " + Parser::intToString(id) + " n'est pas unique !", false);
 			mJointIDMap[id] = j->GetJoint();
 		}
 
@@ -648,14 +635,14 @@ bool LevelLoader::ProcessDeco()
 
 	// Pour toutes les niveau
 	int z = 0;
-	tinyxml2::XMLHandle level = deco.FirstChildElement("level");
-	while (level.ToElement())
+	tinyxml2::XMLHandle layer = deco.FirstChildElement("layer");
+	while (layer.ToElement())
 	{
 		z = 0;
-		level.ToElement()->QueryIntAttribute("z", &z);
+		layer.ToElement()->QueryIntAttribute("z", &z);
 
 		// Pour chaque image
-		tinyxml2::XMLElement *img = level.FirstChildElement("img").ToElement();
+		tinyxml2::XMLElement *img = layer.FirstChildElement("img").ToElement();
 		while (img)
 		{
 			// Réinitialise les attributs
@@ -668,19 +655,19 @@ bool LevelLoader::ProcessDeco()
 			// Récupère les attributs
 			if (img->Attribute("texture")) texture = img->Attribute("texture");
 			img->QueryIntAttribute("z-index", &zindex);
-			if (img->Attribute("position")) posRot = Parser::string2b2Vec3(img->Attribute("position"));
+			if (img->Attribute("position")) posRot = Parser::stringToB2Vec3(img->Attribute("position"));
 			img->QueryFloatAttribute("rotation", &rotation);
 			posRot.z = rotation;
 			
 			// Ajoute la déco
-			d = new Deco(z, mLevel.mTextureMap[texture], getVec3(b22sfVec(getVec2(posRot), mPhysicManager.GetPPM()), posRot.z));
+			d = new Deco(z, mLevel.mResourceManager.GetTexture(texture), getVec3(b22sfVec(getVec2(posRot), mPhysicManager.GetPPM()), posRot.z));
 			mLevel.mEntityManager.RegisterEntity(d);
 
 			// On récupère la prochaine image
 			img = img->NextSiblingElement();
 		}
-		// On récupère le prochain level
-		level = level.NextSiblingElement();
+		// On récupère le prochain layer
+		layer = layer.NextSiblingElement();
 	}
 
 	return true;
@@ -741,7 +728,6 @@ bool LevelLoader::ProcessActions()
 		}
 		else
 		{
-			// TODO: myCheck -> Affiche un message, mais ne quitte pas
 			Dialog::Error("Action type inconnu ("+ type +") !");
 		}
 

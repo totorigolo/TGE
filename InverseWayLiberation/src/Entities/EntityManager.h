@@ -1,7 +1,8 @@
 #pragma once
 #include "../Tools/Singleton.h"
-#include <list>
+
 #include <SFML/Graphics.hpp>
+#include <list>
 
 class Entity;
 class EntityManager : public Singleton<EntityManager>, public sf::Drawable
@@ -22,6 +23,9 @@ public:
 	void DestroyEntity(Entity *entity);
 	void DestroyAllEntities();
 	void SortByLayer();
+
+	// Accès aux Entities
+	const std::list<Entity*>& GetEntities() const;
 
 	// Pour le rendu
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;

@@ -1,40 +1,34 @@
 #pragma once
 #include "../Tools/Singleton.h"
-#include "../Tools/Error.h"
-#include <Thor/Resources.hpp>
+#include "Texture.h"
+
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
 #include <memory>
 #include <string>
-#include <list>
 #include <map>
 
 typedef std::map<std::string, std::shared_ptr<sf::Font>> FontMap;
 typedef std::map<std::string, std::shared_ptr<sf::Sound>> SoundMap;
-typedef std::map<std::string, std::shared_ptr<sf::Texture>> TextureMap;
+typedef std::map<std::string, std::shared_ptr<Texture>> TextureMap;
 
-class ResourceManager : public thor::MultiResourceCache, public Singleton<ResourceManager>
+class ResourceManager : public Singleton<ResourceManager>
 {
 	friend class Singleton<ResourceManager>;
 
 public:
-	// Obtient la FontMap
-	FontMap& GetFontMap()
-	{
-		return mFontMap;
-	}
+	// Vide toutes les ressources
+	void Clear();
 
-	// Obtient la SoundMap
-	SoundMap& GetSoundMap()
-	{
-		return mSoundMap;
-	}
+	// Gestion des textures
+	bool LoadTexture(const std::string &name, const std::string &path);
+	std::shared_ptr<Texture> GetTexture(const std::string &name);
+	bool TextureExists(const std::string &name);
 
-	// Obtient la TextureMap
-	TextureMap& GetTextureMap()
-	{
-		return mTextureMap;
-	}
+	// Obtient les maps
+	const FontMap& GetFontMap();
+	const SoundMap& GetSoundMap();
+	const TextureMap& GetTextureMap();
 
 private:
 	// Conteneurs

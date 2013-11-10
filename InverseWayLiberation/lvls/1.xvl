@@ -109,12 +109,12 @@ ex: (NB = les valeurs mises pour les facultatifs sont celles par défaut)
 ex : (La rotation est en degré, et est facultative.)
 <img texture="volcan" position="(0.f, 0.f)" rotation="0.f"/>
 -->
-    <level z="5">
+    <layer z="5">
       <img texture="volcan" position="(0.f, 5.f)"/>
-    </level>
-    <level z="-1">
+    </layer>
+    <layer z="-1">
       <img texture="lampadere" position="(3.f, 1.25f)"/>
-    </level>
+    </layer>
   </deco>
 
   <!-- Défini les actions -->

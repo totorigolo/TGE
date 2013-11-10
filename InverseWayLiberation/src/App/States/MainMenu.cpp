@@ -1,6 +1,7 @@
 #include "MainMenu.h"
 #include "DevGame.h"
 #include "../../Tools/Dialog.h"
+
 #include <vector>
 
 // Ctor & Dtor

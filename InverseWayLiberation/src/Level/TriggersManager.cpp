@@ -4,6 +4,7 @@
 #include "../Tools/utils.h"
 #include "../Physics/PhysicManager.h"
 #include "../Physics/Callback/AABBCallback.h"
+
 #include <iostream>
 
 // Ctor
@@ -18,7 +19,7 @@ TriggersManager::~TriggersManager()
 {
 }
 
-// Mide à jour
+// Mise à jour
 void TriggersManager::Update()
 {
 	// Il nous faut une Machine Lua pour continuer
@@ -62,12 +63,11 @@ void TriggersManager::Clear()
 }
 
 // Gestion des actions
-// TODO: ActionManager
 void TriggersManager::AddAction(LuaAction *action)
 {
 	myAssert(action, "L'action n'est pas valide.");
 
-	mActionMap[action->GetName()] = action;
+	mActionMap[action->GetName()] = std::shared_ptr<LuaAction>(action);
 }
 void TriggersManager::DeleteAction(const std::string &name)
 {
@@ -76,14 +76,6 @@ void TriggersManager::DeleteAction(const std::string &name)
 	myAssert(it != mActionMap.end(), "L'action n'existe pas.");
 
 	mActionMap.erase(it);
-}
-LuaAction* TriggersManager::GetAction(const std::string &name)
-{
-	auto it = mActionMap.find(name);
-
-	myAssert(it != mActionMap.end(), "L'action n'existe pas.");
-
-	return it->second;
 }
 
 // Gère les Areas

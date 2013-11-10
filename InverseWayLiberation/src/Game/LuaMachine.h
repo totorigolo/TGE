@@ -12,12 +12,16 @@ public:
 	LuaMachine();
 	virtual ~LuaMachine();
 
+	// Réinitialisation
+	void Reset();
+
 	// Enregistrements
 	void RegisterEntityFactory();
 	void RegisterJointFactory();
 	void RegisterLevelManager();
 	void RegisterPhysicManager();
 	void RegisterInputManager();
+	void RegisterResourceManager();
 
 	// Enregistrement des attributs
 	template <typename T>
@@ -48,6 +52,9 @@ protected:
 	void RegisterSFML();
 
 private:
+	// Initialisation
+	void InitLua();
+
 	// Affichage des erreurs
 	int ReportLuaError(int errorCode);
 

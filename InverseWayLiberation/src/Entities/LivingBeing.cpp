@@ -5,8 +5,8 @@
 #include "../Tools/Error.h"
 
 // Ctor & dtor
-LivingBeing::LivingBeing(b2Vec2 position, const std::shared_ptr<sf::Texture> &texture, int layer)
-	: Entity(layer), mBody(nullptr), mTexture(texture), mIsDead(true), mCanJump(false),
+LivingBeing::LivingBeing(b2Vec2 position, const std::shared_ptr<Texture> &texture, int layer, unsigned int ID)
+	: Entity(layer, ID), mBody(nullptr), mTexture(texture), mIsDead(true), mCanJump(false),
 	mBodyIsCreated(false),
 	mPhysicMgr(PhysicManager::GetInstance())
 {
@@ -109,4 +109,12 @@ b2Body* LivingBeing::GetCollisionBody()
 const b2Body* LivingBeing::GetCollisionBody() const
 {
 	return mBody;
+}
+const sf::Sprite* LivingBeing::GetSprite() const
+{
+	return &mSprite;
+}
+const b2Vec2 LivingBeing::GetPosition() const
+{
+	return mBody->GetPosition();
 }

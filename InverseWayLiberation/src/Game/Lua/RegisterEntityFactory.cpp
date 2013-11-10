@@ -1,7 +1,8 @@
 #include "../LuaMachine.h"
 #include "../../Entities/EntityFactory.h"
-#include <exception>
+
 #include <Box2D/Box2D.h>
+#include <exception>
 
 void LuaMachine::RegisterEntityFactory()
 {
@@ -9,9 +10,6 @@ void LuaMachine::RegisterEntityFactory()
 	{
 		// Enregistre les fonctions
 		luabind::module(mLuaState) [
-			// Fxs
-			luabind::def("LoadTexture", EntityFactory::LoadTexture),
-
 			// Fxs dans EntityFactory
 			luabind::namespace_("EntityFactory") [
 				luabind::def("CreateDeco", (void(*)(const b2Vec3&, const std::string&)) EntityFactory::CreateDeco),

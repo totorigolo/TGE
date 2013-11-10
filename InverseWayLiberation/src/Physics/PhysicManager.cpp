@@ -13,6 +13,7 @@ PhysicManager::PhysicManager()
 	mWorld(b2Vec2(0.f, 0.f)),
 	mPPM(100.f),
 	mTimeStep(1.f / 60.f),
+	lastBasicBodiesID(0U),
 	// Autres
 	mLastJointID(0),
 	mDebugDraw(*this)
@@ -96,7 +97,7 @@ void PhysicManager::DestroyBodiesOut(const b2Vec2 &topleft, const b2Vec2 &bottom
 // Création / destruction
 int PhysicManager::RegisterJoint(Joint *joint)
 {
-	mJointList[mLastJointID] = joint;
+	mJointList[mLastJointID] = std::unique_ptr<Joint>(joint);
 	joint->mID = mLastJointID;
 
 	return mLastJointID++;
@@ -104,26 +105,23 @@ int PhysicManager::RegisterJoint(Joint *joint)
 void PhysicManager::DestroyJoint(int jointID)
 {
 	// Vérifie que l'ID soit cohérent
-	myAssert(jointID >= 0, "L'ID \""+ Parser::int2string(jointID) +"\" est impossible (< 0).");
+	myAssert(jointID >= 0, "L'ID \""+ Parser::intToString(jointID) +"\" est impossible (< 0).");
 
 	// Vérifie que la liste ne soit pas vide
 	myAssert(mJointList.size() != 0, "La liste des joints est vide.");
 
 	// Récupère le joint
 	auto itJoint = mJointList.find(jointID);
-	myAssert(itJoint != mJointList.end(), "Le joint #\""+ Parser::int2string(jointID) +"\" n'existe pas.");
-	Joint *joint = itJoint->second;
+	myAssert(itJoint != mJointList.end(), "Le joint #\""+ Parser::intToString(jointID) +"\" n'existe pas.");
 
 	// Supprime le joint
 	mJointList.erase(itJoint);
-	delete joint;
 }
 void PhysicManager::DestroyAllJoints()
 {
 	// Détruit les Joints
 	for (auto it = mJointList.begin(); it != mJointList.end(); )
 	{
-		delete it->second;
 		it = mJointList.erase(it);
 	}
 	mJointList.clear();
@@ -140,7 +138,7 @@ void PhysicManager::Destroyb2Joint(b2Joint *joint)
 	myAssert(joint, " Le joint n'est pas valide.");
 	mWorld.DestroyJoint(joint);
 }
-// Mide à jour
+// Mise à jour
 void PhysicManager::UpdateJoints()
 {
 	// Met à jour tous les joints
@@ -151,10 +149,7 @@ void PhysicManager::UpdateJoints()
 
 		// Supprime le joint si nécessaire
 		if (it->second->ToDestroy())
-		{
-			delete it->second;
 			it = mJointList.erase(it);
-		}
 
 		// Sinon passe juste au suivant
 		else
@@ -188,7 +183,7 @@ Joint* PhysicManager::GetJoint(int jointID)
 		return nullptr;
 
 	// Le retourne
-	return mJointList.at(jointID);
+	return mJointList.at(jointID).get();
 }
 const Joint* PhysicManager::GetJoint(int jointID) const
 {
@@ -197,13 +192,13 @@ const Joint* PhysicManager::GetJoint(int jointID) const
 		return nullptr;
 
 	// Le retourne
-	return mJointList.at(jointID);
+	return mJointList.at(jointID).get();
 }
 
 // Simulation
 void PhysicManager::SetTimeStep(float timeStep)
 {
-	myAssert(timeStep > 0, "Un timeStep ne peut pas être négatif ("+ Parser::float2string(timeStep) +").");
+	myAssert(timeStep > 0, "Un timeStep ne peut pas être négatif ("+ Parser::floatToString(timeStep) +").");
 
 	mTimeStep = mTimeStep;
 }
@@ -265,11 +260,11 @@ unsigned int PhysicManager::GetJointCount()
 {
 	return mJointList.size();
 }
-std::map<int, Joint*>& PhysicManager::GetJointList()
+std::map<int, std::unique_ptr<Joint>>& PhysicManager::GetJointList()
 {
 	return mJointList;
 }
-const std::map<int, Joint*>& PhysicManager::GetJointList() const
+const std::map<int, std::unique_ptr<Joint>>& PhysicManager::GetJointList() const
 {
 	return mJointList;
 }

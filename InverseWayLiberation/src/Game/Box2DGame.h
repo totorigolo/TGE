@@ -1,10 +1,10 @@
 #pragma once
-#include <Thor/Resources.hpp>
-#include <SFML/Graphics.hpp>
-#include <Box2D/Box2D.h>
 #include "LuaMachine.h"
 #include "../Tools/NonCopyable.h"
 #include "../Resources/ResourceManager.h"
+
+#include <SFML/Graphics.hpp>
+#include <Box2D/Box2D.h>
 
 class PhysicManager;
 class LevelManager;
@@ -68,7 +68,6 @@ private:
 
 	// Textures
 	ResourceManager &mResourceManager;
-	TextureMap &mTextureMap;
 
 	// Machine Lua
 	LuaMachine mConsole;

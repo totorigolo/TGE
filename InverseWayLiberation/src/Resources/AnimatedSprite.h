@@ -1,9 +1,10 @@
 #pragma once
 #include "../Tools/Loader.h"
+
 #include <SFML/Graphics.hpp>
 #include <string>
-#include <map>
 #include <vector>
+#include <map>
 
 class Animation
 {

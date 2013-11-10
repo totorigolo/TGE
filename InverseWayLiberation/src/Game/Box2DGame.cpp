@@ -2,13 +2,14 @@
 #include "LuaMachine.h"
 #include "InputManager.h"
 #include "../Entities/Grapnel.h"
+#include "../Level/LevelSaver.h"
 #include "../Level/LevelLoader.h"
 #include "../Level/LevelManager.h"
 #include "../Physics/PhysicManager.h"
 #include "../Entities/EntityFactory.h"
 #include "../Entities/EntityManager.h"
 #include "../Physics/Joints/MouseJoint.h"
-#include "../Physics/Joints/DistanceJoint.h" // TODO: JointFactory
+#include "../Physics/Joints/DistanceJoint.h"
 #include "../Physics/Callback/PointCallback.h"
 #include "../Tools/utils.h"
 
@@ -17,7 +18,6 @@ Box2DGame::Box2DGame(sf::RenderWindow & window)
 	: mWindow(window), mQuit(false),
 	// Ressources
 	mResourceManager(ResourceManager::GetInstance()),
-	mTextureMap(mResourceManager.GetTextureMap()),
 	mInputManager(InputManager::GetInstance()),
 	// Physique
 	mPhysicMgr(PhysicManager::GetInstance()),
@@ -32,10 +32,11 @@ Box2DGame::Box2DGame(sf::RenderWindow & window)
 	mPinBodyA = nullptr;
 	mPinBodyB = nullptr;
 	mHookedSBody = nullptr;
+	mGrapnel = nullptr;
 
 	// Grapin de test
-	mGrapnel = new Grapnel(-1);
-	EntityManager::GetInstance().RegisterEntity(mGrapnel);
+	//mGrapnel = new Grapnel(-1);
+	//EntityManager::GetInstance().RegisterEntity(mGrapnel);
 }
 
 // Dtor
@@ -119,6 +120,7 @@ bool Box2DGame::OnInit()
 	mInputManager.AddSpyedKey(sf::Keyboard::T); // Ragdoll
 	mInputManager.AddSpyedKey(sf::Keyboard::L); // Lamp
 	mInputManager.AddSpyedKey(sf::Keyboard::R); // Reload
+	mInputManager.AddSpyedKey(sf::Keyboard::S); // Save
 	mInputManager.AddSpyedKey(sf::Keyboard::P); // Pin
 	mInputManager.AddSpyedKey(sf::Keyboard::H); // Hook
 	mInputManager.AddSpyedKey(sf::Keyboard::I); // Console
@@ -132,6 +134,7 @@ bool Box2DGame::OnInit()
 	mConsole.RegisterGlobalLuaVar("physicMgr", &mPhysicMgr);
 	mConsole.RegisterInputManager();
 	mConsole.RegisterGlobalLuaVar("inputMgr", &mInputManager);
+	mConsole.RegisterResourceManager();
 
 	// Charge un niveau
 	LevelLoader("lvls/1.xvl");
@@ -249,7 +252,7 @@ void Box2DGame::OnEvent()
 		}
 	}
 
-	// Charge un niveau
+	// Charge et sauvegarde un niveau
 	if (mInputManager.KeyReleased(sf::Keyboard::R))
 	{
 		// Supprime les pointeurs
@@ -258,8 +261,20 @@ void Box2DGame::OnEvent()
 		mPinBodyA = nullptr;
 		mPinBodyB = nullptr;
 
+		// Réinitialise Lua et Triggers
+		mConsole.Reset();
+		mLevel.GetTriggersMgr().Clear();
+
 		// Charge le niveau
-		LevelLoader("lvls/1.xvl");
+		if (!mInputManager.IsKeyPressed(sf::Keyboard::LControl))
+			LevelLoader("lvls/1.xvl");
+		else
+			LevelLoader("lvls/save.xvl");
+	}
+	if (mInputManager.KeyReleased(sf::Keyboard::S))
+	{
+		// Sauvegarde le niveau
+		LevelSaver(mLevel, "lvls/save.xvl");
 	}
 
 	// Grappin
@@ -286,10 +301,10 @@ void Box2DGame::OnEvent()
 			// Il y a un objet, on le retient
 			if (callback.GetFixture() && callback.GetFixture()->GetBody() != mHookedSBody)
 			{
-				EntityFactory::LoadTexture("hook", "tex/hook.png");
+				mResourceManager.LoadTexture("hook", "tex/hook.png");
 
 				b2Body *b = callback.GetFixture()->GetBody();
-				mGrapnel->Create(mTextureMap["hook"], b, b->GetLocalPoint(mMp), mHookedSBody, mHookedSAnchor);
+				mGrapnel->Create(mResourceManager.GetTexture("hook"), b, b->GetLocalPoint(mMp), mHookedSBody, mHookedSAnchor);
 			}
 			mHookedSBody = nullptr;
 		}

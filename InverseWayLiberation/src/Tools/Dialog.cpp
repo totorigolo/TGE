@@ -8,13 +8,12 @@ namespace Dialog
 	{
 		// Création de la fenêtre et des évènements
 		sf::RenderWindow *window = new sf::RenderWindow(sf::VideoMode(500, 150, 32), title);
-		window->setFramerateLimit(20);
+		//window->setFramerateLimit(20);
 		sf::Event event;
 		sf::View windowView(window->getDefaultView());
 
 		// On évite les évènements qui ne nous sont pas destinés
 		while (sf::Keyboard::isKeyPressed(sf::Keyboard::Return) || sf::Keyboard::isKeyPressed(sf::Keyboard::Escape));
-		while (window->pollEvent(event));
 
 		// Chargement de l'image
 		sf::Texture triangle;
@@ -328,7 +327,7 @@ namespace Dialog
 		inputText.scale(0.8f, 0.8f);
 		inputText.setColor(sf::Color::Black);
 		inputText.setPosition(10.f + 5.f, y + 5.f);
-		inputText.setString(Parser::int2string(number));
+		inputText.setString(Parser::intToString(number));
 
 		// Calcul de l'emplacement du bouton
 		y += 40.f + 20.f;
@@ -379,14 +378,14 @@ namespace Dialog
 				else if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::BackSpace)
 				{
 					number /= 10;
-					inputText.setString(Parser::int2string(number));
+					inputText.setString(Parser::intToString(number));
 				}
 
 				// Si on appuie sur une touche : on ajoute à la zone d'entrée
 				else if (event.type == sf::Event::KeyPressed)
 				{
-					number = number * 10 + Parser::key2int(event.key.code);
-					inputText.setString(Parser::int2string(number));
+					number = number * 10 + Parser::keyToInt(event.key.code);
+					inputText.setString(Parser::intToString(number));
 				}
 
 				// Si la souris survole un bouton : on met le fond

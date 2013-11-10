@@ -1,7 +1,8 @@
 #pragma once
+#include "../Tools/Singleton.h"
+
 #include <SFML/Graphics.hpp>
 #include <map>
-#include "../Tools/Singleton.h"
 
 enum KeyState
 {

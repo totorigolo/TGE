@@ -5,8 +5,8 @@
 #include "../Physics/Joints/DistanceJoint.h"
 
 // Ctor & dtor
-Grapnel::Grapnel(int layer)
-	: Entity(layer), mJoint(nullptr), mJointID(-1),
+Grapnel::Grapnel(int layer, unsigned int ID)
+	: Entity(layer, ID), mJoint(nullptr), mJointID(-1),
 	mPhysicMgr(PhysicManager::GetInstance())
 {
 	// Défini le type de l'Entity
@@ -18,7 +18,7 @@ Grapnel::~Grapnel()
 }
 
 // Création du body
-bool Grapnel::Create(const std::shared_ptr<sf::Texture> &textureHook, b2Body *bodyA, b2Vec2 ptA, b2Body *bodyB, b2Vec2 ptB)
+bool Grapnel::Create(const std::shared_ptr<Texture> &textureHook, b2Body *bodyA, b2Vec2 ptA, b2Body *bodyB, b2Vec2 ptB)
 {
 	// On n'en crée pas de nouveau si il y en a déjà un
 	if (mPhysicMgr.JointExists(mJointID))

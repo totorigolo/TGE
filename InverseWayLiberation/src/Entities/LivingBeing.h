@@ -1,14 +1,16 @@
 #pragma once
+#include "Entity.h"
+#include "../Resources/Texture.h"
+
 #include <Box2D/Box2D.h>
 #include <memory>
-#include "Entity.h"
 
 class PhysicManager;
 class LivingBeing : public Entity
 {
 public:
 	// Ctor & dtor
-	LivingBeing(b2Vec2 position, const std::shared_ptr<sf::Texture> &texture, int layer = 1);
+	LivingBeing(b2Vec2 position, const std::shared_ptr<Texture> &texture, int layer = 1, unsigned int ID = 0U);
 	virtual ~LivingBeing();
 
 	// Mise à jour
@@ -20,6 +22,8 @@ public:
 	// Accesseurs
 	b2Body* GetCollisionBody();
 	const b2Body* GetCollisionBody() const;
+	const sf::Sprite* GetSprite() const;
+	const b2Vec2 GetPosition() const;
 	
 protected:
 	bool mIsDead;
@@ -30,5 +34,5 @@ protected:
 	bool mBodyIsCreated;
 
 	sf::Sprite mSprite;
-	std::shared_ptr<sf::Texture> mTexture;
+	std::shared_ptr<Texture> mTexture;
 };

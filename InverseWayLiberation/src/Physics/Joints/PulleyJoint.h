@@ -1,8 +1,8 @@
 #pragma once
+#include "../Joint.h"
+
 #include <SFML/Graphics.hpp>
 #include <Box2D/Box2D.h>
-#include <Thor/Resources.hpp>
-#include "../Joint.h"
 
 struct PulleyJointDef : public JointDef
 {

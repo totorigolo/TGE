@@ -11,7 +11,7 @@ Loader::Loader(std::string const& path)
 	{
 		// Crée le message d'erreur
 		std::string msg = "Impossible d'ouvrir le niveau \""+ mPath + "\".\n";
-		msg += "Erreur #" + Parser::int2string(mFile.ErrorID()) + ".\n";
+		msg += "Erreur #" + Parser::intToString(mFile.ErrorID()) + ".\n";
 
 		// Ajoute l'explication 1 si elle existe
 		if (mFile.GetErrorStr1())
@@ -21,7 +21,7 @@ Loader::Loader(std::string const& path)
 			msg += "\".";
 		}
 
-		// Ajoute l'explication 1 si elle existe
+		// Ajoute l'explication 2 si elle existe
 		if (mFile.GetErrorStr2())
 		{
 			msg += "\nPlus précisément : \"";

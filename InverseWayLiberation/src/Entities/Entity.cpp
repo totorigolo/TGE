@@ -1,8 +1,8 @@
 #include "Entity.h"
 
 // Ctor & dtor
-Entity::Entity(int layer)
-	: mIsAlive(false), mLayer(layer), mOwner(nullptr)
+Entity::Entity(int layer, unsigned int ID)
+	: mIsAlive(false), mID(ID), mLayer(layer), mOwner(nullptr)
 {
 	mType = EntityType::Entity;
 }
@@ -19,6 +19,10 @@ void Entity::Update()
 bool Entity::IsAlive() const
 {
 	return mIsAlive;
+}
+unsigned int Entity::GetID() const
+{
+	return mID;
 }
 int Entity::GetLayer() const
 {

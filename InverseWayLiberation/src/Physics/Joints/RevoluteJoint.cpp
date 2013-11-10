@@ -4,6 +4,30 @@
 #include "../../Tools/Error.h"
 
 //Ctor
+RevoluteJoint::RevoluteJoint(RevoluteJointDef &&def)
+{
+	myAssert(def.body1, "Le b2Body n'existe pas.");
+	myAssert(def.body2, "Le b2Body n'existe pas.");
+	
+	mPhysicMgr.RegisterJoint(this);
+
+	b2RevoluteJointDef jointDef;
+	jointDef.Initialize(def.body1, def.body2, def.body1->GetWorldPoint(def.anchor));
+	jointDef.collideConnected = def.collideconnected;
+	jointDef.enableLimit = def.enableLimit;
+	jointDef.lowerAngle = def.lowerAngle * RPD;
+	jointDef.upperAngle = def.upperAngle * RPD;
+	jointDef.enableMotor = def.enableMotor;
+	jointDef.motorSpeed = def.motorSpeed * RPD;
+	jointDef.maxMotorTorque = def.maxMotorTorque;
+	mJoint = mPhysicMgr.Createb2Joint(&jointDef);
+	mJoint->SetUserData(this);
+		
+	mIsAlive = true;
+	
+	def.body1->SetAwake(true);
+	def.body2->SetAwake(true);
+}
 RevoluteJoint::RevoluteJoint(const RevoluteJointDef &def)
 {
 	myAssert(def.body1, "Le b2Body n'existe pas.");
@@ -32,6 +56,7 @@ RevoluteJoint::RevoluteJoint(const RevoluteJointDef &def)
 // Dtor
 RevoluteJoint::~RevoluteJoint(void)
 {
+	;
 }
 
 // Accesseurs

@@ -1,8 +1,9 @@
 #include "../LuaMachine.h"
 #include "../../Entities/Player.h"
 #include "../../Level/LevelManager.h"
-#include <iostream>
+
 #include <exception>
+#include <iostream>
 
 // Enregistrements
 void LuaMachine::RegisterLevelManager()

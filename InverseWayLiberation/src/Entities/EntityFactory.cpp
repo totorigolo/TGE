@@ -8,6 +8,7 @@
 #include "EntityManager.h"
 #include "BasicBody.h"
 #include "Deco.h"
+
 #include <iostream>
 #include <list>
 #include <map>
@@ -25,26 +26,13 @@ namespace EntityFactory
 
 		// Resources
 		ResourceManager &mResourceManager(ResourceManager::GetInstance());
-		TextureMap &mTextureMap(mResourceManager.GetTextureMap());
 	}
 	
-	// Charge une texture
-	void LoadTexture(const std::string &name, const std::string &path)
-	{
-		try {
-			mTextureMap[name] = mResourceManager.acquire(thor::Resources::fromFile<sf::Texture>(path));
-		}
-		catch (const thor::ResourceLoadingException &e)
-		{
-			std::cout << e.what() << std::endl;
-		}
-	}
-
 	// Crée une déco
 	void CreateDeco(const b2Vec3 &posRot, const std::string &texture, int layer)
 	{
 		// Crée le BasicBody / la Box
-		Deco *d = new Deco(layer, mTextureMap[texture], b32sfVec(posRot, mPhysicManager.GetPPM()));
+		Deco *d = new Deco(layer, mResourceManager.GetTexture(texture), b32sfVec(posRot, mPhysicManager.GetPPM()));
 
 		// L'enregistre et trie les Entities
 		mEntityManager.RegisterEntity(d);
@@ -56,7 +44,7 @@ namespace EntityFactory
 	{
 		// Crée le BasicBody / la Box
 		BasicBody *b = new BasicBody(layer);
-		b->CreateDynBox(posRot, mTextureMap[texture]);
+		b->CreateDynBox(posRot, mResourceManager.GetTexture(texture));
 
 		// L'enregistre et trie les Entities
 		mEntityManager.RegisterEntity(b);
@@ -68,7 +56,7 @@ namespace EntityFactory
 	{
 		// Crée le BasicBody / la Box
 		BasicBody *b = new BasicBody(layer);
-		b->CreateStaticBox(posRot, mTextureMap[texture]);
+		b->CreateStaticBox(posRot, mResourceManager.GetTexture(texture));
 
 		// L'enregistre et trie les Entities
 		mEntityManager.RegisterEntity(b);
@@ -80,7 +68,7 @@ namespace EntityFactory
 	{
 		// Crée le BasicBody / le cercle
 		BasicBody *b = new BasicBody(layer);
-		b->CreateDynCircle(posRot, mTextureMap[texture]);
+		b->CreateDynCircle(posRot, mResourceManager.GetTexture(texture));
 
 		// L'enregistre et trie les Entities
 		mEntityManager.RegisterEntity(b);
@@ -92,7 +80,7 @@ namespace EntityFactory
 	{
 		// Crée le BasicBody / le lampadaire
 		BasicBody *b = new BasicBody(layer);
-		b->CreateStaticBox(posRot, mTextureMap["lampadere"], 0.1f, 0.05f);
+		b->CreateStaticBox(posRot, mResourceManager.GetTexture("lampadere"), 0.1f, 0.05f);
 		
 		// L'enregistre et trie les Entities
 		EntityManager::GetInstance().RegisterEntity(b);
@@ -103,33 +91,21 @@ namespace EntityFactory
 	void CreateRagdoll(const b2Vec2 &position, int layer)
 	{
 		// Charge les textures
-		try {
-			mTextureMap["hero_head"] = mResourceManager.acquire(thor::Resources::fromFile<sf::Texture>("tex/hero/head.png"));
-			mTextureMap["hero_neck"] = mResourceManager.acquire(thor::Resources::fromFile<sf::Texture>("tex/hero/neck.png"));
-
-			mTextureMap["hero_torso1"] = mResourceManager.acquire(thor::Resources::fromFile<sf::Texture>("tex/hero/torso1.png"));
-			mTextureMap["hero_torso2"] = mResourceManager.acquire(thor::Resources::fromFile<sf::Texture>("tex/hero/torso2.png"));
-			mTextureMap["hero_torso3"] = mResourceManager.acquire(thor::Resources::fromFile<sf::Texture>("tex/hero/torso3.png"));
-			
-			mTextureMap["hero_armL1"] = mResourceManager.acquire(thor::Resources::fromFile<sf::Texture>("tex/hero/armL1.png"));
-			mTextureMap["hero_armL2"] = mResourceManager.acquire(thor::Resources::fromFile<sf::Texture>("tex/hero/armL2.png"));
-			mTextureMap["hero_armR1"] = mResourceManager.acquire(thor::Resources::fromFile<sf::Texture>("tex/hero/armR1.png"));
-			mTextureMap["hero_armR2"] = mResourceManager.acquire(thor::Resources::fromFile<sf::Texture>("tex/hero/armR2.png"));
-			
-			mTextureMap["hero_legL1"] = mResourceManager.acquire(thor::Resources::fromFile<sf::Texture>("tex/hero/legL1.png"));
-			mTextureMap["hero_legL2"] = mResourceManager.acquire(thor::Resources::fromFile<sf::Texture>("tex/hero/legL2.png"));
-			mTextureMap["hero_legR1"] = mResourceManager.acquire(thor::Resources::fromFile<sf::Texture>("tex/hero/legR1.png"));
-			mTextureMap["hero_legR2"] = mResourceManager.acquire(thor::Resources::fromFile<sf::Texture>("tex/hero/legR2.png"));
-			
-			mTextureMap["hero_footL"] = mResourceManager.acquire(thor::Resources::fromFile<sf::Texture>("tex/hero/footL.png"));
-			mTextureMap["hero_footR"] = mResourceManager.acquire(thor::Resources::fromFile<sf::Texture>("tex/hero/footR.png"));
-		}
-		catch (const thor::ResourceLoadingException &e)
-		{
-			std::cout << e.what() << std::endl;
-			system("PAUSE");
-			exit(223);
-		}
+		mResourceManager.LoadTexture("hero_head", "tex/hero/head.png");
+		mResourceManager.LoadTexture("hero_neck", "tex/hero/neck.png");
+		mResourceManager.LoadTexture("hero_torso1", "tex/hero/torso1.png");
+		mResourceManager.LoadTexture("hero_torso2", "tex/hero/torso2.png");
+		mResourceManager.LoadTexture("hero_torso3", "tex/hero/torso3.png");
+		mResourceManager.LoadTexture("hero_armL1", "tex/hero/armL1.png");
+		mResourceManager.LoadTexture("hero_armL2", "tex/hero/armL2.png");
+		mResourceManager.LoadTexture("hero_armR1", "tex/hero/armR1.png");
+		mResourceManager.LoadTexture("hero_armR2", "tex/hero/armR2.png");
+		mResourceManager.LoadTexture("hero_legL1", "tex/hero/legL1.png");
+		mResourceManager.LoadTexture("hero_legL2", "tex/hero/legL2.png");
+		mResourceManager.LoadTexture("hero_legR1", "tex/hero/legR1.png");
+		mResourceManager.LoadTexture("hero_legR2", "tex/hero/legR2.png");
+		mResourceManager.LoadTexture("hero_footL", "tex/hero/footL.png");
+		mResourceManager.LoadTexture("hero_footR", "tex/hero/footR.png");
 
 		/* Crée les bodies (ordre d'apparition inverse) */
 		// std::map pour les stocker temporairement
@@ -137,43 +113,43 @@ namespace EntityFactory
 
 		// Jambe, bras et pied gauche
 		bodies["11_armL1"] = new BasicBody(layer);
-		bodies["11_armL1"]->CreateDynBox(b2Vec3(0.f, 0.f, 0.f) + position, mTextureMap["hero_armL1"], 1.f, 0.2f, 0.f, -1);
+		bodies["11_armL1"]->CreateDynBox(b2Vec3(0.f, 0.f, 0.f) + position, mResourceManager.GetTexture("hero_armL1"), 1.f, 0.2f, 0.f, -1);
 		bodies["11_armL2"] = new BasicBody(layer);
-		bodies["11_armL2"]->CreateDynBox(b2Vec3(0.f, -0.2f, 0.f) + position, mTextureMap["hero_armL2"], 1.f, 0.2f, 0.f, -1);
+		bodies["11_armL2"]->CreateDynBox(b2Vec3(0.f, -0.2f, 0.f) + position, mResourceManager.GetTexture("hero_armL2"), 1.f, 0.2f, 0.f, -1);
 		bodies["12_legL1"] = new BasicBody(layer);
-		bodies["12_legL1"]->CreateDynBox(b2Vec3(0.f, -0.3f, 0.f) + position, mTextureMap["hero_legL1"], 1.f, 0.2f, 0.f, -1);
+		bodies["12_legL1"]->CreateDynBox(b2Vec3(0.f, -0.3f, 0.f) + position, mResourceManager.GetTexture("hero_legL1"), 1.f, 0.2f, 0.f, -1);
 		bodies["12_legL2"] = new BasicBody(layer);
-		bodies["12_legL2"]->CreateDynBox(b2Vec3(0.f, -0.6f, 0.f) + position, mTextureMap["hero_legL2"], 1.f, 0.2f, 0.f, -1);
+		bodies["12_legL2"]->CreateDynBox(b2Vec3(0.f, -0.6f, 0.f) + position, mResourceManager.GetTexture("hero_legL2"), 1.f, 0.2f, 0.f, -1);
 		bodies["13_footL"] = new BasicBody(layer);
-		bodies["13_footL"]->CreateDynBox(b2Vec3(0.05f, -0.75f, 0.f) + position, mTextureMap["hero_footL"], 1.f, 0.2f, 0.f, -1);
+		bodies["13_footL"]->CreateDynBox(b2Vec3(0.05f, -0.75f, 0.f) + position, mResourceManager.GetTexture("hero_footL"), 1.f, 0.2f, 0.f, -1);
 
 		// Cou
 		bodies["20_neck"] = new BasicBody(layer);
-		bodies["20_neck"]->CreateDynBox(b2Vec3(0.f, 0.25f, 0.f) + position, mTextureMap["hero_neck"], 1.f, 0.2f, 0.f, -1);
+		bodies["20_neck"]->CreateDynBox(b2Vec3(0.f, 0.25f, 0.f) + position, mResourceManager.GetTexture("hero_neck"), 1.f, 0.2f, 0.f, -1);
 
 		// Torse
 		bodies["31_torso3"] = new BasicBody(layer);
-		bodies["31_torso3"]->CreateDynBox(b2Vec3(0.f, -0.1f, 0.f) + position, mTextureMap["hero_torso3"], 1.f, 0.2f, 0.f, -1);
+		bodies["31_torso3"]->CreateDynBox(b2Vec3(0.f, -0.1f, 0.f) + position, mResourceManager.GetTexture("hero_torso3"), 1.f, 0.2f, 0.f, -1);
 		bodies["32_torso2"] = new BasicBody(layer);
-		bodies["32_torso2"]->CreateDynBox(b2Vec3(0.f, 0.f, 0.f) + position, mTextureMap["hero_torso2"], 1.f, 0.2f, 0.f, -1);
+		bodies["32_torso2"]->CreateDynBox(b2Vec3(0.f, 0.f, 0.f) + position, mResourceManager.GetTexture("hero_torso2"), 1.f, 0.2f, 0.f, -1);
 		bodies["33_torso1"] = new BasicBody(layer);
-		bodies["33_torso1"]->CreateDynBox(b2Vec3(0.f, 0.15f, 0.f) + position, mTextureMap["hero_torso1"], 1.f, 0.2f, 0.f, -1);
+		bodies["33_torso1"]->CreateDynBox(b2Vec3(0.f, 0.15f, 0.f) + position, mResourceManager.GetTexture("hero_torso1"), 1.f, 0.2f, 0.f, -1);
 	
 		// Tête
 		bodies["40_head"] = new BasicBody(layer);
-		bodies["40_head"]->CreateDynCircle(b2Vec3(0.f, 0.5f, 0.f) + position, mTextureMap["hero_head"], 1.f, 0.5f, 0.f, -1);
+		bodies["40_head"]->CreateDynCircle(b2Vec3(0.f, 0.5f, 0.f) + position, mResourceManager.GetTexture("hero_head"), 1.f, 0.5f, 0.f, -1);
 
 		// Jambe, bras et pied droit
 		bodies["51_legR1"] = new BasicBody(layer);
-		bodies["51_legR1"]->CreateDynBox(b2Vec3(0.f, -0.3f, 0.f) + position, mTextureMap["hero_legR1"], 1.f, 0.2f, 0.f, -1);
+		bodies["51_legR1"]->CreateDynBox(b2Vec3(0.f, -0.3f, 0.f) + position, mResourceManager.GetTexture("hero_legR1"), 1.f, 0.2f, 0.f, -1);
 		bodies["51_legR2"] = new BasicBody(layer);
-		bodies["51_legR2"]->CreateDynBox(b2Vec3(0.f, -0.6f, 0.f) + position, mTextureMap["hero_legR2"], 1.f, 0.2f, 0.f, -1);
+		bodies["51_legR2"]->CreateDynBox(b2Vec3(0.f, -0.6f, 0.f) + position, mResourceManager.GetTexture("hero_legR2"), 1.f, 0.2f, 0.f, -1);
 		bodies["52_armR1"] = new BasicBody(layer);
-		bodies["52_armR1"]->CreateDynBox(b2Vec3(0.f, 0.f, 0.f) + position, mTextureMap["hero_armR1"], 1.f, 0.2f, 0.f, -1);
+		bodies["52_armR1"]->CreateDynBox(b2Vec3(0.f, 0.f, 0.f) + position, mResourceManager.GetTexture("hero_armR1"), 1.f, 0.2f, 0.f, -1);
 		bodies["52_armR2"] = new BasicBody(layer);
-		bodies["52_armR2"]->CreateDynBox(b2Vec3(0.f, -0.2f, 0.f) + position, mTextureMap["hero_armR2"], 1.f, 0.2f, 0.f, -1);
+		bodies["52_armR2"]->CreateDynBox(b2Vec3(0.f, -0.2f, 0.f) + position, mResourceManager.GetTexture("hero_armR2"), 1.f, 0.2f, 0.f, -1);
 		bodies["53_footR"] = new BasicBody(layer);
-		bodies["53_footR"]->CreateDynBox(b2Vec3(0.05f, -0.75f, 0.f) + position, mTextureMap["hero_footR"], 1.f, 0.2f, 0.f, -1);
+		bodies["53_footR"]->CreateDynBox(b2Vec3(0.05f, -0.75f, 0.f) + position, mResourceManager.GetTexture("hero_footR"), 1.f, 0.2f, 0.f, -1);
 
 		/* Jointe les bodies entre eux */
 		// Liste des joints

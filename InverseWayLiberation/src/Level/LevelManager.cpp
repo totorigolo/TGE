@@ -18,7 +18,6 @@ LevelManager::LevelManager()
 	mBckgC(sf::Color::White),
 	// Textures
 	mResourceManager(ResourceManager::GetInstance()),
-	mTextureMap(mResourceManager.GetTextureMap()),
 	// Joueur
 	mPlayer(nullptr)
 {
@@ -43,7 +42,7 @@ void LevelManager::LoadFromFile(const std::string &path)
 void LevelManager::Clear()
 {
 	// Vide tous les objets du jeu
-	// TODO: Vider les textures ? (-> faire un système pour ne vider que les textures inutilisées)
+	mResourceManager.Clear();
 	mTriggersManager.Clear();
 	mPhysicMgr.DestroyAllJoints();
 	mEntityManager.DestroyAllEntities();
@@ -101,6 +100,16 @@ void LevelManager::SetBckgColor(const sf::Color &color)
 sf::Color const& LevelManager::GetBckgColor() const
 {
 	return mBckgC;
+}
+
+// TriggersManager
+TriggersManager& LevelManager::GetTriggersMgr()
+{
+	return mTriggersManager;
+}
+const TriggersManager& LevelManager::GetTriggersMgr() const
+{
+	return mTriggersManager;
 }
 
 // TODO

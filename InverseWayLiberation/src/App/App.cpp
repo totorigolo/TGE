@@ -1,7 +1,8 @@
 #include "App.h"
 #include "../Sounds/SoundManager.h"
-#include "States/StartUp.h"
 #include "States/StateSystem.h"
+#include "States/StartUp.h"
+
 #include <SFML/Graphics.hpp>
 #include <iostream>
 
