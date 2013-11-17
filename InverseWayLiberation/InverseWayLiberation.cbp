@@ -61,14 +61,14 @@
 		<Unit filename="src/Game/Lua/RegisterJointFactory.cpp" />
 		<Unit filename="src/Game/Lua/RegisterLevelManager.cpp" />
 		<Unit filename="src/Game/Lua/RegisterPhysicManager.cpp" />
+		<Unit filename="src/Game/Lua/RegisterResourceManager.cpp" />
 		<Unit filename="src/Game/Lua/RegisterSFML.cpp" />
-		<Unit filename="src/InverseWayLiberation.rc">
-			<Option compilerVar="WINDRES" />
-		</Unit>
 		<Unit filename="src/Level/LevelLoader.cpp" />
 		<Unit filename="src/Level/LevelLoader.h" />
 		<Unit filename="src/Level/LevelManager.cpp" />
 		<Unit filename="src/Level/LevelManager.h" />
+		<Unit filename="src/Level/LevelSaver.cpp" />
+		<Unit filename="src/Level/LevelSaver.h" />
 		<Unit filename="src/Level/TriggersManager.cpp" />
 		<Unit filename="src/Level/TriggersManager.h" />
 		<Unit filename="src/Physics/Callback/AABBCallback.h" />
@@ -107,7 +107,9 @@
 		<Unit filename="src/Physics/PhysicManager.h" />
 		<Unit filename="src/Resources/AnimatedSprite.cpp" />
 		<Unit filename="src/Resources/AnimatedSprite.h" />
+		<Unit filename="src/Resources/ResourceManager.cpp" />
 		<Unit filename="src/Resources/ResourceManager.h" />
+		<Unit filename="src/Resources/Texture.h" />
 		<Unit filename="src/Sounds/SoundManager.cpp" />
 		<Unit filename="src/Sounds/SoundManager.h" />
 		<Unit filename="src/Tools/Dialog.cpp" />
@@ -119,11 +121,12 @@
 		<Unit filename="src/Tools/NonCopyable.h" />
 		<Unit filename="src/Tools/Parser.cpp" />
 		<Unit filename="src/Tools/Parser.h" />
+		<Unit filename="src/Tools/Saver.cpp" />
+		<Unit filename="src/Tools/Saver.h" />
 		<Unit filename="src/Tools/Segment.h" />
 		<Unit filename="src/Tools/Singleton.h" />
 		<Unit filename="src/Tools/utils.h" />
 		<Unit filename="src/main.cpp" />
-		<Unit filename="src/resource.h" />
 		<Extensions>
 			<code_completion />
 			<envvars />
