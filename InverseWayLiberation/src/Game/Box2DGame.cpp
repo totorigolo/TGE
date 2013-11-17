@@ -27,6 +27,7 @@ Box2DGame::Box2DGame(sf::RenderWindow & window)
 	// Etats du jeu
 	mPaused = false;
 
+	mMouseMovingBody = nullptr;
 	mMouseJointCreated = false;
 	mMouseJointID = -1;
 	mPinBodyA = nullptr;
@@ -116,6 +117,7 @@ bool Box2DGame::OnInit()
 	mInputManager.SetView(mWindow.getDefaultView());
 
 	// Demande l'espionnage de touches
+	mInputManager.AddSpyedKey(sf::Keyboard::M); // Pause physique
 	mInputManager.AddSpyedKey(sf::Keyboard::T); // Ragdoll
 	mInputManager.AddSpyedKey(sf::Keyboard::L); // Lamp
 	mInputManager.AddSpyedKey(sf::Keyboard::R); // Reload
@@ -164,6 +166,12 @@ void Box2DGame::OnEvent()
 	if (!mInputManager.HasFocus())
 		return;
 
+	// Gestion de la physique
+	if (mInputManager.KeyPressed(sf::Keyboard::M))
+	{
+		mPaused = !mPaused;
+	}
+
 	// Création d'objets
 	if (mInputManager.IsKeyPressed(sf::Keyboard::B))
 	{
@@ -195,15 +203,56 @@ void Box2DGame::OnEvent()
 	}
 
 	// Déplacements des objets
-	if (mInputManager.GetRMBState())
+	if (!mPaused && !mMouseMovingBody) // Physique en continue, on utilise le MouseJoint
 	{
-		// Si la souris est déjà attachée, on met à jour la position
-		if (mMouseJointCreated)
+		if (mInputManager.GetRMBState())
 		{
-			MouseJoint *j = ((MouseJoint*) mPhysicMgr.GetJoint(mMouseJointID));
-			if (j)
+			// Si la souris est déjà attachée, on met à jour la position
+			if (mMouseJointCreated)
 			{
-				j->SetTarget(mMp);
+				MouseJoint *j = ((MouseJoint*)mPhysicMgr.GetJoint(mMouseJointID));
+				if (j)
+				{
+					j->SetTarget(mMp);
+				}
+				// Le joint n'existe plus
+				else
+				{
+					mMouseJointCreated = false;
+					mMouseJointID = -1;
+				}
+			}
+
+			// Sinon on recherche l'objet sous la souris et on l'attache
+			else
+			{
+				// Demande au monde les formes qui sont sous l'AABB
+				PointCallback callback(mMp);
+				mPhysicMgr.GetWorld()->QueryAABB(&callback, callback.GetAABB());
+
+				// Il y a un objet, on l'attache
+				if (callback.GetFixture())
+				{
+					// On cherche un StaticBody disponible
+					b2Body *staticBody = mPhysicMgr.GetAnyStaticBody();
+					if (staticBody) // Si il y en a un
+					{
+						// Récupère le Body
+						b2Body* body = callback.GetFixture()->GetBody();
+						MouseJointDef def(body, staticBody, mMp, 100000000000.f * body->GetMass());
+						MouseJoint *j = new MouseJoint(def);
+						mMouseJointID = j->GetID();
+						mMouseJointCreated = true;
+					}
+				}
+			}
+		}
+		else if (mMouseJointCreated)
+		{
+			if (mPhysicMgr.JointExists(mMouseJointID))
+			{
+				mPhysicMgr.DestroyJoint(mMouseJointID);
+				mMouseJointID = -1;
 			}
 			// Le joint n'existe plus
 			else
@@ -212,45 +261,38 @@ void Box2DGame::OnEvent()
 				mMouseJointID = -1;
 			}
 		}
-
-		// Sinon on recherche l'objet sous la souris et on l'attache
-		else
+	}
+	else // Physique en pause, on téléporte les objets
+	{
+		// Si on appuie sur le clic droit, et tant qu'on appuie dessus
+		if (mInputManager.GetRMBState())
 		{
-			// Demande au monde les formes qui sont sous l'AABB
-			PointCallback callback(mMp);
-			mPhysicMgr.GetWorld()->QueryAABB(&callback, callback.GetAABB());
-
-			// Il y a un objet, on l'attache
-			if (callback.GetFixture())
+			if (!mMouseMovingBody) // Si on n'a pas encore d'objet, on le cherche
 			{
-				// On cherche un StaticBody disponible
-				b2Body *staticBody = mPhysicMgr.GetAnyStaticBody();
-				if (staticBody) // Si il y en a un
+				// Demande au monde les formes qui sont sous l'AABB
+				PointCallback callback(mMp);
+				mPhysicMgr.GetWorld()->QueryAABB(&callback, callback.GetAABB());
+
+				// Il y a un objet, on l'attache
+				if (callback.GetFixture())
 				{
-					b2Body* body = callback.GetFixture()->GetBody();
-					MouseJointDef def(body, staticBody, mMp, 10000000.f * body->GetMass());
-					MouseJoint *j = new MouseJoint(def);
-					mMouseJointID = j->GetID();
-					mMouseJointCreated = true;
+					mMouseMovingBody = callback.GetFixture()->GetBody();
+					mMouseMovingBodyAnchor = mMp - mMouseMovingBody->GetWorldCenter();
 				}
 			}
+			if (mMouseMovingBody)
+			{
+				// Déplace le Body
+				mMouseMovingBody->SetTransform(mMp - mMouseMovingBodyAnchor, mMouseMovingBody->GetAngle());
+				mMouseMovingBody->SetAwake(true);
+			}
+		}
+		else if (mMouseMovingBody) // Oublie le Body dès qu'on relache le bouton
+		{
+			mMouseMovingBody = nullptr;
 		}
 	}
-	else if (mMouseJointCreated)
-	{
-		if (mPhysicMgr.JointExists(mMouseJointID))
-		{
-			mPhysicMgr.DestroyJoint(mMouseJointID);
-			mMouseJointID = -1;
-		}
-		// Le joint n'existe plus
-		else
-		{
-			mMouseJointCreated = false;
-			mMouseJointID = -1;
-		}
-	}
-
+	
 	// Charge et sauvegarde un niveau
 	if (mInputManager.KeyReleased(sf::Keyboard::R))
 	{
@@ -384,9 +426,12 @@ void Box2DGame::OnLogic()
 void Box2DGame::OnStepPhysics()
 {
 	// Simule
-	mPhysicMgr.Step(10, 4);
-	mPhysicMgr.GetWorld()->ClearForces();
-	mPhysicMgr.DestroyBodiesOut(b2Vec2(1000.f, -200.f), b2Vec2(-200.f, 200.f));
+	if (!mPaused)
+	{
+		mPhysicMgr.Step(10, 4);
+		mPhysicMgr.GetWorld()->ClearForces();
+		mPhysicMgr.DestroyBodiesOut(b2Vec2(1000.f, -200.f), b2Vec2(-200.f, 200.f));
+	}
 }
 
 /// Appelé pour les mises à jour

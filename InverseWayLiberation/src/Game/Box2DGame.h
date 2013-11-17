@@ -84,6 +84,8 @@ private:
 	// Déplacement des objets
 	bool mMouseJointCreated;
 	int mMouseJointID;
+	b2Body *mMouseMovingBody;
+	b2Vec2 mMouseMovingBodyAnchor;
 
 	// Variables pour la création de joints
 	b2Body *mPinBodyA;
