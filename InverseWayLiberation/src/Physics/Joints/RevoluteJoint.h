@@ -22,9 +22,10 @@ struct RevoluteJointDef : public JointDef
 	}
 	
 	// Initialisation
-	RevoluteJointDef(b2Body *b1, b2Body *b2, b2Vec2 _anchor, bool _enableLimit = false, float _lowerAngle = 0.f, float _upperAngle = 0.f,
-														    bool _enableMotor = false, float _motorSpeed = 0.f, float _maxMotorTorque = 10.f,
-														    bool _collideconnected = false)
+	RevoluteJointDef(b2Body *b1, b2Body *b2, b2Vec2 _anchor,
+							bool _enableLimit = false, float _lowerAngle = 0.f, float _upperAngle = 0.f,
+							bool _enableMotor = false, float _motorSpeed = 0.f, float _maxMotorTorque = 10.f,
+							bool _collideconnected = false)
 	{
 		body1 = b1;
 		body2 = b2;
@@ -56,7 +57,6 @@ class RevoluteJoint : public Joint
 {
 public:
 	// Ctor & dtor
-	RevoluteJoint(RevoluteJointDef &&def);
 	RevoluteJoint(const RevoluteJointDef &def);
 	virtual ~RevoluteJoint(void);
 	
@@ -64,13 +64,17 @@ public:
 	float GetJointAngle() const;
 	float GetJointSpeed() const;
 	bool IsCollideConnected() const;
+	float GetReferenceAngle() const;
 	bool IsLimitEnabled() const;
 	float GetLowerAngle() const;
 	float GetUpperAngle() const;
+	float GetLowerAngleRad() const;
+	float GetUpperAngleRad() const;
 	bool IsMotorEnabled() const;
 	float GetMotorTorque(float inv_dt) const;
 	float GetMaxMotorTorque() const;
 	float GetMotorSpeed() const;
+	float GetMotorSpeedRad() const;
 	b2Vec2 GetAnchorRelativeToBodyA() const;
 	b2Vec2 GetAnchorRelativeToBodyB() const;
 	

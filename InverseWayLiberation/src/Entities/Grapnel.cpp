@@ -88,7 +88,7 @@ void Grapnel::Update()
 		}
 
 		// Mise à jour de la texture
-		mSpriteHook.setPosition(b22sfVec(mJoint->GetAnchorB(), mPhysicMgr.GetPPM()));
+		mSpriteHook.setPosition(b22sfVec(mJoint->GetRelativeAnchorB(), mPhysicMgr.GetPPM()));
 		mSpriteHook.setRotation(- mJoint->GetBodyB()->GetAngle() * DPR);
 	}
 }

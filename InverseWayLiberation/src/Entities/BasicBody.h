@@ -65,6 +65,8 @@ public:
 	// Position & rotation (en degrés)
 	const b2Vec2 GetPosition() const;
 	const float GetRotation() const;
+	// Fonction à n'employer que pour éditer les niveaux
+	void SetTransform(const b2Vec2 &position, float angle = 0.f);
 
 protected:
 	// Pour le rendu

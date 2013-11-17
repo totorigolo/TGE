@@ -4,7 +4,7 @@
 #include <Box2D/Box2D.h>
 #include <list>
 
-enum ForceType
+enum class ForceType
 {
 	Null,
 	Float,
@@ -32,7 +32,7 @@ struct JointDef
 	JointDef()
 	{
 		isBreakableMaxForce = false;
-		maxForceType = Null;
+		maxForceType = ForceType::Null;
 		maxForce = 0.f;
 		maxVecForce = b2Vec2_zero;
 		isBreakableMaxTorque = false;
@@ -78,6 +78,7 @@ public:
 	void SetBreakableByTorque(bool breakable);
 	void SetMaxTorque(float maxTorque);
 	bool IsBreakableMaxForce() const;
+	ForceType GetMaxForceType() const;
 	float GetMaxForce() const;
 	b2Vec2 GetMaxVecForce() const;
 	bool IsBreakableMaxTorque() const;
@@ -98,6 +99,7 @@ public:
 	b2Body* GetBodyB();
 	const b2Body* GetBodyA() const;
 	const b2Body* GetBodyB() const;
+	bool IsCollideConnected() const;
 
 	// Ces deux fonctions peuvent demander qqs calculs, donc à ne pas trop utiliser
 	b2Vec2 GetReactionForce(float inv_dt) const;

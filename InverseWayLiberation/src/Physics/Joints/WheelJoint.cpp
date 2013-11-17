@@ -35,6 +35,11 @@ WheelJoint::~WheelJoint(void)
 }
 
 // Accesseurs
+b2Vec2 WheelJoint::GetAxis() const
+{
+	return ((b2WheelJoint*)mJoint)->GetLocalAxisA();
+}
+
 float WheelJoint::GetJointSpeed() const
 {
 	return ((b2WheelJoint*) mJoint)->GetJointSpeed();
@@ -65,11 +70,11 @@ float WheelJoint::GetDampingRatio() const
 }
 b2Vec2 WheelJoint::GetAnchorRelativeToBodyA() const
 {
-	return ((b2WheelJoint*) mJoint)->GetAnchorA();
+	return GetBodyA()->GetLocalPoint(((b2WheelJoint*) mJoint)->GetAnchorA());
 }
 b2Vec2 WheelJoint::GetAnchorRelativeToBodyB() const
 {
-	return ((b2WheelJoint*) mJoint)->GetAnchorB();
+	return GetBodyB()->GetLocalPoint(((b2WheelJoint*)mJoint)->GetAnchorB());
 }
 	
 void WheelJoint::SetMotorEnabled(bool enableMotor)

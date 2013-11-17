@@ -44,13 +44,13 @@ float WeldJoint::GetDampingRatio() const
 {
 	return ((b2WeldJoint*) mJoint)->GetDampingRatio();
 }
-b2Vec2 WeldJoint::GetAnchorA() const
+b2Vec2 WeldJoint::GetAnchorRelativeToBodyA() const
 {
-	return ((b2WeldJoint*) mJoint)->GetAnchorA();
+	return GetBodyA()->GetLocalPoint(((b2WeldJoint*) mJoint)->GetAnchorA());
 }
-b2Vec2 WeldJoint::GetAnchorB() const
+b2Vec2 WeldJoint::GetAnchorRelativeToBodyB() const
 {
-	return ((b2WeldJoint*) mJoint)->GetAnchorB();
+	return GetBodyB()->GetLocalPoint(((b2WeldJoint*)mJoint)->GetAnchorB());
 }
 
 void WeldJoint::SetFrequencyHz(float frequencyHz)

@@ -48,4 +48,6 @@ public:
 	// Accesseurs
 	float GetMaxLength() const;
 	void SetMaxLength(float maxLenght);
+	b2Vec2 GetRelativeAnchorA() const;
+	b2Vec2 GetRelativeAnchorB() const;
 };

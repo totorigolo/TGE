@@ -25,6 +25,7 @@ void LuaMachine::RegisterInputManager()
 				.def("SetZoom", &InputManager::SetZoom)
 				.def("SetCenter", &InputManager::SetCenter)
 				.def("GetCurrentZoom", &InputManager::GetCurrentZoom)
+				.def("GetCurrentCenter", &InputManager::GetCurrentZoom)
 				// Evènements
 				.def("IsKeyPressed", &InputManager::IsKeyPressed)
 				.def("GetMousePos", &InputManager::GetMousePos)

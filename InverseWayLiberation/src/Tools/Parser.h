@@ -43,6 +43,9 @@ namespace Parser
 	// Transforme un unsigned int en string
 	std::string uintToString(unsigned int n);
 
+	// Transforme un boolean en string
+	std::string boolToString(bool b);
+
 	// Transforme un float en string
 	// nbOfDecimals définit le nb de chiffres après la virgule (-1 = toutes)
 	std::string floatToString(float n, int nbOfDecimals = -1);

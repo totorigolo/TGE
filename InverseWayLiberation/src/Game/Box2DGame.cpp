@@ -36,7 +36,6 @@ Box2DGame::Box2DGame(sf::RenderWindow & window)
 
 	// Grapin de test
 	//mGrapnel = new Grapnel(-1);
-	//EntityManager::GetInstance().RegisterEntity(mGrapnel);
 }
 
 // Dtor
@@ -284,7 +283,6 @@ void Box2DGame::OnEvent()
 		if (!mGrapnel)
 		{
 			mGrapnel = new Grapnel(-1);
-			EntityManager::GetInstance().RegisterEntity(mGrapnel);
 		}
 
 		// Si le grapin est déjà accroché, on le décroche

@@ -93,6 +93,18 @@ sf::Vector2<T> operator/(sf::Vector2<T> a, sf::Vector2<T> b)
 	return sf::Vector2<T>(a.x / b.x, a.y / b.y);
 }
 
+// Surcharges d'opérateurs pour les b2Vec2
+template<typename T>
+b2Vec2 operator*(b2Vec2 a, T b)
+{
+	return b2Vec2(a.x * b, a.y * b);
+}
+template<typename T>
+b2Vec2 operator/(b2Vec2 a, T b)
+{
+	return b2Vec2(a.x / b, a.y / b);
+}
+
 // Convertion sf::Vector <> b2Vec2 (avec inversion y)
 inline b2Vec2 sf2b2Vec(sf::Vector2f const& vector, float mpp)
 {

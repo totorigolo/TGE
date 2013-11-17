@@ -226,3 +226,8 @@ const float BasicBody::GetRotation() const
 {
 	return mBody->GetAngle() * DPR;
 }
+// Fonction à n'employer que pour éditer les niveaux
+void BasicBody::SetTransform(const b2Vec2 &position, float angle)
+{
+	mBody->SetTransform(position, angle);
+}

@@ -52,8 +52,8 @@ public:
 	float GetLength() const;
 	float GetFrequencyHz() const;
 	float GetDampingRatio() const;
-	b2Vec2 GetAnchorA() const;
-	b2Vec2 GetAnchorB() const;
+	b2Vec2 GetRelativeAnchorA() const;
+	b2Vec2 GetRelativeAnchorB() const;
 
 	void SetLength(float length);
 	void SetFrequencyHz(float frequencyHz);

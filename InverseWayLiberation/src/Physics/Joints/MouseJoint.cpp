@@ -60,7 +60,7 @@ b2Body const* MouseJoint::GetAttachedBody() const
 }
 b2Vec2 MouseJoint::GetAnchor() const
 {
-	return ((b2MouseJoint*) mJoint)->GetAnchorB();
+	return ((b2MouseJoint*)mJoint)->GetAnchorB();
 }
 b2Vec2 MouseJoint::GetTarget() const
 {

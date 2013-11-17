@@ -13,20 +13,21 @@ struct FrictionJointDef : public JointDef
 		point1.SetZero();
 		body2 = nullptr;
 		point2.SetZero();
-		maxForce = 0.f;
-		maxTorque = 0.f;
+		maxFrictionForce = 0.f;
+		maxFrictionTorque = 0.f;
 		collideconnected = true;
 	}
 	
 	// Initialisation
-	FrictionJointDef(b2Body *b1, b2Vec2 pt1, b2Body *b2, b2Vec2 pt2, float _maxForce = 0.f, float _maxTorque = 0.f, bool _collideconnected = true)
+	FrictionJointDef(b2Body *b1, b2Vec2 pt1, b2Body *b2, b2Vec2 pt2, float _maxFrictionForce = 0.f, float _maxFrictionTorque = 0.f,
+					 bool _collideconnected = true)
 	{
 		body1 = b1;
 		point1 = pt1;
 		body2 = b2;
 		point2 = pt2;
-		maxForce = _maxForce;
-		maxTorque = _maxTorque;
+		maxFrictionForce = _maxFrictionForce;
+		maxFrictionTorque = _maxFrictionTorque;
 		collideconnected = _collideconnected;
 	}
 	
@@ -35,8 +36,8 @@ struct FrictionJointDef : public JointDef
 	b2Vec2 point1;
 	b2Body *body2;
 	b2Vec2 point2;
-	float maxForce;
-	float maxTorque;
+	float maxFrictionForce;
+	float maxFrictionTorque;
 	bool collideconnected;
 };
 
@@ -49,11 +50,11 @@ public:
 	virtual ~FrictionJoint(void);
 	
 	// Accesseurs
-	float GetMaxForce() const;
-	float GetMaxTorque() const;
-	b2Vec2 GetAnchorA() const;
-	b2Vec2 GetAnchorB() const;
+	float GetMaxFrictionForce() const;
+	float GetMaxFrictionTorque() const;
+	b2Vec2 GetRelativeAnchorA() const;
+	b2Vec2 GetRelativeAnchorB() const;
 	
-	void SetMaxForce(float maxForce);
-	void SetMaxTorque(float maxTorque);
+	void SetMaxFrictionForce(float maxForce);
+	void SetMaxFrictionTorque(float maxTorque);
 };

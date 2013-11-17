@@ -49,8 +49,8 @@ public:
 	float GetReferenceAngle() const;
 	float GetFrequencyHz() const;
 	float GetDampingRatio() const;
-	b2Vec2 GetAnchorA() const;
-	b2Vec2 GetAnchorB() const;
+	b2Vec2 GetAnchorRelativeToBodyA() const;
+	b2Vec2 GetAnchorRelativeToBodyB() const;
 
 	void SetFrequencyHz(float frequencyHz);
 	void SetDampingRatio(float damping);

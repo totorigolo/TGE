@@ -36,6 +36,11 @@ PrismaticJoint::~PrismaticJoint(void)
 }
 
 // Accesseurs
+b2Vec2 PrismaticJoint::GetAxis() const
+{
+	return ((b2PrismaticJoint*) mJoint)->GetLocalAxisA();
+}
+
 float PrismaticJoint::GetJointTranslation() const
 {
 	return ((b2PrismaticJoint*) mJoint)->GetJointTranslation() * DPR;
@@ -78,11 +83,11 @@ float PrismaticJoint::GetMotorSpeed() const
 }
 b2Vec2 PrismaticJoint::GetAnchorRelativeToBodyA() const
 {
-	return ((b2PrismaticJoint*) mJoint)->GetAnchorA();
+	return GetBodyA()->GetLocalPoint(((b2PrismaticJoint*)mJoint)->GetAnchorA());
 }
 b2Vec2 PrismaticJoint::GetAnchorRelativeToBodyB() const
 {
-	return ((b2PrismaticJoint*) mJoint)->GetAnchorB();
+	return GetBodyB()->GetLocalPoint(((b2PrismaticJoint*)mJoint)->GetAnchorB());
 }
 
 

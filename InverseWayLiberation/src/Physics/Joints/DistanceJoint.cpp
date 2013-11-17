@@ -49,13 +49,13 @@ float DistanceJoint::GetDampingRatio() const
 {
 	return ((b2DistanceJoint*) mJoint)->GetDampingRatio();
 }
-b2Vec2 DistanceJoint::GetAnchorA() const
+b2Vec2 DistanceJoint::GetRelativeAnchorA() const
 {
-	return ((b2DistanceJoint*) mJoint)->GetAnchorA();
+	return GetBodyA()->GetLocalPoint(((b2DistanceJoint*) mJoint)->GetAnchorA());
 }
-b2Vec2 DistanceJoint::GetAnchorB() const
+b2Vec2 DistanceJoint::GetRelativeAnchorB() const
 {
-	return ((b2DistanceJoint*) mJoint)->GetAnchorB();
+	return GetBodyB()->GetLocalPoint(((b2DistanceJoint*) mJoint)->GetAnchorB());
 }
 
 void DistanceJoint::SetLength(float length)

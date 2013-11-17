@@ -36,13 +36,15 @@ public:
 	Entity* GetOwner() { return mOwner; }
 	const Entity* GetOwner() const { return mOwner; }
 
+private:
+	friend class EntityManager;
+
+	// Identifiant (uniques)
+	unsigned int mID;
+
 protected:
 	// Etat
 	bool mIsAlive;
-
-	// Identifiant
-	// Les ID ne sont pas uniques. 0 est l'ID par défaut
-	unsigned int mID;
 
 	// Propriétés
 	int mLayer;

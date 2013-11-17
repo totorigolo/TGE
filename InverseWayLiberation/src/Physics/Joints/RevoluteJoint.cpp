@@ -4,30 +4,6 @@
 #include "../../Tools/Error.h"
 
 //Ctor
-RevoluteJoint::RevoluteJoint(RevoluteJointDef &&def)
-{
-	myAssert(def.body1, "Le b2Body n'existe pas.");
-	myAssert(def.body2, "Le b2Body n'existe pas.");
-	
-	mPhysicMgr.RegisterJoint(this);
-
-	b2RevoluteJointDef jointDef;
-	jointDef.Initialize(def.body1, def.body2, def.body1->GetWorldPoint(def.anchor));
-	jointDef.collideConnected = def.collideconnected;
-	jointDef.enableLimit = def.enableLimit;
-	jointDef.lowerAngle = def.lowerAngle * RPD;
-	jointDef.upperAngle = def.upperAngle * RPD;
-	jointDef.enableMotor = def.enableMotor;
-	jointDef.motorSpeed = def.motorSpeed * RPD;
-	jointDef.maxMotorTorque = def.maxMotorTorque;
-	mJoint = mPhysicMgr.Createb2Joint(&jointDef);
-	mJoint->SetUserData(this);
-		
-	mIsAlive = true;
-	
-	def.body1->SetAwake(true);
-	def.body2->SetAwake(true);
-}
 RevoluteJoint::RevoluteJoint(const RevoluteJointDef &def)
 {
 	myAssert(def.body1, "Le b2Body n'existe pas.");
@@ -73,6 +49,10 @@ bool RevoluteJoint::IsCollideConnected() const
 {
 	return ((b2RevoluteJoint*) mJoint)->GetCollideConnected();
 }
+float RevoluteJoint::GetReferenceAngle() const
+{
+	return ((b2RevoluteJoint*) mJoint)->GetReferenceAngle();
+}
 bool RevoluteJoint::IsLimitEnabled() const
 {
 	return ((b2RevoluteJoint*) mJoint)->IsLimitEnabled();
@@ -84,6 +64,14 @@ float RevoluteJoint::GetLowerAngle() const
 float RevoluteJoint::GetUpperAngle() const
 {
 	return ((b2RevoluteJoint*) mJoint)->GetUpperLimit() * DPR;
+}
+float RevoluteJoint::GetLowerAngleRad() const
+{
+	return ((b2RevoluteJoint*)mJoint)->GetLowerLimit();
+}
+float RevoluteJoint::GetUpperAngleRad() const
+{
+	return ((b2RevoluteJoint*)mJoint)->GetUpperLimit();
 }
 bool RevoluteJoint::IsMotorEnabled() const
 {
@@ -99,15 +87,19 @@ float RevoluteJoint::GetMaxMotorTorque() const
 }
 float RevoluteJoint::GetMotorSpeed() const
 {
-	return ((b2RevoluteJoint*) mJoint)->GetMotorSpeed();
+	return ((b2RevoluteJoint*) mJoint)->GetMotorSpeed() * DPR;
+}
+float RevoluteJoint::GetMotorSpeedRad() const
+{
+	return ((b2RevoluteJoint*)mJoint)->GetMotorSpeed();
 }
 b2Vec2 RevoluteJoint::GetAnchorRelativeToBodyA() const
 {
-	return ((b2RevoluteJoint*) mJoint)->GetAnchorA();
+	return GetBodyA()->GetLocalPoint(((b2RevoluteJoint*) mJoint)->GetAnchorA());
 }
 b2Vec2 RevoluteJoint::GetAnchorRelativeToBodyB() const
 {
-	return ((b2RevoluteJoint*) mJoint)->GetAnchorB();
+	return GetBodyB()->GetLocalPoint(((b2RevoluteJoint*)mJoint)->GetAnchorB());
 }
 
 void RevoluteJoint::SetLimitEnabled(bool enableLimit)

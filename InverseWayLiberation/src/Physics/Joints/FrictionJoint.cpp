@@ -16,8 +16,8 @@ FrictionJoint::FrictionJoint(const FrictionJointDef &def)
 	jointDef.bodyB = def.body2;
 	jointDef.localAnchorA = def.point1;
 	jointDef.localAnchorB = def.point2;
-	jointDef.maxForce = def.maxForce;
-	jointDef.maxTorque = def.maxTorque;
+	jointDef.maxForce = def.maxFrictionForce;
+	jointDef.maxTorque = def.maxFrictionTorque;
 	jointDef.collideConnected = def.collideconnected;
 	mJoint = mPhysicMgr.Createb2Joint(&jointDef);
 	mJoint->SetUserData(this);
@@ -35,29 +35,29 @@ FrictionJoint::~FrictionJoint(void)
 }
 
 // Accesseurs
-float FrictionJoint::GetMaxForce() const
+float FrictionJoint::GetMaxFrictionForce() const
 {
 	return ((b2FrictionJoint*) mJoint)->GetMaxForce();
 }
-float FrictionJoint::GetMaxTorque() const
+float FrictionJoint::GetMaxFrictionTorque() const
 {
 	return ((b2FrictionJoint*) mJoint)->GetMaxTorque();
 }
-b2Vec2 FrictionJoint::GetAnchorA() const
+b2Vec2 FrictionJoint::GetRelativeAnchorA() const
 {
-	return ((b2FrictionJoint*) mJoint)->GetAnchorA();
+	return GetBodyA()->GetLocalPoint(((b2FrictionJoint*) mJoint)->GetAnchorA());
 }
-b2Vec2 FrictionJoint::GetAnchorB() const
+b2Vec2 FrictionJoint::GetRelativeAnchorB() const
 {
-	return ((b2FrictionJoint*) mJoint)->GetAnchorB();
+	return GetBodyB()->GetLocalPoint(((b2FrictionJoint*)mJoint)->GetAnchorB());
 }
 
 
-void FrictionJoint::SetMaxForce(float maxForce)
+void FrictionJoint::SetMaxFrictionForce(float maxForce)
 {
 	((b2FrictionJoint*) mJoint)->SetMaxForce(maxForce);
 }
-void FrictionJoint::SetMaxTorque(float maxTorque)
+void FrictionJoint::SetMaxFrictionTorque(float maxTorque)
 {
 	((b2FrictionJoint*) mJoint)->SetMaxTorque(maxTorque);
 }

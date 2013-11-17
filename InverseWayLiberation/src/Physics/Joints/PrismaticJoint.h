@@ -63,6 +63,8 @@ public:
 	virtual ~PrismaticJoint(void);
 	
 	// Accesseurs
+	b2Vec2 GetAxis() const;
+
 	float GetJointTranslation() const;
 	float GetJointSpeed() const;
 	bool IsCollideConnected() const;

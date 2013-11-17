@@ -42,13 +42,13 @@ float PulleyJoint::GetLenghtB() const
 {
 	return ((b2PulleyJoint*) mJoint)->GetLengthB();
 }
-b2Vec2 PulleyJoint::GetAnchorA() const
+b2Vec2 PulleyJoint::GetRelativeAnchorA() const
 {
-	return ((b2PulleyJoint*) mJoint)->GetAnchorA();
+	return GetBodyA()->GetLocalPoint(((b2PulleyJoint*) mJoint)->GetAnchorA());
 }
-b2Vec2 PulleyJoint::GetAnchorB() const
+b2Vec2 PulleyJoint::GetRelativeAnchorB() const
 {
-	return ((b2PulleyJoint*) mJoint)->GetAnchorB();
+	return GetBodyB()->GetLocalPoint(((b2PulleyJoint*)mJoint)->GetAnchorB());
 }
 b2Vec2 PulleyJoint::GetGroundAnchorA() const
 {

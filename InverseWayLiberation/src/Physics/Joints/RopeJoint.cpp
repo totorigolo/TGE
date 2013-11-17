@@ -44,3 +44,11 @@ void RopeJoint::SetMaxLength(float maxLenght)
 	GetBodyB()->SetAwake(true);
 	((b2RopeJoint*) mJoint)->SetMaxLength(maxLenght);
 }
+b2Vec2 RopeJoint::GetRelativeAnchorA() const
+{
+	return GetBodyA()->GetLocalPoint(((b2RopeJoint*)mJoint)->GetAnchorA());
+}
+b2Vec2 RopeJoint::GetRelativeAnchorB() const
+{
+	return GetBodyB()->GetLocalPoint(((b2RopeJoint*)mJoint)->GetAnchorB());
+}

@@ -59,6 +59,7 @@ public:
 	float GetDefaultZoom() const;
 	float GetCurrentZoom() const;
 	const sf::View& GetView() const;
+	const sf::Vector2f& GetCurrentCenter() const;
 	const sf::Vector2f& GetDefaultCenter() const;
 	
 	sf::RenderWindow* GetWindow();

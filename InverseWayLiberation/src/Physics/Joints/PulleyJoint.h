@@ -55,8 +55,8 @@ public:
 	float GetRatio() const;
 	float GetLenghtA() const; // Never let Pulley have lenght == 0 !
 	float GetLenghtB() const;
-	b2Vec2 GetAnchorA() const;
-	b2Vec2 GetAnchorB() const;
+	b2Vec2 GetRelativeAnchorA() const;
+	b2Vec2 GetRelativeAnchorB() const;
 	b2Vec2 GetGroundAnchorA() const;
 	b2Vec2 GetGroundAnchorB() const;
 };

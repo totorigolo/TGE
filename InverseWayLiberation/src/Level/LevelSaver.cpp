@@ -11,6 +11,17 @@
 #include "../Entities/LivingBeing.h"
 #include "../Entities/EntityManager.h"
 
+#include "../Physics/Joint.h"
+#include "../Physics/Joints/RopeJoint.h"
+#include "../Physics/Joints/WeldJoint.h"
+#include "../Physics/Joints/GearJoint.h"
+#include "../Physics/Joints/WheelJoint.h"
+#include "../Physics/Joints/PulleyJoint.h"
+#include "../Physics/Joints/DistanceJoint.h"
+#include "../Physics/Joints/FrictionJoint.h"
+#include "../Physics/Joints/RevoluteJoint.h"
+#include "../Physics/Joints/PrismaticJoint.h"
+
 // Ctor
 LevelSaver::LevelSaver(const LevelManager &level, const std::string& path)
 	: Saver(path), mLevel(level), mPath(path),
@@ -66,12 +77,18 @@ bool LevelSaver::ProcessWorld()
 	// Crée la balise <world>
 	tinyxml2::XMLElement *world = mDoc.NewElement("world");
 
+	// Vue et zoom enregistrés
+	//sf::Vector2f centreVue = mInputManager.GetDefaultCenter();
+	sf::Vector2f centreVue = mInputManager.GetCurrentCenter();
+	//float zoom = mInputManager.GetDefaultZoom();
+	float zoom = mInputManager.GetCurrentZoom();
+
 	// Crée les attributs
 	world->SetAttribute("gravity", Parser::b2Vec2ToString(mPhysicManager.GetGravity()).c_str());
 	world->SetAttribute("PPM", mLevel.mPhysicMgr.GetPPM());
 	world->SetAttribute("bckgcolor", Parser::colorToString(mLevel.mBckgC).c_str());
-	world->SetAttribute("originview", Parser::b2Vec2ToString(sf2b2Vec(mInputManager.GetDefaultCenter(), mPhysicManager.GetMPP())).c_str());
-	world->SetAttribute("defaultzoom", mInputManager.GetDefaultZoom());
+	world->SetAttribute("originview", Parser::b2Vec2ToString(sf2b2Vec(centreVue, mPhysicManager.GetMPP())).c_str());
+	world->SetAttribute("defaultzoom", zoom);
 	
 	// Ajoute <world> à <level>
 	level->LinkEndChild(world);
@@ -139,7 +156,7 @@ bool LevelSaver::ProcessBasicBodies()
 			else
 			{
 				Dialog::Error("Erreur lors de la sauvegarde :\nBasicBody::Type == Null");
-				type = "null";
+				continue;
 			}
 			
 			// Récupère le nom de la texture
@@ -154,8 +171,12 @@ bool LevelSaver::ProcessBasicBodies()
 			// Cherche la position et la rotation
 			b2Vec2 pos(bb->GetPosition());
 			float rotation = bb->GetRotation();
-			if (abs(rotation - 90) < 0.5) rotation = 90.f;
-			else if (abs(rotation) < 0.5) rotation = 0.f;
+			if (abs(rotation - 90) < 0.05) rotation = 90.f;
+			else if (abs(rotation) < 0.05) rotation = 0.f;
+
+			// Récupère l'état
+			b2Vec2 linvel = bb->GetBody()->GetLinearVelocity();
+			float angvel = bb->GetBody()->GetAngularVelocity();
 
 			// Vérifie que le BasicBody n'a qu'une Fixture
 			b2Fixture *f = bb->GetBody()->GetFixtureList();
@@ -170,12 +191,20 @@ bool LevelSaver::ProcessBasicBodies()
 			float friction = f->GetFriction();
 			float restitution = f->GetRestitution();
 
+			// Récupère les propriétés de groupe
+			b2Filter filter = f->GetFilterData();
+			int16 groupIndex = filter.groupIndex;
+			uint16 categoryBits = filter.categoryBits;
+			uint16 maskBits = filter.maskBits;
+
 			// Crée la balise <name>
 			tinyxml2::XMLElement *balise = mDoc.NewElement(type.c_str());
 			if (id != 0) balise->SetAttribute("id", id);
 			balise->SetAttribute("texture", textureName.c_str());
 			balise->SetAttribute("pos", Parser::b2Vec2ToString(pos).c_str());
 			if (rotation != 0.f) balise->SetAttribute("rotation", rotation);
+			if (linvel.Length() != 0.f) balise->SetAttribute("linvel", Parser::b2Vec2ToString(linvel).c_str());
+			if (angvel != 0.f) balise->SetAttribute("angvel", angvel);
 			if (type != "staticbox" && density != 1.f) balise->SetAttribute("density", density);
 			if (friction != 0.2f) balise->SetAttribute("friction", friction);
 			if (restitution != 0.f) balise->SetAttribute("restitution", restitution);
@@ -185,7 +214,11 @@ bool LevelSaver::ProcessBasicBodies()
 				balise->SetAttribute("bullet", true);
 			else if (bb->GetCollisionType() == BasicBody::CollisionType::OneSidedPlatform)
 				balise->SetAttribute("osp", true);
-			
+
+			if (groupIndex != 0) balise->SetAttribute("groupIndex", groupIndex);
+			if (categoryBits != 0x0001) balise->SetAttribute("categoryBits", categoryBits);
+			if (maskBits != 0xFFFF) balise->SetAttribute("maskBits", maskBits);
+
 			// Ajoute la balise à <basicbodies>
 			basicbodies->LinkEndChild(balise);
 		}
@@ -263,7 +296,7 @@ bool LevelSaver::ProcessEntities()
 }
 bool LevelSaver::ProcessJoints()
 {
-	/*/ Récupère la balise <level>
+	// Récupère la balise <level>
 	tinyxml2::XMLHandle handle(mDoc);
 	tinyxml2::XMLNode *level = handle.FirstChildElement("level").ToNode();
 
@@ -276,73 +309,270 @@ bool LevelSaver::ProcessJoints()
 	// Parcours tous les Joints
 	for (auto it = mLevel.mPhysicMgr.GetJointList().begin(); it != mLevel.mPhysicMgr.GetJointList().end(); ++it)
 	{
-		// Vérifie le type de l'Entity
-		if ((*it)->GetType() == EntityType::BasicBody)
+		Joint *j = ((Joint*) it->second.get());
+
+		// Récupère l'ID
+		unsigned int id = j->GetID();
+
+		// Récupère les propriétés de cassure
+		bool isBreakableMaxForce = j->IsBreakableMaxForce();//(false);
+		ForceType maxForceType = j->GetMaxForceType();//(ForceType::Null);
+		float maxForce = j->GetMaxForce();//(0.f);
+		b2Vec2 maxVecForce = j->GetMaxVecForce();//b2Vec2_Zero
+		bool isBreakableMaxTorque = j->IsBreakableMaxTorque();//(false);
+		float maxTorque = j->GetMaxTorque();//(0.f);
+
+		// Récupères les propriétés du joint
+		unsigned int body1 = ((Entity*) j->GetBodyA()->GetUserData())->GetID();
+		unsigned int body2 = ((Entity*)j->GetBodyB()->GetUserData())->GetID();
+		bool collideConnected = j->IsCollideConnected();
+
+		// Gère tous les types de Joints
+		if (j->GetType() == JointType::DistanceJoint)
 		{
-			BasicBody *bb = ((BasicBody*) *it);
+			DistanceJoint *dj = ((DistanceJoint*) j);
 
-			// Définit le nom de la balise
-			std::string type;
-			if (bb->GetBasicBodyType() == BasicBody::Type::DynamicBox)
-				type = "dynamicbox";
-			else if (bb->GetBasicBodyType() == BasicBody::Type::DynamicCircle)
-				type = "dynamiccircle";
-			else if (bb->GetBasicBodyType() == BasicBody::Type::StaticBox)
-				type = "staticbox";
-			else
-			{
-				Dialog::Error("Erreur lors de la sauvegarde :\nBasicBody::Type == Null");
-				type = "null";
-			}
-			
-			// Récupère le nom de la texture
-			std::string textureName(((Texture*) bb->GetSprite()->getTexture())->GetName());
-
-			// Récupère l'ID
-			unsigned int id = bb->GetID();
-
-			// Récupère la Layer
-			int layer = bb->GetLayer();
-
-			// Cherche la position et la rotation
-			b2Vec2 pos(bb->GetPosition());
-			float rotation = bb->GetRotation();
-			if (abs(rotation - 90) < 0.5) rotation = 90.f;
-			else if (abs(rotation) < 0.5) rotation = 0.f;
-
-			// Vérifie que le BasicBody n'a qu'une Fixture
-			b2Fixture *f = bb->GetBody()->GetFixtureList();
-			if (f->GetNext())
-			{
-				Dialog::Error("Erreur lors de la sauvegarde : \nLe BasicBody a plusieurs fixtures.");
-				continue;
-			}
+			// Récupère les points d'ancrage
+			b2Vec2 pt1 = dj->GetRelativeAnchorA();
+			b2Vec2 pt2 = dj->GetRelativeAnchorB();
 
 			// Récupère les propriétés
-			float density = f->GetDensity();
-			float friction = f->GetFriction();
-			float restitution = f->GetRestitution();
+			float frequency = dj->GetFrequencyHz();
+			float damping = dj->GetDampingRatio();
 
-			// Crée la balise <name>
-			tinyxml2::XMLElement *balise = mDoc.NewElement(type.c_str());
-			if (id != 0) balise->SetAttribute("id", id);
-			balise->SetAttribute("texture", textureName.c_str());
-			balise->SetAttribute("pos", Parser::b2Vec2ToString(pos).c_str());
-			if (rotation != 0.f) balise->SetAttribute("rotation", rotation);
-			if (type != "staticbox" && density != 1.f) balise->SetAttribute("density", density);
-			if (friction != 0.2f) balise->SetAttribute("friction", friction);
-			if (restitution != 0.f) balise->SetAttribute("restitution", restitution);
-			if (layer != 1) balise->SetAttribute("layer", layer);
+			// Crée la balise <distance>
+			tinyxml2::XMLElement *balise = mDoc.NewElement("distance");
+			balise->SetAttribute("body1", body1);
+			balise->SetAttribute("pt1", Parser::b2Vec2ToString(pt1).c_str());
+			balise->SetAttribute("body2", body2);
+			balise->SetAttribute("pt2", Parser::b2Vec2ToString(pt2).c_str());
+			if (frequency != 4.0f) balise->SetAttribute("frequency", frequency);
+			if (damping != 0.5f) balise->SetAttribute("damping", damping);
+			if (collideConnected != true) balise->SetAttribute("collision", "false");
 
-			if (bb->GetCollisionType() == BasicBody::CollisionType::Bullet)
-				balise->SetAttribute("bullet", true);
-			else if (bb->GetCollisionType() == BasicBody::CollisionType::OneSidedPlatform)
-				balise->SetAttribute("osp", true);
-			
-			// Ajoute la balise à <basicbodies>
-			basicbodies->LinkEndChild(balise);
+			// Ajoute la balise à <joints>
+			joints->LinkEndChild(balise);
 		}
-	}*/
+		else if (j->GetType() == JointType::FrictionJoint)
+		{
+			FrictionJoint *fj = ((FrictionJoint*)j);
+
+			// Récupère les points d'ancrage
+			b2Vec2 pt1 = fj->GetRelativeAnchorA();
+			b2Vec2 pt2 = fj->GetRelativeAnchorB();
+
+			// Récupère les propriétés
+			float maxFrictionForce = fj->GetMaxFrictionForce();
+			float maxFrictionTorque = fj->GetMaxFrictionTorque();
+
+			// Crée la balise <friction>
+			tinyxml2::XMLElement *balise = mDoc.NewElement("friction");
+			balise->SetAttribute("body1", body1);
+			balise->SetAttribute("pt1", Parser::b2Vec2ToString(pt1).c_str());
+			balise->SetAttribute("body2", body2);
+			balise->SetAttribute("pt2", Parser::b2Vec2ToString(pt2).c_str());
+			if (maxFrictionForce != 0.f) balise->SetAttribute("maxFrictionForce", maxFrictionForce);
+			if (maxFrictionTorque != 0.f) balise->SetAttribute("maxFrictionTorque", maxFrictionTorque);
+			if (collideConnected != true) balise->SetAttribute("collision", "false");
+
+			// Ajoute la balise à <joints>
+			joints->LinkEndChild(balise);
+		}
+		else if (j->GetType() == JointType::GearJoint)
+		{
+			GearJoint *gj = ((GearJoint*)j);
+
+			// Récupère les points d'ancrage
+			int j1 = ((Joint*) gj->GetJoint1()->GetUserData())->GetID();
+			int j2 = ((Joint*) gj->GetJoint2()->GetUserData())->GetID();
+
+			// Récupère les propriétés
+			float ratio = gj->GetRatio();
+
+			// Crée la balise <gear>
+			tinyxml2::XMLElement *balise = mDoc.NewElement("gear");
+			balise->SetAttribute("body1", body1);
+			balise->SetAttribute("body2", body2);
+			balise->SetAttribute("joint1", j1);
+			balise->SetAttribute("joint2", j2);
+			if (ratio != 1.f) balise->SetAttribute("ratio", ratio);
+			if (collideConnected != true) balise->SetAttribute("collision", "false");
+
+			// Ajoute la balise à <joints>
+			joints->LinkEndChild(balise);
+		}
+		else if (j->GetType() == JointType::PrismaticJoint)
+		{
+			PrismaticJoint *pj = ((PrismaticJoint*)j);
+
+			// Récupère le point d'ancrage
+			b2Vec2 anchor = pj->GetAnchorRelativeToBodyA();
+
+			// Récupère les propriétés
+			b2Vec2 axis = pj->GetAxis();
+			bool enableLimit = pj->IsLimitEnabled();
+			float lowerTranslation = pj->GetLowerTranslation();
+			float upperTranslation = pj->GetUpperTranslation();
+			bool enableMotor = pj->IsMotorEnabled();
+			float motorSpeed = pj->GetMotorSpeed();
+			float maxMotorForce = pj->GetMaxMotorForce();
+
+			// Crée la balise <prismatic>
+			tinyxml2::XMLElement *balise = mDoc.NewElement("prismatic");
+			balise->SetAttribute("body1", body1);
+			balise->SetAttribute("anchor", Parser::b2Vec2ToString(anchor).c_str());
+			balise->SetAttribute("body2", body2);
+			balise->SetAttribute("axis", Parser::b2Vec2ToString(axis).c_str());
+			if (enableLimit != false) balise->SetAttribute("enableLimit", "true");
+			if (lowerTranslation != 0.f) balise->SetAttribute("lower", lowerTranslation);
+			if (upperTranslation != 0.f) balise->SetAttribute("upper", upperTranslation);
+			if (enableMotor != false) balise->SetAttribute("enableMotor", "true");
+			if (motorSpeed != 0.f) balise->SetAttribute("speed", motorSpeed);
+			if (maxMotorForce != 10.f) balise->SetAttribute("maxMotorForce", maxMotorForce);
+			if (collideConnected != false) balise->SetAttribute("collision", "true");
+
+			// Ajoute la balise à <joints>
+			joints->LinkEndChild(balise);
+		}
+		else if (j->GetType() == JointType::PulleyJoint)
+		{
+			PulleyJoint *pj = ((PulleyJoint*)j);
+
+			// Récupère les points d'ancrage
+			b2Vec2 pt1 = pj->GetRelativeAnchorA();
+			b2Vec2 pt2 = pj->GetRelativeAnchorB();
+			b2Vec2 gpt1 = pj->GetGroundAnchorA();
+			b2Vec2 gpt2 = pj->GetGroundAnchorB();
+
+			// Récupère les propriétés
+			float ratio = pj->GetRatio();
+
+			// Crée la balise <pulley>
+			tinyxml2::XMLElement *balise = mDoc.NewElement("pulley");
+			balise->SetAttribute("body1", body1);
+			balise->SetAttribute("pt1", Parser::b2Vec2ToString(pt1).c_str());
+			balise->SetAttribute("body2", body2);
+			balise->SetAttribute("pt2", Parser::b2Vec2ToString(pt2).c_str());
+			balise->SetAttribute("groundpt1", Parser::b2Vec2ToString(gpt1).c_str());
+			balise->SetAttribute("groundpt2", Parser::b2Vec2ToString(gpt2).c_str());
+			if (ratio != 1.0f) balise->SetAttribute("ratio", ratio);
+			if (collideConnected != true) balise->SetAttribute("collision", "false");
+
+			// Ajoute la balise à <joints>
+			joints->LinkEndChild(balise);
+		}
+		else if (j->GetType() == JointType::RevoluteJoint)
+		{
+			RevoluteJoint *rj = ((RevoluteJoint*)j);
+
+			// Récupère le point d'ancrage
+			b2Vec2 anchor = rj->GetAnchorRelativeToBodyA();
+
+			// Récupère l'état
+			float referenceAngle = rj->GetReferenceAngle();
+
+			// Récupère les propriétés
+			bool enableLimit = rj->IsLimitEnabled();
+			float lowerAngle = rj->GetLowerAngle();
+			float upperAngle = rj->GetUpperAngle();
+			bool enableMotor = rj->IsMotorEnabled();
+			float motorSpeed = rj->GetMotorSpeed();
+			float maxMotorTorque = rj->GetMaxMotorTorque();
+
+			// Crée la balise <revolute>
+			tinyxml2::XMLElement *balise = mDoc.NewElement("revolute");
+			balise->SetAttribute("body1", body1);
+			balise->SetAttribute("anchor", Parser::b2Vec2ToString(anchor).c_str());
+			balise->SetAttribute("body2", body2);
+			if (enableLimit != false) balise->SetAttribute("enableLimit", "true");
+			if (lowerAngle != 0.f) balise->SetAttribute("lower", lowerAngle);
+			if (upperAngle != 0.f) balise->SetAttribute("upper", upperAngle);
+			if (enableMotor != false) balise->SetAttribute("enableMotor", "true");
+			if (motorSpeed != 0.f) balise->SetAttribute("speed", motorSpeed);
+			if (maxMotorTorque != 10.f) balise->SetAttribute("maxMotorTorque", maxMotorTorque);
+			if (collideConnected != false) balise->SetAttribute("collision", "true");
+
+			// Ajoute la balise à <joints>
+			joints->LinkEndChild(balise);
+		}
+		else if (j->GetType() == JointType::RopeJoint)
+		{
+			RopeJoint *rj = ((RopeJoint*)j);
+
+			// Récupère les points d'ancrage
+			b2Vec2 pt1 = rj->GetRelativeAnchorA();
+			b2Vec2 pt2 = rj->GetRelativeAnchorB();
+
+			// Récupère les propriétés
+			float maxLength = rj->GetMaxLength();
+
+			// Crée la balise <rope>
+			tinyxml2::XMLElement *balise = mDoc.NewElement("rope");
+			balise->SetAttribute("body1", body1);
+			balise->SetAttribute("pt1", Parser::b2Vec2ToString(pt1).c_str());
+			balise->SetAttribute("body2", body2);
+			balise->SetAttribute("pt2", Parser::b2Vec2ToString(pt2).c_str());
+			balise->SetAttribute("maxLength", maxLength);
+			if (collideConnected != true) balise->SetAttribute("collision", "false");
+
+			// Ajoute la balise à <joints>
+			joints->LinkEndChild(balise);
+		}
+		else if (j->GetType() == JointType::WeldJoint)
+		{
+			WeldJoint *wj = ((WeldJoint*)j);
+
+			// Récupère les points d'ancrage
+			b2Vec2 anchor = wj->GetAnchorRelativeToBodyA();
+
+			// Récupère les propriétés
+			float frequency = wj->GetFrequencyHz();
+			float damping = wj->GetDampingRatio();
+
+			// Crée la balise <weld>
+			tinyxml2::XMLElement *balise = mDoc.NewElement("weld");
+			balise->SetAttribute("body1", body1);
+			balise->SetAttribute("anchor", Parser::b2Vec2ToString(anchor).c_str());
+			balise->SetAttribute("body2", body2);
+			if (frequency != 4.0f) balise->SetAttribute("frequency", frequency);
+			if (damping != 0.5f) balise->SetAttribute("damping", damping);
+			if (collideConnected != false) balise->SetAttribute("collision", "true");
+
+			// Ajoute la balise à <joints>
+			joints->LinkEndChild(balise);
+		}
+		else if (j->GetType() == JointType::WheelJoint)
+		{
+			WheelJoint *wj = ((WheelJoint*)j);
+
+			// Récupère les points d'ancrage
+			b2Vec2 anchor = wj->GetAnchorRelativeToBodyA();
+
+			// Récupère les propriétés
+			b2Vec2 axis = wj->GetAxis();
+			float frequency = wj->GetFrequencyHz();
+			float damping = wj->GetDampingRatio();
+			bool enableMotor = wj->IsMotorEnabled();
+			float motorSpeed = wj->GetMotorSpeed();
+			float maxMotorTorque = wj->GetMaxMotorTorque();
+
+			// Crée la balise <wheel>
+			tinyxml2::XMLElement *balise = mDoc.NewElement("wheel");
+			balise->SetAttribute("body1", body1);
+			balise->SetAttribute("anchor", Parser::b2Vec2ToString(anchor).c_str());
+			balise->SetAttribute("body2", body2);
+			balise->SetAttribute("axis", Parser::b2Vec2ToString(axis).c_str());
+			if (frequency != 4.0f) balise->SetAttribute("frequency", frequency);
+			if (damping != 0.5f) balise->SetAttribute("damping", damping);
+			if (enableMotor != false) balise->SetAttribute("enableMotor", "true");
+			if (motorSpeed != 0.f) balise->SetAttribute("speed", motorSpeed);
+			if (maxMotorTorque != 10.f) balise->SetAttribute("maxMotorForce", maxMotorTorque);
+			if (collideConnected != false) balise->SetAttribute("collision", "true");
+
+			// Ajoute la balise à <joints>
+			joints->LinkEndChild(balise);
+		}
+	}
 
 	// Tout s'est bien passé
 	return true;

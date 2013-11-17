@@ -178,10 +178,14 @@ bool LevelLoader::ProcessBasicBodies()
 	int layer = 1;
 	bool bullet = false, osp = false;
 	float density = 1.f, friction = 0.2f, restitution = 0.0f;
+	int16 groupIndex = 0;
+	uint16 categoryBits = 0x0001, maskBits = 0xFFFF;
 	float rotation = 0.f;
 	unsigned int id = 0U;
 	std::string texture, type;
 	b2Vec3 posRot;
+	b2Vec2 linvel; // Linear velocity
+	float angvel = 0.f; // Angular velocity
 
 	// Pour tous les bodies
 	tinyxml2::XMLElement *body = bodies.FirstChildElement().ToElement();
@@ -195,8 +199,13 @@ bool LevelLoader::ProcessBasicBodies()
 		density = 1.f;
 		friction = 0.2f;
 		restitution = 0.0f;
+		groupIndex = 0;
+		categoryBits = 0x0001;
+		maskBits = 0xFFFF;
 		osp = false;
 		bullet = false;
+		linvel = b2Vec2_zero;
+		angvel = 0.f;
 
 		// Récupère le type
 		type = body->Name();
@@ -221,6 +230,10 @@ bool LevelLoader::ProcessBasicBodies()
 		if (body->Attribute("pos")) posRot = Parser::stringToB2Vec3(body->Attribute("pos"));
 		posRot.z = rotation;
 
+		// Récupère l'état
+		if (body->Attribute("linvel")) linvel = Parser::stringToB2Vec2(body->Attribute("linvel"));
+		body->QueryFloatAttribute("angvel", &angvel);
+
 		// Récupère le layer
 		body->QueryIntAttribute("layer", &layer);
 
@@ -229,21 +242,42 @@ bool LevelLoader::ProcessBasicBodies()
 		body->QueryFloatAttribute("friction", &friction);
 		body->QueryFloatAttribute("restitution", &restitution);
 
+		// Récupère les propriétés de groupe
+		{
+			int tmp = 0;
+			body->QueryIntAttribute("groupIndex", &tmp);
+			groupIndex = static_cast<int16>(tmp);
+			tmp = 0x0001;
+			body->QueryIntAttribute("categoryBits", &tmp);
+			categoryBits = static_cast<uint16>(tmp);
+			tmp = 0xFFFF;
+			body->QueryIntAttribute("maskBits", &tmp);
+			maskBits = static_cast<uint16>(tmp);
+		}
+
 		// Crée le body
 		if (type == "staticbox")
 		{
 			bb = new BasicBody(layer, id);
-			bb->CreateStaticBox(posRot, mLevel.mResourceManager.GetTexture(texture), friction, restitution);
+			bb->CreateStaticBox(posRot, mLevel.mResourceManager.GetTexture(texture), friction, restitution, groupIndex, categoryBits, maskBits);
 		}
 		else if (type == "dynamicbox")
 		{
 			bb = new BasicBody(layer, id);
-			bb->CreateDynBox(posRot, mLevel.mResourceManager.GetTexture(texture), density, friction, restitution);
+			bb->CreateDynBox(posRot, mLevel.mResourceManager.GetTexture(texture), density, friction, restitution, groupIndex, categoryBits, maskBits);
+
+			// Restore l'état
+			bb->GetBody()->SetLinearVelocity(linvel);
+			bb->GetBody()->SetAngularVelocity(angvel);
 		}
 		else if (type == "dynamiccircle")
 		{
 			bb = new BasicBody(layer, id);
-			bb->CreateDynCircle(posRot, mLevel.mResourceManager.GetTexture(texture), density, friction, restitution);
+			bb->CreateDynCircle(posRot, mLevel.mResourceManager.GetTexture(texture), density, friction, restitution, groupIndex, categoryBits, maskBits);
+
+			// Restore l'état
+			bb->GetBody()->SetLinearVelocity(linvel);
+			bb->GetBody()->SetAngularVelocity(angvel);
 		}
 		else
 		{
@@ -253,9 +287,6 @@ bool LevelLoader::ProcessBasicBodies()
 		// Si le BasicBody a été créé
 		if (bb)
 		{
-			// Crée l'Entity correspondante
-			mLevel.mEntityManager.RegisterEntity(bb);
-
 			// Propriétés de collision
 			body->QueryBoolAttribute("osp", &osp);
 			body->QueryBoolAttribute("bullet", &bullet);
@@ -347,10 +378,6 @@ bool LevelLoader::ProcessEntities()
 			Dialog::Error("Entity type inconnu ("+ type +") !");
 		}
 
-		// Crée l'Entity correspondante
-		if (e)
-			mLevel.mEntityManager.RegisterEntity(e);
-
 		// On récupère la prochaine entity
 		entity = entity->NextSiblingElement();
 	}
@@ -366,7 +393,7 @@ bool LevelLoader::ProcessJoints()
 	// Vérifie que <joints> existe
 	if (!joints.ToElement())
 	{
-		// Il n'y a tout simplement pas de joint...
+		// Il n'y a tout simplement pas de joint.
 		return true;
 	}
 
@@ -420,11 +447,17 @@ bool LevelLoader::ProcessJoints()
 		if (mBodyIDMap.find(IDb1) == mBodyIDMap.end())
 		{
 			Dialog::Error("Le body #"+ Parser::uintToString(IDb1) +" est introuvable !");
+
+			// On récupère le prochain body
+			joint = joint->NextSiblingElement();
 			continue;
 		}
 		if (mBodyIDMap.find(IDb2) == mBodyIDMap.end())
 		{
-			Dialog::Error("Le body #"+ Parser::uintToString(IDb1) +" est introuvable !");
+			Dialog::Error("Le body #"+ Parser::uintToString(IDb2) +" est introuvable !");
+
+			// On récupère le prochain body
+			joint = joint->NextSiblingElement();
 			continue;
 		}
 		b1 = mBodyIDMap[IDb1];
@@ -475,6 +508,8 @@ bool LevelLoader::ProcessJoints()
 			DistanceJointDef def;
 			def.body1 = b1;
 			def.body2 = b2;
+			def.point1 = pt1;
+			def.point2 = pt2;
 			def.collideconnected = collision;
 
 			// Récupère les attributs
@@ -489,11 +524,13 @@ bool LevelLoader::ProcessJoints()
 			FrictionJointDef def;
 			def.body1 = b1;
 			def.body2 = b2;
+			def.point1 = pt1;
+			def.point2 = pt2;
 			def.collideconnected = collision;
 
 			// Récupère les attributs
-			joint->QueryFloatAttribute("maxForce", &def.maxForce);
-			joint->QueryFloatAttribute("maxTorque", &def.maxTorque);
+			joint->QueryFloatAttribute("maxFrictionForce", &def.maxFrictionForce);
+			joint->QueryFloatAttribute("maxFrictionTorque", &def.maxFrictionTorque);
 
 			// Crée le joint
 			j = new FrictionJoint(def);
@@ -503,6 +540,8 @@ bool LevelLoader::ProcessJoints()
 			RopeJointDef def;
 			def.body1 = b1;
 			def.body2 = b2;
+			def.point1 = pt1;
+			def.point2 = pt2;
 			def.collideconnected = collision;
 
 			// Récupère les attributs
@@ -516,6 +555,7 @@ bool LevelLoader::ProcessJoints()
 			WeldJointDef def;
 			def.body1 = b1;
 			def.body2 = b2;
+			def.anchor = anchor;
 			def.collideconnected = collision;
 
 			// Récupère les attributs
@@ -530,6 +570,8 @@ bool LevelLoader::ProcessJoints()
 			PulleyJointDef def;
 			def.body1 = b1;
 			def.body2 = b2;
+			def.point1 = pt1;
+			def.point2 = pt2;
 			def.collideconnected = collision;
 
 			// Récupère les attributs
@@ -545,16 +587,17 @@ bool LevelLoader::ProcessJoints()
 			PrismaticJointDef def;
 			def.body1 = b1;
 			def.body2 = b2;
+			def.anchor = anchor;
 			def.collideconnected = collision;
 
 			// Récupère les attributs
 			if (joint->Attribute("axis")) def.axis = Parser::stringToB2Vec2(joint->Attribute("axis"));
-			joint->QueryBoolAttribute("enableLimits", &def.enableLimit);
+			joint->QueryBoolAttribute("enableLimit", &def.enableLimit);
 			joint->QueryFloatAttribute("lower", &def.lowerTranslation);
 			joint->QueryFloatAttribute("upper", &def.upperTranslation);
 			joint->QueryBoolAttribute("enableMotor", &def.enableMotor);
 			joint->QueryFloatAttribute("speed", &def.motorSpeed);
-			joint->QueryFloatAttribute("maxForce", &def.maxForce);
+			joint->QueryFloatAttribute("maxMotorForce", &def.maxMotorForce);
 
 			// Crée le joint
 			j = new PrismaticJoint(def);
@@ -564,15 +607,16 @@ bool LevelLoader::ProcessJoints()
 			RevoluteJointDef def;
 			def.body1 = b1;
 			def.body2 = b2;
+			def.anchor = anchor;
 			def.collideconnected = collision;
 
 			// Récupère les attributs
-			joint->QueryBoolAttribute("enableLimits", &def.enableLimit);
+			joint->QueryBoolAttribute("enableLimit", &def.enableLimit);
 			joint->QueryFloatAttribute("lower", &def.lowerAngle);
 			joint->QueryFloatAttribute("upper", &def.upperAngle);
 			joint->QueryBoolAttribute("enableMotor", &def.enableMotor);
 			joint->QueryFloatAttribute("speed", &def.motorSpeed);
-			joint->QueryFloatAttribute("maxTorque", &def.maxTorque);
+			joint->QueryFloatAttribute("maxMotorTorque", &def.maxMotorTorque);
 
 			// Crée le joint
 			j = new RevoluteJoint(def);
@@ -582,6 +626,7 @@ bool LevelLoader::ProcessJoints()
 			WheelJointDef def;
 			def.car = b1;
 			def.wheel = b2;
+			def.pWheel = anchor;
 			def.collideconnected = collision;
 
 			// Récupère les attributs
@@ -661,7 +706,6 @@ bool LevelLoader::ProcessDeco()
 			
 			// Ajoute la déco
 			d = new Deco(z, mLevel.mResourceManager.GetTexture(texture), getVec3(b22sfVec(getVec2(posRot), mPhysicManager.GetPPM()), posRot.z));
-			mLevel.mEntityManager.RegisterEntity(d);
 
 			// On récupère la prochaine image
 			img = img->NextSiblingElement();

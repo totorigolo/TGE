@@ -26,3 +26,4 @@ private:
 // Vérification d'erreur
 #define myCheckError(exp, msg) if(!(exp)) { Dialog::Error(msg); return false; }
 #define myCheckError_c(exp, msg) if(!(exp)) { Dialog::Error(msg); } // For constructors
+#define myCheckError_v(exp, msg) if(!(exp)) { Dialog::Error(msg); return; } // For void functions

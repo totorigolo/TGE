@@ -272,6 +272,10 @@ const sf::View& InputManager::GetView() const
 {
 	return mView;
 }
+const sf::Vector2f& InputManager::GetCurrentCenter() const
+{
+	return mView.getCenter();
+}
 const sf::Vector2f& InputManager::GetDefaultCenter() const
 {
 	return mDefaultCenter;

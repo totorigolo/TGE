@@ -32,10 +32,9 @@ namespace EntityFactory
 	void CreateDeco(const b2Vec3 &posRot, const std::string &texture, int layer)
 	{
 		// Crée le BasicBody / la Box
-		Deco *d = new Deco(layer, mResourceManager.GetTexture(texture), b32sfVec(posRot, mPhysicManager.GetPPM()));
+		new Deco(layer, mResourceManager.GetTexture(texture), b32sfVec(posRot, mPhysicManager.GetPPM()));
 
-		// L'enregistre et trie les Entities
-		mEntityManager.RegisterEntity(d);
+		// Trie les Entities
 		mEntityManager.SortByLayer();
 	}
 
@@ -46,8 +45,7 @@ namespace EntityFactory
 		BasicBody *b = new BasicBody(layer);
 		b->CreateDynBox(posRot, mResourceManager.GetTexture(texture));
 
-		// L'enregistre et trie les Entities
-		mEntityManager.RegisterEntity(b);
+		// Trie les Entities
 		mEntityManager.SortByLayer();
 	}
 
@@ -58,8 +56,7 @@ namespace EntityFactory
 		BasicBody *b = new BasicBody(layer);
 		b->CreateStaticBox(posRot, mResourceManager.GetTexture(texture));
 
-		// L'enregistre et trie les Entities
-		mEntityManager.RegisterEntity(b);
+		// Trie les Entities
 		mEntityManager.SortByLayer();
 	}
 	
@@ -70,8 +67,7 @@ namespace EntityFactory
 		BasicBody *b = new BasicBody(layer);
 		b->CreateDynCircle(posRot, mResourceManager.GetTexture(texture));
 
-		// L'enregistre et trie les Entities
-		mEntityManager.RegisterEntity(b);
+		// Trie les Entities
 		mEntityManager.SortByLayer();
 	}
 
@@ -82,8 +78,7 @@ namespace EntityFactory
 		BasicBody *b = new BasicBody(layer);
 		b->CreateStaticBox(posRot, mResourceManager.GetTexture("lampadere"), 0.1f, 0.05f);
 		
-		// L'enregistre et trie les Entities
-		EntityManager::GetInstance().RegisterEntity(b);
+		// Trie les Entities
 		EntityManager::GetInstance().SortByLayer();
 	}
 
@@ -184,10 +179,6 @@ namespace EntityFactory
 		joints.push_back(new rj(rjd(bodies["51_legR2"]->GetBody(), bodies["53_footR"]->GetBody(), b2Vec2(-0.035f, -0.15f), true, -90.f, 0.f, true, 50.f, 0.03f)));
 	
 		// Définit la force des joint
-		for (auto it = bodies.begin(); it != bodies.end(); ++it)
-		{
-			mEntityManager.RegisterEntity(it->second);
-		}
 		for (auto it = joints.begin(); it != joints.end(); ++it)
 		{
 			(*it)->SetBreakableByForce(true);

@@ -5,10 +5,10 @@
 
 //Ctor
 Joint::Joint()
-	: mJoint(nullptr), mID(-1),
-	mToDestroy(false), mIsAlive(false),
-	mIsBreakableMaxForce(false), mIsBreakableMaxTorque(false), mMaxForceType(Null), mMaxForce(0.f), mMaxTorque(0.f),
-	mPhysicMgr(PhysicManager::GetInstance())
+	: 
+	mIsAlive(false), mToDestroy(false), mType(JointType::Null), mID(-1),
+	mPhysicMgr(PhysicManager::GetInstance()), mJoint(nullptr),
+	mIsBreakableMaxForce(false), mMaxForceType(ForceType::Null), mMaxForce(0.f), mIsBreakableMaxTorque(false), mMaxTorque(0.f)
 {
 }
 Joint::Joint(const JointDef &def)
@@ -63,12 +63,12 @@ void Joint::Update()
 	{
 		b2Vec2 mf = mJoint->GetReactionForce(1.f / mPhysicMgr.GetTimeStep());
 		
-		if (mMaxForceType == Vector)
+		if (mMaxForceType == ForceType::Vector)
 		{
 			if (mMaxVecForce.x < mf.x && mMaxVecForce.y < mf.y)
 				Destroy();
 		}
-		else if (mMaxForceType == Float)
+		else if (mMaxForceType == ForceType::Float)
 		{
 			if (mMaxForce < mf.Length())
 				Destroy();
@@ -93,12 +93,12 @@ void Joint::SetBreakableByForce(bool breakable)
 void Joint::SetMaxForce(b2Vec2 maxForce)
 {
 	mMaxVecForce = maxForce;
-	mMaxForceType = Vector;
+	mMaxForceType = ForceType::Vector;
 }
 void Joint::SetMaxForce(float maxForce)
 {
 	mMaxForce = maxForce;
-	mMaxForceType = Float;
+	mMaxForceType = ForceType::Float;
 }
 void Joint::SetBreakableByTorque(bool breakable)
 {
@@ -111,6 +111,10 @@ void Joint::SetMaxTorque(float maxTorque)
 bool Joint::IsBreakableMaxForce() const
 {
 	return mIsBreakableMaxForce;
+}
+ForceType Joint::GetMaxForceType() const
+{
+	return mMaxForceType;
 }
 float Joint::GetMaxForce() const
 {
@@ -170,6 +174,10 @@ const b2Body* Joint::GetBodyB() const
 		return nullptr;
 
 	return mJoint->GetBodyB();
+}
+bool Joint::IsCollideConnected() const
+{
+	return mJoint->GetCollideConnected();
 }
 
 // Gestion des joints à supprimer avant celui-ci

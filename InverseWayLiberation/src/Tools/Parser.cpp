@@ -169,7 +169,15 @@ std::string uintToString(unsigned int n)
 	return s;
 }
 
- std::string floatToString(float n, int nbOfDecimals)
+std::string boolToString(bool b)
+{
+	if (b)
+		return std::string("true");
+	else
+		return std::string("false");
+}
+
+std::string floatToString(float n, int nbOfDecimals)
 {
 	if (nbOfDecimals != -1)
 	{
@@ -184,7 +192,7 @@ std::string uintToString(unsigned int n)
 	std::string s = oss.str();
 	return s;
 }
- 
+
 std::string Uint32ToString(sf::Uint32 value)
 {
 	return uintToString(value);
@@ -221,7 +229,7 @@ std::string b2Vec2ToString(b2Vec2 const& value)
 	s.append(")");
 	return s;
 }
-	
+
 std::string b2Vec3ToString(b2Vec3 const& value)
 {
 	std::string s("(");
@@ -233,8 +241,8 @@ std::string b2Vec3ToString(b2Vec3 const& value)
 	s.append(")");
 	return s;
 }
-	
- std::string keyToString(sf::Keyboard::Key key, bool maj)
+
+std::string keyToString(sf::Keyboard::Key key, bool maj)
 {
 	std::string str;
 	// Les lettres

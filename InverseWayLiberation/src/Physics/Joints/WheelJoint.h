@@ -60,6 +60,8 @@ public:
 	virtual ~WheelJoint(void);
 	
 	// Accesseurs
+	b2Vec2 GetAxis() const;
+
 	float GetJointSpeed() const;
 	bool IsMotorEnabled() const;
 	float GetMotorTorque(float inv_dt) const;
