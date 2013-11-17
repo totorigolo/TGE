@@ -645,8 +645,8 @@ bool LevelLoader::ProcessJoints()
 		if (j != nullptr && hasID)
 		{
 			// On regarde si l'ID n'est pas déjà utilisé
-			if (mBodyIDMap.find(id) != mBodyIDMap.end())
-				Dialog::Error("L'ID " + Parser::intToString(id) + " n'est pas unique !", false);
+			if (mJointIDMap.find(id) != mJointIDMap.end())
+				Dialog::Error("L'ID du Joint " + Parser::intToString(id) + " n'est pas unique !", false);
 			mJointIDMap[id] = j->GetJoint();
 		}
 
