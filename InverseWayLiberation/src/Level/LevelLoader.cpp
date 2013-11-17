@@ -768,7 +768,7 @@ bool LevelLoader::ProcessActions()
 	std::string function;
 	std::string type;
 
-	// Pour toutes les triggers
+	// Pour toutes les actions
 	tinyxml2::XMLElement *action = actions.FirstChildElement().ToElement();
 	while (action)
 	{

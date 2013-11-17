@@ -4,8 +4,9 @@
 #pragma warning (disable : 4251)
 #include <luabind/luabind.hpp>
 #include <string>
+#include "../Tools/NonCopyable.h"
 
-class LuaMachine
+class LuaMachine : public NonCopyable
 {
 public:
 	// Ctor & dtor

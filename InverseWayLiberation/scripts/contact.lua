@@ -1,8 +1,9 @@
 
 function hello()
-	if once_hello == nil then
-		print("once ")
-		once_hello = true
+	if compteur == nil then
+		print("once compteur")
+		compteur = 0
 	end
-	--print("hello")
+	print("hello",compteur)
+	compteur = compteur + 1
 end

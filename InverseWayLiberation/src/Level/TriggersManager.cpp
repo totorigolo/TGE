@@ -77,11 +77,27 @@ void TriggersManager::DeleteAction(const std::string &name)
 
 	mActionMap.erase(it);
 }
+ActionMap& TriggersManager::GetActionMap()
+{
+	return mActionMap;
+}
+const ActionMap& TriggersManager::GetActionMap() const
+{
+	return mActionMap;
+}
 
 // Gère les Areas
 void TriggersManager::CreateArea(b2AABB area, const std::string &action)
 {
 	mAreas.push_back(std::make_pair(area, action));
+}
+std::list<std::pair<b2AABB, std::string>>& TriggersManager::GetAreas()
+{
+	return mAreas;
+}
+const std::list<std::pair<b2AABB, std::string>>& TriggersManager::GetAreas() const
+{
+	return mAreas;
 }
 
 // Gestion de la machine Lua

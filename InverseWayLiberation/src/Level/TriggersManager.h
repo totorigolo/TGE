@@ -8,7 +8,7 @@
 #include <memory>
 #include <string>
 #include <list>
-#include <map>
+#include <unordered_map>
 
 class TriggersManager;
 class LuaAction
@@ -61,6 +61,8 @@ private:
 	std::string mFunction;
 };
 
+typedef std::unordered_map<std::string, std::shared_ptr<LuaAction>> ActionMap;
+
 class PhysicManager;
 class TriggersManager : public NonCopyable
 {
@@ -80,10 +82,14 @@ public:
 	void AddAction(LuaAction *action);
 	void DeleteAction(LuaAction *action);
 	void DeleteAction(const std::string &name);
+	ActionMap& GetActionMap();
+	const ActionMap& GetActionMap() const;
 
 	// Gère les Areas
 	void CreateArea(b2AABB area, const std::string &action);
 	// TODO: DestroyArea
+	std::list<std::pair<b2AABB, std::string>>& GetAreas();
+	const std::list<std::pair<b2AABB, std::string>>& GetAreas() const;
 
 	// Gestion de la machine Lua
 	LuaMachine* GetLuaMachine();
@@ -94,7 +100,7 @@ public:
 
 private:
 	// Liste d'actions
-	std::map<std::string, std::shared_ptr<LuaAction>> mActionMap;
+	ActionMap mActionMap;
 
 	// Liste de zones
 	// TODO: Créer une table de correspondance string <> unsigned int

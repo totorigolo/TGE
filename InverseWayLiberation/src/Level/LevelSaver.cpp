@@ -3,6 +3,7 @@
 #include "../Tools/Error.h"
 #include "../Tools/Dialog.h"
 #include "../Tools/Parser.h"
+#include "TriggersManager.h"
 #include "../Physics/PhysicManager.h"
 
 #include "../Entities/Entity.h"
@@ -672,11 +673,82 @@ bool LevelSaver::ProcessDeco()
 }
 bool LevelSaver::ProcessActions()
 {
+	// Récupère la balise <level>
+	tinyxml2::XMLHandle handle(mDoc);
+	tinyxml2::XMLNode *level = handle.FirstChildElement("level").ToNode();
+
+	// Crée la balise <actions>
+	tinyxml2::XMLElement *actions = mDoc.NewElement("actions");
+
+	// Ajoute <actions> à <level>
+	level->LinkEndChild(actions);
+
+	// Ajoute toutes les actions
+	for (auto it = mLevel.mTriggersManager.GetActionMap().begin(); it != mLevel.mTriggersManager.GetActionMap().end(); ++it)
+	{
+		// L'action est un fichier
+		if (!it->second->HasFunction())
+		{
+			// Crée la balise <file>
+			tinyxml2::XMLElement *file = mDoc.NewElement("file");
+
+			// Crée les attributs
+			file->SetAttribute("name", it->second->GetName().c_str());
+			file->SetAttribute("path", it->second->GetFile().c_str());
+
+			// Ajoute le <file> à <actions>
+			actions->LinkEndChild(file);
+		}
+		// L'action est une fonction
+		else
+		{
+			// Crée la balise <function>
+			tinyxml2::XMLElement *function = mDoc.NewElement("function");
+
+			// Crée les attributs
+			function->SetAttribute("name", it->second->GetName().c_str());
+			function->SetAttribute("func", it->second->GetFunction().c_str());
+			function->SetAttribute("file", it->second->GetFile().c_str());
+
+			// Ajoute la <function> à <actions>
+			actions->LinkEndChild(function);
+		}
+	}
+
 	// Tout s'est bien passé
 	return true;
 }
 bool LevelSaver::ProcessTriggers()
 {
+	// Récupère la balise <level>
+	tinyxml2::XMLHandle handle(mDoc);
+	tinyxml2::XMLNode *level = handle.FirstChildElement("level").ToNode();
+
+	// Crée la balise <events>
+	tinyxml2::XMLElement *events = mDoc.NewElement("events");
+	level->LinkEndChild(events);
+
+	// Crée la balise <triggers>
+	tinyxml2::XMLElement *triggers = mDoc.NewElement("triggers");
+	events->LinkEndChild(triggers);
+
+	// Ajoute toutes les actions
+	for (auto it = mLevel.mTriggersManager.GetAreas().begin(); it != mLevel.mTriggersManager.GetAreas().end(); ++it)
+	{
+		// Crée la balise <area>
+		tinyxml2::XMLElement *area = mDoc.NewElement("area");
+
+		// Crée les attributs
+		area->SetAttribute("top", it->first.upperBound.y);
+		area->SetAttribute("left", it->first.lowerBound.x);
+		area->SetAttribute("bottom", it->first.lowerBound.y);
+		area->SetAttribute("right", it->first.upperBound.x);
+		area->SetAttribute("action", it->second.c_str());
+
+		// Ajoute l'<area> à <triggers>
+		triggers->LinkEndChild(area);
+	}
+
 	// Tout s'est bien passé
 	return true;
 }
