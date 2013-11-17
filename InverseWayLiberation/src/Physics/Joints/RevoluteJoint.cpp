@@ -46,8 +46,9 @@ RevoluteJoint::RevoluteJoint(const RevoluteJointDef &def)
 	jointDef.maxMotorTorque = def.maxMotorTorque;
 	mJoint = mPhysicMgr.Createb2Joint(&jointDef);
 	mJoint->SetUserData(this);
-		
+	
 	mIsAlive = true;
+	mType = JointType::RevoluteJoint;
 	
 	def.body1->SetAwake(true);
 	def.body2->SetAwake(true);

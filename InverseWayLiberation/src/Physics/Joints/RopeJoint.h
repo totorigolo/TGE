@@ -47,6 +47,5 @@ public:
 	
 	// Accesseurs
 	float GetMaxLength() const;
-
 	void SetMaxLength(float maxLenght);
 };

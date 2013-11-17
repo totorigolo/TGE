@@ -18,6 +18,7 @@ PulleyJoint::PulleyJoint(const PulleyJointDef &def)
 	mJoint->SetUserData(this);
 	
 	mIsAlive = true;
+	mType = JointType::PulleyJoint;
 	
 	def.body1->SetAwake(true);
 	def.body2->SetAwake(true);

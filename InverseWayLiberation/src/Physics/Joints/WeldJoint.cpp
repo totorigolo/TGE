@@ -20,6 +20,7 @@ WeldJoint::WeldJoint(const WeldJointDef &def)
 	mJoint->SetUserData(this);
 	
 	mIsAlive = true;
+	mType = JointType::WeldJoint;
 	
 	def.body1->SetAwake(true);
 	def.body2->SetAwake(true);

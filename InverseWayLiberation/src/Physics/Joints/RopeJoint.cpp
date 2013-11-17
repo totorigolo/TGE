@@ -22,6 +22,7 @@ RopeJoint::RopeJoint(const RopeJointDef &def)
 	mJoint->SetUserData(this);
 	
 	mIsAlive = true;
+	mType = JointType::RopeJoint;
 	
 	def.body1->SetAwake(true);
 	def.body2->SetAwake(true);
@@ -37,7 +38,6 @@ float RopeJoint::GetMaxLength() const
 {
 	return ((b2RopeJoint*) mJoint)->GetMaxLength();
 }
-
 void RopeJoint::SetMaxLength(float maxLenght)
 {
 	GetBodyA()->SetAwake(true);

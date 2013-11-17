@@ -23,6 +23,7 @@ WheelJoint::WheelJoint(const WheelJointDef &def)
 	mJoint->SetUserData(this);
 	
 	mIsAlive = true;
+	mType = JointType::WheelJoint;
 	
 	def.car->SetAwake(true);
 	def.wheel->SetAwake(true);

@@ -1,7 +1,6 @@
 
 
 A faire :
- - Mettre en place un système d'exeptions (erreurs).
- - Déplacer les include dans les .cpp pour les déclarations de classes
  - SmartPtr par typedef
  - Rule of Three !!
+ - Transformer tous les "int foo = 1;" en "int foo(1);"

@@ -24,6 +24,7 @@ PrismaticJoint::PrismaticJoint(const PrismaticJointDef &def)
 	mJoint->SetUserData(this);
 	
 	mIsAlive = true;
+	mType = JointType::PrismaticJoint;
 	
 	def.body1->SetAwake(true);
 	def.body2->SetAwake(true);

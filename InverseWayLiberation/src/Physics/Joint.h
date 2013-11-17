@@ -11,6 +11,21 @@ enum ForceType
 	Vector
 };
 
+enum class JointType
+{
+	Null,
+	DistanceJoint,
+	FrictionJoint,
+	GearJoint,
+	MouseJoint,
+	PrismaticJoint,
+	PulleyJoint,
+	RevoluteJoint,
+	RopeJoint,
+	WeldJoint,
+	WheelJoint
+};
+
 struct JointDef
 {
 	// Ctor
@@ -72,6 +87,7 @@ public:
 	bool IsAlive() const { return mIsAlive; }
 	bool ToDestroy() const { return mToDestroy; }
 
+	JointType GetType() const;
 	int GetID() const { return mID; }
 
 	b2Joint* GetJoint() { return mJoint; }
@@ -91,6 +107,9 @@ protected:
 	// Etat
 	bool mIsAlive;
 	bool mToDestroy;
+
+	// Type de joint
+	JointType mType;
 
 	// Objets physiques
 	int mID;

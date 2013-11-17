@@ -130,6 +130,10 @@ float Joint::GetMaxTorque() const
 }
 
 // Accesseurs
+JointType Joint::GetType() const
+{
+	return mType;
+}
 b2Vec2 Joint::GetReactionForce(float inv_dt) const
 {
 	return mJoint->GetReactionForce(inv_dt);

@@ -26,6 +26,7 @@ MouseJoint::MouseJoint(const MouseJointDef &def)
 	def.body->SetBullet(true);
 
 	mIsAlive = true;
+	mType = JointType::MouseJoint;
 }
 
 // Dtor
