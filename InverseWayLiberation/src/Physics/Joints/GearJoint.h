@@ -47,8 +47,8 @@ public:
 	
 	// Accesseurs
 	float GetRatio() const;
-	b2Joint *GetJoint1(); // NE PAS CHANGER LE JOINT !!! Seulement modifier ses propriétés (TODO...)
+	b2Joint *const GetJoint1();
 	const b2Joint* GetJoint1() const;
-	b2Joint *GetJoint2();
+	b2Joint *const GetJoint2();
 	const b2Joint* GetJoint2() const;
 };

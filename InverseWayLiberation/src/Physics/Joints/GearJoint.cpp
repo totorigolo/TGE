@@ -47,7 +47,7 @@ float GearJoint::GetRatio() const
 {
 	return ((b2GearJoint*) mJoint)->GetRatio();
 }
-b2Joint *GearJoint::GetJoint1()
+b2Joint *const GearJoint::GetJoint1()
 {
 	return ((b2GearJoint*) mJoint)->GetJoint1();
 }
@@ -55,7 +55,7 @@ b2Joint const* GearJoint::GetJoint1() const
 {
 	return ((b2GearJoint*) mJoint)->GetJoint1();
 }
-b2Joint *GearJoint::GetJoint2()
+b2Joint *const GearJoint::GetJoint2()
 {
 	return ((b2GearJoint*) mJoint)->GetJoint2();
 }
