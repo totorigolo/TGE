@@ -1,5 +1,6 @@
 #include "LevelSaver.h"
 #include "../Tools/utils.h"
+#include "../Tools/Error.h"
 #include "../Tools/Dialog.h"
 #include "../Tools/Parser.h"
 #include "../Physics/PhysicManager.h"
@@ -203,7 +204,7 @@ bool LevelSaver::ProcessBasicBodies()
 			balise->SetAttribute("texture", textureName.c_str());
 			balise->SetAttribute("pos", Parser::b2Vec2ToString(pos).c_str());
 			if (rotation != 0.f) balise->SetAttribute("rotation", rotation);
-			if (linvel.Length() != 0.f) balise->SetAttribute("linvel", Parser::b2Vec2ToString(linvel).c_str());
+			if (linvel.LengthSquared() != 0.f) balise->SetAttribute("linvel", Parser::b2Vec2ToString(linvel).c_str());
 			if (angvel != 0.f) balise->SetAttribute("angvel", angvel);
 			if (type != "staticbox" && density != 1.f) balise->SetAttribute("density", density);
 			if (friction != 0.2f) balise->SetAttribute("friction", friction);
@@ -306,26 +307,43 @@ bool LevelSaver::ProcessJoints()
 	// Ajoute <joints> à <level>
 	level->LinkEndChild(joints);
 
+	// Variable pour gérer l'enregistrement des IDs des joints
+	int lastID = -1;
+
 	// Parcours tous les Joints
 	for (auto it = mLevel.mPhysicMgr.GetJointList().begin(); it != mLevel.mPhysicMgr.GetJointList().end(); ++it)
 	{
 		Joint *j = ((Joint*) it->second.get());
 
-		// Récupère l'ID
-		unsigned int id = j->GetID();
+		// Si le joint est lié à un/des autres, il doit être accessible (ID)
+		int id = -1;
+		if (j->GetLinkedJoints().size() > 0)
+		{
+			// Crée une ID (donc id != -1)
+			id = ++lastID;
+
+			// Ajoute le joint dans la liste
+			mJointIDMap[j->GetJoint()] = id;
+		}
 
 		// Récupère les propriétés de cassure
-		bool isBreakableMaxForce = j->IsBreakableMaxForce();//(false);
-		ForceType maxForceType = j->GetMaxForceType();//(ForceType::Null);
-		float maxForce = j->GetMaxForce();//(0.f);
-		b2Vec2 maxVecForce = j->GetMaxVecForce();//b2Vec2_Zero
-		bool isBreakableMaxTorque = j->IsBreakableMaxTorque();//(false);
-		float maxTorque = j->GetMaxTorque();//(0.f);
+		bool isBreakableMaxForce = j->IsBreakableMaxForce();
+		float maxForce = j->GetMaxForce();
+		b2Vec2 maxVecForce = j->GetMaxVecForce();
+		bool isBreakableMaxTorque = j->IsBreakableMaxTorque();
+		float maxTorque = j->GetMaxTorque();
 
-		// Récupères les propriétés du joint
-		unsigned int body1 = ((Entity*) j->GetBodyA()->GetUserData())->GetID();
+		// Récupère les propriétés du joint
+		myAssert(j->GetBodyA(), "Le Joint #" + Parser::intToString(j->GetID()) + " n'a pas de bodyA.");
+		myAssert(j->GetBodyB(), "Le Joint #" + Parser::intToString(j->GetID()) + " n'a pas de bodyB.");
+		myAssert(j->GetBodyA()->GetUserData(), "Le Joint #" + Parser::intToString(j->GetID()) + " a un b2BodyA sans Entity.");
+		myAssert(j->GetBodyB()->GetUserData(), "Le Joint #" + Parser::intToString(j->GetID()) + " a un b2BodyB sans Entity.");
+		unsigned int body1 = ((Entity*)j->GetBodyA()->GetUserData())->GetID();
 		unsigned int body2 = ((Entity*)j->GetBodyB()->GetUserData())->GetID();
 		bool collideConnected = j->IsCollideConnected();
+
+		// Balise XML du joint
+		tinyxml2::XMLElement *balise = nullptr;
 
 		// Gère tous les types de Joints
 		if (j->GetType() == JointType::DistanceJoint)
@@ -341,7 +359,7 @@ bool LevelSaver::ProcessJoints()
 			float damping = dj->GetDampingRatio();
 
 			// Crée la balise <distance>
-			tinyxml2::XMLElement *balise = mDoc.NewElement("distance");
+			balise = mDoc.NewElement("distance");
 			balise->SetAttribute("body1", body1);
 			balise->SetAttribute("pt1", Parser::b2Vec2ToString(pt1).c_str());
 			balise->SetAttribute("body2", body2);
@@ -349,9 +367,6 @@ bool LevelSaver::ProcessJoints()
 			if (frequency != 4.0f) balise->SetAttribute("frequency", frequency);
 			if (damping != 0.5f) balise->SetAttribute("damping", damping);
 			if (collideConnected != true) balise->SetAttribute("collision", "false");
-
-			// Ajoute la balise à <joints>
-			joints->LinkEndChild(balise);
 		}
 		else if (j->GetType() == JointType::FrictionJoint)
 		{
@@ -366,7 +381,7 @@ bool LevelSaver::ProcessJoints()
 			float maxFrictionTorque = fj->GetMaxFrictionTorque();
 
 			// Crée la balise <friction>
-			tinyxml2::XMLElement *balise = mDoc.NewElement("friction");
+			balise = mDoc.NewElement("friction");
 			balise->SetAttribute("body1", body1);
 			balise->SetAttribute("pt1", Parser::b2Vec2ToString(pt1).c_str());
 			balise->SetAttribute("body2", body2);
@@ -374,32 +389,48 @@ bool LevelSaver::ProcessJoints()
 			if (maxFrictionForce != 0.f) balise->SetAttribute("maxFrictionForce", maxFrictionForce);
 			if (maxFrictionTorque != 0.f) balise->SetAttribute("maxFrictionTorque", maxFrictionTorque);
 			if (collideConnected != true) balise->SetAttribute("collision", "false");
-
-			// Ajoute la balise à <joints>
-			joints->LinkEndChild(balise);
 		}
 		else if (j->GetType() == JointType::GearJoint)
 		{
 			GearJoint *gj = ((GearJoint*)j);
 
-			// Récupère les points d'ancrage
-			int j1 = ((Joint*) gj->GetJoint1()->GetUserData())->GetID();
-			int j2 = ((Joint*) gj->GetJoint2()->GetUserData())->GetID();
+			// Récupère les joints liés
+			if (mJointIDMap.find(gj->GetJoint1()) == mJointIDMap.end())
+			{
+				Joint *j1 = (Joint*)gj->GetJoint1()->GetUserData();
+				myAssert(j1, "Le joint1 du GearJoint #" + Parser::intToString(gj->GetID()) + " n'est pas un Joint valide.");
+
+				unsigned int IDj1 = j1->GetID();
+
+				Dialog::Error("Le joint #" + Parser::uintToString(IDj1) + " est introuvable !\n"
+					"Il doit être sauvegardé avant.");
+				continue;
+			}
+			if (mJointIDMap.find(gj->GetJoint2()) == mJointIDMap.end())
+			{
+				Joint *j2 = (Joint*)gj->GetJoint2()->GetUserData();
+				myAssert(j2, "Le joint2 du GearJoint #" + Parser::intToString(gj->GetID()) + " n'est pas un Joint valide.");
+
+				unsigned int IDj2 = j2->GetID();
+
+				Dialog::Error("Le joint #" + Parser::uintToString(IDj2) + " est introuvable !\n"
+					"Il doit être sauvegardé avant.");
+				continue;
+			}
+			int j1 = mJointIDMap[gj->GetJoint1()];
+			int j2 = mJointIDMap[gj->GetJoint2()];
 
 			// Récupère les propriétés
 			float ratio = gj->GetRatio();
 
 			// Crée la balise <gear>
-			tinyxml2::XMLElement *balise = mDoc.NewElement("gear");
+			balise = mDoc.NewElement("gear");
 			balise->SetAttribute("body1", body1);
 			balise->SetAttribute("body2", body2);
 			balise->SetAttribute("joint1", j1);
 			balise->SetAttribute("joint2", j2);
 			if (ratio != 1.f) balise->SetAttribute("ratio", ratio);
 			if (collideConnected != true) balise->SetAttribute("collision", "false");
-
-			// Ajoute la balise à <joints>
-			joints->LinkEndChild(balise);
 		}
 		else if (j->GetType() == JointType::PrismaticJoint)
 		{
@@ -418,7 +449,7 @@ bool LevelSaver::ProcessJoints()
 			float maxMotorForce = pj->GetMaxMotorForce();
 
 			// Crée la balise <prismatic>
-			tinyxml2::XMLElement *balise = mDoc.NewElement("prismatic");
+			balise = mDoc.NewElement("prismatic");
 			balise->SetAttribute("body1", body1);
 			balise->SetAttribute("anchor", Parser::b2Vec2ToString(anchor).c_str());
 			balise->SetAttribute("body2", body2);
@@ -430,9 +461,6 @@ bool LevelSaver::ProcessJoints()
 			if (motorSpeed != 0.f) balise->SetAttribute("speed", motorSpeed);
 			if (maxMotorForce != 10.f) balise->SetAttribute("maxMotorForce", maxMotorForce);
 			if (collideConnected != false) balise->SetAttribute("collision", "true");
-
-			// Ajoute la balise à <joints>
-			joints->LinkEndChild(balise);
 		}
 		else if (j->GetType() == JointType::PulleyJoint)
 		{
@@ -448,7 +476,7 @@ bool LevelSaver::ProcessJoints()
 			float ratio = pj->GetRatio();
 
 			// Crée la balise <pulley>
-			tinyxml2::XMLElement *balise = mDoc.NewElement("pulley");
+			balise = mDoc.NewElement("pulley");
 			balise->SetAttribute("body1", body1);
 			balise->SetAttribute("pt1", Parser::b2Vec2ToString(pt1).c_str());
 			balise->SetAttribute("body2", body2);
@@ -457,9 +485,6 @@ bool LevelSaver::ProcessJoints()
 			balise->SetAttribute("groundpt2", Parser::b2Vec2ToString(gpt2).c_str());
 			if (ratio != 1.0f) balise->SetAttribute("ratio", ratio);
 			if (collideConnected != true) balise->SetAttribute("collision", "false");
-
-			// Ajoute la balise à <joints>
-			joints->LinkEndChild(balise);
 		}
 		else if (j->GetType() == JointType::RevoluteJoint)
 		{
@@ -467,9 +492,6 @@ bool LevelSaver::ProcessJoints()
 
 			// Récupère le point d'ancrage
 			b2Vec2 anchor = rj->GetAnchorRelativeToBodyA();
-
-			// Récupère l'état
-			float referenceAngle = rj->GetReferenceAngle();
 
 			// Récupère les propriétés
 			bool enableLimit = rj->IsLimitEnabled();
@@ -480,7 +502,7 @@ bool LevelSaver::ProcessJoints()
 			float maxMotorTorque = rj->GetMaxMotorTorque();
 
 			// Crée la balise <revolute>
-			tinyxml2::XMLElement *balise = mDoc.NewElement("revolute");
+			balise = mDoc.NewElement("revolute");
 			balise->SetAttribute("body1", body1);
 			balise->SetAttribute("anchor", Parser::b2Vec2ToString(anchor).c_str());
 			balise->SetAttribute("body2", body2);
@@ -491,9 +513,6 @@ bool LevelSaver::ProcessJoints()
 			if (motorSpeed != 0.f) balise->SetAttribute("speed", motorSpeed);
 			if (maxMotorTorque != 10.f) balise->SetAttribute("maxMotorTorque", maxMotorTorque);
 			if (collideConnected != false) balise->SetAttribute("collision", "true");
-
-			// Ajoute la balise à <joints>
-			joints->LinkEndChild(balise);
 		}
 		else if (j->GetType() == JointType::RopeJoint)
 		{
@@ -507,16 +526,13 @@ bool LevelSaver::ProcessJoints()
 			float maxLength = rj->GetMaxLength();
 
 			// Crée la balise <rope>
-			tinyxml2::XMLElement *balise = mDoc.NewElement("rope");
+			balise = mDoc.NewElement("rope");
 			balise->SetAttribute("body1", body1);
 			balise->SetAttribute("pt1", Parser::b2Vec2ToString(pt1).c_str());
 			balise->SetAttribute("body2", body2);
 			balise->SetAttribute("pt2", Parser::b2Vec2ToString(pt2).c_str());
 			balise->SetAttribute("maxLength", maxLength);
 			if (collideConnected != true) balise->SetAttribute("collision", "false");
-
-			// Ajoute la balise à <joints>
-			joints->LinkEndChild(balise);
 		}
 		else if (j->GetType() == JointType::WeldJoint)
 		{
@@ -530,16 +546,13 @@ bool LevelSaver::ProcessJoints()
 			float damping = wj->GetDampingRatio();
 
 			// Crée la balise <weld>
-			tinyxml2::XMLElement *balise = mDoc.NewElement("weld");
+			balise = mDoc.NewElement("weld");
 			balise->SetAttribute("body1", body1);
 			balise->SetAttribute("anchor", Parser::b2Vec2ToString(anchor).c_str());
 			balise->SetAttribute("body2", body2);
 			if (frequency != 4.0f) balise->SetAttribute("frequency", frequency);
 			if (damping != 0.5f) balise->SetAttribute("damping", damping);
 			if (collideConnected != false) balise->SetAttribute("collision", "true");
-
-			// Ajoute la balise à <joints>
-			joints->LinkEndChild(balise);
 		}
 		else if (j->GetType() == JointType::WheelJoint)
 		{
@@ -557,7 +570,7 @@ bool LevelSaver::ProcessJoints()
 			float maxMotorTorque = wj->GetMaxMotorTorque();
 
 			// Crée la balise <wheel>
-			tinyxml2::XMLElement *balise = mDoc.NewElement("wheel");
+			balise = mDoc.NewElement("wheel");
 			balise->SetAttribute("body1", body1);
 			balise->SetAttribute("anchor", Parser::b2Vec2ToString(anchor).c_str());
 			balise->SetAttribute("body2", body2);
@@ -568,8 +581,22 @@ bool LevelSaver::ProcessJoints()
 			if (motorSpeed != 0.f) balise->SetAttribute("speed", motorSpeed);
 			if (maxMotorTorque != 10.f) balise->SetAttribute("maxMotorForce", maxMotorTorque);
 			if (collideConnected != false) balise->SetAttribute("collision", "true");
+		}
 
-			// Ajoute la balise à <joints>
+		// Si la balise a été créée
+		if (balise)
+		{
+			// ID
+			if (id >= 0) balise->SetAttribute("id", id);
+
+			// Propriétés communes des joints
+			if (isBreakableMaxForce != false) balise->SetAttribute("isBreakableMaxForce", "true");
+			if (j->GetMaxForceType() == ForceType::Float && maxForce != 0.f) balise->SetAttribute("maxForce", maxForce);
+			if (j->GetMaxForceType() == ForceType::Vector && maxVecForce.LengthSquared() != 0) balise->SetAttribute("maxVecForce", maxForce);
+			if (isBreakableMaxTorque != false) balise->SetAttribute("isBreakableMaxTorque", "true");
+			if (maxTorque != 0.f) balise->SetAttribute("maxTorque", maxTorque);
+
+			// On ajoute la balise à <joints>
 			joints->LinkEndChild(balise);
 		}
 	}

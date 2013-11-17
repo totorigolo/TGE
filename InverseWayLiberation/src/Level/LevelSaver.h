@@ -35,4 +35,6 @@ private:
 	const TextureMap &mTextureMap;
 
 	std::string mPath;
+
+	std::map<b2Joint*, int> mJointIDMap;
 };

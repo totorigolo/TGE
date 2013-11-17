@@ -55,6 +55,8 @@ void ContactListener::PreSolve(b2Contact* contact, const b2Manifold* oldManifold
 
 	// Récupère les bodies
 	Entity *entityA = (Entity*) contact->GetFixtureA()->GetBody()->GetUserData();
+	myAssert(entityA, "Contact avec un b2Body sans Entity associée.");
+
 
 	// Traite les BasicBodies
 	if (entityA->GetType() == EntityType::BasicBody)

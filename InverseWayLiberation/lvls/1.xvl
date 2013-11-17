@@ -31,7 +31,7 @@
 	<basicbodies>
 		<!--
 		Les attributs sont facultatifs, sauf la position et la texture.
-		Il est possible de définir un ID, afin de reconnaitre le body par la suite du chargement (ex: joints).
+		Il est possible de définir un ID (> 0), afin de reconnaitre le body par la suite du chargement (ex: joints).
 
 		ex: (NB = les valeurs mises sont celles par défaut) (osp = one sided platform)
 
@@ -41,13 +41,12 @@
 		<kinematicbox layer="1" texture="caisse" pos="(1.9f, 4.f)" rotation="0.f" restitution="0.0f" shadow="true">
 
 		Il est possible de définir les attributs facultatifs : groupIndex, categoryBits, maskBit :
-		groupIndex="0" categoryBits="0x0001" maskBit="0xFFFF"/> <--- Tester !!!!
 		ou  groupIndex="0" categoryBits="1" maskBit="65535"/>
 
 		Options d'édition de niveau
 		active="true" // Un body inactif n'est pas simulé (ex: garder des bodies positionnés à leur place)
 		-->
-		<staticbox texture="ground" pos="(0.f, -0.64f)" friction="0.4f" layer="-1"/>
+		<staticbox id="54" texture="ground" pos="(0.f, -0.64f)" friction="0.4f" layer="-1" maskBits="65533"/>
 		<staticbox texture="ground" pos="(20.48f, -0.64f)" friction="0.4f" layer="-1"/>
 		<staticbox texture="ground" pos="(-20.48f, -0.64f)" friction="0.4f" layer="-1"/>
 

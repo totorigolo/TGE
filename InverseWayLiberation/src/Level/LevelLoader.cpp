@@ -222,8 +222,7 @@ bool LevelLoader::ProcessBasicBodies()
 		}
 
 		// Récupère l'ID
-		if (body->Attribute("id"))
-			body->QueryUnsignedAttribute("id", &id);
+		if (body->Attribute("id")) body->QueryUnsignedAttribute("id", &id);
 
 		// Récupère la position et la rotation
 		body->QueryFloatAttribute("rotation", &rotation);
@@ -243,17 +242,15 @@ bool LevelLoader::ProcessBasicBodies()
 		body->QueryFloatAttribute("restitution", &restitution);
 
 		// Récupère les propriétés de groupe
-		{
-			int tmp = 0;
-			body->QueryIntAttribute("groupIndex", &tmp);
-			groupIndex = static_cast<int16>(tmp);
-			tmp = 0x0001;
-			body->QueryIntAttribute("categoryBits", &tmp);
-			categoryBits = static_cast<uint16>(tmp);
-			tmp = 0xFFFF;
-			body->QueryIntAttribute("maskBits", &tmp);
-			maskBits = static_cast<uint16>(tmp);
-		}
+		int tmp = 0;
+		body->QueryIntAttribute("groupIndex", &tmp);
+		groupIndex = static_cast<int16>(tmp);
+		tmp = 0x0001;
+		body->QueryIntAttribute("categoryBits", &tmp);
+		categoryBits = static_cast<uint16>(tmp);
+		tmp = 0xFFFF;
+		body->QueryIntAttribute("maskBits", &tmp);
+		maskBits = static_cast<uint16>(tmp);
 
 		// Crée le body
 		if (type == "staticbox")
@@ -483,16 +480,26 @@ bool LevelLoader::ProcessJoints()
 			{
 				Dialog::Error("Le joint #"+ Parser::uintToString(IDj1) +" est introuvable !\n"
 							  "Il doit être construit avant.");
+
+				// On récupère le prochain body
+				joint = joint->NextSiblingElement();
 				continue;
 			}
 			if (mJointIDMap.find(IDj2) == mJointIDMap.end())
 			{
 				Dialog::Error("Le joint #"+ Parser::uintToString(IDj2) +" est introuvable !\n"
 							  "Il doit être construit avant.");
+
+				// On récupère le prochain body
+				joint = joint->NextSiblingElement();
 				continue;
 			}
 			j1 = mJointIDMap[IDj1];
 			j2 = mJointIDMap[IDj2];
+
+			// Vérifie qu'il soient bien construits
+			myAssert(j1->GetUserData(), "Le joint1 #" + Parser::intToString(IDj1) + " du Gear n'existe pas.");
+			myAssert(j2->GetUserData(), "Le joint2 #" + Parser::intToString(IDj2) + " du Gear n'existe pas.");
 
 			// Vérifie qu'il soient bien construits
 			myAssert(j1->GetUserData(), "Le joint n'existe pas.");
@@ -639,6 +646,33 @@ bool LevelLoader::ProcessJoints()
 
 			// Crée le joint
 			j = new WheelJoint(def);
+		}
+
+		// Propriétés de cassure communes aux Joints
+		if (j)
+		{
+			JointDef breakDef;
+
+			joint->QueryBoolAttribute("isBreakableMaxForce", &breakDef.isBreakableMaxForce);
+			if (joint->Attribute("maxVecForce"))
+			{
+				breakDef.maxVecForce = Parser::stringToB2Vec2(joint->Attribute("maxVecForce"));
+				breakDef.maxForceType = ForceType::Vector;
+			}
+			else if (joint->Attribute("maxForce"))
+			{
+				joint->QueryFloatAttribute("maxForce", &breakDef.maxForce);
+				breakDef.maxForceType = ForceType::Float;
+			}
+			joint->QueryBoolAttribute("isBreakableMaxTorque", &breakDef.isBreakableMaxTorque);
+			joint->QueryFloatAttribute("maxTorque", &breakDef.maxTorque);
+
+			// Appliques les propriétés
+			j->SetBreakableByForce(breakDef.isBreakableMaxForce);
+			if (breakDef.maxForceType == ForceType::Float) j->SetMaxForce(breakDef.maxForce);
+			if (breakDef.maxForceType == ForceType::Vector) j->SetMaxForce(breakDef.maxVecForce);
+			j->SetBreakableByTorque(breakDef.isBreakableMaxTorque);
+			j->SetMaxTorque(breakDef.maxTorque);
 		}
 
 		// Enregiste l'ID

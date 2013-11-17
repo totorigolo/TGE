@@ -70,6 +70,7 @@ public:
 	void RemoveLinkedJoint(int jointID);
 	void DestroyLinkedJoint(int jointID);
 	void DestroyAllLinkedJoints();
+	const std::list<int>& GetLinkedJoints();
 
 	// Définit si le joint est cassable
 	void SetBreakableByForce(bool breakable);

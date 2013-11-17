@@ -46,6 +46,7 @@ void PhysicManager::DestroyBody(b2Body *body)
 	while (je)
 	{
 		auto next = je->next;
+		myAssert(je->joint->GetUserData(), "b2Joint rencontré sans Joint lié.");
 		DestroyJoint(((Joint*) je->joint->GetUserData())->GetID());
 		je = next;
 	}
@@ -108,11 +109,13 @@ void PhysicManager::DestroyJoint(int jointID)
 	myAssert(jointID >= 0, "L'ID \""+ Parser::intToString(jointID) +"\" est impossible (< 0).");
 
 	// Vérifie que la liste ne soit pas vide
-	myAssert(mJointList.size() != 0, "La liste des joints est vide.");
+	//myAssert(mJointList.size() != 0, "La liste des joints est vide.");
+	if (mJointList.size() == 0) return;
 
 	// Récupère le joint
 	auto itJoint = mJointList.find(jointID);
-	myAssert(itJoint != mJointList.end(), "Le joint #\""+ Parser::intToString(jointID) +"\" n'existe pas.");
+	//myAssert(itJoint != mJointList.end(), "Le joint #"+ Parser::intToString(jointID) +" n'existe pas.");
+	if (itJoint == mJointList.end()) return;
 
 	// Supprime le joint
 	mJointList.erase(itJoint);
@@ -172,8 +175,7 @@ bool PhysicManager::JointExists(int jointID) const
 
 	// Vérifie qu'il est valide
 	if (itJoint != mJointList.end())
-		if (itJoint->second->IsAlive())
-			return true;
+		return true;
 	return false;
 }
 Joint* PhysicManager::GetJoint(int jointID)

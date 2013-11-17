@@ -30,7 +30,7 @@ GearJoint::GearJoint(const GearJointDef &def)
 	joint1->RegisterLinkedJoint(mID);
 	joint2->RegisterLinkedJoint(mID);
 
-	mIsAlive = false;
+	mIsAlive = true;
 	mType = JointType::GearJoint;
 	
 	def.body1->SetAwake(true);

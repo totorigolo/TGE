@@ -149,30 +149,18 @@ float Joint::GetReactionTorque(float inv_dt) const
 
 b2Body* Joint::GetBodyA()
 {
-	if (!mIsAlive)
-		return nullptr;
-
 	return mJoint->GetBodyA();
 }
 b2Body* Joint::GetBodyB()
 {
-	if (!mIsAlive)
-		return nullptr;
-
 	return mJoint->GetBodyB();
 }
 const b2Body* Joint::GetBodyA() const
 {
-	if (!mIsAlive)
-		return nullptr;
-
 	return mJoint->GetBodyA();
 }
 const b2Body* Joint::GetBodyB() const
 {
-	if (!mIsAlive)
-		return nullptr;
-
 	return mJoint->GetBodyB();
 }
 bool Joint::IsCollideConnected() const
@@ -183,7 +171,7 @@ bool Joint::IsCollideConnected() const
 // Gestion des joints à supprimer avant celui-ci
 void Joint::RegisterLinkedJoint(int jointID)
 {
-	myAssert(mPhysicMgr.JointExists(jointID), "Le joint n'existe pas.");
+	myAssert(mPhysicMgr.JointExists(jointID), "Le joint #"+ Parser::intToString(jointID) +" n'existe pas.");
 
 	mLinkedJointList.push_back(jointID);
 }
@@ -204,4 +192,7 @@ void Joint::DestroyAllLinkedJoints()
 	}
 	mLinkedJointList.clear();
 }
-
+const std::list<int>& Joint::GetLinkedJoints()
+{
+	return mLinkedJointList;
+}
