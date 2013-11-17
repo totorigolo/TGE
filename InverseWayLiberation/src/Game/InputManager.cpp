@@ -103,7 +103,7 @@ void InputManager::AddEvent(const sf::Event &event)
 	}
 	else if (event.type == sf::Event::LostFocus)
 	{
-		//mHasFocus = false;
+		mHasFocus = false;
 	}
 		
 	// Gestion du zoom et du resize

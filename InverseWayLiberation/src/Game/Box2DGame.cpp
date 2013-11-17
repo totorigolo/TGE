@@ -26,6 +26,7 @@ Box2DGame::Box2DGame(sf::RenderWindow & window)
 {
 	// Etats du jeu
 	mPaused = false;
+	mDebugDraw = true;
 
 	mMouseMovingBody = nullptr;
 	mMouseJointCreated = false;
@@ -118,6 +119,7 @@ bool Box2DGame::OnInit()
 
 	// Demande l'espionnage de touches
 	mInputManager.AddSpyedKey(sf::Keyboard::M); // Pause physique
+	mInputManager.AddSpyedKey(sf::Keyboard::O); // Debug Draw
 	mInputManager.AddSpyedKey(sf::Keyboard::T); // Ragdoll
 	mInputManager.AddSpyedKey(sf::Keyboard::L); // Lamp
 	mInputManager.AddSpyedKey(sf::Keyboard::R); // Reload
@@ -166,10 +168,15 @@ void Box2DGame::OnEvent()
 	if (!mInputManager.HasFocus())
 		return;
 
-	// Gestion de la physique
+	// Pause physique
 	if (mInputManager.KeyPressed(sf::Keyboard::M))
 	{
 		mPaused = !mPaused;
+	}
+	// DebugDraw
+	if (mInputManager.KeyPressed(sf::Keyboard::O))
+	{
+		mDebugDraw = !mDebugDraw;
 	}
 
 	// Création d'objets
@@ -455,7 +462,7 @@ void Box2DGame::OnRender()
 	mWindow.draw(mLevel);
 
 	// Affichage du debug
-	mPhysicMgr.DrawDebugData();
+	if (!mDebugDraw) mPhysicMgr.DrawDebugData();
 
 	// Si on n'a pas le focus
 	if (!mInputManager.HasFocus())

@@ -52,6 +52,7 @@ protected:
 private:
 	// Etats du jeu
 	bool mPaused;
+	bool mDebugDraw;
 
 	// Fenêtre
 	bool mQuit;
