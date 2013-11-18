@@ -4,3 +4,4 @@ A faire :
  - SmartPtr par typedef
  - Rule of Three !!
  - Transformer tous les "int foo = 1;" en "int foo(1);"
+ - Box2D 2.3.0
