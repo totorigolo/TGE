@@ -4,6 +4,7 @@
 #include "../Resources/ResourceManager.h"
 
 #include <SFML/Graphics.hpp>
+#include <SFGUI/SFGUI.hpp>
 #include <Box2D/Box2D.h>
 
 class PhysicManager;
@@ -94,4 +95,10 @@ private:
 	b2Body *mPinBodyB;
 	b2Vec2 mPinAnchorB;
 
+	// Eléments de la GUI
+	sfg::SFGUI *mSfGUI;
+	sfg::Desktop mDesktop;
+	sf::Clock mGUIElapsedTime;
+	sfg::Window::Ptr mTestWindow;
+	sfg::Button::Ptr mButton;
 };

@@ -8,11 +8,12 @@
 
 App::App()
 	: mStateSystem(StateSystem::GetInstance()),
-	mRenderWindow(nullptr)
+	mRenderWindow(nullptr), mSfGUI(nullptr)
 {
 }
 App::~App()
 {
+	// Suppprime la fenêtre de rendu
 	if (mRenderWindow)
 	{
 		delete mRenderWindow;
@@ -23,6 +24,9 @@ App::~App()
 bool App::Init() 
 {
 	// TODO: Initialiser le son
+
+	// Crée la GUI
+	mSfGUI = new sfg::SFGUI;
 
 	// Charge la fenêtre de rendu
 	mRenderWindow = new sf::RenderWindow(sf::VideoMode(800U, 600U), "Inverse Way Liberation - Chargement");
@@ -63,9 +67,19 @@ int App::Execute()
 
 void App::CleanUp()
 {
+	// Suppprime la GUI
+	if (mSfGUI)
+	{
+		delete mSfGUI;
+		mSfGUI = nullptr;
+	}
 }
 
 // Accesseurs
+sfg::SFGUI* App::GetSfGUI()
+{
+	return mSfGUI;
+}
 sf::RenderWindow* App::GetRenderWindow()
 {
 	return mRenderWindow;

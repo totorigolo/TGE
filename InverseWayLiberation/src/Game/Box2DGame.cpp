@@ -1,6 +1,7 @@
 #include "Box2DGame.h"
 #include "LuaMachine.h"
 #include "InputManager.h"
+#include "../App/App.h"
 #include "../Entities/Grapnel.h"
 #include "../Level/LevelSaver.h"
 #include "../Level/LevelLoader.h"
@@ -14,7 +15,7 @@
 #include "../Tools/utils.h"
 
 // Ctor
-Box2DGame::Box2DGame(sf::RenderWindow & window)
+Box2DGame::Box2DGame(sf::RenderWindow &window)
 	: mWindow(window), mQuit(false),
 	// Ressources
 	mResourceManager(ResourceManager::GetInstance()),
@@ -22,22 +23,22 @@ Box2DGame::Box2DGame(sf::RenderWindow & window)
 	// Physique
 	mPhysicMgr(PhysicManager::GetInstance()),
 	// Level
-	mLevel(LevelManager::GetInstance())
-{
+	mLevel(LevelManager::GetInstance()),
 	// Etats du jeu
-	mPaused = false;
-	mDebugDraw = true;
-
-	mMouseMovingBody = nullptr;
-	mMouseJointCreated = false;
-	mMouseJointID = -1;
-	mPinBodyA = nullptr;
-	mPinBodyB = nullptr;
-	mHookedSBody = nullptr;
-	mGrapnel = nullptr;
-
-	// Grapin de test
-	//mGrapnel = new Grapnel(-1);
+	mPaused(false),
+	mDebugDraw(true),
+	// GUI
+	mSfGUI(App::GetInstance().GetSfGUI()),
+	// Autre
+	mMouseMovingBody(nullptr),
+	mMouseJointCreated(false),
+	mMouseJointID(-1),
+	mPinBodyA(nullptr),
+	mPinBodyB(nullptr),
+	mHookedSBody(nullptr),
+	mGrapnel(nullptr)
+{
+	myAssert(mSfGUI, "La GUI n'a pas été créée.");
 }
 
 // Dtor
@@ -105,6 +106,19 @@ bool Box2DGame::OnInit()
 	// Initialise les variables
 	mPaused = false;
 
+	/* GUI */
+	// Crée la Window et le Desktop
+	mInputManager.AddDesktop(&mDesktop);
+	mTestWindow = sfg::Window::Create();
+	mTestWindow->SetTitle("Test Window");
+	mDesktop.Add(mTestWindow);
+	mGUIElapsedTime.restart();
+
+	// Crée les éléments
+	mButton = sfg::Button::Create("Hello !!!");
+	mTestWindow->Add(mButton);
+
+	/* Physique */
 	// Initialise le monde
 	mPhysicMgr.SetTimeStep(1.f / 60.f);
 	mPhysicMgr.SetDebugDrawTarget(&mWindow);
@@ -449,6 +463,10 @@ void Box2DGame::OnUpdate()
 
 	// Met à jour le niveau
 	mLevel.Update();
+
+	// Met à jour la GUI
+	mDesktop.Update(mGUIElapsedTime.getElapsedTime().asSeconds());
+	mGUIElapsedTime.restart();
 }
 
 /// Appelé pour le rendu
@@ -463,6 +481,9 @@ void Box2DGame::OnRender()
 
 	// Affichage du debug
 	if (!mDebugDraw) mPhysicMgr.DrawDebugData();
+
+	// Affichage de la GUI
+	mSfGUI->Display(mWindow);
 
 	// Si on n'a pas le focus
 	if (!mInputManager.HasFocus())
@@ -494,6 +515,9 @@ void Box2DGame::OnLoopEnd()
 /// Appelé quand le jeu se termine
 void Box2DGame::OnQuit()
 {
+	// Enlève le Desktop du InputManager
+	mInputManager.RemoveDesktop(&mDesktop);
+
 	// Remet la vue par défaut
 	mWindow.setView(mWindow.getDefaultView());
 

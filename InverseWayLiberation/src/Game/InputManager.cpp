@@ -1,5 +1,6 @@
 #include "InputManager.h"
 #include "../Tools/utils.h"
+#include "../Tools/Error.h"
 
 // Ctor & dtor
 InputManager::InputManager()
@@ -67,6 +68,12 @@ void InputManager::Update()
 	{
 		// Traite l'évènement
 		AddEvent(mEvent);
+
+		// Passe l'évènement à chaque Desktop
+		for each (auto desktop in mDesktops)
+		{
+			desktop->HandleEvent(mEvent);
+		}
 	}
 
 	if (!mHasFocus)
@@ -257,6 +264,20 @@ bool InputManager::HasQuitted()
 bool InputManager::HasFocus() const
 {
 	return mHasFocus;
+}
+
+// Gestion des Desktops (GUI)
+void InputManager::AddDesktop(sfg::Desktop *d)
+{
+	myAssert(d, "Le Desktop passé est invalide.");
+
+	mDesktops.push_back(d);
+}
+void InputManager::RemoveDesktop(sfg::Desktop *d)
+{
+	myAssert(d, "Le Desktop passé est invalide.");
+
+	mDesktops.remove(d);
 }
 
 // Accesseurs

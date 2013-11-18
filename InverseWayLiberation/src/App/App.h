@@ -2,6 +2,7 @@
 #include "../Tools/Singleton.h"
 
 #include <SFML/Graphics.hpp>
+#include <SFGUI/SFGUI.hpp>
 
 class StateSystem;
 class App : public Singleton<App>
@@ -18,6 +19,7 @@ public:
 	int Execute();
 
 	// Accesseurs
+	sfg::SFGUI* GetSfGUI();
 	sf::RenderWindow* GetRenderWindow();
 
 protected:
@@ -31,4 +33,7 @@ private:
 
 	// Fenêtre de rendu
 	sf::RenderWindow *mRenderWindow;
+
+	// GUI
+	sfg::SFGUI *mSfGUI;
 };

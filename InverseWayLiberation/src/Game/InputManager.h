@@ -2,6 +2,8 @@
 #include "../Tools/Singleton.h"
 
 #include <SFML/Graphics.hpp>
+#include <SFGUI/SFGUI.hpp>
+#include <list>
 #include <map>
 
 enum KeyState
@@ -55,6 +57,10 @@ public:
 	bool HasQuitted(); // Réinitialise après appel
 	bool HasFocus() const;
 
+	// Gestion des Desktops (GUI)
+	void AddDesktop(sfg::Desktop *d);
+	void RemoveDesktop(sfg::Desktop *d);
+
 	// Accesseurs
 	float GetDefaultZoom() const;
 	float GetCurrentZoom() const;
@@ -97,4 +103,7 @@ private:
 	// Pour l'édition de texte
 	bool mTipingText;
 	sf::String mText;
+
+	// Liste des Desktop à qui partager les events
+	std::list<sfg::Desktop*> mDesktops;
 };
