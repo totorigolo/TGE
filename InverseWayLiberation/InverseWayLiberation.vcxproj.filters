@@ -88,6 +88,12 @@
     <Filter Include="Fichiers sources\Game\Lua">
       <UniqueIdentifier>{3d60c0ae-f299-4733-99fc-7ce752fe5255}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Fichiers d%27en-tête\Editor">
+      <UniqueIdentifier>{d3ade931-276c-43be-ab1b-fe9a891a1670}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers sources\Editor">
+      <UniqueIdentifier>{b4aa2464-5162-410a-8401-87a03722d40a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\_TODO.txt" />
@@ -268,6 +274,9 @@
     <ClCompile Include="src\Game\Lua\RegisterResourceManager.cpp">
       <Filter>Fichiers sources\Game\Lua</Filter>
     </ClCompile>
+    <ClCompile Include="src\Editor\EditBox.cpp">
+      <Filter>Fichiers sources\Editor</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Physics\Joints\DistanceJoint.h">
@@ -425,6 +434,9 @@
     </ClInclude>
     <ClInclude Include="src\Resources\Texture.h">
       <Filter>Fichiers d%27en-tête\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Editor\EditBox.h">
+      <Filter>Fichiers d%27en-tête\Editor</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

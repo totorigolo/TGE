@@ -2,10 +2,12 @@
 #include "LuaMachine.h"
 #include "../Tools/NonCopyable.h"
 #include "../Resources/ResourceManager.h"
+#include "../Editor/EditBox.h"
 
 #include <SFML/Graphics.hpp>
 #include <SFGUI/SFGUI.hpp>
 #include <Box2D/Box2D.h>
+#include <memory>
 
 class PhysicManager;
 class LevelManager;
@@ -99,6 +101,5 @@ private:
 	sfg::SFGUI *mSfGUI;
 	sfg::Desktop mDesktop;
 	sf::Clock mGUIElapsedTime;
-	sfg::Window::Ptr mTestWindow;
-	sfg::Button::Ptr mButton;
+	std::shared_ptr<EditBox> mEditBox;
 };

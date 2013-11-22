@@ -44,7 +44,6 @@ Box2DGame::Box2DGame(sf::RenderWindow &window)
 // Dtor
 Box2DGame::~Box2DGame(void)
 {
-	mLevel.Clear();
 }
 
 // Boucle de jeu
@@ -109,14 +108,8 @@ bool Box2DGame::OnInit()
 	/* GUI */
 	// Crée la Window et le Desktop
 	mInputManager.AddDesktop(&mDesktop);
-	mTestWindow = sfg::Window::Create();
-	mTestWindow->SetTitle("Test Window");
-	mDesktop.Add(mTestWindow);
 	mGUIElapsedTime.restart();
-
-	// Crée les éléments
-	mButton = sfg::Button::Create("Hello !!!");
-	mTestWindow->Add(mButton);
+	mEditBox = std::make_shared<EditBox>(EditBox(mDesktop));
 
 	/* Physique */
 	// Initialise le monde

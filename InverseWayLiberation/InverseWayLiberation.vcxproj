@@ -16,6 +16,7 @@
     <ClCompile Include="src\App\States\MainMenu.cpp" />
     <ClCompile Include="src\App\States\StartUp.cpp" />
     <ClCompile Include="src\App\States\StateSystem.cpp" />
+    <ClCompile Include="src\Editor\EditBox.cpp" />
     <ClCompile Include="src\Entities\BasicBody.cpp" />
     <ClCompile Include="src\Entities\Deco.cpp" />
     <ClCompile Include="src\Entities\Entity.cpp" />
@@ -71,6 +72,7 @@
     <ClInclude Include="src\App\States\StartUp.h" />
     <ClInclude Include="src\App\States\State.h" />
     <ClInclude Include="src\App\States\StateSystem.h" />
+    <ClInclude Include="src\Editor\EditBox.h" />
     <ClInclude Include="src\Entities\BasicBody.h" />
     <ClInclude Include="src\Entities\Deco.h" />
     <ClInclude Include="src\Entities\Entity.h" />
