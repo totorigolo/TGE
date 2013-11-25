@@ -1,6 +1,7 @@
 #pragma once
 #include "../Game/LuaMachine.h"
 #include "../Tools/NonCopyable.h"
+#include "LuaAction.h"
 
 #include <SFML/Graphics.hpp>
 #include <Box2D/Box2D.h>
@@ -9,57 +10,6 @@
 #include <string>
 #include <list>
 #include <unordered_map>
-
-class TriggersManager;
-class LuaAction
-{
-public:
-	// Ctors
-	LuaAction(const std::string &_name, const std::string &_file)
-		: mName(_name), mFile(_file)
-	{
-	}
-	LuaAction(const std::string &_name, const std::string &_file, std::string &_function)
-		: mName(_name), mFile(_file), mFunction(_function)
-	{
-	}
-
-	// Exécute l'action
-	void Execute(LuaMachine *luaMachine)
-	{
-		// Si on a une fonction, on charge le fichier et exécute la fx
-		if (HasFunction())
-		{
-			luaMachine->DoFile(mFile);
-			
-			try
-			{
-				luabind::call_function<void>(luaMachine->GetLuaState(), mFunction.c_str());
-			}
-			catch (const std::exception &e)
-			{
-				std::cerr << e.what() << std::endl;
-			}
-		}
-
-		// Sinon on exécute le fichier
-		else
-		{
-			luaMachine->DoFile(mFile);
-		}
-	}
-
-	// Accesseurs
-	bool HasFunction() { return !mFunction.empty(); }
-	const std::string& GetName() { return mName; }
-	const std::string& GetFile() { return mFile; }
-	const std::string& GetFunction() { return mFunction; }
-
-private:
-	std::string mName;
-	std::string mFile;
-	std::string mFunction;
-};
 
 typedef std::unordered_map<std::string, std::shared_ptr<LuaAction>> ActionMap;
 

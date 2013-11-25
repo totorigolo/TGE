@@ -277,6 +277,9 @@
     <ClCompile Include="src\Editor\EditBox.cpp">
       <Filter>Fichiers sources\Editor</Filter>
     </ClCompile>
+    <ClCompile Include="src\Level\LuaAction.cpp">
+      <Filter>Fichiers sources\Level</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Physics\Joints\DistanceJoint.h">
@@ -437,6 +440,9 @@
     </ClInclude>
     <ClInclude Include="src\Editor\EditBox.h">
       <Filter>Fichiers d%27en-tête\Editor</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Level\LuaAction.h">
+      <Filter>Fichiers d%27en-tête\Level</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -216,10 +216,33 @@ void Box2DGame::OnEvent()
 		mConsole.DoFile("scripts/lvl1.lua");
 	}
 
+	// EditBox : Sélection des objets
+	if (mInputManager.IsKeyPressed(sf::Keyboard::LControl) && mInputManager.GetLMBState())
+	{
+		// Demande au monde les formes qui sont sous l'AABB
+		PointCallback callback(mMp);
+		mPhysicMgr.GetWorld()->QueryAABB(&callback, callback.GetAABB());
+
+		// Il y a un objet, on l'attache
+		if (callback.GetFixture())
+		{
+			// Récupère le Body
+			Entity *e = (Entity*) callback.GetFixture()->GetBody()->GetUserData();
+
+			// Ajoute le Body à l'EditBox
+			myAssert(e, "Un b2Body sans Entity a été sélectionné.");
+			mEditBox->ChangeSelectedObject(e);
+		}
+		else
+		{
+			mEditBox->Unselect();
+		}
+	}
+
 	// Déplacements des objets
 	if (!mPaused && !mMouseMovingBody) // Physique en continue, on utilise le MouseJoint
 	{
-		if (mInputManager.GetRMBState())
+		if (mInputManager.GetRMBState()) // Crée ou met à jour le joint
 		{
 			// Si la souris est déjà attachée, on met à jour la position
 			if (mMouseJointCreated)
@@ -261,8 +284,9 @@ void Box2DGame::OnEvent()
 				}
 			}
 		}
-		else if (mMouseJointCreated)
+		else if (mMouseJointCreated) // Supprime le joint
 		{
+			// Supprime le joint
 			if (mPhysicMgr.JointExists(mMouseJointID))
 			{
 				mPhysicMgr.DestroyJoint(mMouseJointID);

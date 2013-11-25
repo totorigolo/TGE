@@ -37,6 +37,7 @@
     <ClCompile Include="src\Game\Lua\RegisterInputManager.cpp" />
     <ClCompile Include="src\Game\Lua\RegisterEntityFactory.cpp" />
     <ClCompile Include="src\Level\LevelSaver.cpp" />
+    <ClCompile Include="src\Level\LuaAction.cpp" />
     <ClCompile Include="src\Level\TriggersManager.cpp" />
     <ClCompile Include="src\Physics\DebugDraw.cpp" />
     <ClCompile Include="src\Physics\Joint.cpp" />
@@ -87,6 +88,7 @@
     <ClInclude Include="src\Level\LevelManager.h" />
     <ClInclude Include="src\Level\LevelLoader.h" />
     <ClInclude Include="src\Level\LevelSaver.h" />
+    <ClInclude Include="src\Level\LuaAction.h" />
     <ClInclude Include="src\Level\TriggersManager.h" />
     <ClInclude Include="src\Physics\Callback\AABBCallback.h" />
     <ClInclude Include="src\Physics\Callback\AABBListCallback.h" />
