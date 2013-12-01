@@ -1,0 +1,15 @@
+Debug/
+Dropbox/
+DropboxPortableAHK/
+Release/
+InverseWayLiberation/Debug
+InverseWayLiberation/Release
+Shadows/
+.exe
+.dll
+.db
+.lnk
+.opensdf
+.sdf
+.sln
+.suo
