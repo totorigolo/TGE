@@ -101,5 +101,5 @@ private:
 	sfg::SFGUI *mSfGUI;
 	sfg::Desktop mDesktop;
 	sf::Clock mGUIElapsedTime;
-	std::shared_ptr<EditBox> mEditBox;
+	std::unique_ptr<EditBox> mEditBox;
 };

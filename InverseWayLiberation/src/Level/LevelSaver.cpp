@@ -149,15 +149,17 @@ bool LevelSaver::ProcessBasicBodies()
 
 			// Définit le nom de la balise
 			std::string type;
-			if (bb->GetBasicBodyType() == BasicBody::Type::DynamicBox)
+			if (bb->Getb2BodyType() == b2BodyType::b2_dynamicBody && bb->GetBasicBodyShape() == BasicBody::Shape::Box)
 				type = "dynamicbox";
-			else if (bb->GetBasicBodyType() == BasicBody::Type::DynamicCircle)
+			else if (bb->Getb2BodyType() == b2BodyType::b2_dynamicBody && bb->GetBasicBodyShape() == BasicBody::Shape::Circle)
 				type = "dynamiccircle";
-			else if (bb->GetBasicBodyType() == BasicBody::Type::StaticBox)
+			else if (bb->Getb2BodyType() == b2BodyType::b2_staticBody && bb->GetBasicBodyShape() == BasicBody::Shape::Box)
 				type = "staticbox";
+			else if (bb->Getb2BodyType() == b2BodyType::b2_staticBody && bb->GetBasicBodyShape() == BasicBody::Shape::Circle)
+				type = "staticcircle";
 			else
 			{
-				Dialog::Error("Erreur lors de la sauvegarde :\nBasicBody::Type == Null");
+				Dialog::Error("Erreur lors de la sauvegarde :\nBasicBody::Type == Null\nBasicBody ignoré.");
 				continue;
 			}
 			
@@ -172,7 +174,7 @@ bool LevelSaver::ProcessBasicBodies()
 
 			// Cherche la position et la rotation
 			b2Vec2 pos(bb->GetPosition());
-			float rotation = bb->GetRotation();
+			float rotation = bb->GetRotationD();
 			if (abs(rotation - 90) < 0.05) rotation = 90.f;
 			else if (abs(rotation) < 0.05) rotation = 0.f;
 
@@ -207,7 +209,7 @@ bool LevelSaver::ProcessBasicBodies()
 			if (rotation != 0.f) balise->SetAttribute("rotation", rotation);
 			if (linvel.LengthSquared() != 0.f) balise->SetAttribute("linvel", Parser::b2Vec2ToString(linvel).c_str());
 			if (angvel != 0.f) balise->SetAttribute("angvel", angvel);
-			if (type != "staticbox" && density != 1.f) balise->SetAttribute("density", density);
+			if (density != 1.f) balise->SetAttribute("density", density);
 			if (friction != 0.2f) balise->SetAttribute("friction", friction);
 			if (restitution != 0.f) balise->SetAttribute("restitution", restitution);
 			if (layer != 1) balise->SetAttribute("layer", layer);

@@ -256,7 +256,12 @@ bool LevelLoader::ProcessBasicBodies()
 		if (type == "staticbox")
 		{
 			bb = new BasicBody(layer, id);
-			bb->CreateStaticBox(posRot, mLevel.mResourceManager.GetTexture(texture), friction, restitution, groupIndex, categoryBits, maskBits);
+			bb->CreateStaticBox(posRot, mLevel.mResourceManager.GetTexture(texture), density, friction, restitution, groupIndex, categoryBits, maskBits);
+		}
+		else if (type == "staticcircle")
+		{
+			bb = new BasicBody(layer, id);
+			bb->CreateStaticCircle(posRot, mLevel.mResourceManager.GetTexture(texture), density, friction, restitution, groupIndex, categoryBits, maskBits);
 		}
 		else if (type == "dynamicbox")
 		{

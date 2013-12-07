@@ -5,7 +5,7 @@ class NonCopyable
 protected:
 	// Ctor & Dtor (les classes filles peuvent se [cons/dé]truire)
 	NonCopyable() {}
-	virtual ~NonCopyable() {}
+	//virtual ~NonCopyable() {}
 
 private:
 	// La copie est interdite

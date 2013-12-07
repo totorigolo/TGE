@@ -20,6 +20,9 @@ private:
     std::string mMsg;
 };
 
+// Crée une Erreur
+#define myThrowError(msg) throw Error(msg, __FILE__, __FUNCTION__, __LINE__)
+
 // Assertion
 #define myAssert(exp, msg) if(!(exp)) throw Error(msg, __FILE__, __FUNCTION__, __LINE__)
 

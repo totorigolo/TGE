@@ -5,3 +5,4 @@ A faire :
  - Rule of Three !!
  - Transformer tous les "int foo = 1;" en "int foo(1);"
  - Box2D 2.3.0
+ - L'objet sélectionné ne doit pas être supprimé (ex: hors du monde)

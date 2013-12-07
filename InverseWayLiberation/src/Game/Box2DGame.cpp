@@ -109,7 +109,7 @@ bool Box2DGame::OnInit()
 	// Crée la Window et le Desktop
 	mInputManager.AddDesktop(&mDesktop);
 	mGUIElapsedTime.restart();
-	mEditBox = std::make_shared<EditBox>(EditBox(mDesktop));
+	mEditBox = std::unique_ptr<EditBox>(new EditBox(mDesktop));
 
 	/* Physique */
 	// Initialise le monde
@@ -217,10 +217,10 @@ void Box2DGame::OnEvent()
 	}
 
 	// EditBox : Sélection des objets
-	if (mInputManager.IsKeyPressed(sf::Keyboard::LControl) && mInputManager.GetLMBState())
+	if (mInputManager.IsKeyPressed(sf::Keyboard::LControl) && mInputManager.GetRMBState())
 	{
 		// Demande au monde les formes qui sont sous l'AABB
-		PointCallback callback(mMp);
+		PointCallback callback(mMp, false);
 		mPhysicMgr.GetWorld()->QueryAABB(&callback, callback.GetAABB());
 
 		// Il y a un objet, on l'attache
@@ -334,6 +334,9 @@ void Box2DGame::OnEvent()
 	// Charge et sauvegarde un niveau
 	if (mInputManager.KeyReleased(sf::Keyboard::R))
 	{
+		// Déselectionne dans l'EditBox
+		mEditBox->Unselect();
+
 		// Supprime les pointeurs
 		mGrapnel = nullptr;
 		mHookedSBody = nullptr;
@@ -352,6 +355,9 @@ void Box2DGame::OnEvent()
 	}
 	if (mInputManager.KeyReleased(sf::Keyboard::S))
 	{
+		// Déselectionne dans l'EditBox
+		mEditBox->Unselect();
+
 		// Sauvegarde le niveau
 		LevelSaver(mLevel, "lvls/save.xvl");
 	}
@@ -500,6 +506,7 @@ void Box2DGame::OnRender()
 	if (!mDebugDraw) mPhysicMgr.DrawDebugData();
 
 	// Affichage de la GUI
+	if (mEditBox.get()) mWindow.draw(mEditBox->GetSelectionMark());
 	mSfGUI->Display(mWindow);
 
 	// Si on n'a pas le focus
