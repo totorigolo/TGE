@@ -2,11 +2,13 @@
 #include "../Lua/LuaMachine.h"
 #include "../Tools/NonCopyable.h"
 #include "../Resources/ResourceManager.h"
+#include "../App/SpyedKey.h"
 
 #include <SFML/Graphics.hpp>
 #include <SFGUI/SFGUI.hpp>
 #include <Box2D/Box2D.h>
 #include <memory>
+#include <vector>
 
 class PhysicManager;
 class LevelManager;
@@ -62,6 +64,7 @@ private:
 	
 	// Evènements
 	InputManager &mInputManager;
+	std::vector<SpyedKey::Ptr> mSpyedKeys;
 
 	// Niveau
 	LevelManager &mLevel;

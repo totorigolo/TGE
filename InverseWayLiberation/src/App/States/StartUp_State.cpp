@@ -1,10 +1,12 @@
 #include "StartUp_State.h"
 #include "MainMenu_State.h"
+#include "../SpyedKey.h"
 
 #include <vector>
 
 // Ctor & Dtor
 StartUp_State::StartUp_State()
+	: mInputManager(InputManager::GetInstance())
 {
 }
 StartUp_State::~StartUp_State()
@@ -17,6 +19,10 @@ State* StartUp_State::Run(App *app)
 	// Récupère la fenêtre
 	sf::RenderWindow *window = app->GetRenderWindow();
 	window->setFramerateLimit(30U);
+	window->setView(window->getDefaultView());
+
+	// Evènements
+	SpyedKey key_return(sf::Keyboard::Return);
 
 	// Change le titre de la fenêtre
 	window->setTitle("Inverse Way Liberation - Splash");
@@ -46,20 +52,15 @@ State* StartUp_State::Run(App *app)
 	while (window->isOpen() && !quit)
 	{
 		// Evènements
-		sf::Event event;
-		while (window->pollEvent(event))
+		mInputManager.Update();
+		if (mInputManager.HasQuitted())
 		{
-			// Clic sur la petite croix rouge
-			if (event.type == sf::Event::Closed || 
-				(event.type == sf::Event::KeyReleased && event.key.code == sf::Keyboard::Escape))
-				quit = true;
-
-			// N'importe quelle autre touche : splash suivant
-			else if (event.type == sf::Event::KeyReleased)
-			{
-				opacity = 0.f;
-				state = 0;
-			}
+			quit = true;
+		}
+		if (mInputManager.KeyReleased(sf::Keyboard::Return))
+		{
+			opacity = 0.f;
+			state = 0;
 		}
 
 		// Effet
@@ -107,14 +108,13 @@ State* StartUp_State::Run(App *app)
 		{
 			quit = true;
 		}
-		// Change l'opacité
+
+		// Applique l'opacité
 		sprite.setColor(sf::Color(255, 255, 255, static_cast<sf::Uint8>(opacity * 255)));
 
 		// Affichage
 		window->clear();
-
 		window->draw(sprite);
-
 		window->display();
 	}
 

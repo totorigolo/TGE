@@ -107,24 +107,13 @@ bool Game::OnInit()
 	mPhysicMgr.SetDebugDrawTarget(&mWindow);
 
 	/* Evènements */
-	// Enregistre la fênetre
-	mInputManager.SetWindow(&mWindow);
-	mWindow.setKeyRepeatEnabled(false);
-
 	// Enregistre la vue
 	mInputManager.SetView(mWindow.getDefaultView());
 
 	// Demande l'espionnage de touches
-	mInputManager.AddSpyedKey(sf::Keyboard::M); // Pause physique
-	mInputManager.AddSpyedKey(sf::Keyboard::O); // Debug Draw
-	mInputManager.AddSpyedKey(sf::Keyboard::T); // Ragdoll
-	mInputManager.AddSpyedKey(sf::Keyboard::L); // Lamp
-	mInputManager.AddSpyedKey(sf::Keyboard::R); // Reload
-	mInputManager.AddSpyedKey(sf::Keyboard::S); // Save
-	mInputManager.AddSpyedKey(sf::Keyboard::P); // Pin
-	mInputManager.AddSpyedKey(sf::Keyboard::H); // Hook
-	mInputManager.AddSpyedKey(sf::Keyboard::I); // Console
-	mInputManager.AddSpyedKey(sf::Keyboard::X); // test
+	// Evènements
+	mSpyedKeys.push_back(SpyedKey::Create(sf::Keyboard::O)); // Debug Draw
+	mSpyedKeys.push_back(SpyedKey::Create(sf::Keyboard::R)); // Reload
 
 	// Initialise la machine Lua
 	mConsole.RegisterEntityFactory();
@@ -239,7 +228,7 @@ void Game::OnRender()
 		static bool fontLoaded = false;
 		if (!fontLoaded)
 		{
-			f.loadFromFile("tex/calibri.ttf"); // TODO: ResourceMgr
+			f.loadFromFile("data/calibri.ttf"); // TODO: ResourceMgr
 			fontLoaded = true;
 		}
 		sf::Text pause("Pause", f, 50U);
@@ -267,6 +256,7 @@ void Game::OnQuit()
 
 	// Remet la vue par défaut
 	mWindow.setView(mWindow.getDefaultView());
+	mInputManager.SetView(mWindow.getDefaultView());
 
 	// Vide le niveau
 	mLevel.Clear();
@@ -275,7 +265,4 @@ void Game::OnQuit()
 	mConsole.UnregisterGlobalLuaVar("level");
 	mConsole.UnregisterGlobalLuaVar("physicMgr");
 	mConsole.UnregisterGlobalLuaVar("inputMgr");
-
-	// Arrête l'espionnage des touches
-	mInputManager.RemoveSpyedKey(sf::Keyboard::R); // Reload
 }

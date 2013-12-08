@@ -23,7 +23,7 @@ namespace Dialog
 
 		// Création du texte
 		sf::Font f;
-		if (!f.loadFromFile("tex/calibri.ttf"))
+		if (!f.loadFromFile("data/calibri.ttf"))
 		{
 #ifdef _WIN32
 			f.loadFromFile("C:/Windows/Fonts/calibri.ttf");
@@ -152,7 +152,7 @@ namespace Dialog
 
 		// Création du texte
 		sf::Font f;
-		f.loadFromFile("tex/calibri.ttf");
+		f.loadFromFile("data/calibri.ttf");
 		sf::Text text(message, f);
 		text.scale(0.8f, 0.8f);
 		text.setColor(sf::Color::Black);
@@ -301,7 +301,7 @@ namespace Dialog
 
 		// Création du texte
 		sf::Font f;
-		f.loadFromFile("tex/calibri.ttf");
+		f.loadFromFile("data/calibri.ttf");
 		sf::Text text(message, f);
 		text.scale(0.8f, 0.8f);
 		text.setColor(sf::Color::Black);
@@ -442,7 +442,7 @@ namespace Dialog
 
 		// Création du texte
 		sf::Font f;
-		f.loadFromFile("tex/calibri.ttf");
+		f.loadFromFile("data/calibri.ttf");
 		sf::Text text(message, f);
 		text.scale(0.8f, 0.8f);
 		text.setColor(sf::Color::Black);

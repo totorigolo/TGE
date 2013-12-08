@@ -58,6 +58,7 @@ public:
 	int GetMouseWheelDelta() const;
 	bool HasQuitted(); // Réinitialise après appel
 	bool HasFocus() const;
+	bool HasResized(); // Réinitialise après appel
 
 	// Gestion des Desktops (GUI)
 	void AddDesktop(sfg::Desktop *d);
@@ -75,6 +76,7 @@ private:
 	// Etat
 	bool mHasQuitted;
 	bool mHasFocus;
+	bool mHasResized;
 
 	// Fenêtre
 	sf::RenderWindow *mWindow;

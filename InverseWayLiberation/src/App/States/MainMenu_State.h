@@ -14,4 +14,8 @@ public:
 	// Exécute le State
 	// Retourne un pointeur sur le prochain State
 	virtual State* Run(App *app);
+
+private:
+	// InputManager
+	InputManager &mInputManager;
 };

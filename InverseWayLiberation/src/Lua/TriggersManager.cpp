@@ -120,7 +120,7 @@ void TriggersManager::DebugDraw(sf::RenderTarget &target) const
 	static bool fontLoaded = false;
 	if (!fontLoaded)
 	{
-		f.loadFromFile("tex/calibri.ttf"); // TODO: ResourceMgr
+		f.loadFromFile("data/calibri.ttf"); // TODO: ResourceMgr
 		fontLoaded = true;
 	}
 	sf::Text text;

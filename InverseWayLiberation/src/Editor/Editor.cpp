@@ -117,24 +117,21 @@ bool Editor::OnInit()
 	mPhysicMgr.SetDebugDrawTarget(&mWindow);
 
 	/* Evènements */
-	// Enregistre la fênetre
-	mInputManager.SetWindow(&mWindow);
-	mWindow.setKeyRepeatEnabled(false);
-
 	// Enregistre la vue
 	mInputManager.SetView(mWindow.getDefaultView());
 
 	// Demande l'espionnage de touches
-	mInputManager.AddSpyedKey(sf::Keyboard::M); // Pause physique
-	mInputManager.AddSpyedKey(sf::Keyboard::O); // Debug Draw
-	mInputManager.AddSpyedKey(sf::Keyboard::T); // Ragdoll
-	mInputManager.AddSpyedKey(sf::Keyboard::L); // Lamp
-	mInputManager.AddSpyedKey(sf::Keyboard::R); // Reload
-	mInputManager.AddSpyedKey(sf::Keyboard::S); // Save
-	mInputManager.AddSpyedKey(sf::Keyboard::P); // Pin
-	mInputManager.AddSpyedKey(sf::Keyboard::H); // Hook
-	mInputManager.AddSpyedKey(sf::Keyboard::I); // Console
-	mInputManager.AddSpyedKey(sf::Keyboard::X); // test
+	// Evènements
+	mSpyedKeys.push_back(SpyedKey::Create(sf::Keyboard::M)); // Pause physique
+	mSpyedKeys.push_back(SpyedKey::Create(sf::Keyboard::O)); // Debug Draw
+	mSpyedKeys.push_back(SpyedKey::Create(sf::Keyboard::T)); // Ragdoll
+	mSpyedKeys.push_back(SpyedKey::Create(sf::Keyboard::L)); // Lamp
+	mSpyedKeys.push_back(SpyedKey::Create(sf::Keyboard::R)); // Reload
+	mSpyedKeys.push_back(SpyedKey::Create(sf::Keyboard::S)); // Save
+	mSpyedKeys.push_back(SpyedKey::Create(sf::Keyboard::P)); // Pin
+	mSpyedKeys.push_back(SpyedKey::Create(sf::Keyboard::H)); // Hook
+	mSpyedKeys.push_back(SpyedKey::Create(sf::Keyboard::I)); // Console
+	mSpyedKeys.push_back(SpyedKey::Create(sf::Keyboard::X)); // test
 
 	// Initialise la machine Lua
 	mConsole.RegisterEntityFactory();
@@ -216,38 +213,15 @@ void Editor::OnEvent()
 		mConsole.DoFile("scripts/lvl1.lua");
 	}
 
-	// EditBox : Sélection des objets
-	if (mInputManager.IsKeyPressed(sf::Keyboard::LControl) && mInputManager.GetRMBState())
-	{
-		// Demande au monde les formes qui sont sous l'AABB
-		PointCallback callback(mMp, false);
-		mPhysicMgr.GetWorld()->QueryAABB(&callback, callback.GetAABB());
-
-		// Il y a un objet, on l'attache
-		if (callback.GetFixture())
-		{
-			// Récupère le Body
-			Entity *e = (Entity*) callback.GetFixture()->GetBody()->GetUserData();
-
-			// Ajoute le Body à l'EditBox
-			myAssert(e, "Un b2Body sans Entity a été sélectionné.");
-			mEditBox->ChangeSelectedObject(e);
-		}
-		else
-		{
-			mEditBox->Unselect();
-		}
-	}
-
 	// Déplacements des objets
-	if (!mPaused && !mMouseMovingBody) // Physique en continue, on utilise le MouseJoint
+	if (!mPaused) // Physique en continue, on utilise le MouseJoint
 	{
 		if (mInputManager.GetRMBState()) // Crée ou met à jour le joint
 		{
 			// Si la souris est déjà attachée, on met à jour la position
 			if (mMouseJointCreated)
 			{
-				MouseJoint *j = ((MouseJoint*)mPhysicMgr.GetJoint(mMouseJointID));
+				MouseJoint *j = ((MouseJoint*) mPhysicMgr.GetJoint(mMouseJointID));
 				if (j)
 				{
 					j->SetTarget(mMp);
@@ -280,6 +254,7 @@ void Editor::OnEvent()
 						MouseJoint *j = new MouseJoint(def);
 						mMouseJointID = j->GetID();
 						mMouseJointCreated = true;
+						mMouseMovingBody = body;
 					}
 				}
 			}
@@ -291,12 +266,15 @@ void Editor::OnEvent()
 			{
 				mPhysicMgr.DestroyJoint(mMouseJointID);
 				mMouseJointID = -1;
+				mMouseJointCreated = false;
+				mMouseMovingBody = nullptr;
 			}
 			// Le joint n'existe plus
 			else
 			{
 				mMouseJointCreated = false;
 				mMouseJointID = -1;
+				mMouseMovingBody = nullptr;
 			}
 		}
 	}
@@ -331,6 +309,34 @@ void Editor::OnEvent()
 		}
 	}
 	
+	// EditBox : Sélection des objets
+	if (mMouseMovingBody)
+	{
+		myAssert(mMouseMovingBody->GetUserData(), "Un b2Body sans Entity a été sélectionné.");
+		mEditBox->ChangeSelectedObject((Entity*) mMouseMovingBody->GetUserData());
+	}
+	else if (mInputManager.GetRMBState())
+	{
+		// Demande au monde les formes qui sont sous l'AABB
+		PointCallback callback(mMp, false);
+		mPhysicMgr.GetWorld()->QueryAABB(&callback, callback.GetAABB());
+
+		// Il y a un objet, on l'attache
+		if (callback.GetFixture())
+		{
+			// Récupère le Body
+			Entity *e = (Entity*) callback.GetFixture()->GetBody()->GetUserData();
+
+			// Ajoute le Body à l'EditBox
+			myAssert(e, "Un b2Body sans Entity a été sélectionné.");
+			mEditBox->ChangeSelectedObject(e);
+		}
+		else
+		{
+			mEditBox->Unselect();
+		}
+	}
+
 	// Charge et sauvegarde un niveau
 	if (mInputManager.KeyReleased(sf::Keyboard::R))
 	{
@@ -550,7 +556,7 @@ void Editor::OnRender()
 		static bool fontLoaded = false;
 		if (!fontLoaded)
 		{
-			f.loadFromFile("tex/calibri.ttf"); // TODO: ResourceMgr
+			f.loadFromFile("data/calibri.ttf"); // TODO: ResourceMgr
 			fontLoaded = true;
 		}
 		sf::Text pause("Pause", f, 50U);
@@ -578,6 +584,7 @@ void Editor::OnQuit()
 
 	// Remet la vue par défaut
 	mWindow.setView(mWindow.getDefaultView());
+	mInputManager.SetView(mWindow.getDefaultView());
 
 	// Supprime le joint de la souris
 	mMouseJointCreated = false; // Suppr auto
@@ -596,11 +603,4 @@ void Editor::OnQuit()
 	mConsole.UnregisterGlobalLuaVar("level");
 	mConsole.UnregisterGlobalLuaVar("physicMgr");
 	mConsole.UnregisterGlobalLuaVar("inputMgr");
-
-	// Arrête l'espionnage des touches
-	mInputManager.RemoveSpyedKey(sf::Keyboard::T); // Ragdoll
-	mInputManager.RemoveSpyedKey(sf::Keyboard::L); // Lamp
-	mInputManager.RemoveSpyedKey(sf::Keyboard::R); // Reload
-	mInputManager.RemoveSpyedKey(sf::Keyboard::P); // Pin
-	mInputManager.RemoveSpyedKey(sf::Keyboard::H); // Hook
 }

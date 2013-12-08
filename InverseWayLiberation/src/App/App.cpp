@@ -8,7 +8,7 @@
 
 App::App()
 	: mStateSystem(StateSystem::GetInstance()),
-	mRenderWindow(nullptr), mSfGUI(nullptr)
+	mRenderWindow(nullptr), mInputManager(InputManager::GetInstance()), mSfGUI(nullptr)
 {
 }
 App::~App()
@@ -21,7 +21,7 @@ App::~App()
 	}
 }
 
-bool App::Init() 
+bool App::Init()
 {
 	// TODO: Initialiser le son
 
@@ -31,6 +31,11 @@ bool App::Init()
 	// Charge la fenêtre de rendu
 	mRenderWindow = new sf::RenderWindow(sf::VideoMode(800U, 600U), "Inverse Way Liberation - Chargement");
 	mRenderWindow->setFramerateLimit(60U);
+	mRenderWindow->setKeyRepeatEnabled(false);
+
+	// Enregistre la fenêtre dans l'InputManager
+	mInputManager.SetWindow(mRenderWindow);
+	mInputManager.SetView(mRenderWindow->getDefaultView());
 
 	// Change le state
 	mStateSystem.ChangeState(&StartUp_State::GetInstance());

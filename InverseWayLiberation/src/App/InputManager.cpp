@@ -8,6 +8,10 @@ InputManager::InputManager()
 	// Etat
 	mHasQuitted = false;
 	mHasFocus = true;
+	mHasResized = false;
+
+	// View et Zoom
+	mCurrentZoom = 1.f;
 
 	// Souris
 	mRMBIsDown = false;
@@ -46,6 +50,7 @@ void InputManager::Zoom(float zoom)
 void InputManager::SetView(const sf::View &view)
 {
 	mView = view;
+	SetZoom(1.f);
 }
 void InputManager::MoveCenter(const sf::Vector2f &dep)
 {
@@ -121,24 +126,8 @@ void InputManager::AddEvent(const sf::Event &event)
 	{
 		mView.setSize(u2f(mWindow->getSize()) * sf::Vector2f(mView.getViewport().width, mView.getViewport().height));
 		mView.zoom(mCurrentZoom);
-	}
 
-	// Déplacement de la vue avec les flèches
-	else if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Up)
-	{
-		mView.move(sf::Vector2f(0.f, -5.f) * mCurrentZoom);
-	}
-	else if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Down)
-	{
-		mView.move(sf::Vector2f(0.f, 5.f) * mCurrentZoom);
-	}
-	else if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Left)
-	{
-		mView.move(sf::Vector2f(-5.f, 0.f) * mCurrentZoom);
-	}
-	else if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Right)
-	{
-		mView.move(sf::Vector2f(5.f, 0.f) * mCurrentZoom);
+		mHasResized = true;
 	}
 
 	// Espionnage des touches (doit être à la fin)
@@ -244,6 +233,15 @@ bool InputManager::HasQuitted()
 bool InputManager::HasFocus() const
 {
 	return mHasFocus;
+}
+bool InputManager::HasResized()
+{
+	if (mHasResized)
+	{
+		mHasResized = false;
+		return true;
+	}
+	return false;
 }
 
 // Gestion des Desktops (GUI)

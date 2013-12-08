@@ -1,4 +1,5 @@
 #pragma once
+#include "InputManager.h"
 #include "../Tools/Singleton.h"
 
 #include <SFML/Graphics.hpp>
@@ -33,6 +34,9 @@ private:
 
 	// Fenêtre de rendu
 	sf::RenderWindow *mRenderWindow;
+
+	// InputManager
+	InputManager &mInputManager;
 
 	// GUI
 	sfg::SFGUI *mSfGUI;

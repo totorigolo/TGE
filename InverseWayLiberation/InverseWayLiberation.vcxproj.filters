@@ -292,6 +292,9 @@
     <ClCompile Include="src\App\States\Editor_State.cpp">
       <Filter>Fichiers sources\App\States</Filter>
     </ClCompile>
+    <ClCompile Include="src\App\States\Configuration_State.cpp">
+      <Filter>Fichiers sources\App\States</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Physics\Joints\DistanceJoint.h">
@@ -461,6 +464,12 @@
     </ClInclude>
     <ClInclude Include="src\App\States\StartUp_State.h">
       <Filter>Fichiers d%27en-tête\App\States</Filter>
+    </ClInclude>
+    <ClInclude Include="src\App\States\Configuration_State.h">
+      <Filter>Fichiers d%27en-tête\App\States</Filter>
+    </ClInclude>
+    <ClInclude Include="src\App\SpyedKey.h">
+      <Filter>Fichiers d%27en-tête\App</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
