@@ -2,6 +2,7 @@
 #include "../Tools/Error.h"
 #include "../Tools/Parser.h"
 #include "../Tools/utils.h"
+#include "../App/InputManager.h"
 
 #include "../Entities/BasicBody.h"
 #include "../Entities/Deco.h"
@@ -24,7 +25,7 @@
 // Ctor
 EditBox::EditBox(sfg::Desktop &desktop)
 	: mDesktop(desktop),
-	mLevelMgr(LevelManager::GetInstance()), mPhysicMgr(PhysicManager::GetInstance()), mInputMgr(InputManager::GetInstance()),
+	mLevelMgr(LevelManager::GetInstance()), mPhysicMgr(PhysicManager::GetInstance()),
 	mSelectedEntity(nullptr), mSelectedJoint(nullptr), mSelectionType(SelectionType::Null)
 {
 	// Crée la fenêtre
@@ -40,6 +41,9 @@ EditBox::EditBox(sfg::Desktop &desktop)
 
 	// Initialise l'EditBox
 	CreateEmptyWindow();
+
+	// Initialise des variables
+	mPosStepSaveValue = 1.f;
 }
 
 // Dtor
@@ -88,6 +92,14 @@ void EditBox::Unselect()
 EditBox::SelectionType EditBox::GetSelectionType()
 {
 	return mSelectionType;
+}
+Entity* EditBox::GetSelectedEntity()
+{
+	return mSelectedEntity;
+}
+Joint* EditBox::GetSelectedJoint()
+{
+	return mSelectedJoint;
 }
 std::string EditBox::SelectionTypeToString(const SelectionType &type)
 {
@@ -145,6 +157,7 @@ void EditBox::EmptyGUI()
 	mPosY.reset();
 	mRot.reset();
 	mPosButton.reset();
+	if (mPosStep) mPosStepSaveValue = mPosStep->GetValue();
 	mPosStep.reset();
 	mPosXp.reset();
 	mPosXm.reset();
@@ -364,15 +377,19 @@ void EditBox::OnLevelCreateWindow()
 	mOriginViewX->SetDigits(3);
 	mOriginViewY = sfg::SpinButton::Create(-1000000.f, 1000000.f, 1.f);
 	mOriginViewY->SetDigits(3);
+	mOriginViewCurrentBtn = sfg::Button::Create("C");
 	mOriginViewBox->PackEnd(mOriginViewLabel, false);
 	mOriginViewBox->PackEnd(mOriginViewX);
 	mOriginViewBox->PackEnd(mOriginViewY);
+	mOriginViewBox->PackEnd(mOriginViewCurrentBtn, false);
 	mDefaultZoomBox = sfg::Box::Create(sfg::Box::Orientation::HORIZONTAL);
 	mDefaultZoomLabel = sfg::Label::Create("Déf Zoom :");
 	mDefaultZoom = sfg::SpinButton::Create(0.f, 200.f, 0.1f);
 	mDefaultZoom->SetDigits(3);
+	mDefaultZoomCurrentBtn = sfg::Button::Create("C");
 	mDefaultZoomBox->PackEnd(mDefaultZoomLabel, false);
 	mDefaultZoomBox->PackEnd(mDefaultZoom);
+	mDefaultZoomBox->PackEnd(mDefaultZoomCurrentBtn, false);
 	mLevelCloseBtn = sfg::Button::Create("Fermer");
 
 	// Met à jour les valeurs
@@ -386,7 +403,9 @@ void EditBox::OnLevelCreateWindow()
 	mBckgColorB->GetSignal(sfg::SpinButton::OnValueChanged).Connect(std::bind(&EditBox::OnLevelChangeBckgColorB, this));
 	mOriginViewX->GetSignal(sfg::SpinButton::OnValueChanged).Connect(std::bind(&EditBox::OnLevelChangeOriginViewX, this));
 	mOriginViewY->GetSignal(sfg::SpinButton::OnValueChanged).Connect(std::bind(&EditBox::OnLevelChangeOriginViewY, this));
+	mOriginViewCurrentBtn->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind(&EditBox::OnLevelChangeOriginViewCurrent, this));
 	mDefaultZoom->GetSignal(sfg::SpinButton::OnValueChanged).Connect(std::bind(&EditBox::OnLevelChangemDefaultZoom, this));
+	mDefaultZoomCurrentBtn->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind(&EditBox::OnLevelChangemDefaultZoomCurrent, this));
 	mLevelCloseBtn->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind(&EditBox::OnLevelClose, this));
 
 	// Ajoute les éléments à la fenêtre
@@ -422,7 +441,7 @@ void EditBox::CreateBasicBodyWindow()
 	mPosButton = sfg::Button::Create("X");
 	mPosButton->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind(&EditBox::OnBasicBodyChangePosition, this));
 	mPosStep = sfg::SpinButton::Create(0.f, 200.f, 0.1f);
-	mPosStep->SetValue(1.f);
+	mPosStep->SetValue(mPosStepSaveValue);
 	mPosStep->SetDigits(1);
 	mPosStep->SetRequisition(sf::Vector2f(40.f, 0.f));
 	mPosXp = sfg::Button::Create("+");
@@ -653,11 +672,11 @@ void EditBox::OnLevelRefresh()
 	mBckgColorB->SetValue(mLevelMgr.GetBckgColor().b);
 
 	// Origine de la vue
-	mOriginViewX->SetValue(mInputMgr.GetDefaultCenter().x * mPhysicMgr.GetMPP());
-	mOriginViewY->SetValue(mInputMgr.GetDefaultCenter().y * mPhysicMgr.GetMPP());
+	mOriginViewX->SetValue(mLevelMgr.GetDefaultCenter().x * mPhysicMgr.GetMPP());
+	mOriginViewY->SetValue(mLevelMgr.GetDefaultCenter().y * mPhysicMgr.GetMPP());
 
 	// Zoom par défaut
-	mDefaultZoom->SetValue(mInputMgr.GetDefaultZoom());
+	mDefaultZoom->SetValue(mLevelMgr.GetDefaultZoom());
 }
 void EditBox::OnLevelClose()
 {
@@ -677,9 +696,11 @@ void EditBox::OnLevelClose()
 	mOriginViewLabel.reset();
 	mOriginViewX.reset();
 	mOriginViewY.reset();
+	mOriginViewCurrentBtn.reset();
 	mDefaultZoomBox.reset();
 	mDefaultZoomLabel.reset();
 	mDefaultZoom.reset();
+	mDefaultZoomCurrentBtn.reset();
 	mLevelCloseBtn.reset();
 }
 void EditBox::OnLevelChangeGravityX()
@@ -710,19 +731,30 @@ void EditBox::OnLevelChangeBckgColorB()
 }
 void EditBox::OnLevelChangeOriginViewX()
 {
-	sf::Vector2f c = mInputMgr.GetDefaultCenter();
+	sf::Vector2f c = mLevelMgr.GetDefaultCenter();
 	c.x = mOriginViewX->GetValue() * mPhysicMgr.GetPPM();
-	mInputMgr.SetDefaultCenter(c);
+	mLevelMgr.SetDefaultCenter(c);
 }
 void EditBox::OnLevelChangeOriginViewY()
 {
-	sf::Vector2f c = mInputMgr.GetDefaultCenter();
+	sf::Vector2f c = mLevelMgr.GetDefaultCenter();
 	c.y = mOriginViewY->GetValue() * mPhysicMgr.GetPPM();
-	mInputMgr.SetDefaultCenter(c);
+	mLevelMgr.SetDefaultCenter(c);
+}
+void EditBox::OnLevelChangeOriginViewCurrent()
+{
+	mLevelMgr.SetDefaultCenter(InputManager::GetInstance().GetCurrentCenter() * mPhysicMgr.GetMPP());
+
+	mOriginViewX->SetValue(mLevelMgr.GetDefaultCenter().x);
+	mOriginViewY->SetValue(mLevelMgr.GetDefaultCenter().y);
 }
 void EditBox::OnLevelChangemDefaultZoom()
 {
-	mInputMgr.SetDefaultZoom(mDefaultZoom->GetValue());
+	mLevelMgr.SetDefaultZoom(mDefaultZoom->GetValue());
+}
+void EditBox::OnLevelChangemDefaultZoomCurrent()
+{
+	mDefaultZoom->SetValue(InputManager::GetInstance().GetCurrentZoom());
 }
 // BasicBodies
 void EditBox::OnBasicBodyRefresh()

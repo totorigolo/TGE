@@ -6,7 +6,7 @@
 #include "../Tools/Dialog.h"
 #include "../Tools/Parser.h"
 
-#include "../Game/InputManager.h"
+#include "../App/InputManager.h"
 #include "../Physics/PhysicManager.h"
 
 #include "../Physics/Joints/RopeJoint.h"
@@ -127,11 +127,11 @@ bool LevelLoader::ProcessWorld()
 	}
 
 	// Change les attributs
-	mLevel.mBckgC = bckgColor;
+	mLevel.SetBckgColor(bckgColor);
 	mPhysicManager.SetGravity(gravity);
 	mPhysicManager.SetPPM(PPM);
-	mInputManager.SetDefaultZoom(defaultZoom);
-	mInputManager.SetDefaultCenter(b22sfVec(originView, mPhysicManager.GetPPM()));
+	mLevel.SetDefaultZoom(defaultZoom);
+	mLevel.SetDefaultCenter(b22sfVec(originView, mPhysicManager.GetPPM()));
 
 	return true;
 }

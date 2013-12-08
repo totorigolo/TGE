@@ -85,14 +85,20 @@
     <Filter Include="Fichiers de ressources\Scripts">
       <UniqueIdentifier>{5edf6274-fe55-45b9-bc64-db52bb465704}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Fichiers sources\Game\Lua">
-      <UniqueIdentifier>{3d60c0ae-f299-4733-99fc-7ce752fe5255}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Fichiers d%27en-tête\Editor">
       <UniqueIdentifier>{d3ade931-276c-43be-ab1b-fe9a891a1670}</UniqueIdentifier>
     </Filter>
     <Filter Include="Fichiers sources\Editor">
       <UniqueIdentifier>{b4aa2464-5162-410a-8401-87a03722d40a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers sources\Lua">
+      <UniqueIdentifier>{d2465575-04f3-4621-ba30-7b0ce9e8f73a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers d%27en-tête\Lua">
+      <UniqueIdentifier>{6d9e3da5-ab6a-4356-a25b-c5d2c7dbcdb1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers sources\Lua\Registrations">
+      <UniqueIdentifier>{7df680c7-277c-4c5f-acea-69bcb4f93d9f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -169,20 +175,8 @@
     <ClCompile Include="src\App\App.cpp">
       <Filter>Fichiers sources\App</Filter>
     </ClCompile>
-    <ClCompile Include="src\App\States\StartUp.cpp">
-      <Filter>Fichiers sources\App\States</Filter>
-    </ClCompile>
     <ClCompile Include="src\App\States\StateSystem.cpp">
       <Filter>Fichiers sources\App\States</Filter>
-    </ClCompile>
-    <ClCompile Include="src\App\States\MainMenu.cpp">
-      <Filter>Fichiers sources\App\States</Filter>
-    </ClCompile>
-    <ClCompile Include="src\App\States\DevGame.cpp">
-      <Filter>Fichiers sources\App\States</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Game\Box2DGame.cpp">
-      <Filter>Fichiers sources\Game</Filter>
     </ClCompile>
     <ClCompile Include="src\Entities\Entity.cpp">
       <Filter>Fichiers sources\Entities</Filter>
@@ -223,12 +217,6 @@
     <ClCompile Include="src\Entities\EntityFactory.cpp">
       <Filter>Fichiers sources\Entities</Filter>
     </ClCompile>
-    <ClCompile Include="src\Game\InputManager.cpp">
-      <Filter>Fichiers sources\Game</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Game\LuaMachine.cpp">
-      <Filter>Fichiers sources\Game</Filter>
-    </ClCompile>
     <ClCompile Include="src\Physics\JointFactory.cpp">
       <Filter>Fichiers sources\Physics</Filter>
     </ClCompile>
@@ -237,30 +225,6 @@
     </ClCompile>
     <ClCompile Include="src\Tools\Error.cpp">
       <Filter>Fichiers sources\Tools</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Level\TriggersManager.cpp">
-      <Filter>Fichiers sources\Level</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Game\Lua\RegisterEntityFactory.cpp">
-      <Filter>Fichiers sources\Game\Lua</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Game\Lua\RegisterJointFactory.cpp">
-      <Filter>Fichiers sources\Game\Lua</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Game\Lua\RegisterLevelManager.cpp">
-      <Filter>Fichiers sources\Game\Lua</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Game\Lua\RegisterPhysicManager.cpp">
-      <Filter>Fichiers sources\Game\Lua</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Game\Lua\RegisterInputManager.cpp">
-      <Filter>Fichiers sources\Game\Lua</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Game\Lua\RegisterBox2D.cpp">
-      <Filter>Fichiers sources\Game\Lua</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Game\Lua\RegisterSFML.cpp">
-      <Filter>Fichiers sources\Game\Lua</Filter>
     </ClCompile>
     <ClCompile Include="src\Level\LevelSaver.cpp">
       <Filter>Fichiers sources\Level</Filter>
@@ -271,14 +235,62 @@
     <ClCompile Include="src\Resources\ResourceManager.cpp">
       <Filter>Fichiers sources\Resources</Filter>
     </ClCompile>
-    <ClCompile Include="src\Game\Lua\RegisterResourceManager.cpp">
-      <Filter>Fichiers sources\Game\Lua</Filter>
-    </ClCompile>
     <ClCompile Include="src\Editor\EditBox.cpp">
       <Filter>Fichiers sources\Editor</Filter>
     </ClCompile>
-    <ClCompile Include="src\Level\LuaAction.cpp">
-      <Filter>Fichiers sources\Level</Filter>
+    <ClCompile Include="src\Game\Game.cpp">
+      <Filter>Fichiers sources\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Editor\Editor.cpp">
+      <Filter>Fichiers sources\Editor</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Lua\LuaMachine.cpp">
+      <Filter>Fichiers sources\Lua</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Lua\Registrations\RegisterBox2D.cpp">
+      <Filter>Fichiers sources\Lua\Registrations</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Lua\Registrations\RegisterEntityFactory.cpp">
+      <Filter>Fichiers sources\Lua\Registrations</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Lua\Registrations\RegisterInputManager.cpp">
+      <Filter>Fichiers sources\Lua\Registrations</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Lua\Registrations\RegisterJointFactory.cpp">
+      <Filter>Fichiers sources\Lua\Registrations</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Lua\Registrations\RegisterLevelManager.cpp">
+      <Filter>Fichiers sources\Lua\Registrations</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Lua\Registrations\RegisterPhysicManager.cpp">
+      <Filter>Fichiers sources\Lua\Registrations</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Lua\Registrations\RegisterResourceManager.cpp">
+      <Filter>Fichiers sources\Lua\Registrations</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Lua\Registrations\RegisterSFML.cpp">
+      <Filter>Fichiers sources\Lua\Registrations</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Lua\TriggersManager.cpp">
+      <Filter>Fichiers sources\Lua</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Lua\LuaAction.cpp">
+      <Filter>Fichiers sources\Lua</Filter>
+    </ClCompile>
+    <ClCompile Include="src\App\InputManager.cpp">
+      <Filter>Fichiers sources\App</Filter>
+    </ClCompile>
+    <ClCompile Include="src\App\States\Game_State.cpp">
+      <Filter>Fichiers sources\App\States</Filter>
+    </ClCompile>
+    <ClCompile Include="src\App\States\MainMenu_State.cpp">
+      <Filter>Fichiers sources\App\States</Filter>
+    </ClCompile>
+    <ClCompile Include="src\App\States\StartUp_State.cpp">
+      <Filter>Fichiers sources\App\States</Filter>
+    </ClCompile>
+    <ClCompile Include="src\App\States\Editor_State.cpp">
+      <Filter>Fichiers sources\App\States</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -348,20 +360,8 @@
     <ClInclude Include="src\App\States\State.h">
       <Filter>Fichiers d%27en-tête\App\States</Filter>
     </ClInclude>
-    <ClInclude Include="src\App\States\StartUp.h">
-      <Filter>Fichiers d%27en-tête\App\States</Filter>
-    </ClInclude>
     <ClInclude Include="src\App\States\StateSystem.h">
       <Filter>Fichiers d%27en-tête\App\States</Filter>
-    </ClInclude>
-    <ClInclude Include="src\App\States\MainMenu.h">
-      <Filter>Fichiers d%27en-tête\App\States</Filter>
-    </ClInclude>
-    <ClInclude Include="src\App\States\DevGame.h">
-      <Filter>Fichiers d%27en-tête\App\States</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Game\Box2DGame.h">
-      <Filter>Fichiers d%27en-tête\Game</Filter>
     </ClInclude>
     <ClInclude Include="src\Entities\Entity.h">
       <Filter>Fichiers d%27en-tête\Entities</Filter>
@@ -408,12 +408,6 @@
     <ClInclude Include="src\Entities\EntityFactory.h">
       <Filter>Fichiers d%27en-tête\Entities</Filter>
     </ClInclude>
-    <ClInclude Include="src\Game\InputManager.h">
-      <Filter>Fichiers d%27en-tête\Game</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Game\LuaMachine.h">
-      <Filter>Fichiers d%27en-tête\Game</Filter>
-    </ClInclude>
     <ClInclude Include="src\Physics\JointFactory.h">
       <Filter>Fichiers d%27en-tête\Physics</Filter>
     </ClInclude>
@@ -422,9 +416,6 @@
     </ClInclude>
     <ClInclude Include="src\Tools\Error.h">
       <Filter>Fichiers d%27en-tête\Tools</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Level\TriggersManager.h">
-      <Filter>Fichiers d%27en-tête\Level</Filter>
     </ClInclude>
     <ClInclude Include="src\Physics\Callback\AABBListCallback.h">
       <Filter>Fichiers d%27en-tête\Physics\Callback</Filter>
@@ -441,8 +432,35 @@
     <ClInclude Include="src\Editor\EditBox.h">
       <Filter>Fichiers d%27en-tête\Editor</Filter>
     </ClInclude>
-    <ClInclude Include="src\Level\LuaAction.h">
-      <Filter>Fichiers d%27en-tête\Level</Filter>
+    <ClInclude Include="src\Game\Game.h">
+      <Filter>Fichiers d%27en-tête\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Editor\Editor.h">
+      <Filter>Fichiers d%27en-tête\Editor</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Lua\LuaMachine.h">
+      <Filter>Fichiers d%27en-tête\Lua</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Lua\TriggersManager.h">
+      <Filter>Fichiers d%27en-tête\Lua</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Lua\LuaAction.h">
+      <Filter>Fichiers d%27en-tête\Lua</Filter>
+    </ClInclude>
+    <ClInclude Include="src\App\InputManager.h">
+      <Filter>Fichiers d%27en-tête\App</Filter>
+    </ClInclude>
+    <ClInclude Include="src\App\States\Editor_State.h">
+      <Filter>Fichiers d%27en-tête\App\States</Filter>
+    </ClInclude>
+    <ClInclude Include="src\App\States\Game_State.h">
+      <Filter>Fichiers d%27en-tête\App\States</Filter>
+    </ClInclude>
+    <ClInclude Include="src\App\States\MainMenu_State.h">
+      <Filter>Fichiers d%27en-tête\App\States</Filter>
+    </ClInclude>
+    <ClInclude Include="src\App\States\StartUp_State.h">
+      <Filter>Fichiers d%27en-tête\App\States</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

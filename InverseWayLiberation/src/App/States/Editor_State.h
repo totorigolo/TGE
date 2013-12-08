@@ -1,14 +1,14 @@
 #pragma once
 #include "State.h"
 
-class DevGame_State : public State, public Singleton<DevGame_State>
+class Editor_State : public State, public Singleton<Editor_State>
 {
 protected:
-	friend class Singleton<DevGame_State>;
+	friend class Singleton<Editor_State>;
 
 	// Ctor & Dtor
-	DevGame_State();
-	virtual ~DevGame_State();
+	Editor_State();
+	virtual ~Editor_State();
 
 public:
 	// Exécute le State

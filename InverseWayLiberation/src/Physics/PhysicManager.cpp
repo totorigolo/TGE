@@ -66,14 +66,14 @@ void PhysicManager::DestroyAllBody()
 		DestroyBody(bb);
 	}
 }
-void PhysicManager::DestroyBodiesOut(const b2Vec2 &topleft, const b2Vec2 &bottomright)
+void PhysicManager::DestroyBodiesOut(const b2Vec2 &topleft, const b2Vec2 &bottomright, b2Body *skip)
 {
 	// Destruction des bodies en dehors de la zone
 	b2Body *b = GetBodyList(), *bb = nullptr;
 	while (b)
 	{
 		// On supprime seulement les dynamicBodies
-		if (b->GetType() == b2_dynamicBody)
+		if (b->GetType() == b2_dynamicBody && b != skip)
 		{
 			// Vérifie si l'objet est hors du monde
 			b2Vec2 pos = b->GetPosition();

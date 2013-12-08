@@ -1,5 +1,5 @@
 #pragma once
-#include "TriggersManager.h"
+#include "../Lua/TriggersManager.h"
 #include "../Tools/Singleton.h"
 #include "../Resources/ResourceManager.h"
 
@@ -42,6 +42,12 @@ public:
 	// Pour le rendu
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
+	// Réglages de la vue initiale
+	void SetDefaultZoom(float zoom);
+	void SetDefaultCenter(const sf::Vector2f &center);
+	float GetDefaultZoom() const;
+	const sf::Vector2f& GetDefaultCenter() const;
+
 	/* Accesseurs */
 	// Etat
 	bool IsCharged() const;
@@ -77,6 +83,10 @@ private:
 
 	// Config de la fenêtre de rendu
 	sf::Color mBckgC;
+
+	// Vue initiale
+	float mDefaultZoom;
+	sf::Vector2f mDefaultCenter;
 
 	// Textures
 	ResourceManager &mResourceManager;

@@ -1,6 +1,6 @@
 #include "LuaMachine.h"
-#include "Box2DGame.h"
-#include "InputManager.h"
+#include "../Game/Game.h"
+#include "../App/InputManager.h"
 #include "../Level/LevelManager.h"
 #include "../Physics/JointFactory.h"
 #include "../Physics/PhysicManager.h"

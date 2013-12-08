@@ -22,6 +22,8 @@ void LuaMachine::RegisterLevelManager()
 				// Attributs
 				.property("charged", &LevelManager::IsCharged, &LevelManager::SetCharged)
 				.property("bckgcolor", &LevelManager::GetBckgColor, &LevelManager::SetBckgColor)
+				.property("defaultZoom", &LevelManager::GetDefaultZoom, &LevelManager::SetDefaultZoom)
+				.property("defaultCenter", &LevelManager::GetDefaultCenter, &LevelManager::SetDefaultCenter)
 		];
 	}
 	catch (const std::exception &e)

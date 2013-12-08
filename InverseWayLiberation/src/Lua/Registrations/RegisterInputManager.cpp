@@ -1,5 +1,5 @@
 #include "../LuaMachine.h"
-#include "../InputManager.h"
+#include "../../App/InputManager.h"
 
 #include <luabind/operator.hpp>
 #include <exception>
@@ -25,7 +25,9 @@ void LuaMachine::RegisterInputManager()
 				.def("SetZoom", &InputManager::SetZoom)
 				.def("SetCenter", &InputManager::SetCenter)
 				.def("GetCurrentZoom", &InputManager::GetCurrentZoom)
-				.def("GetCurrentCenter", &InputManager::GetCurrentZoom)
+				.def("GetCurrentCenter", &InputManager::GetCurrentCenter)
+				.property("zoom", &InputManager::GetCurrentZoom, &InputManager::SetZoom)
+				.property("center", &InputManager::GetCurrentCenter, &InputManager::SetCenter)
 				// Evènements
 				.def("IsKeyPressed", &InputManager::IsKeyPressed)
 				.def("GetMousePos", &InputManager::GetMousePos)
@@ -41,9 +43,6 @@ void LuaMachine::RegisterInputManager()
 				.def("KeyPressed", &InputManager::KeyPressed)
 				.def("KeyReleased", &InputManager::KeyReleased)
 				.def("GetSpyedKeyState", &InputManager::GetSpyedKeyState)
-				// Attributs
-				.property("defaultZoom", &InputManager::GetDefaultZoom, &InputManager::SetDefaultZoom)
-				.property("defaultCenter", &InputManager::GetDefaultCenter, &InputManager::SetDefaultCenter)
 		];
 	}
 	catch (const std::exception &e)

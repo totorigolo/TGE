@@ -1,6 +1,6 @@
 #pragma once
 #include "LevelManager.h"
-#include "../Game/InputManager.h"
+#include "../App/InputManager.h"
 #include "../Physics/PhysicManager.h"
 #include "../Resources/ResourceManager.h"
 #include "../Tools/Saver.h"

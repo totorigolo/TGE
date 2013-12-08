@@ -2,8 +2,8 @@
 #include "LevelLoader.h"
 #include "../Tools/utils.h"
 #include "../Entities/Player.h"
-#include "../Game/InputManager.h"
-#include "../Game/LuaMachine.h" // TODO
+#include "../App/InputManager.h"
+#include "../Lua/LuaMachine.h" // TODO
 #include "../Physics/PhysicManager.h"
 #include "../Entities/EntityManager.h"
 
@@ -16,6 +16,8 @@ LevelManager::LevelManager()
 	mEntityManager(EntityManager::GetInstance()),
 	// Config de la fenêtre de rendu
 	mBckgC(sf::Color::White),
+	// Zoom initial
+	mDefaultZoom(1.f),
 	// Textures
 	mResourceManager(ResourceManager::GetInstance()),
 	// Joueur
@@ -69,6 +71,26 @@ void LevelManager::draw(sf::RenderTarget& target, sf::RenderStates states) const
 	// Affiche les Entities
 	target.draw(mEntityManager, states);
 	mTriggersManager.DebugDraw(target);
+}
+
+// Réglages de la vue initiale
+void LevelManager::SetDefaultZoom(float zoom)
+{
+	mDefaultZoom = zoom;
+	InputManager::GetInstance().SetZoom(mDefaultZoom);
+}
+void LevelManager::SetDefaultCenter(const sf::Vector2f &center)
+{
+	mDefaultCenter = center;
+	InputManager::GetInstance().SetCenter(mDefaultCenter);
+}
+float LevelManager::GetDefaultZoom() const
+{
+	return mDefaultZoom;
+}
+const sf::Vector2f& LevelManager::GetDefaultCenter() const
+{
+	return mDefaultCenter;
 }
 
 /* Accesseurs */

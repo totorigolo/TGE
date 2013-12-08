@@ -1,5 +1,5 @@
 #pragma once
-#include "../Game/LuaMachine.h"
+#include "../Lua/LuaMachine.h"
 #include "../Tools/NonCopyable.h"
 #include "LuaAction.h"
 

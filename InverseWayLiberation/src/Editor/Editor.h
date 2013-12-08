@@ -1,5 +1,5 @@
 #pragma once
-#include "LuaMachine.h"
+#include "../Lua/LuaMachine.h"
 #include "../Tools/NonCopyable.h"
 #include "../Resources/ResourceManager.h"
 #include "../Editor/EditBox.h"
@@ -13,12 +13,12 @@ class PhysicManager;
 class LevelManager;
 class InputManager;
 class Grapnel;
-class Box2DGame : public NonCopyable
+class Editor : public NonCopyable
 {
 public:
 	// Ctor & dtor
-	Box2DGame(sf::RenderWindow &window);
-	virtual ~Box2DGame(void);
+	Editor(sf::RenderWindow &window);
+	virtual ~Editor(void);
 	
 	/// Boucle de jeu
 	void Run();

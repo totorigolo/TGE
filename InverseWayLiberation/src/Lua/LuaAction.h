@@ -1,5 +1,5 @@
 #pragma once
-#include "../Game/LuaMachine.h"
+#include "../Lua/LuaMachine.h"
 #include <iostream>
 #include <string>
 

@@ -1,11 +1,10 @@
 #pragma once
 #include "../Entities/Entity.h"
 #include "../Physics/Joint.h"
-#include "../Level/TriggersManager.h"
+#include "../Lua/TriggersManager.h"
 #include "../Tools/NonCopyable.h"
 #include "../Level/LevelManager.h"
 #include "../Physics/PhysicManager.h"
-#include "../Game/InputManager.h"
 
 #include <SFML/Graphics.hpp>
 #include <SFGUI/SFGUI.hpp>
@@ -46,7 +45,8 @@ public:
 	void ChangeSelectedObject(Joint *joint);
 	void Unselect();
 	SelectionType GetSelectionType();
-
+	Entity* GetSelectedEntity();
+	Joint* GetSelectedJoint();
 
 	// Vide la EditBox
 	void EmptyGUI();
@@ -80,7 +80,9 @@ protected:
 	void OnLevelChangeBckgColorB();
 	void OnLevelChangeOriginViewX();
 	void OnLevelChangeOriginViewY();
+	void OnLevelChangeOriginViewCurrent();
 	void OnLevelChangemDefaultZoom();
+	void OnLevelChangemDefaultZoomCurrent();
 	// BasicBodies
 	void OnBasicBodyRefresh();
 	void OnBasicBodyChangePosition();
@@ -105,10 +107,9 @@ private:
 	sfg::Desktop &mDesktop;
 	sfg::Window::Ptr mWindow;
 
-	// LevelMgr, PhysicMgr, InputMgr
+	// LevelMgr, PhysicMgr
 	LevelManager &mLevelMgr;
 	PhysicManager &mPhysicMgr;
-	InputManager &mInputMgr;
 
 	// Objet sélectionné
 	Entity *mSelectedEntity;
@@ -138,9 +139,11 @@ private:
 	sfg::Label::Ptr mOriginViewLabel;
 	sfg::SpinButton::Ptr mOriginViewX;
 	sfg::SpinButton::Ptr mOriginViewY;
+	sfg::Button::Ptr mOriginViewCurrentBtn;
 	sfg::Box::Ptr mDefaultZoomBox;
 	sfg::Label::Ptr mDefaultZoomLabel;
 	sfg::SpinButton::Ptr mDefaultZoom;
+	sfg::Button::Ptr mDefaultZoomCurrentBtn;
 	sfg::Button::Ptr mLevelCloseBtn;
 
 	// Entities : Position
@@ -151,6 +154,7 @@ private:
 	sfg::Entry::Ptr mRot;
 	sfg::Button::Ptr mPosButton;
 	sfg::SpinButton::Ptr mPosStep;
+	float mPosStepSaveValue;
 	sfg::Button::Ptr mPosXp;
 	sfg::Button::Ptr mPosXm;
 	sfg::Button::Ptr mPosYp;

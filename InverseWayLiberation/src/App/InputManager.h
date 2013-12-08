@@ -27,11 +27,11 @@ protected:
 public:
 	// Réglages des propriétés
 	void SetWindow(sf::RenderWindow *window);
+	void Zoom(float zoom);
 	void SetZoom(float zoom);
-	void SetDefaultZoom(float zoom);
 	void SetView(const sf::View &view);
+	void MoveCenter(const sf::Vector2f &dep);
 	void SetCenter(const sf::Vector2f &center);
-	void SetDefaultCenter(const sf::Vector2f &center);
 
 	// Ajout d'évènement
 	void Update();
@@ -54,6 +54,8 @@ public:
 	bool GetLMBState() const;
 	bool GetRMBState() const;
 	bool GetMMBState() const;
+	bool GetMouseWheelState() const;
+	int GetMouseWheelDelta() const;
 	bool HasQuitted(); // Réinitialise après appel
 	bool HasFocus() const;
 
@@ -62,11 +64,9 @@ public:
 	void RemoveDesktop(sfg::Desktop *d);
 
 	// Accesseurs
-	float GetDefaultZoom() const;
 	float GetCurrentZoom() const;
 	const sf::View& GetView() const;
 	const sf::Vector2f& GetCurrentCenter() const;
-	const sf::Vector2f& GetDefaultCenter() const;
 	
 	sf::RenderWindow* GetWindow();
 	const sf::RenderWindow* GetWindow() const;
@@ -88,8 +88,6 @@ private:
 	// View et Zoom
 	float mCurrentZoom;
 	sf::View mView;
-	float mDefaultZoom;
-	sf::Vector2f mDefaultCenter;
 
 	// Souris
 	sf::Vector2i mMousePos;
@@ -99,11 +97,13 @@ private:
 	bool mRMBIsDown;
 	bool mLMBIsDown;
 	bool mMMBIsDown;
+	bool mMouseWheelMoved;
+	int mMouseWheelDelta;
 
 	// Pour l'édition de texte
 	bool mTipingText;
 	sf::String mText;
 
-	// Liste des Desktop à qui partager les events
+	// Liste des Desktop avec qui partager les events
 	std::list<sfg::Desktop*> mDesktops;
 };

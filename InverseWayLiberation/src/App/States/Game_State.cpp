@@ -1,17 +1,17 @@
-#include "DevGame.h"
-#include "MainMenu.h"
-#include "../../Game/Box2DGame.h"
+#include "Game_State.h"
+#include "MainMenu_State.h"
+#include "../../Game/Game.h"
 
 // Ctor & Dtor
-DevGame_State::DevGame_State()
+Game_State::Game_State()
 {
 }
-DevGame_State::~DevGame_State()
+Game_State::~Game_State()
 {
 }
 
 // Exécute le State
-State* DevGame_State::Run(App *app)
+State* Game_State::Run(App *app)
 {
 	// Obtient un pointeur vers la fenêtre
 	sf::RenderWindow *window = app->GetRenderWindow();
@@ -21,8 +21,7 @@ State* DevGame_State::Run(App *app)
 	window->setTitle("Inverse Way Liberation - DevGame");
 
 	// Lance le jeu
-	// TODO: Changer ça
-	Box2DGame *game = new Box2DGame(*window);
+	Game *game = new Game(*window);
 	game->Run();
 	delete game;
 

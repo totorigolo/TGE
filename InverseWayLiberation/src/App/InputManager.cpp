@@ -9,14 +9,12 @@ InputManager::InputManager()
 	mHasQuitted = false;
 	mHasFocus = true;
 
-	// View et Zoom
-	mCurrentZoom = 1.f;
-	mDefaultZoom = 1.f;
-
 	// Souris
 	mRMBIsDown = false;
 	mLMBIsDown = false;
 	mMMBIsDown = false;
+	mMouseWheelMoved = false;
+	mMouseWheelDelta = 0;
 
 	// Pour l'édition de texte
 	mTipingText = false;
@@ -36,32 +34,36 @@ void InputManager::SetZoom(float zoom)
 
 	mCurrentZoom = zoom;
 	mView.setSize(u2f(mWindow->getSize()) * sf::Vector2f(mView.getViewport().width, mView.getViewport().height));
-	mView.setCenter(sf::Vector2f(0.f, 0.f));
+	mView.setCenter(mView.getCenter());
 	mView.zoom(mCurrentZoom);
 }
-void InputManager::SetDefaultZoom(float zoom)
+void InputManager::Zoom(float zoom)
 {
-	mDefaultZoom = zoom;
-	SetZoom(zoom);
+	if (!mWindow) return;
+
+	SetZoom(mCurrentZoom * zoom);
 }
 void InputManager::SetView(const sf::View &view)
 {
 	mView = view;
 }
+void InputManager::MoveCenter(const sf::Vector2f &dep)
+{
+	mView.move(dep);
+}
 void InputManager::SetCenter(const sf::Vector2f &center)
 {
 	mView.setCenter(center);
-}
-void InputManager::SetDefaultCenter(const sf::Vector2f &center)
-{
-	mDefaultCenter = center;
-	mView.setCenter(mDefaultCenter);
 }
 
 // Ajout d'évènement
 void InputManager::Update()
 {
 	if (!mWindow) return;
+
+	// Réinitialise les infos de la molette
+	mMouseWheelMoved = false;
+	mMouseWheelDelta = 0;
 
 	// Traite tous les évènements
 	while (mWindow->pollEvent(mEvent))
@@ -87,12 +89,6 @@ void InputManager::Update()
 	mLMBIsDown = sf::Mouse::isButtonPressed(sf::Mouse::Left);
 	mRMBIsDown = sf::Mouse::isButtonPressed(sf::Mouse::Right);
 	mMMBIsDown = sf::Mouse::isButtonPressed(sf::Mouse::Middle);
-
-	// Gère le déplacement à la souris (clic molette)
-	if (mMMBIsDown)
-	{
-		mView.move(- i2f(mMousePos - mLastMousePos) * mCurrentZoom);
-	}
 }
 void InputManager::AddEvent(const sf::Event &event)
 {
@@ -112,43 +108,19 @@ void InputManager::AddEvent(const sf::Event &event)
 	{
 		mHasFocus = false;
 	}
-		
-	// Gestion du zoom et du resize
-	else if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Add)
+
+	// Gestion de la molette
+	if (event.type == sf::Event::MouseWheelMoved)
 	{
-		mCurrentZoom *= 0.8f;
-		mView.zoom(0.8f);
+		mMouseWheelMoved = true;
+		mMouseWheelDelta = event.mouseWheel.delta;
 	}
-	else if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Subtract)
-	{
-		mCurrentZoom *= 1.2f;
-		mView.zoom(1.2f);
-	}
-	else if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Numpad0)
-	{
-		SetZoom(mDefaultZoom);
-		SetCenter(mDefaultCenter);
-	}
+	
+	// Gestion du resize
 	else if (event.type == sf::Event::Resized)
 	{
 		mView.setSize(u2f(mWindow->getSize()) * sf::Vector2f(mView.getViewport().width, mView.getViewport().height));
 		mView.zoom(mCurrentZoom);
-	}
-	else if (event.type == sf::Event::MouseWheelMoved)
-	{
-		// Zoom
-		if (event.mouseWheel.delta > 0)
-		{
-			mCurrentZoom *= 0.8f;
-			mView.zoom(0.8f);
-		}
-			
-		// Dézoom
-		else
-		{
-			mCurrentZoom *= 1.2f;
-			mView.zoom(1.2f);
-		}
 	}
 
 	// Déplacement de la vue avec les flèches
@@ -252,6 +224,14 @@ bool InputManager::GetMMBState() const
 {
 	return mMMBIsDown;
 }
+bool InputManager::GetMouseWheelState() const
+{
+	return mMouseWheelMoved;
+}
+int InputManager::GetMouseWheelDelta() const
+{
+	return mMouseWheelDelta;
+}
 bool InputManager::HasQuitted()
 {
 	if (mHasQuitted)
@@ -281,10 +261,6 @@ void InputManager::RemoveDesktop(sfg::Desktop *d)
 }
 
 // Accesseurs
-float InputManager::GetDefaultZoom() const
-{
-	return mDefaultZoom;
-}
 float InputManager::GetCurrentZoom() const
 {
 	return mCurrentZoom;
@@ -296,10 +272,6 @@ const sf::View& InputManager::GetView() const
 const sf::Vector2f& InputManager::GetCurrentCenter() const
 {
 	return mView.getCenter();
-}
-const sf::Vector2f& InputManager::GetDefaultCenter() const
-{
-	return mDefaultCenter;
 }
 
 sf::RenderWindow* InputManager::GetWindow()

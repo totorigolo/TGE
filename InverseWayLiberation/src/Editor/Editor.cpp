@@ -1,12 +1,12 @@
-#include "Box2DGame.h"
-#include "LuaMachine.h"
-#include "InputManager.h"
+#include "Editor.h"
 #include "../App/App.h"
+#include "../App/InputManager.h"
 #include "../Entities/Grapnel.h"
 #include "../Level/LevelSaver.h"
 #include "../Level/LevelLoader.h"
 #include "../Level/LevelManager.h"
 #include "../Physics/PhysicManager.h"
+#include "../Entities/BasicBody.h"
 #include "../Entities/EntityFactory.h"
 #include "../Entities/EntityManager.h"
 #include "../Physics/Joints/MouseJoint.h"
@@ -15,7 +15,7 @@
 #include "../Tools/utils.h"
 
 // Ctor
-Box2DGame::Box2DGame(sf::RenderWindow &window)
+Editor::Editor(sf::RenderWindow &window)
 	: mWindow(window), mQuit(false),
 	// Ressources
 	mResourceManager(ResourceManager::GetInstance()),
@@ -42,12 +42,12 @@ Box2DGame::Box2DGame(sf::RenderWindow &window)
 }
 
 // Dtor
-Box2DGame::~Box2DGame(void)
+Editor::~Editor(void)
 {
 }
 
 // Boucle de jeu
-void Box2DGame::Run()
+void Editor::Run()
 {
 	// Appel l'initialisation
 	if (this->OnInit())
@@ -100,7 +100,7 @@ void Box2DGame::Run()
 
 /* Fonctions évènements */
 /// Initialise le jeu
-bool Box2DGame::OnInit()
+bool Editor::OnInit()
 {
 	// Initialise les variables
 	mPaused = false;
@@ -157,14 +157,14 @@ bool Box2DGame::OnInit()
 }
 
 /// Appelé quand la boucle commence
-void Box2DGame::OnLoopBegin()
+void Editor::OnLoopBegin()
 {
 	// Sauvegarde la dernière position de la souris
 	mMp = sf2b2Vec(mInputManager.GetMousePosRV(), mPhysicMgr.GetMPP()); // système Box2D
 }
 
 /// Appelé pour les évènements
-void Box2DGame::OnEvent()
+void Editor::OnEvent()
 {
 	// Met à jour les évènements
 	mInputManager.Update();
@@ -343,9 +343,8 @@ void Box2DGame::OnEvent()
 		mPinBodyA = nullptr;
 		mPinBodyB = nullptr;
 
-		// Réinitialise Lua et Triggers
+		// Réinitialise Lua
 		mConsole.Reset();
-		mLevel.GetTriggersMgr().Clear();
 
 		// Charge le niveau
 		if (!mInputManager.IsKeyPressed(sf::Keyboard::LControl))
@@ -459,27 +458,62 @@ void Box2DGame::OnEvent()
 			mPinBodyB = nullptr;
 		}
 	}
+
+	// Gestion du zoom et déplacement de la vue
+	if (mInputManager.KeyPressed(sf::Keyboard::Add))
+	{
+		mInputManager.Zoom(0.8f);
+	}
+	if (mInputManager.KeyPressed(sf::Keyboard::Subtract))
+	{
+		mInputManager.Zoom(1.2f);
+	}
+	if (mInputManager.KeyPressed(sf::Keyboard::Numpad0))
+	{
+		mInputManager.SetZoom(mLevel.GetDefaultZoom());
+		mInputManager.SetCenter(mLevel.GetDefaultCenter());
+	}
+	if (mInputManager.GetMouseWheelState())
+	{
+		// Zoom
+		if (mInputManager.GetMouseWheelDelta() > 0)
+			mInputManager.Zoom(0.8f);
+
+		// Dézoom
+		else
+			mInputManager.Zoom(1.2f);
+	}
+	if (mInputManager.GetMMBState())
+	{
+		mInputManager.MoveCenter(-i2f(mInputManager.GetMousePos() - mInputManager.GetLastMousePos()) * mInputManager.GetCurrentZoom());
+	}
 }
 
 /// Appelé pour la logique
-void Box2DGame::OnLogic()
+void Editor::OnLogic()
 {
 }
 
 /// Appelé pour la physique
-void Box2DGame::OnStepPhysics()
+void Editor::OnStepPhysics()
 {
 	// Simule
 	if (!mPaused)
 	{
 		mPhysicMgr.Step(10, 4);
 		mPhysicMgr.GetWorld()->ClearForces();
-		mPhysicMgr.DestroyBodiesOut(b2Vec2(1000.f, -200.f), b2Vec2(-200.f, 200.f));
+
+		b2Body *b = nullptr;
+		Entity *e = mEditBox->GetSelectedEntity();
+		if (e)
+			if (e->GetType() == EntityType::BasicBody)
+				b = ((BasicBody*) e)->GetBody();
+		mPhysicMgr.DestroyBodiesOut(b2Vec2(1000.f, -200.f), b2Vec2(-200.f, 200.f), b);
 	}
 }
 
 /// Appelé pour les mises à jour
-void Box2DGame::OnUpdate()
+void Editor::OnUpdate()
 {
 	// Met à jour les Joints
 	mPhysicMgr.UpdateJoints();
@@ -493,7 +527,7 @@ void Box2DGame::OnUpdate()
 }
 
 /// Appelé pour le rendu
-void Box2DGame::OnRender()
+void Editor::OnRender()
 {
 	// Rendu
 	mWindow.clear(mLevel.GetBckgColor());
@@ -532,12 +566,12 @@ void Box2DGame::OnRender()
 }
 
 /// Appelé quand la boucle se termine
-void Box2DGame::OnLoopEnd()
+void Editor::OnLoopEnd()
 {
 }
 
 /// Appelé quand le jeu se termine
-void Box2DGame::OnQuit()
+void Editor::OnQuit()
 {
 	// Enlève le Desktop du InputManager
 	mInputManager.RemoveDesktop(&mDesktop);

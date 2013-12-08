@@ -1,5 +1,6 @@
-#include "MainMenu.h"
-#include "DevGame.h"
+#include "MainMenu_State.h"
+#include "Game_State.h"
+#include "Editor_State.h"
 #include "../../Tools/Dialog.h"
 
 #include <vector>
@@ -94,10 +95,10 @@ State* MainMenu_State::Run(App *app)
 				switch (index)
 				{
 				case 0:
-					return &DevGame_State::GetInstance();
+					return &Game_State::GetInstance();
 					break;
 				case 1:
-					//return Editor_State::GetPInstance();
+					return &Editor_State::GetInstance();
 					break;
 				case 2:
 					// TODO: Système de menu plus poussé

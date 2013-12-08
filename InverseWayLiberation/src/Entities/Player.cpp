@@ -1,7 +1,7 @@
 #include "Player.h"
 #include "EntityManager.h"
 #include "../Tools/Error.h"
-#include "../Game/InputManager.h"
+#include "../App/InputManager.h"
 
 // Ctor & dtor
 Player::Player(b2Vec2 position, std::shared_ptr<Texture> texture, int layer, unsigned int ID)

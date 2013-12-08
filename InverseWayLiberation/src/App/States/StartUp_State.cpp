@@ -1,5 +1,5 @@
-#include "StartUp.h"
-#include "MainMenu.h"
+#include "StartUp_State.h"
+#include "MainMenu_State.h"
 
 #include <vector>
 
@@ -20,8 +20,6 @@ State* StartUp_State::Run(App *app)
 
 	// Change le titre de la fenêtre
 	window->setTitle("Inverse Way Liberation - Splash");
-
-	//return MainMenu_State::GetPInstance();
 
 	// Charge les textures
 	std::vector<sf::Texture*> textures;

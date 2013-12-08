@@ -3,7 +3,7 @@
 #include "../Tools/Error.h"
 #include "../Tools/Dialog.h"
 #include "../Tools/Parser.h"
-#include "TriggersManager.h"
+#include "../Lua/TriggersManager.h"
 #include "../Physics/PhysicManager.h"
 
 #include "../Entities/Entity.h"
