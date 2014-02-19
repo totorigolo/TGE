@@ -5,6 +5,8 @@ Release/
 InverseWayLiberation/Debug
 InverseWayLiberation/Release
 Shadows/
+tex/
+zic/
 .exe
 .dll
 .db
