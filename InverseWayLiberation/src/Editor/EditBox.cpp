@@ -200,8 +200,6 @@ void EditBox::UpdateGUI()
 		return;
 	mSelectionChanged = false;
 
-	std::cout << "EditBox::UpdateGUI()" << std::endl;
-
 	// Vide la GUI
 	EmptyGUI();
 

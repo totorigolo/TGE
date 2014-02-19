@@ -6,9 +6,9 @@
 
 // Ctor
 BodyScenario::BodyScenario(EditBox &editBox)
-	: Scenario(editBox, "BasicBody"),
-	mEntityMgr(EntityManager::GetInstance()),
-	mSelectionPoly(nullptr), mSelectionBasic(nullptr)
+	: Scenario(editBox, "Body"),
+	mEntityMgr(EntityManager::GetInstance()), mResourceMgr(ResourceManager::GetInstance()),
+	mSelection(nullptr)
 {
 	// Initialise le pas
 	mPosStepSaveValue = 1.f;
@@ -19,95 +19,65 @@ BodyScenario::BodyScenario(EditBox &editBox)
 }
 
 // Gestion de la sélection
-void BodyScenario::Select(PolyBody *selection)
-{
-	myAssert(selection, "PolyBody passé invalide.");
-
-	mSelectionBasic = nullptr;
-	mSelectionPoly = selection;
-
-	OnRefresh();
-}
-void BodyScenario::Select(BasicBody *selection)
+void BodyScenario::Select(BaseBody *selection)
 {
 	myAssert(selection, "BasicBody passé invalide.");
 
-	mSelectionPoly = nullptr;
-	mSelectionBasic = selection;
+	mSelection = selection;
 
 	OnRefresh();
 }
 void BodyScenario::Unselect()
 {
-	mSelectionPoly = nullptr;
-	mSelectionBasic = nullptr;
+	mSelection = nullptr;
 }
 
 // Actualisation
 void BodyScenario::Update()
 {
-	if (mSelectionPoly)
+	if (!mSelection) return;
+
+	// Met à jour les valeurs
+	mPosX->SetText(Parser::floatToString(mSelection->GetPosition().x, 4));
+	mPosY->SetText(Parser::floatToString(mSelection->GetPosition().y, 4));
+	float rot = mSelection->GetRotationD(); rot = float(int(rot) % 360) + rot - float(int(rot));
+	mRot->SetText(Parser::floatToString(rot, 4));
+
+	// Gère le type
+	if (mSelection->Getb2BodyType() == b2BodyType::b2_dynamicBody)
+		mType[0]->SetActive(true);
+	else if (mSelection->Getb2BodyType() == b2BodyType::b2_staticBody)
+		mType[1]->SetActive(true);
+	else
+		myThrowError("Type de BaseBody non géré.");
+
+	// Gère le type de collision
+	if (mSelection->GetCollisionType() == BaseBody::CollisionType::Default)
+		mCollisionType->SelectItem(0);
+	else if (mSelection->GetCollisionType() == BaseBody::CollisionType::Bullet)
+		mCollisionType->SelectItem(1);
+	else if (mSelection->GetCollisionType() == BaseBody::CollisionType::OneSidedPlatform)
+		mCollisionType->SelectItem(2);
+	else
+		myThrowError("CollisionType de BaseBody non géré.");
+
+	// Mets à jour la liste de texture, et la texture actuelle
+	for (int i = mTexture->GetItemCount(); i > 0; --i)
+		mTexture->RemoveItem(i - 1);
+	int index = 0;
+	for each (const auto &tex in mResourceMgr.GetTextureMap())
 	{
-		// Met à jour les valeurs
-		mPosX->SetText(Parser::floatToString(mSelectionPoly->GetPosition().x, 4));
-		mPosY->SetText(Parser::floatToString(mSelectionPoly->GetPosition().y, 4));
-		float rot = mSelectionPoly->GetRotationD(); rot = float(int(rot) % 360) + rot - float(int(rot));
-		mRot->SetText(Parser::floatToString(rot, 4));
+		mTexture->AppendItem(tex.first);
 
-		// Gère le type
-		if (mSelectionPoly->Getb2BodyType() == b2BodyType::b2_dynamicBody)
-			mType[0]->SetActive(true);
-		else if (mSelectionPoly->Getb2BodyType() == b2BodyType::b2_staticBody)
-			mType[1]->SetActive(true);
-		else
-			myThrowError("Type de PolyBody non géré.");
-
-		// Gère le type de collision
-		if (mSelectionPoly->GetCollisionType() == PolyBody::CollisionType::Default)
-			mCollisionType->SelectItem(0);
-		else if (mSelectionPoly->GetCollisionType() == PolyBody::CollisionType::Bullet)
-			mCollisionType->SelectItem(1);
-		else if (mSelectionPoly->GetCollisionType() == PolyBody::CollisionType::OneSidedPlatform)
-			mCollisionType->SelectItem(2);
-		else
-			myThrowError("CollisionType de PolyBody non géré.");
-
-		// Gère les paramètres de collision
-		mDensity->SetValue(mSelectionPoly->GetDensity());
-		mFriction->SetValue(mSelectionPoly->GetFriction());
-		mRestitution->SetValue(mSelectionPoly->GetRestitution());
+		if (tex.first == mSelection->GetTexture()->GetName())
+			mTexture->SelectItem(index);
+		++index;
 	}
-	else if (mSelectionBasic)
-	{
-		// Met à jour les valeurs
-		mPosX->SetText(Parser::floatToString(mSelectionBasic->GetPosition().x, 4));
-		mPosY->SetText(Parser::floatToString(mSelectionBasic->GetPosition().y, 4));
-		float rot = mSelectionBasic->GetRotationD(); rot = float(int(rot) % 360) + rot - float(int(rot));
-		mRot->SetText(Parser::floatToString(rot, 4));
 
-		// Gère le type
-		if (mSelectionBasic->Getb2BodyType() == b2BodyType::b2_dynamicBody)
-			mType[0]->SetActive(true);
-		else if (mSelectionBasic->Getb2BodyType() == b2BodyType::b2_staticBody)
-			mType[1]->SetActive(true);
-		else
-			myThrowError("Type de BasicBody non géré.");
-
-		// Gère le type de collision
-		if (mSelectionBasic->GetCollisionType() == BasicBody::CollisionType::Default)
-			mCollisionType->SelectItem(0);
-		else if (mSelectionBasic->GetCollisionType() == BasicBody::CollisionType::Bullet)
-			mCollisionType->SelectItem(1);
-		else if (mSelectionBasic->GetCollisionType() == BasicBody::CollisionType::OneSidedPlatform)
-			mCollisionType->SelectItem(2);
-		else
-			myThrowError("CollisionType de BasicBody non géré.");
-
-		// Gère les paramètres de collision
-		mDensity->SetValue(mSelectionBasic->GetDensity());
-		mFriction->SetValue(mSelectionBasic->GetFriction());
-		mRestitution->SetValue(mSelectionBasic->GetRestitution());
-	}
+	// Gère les paramètres de collision
+	mDensity->SetValue(mSelection->GetDensity());
+	mFriction->SetValue(mSelection->GetFriction());
+	mRestitution->SetValue(mSelection->GetRestitution());
 }
 
 // Construit la fenêtre et les éléments
@@ -199,6 +169,14 @@ void BodyScenario::Fill()
 	mPhysicsParamsTable->Attach(mRestitutionLabel, sf::Rect<sf::Uint32>(1, 3, 1, 1));
 	mPhysicsParamsTable->Attach(mRestitution, sf::Rect<sf::Uint32>(2, 3, 1, 1));
 
+	// Texture
+	mTextureHBox = sfg::Box::Create(sfg::Box::Orientation::HORIZONTAL);
+	mTextureLabel = sfg::Label::Create("Texture :");
+	mTexture = sfg::ComboBox::Create();
+	mTexture->GetSignal(sfg::ComboBox::OnSelect).Connect(std::bind(&BodyScenario::OnChangeTexture, this));
+	mTextureHBox->PackEnd(mTextureLabel);
+	mTextureHBox->PackEnd(mTexture);
+
 	// Bouton Détruire & ClearForces
 	mButtonsHBox1 = sfg::Box::Create(sfg::Box::Orientation::HORIZONTAL);
 	mDestroy = sfg::Button::Create("Détruire");
@@ -222,6 +200,7 @@ void BodyScenario::Fill()
 	AddToVBox(mTypeTable);
 	AddToVBox(mCollisionTypeTable);
 	AddToVBox(mPhysicsParamsTable);
+	AddToVBox(mTextureHBox);
 	AddToVBox(mButtonsHBox1);
 	AddToVBox(mButtonsHBox2);
 }
@@ -229,244 +208,131 @@ void BodyScenario::Fill()
 // Callbacks
 void BodyScenario::OnChangePosition()
 {
-	if (!mApply) return;
+	if (!mApply || !mSelection) return;
 
-	if (mSelectionPoly)
-	{
-		// Change sa position et sa rotation
-		mSelectionPoly->SetTransform(b2Vec2(Parser::stringToFloat(mPosX->GetText()), Parser::stringToFloat(mPosY->GetText())),
-			Parser::stringToFloat(mRot->GetText()) * RPD);
-	}
-	else if (mSelectionBasic)
-	{
-		// Change sa position et sa rotation
-		mSelectionBasic->SetTransform(b2Vec2(Parser::stringToFloat(mPosX->GetText()), Parser::stringToFloat(mPosY->GetText())),
-			Parser::stringToFloat(mRot->GetText()) * RPD);
-	}
+	// Change sa position et sa rotation
+	mSelection->SetTransform(b2Vec2(Parser::stringToFloat(mPosX->GetText()), Parser::stringToFloat(mPosY->GetText())),
+		Parser::stringToFloat(mRot->GetText()) * RPD);
 }
 void BodyScenario::OnChangeType()
 {
-	if (!mApply) return;
+	if (!mApply || !mSelection) return;
 
-	if (mSelectionPoly)
-	{
-		if (mType[0]->IsActive()) mSelectionPoly->Setb2BodyType(b2BodyType::b2_dynamicBody);
-		else if (mType[1]->IsActive()) mSelectionPoly->Setb2BodyType(b2BodyType::b2_staticBody);
-		//else if (mType[2]->IsActive()) mSelectionPoly->Setb2BodyType(b2BodyType::b2_kinematicBody);
-	}
-	else if (mSelectionBasic)
-	{
-		if (mType[0]->IsActive()) mSelectionBasic->Setb2BodyType(b2BodyType::b2_dynamicBody);
-		else if (mType[1]->IsActive()) mSelectionBasic->Setb2BodyType(b2BodyType::b2_staticBody);
-		//else if (mType[2]->IsActive()) mSelectionBasic->Setb2BodyType(b2BodyType::b2_kinematicBody);
-	}
+	if (mType[0]->IsActive()) mSelection->Setb2BodyType(b2BodyType::b2_dynamicBody);
+	else if (mType[1]->IsActive()) mSelection->Setb2BodyType(b2BodyType::b2_staticBody);
+	//else if (mType[2]->IsActive()) mSelection->Setb2BodyType(b2BodyType::b2_kinematicBody);
 }
 void BodyScenario::OnChangeCollisionType()
 {
-	if (!mApply) return;
+	if (!mApply || !mSelection) return;
 
 	int ntype = mCollisionType->GetSelectedItem();
-	if (mSelectionPoly)
-	{
-		if (ntype == 0) mSelectionPoly->SetCollisionType(PolyBody::CollisionType::Default);
-		else if (ntype == 1) mSelectionPoly->SetCollisionType(PolyBody::CollisionType::Bullet);
-		else if (ntype == 2) mSelectionPoly->SetCollisionType(PolyBody::CollisionType::OneSidedPlatform);
-	}
-	else if (mSelectionBasic)
-	{
-		if (ntype == 0) mSelectionBasic->SetCollisionType(BasicBody::CollisionType::Default);
-		else if (ntype == 1) mSelectionBasic->SetCollisionType(BasicBody::CollisionType::Bullet);
-		else if (ntype == 2) mSelectionBasic->SetCollisionType(BasicBody::CollisionType::OneSidedPlatform);
-	}
+	if (ntype == 0) mSelection->SetCollisionType(BaseBody::CollisionType::Default);
+	else if (ntype == 1) mSelection->SetCollisionType(BaseBody::CollisionType::Bullet);
+	else if (ntype == 2) mSelection->SetCollisionType(BaseBody::CollisionType::OneSidedPlatform);
+}
+void BodyScenario::OnChangeTexture()
+{
+	if (!mApply || !mSelection) return;
+
+	mSelection->SetTexture(mResourceMgr.GetTexture(mTexture->GetItem(mTexture->GetSelectedItem())));
 }
 void BodyScenario::OnChangePosXp()
 {
-	if (!mApply) return;
+	if (!mApply || !mSelection) return;
 
-	if (mSelectionPoly)
-	{
-		// Change sa position
-		mSelectionPoly->SetTransform(mSelectionPoly->GetPosition() - b2Vec2(-mPosStep->GetValue(), 0.f), mSelectionPoly->GetRotationR());
-	}
-	else if (mSelectionBasic)
-	{
-		// Change sa position
-		mSelectionBasic->SetTransform(mSelectionBasic->GetPosition() - b2Vec2(-mPosStep->GetValue(), 0.f), mSelectionBasic->GetRotationR());
-	}
+	// Change sa position
+	mSelection->SetTransform(mSelection->GetPosition() - b2Vec2(-mPosStep->GetValue(), 0.f), mSelection->GetRotationR());
 
 	// Actualise
 	OnRefresh();
 }
 void BodyScenario::OnChangePosXm()
 {
-	if (!mApply) return;
+	if (!mApply || !mSelection) return;
 
-	if (mSelectionPoly)
-	{
-		// Change sa position
-		mSelectionPoly->SetTransform(mSelectionPoly->GetPosition() - b2Vec2(mPosStep->GetValue(), 0.f), mSelectionPoly->GetRotationR());
-	}
-	else if (mSelectionBasic)
-	{
-		// Change sa position
-		mSelectionBasic->SetTransform(mSelectionBasic->GetPosition() - b2Vec2(mPosStep->GetValue(), 0.f), mSelectionBasic->GetRotationR());
-	}
+	// Change sa position
+	mSelection->SetTransform(mSelection->GetPosition() - b2Vec2(mPosStep->GetValue(), 0.f), mSelection->GetRotationR());
 
 	// Actualise
 	OnRefresh();
 }
 void BodyScenario::OnChangePosYp()
 {
-	if (!mApply) return;
+	if (!mApply || !mSelection) return;
 
-	if (mSelectionPoly)
-	{
-		// Change sa position
-		mSelectionPoly->SetTransform(mSelectionPoly->GetPosition() - b2Vec2(0.f, -mPosStep->GetValue()), mSelectionPoly->GetRotationR());
-	}
-	else if (mSelectionBasic)
-	{
-		// Change sa position
-		mSelectionBasic->SetTransform(mSelectionBasic->GetPosition() - b2Vec2(0.f, -mPosStep->GetValue()), mSelectionBasic->GetRotationR());
-	}
+	// Change sa position
+	mSelection->SetTransform(mSelection->GetPosition() - b2Vec2(0.f, -mPosStep->GetValue()), mSelection->GetRotationR());
 
 	// Actualise
 	OnRefresh();
 }
 void BodyScenario::OnChangePosYm()
 {
-	if (!mApply) return;
+	if (!mApply || !mSelection) return;
 
-	if (mSelectionPoly)
-	{
-		// Change sa position
-		mSelectionPoly->SetTransform(mSelectionPoly->GetPosition() - b2Vec2(0.f, mPosStep->GetValue()), mSelectionPoly->GetRotationR());
-	}
-	else if (mSelectionBasic)
-	{
-		// Change sa position
-		mSelectionBasic->SetTransform(mSelectionBasic->GetPosition() - b2Vec2(0.f, mPosStep->GetValue()), mSelectionBasic->GetRotationR());
-	}
+	// Change sa position
+	mSelection->SetTransform(mSelection->GetPosition() - b2Vec2(0.f, mPosStep->GetValue()), mSelection->GetRotationR());
 
 	// Actualise
 	OnRefresh();
 }
 void BodyScenario::OnChangePosRp()
 {
-	if (!mApply) return;
+	if (!mApply || !mSelection) return;
 
-	if (mSelectionPoly)
-	{
-		// Change sa rotation
-		mSelectionPoly->SetTransform(mSelectionPoly->GetPosition(), mSelectionPoly->GetRotationR() - 2 * RPD);
-	}
-	else if (mSelectionBasic)
-	{
-		// Change sa rotation
-		mSelectionBasic->SetTransform(mSelectionBasic->GetPosition(), mSelectionBasic->GetRotationR() - 2 * RPD);
-	}
+	// Change sa rotation
+	mSelection->SetTransform(mSelection->GetPosition(), mSelection->GetRotationR() - 2 * RPD);
 
 	// Actualise
 	OnRefresh();
 }
 void BodyScenario::OnChangePosRm()
 {
-	if (!mApply) return;
+	if (!mApply || !mSelection) return;
 
-	if (mSelectionPoly)
-	{
-		// Change sa position
-		mSelectionPoly->SetTransform(mSelectionPoly->GetPosition(), mSelectionPoly->GetRotationR() + 2 * RPD);
-	}
-	else if (mSelectionBasic)
-	{
-		// Change sa position
-		mSelectionBasic->SetTransform(mSelectionBasic->GetPosition(), mSelectionBasic->GetRotationR() + 2 * RPD);
-	}
+	// Change sa position
+	mSelection->SetTransform(mSelection->GetPosition(), mSelection->GetRotationR() + 2 * RPD);
 
 	// Actualise
 	OnRefresh();
 }
 void BodyScenario::OnChangeDensity()
 {
-	if (!mApply) return;
+	if (!mApply || !mSelection) return;
 
-	if (mSelectionPoly)
-	{
-		// Gère les paramètres de collision
-		mSelectionPoly->SetDensity(mDensity->GetValue());
-	}
-	else if (mSelectionBasic)
-	{
-		// Gère les paramètres de collision
-		mSelectionBasic->SetDensity(mDensity->GetValue());
-	}
+	// Gère les paramètres de collision
+	mSelection->SetDensity(mDensity->GetValue());
 }
 void BodyScenario::OnChangeFriction()
 {
-	if (!mApply) return;
+	if (!mApply || !mSelection) return;
 
-	if (mSelectionPoly)
-	{
-		// Gère les paramètres de collision
-		mSelectionPoly->SetFriction(mFriction->GetValue());
-	}
-	else if (mSelectionBasic)
-	{
-		// Gère les paramètres de collision
-		mSelectionBasic->SetFriction(mFriction->GetValue());
-	}
+	// Gère les paramètres de collision
+	mSelection->SetFriction(mFriction->GetValue());
 }
 void BodyScenario::OnChangeRestitution()
 {
-	if (!mApply) return;
+	if (!mApply || !mSelection) return;
 
-	if (mSelectionPoly)
-	{
-		// Gère les paramètres de collision
-		mSelectionPoly->SetRestitution(mRestitution->GetValue());
-	}
-	else if (mSelectionBasic)
-	{
-		// Gère les paramètres de collision
-		mSelectionBasic->SetRestitution(mRestitution->GetValue());
-	}
+	// Gère les paramètres de collision
+	mSelection->SetRestitution(mRestitution->GetValue());
 }
 void BodyScenario::OnClearForces()
 {
-	if (!mApply) return;
+	if (!mApply || !mSelection) return;
 
-	if (mSelectionPoly)
-	{
-		// Obtient le BasicBody
-		myAssert(mSelectionPoly->GetBody(), "Aucun b2Body associé au BasicBody.");
-		mSelectionPoly->GetBody()->SetLinearVelocity(b2Vec2_zero);
-		mSelectionPoly->GetBody()->SetAngularVelocity(0.f);
-	}
-	else if (mSelectionBasic)
-	{
-		// Obtient le BasicBody
-		myAssert(mSelectionBasic->GetBody(), "Aucun b2Body associé au BasicBody.");
-		mSelectionBasic->GetBody()->SetLinearVelocity(b2Vec2_zero);
-		mSelectionBasic->GetBody()->SetAngularVelocity(0.f);
-	}
+	// Obtient le BasicBody
+	myAssert(mSelection->GetBody(), "Aucun b2Body associé au BaseBody.");
+	mSelection->GetBody()->SetLinearVelocity(b2Vec2_zero);
+	mSelection->GetBody()->SetAngularVelocity(0.f);
 }
 void BodyScenario::OnDestroy()
 {
-	if (!mApply) return;
+	if (!mApply || !mSelection) return;
 
-	if (mSelectionPoly)
-	{
-		// Détruit le BasicBody
-		mEntityMgr.DestroyEntity(mSelectionPoly);
-		Unselect();
-		mEditBox.ScheduleUnselection();
-	}
-	else if (mSelectionBasic)
-	{
-		// Détruit le BasicBody
-		mEntityMgr.DestroyEntity(mSelectionBasic);
-		Unselect();
-		mEditBox.ScheduleUnselection();
-	}
+	// Détruit le BaseBody
+	mEntityMgr.DestroyEntity(mSelection);
+	Unselect();
+	mEditBox.ScheduleUnselection();
 }

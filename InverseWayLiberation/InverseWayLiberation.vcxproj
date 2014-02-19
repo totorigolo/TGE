@@ -30,6 +30,7 @@
     <ClCompile Include="src\Editor\GUI\PolyCreationWindow.cpp" />
     <ClCompile Include="src\Editor\GUI\Scenario.cpp" />
     <ClCompile Include="src\Editor\GUI\Window.cpp" />
+    <ClCompile Include="src\Entities\BaseBody.cpp" />
     <ClCompile Include="src\Entities\BasicBody.cpp" />
     <ClCompile Include="src\Entities\Deco.cpp" />
     <ClCompile Include="src\Entities\Entity.cpp" />

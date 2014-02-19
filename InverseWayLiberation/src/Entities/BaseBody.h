@@ -26,7 +26,7 @@ public:
 	virtual void Update();
 
 	// Destruction du body
-	void Destroy();
+	virtual void Destroy();
 
 	/* Accesseurs */
 	// Type de b2Body
@@ -42,6 +42,9 @@ public:
 	void SetFriction(float friction);
 	float GetRestitution() const;
 	void SetRestitution(float restitution);
+	// Texture
+	std::shared_ptr<Texture> GetTexture();
+	void SetTexture(std::shared_ptr<Texture> texture);
 	// Sprite
 	sf::Sprite* GetSprite();
 	const sf::Sprite* GetSprite() const;
@@ -59,7 +62,7 @@ protected:
 	// Pour le rendu
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
-private:
+protected:
 	// Propriété de collision
 	CollisionType mCollisionType;
 

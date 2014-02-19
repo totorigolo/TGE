@@ -13,9 +13,9 @@ ColFilteringWindow::ColFilteringWindow()
 }
 
 // Gestion de la sélection
-void ColFilteringWindow::Select(BasicBody *selection)
+void ColFilteringWindow::Select(BaseBody *selection)
 {
-	myAssert(selection, "BasicBody passé invalide.");
+	myAssert(selection, "BaseBody passé invalide.");
 
 	mSelection = selection;
 	SetTitle("Collision Filtering");

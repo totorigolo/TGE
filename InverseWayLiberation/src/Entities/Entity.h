@@ -9,8 +9,9 @@ enum class EntityType
 	Deco,
 	LivingBeing,
 	Player,
-	BasicBody,
-	PolyBody,
+	BaseBody,
+		BasicBody,
+		PolyBody,
 	Grapnel
 };
 

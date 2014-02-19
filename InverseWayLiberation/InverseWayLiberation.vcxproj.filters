@@ -334,6 +334,9 @@
     <ClCompile Include="src\Editor\GUI\BodyScenario.cpp">
       <Filter>Fichiers sources\Editor\GUI</Filter>
     </ClCompile>
+    <ClCompile Include="src\Entities\BaseBody.cpp">
+      <Filter>Fichiers sources\Entities</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Physics\Joints\DistanceJoint.h">

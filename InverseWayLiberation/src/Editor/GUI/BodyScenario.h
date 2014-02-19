@@ -1,15 +1,13 @@
 #pragma once
 #include "Scenario.h"
-#include "../../Entities/PolyBody.h"
-#include "../../Entities/BasicBody.h"
+#include "../../Entities/BaseBody.h"
 #include "../../Level/LevelManager.h"
 #include "../../Physics/PhysicManager.h"
 #include "../../Entities/EntityManager.h"
+#include "../../Resources/ResourceManager.h"
 
 #include <SFML/Graphics.hpp>
 #include <SFGUI/SFGUI.hpp>
-
-// TODO: Créer un classe de base commune à BasicBody et à PolyBody pour éviter tout le code dupliqué
 
 class EditBox;
 class BodyScenario : public Scenario
@@ -19,8 +17,7 @@ public:
 	BodyScenario(EditBox &editBox);
 
 	// Gestion de la sélection
-	void Select(PolyBody *selection);
-	void Select(BasicBody *selection);
+	void Select(BaseBody *selection);
 	void Unselect();
 
 	// Actualisation
@@ -34,6 +31,7 @@ protected:
 	void OnChangePosition();
 	void OnChangeType();
 	void OnChangeCollisionType();
+	void OnChangeTexture();
 	void OnChangePosXp();
 	void OnChangePosXm();
 	void OnChangePosYp();
@@ -47,12 +45,13 @@ protected:
 	void OnDestroy();
 
 private:
-	// EntityManager
+	// EntityManager, TexturesManager
 	EntityManager &mEntityMgr;
+	ResourceManager &mResourceMgr;
+
 
 	// Sélection
-	PolyBody *mSelectionPoly;
-	BasicBody *mSelectionBasic;
+	BaseBody *mSelection;
 
 	/* Eléments */
 	// Position
@@ -89,6 +88,11 @@ private:
 	sfg::SpinButton::Ptr mFriction;
 	sfg::Label::Ptr mRestitutionLabel;
 	sfg::SpinButton::Ptr mRestitution;
+
+	// Texture
+	sfg::Box::Ptr mTextureHBox;
+	sfg::Label::Ptr mTextureLabel;
+	sfg::ComboBox::Ptr mTexture;
 
 	// Boutons
 	sfg::Box::Ptr mButtonsHBox1;

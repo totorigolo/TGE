@@ -1,6 +1,6 @@
 #pragma once
 #include "Window.h"
-#include "../../Entities/BasicBody.h"
+#include "../../Entities/BaseBody.h"
 #include "../../Level/LevelManager.h"
 #include "../../Physics/PhysicManager.h"
 #include "../../Entities/EntityManager.h"
@@ -15,7 +15,7 @@ public:
 	ColFilteringWindow();
 
 	// Gestion de la sélection
-	void Select(BasicBody *selection);
+	void Select(BaseBody *selection);
 	void Unselect();
 
 	// Actualisation
@@ -36,7 +36,7 @@ private:
 	PhysicManager &mPhysicMgr;
 
 	// Sélection
-	BasicBody *mSelection;
+	BaseBody *mSelection;
 
 	// Eléments
 	sfg::Window::Ptr mColFilteringWindow;
