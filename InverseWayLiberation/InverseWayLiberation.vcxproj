@@ -21,6 +21,15 @@
     <ClCompile Include="src\App\States\StateSystem.cpp" />
     <ClCompile Include="src\Editor\EditBox.cpp" />
     <ClCompile Include="src\Editor\Editor.cpp" />
+    <ClCompile Include="src\Editor\GUI\BodyScenario.cpp" />
+    <ClCompile Include="src\Editor\GUI\ColFilteringWindow.cpp" />
+    <ClCompile Include="src\Editor\GUI\DecoScenario.cpp" />
+    <ClCompile Include="src\Editor\GUI\EmptyScenario.cpp" />
+    <ClCompile Include="src\Editor\GUI\LevelWindow.cpp" />
+    <ClCompile Include="src\Editor\GUI\LuaConsoleWindow.cpp" />
+    <ClCompile Include="src\Editor\GUI\PolyCreationWindow.cpp" />
+    <ClCompile Include="src\Editor\GUI\Scenario.cpp" />
+    <ClCompile Include="src\Editor\GUI\Window.cpp" />
     <ClCompile Include="src\Entities\BasicBody.cpp" />
     <ClCompile Include="src\Entities\Deco.cpp" />
     <ClCompile Include="src\Entities\Entity.cpp" />
@@ -29,6 +38,7 @@
     <ClCompile Include="src\Entities\Grapnel.cpp" />
     <ClCompile Include="src\Entities\LivingBeing.cpp" />
     <ClCompile Include="src\Entities\Player.cpp" />
+    <ClCompile Include="src\Entities\PolyBody.cpp" />
     <ClCompile Include="src\Game\Game.cpp" />
     <ClCompile Include="src\Level\LevelSaver.cpp" />
     <ClCompile Include="src\Lua\LuaAction.cpp" />
@@ -67,6 +77,7 @@
     <ClCompile Include="src\Physics\Joints\WeldJoint.cpp" />
     <ClCompile Include="src\Physics\Joints\WheelJoint.cpp" />
     <ClCompile Include="src\Tools\Loader.cpp" />
+    <ClCompile Include="src\Tools\PromptEntry.cpp" />
     <ClCompile Include="src\Tools\Saver.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -82,6 +93,16 @@
     <ClInclude Include="src\App\States\StateSystem.h" />
     <ClInclude Include="src\Editor\EditBox.h" />
     <ClInclude Include="src\Editor\Editor.h" />
+    <ClInclude Include="src\Editor\GUI\BodyScenario.h" />
+    <ClInclude Include="src\Editor\GUI\ColFilteringWindow.h" />
+    <ClInclude Include="src\Editor\GUI\DecoScenario.h" />
+    <ClInclude Include="src\Editor\GUI\EmptyScenario.h" />
+    <ClInclude Include="src\Editor\GUI\LevelWindow.h" />
+    <ClInclude Include="src\Editor\GUI\LuaConsoleWindow.h" />
+    <ClInclude Include="src\Editor\GUI\PolyCreationWindow.h" />
+    <ClInclude Include="src\Editor\GUI\Scenario.h" />
+    <ClInclude Include="src\Editor\GUI\Window.h" />
+    <ClInclude Include="src\Entities\BaseBody.h" />
     <ClInclude Include="src\Entities\BasicBody.h" />
     <ClInclude Include="src\Entities\Deco.h" />
     <ClInclude Include="src\Entities\Entity.h" />
@@ -90,12 +111,14 @@
     <ClInclude Include="src\Entities\Grapnel.h" />
     <ClInclude Include="src\Entities\LivingBeing.h" />
     <ClInclude Include="src\Entities\Player.h" />
+    <ClInclude Include="src\Entities\PolyBody.h" />
     <ClInclude Include="src\Game\Game.h" />
     <ClInclude Include="src\Level\LevelManager.h" />
     <ClInclude Include="src\Level\LevelLoader.h" />
     <ClInclude Include="src\Level\LevelSaver.h" />
     <ClInclude Include="src\Lua\LuaAction.h" />
     <ClInclude Include="src\Lua\LuaMachine.h" />
+    <ClInclude Include="src\Lua\OutputInterfaces.h" />
     <ClInclude Include="src\Lua\TriggersManager.h" />
     <ClInclude Include="src\Physics\Callback\AABBCallback.h" />
     <ClInclude Include="src\Physics\Callback\AABBListCallback.h" />
@@ -112,6 +135,7 @@
     <ClInclude Include="src\Tools\Error.h" />
     <ClInclude Include="src\Tools\Loader.h" />
     <ClInclude Include="src\Tools\NonCopyable.h" />
+    <ClInclude Include="src\Tools\PromptEntry.h" />
     <ClInclude Include="src\Tools\Saver.h" />
     <ClInclude Include="src\Tools\Singleton.h" />
     <ClInclude Include="src\Tools\Dialog.h" />

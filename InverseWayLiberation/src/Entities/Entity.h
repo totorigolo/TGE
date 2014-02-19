@@ -10,6 +10,7 @@ enum class EntityType
 	LivingBeing,
 	Player,
 	BasicBody,
+	PolyBody,
 	Grapnel
 };
 

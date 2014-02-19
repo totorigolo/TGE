@@ -45,67 +45,67 @@ void LuaMachine::UnregisterGlobalLuaVar(const std::string &name)
 }
 
 // Exécution
-int LuaMachine::DoFile(const std::string &path)
+int LuaMachine::DoFile(const std::string &path, OutputInterface *interface)
 {
 	try
 	{
 #ifdef _DEBUG
 		sf::Clock c;
-		int r = ReportLuaError(luaL_dofile(mLuaState, path.c_str()));
-		std::cout << "Script \"" << path << "\" ex\x82""cut\x82 en : "
+		int r = ReportLuaError(luaL_dofile(mLuaState, path.c_str()), interface);
+		*interface << "Script \"" << path << "\" ex\x82""cut\x82 en : "
 			<< c.getElapsedTime().asSeconds() << " sec" << std::endl << std::endl;
 		return r;
 #else
-		return ReportLuaError(luaL_dofile(mLuaState, path.c_str()));
+		return ReportLuaError(luaL_dofile(mLuaState, path.c_str()), interface);
 #endif
 	}
 	catch (const std::exception &e)
 	{
-		std::cerr << e.what() << std::endl;
+		*interface << e.what() << std::endl;
 	}
 
 	// Si on est là, c'est à cause d'une erreur
 	return -1;
 }
-int LuaMachine::LoadFile(const std::string &path)
+int LuaMachine::LoadFile(const std::string &path, OutputInterface *interface)
 {
 	try
 	{
 #ifdef _DEBUG
 		sf::Clock c;
-		int r = ReportLuaError(luaL_loadfile(mLuaState, path.c_str()));
-		std::cout << "Fichier \"" << path << "\" charg\x82 en : "
+		int r = ReportLuaError(luaL_loadfile(mLuaState, path.c_str()), interface);
+		*interface << "Fichier \"" << path << "\" charg\x82 en : "
 			<< c.getElapsedTime().asSeconds() << " sec" << std::endl << std::endl;
 		return r;
 #else
-		return ReportLuaError(luaL_loadfile(mLuaState, path.c_str()));
+		return ReportLuaError(luaL_loadfile(mLuaState, path.c_str()), interface);
 #endif
 	}
 	catch (const std::exception &e)
 	{
-		std::cerr << e.what() << std::endl;
+		*interface << e.what() << std::endl;
 	}
 
 	// Si on est là, c'est à cause d'une erreur
 	return -1;
 }
-int LuaMachine::DoString(const std::string &command)
+int LuaMachine::DoString(const std::string &command, OutputInterface *interface)
 {
 	try
 	{
 #ifdef _DEBUG
 		sf::Clock c;
-		int r = ReportLuaError(luaL_dostring(mLuaState, command.c_str()));
-		std::cout << "Commande \"" << command << "\" ex\x82""cut\x82 en : "
+		int r = ReportLuaError(luaL_dostring(mLuaState, command.c_str()), interface);
+		*interface << "Commande \"" << command << "\" ex\x82""cut\x82 en : "
 			<< c.getElapsedTime().asSeconds() << " sec" << std::endl << std::endl;
 		return r;
 #else
-		return ReportLuaError(luaL_dostring(mLuaState, command.c_str()));
+		return ReportLuaError(luaL_dostring(mLuaState, command.c_str()), interface);
 #endif
 	}
 	catch (const std::exception &e)
 	{
-		std::cerr << e.what() << std::endl;
+		*interface << e.what() << std::endl;
 	}
 
 	// Si on est là, c'est à cause d'une erreur
@@ -134,34 +134,37 @@ void LuaMachine::InitLua()
 }
 
 // Affichage des erreurs
-int LuaMachine::ReportLuaError(int errorCode)
+int LuaMachine::ReportLuaError(int errorCode, OutputInterface *interface)
 {
 	// Pas d'erreur
 	if (errorCode == 0)
+	{
+		*interface << "Aucune erreur." << std::endl;
 		return errorCode;
+	}
 
 	// Erreurs connus
 	else if (errorCode == LUA_ERRSYNTAX)
-		std::cerr << "Lua: Erreur de syntaxe (LUA_ERRSYNTAX)." << std::endl;
+		*interface << "Lua: Erreur de syntaxe (LUA_ERRSYNTAX)." << std::endl;
 
 	else if (errorCode == LUA_ERRRUN)
-		std::cerr << "Lua: Erreur de Runtime (LUA_ERRRUN)." << std::endl;
+		*interface << "Lua: Erreur de Runtime (LUA_ERRRUN)." << std::endl;
 
 	else if (errorCode == LUA_ERRMEM)
-		std::cerr << "Lua: Pas assez de mémoire (LUA_ERRMEM)." << std::endl;
-
+		*interface << "Lua: Pas assez de mémoire (LUA_ERRMEM)." << std::endl;
+	
 	else if (errorCode == LUA_ERRERR)
-		std::cerr << "Lua: Erreur intraitable (LUA_ERRERR)." << std::endl;
+		*interface << "Lua: Erreur intraitable (LUA_ERRERR)." << std::endl;
 
 	else if (errorCode == LUA_ERRFILE)
-		std::cerr << "Lua: Fichier introuvable (LUA_ERRFILE)." << std::endl;
+		*interface << "Lua: Fichier introuvable (LUA_ERRFILE)." << std::endl;
 
 	// Erreur inconnu
 	else
-		std::cerr << "Lua: Erreur inconnue (" << errorCode << ")." << std::endl;
+		*interface << "Lua: Erreur inconnue (" << errorCode << ")." << std::endl;
 	
 	// Affiche l'erreur sur la pile
-	std::cout << lua_tostring(mLuaState, -1) << std::endl;
+	*interface << lua_tostring(mLuaState, -1) << std::endl;
 
 	return errorCode;
 }

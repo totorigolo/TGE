@@ -7,6 +7,7 @@
 #include "../Tools/utils.h"
 #include "EntityManager.h"
 #include "BasicBody.h"
+#include "PolyBody.h"
 #include "Deco.h"
 
 #include <iostream>
@@ -66,6 +67,17 @@ namespace EntityFactory
 		// Crée le BasicBody / le cercle
 		BasicBody *b = new BasicBody(layer);
 		b->CreateDynCircle(posRot, mResourceManager.GetTexture(texture));
+
+		// Trie les Entities
+		mEntityManager.SortByLayer();
+	}
+
+	// Crée un PolyBody
+	void CreatePolyBody(const std::vector<b2Vec2> &vectices, const b2BodyType &type, const std::string &texture, int layer)
+	{
+		// Crée le PolyBody
+		PolyBody *b = new PolyBody(layer);
+		b->Create(vectices, type, mResourceManager.GetTexture(texture));
 
 		// Trie les Entities
 		mEntityManager.SortByLayer();

@@ -100,6 +100,12 @@
     <Filter Include="Fichiers sources\Lua\Registrations">
       <UniqueIdentifier>{7df680c7-277c-4c5f-acea-69bcb4f93d9f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Fichiers sources\Editor\GUI">
+      <UniqueIdentifier>{7d40da53-bda2-4a89-b2ff-7b421332fe1d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers d%27en-tête\Editor\GUI">
+      <UniqueIdentifier>{229c767c-2fd9-4efe-afa7-84e0ba80c22d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\_TODO.txt" />
@@ -295,6 +301,39 @@
     <ClCompile Include="src\App\States\Configuration_State.cpp">
       <Filter>Fichiers sources\App\States</Filter>
     </ClCompile>
+    <ClCompile Include="src\Editor\GUI\LevelWindow.cpp">
+      <Filter>Fichiers sources\Editor\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Editor\GUI\Window.cpp">
+      <Filter>Fichiers sources\Editor\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Editor\GUI\ColFilteringWindow.cpp">
+      <Filter>Fichiers sources\Editor\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Editor\GUI\Scenario.cpp">
+      <Filter>Fichiers sources\Editor\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Editor\GUI\DecoScenario.cpp">
+      <Filter>Fichiers sources\Editor\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Editor\GUI\EmptyScenario.cpp">
+      <Filter>Fichiers sources\Editor\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Tools\PromptEntry.cpp">
+      <Filter>Fichiers sources\Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Editor\GUI\LuaConsoleWindow.cpp">
+      <Filter>Fichiers sources\Editor\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Editor\GUI\PolyCreationWindow.cpp">
+      <Filter>Fichiers sources\Editor\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Entities\PolyBody.cpp">
+      <Filter>Fichiers sources\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Editor\GUI\BodyScenario.cpp">
+      <Filter>Fichiers sources\Editor\GUI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Physics\Joints\DistanceJoint.h">
@@ -470,6 +509,45 @@
     </ClInclude>
     <ClInclude Include="src\App\SpyedKey.h">
       <Filter>Fichiers d%27en-tête\App</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Editor\GUI\LevelWindow.h">
+      <Filter>Fichiers d%27en-tête\Editor\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Editor\GUI\Window.h">
+      <Filter>Fichiers d%27en-tête\Editor\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Editor\GUI\ColFilteringWindow.h">
+      <Filter>Fichiers d%27en-tête\Editor\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Editor\GUI\Scenario.h">
+      <Filter>Fichiers d%27en-tête\Editor\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Editor\GUI\DecoScenario.h">
+      <Filter>Fichiers d%27en-tête\Editor\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Editor\GUI\EmptyScenario.h">
+      <Filter>Fichiers d%27en-tête\Editor\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Tools\PromptEntry.h">
+      <Filter>Fichiers d%27en-tête\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Editor\GUI\LuaConsoleWindow.h">
+      <Filter>Fichiers d%27en-tête\Editor\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Lua\OutputInterfaces.h">
+      <Filter>Fichiers d%27en-tête\Lua</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Editor\GUI\PolyCreationWindow.h">
+      <Filter>Fichiers d%27en-tête\Editor\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Entities\PolyBody.h">
+      <Filter>Fichiers d%27en-tête\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Editor\GUI\BodyScenario.h">
+      <Filter>Fichiers d%27en-tête\Editor\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Entities\BaseBody.h">
+      <Filter>Fichiers d%27en-tête\Entities</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

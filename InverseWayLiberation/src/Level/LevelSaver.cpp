@@ -655,7 +655,7 @@ bool LevelSaver::ProcessDeco()
 
 			// Cherche la position
 			b2Vec2 pos(d->GetPosition());
-			float rotation = d->GetRotation();
+			float rotation = d->GetRotationD();
 			if (abs(rotation - 90) < 0.5) rotation = 90.f;
 			else if (abs(rotation) < 0.5) rotation = 0.f;
 

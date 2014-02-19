@@ -1,10 +1,13 @@
 #pragma once
+#include "OutputInterfaces.h"
+#include "../Tools/NonCopyable.h"
+
 #include <lua.hpp>
 // Désactive les warning "warning C4251: ...nécessite une interface DLL pour être utilisé(e) par les clients..."
 #pragma warning (disable : 4251)
 #include <luabind/luabind.hpp>
+#include <memory>
 #include <string>
-#include "../Tools/NonCopyable.h"
 
 class LuaMachine : public NonCopyable
 {
@@ -40,9 +43,9 @@ public:
 	void UnregisterGlobalLuaVar(const std::string &name);
 
 	// Exécution
-	int DoFile(const std::string &path);
-	int LoadFile(const std::string &path);
-	int DoString(const std::string &command);
+	int DoFile(const std::string &path, OutputInterface *interface = new ostreamInterface());
+	int LoadFile(const std::string &path, OutputInterface *interface = new ostreamInterface());
+	int DoString(const std::string &command, OutputInterface *interface = new ostreamInterface());
 
 	// Accesseur
 	lua_State* GetLuaState();
@@ -57,7 +60,7 @@ private:
 	void InitLua();
 
 	// Affichage des erreurs
-	int ReportLuaError(int errorCode);
+	int ReportLuaError(int errorCode, OutputInterface *interface = new ostreamInterface());
 
 private:
 	// State Lua

@@ -6,6 +6,7 @@
 #include "../Level/LevelLoader.h"
 #include "../Level/LevelManager.h"
 #include "../Physics/PhysicManager.h"
+#include "../Entities/Deco.h"
 #include "../Entities/BasicBody.h"
 #include "../Entities/EntityFactory.h"
 #include "../Entities/EntityManager.h"
@@ -24,12 +25,15 @@ Editor::Editor(sf::RenderWindow &window)
 	mPhysicMgr(PhysicManager::GetInstance()),
 	// Level
 	mLevel(LevelManager::GetInstance()),
+	mEntityMgr(EntityManager::GetInstance()),
 	// Etats du jeu
 	mPaused(false),
 	mDebugDraw(true),
 	// GUI
 	mSfGUI(App::GetInstance().GetSfGUI()),
 	// Autre
+	mPolyCreationWindow(nullptr),
+	mPointJustAdded(false),
 	mMouseMovingBody(nullptr),
 	mMouseJointCreated(false),
 	mMouseJointID(-1),
@@ -110,6 +114,7 @@ bool Editor::OnInit()
 	mInputManager.AddDesktop(&mDesktop);
 	mGUIElapsedTime.restart();
 	mEditBox = std::unique_ptr<EditBox>(new EditBox(mDesktop));
+	mPolyCreationWindow = mEditBox->GetPolyCreationWindow();
 
 	/* Physique */
 	// Initialise le monde
@@ -124,6 +129,8 @@ bool Editor::OnInit()
 	// Evènements
 	mSpyedKeys.push_back(SpyedKey::Create(sf::Keyboard::M)); // Pause physique
 	mSpyedKeys.push_back(SpyedKey::Create(sf::Keyboard::O)); // Debug Draw
+	mSpyedKeys.push_back(SpyedKey::Create(sf::Keyboard::B)); // Box
+	mSpyedKeys.push_back(SpyedKey::Create(sf::Keyboard::C)); // Circle
 	mSpyedKeys.push_back(SpyedKey::Create(sf::Keyboard::T)); // Ragdoll
 	mSpyedKeys.push_back(SpyedKey::Create(sf::Keyboard::L)); // Lamp
 	mSpyedKeys.push_back(SpyedKey::Create(sf::Keyboard::R)); // Reload
@@ -148,7 +155,12 @@ bool Editor::OnInit()
 	if (!mLevel.IsCharged())
 		return false;
 
+	// Charge la texture "vide"
+	mResourceManager.LoadTexture("unknown", "tex/unknown.png");
+
+	// Enregistre la console
 	mLevel.SetLuaConsole(&mConsole);
+	mEditBox->SetLuaMachine(&mConsole);
 
 	return true;
 }
@@ -165,6 +177,9 @@ void Editor::OnEvent()
 {
 	// Met à jour les évènements
 	mInputManager.Update();
+
+	// Exécute les actions planifiées de la GUI
+	mEditBox->DoScheduledTasks();
 
 	// Vérifie les évènements
 	if (mInputManager.HasQuitted())
@@ -184,12 +199,12 @@ void Editor::OnEvent()
 	}
 
 	// Création d'objets
-	if (mInputManager.IsKeyPressed(sf::Keyboard::B))
+	if (mInputManager.KeyReleased(sf::Keyboard::B))
 	{
 		std::string list[] = {"box", "box2", "caisse", "way", "tonneau"};
 		EntityFactory::CreateDynamicBox(getVec3(mMp), randomElement(list, 5));
 	}
-	if (mInputManager.IsKeyPressed(sf::Keyboard::C))
+	if (mInputManager.KeyReleased(sf::Keyboard::C))
 	{
 		std::string list[] = {"ball", "circle"};
 		EntityFactory::CreateDynamicCircle(getVec3(mMp), randomElement(list, 2));
@@ -201,6 +216,22 @@ void Editor::OnEvent()
 	if (mInputManager.KeyReleased(sf::Keyboard::L))
 	{
 		EntityFactory::CreateLamp(getVec3(mMp), -1);
+	}
+
+	// Poly Creation
+	if (mInputManager.GetLMBState() && mInputManager.IsKeyPressed(sf::Keyboard::LControl) && mPolyCreationWindow && !mPointJustAdded)
+	{
+		// Si la fenêtre de création de polygones est en mode création, on gère les clics
+		if (mPolyCreationWindow->IsInEditMode())
+		{
+			mPolyCreationWindow->AddPoint(mMp);
+			mPointJustAdded = true;
+		}
+	}
+	else if (mPointJustAdded && !mInputManager.GetLMBState())
+	{
+		// Attend le relâchement du clic pour mettre un autre point
+		mPointJustAdded = false;
 	}
 
 	// Lua
@@ -317,6 +348,8 @@ void Editor::OnEvent()
 	}
 	else if (mInputManager.GetRMBState())
 	{
+		bool found = false;
+
 		// Demande au monde les formes qui sont sous l'AABB
 		PointCallback callback(mMp, false);
 		mPhysicMgr.GetWorld()->QueryAABB(&callback, callback.GetAABB());
@@ -330,11 +363,37 @@ void Editor::OnEvent()
 			// Ajoute le Body à l'EditBox
 			myAssert(e, "Un b2Body sans Entity a été sélectionné.");
 			mEditBox->ChangeSelectedObject(e);
+			found = true;
 		}
+
+		// Si on n'a pas de b2Body, on cherche ce qui n'est pas physique
 		else
 		{
-			mEditBox->Unselect();
+			// Récupère la position de la souris en mode SFML
+			sf::Vector2f mousePos = mInputManager.GetMousePosRV();
+
+			// Les Entities (Déco, LivingBeing, Player)
+			std::list<Entity*> &entities(mEntityMgr.GetEntities());
+			for (auto it = entities.rbegin(); it != entities.rend(); ++it)
+			{
+				// Pour chaque type
+				if ((*it)->GetType() == EntityType::Deco)
+				{
+					// Vérifie si le curseur est dessus
+					Deco *d = (Deco*) (*it);
+					if (d->GetSprite()->getGlobalBounds().contains(mousePos))
+					{
+						mEditBox->ChangeSelectedObject(d);
+						found = true;
+						break;
+					}
+				}
+			}
 		}
+
+		// Déselectione le body courant si on n'en a pas trouvé de nouveau
+		if (!found)
+			mEditBox->Unselect();
 	}
 
 	// Charge et sauvegarde un niveau
@@ -547,6 +606,7 @@ void Editor::OnRender()
 
 	// Affichage de la GUI
 	if (mEditBox.get()) mWindow.draw(mEditBox->GetSelectionMark());
+	if (mPolyCreationWindow) mPolyCreationWindow->DrawPointsOn(mWindow);
 	mSfGUI->Display(mWindow);
 
 	// Si on n'a pas le focus

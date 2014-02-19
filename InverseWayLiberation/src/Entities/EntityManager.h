@@ -26,6 +26,7 @@ public:
 	void SortByLayer();
 
 	// Accès aux Entities
+	std::list<Entity*>& GetEntities();
 	const std::list<Entity*>& GetEntities() const;
 
 	// Gestion des IDs

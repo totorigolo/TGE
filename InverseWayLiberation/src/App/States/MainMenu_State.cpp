@@ -4,6 +4,7 @@
 #include "Configuration_State.h"
 #include "../SpyedKey.h"
 #include "../../Tools/Dialog.h"
+#include "../../Tools/utils.h"
 
 #include <vector>
 
@@ -22,8 +23,7 @@ State* MainMenu_State::Run(App *app)
 	// Récupère la fenêtre
 	sf::RenderWindow *window = app->GetRenderWindow();
 	window->setFramerateLimit(30U);
-	window->setView(window->getDefaultView());
-
+	
 	// Evènements
 	SpyedKey key_return(sf::Keyboard::Return);
 	SpyedKey key_up(sf::Keyboard::Up);
@@ -39,7 +39,11 @@ State* MainMenu_State::Run(App *app)
 	if (!fondTex.loadFromFile("tex/main_menu_bckg.jpg"))
 		Dialog::Error("Impossible de charger l'image de fond du menu.");
 	sf::Sprite fond(fondTex);
-	fond.setPosition(window->getSize().x / 2.f - fondTex.getSize().x / 2.f , 0.f);
+	fond.setPosition(0.f, 0.f);//(window->getSize().x / 2.f - fondTex.getSize().x / 2.f , 0.f);
+
+	// Gestion de la vue
+	sf::View view(window->getDefaultView());
+	view.reset(sf::FloatRect(0, 0, static_cast<float>(fondTex.getSize().x), static_cast<float>(fondTex.getSize().y)));
 
 	// Charge la flèche
 	sf::Texture arrowTex;
@@ -54,18 +58,19 @@ State* MainMenu_State::Run(App *app)
 
 	// Crée les entrées du menu
 	std::vector<sf::Text> entries;
-	entries.push_back(sf::Text("Jouer", font));
-	entries.push_back(sf::Text("Editeur", font));
-	entries.push_back(sf::Text("Configuration", font));
-	entries.push_back(sf::Text("Quitter", font));
+	entries.push_back(sf::Text("Jouer", font, 60U));
+	entries.push_back(sf::Text("Editeur", font, 60U));
+	entries.push_back(sf::Text("Configuration", font, 60U));
+	entries.push_back(sf::Text("Quitter", font, 60U));
 
 	// Positionne les entrées
-	float x = 320.f;
-	float y = 250.f;
+	float x = 0.41f * static_cast<float>(fondTex.getSize().x);
+	float y = 0.37f * static_cast<float>(fondTex.getSize().y);
 	float stepY = entries.front().getCharacterSize() + 10.f;
 	for (unsigned int i = 0; i < entries.size(); ++i)
 	{
 		entries[i].setPosition(x, y + i * stepY);
+		entries[i].setColor(sf::Color(20, 20, 20));
 	}
 
 	// Variables pour le menu
@@ -84,7 +89,7 @@ State* MainMenu_State::Run(App *app)
 		// Redimensionnement
 		if (mInputManager.HasResized())
 		{
-
+			view.reset(sf::FloatRect(0, 0, static_cast<float>(fondTex.getSize().x), static_cast<float>(fondTex.getSize().y)));
 		}
 		// Flèche haut
 		if (mInputManager.KeyReleased(sf::Keyboard::Up))
@@ -122,12 +127,13 @@ State* MainMenu_State::Run(App *app)
 		}
 
 		// Flèche
-		arrow.setPosition(x - arrowTex.getSize().x - 10.f, y + index * stepY);
+		arrow.setPosition(x - arrowTex.getSize().x - 10.f, y + index * stepY + 10.f);
 
 		/* Affichage */
 		window->clear();
 		
 		// Affiche le fond, la flèche
+		window->setView(view);
 		window->draw(fond);
 		window->draw(arrow);
 

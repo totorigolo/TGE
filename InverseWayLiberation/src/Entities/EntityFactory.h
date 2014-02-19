@@ -1,5 +1,6 @@
 #pragma once
 #include <Box2D/Box2D.h>
+#include <vector>
 #include <string>
 
 namespace EntityFactory
@@ -18,6 +19,9 @@ namespace EntityFactory
 	
 	// Crée un DynamicCircle
 	void CreateDynamicCircle(const b2Vec3 &posRot, const std::string &texture, int layer = 1);
+
+	// Crée un PolyBody
+	void CreatePolyBody(const std::vector<b2Vec2> &vectices, const b2BodyType &type, const std::string &texture, int layer = 1);
 
 	// Crée un lampadaire
 	void CreateLamp(const b2Vec3 &posRot, int layer = 1);

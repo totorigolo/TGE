@@ -70,6 +70,10 @@ void EntityManager::SortByLayer()
 }
 
 // Accès aux Entities
+std::list<Entity*>& EntityManager::GetEntities()
+{
+	return mEntities;
+}
 const std::list<Entity*>& EntityManager::GetEntities() const
 {
 	return mEntities;

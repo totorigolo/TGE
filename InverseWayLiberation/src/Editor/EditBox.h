@@ -1,10 +1,18 @@
 #pragma once
+#include "GUI/LevelWindow.h"
+#include "GUI/DecoScenario.h"
+#include "GUI/EmptyScenario.h"
+#include "GUI/LuaConsoleWindow.h"
+#include "GUI/BodyScenario.h"
+#include "GUI/ColFilteringWindow.h"
+#include "GUI/PolyCreationWindow.h"
 #include "../Entities/Entity.h"
 #include "../Physics/Joint.h"
 #include "../Lua/TriggersManager.h"
 #include "../Tools/NonCopyable.h"
 #include "../Level/LevelManager.h"
 #include "../Physics/PhysicManager.h"
+#include "../Entities/EntityManager.h"
 
 #include <SFML/Graphics.hpp>
 #include <SFGUI/SFGUI.hpp>
@@ -17,11 +25,12 @@ public:
 	enum class SelectionType {
 		Null,
 		Entity,
+			PolyBody,
 			BasicBody,
 			Deco,
 			Grapnel,
 			LivingBeing,
-			Player,
+				Player,
 		Joint,
 			DistanceJoint,
 			FrictionJoint,
@@ -40,6 +49,11 @@ public:
 	EditBox(sfg::Desktop &desktop);
 	virtual ~EditBox();
 
+	// Actions différées
+	void DoScheduledTasks();
+	void ScheduleUpdate();
+	void ScheduleUnselection();
+
 	// Change l'objet actuel
 	void ChangeSelectedObject(Entity *entity);
 	void ChangeSelectedObject(Joint *joint);
@@ -51,150 +65,70 @@ public:
 	// Vide la EditBox
 	void EmptyGUI();
 
-	// Mise à jour des Widgets en f° de l'objet
+	// Mise à jour des Widgets en f° de la sélection
 	void UpdateGUI();
+
+	// Gestion de la Machine Lua
+	void SetLuaMachine(LuaMachine *luaMachine);
+	LuaMachine* GetLuaMachine();
 
 	// Obtient le repère de l'objet sélectionné
 	sf::CircleShape GetSelectionMark();
 
-protected:
 	// Mise en place des différents scénarios
-	void CreateEmptyWindow();
-	void OnLevelCreateWindow(); // Callback
-	void CreateBasicBodyWindow();
-	void OnColFilteringCreateWindow(); // Callback
+	void ShowEmptyScenario();
+	void OnShowLevelWindow(); // Callback
+	void ShowBodyScenario();
+	void ShowDecoScenario();
+	void OnShowLuaConsoleWindow(); // Callback
+	void OnShowColFilteringWindow(); // Callback
+	void ShowPolyCreationWindow();
 
-	// Actualise les valeurs des différents scénarios
-	void UpdateLevelWindow();
-	void UpdateBasicBodyWindow();
-	void UpdateColFilteringWindow();
+	// Fermeture des fenêtres / scénarios
+	void OnCloseLevelWindow(); // Callback
 
-	/* Callbacks */
-	// Level
-	void OnLevelRefresh();
-	void OnLevelClose();
-	void OnLevelChangeGravityX();
-	void OnLevelChangeGravityY();
-	void OnLevelChangeBckgColorR();
-	void OnLevelChangeBckgColorG();
-	void OnLevelChangeBckgColorB();
-	void OnLevelChangeOriginViewX();
-	void OnLevelChangeOriginViewY();
-	void OnLevelChangeOriginViewCurrent();
-	void OnLevelChangemDefaultZoom();
-	void OnLevelChangemDefaultZoomCurrent();
-	// BasicBodies
-	void OnBasicBodyRefresh();
-	void OnBasicBodyChangePosition();
-	void OnBasicBodyChangeType();
-	void OnBasicBodyChangeCollisionType();
-	void OnBasicBodyChangePosXp();
-	void OnBasicBodyChangePosXm();
-	void OnBasicBodyChangePosYp();
-	void OnBasicBodyChangePosYm();
-	void OnBasicBodyChangePosRp();
-	void OnBasicBodyChangePosRm();
-	void OnBasicBodyChangeDensity();
-	void OnBasicBodyChangeFriction();
-	void OnBasicBodyChangeRestitution();
-	// Collision Filtering
-	void OnColFilteringApply();
-	void OnColFilteringRefresh();
-	void OnColFilteringClose();
+	// Accesseurs des fenêtres et scénarii
+	EmptyScenario* GetEmptyScenario();
+	LevelWindow* GetLevelWindow();
+	DecoScenario* GetDecoScenario();
+	BodyScenario* GetBodyScenario();
+	LuaConsoleWindow* GetLuaConsoleWindow();
+	ColFilteringWindow* GetColFilteringWindow();
+	PolyCreationWindow* GetPolyCreationWindow();
 
 private:
+	// Actions différées
+	bool mUpdateScheduled;
+	bool mUnselectionScheduled;
+
 	// Fenêtre
 	sfg::Desktop &mDesktop;
 	sfg::Window::Ptr mWindow;
 
-	// LevelMgr, PhysicMgr
+	// LevelMgr, PhysicMgr, EntityManager
 	LevelManager &mLevelMgr;
 	PhysicManager &mPhysicMgr;
+	EntityManager &mEntityMgr;
 
 	// Objet sélectionné
 	Entity *mSelectedEntity;
 	Joint *mSelectedJoint;
 	SelectionType mSelectionType;
+	bool mSelectionChanged;
 
-	/* Eléments */
-	// EditBox : VBox
-	sfg::Box::Ptr mVBox;
+	// Différentes fenêtres / scénarios
+	EmptyScenario mEmptyScenario;
+	LevelWindow mLevelWindow;
+	DecoScenario mDecoScenario;
+	BodyScenario mBodyScenario;
+	LuaConsoleWindow mLuaConsoleWindow;
+	ColFilteringWindow mColFilteringWindow;
+	PolyCreationWindow mPolyCreationWindow;
 
-	// EditBox : Boutons
-	sfg::Button::Ptr mOpenLevelBtn;
-
-	// Level
-	sfg::Window::Ptr mLevelWindow;
-	sfg::Box::Ptr mLevelVBox;
-	sfg::Box::Ptr mGravityBox;
-	sfg::Label::Ptr mGravityLabel;
-	sfg::SpinButton::Ptr mGravityX;
-	sfg::SpinButton::Ptr mGravityY;
-	sfg::Box::Ptr mBckgColorBox;
-	sfg::Label::Ptr mBckgColorLabel;
-	sfg::SpinButton::Ptr mBckgColorR;
-	sfg::SpinButton::Ptr mBckgColorG;
-	sfg::SpinButton::Ptr mBckgColorB;
-	sfg::Box::Ptr mOriginViewBox;
-	sfg::Label::Ptr mOriginViewLabel;
-	sfg::SpinButton::Ptr mOriginViewX;
-	sfg::SpinButton::Ptr mOriginViewY;
-	sfg::Button::Ptr mOriginViewCurrentBtn;
-	sfg::Box::Ptr mDefaultZoomBox;
-	sfg::Label::Ptr mDefaultZoomLabel;
-	sfg::SpinButton::Ptr mDefaultZoom;
-	sfg::Button::Ptr mDefaultZoomCurrentBtn;
-	sfg::Button::Ptr mLevelCloseBtn;
-
-	// Entities : Position
-	sfg::Table::Ptr mPosTable;
-	sfg::Label::Ptr mPosLabel;
-	sfg::Entry::Ptr mPosX;
-	sfg::Entry::Ptr mPosY;
-	sfg::Entry::Ptr mRot;
-	sfg::Button::Ptr mPosButton;
-	sfg::SpinButton::Ptr mPosStep;
-	float mPosStepSaveValue;
-	sfg::Button::Ptr mPosXp;
-	sfg::Button::Ptr mPosXm;
-	sfg::Button::Ptr mPosYp;
-	sfg::Button::Ptr mPosYm;
-	sfg::Button::Ptr mPosRp;
-	sfg::Button::Ptr mPosRm;
-	// BasicBody : Type
-	sfg::Table::Ptr mTypeTable;
-	sfg::Label::Ptr mTypeLabel;
-	std::vector<sfg::RadioButton::Ptr> mType;
-	// BasicBody : CollisionType
-	sfg::Table::Ptr mCollisionTypeTable;
-	sfg::Label::Ptr mCollisionTypeLabel;
-	sfg::ComboBox::Ptr mCollisionType;
-	// BasicBody : Densité, friction, restitution
-	sfg::Table::Ptr mPhysicsParamsTable;
-	sfg::Label::Ptr mDensityLabel;
-	sfg::SpinButton::Ptr mDensity;
-	sfg::Label::Ptr mFrictionLabel;
-	sfg::SpinButton::Ptr mFriction;
-	sfg::Label::Ptr mRestitutionLabel;
-	sfg::SpinButton::Ptr mRestitution;
-	// BasicBody : Boutons
-	sfg::Button::Ptr mColFilteringButton;
-	sfg::Button::Ptr mRefresh;
-	sfg::Box::Ptr mButtonsHBox;
-
-	// Collision Filtering
-	sfg::Window::Ptr mColFilteringWindow;
-	sfg::Box::Ptr mColFilteringVBox;
-	sfg::Box::Ptr mGroupIndexBox;
-	sfg::Label::Ptr mGroupIndexLabel;
-	sfg::SpinButton::Ptr mGroupIndex;
-	sfg::Label::Ptr mCatBitsLabel;
-	sfg::Label::Ptr mMaskBitsLabel;
-	std::vector<sfg::ToggleButton::Ptr> mCatBits;
-	std::vector<sfg::ToggleButton::Ptr> mMaskBits;
-	sfg::Table::Ptr mBitsTable;
-	sfg::Box::Ptr mColFilteringButtonsHBox;
-	sfg::Button::Ptr mColFilteringApply;
-	sfg::Button::Ptr mColFilteringRefresh;
-	sfg::Button::Ptr mColFilteringClose;
+	// Etat des fenêtres / scénarios
+	bool mLevelWindowAdded;
+	bool mEditBoxGUICreated;
+	bool mLuaConsoleWindowAdded;
+	bool mColFilteringWindowAdded;
+	bool mPolyCreationWindowAdded;
 };

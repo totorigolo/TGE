@@ -33,6 +33,41 @@ void Deco::draw(sf::RenderTarget& target, sf::RenderStates states) const
 	target.draw(mSprite, states);
 }
 
+// Position et rotation
+void Deco::SetPosition(const b2Vec2 &pos)
+{
+	mSprite.setPosition(b22sfVec(pos, PhysicManager::GetInstance().GetPPM()));
+}
+void Deco::SetPosition(const sf::Vector2f &pos)
+{
+	mSprite.setPosition(pos);
+}
+const b2Vec2 Deco::GetPosition() const
+{
+	return sf2b2Vec(mSprite.getPosition(), PhysicManager::GetInstance().GetMPP());
+}
+const sf::Vector2f Deco::GetPositionPx() const
+{
+	return mSprite.getPosition();
+}
+void Deco::SetRotationD(float rot)
+{
+	mSprite.setRotation(rot);
+}
+void Deco::SetRotationR(float rot)
+{
+	mSprite.setRotation(rot * DPR);
+}
+const float Deco::GetRotationD() const
+{
+	return mSprite.getRotation();
+}
+const float Deco::GetRotationR() const
+{
+	return mSprite.getRotation() * RPD;
+}
+
+
 // Accesseurs
 sf::Sprite* Deco::GetSprite()
 {
@@ -41,12 +76,4 @@ sf::Sprite* Deco::GetSprite()
 const sf::Sprite* Deco::GetSprite() const
 {
 	return &mSprite;
-}
-const b2Vec2 Deco::GetPosition() const
-{
-	return sf2b2Vec(mSprite.getPosition(), PhysicManager::GetInstance().GetMPP());
-}
-const float Deco::GetRotation() const
-{
-	return mSprite.getRotation();
 }

@@ -73,7 +73,7 @@ void Player::UpdateEvents()
 		// Applique le déplacement
 		float velChange = desiredVel - vel.x;
 		float impulse = mBody->GetMass() * velChange * 100;
-		mBody->ApplyForceToCenter(b2Vec2(impulse, 0.f));
+		mBody->ApplyForceToCenter(b2Vec2(impulse, 0.f), true);
 
 		// Saut
 		if (mInputManager.KeyPressed(sf::Keyboard::Space))
@@ -82,7 +82,7 @@ void Player::UpdateEvents()
 			{
 				//mBody->ApplyForceToCenter(b2Vec2(0.f, 370.f));
 				float impulse = mBody->GetMass() * 6.3f;
-				mBody->ApplyLinearImpulse(b2Vec2(0,impulse), mBody->GetWorldCenter());
+				mBody->ApplyLinearImpulse(b2Vec2(0,impulse), mBody->GetWorldCenter(), true);
 				mCanJump = false;
 			}
 		}

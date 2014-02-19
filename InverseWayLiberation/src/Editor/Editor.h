@@ -3,6 +3,7 @@
 #include "../Tools/NonCopyable.h"
 #include "../Resources/ResourceManager.h"
 #include "../Editor/EditBox.h"
+#include "../Editor/GUI/PolyCreationWindow.h"
 #include "../App/SpyedKey.h"
 
 #include <SFML/Graphics.hpp>
@@ -66,9 +67,12 @@ private:
 	// Evènements
 	InputManager &mInputManager;
 	std::vector<SpyedKey::Ptr> mSpyedKeys;
+	PolyCreationWindow *mPolyCreationWindow;
+	bool mPointJustAdded;
 
 	// Niveau
 	LevelManager &mLevel;
+	EntityManager &mEntityMgr;
 
 	// Monde physique
 	PhysicManager &mPhysicMgr;
