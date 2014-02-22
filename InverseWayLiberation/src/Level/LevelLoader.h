@@ -18,6 +18,7 @@ private:
 	// Une fonction par catégorie
 	bool ProcessWorld();
 	bool ProcessTextures();
+	bool ProcessPolyBodies();
 	bool ProcessBasicBodies();
 	bool ProcessEntities();
 	bool ProcessJoints();

@@ -35,9 +35,9 @@
 #include <unordered_map>
 
 // Project
-#include "Tools\Dialog.h"
-#include "Tools\Error.h"
-#include "Tools\NonCopyable.h"
-#include "Tools\Parser.h"
-#include "Tools\Singleton.h"
-#include "Tools\utils.h"
+#include "Tools/Dialog.h"
+#include "Tools/Error.h"
+#include "Tools/NonCopyable.h"
+#include "Tools/Parser.h"
+#include "Tools/Singleton.h"
+#include "Tools/utils.h"

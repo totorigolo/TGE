@@ -9,6 +9,7 @@
 #include "../Physics/PhysicManager.h"
 #include "../Entities/Deco.h"
 #include "../Entities/BasicBody.h"
+#include "../Entities/LivingBeing.h"
 #include "../Entities/EntityFactory.h"
 #include "../Entities/EntityManager.h"
 #include "../Physics/Joints/MouseJoint.h"
@@ -151,12 +152,8 @@ bool Editor::OnInit()
 	mConsole.RegisterResourceManager();
 
 	// Charge un niveau
-	LevelLoader("lvls/1.xvl");
-	if (!mLevel.IsCharged())
+	if (!LoadLevel("lvls/1.xvl"))
 		return false;
-
-	// Charge la texture "vide"
-	mResourceManager.LoadTexture("unknown", "tex/unknown.png");
 
 	// Enregistre la console
 	mLevel.SetLuaConsole(&mConsole);
@@ -571,8 +568,12 @@ void Editor::OnStepPhysics()
 		b2Body *b = nullptr;
 		Entity *e = mEditBox->GetSelectedEntity();
 		if (e)
-			if (e->GetType() == EntityType::BasicBody)
-				b = ((BasicBody*) e)->GetBody();
+		{
+			if (e->GetType() == EntityType::BasicBody || e->GetType() == EntityType::PolyBody)
+				b = ((BaseBody*) e)->GetBody();
+			else if (e->GetType() == EntityType::LivingBeing || e->GetType() == EntityType::Player)
+				b = ((LivingBeing*) e)->GetBody();
+		}
 		mPhysicMgr.DestroyBodiesOut(b2Vec2(1000.f, -200.f), b2Vec2(-200.f, 200.f), b);
 	}
 }
@@ -663,4 +664,18 @@ void Editor::OnQuit()
 	mConsole.UnregisterGlobalLuaVar("level");
 	mConsole.UnregisterGlobalLuaVar("physicMgr");
 	mConsole.UnregisterGlobalLuaVar("inputMgr");
+}
+
+// Charge un niveau
+bool Editor::LoadLevel(const std::string &path)
+{
+	// Charge un niveau
+	LevelLoader(path.c_str());
+	if (!mLevel.IsCharged())
+		return false;
+
+	// Charge la texture "vide"
+	mResourceManager.LoadTexture("unknown", "tex/unknown.png");
+
+	return true;
 }

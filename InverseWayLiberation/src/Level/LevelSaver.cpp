@@ -6,6 +6,8 @@
 #include "../Entities/Entity.h"
 #include "../Entities/Deco.h"
 #include "../Entities/Player.h"
+#include "../Entities/BaseBody.h"
+#include "../Entities/PolyBody.h"
 #include "../Entities/BasicBody.h"
 #include "../Entities/LivingBeing.h"
 #include "../Entities/EntityManager.h"
@@ -52,7 +54,7 @@ bool LevelSaver::Process()
 	// Enregistre tout
 	if (!ProcessWorld()) return false;
 	if (!ProcessTextures()) return false;
-	if (!ProcessBasicBodies()) return false;
+	if (!ProcessBodies()) return false;
 	if (!ProcessEntities()) return false;
 	if (!ProcessJoints()) return false;
 	if (!ProcessDeco()) return false;
@@ -124,40 +126,61 @@ bool LevelSaver::ProcessTextures()
 	// Tout s'est bien passé
 	return true;
 }
-bool LevelSaver::ProcessBasicBodies()
+bool LevelSaver::ProcessBodies()
 {
 	// Récupère la balise <level>
 	tinyxml2::XMLHandle handle(mDoc);
 	tinyxml2::XMLNode *level = handle.FirstChildElement("level").ToNode();
 
-	// Crée la balise <basicbodies>
+	// Crée les balise <basicbodies> et <polybodies>
 	tinyxml2::XMLElement *basicbodies = mDoc.NewElement("basicbodies");
+	tinyxml2::XMLElement *polybodies = mDoc.NewElement("polybodies");
 	
-	// Ajoute <basicbodies> à <level>
+	// Ajoute <basicbodies> et <polybodies> à <level>
 	level->LinkEndChild(basicbodies);
+	level->LinkEndChild(polybodies);
 
 	// Parcours toutes les Entities
 	for (auto it = mLevel.mEntityManager.GetEntities().begin(); it != mLevel.mEntityManager.GetEntities().end(); ++it)
 	{
 		// Vérifie le type de l'Entity
-		if ((*it)->GetType() == EntityType::BasicBody)
+		if ((*it)->GetType() == EntityType::BasicBody || (*it)->GetType() == EntityType::PolyBody)
 		{
-			BasicBody *bb = ((BasicBody*) *it);
+			BaseBody *bb = ((BaseBody*) *it);
 
 			// Définit le nom de la balise
 			std::string type;
-			if (bb->Getb2BodyType() == b2BodyType::b2_dynamicBody && bb->GetBasicBodyShape() == BasicBody::Shape::Box)
-				type = "dynamicbox";
-			else if (bb->Getb2BodyType() == b2BodyType::b2_dynamicBody && bb->GetBasicBodyShape() == BasicBody::Shape::Circle)
-				type = "dynamiccircle";
-			else if (bb->Getb2BodyType() == b2BodyType::b2_staticBody && bb->GetBasicBodyShape() == BasicBody::Shape::Box)
-				type = "staticbox";
-			else if (bb->Getb2BodyType() == b2BodyType::b2_staticBody && bb->GetBasicBodyShape() == BasicBody::Shape::Circle)
-				type = "staticcircle";
+			if ((*it)->GetType() == EntityType::BasicBody)
+			{
+				BasicBody *bbtmp = ((BasicBody*) bb);
+
+				if (bb->Getb2BodyType() == b2BodyType::b2_dynamicBody && bbtmp->GetBasicBodyShape() == BasicBody::Shape::Box)
+					type = "dynamicbox";
+				else if (bb->Getb2BodyType() == b2BodyType::b2_dynamicBody && bbtmp->GetBasicBodyShape() == BasicBody::Shape::Circle)
+					type = "dynamiccircle";
+				else if (bb->Getb2BodyType() == b2BodyType::b2_staticBody && bbtmp->GetBasicBodyShape() == BasicBody::Shape::Box)
+					type = "staticbox";
+				else if (bb->Getb2BodyType() == b2BodyType::b2_staticBody && bbtmp->GetBasicBodyShape() == BasicBody::Shape::Circle)
+					type = "staticcircle";
+				else
+				{
+					Dialog::Error("Erreur lors de la sauvegarde :\nBasicBody::Type == Null\nBasicBody ignoré.");
+					continue;
+				}
+			}
 			else
 			{
-				Dialog::Error("Erreur lors de la sauvegarde :\nBasicBody::Type == Null\nBasicBody ignoré.");
-				continue;
+				if (bb->Getb2BodyType() == b2BodyType::b2_dynamicBody)
+					type = "dynamic";
+				else if (bb->Getb2BodyType() == b2BodyType::b2_staticBody)
+					type = "static";
+				else if (bb->Getb2BodyType() == b2BodyType::b2_kinematicBody)
+					type = "kinematic";
+				else
+				{
+					Dialog::Error("Erreur lors de la sauvegarde :\nPolyBody::Type == Null\nPolyBody ignoré.");
+					continue;
+				}
 			}
 			
 			// Récupère le nom de la texture
@@ -183,7 +206,7 @@ bool LevelSaver::ProcessBasicBodies()
 			b2Fixture *f = bb->GetBody()->GetFixtureList();
 			if (f->GetNext())
 			{
-				Dialog::Error("Erreur lors de la sauvegarde : \nLe BasicBody a plusieurs fixtures.");
+				Dialog::Error("Erreur lors de la sauvegarde : \nLe BaseBody a plusieurs fixtures.");
 				continue;
 			}
 
@@ -198,7 +221,7 @@ bool LevelSaver::ProcessBasicBodies()
 			uint16 categoryBits = filter.categoryBits;
 			uint16 maskBits = filter.maskBits;
 
-			// Crée la balise <name>
+			// Crée la balise <type>
 			tinyxml2::XMLElement *balise = mDoc.NewElement(type.c_str());
 			if (id != 0) balise->SetAttribute("id", id);
 			balise->SetAttribute("texture", textureName.c_str());
@@ -220,8 +243,23 @@ bool LevelSaver::ProcessBasicBodies()
 			if (categoryBits != 0x0001) balise->SetAttribute("categoryBits", categoryBits);
 			if (maskBits != 0xFFFF) balise->SetAttribute("maskBits", maskBits);
 
-			// Ajoute la balise à <basicbodies>
-			basicbodies->LinkEndChild(balise);
+			// Ajoute la position des points pour les PolyBodies
+			if ((*it)->GetType() == EntityType::PolyBody)
+			{
+				const std::vector<b2Vec2>& pts = ((PolyBody*) (*it))->GetPoints();
+				for (int p = 0; p < pts.size(); ++p)
+				{
+					tinyxml2::XMLElement *point = mDoc.NewElement("point");
+					point->SetAttribute("pos", Parser::b2Vec2ToString(pts[p]).c_str());
+					balise->LinkEndChild(point);
+				}
+			}
+			
+			// Ajoute la balise à <basicbodies> ou <polybodies>
+			if ((*it)->GetType() == EntityType::BasicBody)
+				basicbodies->LinkEndChild(balise);
+			else
+				polybodies->LinkEndChild(balise);
 		}
 	}
 

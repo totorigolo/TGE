@@ -18,6 +18,8 @@
 #include "../Entities/Entity.h"
 #include "../Entities/Deco.h"
 #include "../Entities/Player.h"
+#include "../Entities/BaseBody.h"
+#include "../Entities/PolyBody.h"
 #include "../Entities/BasicBody.h"
 #include "../Entities/LivingBeing.h"
 #include "../Entities/EntityFactory.h"
@@ -68,6 +70,10 @@ bool LevelLoader::Process()
 	// Les Bodies basiques
 	myCheckError(ProcessBasicBodies(), "Une erreur est survenue lors du chargement du niveau.\n"
 									   "Le chargement des BasicBodies a échoué (" + mPath + ").");
+
+	// Les Bodies polygones
+	myCheckError(ProcessPolyBodies(), "Une erreur est survenue lors du chargement du niveau.\n"
+									  "Le chargement des PolyBodies a échoué (" + mPath + ").");
 
 	// Les Entities
 	myCheckError(ProcessEntities(), "Une erreur est survenue lors du chargement du niveau.\n"
@@ -160,6 +166,169 @@ bool LevelLoader::ProcessTextures()
 
 	return true;
 }
+bool LevelLoader::ProcessPolyBodies()
+{
+	// Récupère <polybodies>
+	tinyxml2::XMLHandle hdl(mFile);
+	tinyxml2::XMLHandle bodies = hdl.FirstChildElement("level").FirstChildElement("polybodies");
+
+	// Vérifie que <polybodies> existe
+	if (!bodies.ToElement())
+		return true;
+
+	// On crée les attributs
+	PolyBody *pb = nullptr;
+	int layer = 1;
+	bool bullet = false, osp = false;
+	float density = 1.f, friction = 0.2f, restitution = 0.0f;
+	int16 groupIndex = 0;
+	uint16 categoryBits = 0x0001, maskBits = 0xFFFF;
+	float rotation = 0.f;
+	unsigned int id = 0U;
+	std::string texture, type;
+	b2BodyType b2type;
+	b2Vec3 posRot;
+	b2Vec2 linvel; // Linear velocity
+	float angvel = 0.f; // Angular velocity
+	std::vector<b2Vec2> vertices;
+
+	// Pour tous les bodies
+	tinyxml2::XMLElement *body = bodies.FirstChildElement().ToElement();
+	while (body)
+	{
+		// Réinitialise les attributs
+		pb = nullptr;
+		layer = 1;
+		id = 0U;
+		rotation = 0.f;
+		density = 1.f;
+		friction = 0.2f;
+		restitution = 0.0f;
+		groupIndex = 0;
+		categoryBits = 0x0001;
+		maskBits = 0xFFFF;
+		b2type = b2BodyType::b2_staticBody;
+		osp = false;
+		bullet = false;
+		linvel = b2Vec2_zero;
+		angvel = 0.f;
+		vertices.clear();
+
+		// Récupère le type
+		type = body->Name();
+		if (type == "static")
+			b2type = b2BodyType::b2_staticBody;
+		else if (type == "dynamic")
+			b2type = b2BodyType::b2_dynamicBody;
+		else if (type == "kinematic")
+			b2type = b2BodyType::b2_dynamicBody;
+		else
+			Dialog::Error("PolyBody type inconnu (" + type + ") !");
+
+		// Récupère la texture et vérifie si elle existe
+		if (body->Attribute("texture")) texture = body->Attribute("texture");
+		if (!mLevel.mResourceManager.TextureExists(texture))
+		{
+			Dialog::Error("Texture \"" + texture + "\" inconnue. Body ignoré !");
+
+			// On passe au prochain body
+			body = body->NextSiblingElement();
+			continue;
+		}
+
+		// Récupère l'ID
+		if (body->Attribute("id")) body->QueryUnsignedAttribute("id", &id);
+
+		// Récupère la position et la rotation
+		body->QueryFloatAttribute("rotation", &rotation);
+		if (body->Attribute("pos")) posRot = Parser::stringToB2Vec3(body->Attribute("pos"));
+		posRot.z = rotation;
+
+		// Récupère l'état
+		if (body->Attribute("linvel")) linvel = Parser::stringToB2Vec2(body->Attribute("linvel"));
+		body->QueryFloatAttribute("angvel", &angvel);
+
+		// Récupère le layer
+		body->QueryIntAttribute("layer", &layer);
+
+		// Récupère les propriétés
+		body->QueryFloatAttribute("density", &density);
+		body->QueryFloatAttribute("friction", &friction);
+		body->QueryFloatAttribute("restitution", &restitution);
+
+		// Récupère les propriétés de groupe
+		int tmp = 0;
+		body->QueryIntAttribute("groupIndex", &tmp);
+		groupIndex = static_cast<int16>(tmp);
+		tmp = 0x0001;
+		body->QueryIntAttribute("categoryBits", &tmp);
+		categoryBits = static_cast<uint16>(tmp);
+		tmp = 0xFFFF;
+		body->QueryIntAttribute("maskBits", &tmp);
+		maskBits = static_cast<uint16>(tmp);
+
+		// Récupère les points
+		tinyxml2::XMLHandle bodyHandle(body);
+		tinyxml2::XMLElement *point = bodyHandle.FirstChildElement().ToElement();
+		while (point)
+		{
+			// Si il s'agit bien d'une balise <point>
+			if (std::string(point->Name()) == std::string("point"))
+			{
+				// Récupère la position
+				if (point->Attribute("pos"))
+				{
+					b2Vec2 p = Parser::stringToB2Vec2(point->Attribute("pos"));
+					vertices.push_back(p);
+				}
+			}
+
+			// On récupère le prochain point
+			point = point->NextSiblingElement();
+		}
+
+		// Crée le body
+		pb = new PolyBody(layer, id);
+		pb->Create(posRot, vertices, b2type, mLevel.mResourceManager.GetTexture(texture), density, friction, restitution, groupIndex, categoryBits, maskBits);
+
+		// Restore l'état
+		if (type == "dynamic" || type == "kinematic")
+		{
+			pb->GetBody()->SetLinearVelocity(linvel);
+			pb->GetBody()->SetAngularVelocity(angvel);
+		}
+
+		// Si le PolyBody a été créé
+		if (pb)
+		{
+			// Propriétés de collision
+			body->QueryBoolAttribute("osp", &osp);
+			body->QueryBoolAttribute("bullet", &bullet);
+
+			// Applique les propriétés
+			if (osp && bullet)
+				Dialog::Error("Impossible d'avoir osp et bullet en même temps !");
+			else if (osp)
+				pb->SetCollisionType(BasicBody::CollisionType::OneSidedPlatform);
+			else if (bullet)
+				pb->SetCollisionType(BasicBody::CollisionType::Bullet);
+
+			// Enregiste l'ID
+			if (id != 0)
+			{
+				// On regarde si l'ID n'est pas déjà utilisé
+				if (mBodyIDMap.find(id) != mBodyIDMap.end())
+					Dialog::Error("L'ID " + Parser::intToString(id) + " n'est pas unique !");
+				mBodyIDMap[id] = pb->GetBody();
+			}
+		}
+
+		// On récupère le prochain body
+		body = body->NextSiblingElement();
+	}
+
+	return true;
+}
 bool LevelLoader::ProcessBasicBodies()
 {
 	// Récupère <basicbodies>
@@ -167,7 +336,8 @@ bool LevelLoader::ProcessBasicBodies()
 	tinyxml2::XMLHandle bodies = hdl.FirstChildElement("level").FirstChildElement("basicbodies");
 
 	// Vérifie que <basicbodies> existe
-	myCheckError(bodies.ToElement(), "Une erreur est survenue lors du chargement du niveau.\n<basicbodies> non trouvé (" + mPath + ").");
+	if (!bodies.ToElement())
+		return true;
 
 	// On crée les attributs
 	BasicBody *bb = nullptr;

@@ -21,6 +21,9 @@ public:
 	const b2Body* GetCollisionBody() const;
 	const sf::Sprite* GetSprite() const;
 	const b2Vec2 GetPosition() const;
+	// Body
+	b2Body* GetBody();
+	const b2Body* GetBody() const;
 	
 protected:
 	bool mIsDead;

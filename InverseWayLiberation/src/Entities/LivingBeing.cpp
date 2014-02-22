@@ -117,3 +117,12 @@ const b2Vec2 LivingBeing::GetPosition() const
 {
 	return mBody->GetPosition();
 }
+// Body
+b2Body* LivingBeing::GetBody()
+{
+	return mBody;
+}
+const b2Body* LivingBeing::GetBody() const
+{
+	return mBody;
+}

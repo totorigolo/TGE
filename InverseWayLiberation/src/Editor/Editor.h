@@ -49,6 +49,10 @@ protected:
 	inline void OnQuit();
 	
 private:
+	// Charge un niveau
+	bool LoadLevel(const std::string &path);
+
+private:
 	// Etats du jeu
 	bool mPaused;
 	bool mDebugDraw;
