@@ -336,10 +336,10 @@ sf::CircleShape EditBox::GetSelectionMark()
 	cs.setOrigin(sf::Vector2f(9.f, 9.f));
 
 	// Gère chaque type
-	if (mSelectionType == SelectionType::BasicBody)
+	if (mSelectionType == SelectionType::BasicBody || mSelectionType == SelectionType::PolyBody)
 	{
 		// Obtient le BasicBody
-		BasicBody *bb = (BasicBody*) mSelectedEntity;
+		BaseBody *bb = (BaseBody*) mSelectedEntity;
 		myAssert(bb, "Erreur lors du la détermination du type.");
 
 		cs.setPosition(b22sfVec(bb->GetPosition(), mPhysicMgr.GetPPM()));
