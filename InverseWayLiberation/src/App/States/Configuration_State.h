@@ -1,9 +1,6 @@
 #pragma once
 #include "State.h"
 
-#include <SFML/Graphics.hpp>
-#include <SFGUI/SFGUI.hpp>
-
 class Configuration_State : public State, public Singleton<Configuration_State>
 {
 protected:

@@ -1,8 +1,6 @@
+#include "stdafx.h"
 #include "../LuaMachine.h"
 #include "../../Resources/ResourceManager.h"
-
-#include <exception>
-#include <string>
 
 void LuaMachine::RegisterResourceManager()
 {

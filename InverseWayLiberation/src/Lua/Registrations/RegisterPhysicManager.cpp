@@ -1,8 +1,6 @@
+#include "stdafx.h"
 #include "../LuaMachine.h"
 #include "../../Physics/PhysicManager.h"
-
-#include <exception>
-#include <iostream>
 
 // Enregistrements
 void LuaMachine::RegisterPhysicManager()

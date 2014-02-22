@@ -1,9 +1,6 @@
+#include "stdafx.h"
 #include "DebugDraw.h"
 #include "PhysicManager.h"
-#include "../Tools/utils.h"
-#include "../Tools/Error.h"
-
-#include <iostream>
 
 // Ctor
 DebugDraw::DebugDraw(PhysicManager &physicMgr)

@@ -1,12 +1,6 @@
 #pragma once
 #include "../Lua/TriggersManager.h"
-#include "../Tools/Singleton.h"
 #include "../Resources/ResourceManager.h"
-
-#include <SFML/Graphics.hpp>
-#include <Box2D/Box2D.h>
-#include <string>
-#include <list>
 
 class Player;
 class LevelSaver;

@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "LuaAction.h"
 
 // Ctors

@@ -337,6 +337,9 @@
     <ClCompile Include="src\Entities\BaseBody.cpp">
       <Filter>Fichiers sources\Entities</Filter>
     </ClCompile>
+    <ClCompile Include="src\stdafx.cpp">
+      <Filter>Fichiers sources\Tools</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Physics\Joints\DistanceJoint.h">
@@ -551,6 +554,9 @@
     </ClInclude>
     <ClInclude Include="src\Entities\BaseBody.h">
       <Filter>Fichiers d%27en-tête\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="src\stdafx.h">
+      <Filter>Fichiers d%27en-tête\Tools</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

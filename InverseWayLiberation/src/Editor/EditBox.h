@@ -9,15 +9,9 @@
 #include "../Entities/Entity.h"
 #include "../Physics/Joint.h"
 #include "../Lua/TriggersManager.h"
-#include "../Tools/NonCopyable.h"
 #include "../Level/LevelManager.h"
 #include "../Physics/PhysicManager.h"
 #include "../Entities/EntityManager.h"
-
-#include <SFML/Graphics.hpp>
-#include <SFGUI/SFGUI.hpp>
-#include <string>
-#include <vector>
 
 class EditBox : public NonCopyable
 {

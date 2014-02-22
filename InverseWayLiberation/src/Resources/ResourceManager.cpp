@@ -1,5 +1,5 @@
+#include "stdafx.h"
 #include "ResourceManager.h"
-#include "../Tools/Error.h"
 
 // Vide toutes les ressources
 void ResourceManager::Clear()

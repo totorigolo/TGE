@@ -1,7 +1,4 @@
 #pragma once
-#include <SFML/Graphics.hpp>
-#include <string>
-#include "../Tools/Error.h"
 
 class Texture : public sf::Texture
 {

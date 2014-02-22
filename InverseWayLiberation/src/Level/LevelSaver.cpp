@@ -1,8 +1,5 @@
+#include "stdafx.h"
 #include "LevelSaver.h"
-#include "../Tools/utils.h"
-#include "../Tools/Error.h"
-#include "../Tools/Dialog.h"
-#include "../Tools/Parser.h"
 #include "../Lua/TriggersManager.h"
 #include "../Physics/PhysicManager.h"
 

@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "PromptEntry.h"
 
 sfg::Signal::SignalID PromptEntry::OnTextSent = 0;

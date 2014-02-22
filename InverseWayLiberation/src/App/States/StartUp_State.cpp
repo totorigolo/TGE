@@ -1,8 +1,7 @@
+#include "stdafx.h"
 #include "StartUp_State.h"
 #include "MainMenu_State.h"
 #include "../SpyedKey.h"
-
-#include <vector>
 
 // Ctor & Dtor
 StartUp_State::StartUp_State()

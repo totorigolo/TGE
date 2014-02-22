@@ -1,4 +1,4 @@
-#include "Error.h"
+#include "stdafx.h"
 
 // Ctor
 Error::Error(const std::string &msg, const char *file, const char *func, int line)

@@ -1,8 +1,4 @@
 #pragma once
-#include "../Tools/NonCopyable.h"
-
-#include <Box2D/Box2D.h>
-#include <list>
 
 enum class ForceType
 {

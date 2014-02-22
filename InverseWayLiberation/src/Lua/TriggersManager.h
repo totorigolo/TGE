@@ -1,15 +1,6 @@
 #pragma once
 #include "../Lua/LuaMachine.h"
-#include "../Tools/NonCopyable.h"
 #include "LuaAction.h"
-
-#include <SFML/Graphics.hpp>
-#include <Box2D/Box2D.h>
-#include <iostream>
-#include <memory>
-#include <string>
-#include <list>
-#include <unordered_map>
 
 typedef std::unordered_map<std::string, std::shared_ptr<LuaAction>> ActionMap;
 

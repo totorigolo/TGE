@@ -1,6 +1,5 @@
+#include "stdafx.h"
 #include "Loader.h"
-#include "../Tools/Dialog.h"
-#include "../Tools/Parser.h"
 
 // Ctor
 Loader::Loader(std::string const& path)

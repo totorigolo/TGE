@@ -2,9 +2,6 @@
 #include "LivingBeing.h"
 #include "../Resources/Texture.h"
 
-#include <SFML/Graphics.hpp>
-#include <string>
-
 class InputManager;
 class Player : public LivingBeing
 {

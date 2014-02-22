@@ -1,9 +1,6 @@
 #pragma once
 #include "../Joint.h"
 
-#include <SFML/Graphics.hpp>
-#include <Box2D/Box2D.h>
-
 struct WheelJointDef : public JointDef
 {
 	// Ctor

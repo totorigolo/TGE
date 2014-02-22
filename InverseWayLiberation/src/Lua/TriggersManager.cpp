@@ -1,11 +1,7 @@
+#include "stdafx.h"
 #include "TriggersManager.h"
-#include "../Tools/Error.h"
-#include "../Tools/Parser.h"
-#include "../Tools/utils.h"
 #include "../Physics/PhysicManager.h"
 #include "../Physics/Callback/AABBCallback.h"
-
-#include <iostream>
 
 // Ctor
 TriggersManager::TriggersManager()

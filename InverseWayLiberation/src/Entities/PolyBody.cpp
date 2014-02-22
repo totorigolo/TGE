@@ -1,9 +1,6 @@
+#include "stdafx.h"
 #include "PolyBody.h"
-#include "../Tools/utils.h"
-#include "../Tools/Error.h"
 #include "../Physics/PhysicManager.h"
-
-#include <iostream>
 
 // Ctor & dtor
 PolyBody::PolyBody(int layer, unsigned int ID)

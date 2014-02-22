@@ -1,6 +1,6 @@
+#include "stdafx.h"
 #include "ColFilteringWindow.h"
 #include "../../App/InputManager.h"
-#include "../../Tools/Error.h"
 
 // Ctor
 ColFilteringWindow::ColFilteringWindow()

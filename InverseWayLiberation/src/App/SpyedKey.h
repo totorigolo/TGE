@@ -1,8 +1,5 @@
 #pragma once
 #include "InputManager.h"
-#include "../Tools/NonCopyable.h"
-
-#include <memory>
 
 class SpyedKey : public NonCopyable
 {

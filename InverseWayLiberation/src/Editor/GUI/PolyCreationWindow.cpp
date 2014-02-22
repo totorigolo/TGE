@@ -1,10 +1,9 @@
+#include "stdafx.h"
 #include "PolyCreationWindow.h"
 #include "../EditBox.h"
 #include "../../App/InputManager.h"
 #include "../../Entities/PolyBody.h"
 #include "../../Entities/EntityFactory.h"
-#include "../../Tools/Error.h"
-#include "../../Tools/utils.h"
 
 // Ctor
 PolyCreationWindow::PolyCreationWindow()

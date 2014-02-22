@@ -1,10 +1,5 @@
 #pragma once
 #include "../Editor/GUI/LuaConsoleWindow.h"
-#include "../Tools/NonCopyable.h"
-#include "../Tools/Parser.h"
-
-#include <iostream>
-#include <string>
 
 // Classe abstraite de base
 class OutputInterface : public NonCopyable

@@ -1,9 +1,6 @@
+#include "stdafx.h"
 #include "BasicBody.h"
-#include "../Tools/utils.h"
-#include "../Tools/Error.h"
 #include "../Physics/PhysicManager.h"
-
-#include <iostream>
 
 // Ctor & dtor
 BasicBody::BasicBody(int layer, unsigned int ID)

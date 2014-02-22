@@ -1,7 +1,4 @@
 #pragma once
-#include "../../Tools/NonCopyable.h"
-
-#include <Box2D/Box2D.h>
 
 // Ce callback est utilisé pour trouver le body le plus près lors d'un raycast
 class FirstBodyRaycastCallback : public b2RayCastCallback, public NonCopyable

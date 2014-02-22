@@ -1,7 +1,6 @@
+#include "stdafx.h"
 #include "DistanceJoint.h"
 #include "../PhysicManager.h"
-#include "../../Tools/utils.h"
-#include "../../Tools/Error.h"
 
 //Ctor
 DistanceJoint::DistanceJoint(const DistanceJointDef &def)

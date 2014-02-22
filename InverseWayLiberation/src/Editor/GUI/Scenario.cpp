@@ -1,6 +1,6 @@
+#include "stdafx.h"
 #include "Scenario.h"
 #include "../EditBox.h"
-#include "../../Tools/Error.h"
 
 // Ctor
 Scenario::Scenario(EditBox &editBox, const std::string &title)

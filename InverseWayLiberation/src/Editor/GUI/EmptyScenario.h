@@ -1,9 +1,6 @@
 #pragma once
 #include "Scenario.h"
 
-#include <SFML/Graphics.hpp>
-#include <SFGUI/SFGUI.hpp>
-
 class EditBox;
 class EmptyScenario : public Scenario
 {

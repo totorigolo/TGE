@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "StateSystem.h"
 #include "State.h"
 #include "../App.h"

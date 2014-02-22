@@ -1,8 +1,4 @@
 #pragma once
-#include "../Tools/NonCopyable.h"
-
-#include <SFML/Graphics.hpp>
-#include <Box2D/Box2D.h>
 
 class ContactListener : public b2ContactListener, public NonCopyable
 {

@@ -1,6 +1,5 @@
+#include "stdafx.h"
 #include "Grapnel.h"
-#include "../Tools/utils.h"
-#include "../Tools/Error.h"
 #include "../Physics/PhysicManager.h"
 #include "../Physics/Joints/DistanceJoint.h"
 

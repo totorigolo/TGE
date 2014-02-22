@@ -1,8 +1,6 @@
+#include "stdafx.h"
 #include "../LuaMachine.h"
 #include "../../Entities/EntityFactory.h"
-
-#include <Box2D/Box2D.h>
-#include <exception>
 
 void LuaMachine::RegisterEntityFactory()
 {

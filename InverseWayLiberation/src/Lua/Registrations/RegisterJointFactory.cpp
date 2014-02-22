@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "../LuaMachine.h"
 #include "../../Physics/JointFactory.h"
 #include "../../Physics/Joints/DistanceJoint.h"
@@ -9,10 +10,6 @@
 #include "../../Physics/Joints/RopeJoint.h"
 #include "../../Physics/Joints/WeldJoint.h"
 #include "../../Physics/Joints/WheelJoint.h"
-
-#include <Box2D/Box2D.h>
-#include <exception>
-#include <iostream>
 
 // Enregistrements
 void LuaMachine::RegisterJointFactory()

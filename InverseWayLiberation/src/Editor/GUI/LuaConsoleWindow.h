@@ -2,10 +2,6 @@
 #include "Window.h"
 #include "../../Tools/PromptEntry.h"
 
-#include <SFML/Graphics.hpp>
-#include <SFGUI/SFGUI.hpp>
-#include <vector>
-
 class LuaMachine;
 class LuaConsoleWindow : public Window
 {

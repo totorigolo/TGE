@@ -1,8 +1,6 @@
+#include "stdafx.h"
 #include "App/App.h"
 #include "Tools/Dialog.h"
-
-#include <exception>
-#include <iostream>
 
 int main()
 {

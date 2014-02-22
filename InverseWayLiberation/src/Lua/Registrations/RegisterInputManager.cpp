@@ -1,8 +1,6 @@
+#include "stdafx.h"
 #include "../LuaMachine.h"
 #include "../../App/InputManager.h"
-
-#include <luabind/operator.hpp>
-#include <exception>
 
 // Enregistrements
 void LuaMachine::RegisterInputManager()

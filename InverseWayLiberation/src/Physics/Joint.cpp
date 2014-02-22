@@ -1,6 +1,5 @@
+#include "stdafx.h"
 #include "Joint.h"
-#include "../Tools/utils.h"
-#include "../Tools/Error.h"
 #include "PhysicManager.h"
 
 //Ctor

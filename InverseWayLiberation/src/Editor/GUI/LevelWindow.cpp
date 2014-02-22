@@ -1,6 +1,6 @@
+#include "stdafx.h"
 #include "LevelWindow.h"
 #include "../../App/InputManager.h"
-#include "../../Tools/Error.h"
 
 // Ctor
 LevelWindow::LevelWindow()

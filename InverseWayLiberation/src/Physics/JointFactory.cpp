@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "JointFactory.h"
 #include "Joints\DistanceJoint.h"
 #include "Joints\FrictionJoint.h"

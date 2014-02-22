@@ -1,8 +1,6 @@
+#include "stdafx.h"
 #include "Configuration_State.h"
 #include "MainMenu_State.h"
-#include "../../Tools/Dialog.h"
-
-#include <vector>
 
 // Ctor & Dtor
 Configuration_State::Configuration_State()

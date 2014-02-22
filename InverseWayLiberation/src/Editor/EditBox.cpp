@@ -1,7 +1,5 @@
+#include "stdafx.h"
 #include "EditBox.h"
-#include "../Tools/Error.h"
-#include "../Tools/Parser.h"
-#include "../Tools/utils.h"
 #include "../App/InputManager.h"
 
 #include "../Entities/PolyBody.h"
@@ -20,8 +18,6 @@
 #include "../Physics/Joints/RopeJoint.h"
 #include "../Physics/Joints/WeldJoint.h"
 #include "../Physics/Joints/WheelJoint.h"
-
-#include <iostream>
 
 // Ctor
 EditBox::EditBox(sfg::Desktop &desktop)

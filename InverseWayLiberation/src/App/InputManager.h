@@ -1,11 +1,6 @@
 #pragma once
 #include "../Tools/Singleton.h"
 
-#include <SFML/Graphics.hpp>
-#include <SFGUI/SFGUI.hpp>
-#include <list>
-#include <map>
-
 enum KeyState
 {
 	None,

@@ -1,7 +1,5 @@
 #pragma once
 #include "../Lua/LuaMachine.h"
-#include <iostream>
-#include <string>
 
 class TriggersManager;
 class LuaAction

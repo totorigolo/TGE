@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "Editor_State.h"
 #include "MainMenu_State.h"
 #include "../../Editor/Editor.h"

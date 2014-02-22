@@ -1,9 +1,4 @@
 #pragma once
-#include "../Tools/Singleton.h"
-
-#include <SFML/Graphics.hpp>
-#include <list>
-#include <set>
 
 class Entity;
 class EntityManager : public Singleton<EntityManager>, public sf::Drawable

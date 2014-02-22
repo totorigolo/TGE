@@ -1,10 +1,6 @@
+#include "stdafx.h"
 #include "LevelLoader.h"
 #include "LevelManager.h"
-
-#include "../Tools/utils.h"
-#include "../Tools/Error.h"
-#include "../Tools/Dialog.h"
-#include "../Tools/Parser.h"
 
 #include "../App/InputManager.h"
 #include "../Physics/PhysicManager.h"

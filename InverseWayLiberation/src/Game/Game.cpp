@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "Game.h"
 #include "../App/App.h"
 #include "../App/InputManager.h"
@@ -11,7 +12,6 @@
 #include "../Physics/Joints/MouseJoint.h"
 #include "../Physics/Joints/DistanceJoint.h"
 #include "../Physics/Callback/PointCallback.h"
-#include "../Tools/utils.h"
 
 // Ctor
 Game::Game(sf::RenderWindow &window)

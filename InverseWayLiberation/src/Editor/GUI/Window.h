@@ -1,9 +1,4 @@
 #pragma once
-#include "../../Tools/NonCopyable.h"
-
-#include <SFML/Graphics.hpp>
-#include <SFGUI/SFGUI.hpp>
-#include <string>
 
 class Window : public NonCopyable
 {

@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "LuaMachine.h"
 #include "../Game/Game.h"
 #include "../App/InputManager.h"
@@ -6,12 +7,6 @@
 #include "../Physics/PhysicManager.h"
 #include "../Entities/EntityFactory.h"
 #include "../Entities/Player.h"
-
-#include <luabind/operator.hpp>
-#include <SFML/Graphics.hpp>
-#include <Box2D/Box2D.h>
-#include <exception>
-#include <iostream>
 
 // Ctor & dtor
 LuaMachine::LuaMachine()

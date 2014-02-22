@@ -1,18 +1,14 @@
+#include "stdafx.h"
 #include "EntityFactory.h"
 #include "../Resources/ResourceManager.h"
 #include "../Physics/Joints/RevoluteJoint.h"
 #include "../Physics/Joints/WeldJoint.h"
 #include "../Physics/PhysicManager.h"
 #include "../Physics/Joint.h"
-#include "../Tools/utils.h"
 #include "EntityManager.h"
 #include "BasicBody.h"
 #include "PolyBody.h"
 #include "Deco.h"
-
-#include <iostream>
-#include <list>
-#include <map>
 
 namespace EntityFactory
 {

@@ -1,6 +1,4 @@
-#include "Dialog.h"
-#include "Parser.h"
-#include "utils.h"
+#include "stdafx.h"
 
 namespace Dialog
 {

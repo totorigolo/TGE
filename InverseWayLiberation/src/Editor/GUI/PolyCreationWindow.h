@@ -5,10 +5,6 @@
 #include "../../Physics/PhysicManager.h"
 #include "../../Entities/EntityManager.h"
 
-#include <SFML/Graphics.hpp>
-#include <SFGUI/SFGUI.hpp>
-#include <vector>
-
 class EditBox;
 class PolyCreationWindow : public Window
 {

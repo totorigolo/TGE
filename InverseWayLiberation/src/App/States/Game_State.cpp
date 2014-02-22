@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "Game_State.h"
 #include "MainMenu_State.h"
 #include "../../Game/Game.h"

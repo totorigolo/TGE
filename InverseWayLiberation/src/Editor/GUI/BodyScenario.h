@@ -6,9 +6,6 @@
 #include "../../Entities/EntityManager.h"
 #include "../../Resources/ResourceManager.h"
 
-#include <SFML/Graphics.hpp>
-#include <SFGUI/SFGUI.hpp>
-
 class EditBox;
 class BodyScenario : public Scenario
 {

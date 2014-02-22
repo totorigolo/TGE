@@ -4,9 +4,6 @@
 #include "../../Physics/PhysicManager.h"
 #include "../../Entities/EntityManager.h"
 
-#include <SFML/Graphics.hpp>
-#include <SFGUI/SFGUI.hpp>
-
 class LevelWindow : public Window
 {
 public:

@@ -2,10 +2,6 @@
 #include "Entity.h"
 #include "../Resources/Texture.h"
 
-#include <SFML/Graphics.hpp>
-#include <Box2D/Box2D.h>
-#include <memory>
-
 class Deco : public Entity
 {
 public:

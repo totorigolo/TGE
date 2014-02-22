@@ -1,6 +1,6 @@
+#include "stdafx.h"
 #include "EntityManager.h"
 #include "Entity.h"
-#include "../Tools/Error.h"
 
 // Ctor & dtor
 EntityManager::EntityManager()

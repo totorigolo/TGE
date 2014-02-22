@@ -1,6 +1,6 @@
+#include "stdafx.h"
 #include "Entity.h"
 #include "EntityManager.h"
-#include "../Tools/Error.h"
 
 // Ctor & dtor
 Entity::Entity(int layer, unsigned int ID)

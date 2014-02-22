@@ -1,11 +1,6 @@
 #pragma once
-#include "../Tools/Singleton.h"
 #include "DebugDraw.h"
 #include "ContactListener.h"
-
-#include <Box2D/Box2D.h>
-#include <utility>
-#include <map>
 
 class Joint;
 class Entity;

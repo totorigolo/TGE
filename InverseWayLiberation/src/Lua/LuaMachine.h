@@ -1,13 +1,5 @@
 #pragma once
 #include "OutputInterfaces.h"
-#include "../Tools/NonCopyable.h"
-
-#include <lua.hpp>
-// Désactive les warning "warning C4251: ...nécessite une interface DLL pour être utilisé(e) par les clients..."
-#pragma warning (disable : 4251)
-#include <luabind/luabind.hpp>
-#include <memory>
-#include <string>
 
 class LuaMachine : public NonCopyable
 {

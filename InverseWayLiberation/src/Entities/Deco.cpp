@@ -1,6 +1,5 @@
+#include "stdafx.h"
 #include "Deco.h"
-#include "../Tools/utils.h"
-#include "../Tools/Error.h"
 #include "../Physics/PhysicManager.h"
 
 // Ctor & dtor

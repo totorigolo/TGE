@@ -1,7 +1,6 @@
+#include "stdafx.h"
 #include "PrismaticJoint.h"
 #include "../PhysicManager.h"
-#include "../../Tools/utils.h"
-#include "../../Tools/Error.h"
 
 //Ctor
 PrismaticJoint::PrismaticJoint(const PrismaticJointDef &def)

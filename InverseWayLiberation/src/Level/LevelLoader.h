@@ -1,10 +1,6 @@
 #pragma once
 #include "../Tools/Loader.h"
 
-#include <Box2D/Box2D.h>
-#include <string>
-#include <map>
-
 class InputManager;
 class LevelManager;
 class PhysicManager;

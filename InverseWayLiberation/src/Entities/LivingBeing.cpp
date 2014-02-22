@@ -1,8 +1,7 @@
+#include "stdafx.h"
 #include "LivingBeing.h"
 #include "EntityManager.h"
 #include "../Physics/PhysicManager.h"
-#include "../Tools/utils.h"
-#include "../Tools/Error.h"
 
 // Ctor & dtor
 LivingBeing::LivingBeing(b2Vec2 position, const std::shared_ptr<Texture> &texture, int layer, unsigned int ID)

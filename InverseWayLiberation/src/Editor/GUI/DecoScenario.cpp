@@ -1,8 +1,7 @@
+#include "stdafx.h"
 #include "DecoScenario.h"
 #include "../EditBox.h"
 #include "../../App/InputManager.h"
-#include "../../Tools/Error.h"
-#include "../../Tools/utils.h"
 
 // Ctor
 DecoScenario::DecoScenario(EditBox &editBox)

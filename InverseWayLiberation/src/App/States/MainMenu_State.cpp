@@ -1,12 +1,9 @@
+#include "stdafx.h"
 #include "MainMenu_State.h"
 #include "Game_State.h"
 #include "Editor_State.h"
 #include "Configuration_State.h"
 #include "../SpyedKey.h"
-#include "../../Tools/Dialog.h"
-#include "../../Tools/utils.h"
-
-#include <vector>
 
 // Ctor & Dtor
 MainMenu_State::MainMenu_State()

@@ -1,6 +1,6 @@
+#include "stdafx.h"
 #include "LuaConsoleWindow.h"
 #include "../../Lua/LuaMachine.h"
-#include "../../Tools/Error.h"
 #include "../../Lua/OutputInterfaces.h"
 
 // Ctor

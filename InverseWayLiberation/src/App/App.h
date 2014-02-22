@@ -1,9 +1,5 @@
 #pragma once
 #include "InputManager.h"
-#include "../Tools/Singleton.h"
-
-#include <SFML/Graphics.hpp>
-#include <SFGUI/SFGUI.hpp>
 
 class StateSystem;
 class App : public Singleton<App>

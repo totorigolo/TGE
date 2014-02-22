@@ -1,12 +1,6 @@
 #pragma once
-#include "../Tools/Singleton.h"
 #include "Texture.h"
 
-#include <SFML/Graphics.hpp>
-#include <SFML/Audio.hpp>
-#include <memory>
-#include <string>
-#include <map>
 
 typedef std::map<std::string, std::shared_ptr<sf::Font>> FontMap;
 typedef std::map<std::string, std::shared_ptr<sf::Sound>> SoundMap;

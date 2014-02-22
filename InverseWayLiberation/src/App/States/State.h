@@ -1,5 +1,4 @@
 #pragma once
-#include "../../Tools/NonCopyable.h"
 #include "../App.h"
 
 // State prédéfini.

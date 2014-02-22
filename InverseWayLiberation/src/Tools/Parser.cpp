@@ -1,7 +1,4 @@
-#include "Parser.h"
-#include "Dialog.h"
-
-#include <sstream>
+#include "stdafx.h"
 
 namespace Parser
 {

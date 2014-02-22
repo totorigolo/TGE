@@ -2,10 +2,6 @@
 #include "Entity.h"
 #include "../Resources/Texture.h"
 
-#include <SFML/System.hpp>
-#include <Box2D/Box2D.h>
-#include <memory>
-
 class Joint;
 class PhysicManager;
 class DistanceJoint;

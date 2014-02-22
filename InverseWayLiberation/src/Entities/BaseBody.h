@@ -2,9 +2,6 @@
 #include "Entity.h"
 #include "../Resources/Texture.h"
 
-#include <Box2D/Box2D.h>
-#include <memory>
-
 class PhysicManager;
 class BaseBody : public Entity
 {

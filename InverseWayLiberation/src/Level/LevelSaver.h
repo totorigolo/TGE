@@ -5,8 +5,6 @@
 #include "../Resources/ResourceManager.h"
 #include "../Tools/Saver.h"
 
-#include <string>
-
 class LevelSaver : public Saver
 {
 public:

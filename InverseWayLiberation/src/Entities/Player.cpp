@@ -1,6 +1,6 @@
+#include "stdafx.h"
 #include "Player.h"
 #include "EntityManager.h"
-#include "../Tools/Error.h"
 #include "../App/InputManager.h"
 
 // Ctor & dtor

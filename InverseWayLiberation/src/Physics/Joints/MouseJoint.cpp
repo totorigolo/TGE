@@ -1,7 +1,6 @@
+#include "stdafx.h"
 #include "MouseJoint.h"
 #include "../PhysicManager.h"
-#include "../../Tools/utils.h"
-#include "../../Tools/Error.h"
 
 //Ctor
 MouseJoint::MouseJoint(const MouseJointDef &def)

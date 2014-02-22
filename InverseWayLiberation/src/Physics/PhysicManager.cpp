@@ -1,9 +1,8 @@
+#include "stdafx.h"
 #include "PhysicManager.h"
 #include "Joint.h"
 #include "DebugDraw.h"
 #include "ContactListener.h"
-#include "../Tools/Error.h"
-#include "../Tools/Parser.h"
 #include "../Entities/Entity.h"
 #include "../Entities/EntityManager.h"
 

@@ -1,8 +1,5 @@
+#include "stdafx.h"
 #include "Saver.h"
-#include "../Tools/Dialog.h"
-#include "../Tools/Parser.h"
-
-#include <fstream>
 
 // Ctor
 Saver::Saver(std::string const& path, bool overwrite)

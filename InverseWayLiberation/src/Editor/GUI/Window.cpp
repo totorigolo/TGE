@@ -1,5 +1,5 @@
+#include "stdafx.h"
 #include "Window.h"
-#include "../../Tools/Error.h"
 
 // Ctor
 Window::Window(const std::string &title)

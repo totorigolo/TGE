@@ -1,6 +1,6 @@
+#include "stdafx.h"
 #include "LevelManager.h"
 #include "LevelLoader.h"
-#include "../Tools/utils.h"
 #include "../Entities/Player.h"
 #include "../App/InputManager.h"
 #include "../Lua/LuaMachine.h" // TODO

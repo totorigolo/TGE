@@ -1,8 +1,7 @@
+#include "stdafx.h"
 #include "EmptyScenario.h"
 #include "../EditBox.h"
 #include "../../App/InputManager.h"
-#include "../../Tools/Error.h"
-#include "../../Tools/utils.h"
 
 // Ctor
 EmptyScenario::EmptyScenario(EditBox &editBox)

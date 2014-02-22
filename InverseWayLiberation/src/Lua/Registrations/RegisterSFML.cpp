@@ -1,9 +1,5 @@
+#include "stdafx.h"
 #include "../LuaMachine.h"
-
-#include <luabind/operator.hpp>
-#include <SFML/Graphics.hpp>
-#include <exception>
-#include <iostream>
 
 // Enregistrements privés
 void LuaMachine::RegisterSFML()

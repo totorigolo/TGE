@@ -1,7 +1,6 @@
+#include "stdafx.h"
 #include "GearJoint.h"
 #include "../PhysicManager.h"
-#include "../../Tools/utils.h"
-#include "../../Tools/Error.h"
 
 //Ctor
 GearJoint::GearJoint(const GearJointDef &def)
