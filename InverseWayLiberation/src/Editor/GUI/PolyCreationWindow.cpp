@@ -146,6 +146,7 @@ void PolyCreationWindow::OnCancelLast()
 	if (mPoints.size() > 0)
 		mPoints.pop_back();
 
+	OnRefresh();
 }
 void PolyCreationWindow::OnCreatePoly()
 {
