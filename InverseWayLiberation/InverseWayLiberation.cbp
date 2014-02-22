@@ -49,9 +49,6 @@
 		<Unit filename="lvls/1.xvl" />
 		<Unit filename="lvls/2.xvl" />
 		<Unit filename="lvls/save.xvl" />
-		<Unit filename="scripts/contact.lua" />
-		<Unit filename="scripts/lvl1.lua" />
-		<Unit filename="scripts/test1.lua" />
 		<Unit filename="src/App/App.cpp" />
 		<Unit filename="src/App/App.h" />
 		<Unit filename="src/App/InputManager.cpp" />
@@ -193,6 +190,8 @@
 		<Unit filename="src/Tools/Singleton.h" />
 		<Unit filename="src/Tools/utils.h" />
 		<Unit filename="src/main.cpp" />
+		<Unit filename="src/stdafx.cpp" />
+		<Unit filename="src/stdafx.h" />
 		<Unit filename="src_en_attente/FileLogger.cpp" />
 		<Unit filename="src_en_attente/FileLogger.h" />
 		<Unit filename="src_en_attente/Lights/CircleHull.cpp" />
