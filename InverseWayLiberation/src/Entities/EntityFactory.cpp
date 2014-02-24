@@ -12,7 +12,7 @@
 
 namespace EntityFactory
 {
-	// Variables privés
+	// Variables privées
 	namespace
 	{
 		// Physique
@@ -35,45 +35,34 @@ namespace EntityFactory
 		mEntityManager.SortByLayer();
 	}
 
-	// Crée une Box parmi la liste
-	void CreateDynamicBox(const b2Vec3 &posRot, const std::string &texture, int layer)
+	// Crée un BasicBody : Box
+	void CreateBox(const b2Vec3 &posRot, b2BodyType type, const std::string &texture, int layer)
 	{
 		// Crée le BasicBody / la Box
 		BasicBody *b = new BasicBody(layer);
-		b->CreateDynBox(posRot, mResourceManager.GetTexture(texture));
+		b->CreateBox(posRot, type, mResourceManager.GetTexture(texture));
 
 		// Trie les Entities
 		mEntityManager.SortByLayer();
 	}
 
-	// Crée un StaticBox
-	void CreateStaticBox(const b2Vec3 &posRot, const std::string &texture, int layer)
-	{
-		// Crée le BasicBody / la Box
-		BasicBody *b = new BasicBody(layer);
-		b->CreateStaticBox(posRot, mResourceManager.GetTexture(texture));
-
-		// Trie les Entities
-		mEntityManager.SortByLayer();
-	}
-	
-	// Crée un cercle parmi la liste
-	void CreateDynamicCircle(const b2Vec3 &posRot, const std::string &texture, int layer)
+	// Crée un BasicBody : Circle
+	void CreateCircle(const b2Vec3 &posRot, b2BodyType type, const std::string &texture, int layer)
 	{
 		// Crée le BasicBody / le cercle
 		BasicBody *b = new BasicBody(layer);
-		b->CreateDynCircle(posRot, mResourceManager.GetTexture(texture));
+		b->CreateCircle(posRot, type, mResourceManager.GetTexture(texture));
 
 		// Trie les Entities
 		mEntityManager.SortByLayer();
 	}
 
 	// Crée un PolyBody
-	void CreatePolyBody(const std::vector<b2Vec2> &vectices, const b2BodyType &type, const std::string &texture, int layer)
+	void CreatePolyBody(const vector_b2Vec2 &vectices, b2BodyType type, const std::string &texture, int layer)
 	{
 		// Crée le PolyBody
 		PolyBody *b = new PolyBody(layer);
-		b->Create(vectices, type, mResourceManager.GetTexture(texture));
+		b->Create(vectices.GetVector(), type, mResourceManager.GetTexture(texture));
 
 		// Trie les Entities
 		mEntityManager.SortByLayer();
@@ -84,7 +73,7 @@ namespace EntityFactory
 	{
 		// Crée le BasicBody / le lampadaire
 		BasicBody *b = new BasicBody(layer);
-		b->CreateStaticBox(posRot, mResourceManager.GetTexture("lampadere"), 0.1f, 0.05f);
+		b->CreateBox(posRot, b2BodyType::b2_staticBody, mResourceManager.GetTexture("lampadere"), 0.1f, 0.05f);
 		
 		// Trie les Entities
 		EntityManager::GetInstance().SortByLayer();
@@ -114,45 +103,48 @@ namespace EntityFactory
 		// std::map pour les stocker temporairement
 		std::map<std::string, BasicBody*> bodies;
 
+		// Variables tmp pour raccourcir
+		b2BodyType td = b2BodyType::b2_dynamicBody;
+
 		// Jambe, bras et pied gauche
 		bodies["11_armL1"] = new BasicBody(layer);
-		bodies["11_armL1"]->CreateDynBox(b2Vec3(0.f, 0.f, 0.f) + position, mResourceManager.GetTexture("hero_armL1"), 1.f, 0.2f, 0.f, -1);
+		bodies["11_armL1"]->CreateBox(b2Vec3(0.f, 0.f, 0.f) + position, td, mResourceManager.GetTexture("hero_armL1"), 1.f, 0.2f, 0.f, -1);
 		bodies["11_armL2"] = new BasicBody(layer);
-		bodies["11_armL2"]->CreateDynBox(b2Vec3(0.f, -0.2f, 0.f) + position, mResourceManager.GetTexture("hero_armL2"), 1.f, 0.2f, 0.f, -1);
+		bodies["11_armL2"]->CreateBox(b2Vec3(0.f, -0.2f, 0.f) + position, td, mResourceManager.GetTexture("hero_armL2"), 1.f, 0.2f, 0.f, -1);
 		bodies["12_legL1"] = new BasicBody(layer);
-		bodies["12_legL1"]->CreateDynBox(b2Vec3(0.f, -0.3f, 0.f) + position, mResourceManager.GetTexture("hero_legL1"), 1.f, 0.2f, 0.f, -1);
+		bodies["12_legL1"]->CreateBox(b2Vec3(0.f, -0.3f, 0.f) + position, td, mResourceManager.GetTexture("hero_legL1"), 1.f, 0.2f, 0.f, -1);
 		bodies["12_legL2"] = new BasicBody(layer);
-		bodies["12_legL2"]->CreateDynBox(b2Vec3(0.f, -0.6f, 0.f) + position, mResourceManager.GetTexture("hero_legL2"), 1.f, 0.2f, 0.f, -1);
+		bodies["12_legL2"]->CreateBox(b2Vec3(0.f, -0.6f, 0.f) + position, td, mResourceManager.GetTexture("hero_legL2"), 1.f, 0.2f, 0.f, -1);
 		bodies["13_footL"] = new BasicBody(layer);
-		bodies["13_footL"]->CreateDynBox(b2Vec3(0.05f, -0.75f, 0.f) + position, mResourceManager.GetTexture("hero_footL"), 1.f, 0.2f, 0.f, -1);
+		bodies["13_footL"]->CreateBox(b2Vec3(0.05f, -0.75f, 0.f) + position, td, mResourceManager.GetTexture("hero_footL"), 1.f, 0.2f, 0.f, -1);
 
 		// Cou
 		bodies["20_neck"] = new BasicBody(layer);
-		bodies["20_neck"]->CreateDynBox(b2Vec3(0.f, 0.25f, 0.f) + position, mResourceManager.GetTexture("hero_neck"), 1.f, 0.2f, 0.f, -1);
+		bodies["20_neck"]->CreateBox(b2Vec3(0.f, 0.25f, 0.f) + position, td, mResourceManager.GetTexture("hero_neck"), 1.f, 0.2f, 0.f, -1);
 
 		// Torse
 		bodies["31_torso3"] = new BasicBody(layer);
-		bodies["31_torso3"]->CreateDynBox(b2Vec3(0.f, -0.1f, 0.f) + position, mResourceManager.GetTexture("hero_torso3"), 1.f, 0.2f, 0.f, -1);
+		bodies["31_torso3"]->CreateBox(b2Vec3(0.f, -0.1f, 0.f) + position, td, mResourceManager.GetTexture("hero_torso3"), 1.f, 0.2f, 0.f, -1);
 		bodies["32_torso2"] = new BasicBody(layer);
-		bodies["32_torso2"]->CreateDynBox(b2Vec3(0.f, 0.f, 0.f) + position, mResourceManager.GetTexture("hero_torso2"), 1.f, 0.2f, 0.f, -1);
+		bodies["32_torso2"]->CreateBox(b2Vec3(0.f, 0.f, 0.f) + position, td, mResourceManager.GetTexture("hero_torso2"), 1.f, 0.2f, 0.f, -1);
 		bodies["33_torso1"] = new BasicBody(layer);
-		bodies["33_torso1"]->CreateDynBox(b2Vec3(0.f, 0.15f, 0.f) + position, mResourceManager.GetTexture("hero_torso1"), 1.f, 0.2f, 0.f, -1);
+		bodies["33_torso1"]->CreateBox(b2Vec3(0.f, 0.15f, 0.f) + position, td, mResourceManager.GetTexture("hero_torso1"), 1.f, 0.2f, 0.f, -1);
 	
 		// Tête
 		bodies["40_head"] = new BasicBody(layer);
-		bodies["40_head"]->CreateDynCircle(b2Vec3(0.f, 0.5f, 0.f) + position, mResourceManager.GetTexture("hero_head"), 1.f, 0.5f, 0.f, -1);
+		bodies["40_head"]->CreateCircle(b2Vec3(0.f, 0.5f, 0.f) + position, td, mResourceManager.GetTexture("hero_head"), 1.f, 0.5f, 0.f, -1);
 
 		// Jambe, bras et pied droit
 		bodies["51_legR1"] = new BasicBody(layer);
-		bodies["51_legR1"]->CreateDynBox(b2Vec3(0.f, -0.3f, 0.f) + position, mResourceManager.GetTexture("hero_legR1"), 1.f, 0.2f, 0.f, -1);
+		bodies["51_legR1"]->CreateBox(b2Vec3(0.f, -0.3f, 0.f) + position, td, mResourceManager.GetTexture("hero_legR1"), 1.f, 0.2f, 0.f, -1);
 		bodies["51_legR2"] = new BasicBody(layer);
-		bodies["51_legR2"]->CreateDynBox(b2Vec3(0.f, -0.6f, 0.f) + position, mResourceManager.GetTexture("hero_legR2"), 1.f, 0.2f, 0.f, -1);
+		bodies["51_legR2"]->CreateBox(b2Vec3(0.f, -0.6f, 0.f) + position, td, mResourceManager.GetTexture("hero_legR2"), 1.f, 0.2f, 0.f, -1);
 		bodies["52_armR1"] = new BasicBody(layer);
-		bodies["52_armR1"]->CreateDynBox(b2Vec3(0.f, 0.f, 0.f) + position, mResourceManager.GetTexture("hero_armR1"), 1.f, 0.2f, 0.f, -1);
+		bodies["52_armR1"]->CreateBox(b2Vec3(0.f, 0.f, 0.f) + position, td, mResourceManager.GetTexture("hero_armR1"), 1.f, 0.2f, 0.f, -1);
 		bodies["52_armR2"] = new BasicBody(layer);
-		bodies["52_armR2"]->CreateDynBox(b2Vec3(0.f, -0.2f, 0.f) + position, mResourceManager.GetTexture("hero_armR2"), 1.f, 0.2f, 0.f, -1);
+		bodies["52_armR2"]->CreateBox(b2Vec3(0.f, -0.2f, 0.f) + position, td, mResourceManager.GetTexture("hero_armR2"), 1.f, 0.2f, 0.f, -1);
 		bodies["53_footR"] = new BasicBody(layer);
-		bodies["53_footR"]->CreateDynBox(b2Vec3(0.05f, -0.75f, 0.f) + position, mResourceManager.GetTexture("hero_footR"), 1.f, 0.2f, 0.f, -1);
+		bodies["53_footR"]->CreateBox(b2Vec3(0.05f, -0.75f, 0.f) + position, td, mResourceManager.GetTexture("hero_footR"), 1.f, 0.2f, 0.f, -1);
 
 		/* Jointe les bodies entre eux */
 		// Liste des joints

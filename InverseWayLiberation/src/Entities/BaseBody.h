@@ -26,6 +26,8 @@ public:
 	virtual void Destroy();
 
 	/* Accesseurs */
+	// Est-ce que le Body est créé
+	bool IsCreated() const;
 	// Type de b2Body
 	b2BodyType Getb2BodyType() const;
 	void Setb2BodyType(const b2BodyType &type);

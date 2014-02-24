@@ -3,6 +3,8 @@
 #include "../Resources/ResourceManager.h"
 #include "../Editor/EditBox.h"
 #include "../Editor/GUI/PolyCreationWindow.h"
+#include "../Editor/GUI/DecoCreationWindow.h"
+#include "../Editor/GUI/BasicBodyCreationWindow.h"
 #include "../App/SpyedKey.h"
 
 class PhysicManager;
@@ -65,6 +67,8 @@ private:
 	InputManager &mInputManager;
 	std::vector<SpyedKey::Ptr> mSpyedKeys;
 	PolyCreationWindow *mPolyCreationWindow;
+	DecoCreationWindow *mDecoCreationWindow;
+	BasicBodyCreationWindow *mBasicBodyCreationWindow;
 	bool mPointJustAdded;
 
 	// Niveau

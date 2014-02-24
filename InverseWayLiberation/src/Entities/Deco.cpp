@@ -15,6 +15,8 @@ Deco::Deco(int layer, const std::shared_ptr<Texture> &texture, sf::Vector3f posR
 	mSprite.setPosition(getVec2(posRot));
 	mSprite.setRotation(posRot.z);
 	mSprite.setOrigin(u2f(mSprite.getTexture()->getSize()) / 2.f);
+
+	mIsAlive = true;
 }
 Deco::~Deco()
 {

@@ -1,4 +1,5 @@
 #pragma once
+#include "../Tools/vector_wrappers.h"
 
 namespace EntityFactory
 {
@@ -8,17 +9,14 @@ namespace EntityFactory
 	// Crée une déco
 	void CreateDeco(const b2Vec3 &posRot, const std::string &texture, int layer = 1);
 	
-	// Crée une DynamicBox
-	void CreateDynamicBox(const b2Vec3 &posRot, const std::string &texture, int layer = 1);
+	// Crée un BasicBody : Box
+	void CreateBox(const b2Vec3 &posRot, b2BodyType type, const std::string &texture, int layer = 1);
 	
-	// Crée un StaticBox
-	void CreateStaticBox(const b2Vec3 &posRot, const std::string &texture, int layer = 1);
-	
-	// Crée un DynamicCircle
-	void CreateDynamicCircle(const b2Vec3 &posRot, const std::string &texture, int layer = 1);
+	// Crée un BasicBody : Circle
+	void CreateCircle(const b2Vec3 &posRot, b2BodyType type, const std::string &texture, int layer = 1);
 
 	// Crée un PolyBody
-	void CreatePolyBody(const std::vector<b2Vec2> &vectices, const b2BodyType &type, const std::string &texture, int layer = 1);
+	void CreatePolyBody(const vector_b2Vec2 &vectices, b2BodyType type, const std::string &texture, int layer = 1);
 
 	// Crée un lampadaire
 	void CreateLamp(const b2Vec3 &posRot, int layer = 1);

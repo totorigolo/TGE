@@ -46,7 +46,6 @@ private:
 	EntityManager &mEntityMgr;
 	ResourceManager &mResourceMgr;
 
-
 	// Sélection
 	BaseBody *mSelection;
 

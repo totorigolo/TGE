@@ -85,12 +85,15 @@ void DecoScenario::Fill()
 	mPosTable->Attach(mPosRp, sf::Rect<sf::Uint32>(10, 2, 2, 1));
 	mPosTable->Attach(mPosRm, sf::Rect<sf::Uint32>(12, 2, 2, 1));
 
-	// Bouton Détruire
+	// Boutons
+	mRefresh = sfg::Button::Create("Actualiser");
+	mRefresh->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind(&DecoScenario::OnRefresh, this));
 	mDestroy = sfg::Button::Create("Détruire");
 	mDestroy->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind(&DecoScenario::OnDestroy, this));
 
 	// Ajoute les éléments à la fenêtre
 	AddToVBox(mPosTable);
+	AddToVBox(mRefresh);
 	AddToVBox(mDestroy);
 }
 
@@ -100,7 +103,7 @@ void DecoScenario::OnChangePosition()
 	if (!mApply || !mSelection) return;
 
 	// Change sa position et sa rotation
-	mSelection->SetPosition(sf::Vector2f(Parser::stringToFloat(mPosX->GetText()), Parser::stringToFloat(mPosY->GetText())));
+	mSelection->SetPosition(b2Vec2(Parser::stringToFloat(mPosX->GetText()), Parser::stringToFloat(mPosY->GetText())));
 	mSelection->SetRotationD(Parser::stringToFloat(mRot->GetText()));
 }
 void DecoScenario::OnChangePosXp()

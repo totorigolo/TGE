@@ -18,6 +18,15 @@ State* Configuration_State::Run(App *app)
 	// Récupère la fenêtre
 	sf::RenderWindow *window = app->GetRenderWindow();
 	window->setFramerateLimit(30U);
+	
+	// Charge le style de la GUI
+	try {
+		mDesktop.LoadThemeFromFile("data/style.css");
+	}
+	catch (const std::exception &e)
+	{
+		Dialog::Error("Erreur lors de la lecture du thème :\n" + std::string(e.what()));
+	}
 
 	// Change le titre de la fenêtre
 	window->setTitle("Inverse Way Liberation - Configuration");

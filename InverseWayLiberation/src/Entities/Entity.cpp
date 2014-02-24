@@ -27,7 +27,7 @@ bool Entity::IsAlive() const
 }
 unsigned int Entity::GetID() const
 {
-	myAssert(mID != 0U, "L'ID 0 ne devrait pas exister.\nDans Entity::GetID().");
+	myAssert(mID != 0U, "L'ID 0 ne devrait pas exister.");
 
 	return mID;
 }

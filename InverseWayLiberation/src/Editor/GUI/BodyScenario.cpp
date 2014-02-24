@@ -150,16 +150,16 @@ void BodyScenario::Fill()
 	// Paramètres de collision
 	mPhysicsParamsTable = sfg::Table::Create();
 	mDensityLabel = sfg::Label::Create("Densité :");
-	mDensity = sfg::SpinButton::Create(0.f, 100.f, 0.2f);
-	mDensity->SetDigits(3);
+	mDensity = sfg::SpinButton::Create(0.f, 100.f, 0.02f);
+	mDensity->SetDigits(2);
 	mDensity->GetSignal(sfg::SpinButton::OnValueChanged).Connect(std::bind(&BodyScenario::OnChangeDensity, this));
 	mFrictionLabel = sfg::Label::Create("Friction :");
-	mFriction = sfg::SpinButton::Create(0.f, 100.f, 0.1f);
-	mFriction->SetDigits(3);
+	mFriction = sfg::SpinButton::Create(0.f, 100.f, 0.02f);
+	mFriction->SetDigits(2);
 	mFriction->GetSignal(sfg::SpinButton::OnValueChanged).Connect(std::bind(&BodyScenario::OnChangeFriction, this));
 	mRestitutionLabel = sfg::Label::Create("Restitution :");
-	mRestitution = sfg::SpinButton::Create(0.f, 100.f, 0.1f);
-	mRestitution->SetDigits(3);
+	mRestitution = sfg::SpinButton::Create(0.f, 100.f, 0.02f);
+	mRestitution->SetDigits(2);
 	mRestitution->GetSignal(sfg::SpinButton::OnValueChanged).Connect(std::bind(&BodyScenario::OnChangeRestitution, this));
 	mPhysicsParamsTable->Attach(mDensityLabel, sf::Rect<sf::Uint32>(1, 1, 1, 1));
 	mPhysicsParamsTable->Attach(mDensity, sf::Rect<sf::Uint32>(2, 1, 1, 1));

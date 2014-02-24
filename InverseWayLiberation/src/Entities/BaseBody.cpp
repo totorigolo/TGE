@@ -50,6 +50,11 @@ void BaseBody::draw(sf::RenderTarget& target, sf::RenderStates states) const
 }
 
 /* Accesseurs */
+// Est-ce que le Body est créé
+bool BaseBody::IsCreated() const
+{
+	return mBodyIsCreated;
+}
 // Type de b2Body
 b2BodyType BaseBody::Getb2BodyType() const
 {

@@ -78,6 +78,7 @@ public:
 	// Affichage du texte
 	virtual OutputInterface& operator<<(const std::string &text)
 	{
+		std::cout << text;
 		mluaConsoleWindow << text;
 		return *this;
 	}

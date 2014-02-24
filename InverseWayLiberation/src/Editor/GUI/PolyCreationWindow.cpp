@@ -51,7 +51,7 @@ void PolyCreationWindow::DrawPointsOn(sf::RenderTarget &target)
 	cs.setOrigin(sf::Vector2f(3.5f, 3.5f));
 
 	// Parcours chaque point
-	for (int i = 0; i < mPoints.size(); ++i)
+	for (unsigned int i = 0; i < mPoints.size(); ++i)
 	{
 		cs.setPosition(b22sfVec(mPoints[i], mPhysicMgr.GetPPM()));
 		target.draw(cs);
@@ -152,20 +152,22 @@ void PolyCreationWindow::OnCreatePoly()
 {
 	if (!mApply) return;
 
-	// Il faut au minimum trois points (+1 pour celui du clic)
-	if (mPoints.size() < 3) return;
+	// Il faut au minimum trois points, et max 8 points
+	if (mPoints.size() < 3 || mPoints.size() > b2_maxPolygonVertices) return;
 
 	// Crée le Body suivant le type
 	if (mType[0]->IsActive()) // Dynamique
 	{
-		EntityFactory::CreatePolyBody(mPoints, b2BodyType::b2_dynamicBody, "unknown");
+		vector_b2Vec2 v(mPoints);
+		EntityFactory::CreatePolyBody(v, b2BodyType::b2_dynamicBody, "unknown");
 
 		// Supprime les points
 		OnEmptyPoints();
 	}
 	else if (mType[1]->IsActive()) // Statique
 	{
-		EntityFactory::CreatePolyBody(mPoints, b2BodyType::b2_staticBody, "unknown");
+		vector_b2Vec2 v(mPoints);
+		EntityFactory::CreatePolyBody(v, b2BodyType::b2_staticBody, "unknown");
 
 		// Supprime les points
 		OnEmptyPoints();

@@ -10,6 +10,7 @@
 
 // Ctor & dtor
 LuaMachine::LuaMachine()
+	: mLuaConsoleWindow(nullptr)
 {
 	// Initialise le Lua
 	InitLua();
@@ -42,21 +43,24 @@ void LuaMachine::UnregisterGlobalLuaVar(const std::string &name)
 // Exécution
 int LuaMachine::DoFile(const std::string &path, OutputInterface *interface)
 {
+	// Normalise l'interface
+	auto output = GetInterface(interface);
+
 	try
 	{
 #ifdef _DEBUG
 		sf::Clock c;
-		int r = ReportLuaError(luaL_dofile(mLuaState, path.c_str()), interface);
-		*interface << "Script \"" << path << "\" ex\x82""cut\x82 en : "
+		int r = ReportLuaError(luaL_dofile(mLuaState, path.c_str()), output);
+		*output << "Script \"" << path << "\" ex\x82""cut\x82 en : "
 			<< c.getElapsedTime().asSeconds() << " sec" << std::endl << std::endl;
 		return r;
 #else
-		return ReportLuaError(luaL_dofile(mLuaState, path.c_str()), interface);
+		return ReportLuaError(luaL_dofile(mLuaState, path.c_str()), output);
 #endif
 	}
 	catch (const std::exception &e)
 	{
-		*interface << e.what() << std::endl;
+		*output << e.what() << std::endl;
 	}
 
 	// Si on est là, c'est à cause d'une erreur
@@ -64,21 +68,24 @@ int LuaMachine::DoFile(const std::string &path, OutputInterface *interface)
 }
 int LuaMachine::LoadFile(const std::string &path, OutputInterface *interface)
 {
+	// Normalise l'interface
+	auto output = GetInterface(interface);
+
 	try
 	{
 #ifdef _DEBUG
 		sf::Clock c;
-		int r = ReportLuaError(luaL_loadfile(mLuaState, path.c_str()), interface);
-		*interface << "Fichier \"" << path << "\" charg\x82 en : "
+		int r = ReportLuaError(luaL_loadfile(mLuaState, path.c_str()), output);
+		*output << "Fichier \"" << path << "\" charg\x82 en : "
 			<< c.getElapsedTime().asSeconds() << " sec" << std::endl << std::endl;
 		return r;
 #else
-		return ReportLuaError(luaL_loadfile(mLuaState, path.c_str()), interface);
+		return ReportLuaError(luaL_loadfile(mLuaState, path.c_str()), output);
 #endif
 	}
 	catch (const std::exception &e)
 	{
-		*interface << e.what() << std::endl;
+		*output << e.what() << std::endl;
 	}
 
 	// Si on est là, c'est à cause d'une erreur
@@ -86,25 +93,49 @@ int LuaMachine::LoadFile(const std::string &path, OutputInterface *interface)
 }
 int LuaMachine::DoString(const std::string &command, OutputInterface *interface)
 {
+	// Normalise l'interface
+	auto output = GetInterface(interface);
+
 	try
 	{
 #ifdef _DEBUG
 		sf::Clock c;
-		int r = ReportLuaError(luaL_dostring(mLuaState, command.c_str()), interface);
-		*interface << "Commande \"" << command << "\" ex\x82""cut\x82 en : "
+		int r = ReportLuaError(luaL_dostring(mLuaState, command.c_str()), output);
+		*output << "Commande \"" << command << "\" ex\x82""cut\x82 en : "
 			<< c.getElapsedTime().asSeconds() << " sec" << std::endl << std::endl;
 		return r;
 #else
-		return ReportLuaError(luaL_dostring(mLuaState, command.c_str()), interface);
+		return ReportLuaError(luaL_dostring(mLuaState, command.c_str()), output);
 #endif
 	}
 	catch (const std::exception &e)
 	{
-		*interface << e.what() << std::endl;
+		*output << e.what() << std::endl;
 	}
 
 	// Si on est là, c'est à cause d'une erreur
 	return -1;
+}
+
+// Enregistre la console Lua
+void LuaMachine::SetLuaConsole(LuaConsoleWindow *window)
+{
+	myCheckError_v(window, "LuaConsoleWindow passée invalide.");
+	mLuaConsoleWindow = window;
+}
+OutputInterface* LuaMachine::GetInterface(OutputInterface *interface)
+{
+	auto tmp = interface;
+
+	// Crée une interface si on en a pas
+	if (!tmp)
+	{
+		if (mLuaConsoleWindow)
+			tmp = new LuaConsoleInterface(*mLuaConsoleWindow);
+		else
+			tmp = new ostreamInterface();
+	}
+	return tmp;
 }
 
 // Accesseur
@@ -134,7 +165,7 @@ int LuaMachine::ReportLuaError(int errorCode, OutputInterface *interface)
 	// Pas d'erreur
 	if (errorCode == 0)
 	{
-		*interface << "Aucune erreur." << std::endl;
+		//*interface << "Aucune erreur." << std::endl;
 		return errorCode;
 	}
 

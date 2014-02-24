@@ -1,0 +1,27 @@
+/*
+** Fichier de thème de la GUI
+*/
+
+*{
+	BorderColor: #363535FF;
+	BorderWidth: 0.f;
+	BackgroundColor: #74747490;
+}
+
+Window {
+	TitleBackgroundColor: #74747490;
+}
+
+RadioButton {
+	BorderColor: #565656AA;
+	BorderWidth: 2.f;
+	BackgroundColor: #666666CC;
+	CheckColor: #CACACACC;
+}
+
+ComboBox {
+	BackgroundColor: #8d6e5aDD;
+	BorderWidth: 1.5f;
+	BorderColor: #363535FF;
+	ArrowColor: #363535FF;
+}

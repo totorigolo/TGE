@@ -148,20 +148,37 @@ bool LevelSaver::ProcessBodies()
 		{
 			BaseBody *bb = ((BaseBody*) *it);
 
+			// Vérifie que l'Entity est créée
+			if (!bb->IsCreated())
+			{
+				Dialog::Error("Erreur lors de la sauvegarde :\nBaseBody non créé\nBaseBody ignoré.");
+				continue;
+			}
+
 			// Définit le nom de la balise
-			std::string type;
+			std::string forme, type;
 			if ((*it)->GetType() == EntityType::BasicBody)
 			{
 				BasicBody *bbtmp = ((BasicBody*) bb);
 
-				if (bb->Getb2BodyType() == b2BodyType::b2_dynamicBody && bbtmp->GetBasicBodyShape() == BasicBody::Shape::Box)
-					type = "dynamicbox";
-				else if (bb->Getb2BodyType() == b2BodyType::b2_dynamicBody && bbtmp->GetBasicBodyShape() == BasicBody::Shape::Circle)
-					type = "dynamiccircle";
-				else if (bb->Getb2BodyType() == b2BodyType::b2_staticBody && bbtmp->GetBasicBodyShape() == BasicBody::Shape::Box)
-					type = "staticbox";
-				else if (bb->Getb2BodyType() == b2BodyType::b2_staticBody && bbtmp->GetBasicBodyShape() == BasicBody::Shape::Circle)
-					type = "staticcircle";
+				// Forme
+				if (bbtmp->GetBasicBodyShape() == BasicBody::Shape::Box)
+					forme = "box";
+				else if (bbtmp->GetBasicBodyShape() == BasicBody::Shape::Circle)
+					forme = "circle";
+				else
+				{
+					Dialog::Error("Erreur lors de la sauvegarde :\nBasicBody::Shape == Null\nBasicBody ignoré.");
+					continue;
+				}
+
+				// Type
+				if (bb->Getb2BodyType() == b2BodyType::b2_dynamicBody)
+					type = "dynamic";
+				else if (bb->Getb2BodyType() == b2BodyType::b2_staticBody)
+					type = "static";
+				else if (bb->Getb2BodyType() == b2BodyType::b2_kinematicBody)
+					type = "kinematic";
 				else
 				{
 					Dialog::Error("Erreur lors de la sauvegarde :\nBasicBody::Type == Null\nBasicBody ignoré.");
@@ -170,6 +187,7 @@ bool LevelSaver::ProcessBodies()
 			}
 			else
 			{
+				forme = "poly";
 				if (bb->Getb2BodyType() == b2BodyType::b2_dynamicBody)
 					type = "dynamic";
 				else if (bb->Getb2BodyType() == b2BodyType::b2_staticBody)
@@ -222,8 +240,9 @@ bool LevelSaver::ProcessBodies()
 			uint16 maskBits = filter.maskBits;
 
 			// Crée la balise <type>
-			tinyxml2::XMLElement *balise = mDoc.NewElement(type.c_str());
+			tinyxml2::XMLElement *balise = mDoc.NewElement(forme.c_str());
 			if (id != 0) balise->SetAttribute("id", id);
+			balise->SetAttribute("type", type.c_str());
 			balise->SetAttribute("texture", textureName.c_str());
 			balise->SetAttribute("pos", Parser::b2Vec2ToString(pos).c_str());
 			if (rotation != 0.f) balise->SetAttribute("rotation", rotation);
@@ -247,7 +266,7 @@ bool LevelSaver::ProcessBodies()
 			if ((*it)->GetType() == EntityType::PolyBody)
 			{
 				const std::vector<b2Vec2>& pts = ((PolyBody*) (*it))->GetPoints();
-				for (int p = 0; p < pts.size(); ++p)
+				for (unsigned int p = 0; p < pts.size(); ++p)
 				{
 					tinyxml2::XMLElement *point = mDoc.NewElement("point");
 					point->SetAttribute("pos", Parser::b2Vec2ToString(pts[p]).c_str());

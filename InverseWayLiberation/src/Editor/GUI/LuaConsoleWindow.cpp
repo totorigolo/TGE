@@ -55,7 +55,7 @@ void LuaConsoleWindow::Fill()
 	mHBox->PackEnd(mPrompt);
 	mHBox->PackEnd(mReturnBtn, false);
 	mHBox->PackEnd(mCloseBtn, false);
-	mVBox->PackEnd(mHBox);
+	mVBox->PackEnd(mHBox, false);
 
 	// Connecte les signaux
 	mPrompt->GetSignal(PromptEntry::OnTextSent).Connect(std::bind(&LuaConsoleWindow::OnSend, this));
@@ -102,7 +102,7 @@ void LuaConsoleWindow::OnUp()
 	if (!mApply) return;
 
 	// Change la commande
-	if (mCurrent < static_cast<int>(mHistory.size()))
+	if (mCurrent < static_cast<int>(mHistory.size()) && mCurrent >= 0)
 	{
 		mPrompt->SetText(mHistory.at(mCurrent--));
 	}
@@ -112,7 +112,7 @@ void LuaConsoleWindow::OnDown()
 	if (!mApply) return;
 
 	// Change la commande
-	if (mCurrent + 1 < static_cast<int>(mHistory.size()))
+	if (mCurrent + 1 < static_cast<int>(mHistory.size()) && mCurrent >= 0)
 	{
 		mPrompt->SetText(mHistory.at(++mCurrent));
 	}

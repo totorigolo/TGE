@@ -37,7 +37,6 @@ bool Grapnel::Create(const std::shared_ptr<Texture> &textureHook, b2Body *bodyA,
 	DistanceJointDef def(bodyA, ptA, bodyB, ptB);
 	mJoint = new DistanceJoint(def);
 	mJointID = mJoint->GetID();
-	mIsAlive = true;
 	mClock.restart();
 	mIsRetracting = true;
 
@@ -45,6 +44,7 @@ bool Grapnel::Create(const std::shared_ptr<Texture> &textureHook, b2Body *bodyA,
 	mJoint->SetBreakableByForce(true);
 	mJoint->SetMaxForce(120.f);
 
+	mIsAlive = true;
 	return true;
 }
 

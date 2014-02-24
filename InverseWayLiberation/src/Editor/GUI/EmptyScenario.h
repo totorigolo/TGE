@@ -20,5 +20,7 @@ private:
 	// Boutons
 	sfg::Button::Ptr mOpenLevelBtn;
 	sfg::Button::Ptr mOpenLuaConsoleBtn;
+	sfg::Button::Ptr mDecoCreationBtn;
 	sfg::Button::Ptr mPolyCreationBtn;
+	sfg::Button::Ptr mBasicBodyCreationBtn;
 };

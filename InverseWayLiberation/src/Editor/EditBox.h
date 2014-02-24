@@ -5,7 +5,9 @@
 #include "GUI/LuaConsoleWindow.h"
 #include "GUI/BodyScenario.h"
 #include "GUI/ColFilteringWindow.h"
+#include "GUI/DecoCreationWindow.h"
 #include "GUI/PolyCreationWindow.h"
+#include "GUI/BasicBodyCreationWindow.h"
 #include "../Entities/Entity.h"
 #include "../Physics/Joint.h"
 #include "../Lua/TriggersManager.h"
@@ -76,7 +78,9 @@ public:
 	void ShowDecoScenario();
 	void OnShowLuaConsoleWindow(); // Callback
 	void OnShowColFilteringWindow(); // Callback
+	void ShowDecoCreationWindow();
 	void ShowPolyCreationWindow();
+	void ShowBasicBodyCreationWindow();
 
 	// Fermeture des fenêtres / scénarios
 	void OnCloseLevelWindow(); // Callback
@@ -88,7 +92,9 @@ public:
 	BodyScenario* GetBodyScenario();
 	LuaConsoleWindow* GetLuaConsoleWindow();
 	ColFilteringWindow* GetColFilteringWindow();
+	DecoCreationWindow* GetDecoCreationWindow();
 	PolyCreationWindow* GetPolyCreationWindow();
+	BasicBodyCreationWindow* GetBasicBodyCreationWindow();
 
 private:
 	// Actions différées
@@ -117,12 +123,16 @@ private:
 	BodyScenario mBodyScenario;
 	LuaConsoleWindow mLuaConsoleWindow;
 	ColFilteringWindow mColFilteringWindow;
+	DecoCreationWindow mDecoCreationWindow;
 	PolyCreationWindow mPolyCreationWindow;
+	BasicBodyCreationWindow mBasicBodyCreationWindow;
 
 	// Etat des fenêtres / scénarios
 	bool mLevelWindowAdded;
 	bool mEditBoxGUICreated;
 	bool mLuaConsoleWindowAdded;
 	bool mColFilteringWindowAdded;
+	bool mDecoCreationWindowAdded;
 	bool mPolyCreationWindowAdded;
+	bool mBasicBodyCreationWindowAdded;
 };

@@ -26,7 +26,8 @@ EditBox::EditBox(sfg::Desktop &desktop)
 	mLevelMgr(LevelManager::GetInstance()), mPhysicMgr(PhysicManager::GetInstance()), mEntityMgr(EntityManager::GetInstance()),
 	mSelectedEntity(nullptr), mSelectedJoint(nullptr), mSelectionType(SelectionType::Null), mSelectionChanged(false),
 	mEmptyScenario(*this), mDecoScenario(*this), mBodyScenario(*this),
-	mLevelWindowAdded(false), mLuaConsoleWindowAdded(false), mColFilteringWindowAdded(false), mPolyCreationWindowAdded(false)
+	mLevelWindowAdded(false), mLuaConsoleWindowAdded(false), mColFilteringWindowAdded(false), mDecoCreationWindowAdded(false),
+	mPolyCreationWindowAdded(false), mBasicBodyCreationWindowAdded(false)
 {
 	// Crée la fenêtre
 	mWindow = sfg::Window::Create();
@@ -407,6 +408,16 @@ void EditBox::OnShowColFilteringWindow()
 
 	mColFilteringWindow.Show();
 }
+void EditBox::ShowDecoCreationWindow()
+{
+	if (!mDecoCreationWindowAdded)
+	{
+		mDecoCreationWindow.RegisterInDesktop(&mDesktop);
+		mDecoCreationWindowAdded = true;
+	}
+
+	mDecoCreationWindow.Show();
+}
 void EditBox::ShowPolyCreationWindow()
 {
 	if (!mLuaConsoleWindowAdded)
@@ -416,6 +427,16 @@ void EditBox::ShowPolyCreationWindow()
 	}
 
 	mPolyCreationWindow.Show();
+}
+void EditBox::ShowBasicBodyCreationWindow()
+{
+	if (!mBasicBodyCreationWindowAdded)
+	{
+		mBasicBodyCreationWindow.RegisterInDesktop(&mDesktop);
+		mBasicBodyCreationWindowAdded = true;
+	}
+
+	mBasicBodyCreationWindow.Show();
 }
 
 // Fermeture des fenêtres / scénarios
@@ -449,7 +470,15 @@ ColFilteringWindow* EditBox::GetColFilteringWindow()
 {
 	return &mColFilteringWindow;
 }
+DecoCreationWindow* EditBox::GetDecoCreationWindow()
+{
+	return &mDecoCreationWindow;
+}
 PolyCreationWindow* EditBox::GetPolyCreationWindow()
 {
 	return &mPolyCreationWindow;
+}
+BasicBodyCreationWindow* EditBox::GetBasicBodyCreationWindow()
+{
+	return &mBasicBodyCreationWindow;
 }

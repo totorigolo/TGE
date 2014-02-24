@@ -11,12 +11,19 @@ PolyBody::PolyBody(int layer, unsigned int ID)
 }
 
 // Création du body
-bool PolyBody::Create(std::vector<b2Vec2> vertices, b2BodyType type, const std::shared_ptr<Texture> &texture,
+bool PolyBody::Create(const std::vector<b2Vec2> &vertices, b2BodyType type, const std::shared_ptr<Texture> &texture,
 					  float density, float friction, float restitution, int groupIndex, uint16 categoryBits, uint16 maskBits)
 {
 	// On n'en crée pas de nouveau si il y en a déjà un
 	if (mBodyIsCreated)
 		return false;
+
+	// Vérifie les points
+	if (!CheckPoints(vertices))
+	{
+		//Dialog::Error("Le PolyBody n'a pas été créé :\nPoints invalides.");
+		return false;
+	}
 
 	// Récupère la position du centre
 	b2Vec2 center(b2Vec2_zero);
@@ -34,12 +41,19 @@ bool PolyBody::Create(std::vector<b2Vec2> vertices, b2BodyType type, const std::
 
 	return true;
 }
-bool PolyBody::Create(b2Vec3 posRot, std::vector<b2Vec2> vertices, b2BodyType type, const std::shared_ptr<Texture> &texture,
+bool PolyBody::Create(b2Vec3 posRot, const std::vector<b2Vec2> &vertices, b2BodyType type, const std::shared_ptr<Texture> &texture,
 					  float density, float friction, float restitution, int groupIndex, uint16 categoryBits, uint16 maskBits)
 {
 	// On n'en crée pas de nouveau si il y en a déjà un
 	if (mBodyIsCreated)
 		return false;
+
+	// Vérifie les points
+	if (!CheckPoints(vertices))
+	{
+		//Dialog::Error("Le PolyBody n'a pas été créé :\nPoints invalides.");
+		return false;
+	}
 
 	// Change la texture
 	mTexture = texture;
@@ -78,6 +92,28 @@ bool PolyBody::Create(b2Vec3 posRot, std::vector<b2Vec2> vertices, b2BodyType ty
 	// Enregistrements
 	mBody->SetUserData(this);
 	mBodyIsCreated = true;
+	mIsAlive = true;
+
+	return true;
+}
+
+// Vérifie les points passés
+bool PolyBody::CheckPoints(const std::vector<b2Vec2> &vertices)
+{
+	// Si il n'y a pas le bon nombre de points, on arrête
+	if (vertices.size() < 3 || vertices.size() > b2_maxPolygonVertices)
+		return false;
+
+	// Vérifie qu'il n'y a pas d'arête de longueur nulle
+	b2Vec2 last = vertices.front();
+	for (unsigned int i = 1; i < vertices.size(); ++i)
+	{
+		if (vertices[i] == last)
+			return false;
+		last = vertices[i];
+	}
+	if (vertices.front() == vertices.back())
+		return false;
 
 	return true;
 }

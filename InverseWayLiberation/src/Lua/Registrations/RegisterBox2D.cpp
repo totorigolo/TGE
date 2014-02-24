@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "../LuaMachine.h"
+#include "../../Tools/vector_wrappers.h"
 
 // Enregistrements privés
 void LuaMachine::RegisterBox2D()
@@ -7,6 +8,11 @@ void LuaMachine::RegisterBox2D()
 	/* Enregistre les classes */
 	try
 	{
+		// b2BodyType
+		luabind::globals(mLuaState)["b2_dynamicBody"] = b2BodyType::b2_dynamicBody;
+		luabind::globals(mLuaState)["b2_staticBody"] = b2BodyType::b2_staticBody;
+		luabind::globals(mLuaState)["b2_kinematicBody"] = b2BodyType::b2_kinematicBody;
+
 		// b2Vec2
 		luabind::module(mLuaState) [
 			// La classe
@@ -38,9 +44,12 @@ void LuaMachine::RegisterBox2D()
 			luabind::def("b2Cross", (b2Vec2(*)(const b2Vec2&, float32)) b2Cross),
 			luabind::def("b2Cross", (b2Vec2(*)(float32, const b2Vec2&)) b2Cross),
 			luabind::def("b2Distance", (float32(*)(const b2Vec2&, const b2Vec2&)) b2Distance),
-			luabind::def("b2DistanceSquared", (float32(*)(const b2Vec2&, const b2Vec2&)) b2DistanceSquared)
+			luabind::def("b2DistanceSquared", (float32(*)(const b2Vec2&, const b2Vec2&)) b2DistanceSquared),
+
+			// vector_b2Vec2
+			REGISTER_VECTOR_WRAPPER(b2Vec2, vector_b2Vec2)
 		];
-	
+
 		// b2Vec3
 		luabind::module(mLuaState) [
 			// La classe

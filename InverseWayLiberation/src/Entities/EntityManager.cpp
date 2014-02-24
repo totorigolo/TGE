@@ -14,6 +14,15 @@ EntityManager::~EntityManager()
 // Mise à jour
 void EntityManager::Update()
 {
+	// Supprime les Entities mortes
+	for (std::list<Entity*>::iterator it = mEntities.begin(); it != mEntities.end();)
+	{
+		if (!(*it)->IsAlive())
+			DestroyEntity(*(it++));
+		else
+			++it;
+	}
+
 	// Met à jour toutes les Entities
 	for (std::list<Entity*>::iterator it = mEntities.begin(); it != mEntities.end(); ++it)
 	{

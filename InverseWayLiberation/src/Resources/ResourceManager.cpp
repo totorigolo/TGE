@@ -23,7 +23,10 @@ bool ResourceManager::LoadTexture(const std::string &name, const std::string &pa
 std::shared_ptr<Texture> ResourceManager::GetTexture(const std::string &name)
 {
 	if (mTextureMap.find(name) == mTextureMap.end())
-		Dialog::Error("La texture ["+ name +"] n'existe pas.");
+	{
+		Dialog::Error("La texture [" + name + "] n'existe pas.");
+		return std::shared_ptr<Texture>();
+	}
 
 	return mTextureMap.find(name)->second;
 }

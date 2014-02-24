@@ -1,5 +1,6 @@
 #pragma once
 #include "OutputInterfaces.h"
+#include "../Editor/GUI/LuaConsoleWindow.h"
 
 class LuaMachine : public NonCopyable
 {
@@ -35,9 +36,13 @@ public:
 	void UnregisterGlobalLuaVar(const std::string &name);
 
 	// Exécution
-	int DoFile(const std::string &path, OutputInterface *interface = new ostreamInterface());
-	int LoadFile(const std::string &path, OutputInterface *interface = new ostreamInterface());
-	int DoString(const std::string &command, OutputInterface *interface = new ostreamInterface());
+	int DoFile(const std::string &path, OutputInterface *interface = nullptr);//new ostreamInterface());
+	int LoadFile(const std::string &path, OutputInterface *interface = nullptr);//new ostreamInterface());
+	int DoString(const std::string &command, OutputInterface *interface = nullptr);//new ostreamInterface());
+
+	// Enregistre la console Lua
+	void SetLuaConsole(LuaConsoleWindow *window);
+	OutputInterface* GetInterface(OutputInterface *interface = nullptr);
 
 	// Accesseur
 	lua_State* GetLuaState();
@@ -57,4 +62,7 @@ private:
 private:
 	// State Lua
 	lua_State *mLuaState;
+
+	// Console Lua
+	LuaConsoleWindow *mLuaConsoleWindow;
 };

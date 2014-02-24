@@ -21,8 +21,10 @@
     <ClCompile Include="src\App\States\StateSystem.cpp" />
     <ClCompile Include="src\Editor\EditBox.cpp" />
     <ClCompile Include="src\Editor\Editor.cpp" />
+    <ClCompile Include="src\Editor\GUI\BasicBodyCreationWindow.cpp" />
     <ClCompile Include="src\Editor\GUI\BodyScenario.cpp" />
     <ClCompile Include="src\Editor\GUI\ColFilteringWindow.cpp" />
+    <ClCompile Include="src\Editor\GUI\DecoCreationWindow.cpp" />
     <ClCompile Include="src\Editor\GUI\DecoScenario.cpp" />
     <ClCompile Include="src\Editor\GUI\EmptyScenario.cpp" />
     <ClCompile Include="src\Editor\GUI\LevelWindow.cpp" />
@@ -98,8 +100,10 @@
     <ClInclude Include="src\App\States\StateSystem.h" />
     <ClInclude Include="src\Editor\EditBox.h" />
     <ClInclude Include="src\Editor\Editor.h" />
+    <ClInclude Include="src\Editor\GUI\BasicBodyCreationWindow.h" />
     <ClInclude Include="src\Editor\GUI\BodyScenario.h" />
     <ClInclude Include="src\Editor\GUI\ColFilteringWindow.h" />
+    <ClInclude Include="src\Editor\GUI\DecoCreationWindow.h" />
     <ClInclude Include="src\Editor\GUI\DecoScenario.h" />
     <ClInclude Include="src\Editor\GUI\EmptyScenario.h" />
     <ClInclude Include="src\Editor\GUI\LevelWindow.h" />
@@ -158,6 +162,7 @@
     <ClInclude Include="src\Physics\Joints\WeldJoint.h" />
     <ClInclude Include="src\Physics\Joints\WheelJoint.h" />
     <ClInclude Include="src\Tools\utils.h" />
+    <ClInclude Include="src\Tools\vector_wrappers.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\README.txt" />

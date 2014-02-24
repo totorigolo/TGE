@@ -59,5 +59,6 @@ private:
 	sfg::Button::Ptr mPosRm;
 
 	// Bouton
+	sfg::Button::Ptr mRefresh;
 	sfg::Button::Ptr mDestroy;
 };

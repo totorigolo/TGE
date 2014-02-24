@@ -116,6 +116,17 @@ bool Editor::OnInit()
 	mGUIElapsedTime.restart();
 	mEditBox = std::unique_ptr<EditBox>(new EditBox(mDesktop));
 	mPolyCreationWindow = mEditBox->GetPolyCreationWindow();
+	mDecoCreationWindow = mEditBox->GetDecoCreationWindow();
+	mBasicBodyCreationWindow = mEditBox->GetBasicBodyCreationWindow();
+
+	// Charge le style de la GUI
+	try {
+		mDesktop.LoadThemeFromFile("data/style.css");
+	}
+	catch (const std::exception &e)
+	{
+		Dialog::Error("Erreur lors de la lecture du thème :\n" + std::string(e.what()));
+	}
 
 	/* Physique */
 	// Initialise le monde
@@ -140,6 +151,9 @@ bool Editor::OnInit()
 	mSpyedKeys.push_back(SpyedKey::Create(sf::Keyboard::H)); // Hook
 	mSpyedKeys.push_back(SpyedKey::Create(sf::Keyboard::I)); // Console
 	mSpyedKeys.push_back(SpyedKey::Create(sf::Keyboard::X)); // test
+	mSpyedKeys.push_back(SpyedKey::Create(sf::Keyboard::Add)); // Zoom in
+	mSpyedKeys.push_back(SpyedKey::Create(sf::Keyboard::Subtract)); // Zoom out
+	mSpyedKeys.push_back(SpyedKey::Create(sf::Keyboard::Numpad0)); // Reset vue
 
 	// Initialise la machine Lua
 	mConsole.RegisterEntityFactory();
@@ -158,6 +172,7 @@ bool Editor::OnInit()
 	// Enregistre la console
 	mLevel.SetLuaConsole(&mConsole);
 	mEditBox->SetLuaMachine(&mConsole);
+	mConsole.SetLuaConsole(mEditBox->GetLuaConsoleWindow());
 
 	return true;
 }
@@ -199,12 +214,12 @@ void Editor::OnEvent()
 	if (mInputManager.KeyReleased(sf::Keyboard::B))
 	{
 		std::string list[] = {"box", "box2", "caisse", "way", "tonneau"};
-		EntityFactory::CreateDynamicBox(getVec3(mMp), randomElement(list, 5));
+		EntityFactory::CreateBox(getVec3(mMp), b2BodyType::b2_dynamicBody, randomElement(list, 5));
 	}
 	if (mInputManager.KeyReleased(sf::Keyboard::C))
 	{
 		std::string list[] = {"ball", "circle"};
-		EntityFactory::CreateDynamicCircle(getVec3(mMp), randomElement(list, 2));
+		EntityFactory::CreateCircle(getVec3(mMp), b2BodyType::b2_dynamicBody, randomElement(list, 2));
 	}
 	if (mInputManager.KeyReleased(sf::Keyboard::T))
 	{
@@ -215,10 +230,10 @@ void Editor::OnEvent()
 		EntityFactory::CreateLamp(getVec3(mMp), -1);
 	}
 
-	// Poly Creation
+	// EditBox : Poly Creation
 	if (mInputManager.GetLMBState() && mInputManager.IsKeyPressed(sf::Keyboard::LControl) && mPolyCreationWindow && !mPointJustAdded)
 	{
-		// Si la fenêtre de création de polygones est en mode création, on gère les clics
+		// Si la fenêtre de création de polygones est en mode création, on transmet les clics
 		if (mPolyCreationWindow->IsInEditMode())
 		{
 			mPolyCreationWindow->AddPoint(mMp);
@@ -228,6 +243,38 @@ void Editor::OnEvent()
 	else if (mPointJustAdded && !mInputManager.GetLMBState())
 	{
 		// Attend le relâchement du clic pour mettre un autre point
+		mPointJustAdded = false;
+	}
+
+	// EditBox : Deco Creation
+	if (mInputManager.GetLMBState() && mInputManager.IsKeyPressed(sf::Keyboard::LControl) && mDecoCreationWindow && !mPointJustAdded)
+	{
+		// Si la fenêtre de création est en mode ajout, on transmet les clics
+		if (mDecoCreationWindow->IsInAddMode())
+		{
+			mDecoCreationWindow->Add(mMp);
+			mPointJustAdded = true;
+		}
+	}
+	else if (mPointJustAdded && !mInputManager.GetLMBState())
+	{
+		// Attend le relâchement du clic pour créer un autre body
+		mPointJustAdded = false;
+	}
+
+	// EditBox : BasicBody Creation
+	if (mInputManager.GetLMBState() && mInputManager.IsKeyPressed(sf::Keyboard::LControl) && mBasicBodyCreationWindow && !mPointJustAdded)
+	{
+		// Si la fenêtre de création est en mode ajout, on transmet les clics
+		if (mBasicBodyCreationWindow->IsInAddMode())
+		{
+			mBasicBodyCreationWindow->Add(mMp);
+			mPointJustAdded = true;
+		}
+	}
+	else if (mPointJustAdded && !mInputManager.GetLMBState())
+	{
+		// Attend le relâchement du clic pour créer un autre body
 		mPointJustAdded = false;
 	}
 
@@ -410,9 +457,9 @@ void Editor::OnEvent()
 
 		// Charge le niveau
 		if (!mInputManager.IsKeyPressed(sf::Keyboard::LControl))
-			LevelLoader("lvls/1.xvl");
+			LoadLevel("lvls/1.xvl");
 		else
-			LevelLoader("lvls/save.xvl");
+			LoadLevel("lvls/save.xvl");
 	}
 	if (mInputManager.KeyReleased(sf::Keyboard::S))
 	{
@@ -563,7 +610,7 @@ void Editor::OnStepPhysics()
 	if (!mPaused)
 	{
 		mPhysicMgr.Step(10, 4);
-		mPhysicMgr.GetWorld()->ClearForces();
+		//mPhysicMgr.GetWorld()->ClearForces();
 
 		b2Body *b = nullptr;
 		Entity *e = mEditBox->GetSelectedEntity();

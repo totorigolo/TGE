@@ -27,11 +27,19 @@ void EmptyScenario::Fill()
 	mOpenLuaConsoleBtn = sfg::Button::Create("Console Lua");
 	mOpenLuaConsoleBtn->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind(&EditBox::OnShowLuaConsoleWindow, &mEditBox));
 
+	mDecoCreationBtn = sfg::Button::Create("Deco Creation");
+	mDecoCreationBtn->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind(&EditBox::ShowDecoCreationWindow, &mEditBox));
+
 	mPolyCreationBtn = sfg::Button::Create("Poly Creation");
 	mPolyCreationBtn->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind(&EditBox::ShowPolyCreationWindow, &mEditBox));
+
+	mBasicBodyCreationBtn = sfg::Button::Create("BasicBody Creation");
+	mBasicBodyCreationBtn->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind(&EditBox::ShowBasicBodyCreationWindow, &mEditBox));
 
 	// Ajoute les éléments à la fenêtre
 	AddToVBox(mOpenLevelBtn);
 	AddToVBox(mOpenLuaConsoleBtn);
+	AddToVBox(mDecoCreationBtn);
 	AddToVBox(mPolyCreationBtn);
+	AddToVBox(mBasicBodyCreationBtn);
 }

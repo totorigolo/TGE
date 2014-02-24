@@ -215,15 +215,20 @@ bool LevelLoader::ProcessPolyBodies()
 		vertices.clear();
 
 		// Récupère le type
-		type = body->Name();
-		if (type == "static")
-			b2type = b2BodyType::b2_staticBody;
-		else if (type == "dynamic")
-			b2type = b2BodyType::b2_dynamicBody;
-		else if (type == "kinematic")
-			b2type = b2BodyType::b2_dynamicBody;
+		if (body->Attribute("type"))
+		{
+			type = body->Attribute("type");
+			if (type == "static")
+				b2type = b2BodyType::b2_staticBody;
+			else if (type == "dynamic")
+				b2type = b2BodyType::b2_dynamicBody;
+			else if (type == "kinematic")
+				b2type = b2BodyType::b2_kinematicBody;
+			else
+				Dialog::Error("PolyBody type inconnu (" + type + ") !\nStatique par défaut.");
+		}
 		else
-			Dialog::Error("PolyBody type inconnu (" + type + ") !");
+			Dialog::Error("PolyBody type introuvable !\nStatique par défaut.");
 
 		// Récupère la texture et vérifie si elle existe
 		if (body->Attribute("texture")) texture = body->Attribute("texture");
@@ -348,7 +353,8 @@ bool LevelLoader::ProcessBasicBodies()
 	uint16 categoryBits = 0x0001, maskBits = 0xFFFF;
 	float rotation = 0.f;
 	unsigned int id = 0U;
-	std::string texture, type;
+	std::string texture, forme;
+	b2BodyType type;
 	b2Vec3 posRot;
 	b2Vec2 linvel; // Linear velocity
 	float angvel = 0.f; // Angular velocity
@@ -368,13 +374,28 @@ bool LevelLoader::ProcessBasicBodies()
 		groupIndex = 0;
 		categoryBits = 0x0001;
 		maskBits = 0xFFFF;
+		type = b2BodyType::b2_dynamicBody;
 		osp = false;
 		bullet = false;
 		linvel = b2Vec2_zero;
 		angvel = 0.f;
 
+		// Récupère la forme
+		forme = body->Name();
+
 		// Récupère le type
-		type = body->Name();
+		if (body->Attribute("type"))
+		{
+			std::string stype = body->Attribute("type");
+			if (stype == "static")
+				type = b2BodyType::b2_staticBody;
+			else if (stype == "dynamic")
+				type = b2BodyType::b2_dynamicBody;
+			else if (stype == "kinematic")
+				type = b2BodyType::b2_kinematicBody;
+			else
+				Dialog::Error("BasicBody type inconnu (" + stype + ") !");
+		}
 
 		// Récupère la texture et vérifie si elle existe
 		if (body->Attribute("texture")) texture = body->Attribute("texture");
@@ -419,37 +440,24 @@ bool LevelLoader::ProcessBasicBodies()
 		maskBits = static_cast<uint16>(tmp);
 
 		// Crée le body
-		if (type == "staticbox")
+		if (forme == "box")
 		{
 			bb = new BasicBody(layer, id);
-			bb->CreateStaticBox(posRot, mLevel.mResourceManager.GetTexture(texture), density, friction, restitution, groupIndex, categoryBits, maskBits);
+			bb->CreateBox(posRot, type, mLevel.mResourceManager.GetTexture(texture), density, friction, restitution, groupIndex, categoryBits, maskBits);
 		}
-		else if (type == "staticcircle")
+		else if (forme == "circle")
 		{
 			bb = new BasicBody(layer, id);
-			bb->CreateStaticCircle(posRot, mLevel.mResourceManager.GetTexture(texture), density, friction, restitution, groupIndex, categoryBits, maskBits);
-		}
-		else if (type == "dynamicbox")
-		{
-			bb = new BasicBody(layer, id);
-			bb->CreateDynBox(posRot, mLevel.mResourceManager.GetTexture(texture), density, friction, restitution, groupIndex, categoryBits, maskBits);
-
-			// Restore l'état
-			bb->GetBody()->SetLinearVelocity(linvel);
-			bb->GetBody()->SetAngularVelocity(angvel);
-		}
-		else if (type == "dynamiccircle")
-		{
-			bb = new BasicBody(layer, id);
-			bb->CreateDynCircle(posRot, mLevel.mResourceManager.GetTexture(texture), density, friction, restitution, groupIndex, categoryBits, maskBits);
-
-			// Restore l'état
-			bb->GetBody()->SetLinearVelocity(linvel);
-			bb->GetBody()->SetAngularVelocity(angvel);
+			bb->CreateCircle(posRot, type, mLevel.mResourceManager.GetTexture(texture), density, friction, restitution, groupIndex, categoryBits, maskBits);
 		}
 		else
+			Dialog::Error("BasicBody forme inconnu (" + forme + ") !");
+
+		// Restore l'état
+		if (type == b2BodyType::b2_dynamicBody || type == b2BodyType::b2_kinematicBody)
 		{
-			Dialog::Error("BasicBody type inconnu ("+ type +") !");
+			bb->GetBody()->SetLinearVelocity(linvel);
+			bb->GetBody()->SetAngularVelocity(angvel);
 		}
 
 		// Si le BasicBody a été créé

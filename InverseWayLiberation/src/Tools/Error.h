@@ -21,6 +21,7 @@ private:
 };
 
 // Crée une Erreur
+#define myError(msg) { Error __e(msg, __FILE__, __FUNCTION__, __LINE__); Dialog::Error(__e.what()); }
 #define myThrowError(msg) throw Error(msg, __FILE__, __FUNCTION__, __LINE__)
 
 // Assertion

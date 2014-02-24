@@ -6,59 +6,58 @@
 #include "../../Entities/EntityManager.h"
 
 class EditBox;
-class PolyCreationWindow : public Window
+class BasicBodyCreationWindow : public Window
 {
 public:
 	// Ctor
-	PolyCreationWindow();
+	BasicBodyCreationWindow();
 
-	// Gestion de l'ajout de points
-	void AddPoint(b2Vec2 pos);
-	void EmptyPoints();
-	void DrawPointsOn(sf::RenderTarget &target);
+	// Gestion de l'ajout
+	void Add(b2Vec2 pos);
 
 	// Actualisation
 	virtual void Update();
 
 	// Accesseurs
-	bool IsInEditMode();
+	bool IsInAddMode();
 
 protected:
 	// Construit la fenêtre et les éléments
 	virtual void Fill();
 
 	// Callbacks
-	void OnEmptyPoints();
-	void OnCancelLast();
-	void OnCreatePoly();
-	void OnEnterEditMode();
-	void OnEnterPassiveMode();
+	void OnToggleMode();
 
 private:
 	// Etat
-	bool mIsEnterEditMode;
+	bool mIsInAddMode;
 
 	// EntityManager, PhysicMgr
 	EntityManager &mEntityMgr;
 	PhysicManager &mPhysicMgr;
-
-	// Points
-	std::vector<b2Vec2> mPoints;
+	ResourceManager &mResourceMgr;
 
 	/* Eléments */
 	sfg::Box::Ptr mVBox;
 	sfg::Label::Ptr mMode;
 	sfg::Label::Ptr mHelpLabel;
+
+	// Forme
+	sfg::Box::Ptr mShapeBox;
+	sfg::Label::Ptr mShapeLabel;
+	std::vector<sfg::RadioButton::Ptr> mShape;
+
 	// Type
-	sfg::Table::Ptr mTypeTable;
+	sfg::Box::Ptr mTypeBox;
 	sfg::Label::Ptr mTypeLabel;
 	std::vector<sfg::RadioButton::Ptr> mType;
 
+	// Texture
+	sfg::Box::Ptr mTextureHBox;
+	sfg::Label::Ptr mTextureLabel;
+	sfg::ComboBox::Ptr mTexture;
+
 	// Boutons
-	sfg::Button::Ptr mEnterEditModeBtn;
-	sfg::Button::Ptr mCreatePolyBtn;
-	sfg::Box::Ptr mButtonsHBox;
+	sfg::Button::Ptr mToggleModeBtn;
 	sfg::Button::Ptr mCloseBtn;
-	sfg::Button::Ptr mCancelBtn;
-	sfg::Button::Ptr mEmptyBtn;
 };
