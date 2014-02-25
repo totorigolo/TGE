@@ -175,7 +175,7 @@ bool LevelSaver::ProcessBodies()
 					continue;
 				}
 			}
-			if ((*it)->GetType() == EntityType::PolyChain)
+			else if ((*it)->GetType() == EntityType::PolyChain)
 			{
 				PolyChain *bbtmp = ((PolyChain*) bb);
 

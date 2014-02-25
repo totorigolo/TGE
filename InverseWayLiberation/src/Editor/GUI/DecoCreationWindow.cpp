@@ -86,17 +86,22 @@ void DecoCreationWindow::Fill()
 	mLayerHBox = sfg::Box::Create(sfg::Box::Orientation::HORIZONTAL);
 	mLayerLabel = sfg::Label::Create("Layer : ");
 	mLayer = sfg::SpinButton::Create(-1000.f, 1000.f, 1.f);
-	mLayer->SetValue(1);
+	mLayer->SetValue(5);
 	mLayer->SetDigits(0);
 	mLayerHBox->PackEnd(mLayerLabel, false);
 	mLayerHBox->PackEnd(mLayer);
 
 	// Boutons
 	mToggleModeBtn = sfg::Button::Create("Entrer mode Création");
+	mButtonsHBox = sfg::Box::Create(sfg::Box::Orientation::HORIZONTAL);
+	mRefreshBtn = sfg::Button::Create("Actualiser");
 	mCloseBtn = sfg::Button::Create("Fermer");
+	mButtonsHBox->PackEnd(mRefreshBtn);
+	mButtonsHBox->PackEnd(mCloseBtn);
 
 	// Signaux
 	mToggleModeBtn->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind(&DecoCreationWindow::OnToggleMode, this));
+	mRefreshBtn->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind(&DecoCreationWindow::OnRefresh, this));
 	mCloseBtn->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind(&DecoCreationWindow::OnClose, this));
 
 	// Ajoute les éléments à la fenêtre
@@ -105,7 +110,7 @@ void DecoCreationWindow::Fill()
 	mVBox->PackEnd(mTextureHBox);
 	mVBox->PackEnd(mLayerHBox);
 	mVBox->PackEnd(mToggleModeBtn);
-	mVBox->PackEnd(mCloseBtn);
+	mVBox->PackEnd(mButtonsHBox);
 
 	// Ajoute la mVBox à la fenêtre
 	AddToWindow(mVBox);

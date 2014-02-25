@@ -6,21 +6,21 @@
 Deco::Deco(int layer, const std::shared_ptr<Texture> &texture, sf::Vector3f posRot, unsigned int ID)
 	: Entity(layer, ID), mTexture(texture)
 {
-	myAssert(mTexture.get(), "La texture n'est pas chargée.");
+	if (!mTexture.get())
+	{
+		Dialog::Error("La texture n'est pas chargée.\nDéco supprimée");
+		mIsAlive = false;
+	}
+	else
+	{
+		mType = EntityType::Deco;
 
-	mType = EntityType::Deco;
+		SetTexture(texture);
+		SetPosition(getVec2(posRot));
+		SetRotationD(posRot.z);
 
-	SetTexture(texture);
-	SetPosition(getVec2(posRot));
-	SetRotationD(posRot.z);
-
-	/*/ Crée le Sprite
-	mSprite.setTexture(*mTexture);
-	mSprite.setPosition(getVec2(posRot));
-	mSprite.setRotation(posRot.z);
-	mSprite.setOrigin(u2f(mSprite.getTexture()->getSize()) / 2.f);*/
-
-	mIsAlive = true;
+		mIsAlive = true;
+	}
 }
 Deco::~Deco()
 {
@@ -35,6 +35,8 @@ void Deco::Update()
 // Pour le rendu
 void Deco::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
+	if (!mIsAlive) return;
+
 	target.draw(mSprite, states);
 }
 

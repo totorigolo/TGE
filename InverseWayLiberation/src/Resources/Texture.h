@@ -6,7 +6,8 @@ public:
 	Texture(const std::string &name, const std::string &path)
 		: mLoaded(false), mName(name), mPath(path)
 	{
-		myCheckError_c((mLoaded = loadFromFile(path)), "Impossible de charger :\n" + path);
+		mLoaded = loadFromFile(path);
+		myCheckError_c(mLoaded, "Impossible de charger :\n" + path);
 	}
 
 	// Gestion de l'état

@@ -20,6 +20,9 @@ TexturesWindow::TexturesWindow()
 // Actualisation
 void TexturesWindow::Update()
 {
+	// Récupère la texture pointée
+	mSelectedTexture = mResourceMgr.GetTexture(mTexture->GetItem(mTexture->GetSelectedItem()));
+
 	// Met à jour les infos sur la texture sélectionnée
 	if (!mSelectedTexture.expired())
 	{
@@ -85,7 +88,7 @@ void TexturesWindow::Fill()
 	mPath = sfg::Entry::Create();
 	mPathHBox->PackEnd(mPathLabel, false);
 	mPathHBox->PackEnd(mPath);
-	mLoadBtn = sfg::Button::Create("Chager");
+	mLoadBtn = sfg::Button::Create("Charger");
 	mLoadLabel = sfg::Label::Create("--");
 
 	// Texture
@@ -134,10 +137,10 @@ void TexturesWindow::OnLoadTexture()
 	if (!mApply) return;
 
 	// Si les entrées sont invalides, on arrête
-	if (mPath->GetText().isEmpty() || mPath->GetText().isEmpty()) return;
+	if (mName->GetText().isEmpty() || mPath->GetText().isEmpty()) return;
 
 	// Charge la texture
-	if (mResourceMgr.LoadTexture(mName->GetText(), mPath->GetText()))
+	if (mResourceMgr.LoadTexture(mName->GetText(), "tex/" + mPath->GetText()))
 		mLoadLabel->SetText("Texture chargée.");
 	else
 		mLoadLabel->SetText("Entrées invalides.");
@@ -147,9 +150,6 @@ void TexturesWindow::OnLoadTexture()
 void TexturesWindow::OnSelectTexture()
 {
 	if (!mApply || mTexture->GetSelectedItem() == sfg::ComboBox::NONE) return;
-
-	// Récupère la texture pointée
-	mSelectedTexture = mResourceMgr.GetTexture(mTexture->GetItem(mTexture->GetSelectedItem()));
 
 	OnRefresh();
 }

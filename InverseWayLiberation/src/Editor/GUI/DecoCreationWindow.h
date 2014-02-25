@@ -54,5 +54,7 @@ private:
 
 	// Boutons
 	sfg::Button::Ptr mToggleModeBtn;
+	sfg::Box::Ptr mButtonsHBox;
+	sfg::Button::Ptr mRefreshBtn;
 	sfg::Button::Ptr mCloseBtn;
 };
