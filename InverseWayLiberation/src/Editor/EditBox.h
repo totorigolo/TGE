@@ -4,6 +4,7 @@
 #include "GUI/EmptyScenario.h"
 #include "GUI/LuaConsoleWindow.h"
 #include "GUI/BodyScenario.h"
+#include "GUI/TexturesWindow.h"
 #include "GUI/ColFilteringWindow.h"
 #include "GUI/DecoCreationWindow.h"
 #include "GUI/PolyCreationWindow.h"
@@ -78,6 +79,7 @@ public:
 	void ShowDecoScenario();
 	void OnShowLuaConsoleWindow(); // Callback
 	void OnShowColFilteringWindow(); // Callback
+	void ShowTexturesWindow();
 	void ShowDecoCreationWindow();
 	void ShowPolyCreationWindow();
 	void ShowBasicBodyCreationWindow();
@@ -90,6 +92,7 @@ public:
 	LevelWindow* GetLevelWindow();
 	DecoScenario* GetDecoScenario();
 	BodyScenario* GetBodyScenario();
+	TexturesWindow* GetTexturesWindow();
 	LuaConsoleWindow* GetLuaConsoleWindow();
 	ColFilteringWindow* GetColFilteringWindow();
 	DecoCreationWindow* GetDecoCreationWindow();
@@ -121,6 +124,7 @@ private:
 	LevelWindow mLevelWindow;
 	DecoScenario mDecoScenario;
 	BodyScenario mBodyScenario;
+	TexturesWindow mTexturesWindow;
 	LuaConsoleWindow mLuaConsoleWindow;
 	ColFilteringWindow mColFilteringWindow;
 	DecoCreationWindow mDecoCreationWindow;
@@ -130,6 +134,7 @@ private:
 	// Etat des fenêtres / scénarios
 	bool mLevelWindowAdded;
 	bool mEditBoxGUICreated;
+	bool mTexturesWindowAdded;
 	bool mLuaConsoleWindowAdded;
 	bool mColFilteringWindowAdded;
 	bool mDecoCreationWindowAdded;

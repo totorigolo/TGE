@@ -66,10 +66,14 @@ private:
 	// Evènements
 	InputManager &mInputManager;
 	std::vector<SpyedKey::Ptr> mSpyedKeys;
+
+	// Ajout d'Entities
 	PolyCreationWindow *mPolyCreationWindow;
 	DecoCreationWindow *mDecoCreationWindow;
 	BasicBodyCreationWindow *mBasicBodyCreationWindow;
-	bool mPointJustAdded;
+	bool mDecoJustAdded;
+	bool mPolyPointJustAdded;
+	bool mBasicBodyJustAdded;
 
 	// Niveau
 	LevelManager &mLevel;

@@ -20,6 +20,19 @@ void Entity::Update()
 {
 }
 
+// Gestion du Layer
+void Entity::SetLayer(int layer)
+{
+	mLayer = layer;
+
+	// Trie les Entities
+	EntityManager::GetInstance().SortByLayer();
+}
+int Entity::GetLayer() const
+{
+	return mLayer;
+}
+
 // Accesseurs
 bool Entity::IsAlive() const
 {
@@ -30,8 +43,4 @@ unsigned int Entity::GetID() const
 	myAssert(mID != 0U, "L'ID 0 ne devrait pas exister.");
 
 	return mID;
-}
-int Entity::GetLayer() const
-{
-	return mLayer;
 }

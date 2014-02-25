@@ -25,6 +25,8 @@ protected:
 
 	// Callbacks
 	void OnChangePosition();
+	void OnChangeTexture();
+	void OnChangeLayer();
 	void OnChangePosXp();
 	void OnChangePosXm();
 	void OnChangePosYp();
@@ -37,6 +39,7 @@ private:
 	// EntityManager, PhysicManager
 	EntityManager &mEntityMgr;
 	PhysicManager &mPhysicMgr;
+	ResourceManager &mResourceMgr;
 
 	// Sélection
 	Deco *mSelection;
@@ -57,6 +60,16 @@ private:
 	sfg::Button::Ptr mPosYm;
 	sfg::Button::Ptr mPosRp;
 	sfg::Button::Ptr mPosRm;
+
+	// Texture
+	sfg::Box::Ptr mTextureHBox;
+	sfg::Label::Ptr mTextureLabel;
+	sfg::ComboBox::Ptr mTexture;
+
+	// Layer
+	sfg::Box::Ptr mLayerHBox;
+	sfg::Label::Ptr mLayerLabel;
+	sfg::SpinButton::Ptr mLayer;
 
 	// Bouton
 	sfg::Button::Ptr mRefresh;

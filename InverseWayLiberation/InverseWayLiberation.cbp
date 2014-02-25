@@ -45,10 +45,14 @@
 		<Unit filename="../Shadows/shadow.fx" />
 		<Unit filename="../Shadows/utils.h" />
 		<Unit filename="../VertexShadows/main.cpp" />
+		<Unit filename="data/style.css" />
 		<Unit filename="lvls/1.lvl" />
 		<Unit filename="lvls/1.xvl" />
 		<Unit filename="lvls/2.xvl" />
 		<Unit filename="lvls/save.xvl" />
+		<Unit filename="scripts/contact.lua" />
+		<Unit filename="scripts/lvl1.lua" />
+		<Unit filename="scripts/test1.lua" />
 		<Unit filename="src/App/App.cpp" />
 		<Unit filename="src/App/App.h" />
 		<Unit filename="src/App/InputManager.cpp" />
@@ -71,10 +75,14 @@
 		<Unit filename="src/Editor/EditBox.h" />
 		<Unit filename="src/Editor/Editor.cpp" />
 		<Unit filename="src/Editor/Editor.h" />
+		<Unit filename="src/Editor/GUI/BasicBodyCreationWindow.cpp" />
+		<Unit filename="src/Editor/GUI/BasicBodyCreationWindow.h" />
 		<Unit filename="src/Editor/GUI/BodyScenario.cpp" />
 		<Unit filename="src/Editor/GUI/BodyScenario.h" />
 		<Unit filename="src/Editor/GUI/ColFilteringWindow.cpp" />
 		<Unit filename="src/Editor/GUI/ColFilteringWindow.h" />
+		<Unit filename="src/Editor/GUI/DecoCreationWindow.cpp" />
+		<Unit filename="src/Editor/GUI/DecoCreationWindow.h" />
 		<Unit filename="src/Editor/GUI/DecoScenario.cpp" />
 		<Unit filename="src/Editor/GUI/DecoScenario.h" />
 		<Unit filename="src/Editor/GUI/EmptyScenario.cpp" />
@@ -189,6 +197,7 @@
 		<Unit filename="src/Tools/Segment.h" />
 		<Unit filename="src/Tools/Singleton.h" />
 		<Unit filename="src/Tools/utils.h" />
+		<Unit filename="src/Tools/vector_wrappers.h" />
 		<Unit filename="src/main.cpp" />
 		<Unit filename="src/stdafx.cpp" />
 		<Unit filename="src/stdafx.h" />

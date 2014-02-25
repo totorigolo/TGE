@@ -57,6 +57,11 @@ private:
 	sfg::Label::Ptr mTextureLabel;
 	sfg::ComboBox::Ptr mTexture;
 
+	// Layer
+	sfg::Box::Ptr mLayerHBox;
+	sfg::Label::Ptr mLayerLabel;
+	sfg::SpinButton::Ptr mLayer;
+
 	// Boutons
 	sfg::Button::Ptr mToggleModeBtn;
 	sfg::Button::Ptr mCloseBtn;

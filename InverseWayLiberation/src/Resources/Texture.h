@@ -4,11 +4,16 @@ class Texture : public sf::Texture
 {
 public:
 	Texture(const std::string &name, const std::string &path)
-		: mName(name), mPath(path)
+		: mLoaded(false), mName(name), mPath(path)
 	{
-		myCheckError_c(loadFromFile(path), "Impossible de charger :\n" + path);
+		myCheckError_c((mLoaded = loadFromFile(path)), "Impossible de charger :\n" + path);
 	}
 
+	// Gestion de l'état
+	bool IsLoaded()
+	{
+		return mLoaded;
+	}
 	// Gestion du nom
 	const std::string& GetName()
 	{
@@ -34,6 +39,7 @@ protected:
 	}
 
 private:
+	bool mLoaded;
 	std::string mName;
 	std::string mPath;
 };

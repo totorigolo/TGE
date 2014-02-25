@@ -77,6 +77,9 @@ void BodyScenario::Update()
 	mDensity->SetValue(mSelection->GetDensity());
 	mFriction->SetValue(mSelection->GetFriction());
 	mRestitution->SetValue(mSelection->GetRestitution());
+
+	// Gère le Layer
+	mLayer->SetValue(static_cast<float>(mSelection->GetLayer()));
 }
 
 // Construit la fenêtre et les éléments
@@ -176,6 +179,16 @@ void BodyScenario::Fill()
 	mTextureHBox->PackEnd(mTextureLabel);
 	mTextureHBox->PackEnd(mTexture);
 
+	// Layer
+	mLayerHBox = sfg::Box::Create(sfg::Box::Orientation::HORIZONTAL);
+	mLayerLabel = sfg::Label::Create("Layer : ");
+	mLayer = sfg::SpinButton::Create(-1000.f, 1000.f, 1.f);
+	mLayer->SetValue(1);
+	mLayer->SetDigits(0);
+	mLayer->GetSignal(sfg::SpinButton::OnValueChanged).Connect(std::bind(&BodyScenario::OnChangeLayer, this));
+	mLayerHBox->PackEnd(mLayerLabel, false);
+	mLayerHBox->PackEnd(mLayer);
+
 	// Bouton Détruire & ClearForces
 	mButtonsHBox1 = sfg::Box::Create(sfg::Box::Orientation::HORIZONTAL);
 	mDestroy = sfg::Button::Create("Détruire");
@@ -200,6 +213,7 @@ void BodyScenario::Fill()
 	AddToVBox(mCollisionTypeTable);
 	AddToVBox(mPhysicsParamsTable);
 	AddToVBox(mTextureHBox);
+	AddToVBox(mLayerHBox);
 	AddToVBox(mButtonsHBox1);
 	AddToVBox(mButtonsHBox2);
 }
@@ -235,6 +249,12 @@ void BodyScenario::OnChangeTexture()
 	if (!mApply || !mSelection) return;
 
 	mSelection->SetTexture(mResourceMgr.GetTexture(mTexture->GetItem(mTexture->GetSelectedItem())));
+}
+void BodyScenario::OnChangeLayer()
+{
+	if (!mApply || !mSelection) return;
+
+	mSelection->SetLayer(static_cast<int>(mLayer->GetValue()));
 }
 void BodyScenario::OnChangePosXp()
 {

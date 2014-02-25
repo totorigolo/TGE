@@ -27,7 +27,7 @@ EditBox::EditBox(sfg::Desktop &desktop)
 	mSelectedEntity(nullptr), mSelectedJoint(nullptr), mSelectionType(SelectionType::Null), mSelectionChanged(false),
 	mEmptyScenario(*this), mDecoScenario(*this), mBodyScenario(*this),
 	mLevelWindowAdded(false), mLuaConsoleWindowAdded(false), mColFilteringWindowAdded(false), mDecoCreationWindowAdded(false),
-	mPolyCreationWindowAdded(false), mBasicBodyCreationWindowAdded(false)
+	mPolyCreationWindowAdded(false), mBasicBodyCreationWindowAdded(false), mTexturesWindowAdded(false)
 {
 	// Crée la fenêtre
 	mWindow = sfg::Window::Create();
@@ -388,6 +388,16 @@ void EditBox::ShowDecoScenario()
 	mDecoScenario.AddInWindow(mWindow);
 	mDecoScenario.Show();
 }
+void EditBox::ShowTexturesWindow()
+{
+	if (!mTexturesWindowAdded)
+	{
+		mTexturesWindow.RegisterInDesktop(&mDesktop);
+		mTexturesWindowAdded = true;
+	}
+
+	mTexturesWindow.Show();
+}
 void EditBox::OnShowLuaConsoleWindow()
 {
 	if (!mLuaConsoleWindowAdded)
@@ -461,6 +471,10 @@ DecoScenario* EditBox::GetDecoScenario()
 BodyScenario* EditBox::GetBodyScenario()
 {
 	return &mBodyScenario;
+}
+TexturesWindow* EditBox::GetTexturesWindow()
+{
+	return &mTexturesWindow;
 }
 LuaConsoleWindow* EditBox::GetLuaConsoleWindow()
 {

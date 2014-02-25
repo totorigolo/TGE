@@ -10,11 +10,15 @@ Deco::Deco(int layer, const std::shared_ptr<Texture> &texture, sf::Vector3f posR
 
 	mType = EntityType::Deco;
 
-	// Crée le Sprite
+	SetTexture(texture);
+	SetPosition(getVec2(posRot));
+	SetRotationD(posRot.z);
+
+	/*/ Crée le Sprite
 	mSprite.setTexture(*mTexture);
 	mSprite.setPosition(getVec2(posRot));
 	mSprite.setRotation(posRot.z);
-	mSprite.setOrigin(u2f(mSprite.getTexture()->getSize()) / 2.f);
+	mSprite.setOrigin(u2f(mSprite.getTexture()->getSize()) / 2.f);*/
 
 	mIsAlive = true;
 }
@@ -32,6 +36,14 @@ void Deco::Update()
 void Deco::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
 	target.draw(mSprite, states);
+}
+
+// Texture
+void Deco::SetTexture(const std::shared_ptr<Texture> &texture)
+{
+	mTexture = texture;
+	mSprite.setTexture(*mTexture);
+	mSprite.setOrigin(u2f(mSprite.getTexture()->getSize()) / 2.f);
 }
 
 // Position et rotation
@@ -67,7 +79,6 @@ const float Deco::GetRotationR() const
 {
 	return mSprite.getRotation() * RPD;
 }
-
 
 // Accesseurs
 sf::Sprite* Deco::GetSprite()

@@ -54,9 +54,9 @@ void BasicBodyCreationWindow::Add(b2Vec2 pos)
 
 	// Crée le Body suivant la forme
 	if (mShape[0]->IsActive()) // Box
-		EntityFactory::CreateBox(posRot, type, mTexture->GetItem(mTexture->GetSelectedItem()));
+		EntityFactory::CreateBox(posRot, type, mTexture->GetItem(mTexture->GetSelectedItem()), static_cast<int>(mLayer->GetValue()));
 	else if (mShape[1]->IsActive()) // Circle
-		EntityFactory::CreateCircle(posRot, type, mTexture->GetItem(mTexture->GetSelectedItem()));
+		EntityFactory::CreateCircle(posRot, type, mTexture->GetItem(mTexture->GetSelectedItem()), static_cast<int>(mLayer->GetValue()));
 	else
 	{
 		std::cout << "Aucune forme choisie !" << std::endl;
@@ -125,6 +125,15 @@ void BasicBodyCreationWindow::Fill()
 	mTextureHBox->PackEnd(mTextureLabel, false);
 	mTextureHBox->PackEnd(mTexture);
 
+	// Layer
+	mLayerHBox = sfg::Box::Create(sfg::Box::Orientation::HORIZONTAL);
+	mLayerLabel = sfg::Label::Create("Layer : ");
+	mLayer = sfg::SpinButton::Create(-1000.f, 1000.f, 1.f);
+	mLayer->SetValue(1);
+	mLayer->SetDigits(0);
+	mLayerHBox->PackEnd(mLayerLabel, false);
+	mLayerHBox->PackEnd(mLayer);
+
 	// Boutons
 	mToggleModeBtn = sfg::Button::Create("Entrer mode Création");
 	mCloseBtn = sfg::Button::Create("Fermer");
@@ -139,6 +148,7 @@ void BasicBodyCreationWindow::Fill()
 	mVBox->PackEnd(mShapeBox);
 	mVBox->PackEnd(mTypeBox);
 	mVBox->PackEnd(mTextureHBox);
+	mVBox->PackEnd(mLayerHBox);
 	mVBox->PackEnd(mToggleModeBtn);
 	mVBox->PackEnd(mCloseBtn);
 

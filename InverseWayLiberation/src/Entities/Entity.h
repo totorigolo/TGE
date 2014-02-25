@@ -25,10 +25,13 @@ public:
 	// Pour le rendu
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const = 0;
 
+	// Gestion du Layer
+	void SetLayer(int layer);
+	int GetLayer() const;
+
 	// Accesseurs
 	bool IsAlive() const;
 	unsigned int GetID() const;
-	int GetLayer() const;
 	EntityType GetType() const { return mType; }
 
 	void SetOwner(Entity *e) { mOwner = e; }

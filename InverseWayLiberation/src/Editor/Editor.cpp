@@ -34,7 +34,9 @@ Editor::Editor(sf::RenderWindow &window)
 	mSfGUI(App::GetInstance().GetSfGUI()),
 	// Autre
 	mPolyCreationWindow(nullptr),
-	mPointJustAdded(false),
+	mDecoJustAdded(false),
+	mPolyPointJustAdded(false),
+	mBasicBodyJustAdded(false),
 	mMouseMovingBody(nullptr),
 	mMouseJointCreated(false),
 	mMouseJointID(-1),
@@ -141,16 +143,10 @@ bool Editor::OnInit()
 	// Evènements
 	mSpyedKeys.push_back(SpyedKey::Create(sf::Keyboard::M)); // Pause physique
 	mSpyedKeys.push_back(SpyedKey::Create(sf::Keyboard::O)); // Debug Draw
-	mSpyedKeys.push_back(SpyedKey::Create(sf::Keyboard::B)); // Box
-	mSpyedKeys.push_back(SpyedKey::Create(sf::Keyboard::C)); // Circle
 	mSpyedKeys.push_back(SpyedKey::Create(sf::Keyboard::T)); // Ragdoll
-	mSpyedKeys.push_back(SpyedKey::Create(sf::Keyboard::L)); // Lamp
 	mSpyedKeys.push_back(SpyedKey::Create(sf::Keyboard::R)); // Reload
 	mSpyedKeys.push_back(SpyedKey::Create(sf::Keyboard::S)); // Save
 	mSpyedKeys.push_back(SpyedKey::Create(sf::Keyboard::P)); // Pin
-	mSpyedKeys.push_back(SpyedKey::Create(sf::Keyboard::H)); // Hook
-	mSpyedKeys.push_back(SpyedKey::Create(sf::Keyboard::I)); // Console
-	mSpyedKeys.push_back(SpyedKey::Create(sf::Keyboard::X)); // test
 	mSpyedKeys.push_back(SpyedKey::Create(sf::Keyboard::Add)); // Zoom in
 	mSpyedKeys.push_back(SpyedKey::Create(sf::Keyboard::Subtract)); // Zoom out
 	mSpyedKeys.push_back(SpyedKey::Create(sf::Keyboard::Numpad0)); // Reset vue
@@ -210,82 +206,52 @@ void Editor::OnEvent()
 		mDebugDraw = !mDebugDraw;
 	}
 
-	// Création d'objets
-	if (mInputManager.KeyReleased(sf::Keyboard::B))
-	{
-		std::string list[] = {"box", "box2", "caisse", "way", "tonneau"};
-		EntityFactory::CreateBox(getVec3(mMp), b2BodyType::b2_dynamicBody, randomElement(list, 5));
-	}
-	if (mInputManager.KeyReleased(sf::Keyboard::C))
-	{
-		std::string list[] = {"ball", "circle"};
-		EntityFactory::CreateCircle(getVec3(mMp), b2BodyType::b2_dynamicBody, randomElement(list, 2));
-	}
-	if (mInputManager.KeyReleased(sf::Keyboard::T))
-	{
-		EntityFactory::CreateRagdoll(mMp);
-	}
-	if (mInputManager.KeyReleased(sf::Keyboard::L))
-	{
-		EntityFactory::CreateLamp(getVec3(mMp), -1);
-	}
-
 	// EditBox : Poly Creation
-	if (mInputManager.GetLMBState() && mInputManager.IsKeyPressed(sf::Keyboard::LControl) && mPolyCreationWindow && !mPointJustAdded)
+	if (mInputManager.GetLMBState() && mInputManager.IsKeyPressed(sf::Keyboard::LControl) && mPolyCreationWindow && !mPolyPointJustAdded)
 	{
 		// Si la fenêtre de création de polygones est en mode création, on transmet les clics
 		if (mPolyCreationWindow->IsInEditMode())
 		{
 			mPolyCreationWindow->AddPoint(mMp);
-			mPointJustAdded = true;
+			mPolyPointJustAdded = true;
 		}
 	}
-	else if (mPointJustAdded && !mInputManager.GetLMBState())
+	else if (mPolyPointJustAdded && !mInputManager.GetLMBState())
 	{
 		// Attend le relâchement du clic pour mettre un autre point
-		mPointJustAdded = false;
+		mPolyPointJustAdded = false;
 	}
 
 	// EditBox : Deco Creation
-	if (mInputManager.GetLMBState() && mInputManager.IsKeyPressed(sf::Keyboard::LControl) && mDecoCreationWindow && !mPointJustAdded)
+	if (mInputManager.GetLMBState() && mInputManager.IsKeyPressed(sf::Keyboard::LControl) && mDecoCreationWindow && !mDecoJustAdded)
 	{
 		// Si la fenêtre de création est en mode ajout, on transmet les clics
 		if (mDecoCreationWindow->IsInAddMode())
 		{
 			mDecoCreationWindow->Add(mMp);
-			mPointJustAdded = true;
+			mDecoJustAdded = true;
 		}
 	}
-	else if (mPointJustAdded && !mInputManager.GetLMBState())
+	else if (mDecoJustAdded && !mInputManager.GetLMBState())
 	{
 		// Attend le relâchement du clic pour créer un autre body
-		mPointJustAdded = false;
+		mDecoJustAdded = false;
 	}
 
 	// EditBox : BasicBody Creation
-	if (mInputManager.GetLMBState() && mInputManager.IsKeyPressed(sf::Keyboard::LControl) && mBasicBodyCreationWindow && !mPointJustAdded)
+	if (mInputManager.GetLMBState() && mInputManager.IsKeyPressed(sf::Keyboard::LControl) && mBasicBodyCreationWindow && !mBasicBodyJustAdded)
 	{
 		// Si la fenêtre de création est en mode ajout, on transmet les clics
 		if (mBasicBodyCreationWindow->IsInAddMode())
 		{
 			mBasicBodyCreationWindow->Add(mMp);
-			mPointJustAdded = true;
+			mBasicBodyJustAdded = true;
 		}
 	}
-	else if (mPointJustAdded && !mInputManager.GetLMBState())
+	else if (mBasicBodyJustAdded && !mInputManager.GetLMBState())
 	{
 		// Attend le relâchement du clic pour créer un autre body
-		mPointJustAdded = false;
-	}
-
-	// Lua
-	if (mInputManager.KeyPressed(sf::Keyboard::I))
-	{
-		mConsole.DoFile("scripts/test1.lua");
-	}
-	if (mInputManager.KeyPressed(sf::Keyboard::X))
-	{
-		mConsole.DoFile("scripts/lvl1.lua");
+		mBasicBodyJustAdded = false;
 	}
 
 	// Déplacements des objets
@@ -468,54 +434,6 @@ void Editor::OnEvent()
 
 		// Sauvegarde le niveau
 		LevelSaver(mLevel, "lvls/save.xvl");
-	}
-
-	// Grappin
-	if (mInputManager.KeyPressed(sf::Keyboard::H))
-	{
-		// Si le grapin n'existe pas, on le crée
-		if (!mGrapnel)
-		{
-			mGrapnel = new Grapnel(-1);
-		}
-
-		// Si le grapin est déjà accroché, on le décroche
-		if (mGrapnel->IsAlive())
-			mGrapnel->Destroy();
-
-		// Si le body est déjà sélectionné, on l'accroche avec le grapin
-		else if (mHookedSBody)
-		{
-			// Demande au monde les formes qui sont sous l'AABB
-			PointCallback callback(mMp, false);
-			mPhysicMgr.GetWorld()->QueryAABB(&callback, callback.GetAABB());
-
-			// Il y a un objet, on le retient
-			if (callback.GetFixture() && callback.GetFixture()->GetBody() != mHookedSBody)
-			{
-				mResourceManager.LoadTexture("hook", "tex/hook.png");
-
-				b2Body *b = callback.GetFixture()->GetBody();
-				mGrapnel->Create(mResourceManager.GetTexture("hook"), b, b->GetLocalPoint(mMp), mHookedSBody, mHookedSAnchor);
-			}
-			mHookedSBody = nullptr;
-		}
-
-		// Sinon on cherche le body survollé pour l'accrocher
-		else
-		{
-			// Demande au monde les formes qui sont sous l'AABB
-			PointCallback callback(mMp, false);
-			mPhysicMgr.GetWorld()->QueryAABB(&callback, callback.GetAABB());
-
-			// Il y a un objet, on le retient
-			if (callback.GetFixture())
-			{
-				// Enregistre le body appuyé
-				mHookedSBody = callback.GetFixture()->GetBody();
-				mHookedSAnchor = mHookedSBody->GetLocalPoint(mMp);
-			}
-		}
 	}
 
 	// Epingle un objet

@@ -346,6 +346,9 @@
     <ClCompile Include="src\Editor\GUI\BasicBodyCreationWindow.cpp">
       <Filter>Fichiers sources\Editor\GUI</Filter>
     </ClCompile>
+    <ClCompile Include="src\Editor\GUI\TexturesWindow.cpp">
+      <Filter>Fichiers sources\Editor\GUI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Physics\Joints\DistanceJoint.h">
@@ -572,6 +575,9 @@
     </ClInclude>
     <ClInclude Include="src\Tools\vector_wrappers.h">
       <Filter>Fichiers d%27en-tête\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Editor\GUI\TexturesWindow.h">
+      <Filter>Fichiers d%27en-tête\Editor\GUI</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -3,13 +3,14 @@
 */
 
 *{
-	BorderColor: #363535FF;
-	BorderWidth: 0.f;
-	BackgroundColor: #74747490;
+	BackgroundColor: #747474FF;
+	BorderWidth: 1.f;
+	BorderColor: #666666FF;
+	Color: #CCCCCCFF;
 }
 
 Window {
-	TitleBackgroundColor: #74747490;
+	TitleBackgroundColor: #64646490;
 }
 
 RadioButton {
@@ -20,8 +21,8 @@ RadioButton {
 }
 
 ComboBox {
-	BackgroundColor: #8d6e5aDD;
-	BorderWidth: 1.5f;
+	/*BackgroundColor: #8d6e5aFF;/*DD;*/
+	BorderWidth: 1.f;
 	BorderColor: #363535FF;
 	ArrowColor: #363535FF;
 }

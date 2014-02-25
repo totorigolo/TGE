@@ -8,7 +8,7 @@
 // Ctor
 PolyCreationWindow::PolyCreationWindow()
 	: Window("PolyCreation"),
-	mEntityMgr(EntityManager::GetInstance()), mPhysicMgr(PhysicManager::GetInstance()),
+	mEntityMgr(EntityManager::GetInstance()), mPhysicMgr(PhysicManager::GetInstance()), mResourceMgr(ResourceManager::GetInstance()),
 	mIsEnterEditMode(false)
 {
 	// Rempli la fenêtre
@@ -69,6 +69,17 @@ void PolyCreationWindow::Update()
 	{
 		mMode->SetText("Mode : Création -> limite atteinte");
 	}
+
+	// Mets à jour la liste de texture
+	if (mTexture.get())
+	{
+		auto current = mTexture->GetSelectedItem();
+		for (int i = mTexture->GetItemCount(); i > 0; --i)
+			mTexture->RemoveItem(i - 1);
+		for each (const auto &tex in mResourceMgr.GetTextureMap())
+			mTexture->AppendItem(tex.first);
+		mTexture->SelectItem(current);
+	}
 }
 
 // Accesseurs
@@ -99,6 +110,22 @@ void PolyCreationWindow::Fill()
 	mTypeTable->Attach(mType[0], sf::Rect<sf::Uint32>(2, 1, 5, 1));
 	mTypeTable->Attach(mType[1], sf::Rect<sf::Uint32>(8, 1, 5, 1));
 
+	// Texture
+	mTextureHBox = sfg::Box::Create(sfg::Box::Orientation::HORIZONTAL);
+	mTextureLabel = sfg::Label::Create("Texture : ");
+	mTexture = sfg::ComboBox::Create();
+	mTextureHBox->PackEnd(mTextureLabel, false);
+	mTextureHBox->PackEnd(mTexture);
+
+	// Layer
+	mLayerHBox = sfg::Box::Create(sfg::Box::Orientation::HORIZONTAL);
+	mLayerLabel = sfg::Label::Create("Layer : ");
+	mLayer = sfg::SpinButton::Create(-1000.f, 1000.f, 1.f);
+	mLayer->SetValue(1);
+	mLayer->SetDigits(0);
+	mLayerHBox->PackEnd(mLayerLabel, false);
+	mLayerHBox->PackEnd(mLayer);
+
 	// Boutons
 	mEnterEditModeBtn = sfg::Button::Create("Entrer mode Création");
 	mCreatePolyBtn = sfg::Button::Create("Créer poly");
@@ -121,6 +148,8 @@ void PolyCreationWindow::Fill()
 	mVBox->PackEnd(mMode);
 	mVBox->PackEnd(mHelpLabel);
 	mVBox->PackEnd(mTypeTable);
+	mVBox->PackEnd(mTextureHBox);
+	mVBox->PackEnd(mLayerHBox);
 	mVBox->PackEnd(mEnterEditModeBtn);
 	mVBox->PackEnd(mCreatePolyBtn);
 	mVBox->PackEnd(mCancelBtn);
@@ -155,27 +184,23 @@ void PolyCreationWindow::OnCreatePoly()
 	// Il faut au minimum trois points, et max 8 points
 	if (mPoints.size() < 3 || mPoints.size() > b2_maxPolygonVertices) return;
 
-	// Crée le Body suivant le type
+	// Récupère le type
+	b2BodyType type;
 	if (mType[0]->IsActive()) // Dynamique
-	{
-		vector_b2Vec2 v(mPoints);
-		EntityFactory::CreatePolyBody(v, b2BodyType::b2_dynamicBody, "unknown");
-
-		// Supprime les points
-		OnEmptyPoints();
-	}
+		type = b2BodyType::b2_dynamicBody;
 	else if (mType[1]->IsActive()) // Statique
-	{
-		vector_b2Vec2 v(mPoints);
-		EntityFactory::CreatePolyBody(v, b2BodyType::b2_staticBody, "unknown");
-
-		// Supprime les points
-		OnEmptyPoints();
-	}
+		type = b2BodyType::b2_staticBody;
 	else
 	{
 		std::cout << "Aucun type choisi !" << std::endl;
+		return;
 	}
+
+	// Crée le Poly
+	EntityFactory::CreatePolyBody(mPoints, type, "unknown", static_cast<int>(mLayer->GetValue()));
+
+	// Supprime les points
+	OnEmptyPoints();
 }
 void PolyCreationWindow::OnEnterEditMode()
 {

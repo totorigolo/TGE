@@ -15,6 +15,13 @@ bool ResourceManager::LoadTexture(const std::string &name, const std::string &pa
 	// Charge la texture
 	std::shared_ptr<Texture> texture(new Texture(name, path));
 
+	// Si la texture n'est pas chargée, on la supprime
+	if (!texture->IsLoaded())
+	{
+		texture.reset();
+		return false;
+	}
+
 	// Ajoute la texture à la TextureMap
 	mTextureMap[name] = std::move(texture);
 

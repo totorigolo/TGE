@@ -31,6 +31,7 @@
     <ClCompile Include="src\Editor\GUI\LuaConsoleWindow.cpp" />
     <ClCompile Include="src\Editor\GUI\PolyCreationWindow.cpp" />
     <ClCompile Include="src\Editor\GUI\Scenario.cpp" />
+    <ClCompile Include="src\Editor\GUI\TexturesWindow.cpp" />
     <ClCompile Include="src\Editor\GUI\Window.cpp" />
     <ClCompile Include="src\Entities\BaseBody.cpp" />
     <ClCompile Include="src\Entities\BasicBody.cpp" />
@@ -110,6 +111,7 @@
     <ClInclude Include="src\Editor\GUI\LuaConsoleWindow.h" />
     <ClInclude Include="src\Editor\GUI\PolyCreationWindow.h" />
     <ClInclude Include="src\Editor\GUI\Scenario.h" />
+    <ClInclude Include="src\Editor\GUI\TexturesWindow.h" />
     <ClInclude Include="src\Editor\GUI\Window.h" />
     <ClInclude Include="src\Entities\BaseBody.h" />
     <ClInclude Include="src\Entities\BasicBody.h" />

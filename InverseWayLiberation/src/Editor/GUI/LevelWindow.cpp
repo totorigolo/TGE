@@ -38,7 +38,7 @@ void LevelWindow::Fill()
 	// Widgets
 	mVBox = sfg::Box::Create(sfg::Box::Orientation::VERTICAL);
 	mGravityBox = sfg::Box::Create(sfg::Box::Orientation::HORIZONTAL);
-	mGravityLabel = sfg::Label::Create("Gravité :");
+	mGravityLabel = sfg::Label::Create("Gravité : ");
 	mGravityX = sfg::SpinButton::Create(-2000.f, 2000.f, 0.2f);
 	mGravityX->SetDigits(2);
 	mGravityY = sfg::SpinButton::Create(-2000.f, 2000.f, 0.2f);
@@ -47,7 +47,7 @@ void LevelWindow::Fill()
 	mGravityBox->PackEnd(mGravityX);
 	mGravityBox->PackEnd(mGravityY);
 	mBckgColorBox = sfg::Box::Create(sfg::Box::Orientation::HORIZONTAL);
-	mBckgColorLabel = sfg::Label::Create("BckgC :");
+	mBckgColorLabel = sfg::Label::Create("BckgC : ");
 	mBckgColorR = sfg::SpinButton::Create(0.f, 255.f, 1.f);
 	mBckgColorR->SetDigits(0);
 	mBckgColorR->SetRequisition(sf::Vector2f(60.f, 0.f));
@@ -62,7 +62,7 @@ void LevelWindow::Fill()
 	mBckgColorBox->PackEnd(mBckgColorG);
 	mBckgColorBox->PackEnd(mBckgColorB);
 	mOriginViewBox = sfg::Box::Create(sfg::Box::Orientation::HORIZONTAL);
-	mOriginViewLabel = sfg::Label::Create("Origine :");
+	mOriginViewLabel = sfg::Label::Create("Origine : ");
 	mOriginViewX = sfg::SpinButton::Create(-1000000.f, 1000000.f, 1.f);
 	mOriginViewX->SetDigits(3);
 	mOriginViewY = sfg::SpinButton::Create(-1000000.f, 1000000.f, 1.f);
@@ -73,7 +73,7 @@ void LevelWindow::Fill()
 	mOriginViewBox->PackEnd(mOriginViewY);
 	mOriginViewBox->PackEnd(mOriginViewCurrentBtn, false);
 	mDefaultZoomBox = sfg::Box::Create(sfg::Box::Orientation::HORIZONTAL);
-	mDefaultZoomLabel = sfg::Label::Create("Déf Zoom :");
+	mDefaultZoomLabel = sfg::Label::Create("Déf Zoom : ");
 	mDefaultZoom = sfg::SpinButton::Create(0.f, 200.f, 0.1f);
 	mDefaultZoom->SetDigits(3);
 	mDefaultZoomCurrentBtn = sfg::Button::Create("C");

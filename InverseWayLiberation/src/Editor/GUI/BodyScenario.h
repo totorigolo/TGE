@@ -29,6 +29,7 @@ protected:
 	void OnChangeType();
 	void OnChangeCollisionType();
 	void OnChangeTexture();
+	void OnChangeLayer();
 	void OnChangePosXp();
 	void OnChangePosXm();
 	void OnChangePosYp();
@@ -89,6 +90,11 @@ private:
 	sfg::Box::Ptr mTextureHBox;
 	sfg::Label::Ptr mTextureLabel;
 	sfg::ComboBox::Ptr mTexture;
+
+	// Layer
+	sfg::Box::Ptr mLayerHBox;
+	sfg::Label::Ptr mLayerLabel;
+	sfg::SpinButton::Ptr mLayer;
 
 	// Boutons
 	sfg::Box::Ptr mButtonsHBox1;

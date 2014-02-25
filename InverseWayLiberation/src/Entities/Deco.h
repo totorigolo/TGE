@@ -15,6 +15,9 @@ public:
 	// Pour le rendu
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
+	// Texture
+	void SetTexture(const std::shared_ptr<Texture> &texture);
+
 	// Position et rotation
 	void SetPosition(const b2Vec2 &pos);
 	void SetPosition(const sf::Vector2f &pos);

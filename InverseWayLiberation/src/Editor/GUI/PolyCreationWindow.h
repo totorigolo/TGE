@@ -41,6 +41,7 @@ private:
 	// EntityManager, PhysicMgr
 	EntityManager &mEntityMgr;
 	PhysicManager &mPhysicMgr;
+	ResourceManager &mResourceMgr;
 
 	// Points
 	std::vector<b2Vec2> mPoints;
@@ -53,6 +54,16 @@ private:
 	sfg::Table::Ptr mTypeTable;
 	sfg::Label::Ptr mTypeLabel;
 	std::vector<sfg::RadioButton::Ptr> mType;
+
+	// Texture
+	sfg::Box::Ptr mTextureHBox;
+	sfg::Label::Ptr mTextureLabel;
+	sfg::ComboBox::Ptr mTexture;
+
+	// Layer
+	sfg::Box::Ptr mLayerHBox;
+	sfg::Label::Ptr mLayerLabel;
+	sfg::SpinButton::Ptr mLayer;
 
 	// Boutons
 	sfg::Button::Ptr mEnterEditModeBtn;

@@ -6,7 +6,8 @@
 // Ctor
 DecoScenario::DecoScenario(EditBox &editBox)
 	: Scenario(editBox, "Deco"),
-	mEntityMgr(EntityManager::GetInstance()), mPhysicMgr(PhysicManager::GetInstance()), mSelection(nullptr)
+	mEntityMgr(EntityManager::GetInstance()), mPhysicMgr(PhysicManager::GetInstance()), mResourceMgr(ResourceManager::GetInstance()),
+	mSelection(nullptr)
 {
 	// Initialise le pas
 	mPosStepSaveValue = 1.f;
@@ -85,6 +86,24 @@ void DecoScenario::Fill()
 	mPosTable->Attach(mPosRp, sf::Rect<sf::Uint32>(10, 2, 2, 1));
 	mPosTable->Attach(mPosRm, sf::Rect<sf::Uint32>(12, 2, 2, 1));
 
+	// Texture
+	mTextureHBox = sfg::Box::Create(sfg::Box::Orientation::HORIZONTAL);
+	mTextureLabel = sfg::Label::Create("Texture :");
+	mTexture = sfg::ComboBox::Create();
+	mTexture->GetSignal(sfg::ComboBox::OnSelect).Connect(std::bind(&DecoScenario::OnChangeTexture, this));
+	mTextureHBox->PackEnd(mTextureLabel);
+	mTextureHBox->PackEnd(mTexture);
+
+	// Layer
+	mLayerHBox = sfg::Box::Create(sfg::Box::Orientation::HORIZONTAL);
+	mLayerLabel = sfg::Label::Create("Layer : ");
+	mLayer = sfg::SpinButton::Create(-1000.f, 1000.f, 1.f);
+	mLayer->SetValue(1);
+	mLayer->SetDigits(0);
+	mLayer->GetSignal(sfg::SpinButton::OnValueChanged).Connect(std::bind(&DecoScenario::OnChangeLayer, this));
+	mLayerHBox->PackEnd(mLayerLabel, false);
+	mLayerHBox->PackEnd(mLayer);
+
 	// Boutons
 	mRefresh = sfg::Button::Create("Actualiser");
 	mRefresh->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind(&DecoScenario::OnRefresh, this));
@@ -93,6 +112,7 @@ void DecoScenario::Fill()
 
 	// Ajoute les éléments à la fenêtre
 	AddToVBox(mPosTable);
+	AddToVBox(mLayerHBox);
 	AddToVBox(mRefresh);
 	AddToVBox(mDestroy);
 }
@@ -105,6 +125,18 @@ void DecoScenario::OnChangePosition()
 	// Change sa position et sa rotation
 	mSelection->SetPosition(b2Vec2(Parser::stringToFloat(mPosX->GetText()), Parser::stringToFloat(mPosY->GetText())));
 	mSelection->SetRotationD(Parser::stringToFloat(mRot->GetText()));
+}
+void DecoScenario::OnChangeTexture()
+{
+	if (!mApply || !mSelection) return;
+
+	mSelection->SetTexture(mResourceMgr.GetTexture(mTexture->GetItem(mTexture->GetSelectedItem())));
+}
+void DecoScenario::OnChangeLayer()
+{
+	if (!mApply || !mSelection) return;
+
+	mSelection->SetLayer(static_cast<int>(mLayer->GetValue()));
 }
 void DecoScenario::OnChangePosXp()
 {
