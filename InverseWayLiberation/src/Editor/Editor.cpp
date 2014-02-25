@@ -561,10 +561,12 @@ void Editor::OnRender()
 			f.loadFromFile("data/calibri.ttf"); // TODO: ResourceMgr
 			fontLoaded = true;
 		}
-		sf::Text pause("Pause", f, 50U);
-		pause.setPosition(mWindow.getSize().x / 2.f - pause.getGlobalBounds().width / 2.f, 0.f);
+		sf::Text pause("Pause", f, 60U);
+		sf::Vector2f pos(mInputManager.GetWindowView().getCenter().x - pause.getGlobalBounds().width / 2.f, 0.f);
+		pos.y = mWindow.mapPixelToCoords(f2i(pos), mInputManager.GetWindowView()).y;
+		pause.setPosition(pos);
 
-		mWindow.setView(mWindow.getDefaultView());
+		mWindow.setView(mInputManager.GetWindowView());
 		mWindow.draw(pause);
 		mWindow.setView(mInputManager.GetView());
 	}

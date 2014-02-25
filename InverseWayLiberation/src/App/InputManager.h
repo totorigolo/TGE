@@ -65,11 +65,13 @@ public:
 	void AddDesktop(sfg::Desktop *d);
 	void RemoveDesktop(sfg::Desktop *d);
 
-	// Accesseurs
+	// Accès relatifs à la vue
 	float GetCurrentZoom() const;
 	const sf::View& GetView() const;
+	const sf::View& GetWindowView() const;
 	const sf::Vector2f& GetCurrentCenter() const;
 	
+	// Accès à la fenêtre
 	sf::RenderWindow* GetWindow();
 	const sf::RenderWindow* GetWindow() const;
 
@@ -91,6 +93,7 @@ private:
 	// View et Zoom
 	float mCurrentZoom;
 	sf::View mView;
+	sf::View mWindowView;
 
 	// Souris
 	sf::Vector2i mMousePos;

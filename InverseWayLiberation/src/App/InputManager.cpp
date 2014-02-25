@@ -38,6 +38,7 @@ InputManager::~InputManager()
 void InputManager::SetWindow(sf::RenderWindow *window)
 {
 	mWindow = window;
+	mWindowView = mWindow->getDefaultView();
 }
 void InputManager::SetZoom(float zoom)
 {
@@ -161,6 +162,8 @@ void InputManager::AddEvent(const sf::Event &event)
 	{
 		mView.setSize(u2f(mWindow->getSize()) * sf::Vector2f(mView.getViewport().width, mView.getViewport().height));
 		mView.zoom(mCurrentZoom);
+
+		mWindowView.setSize(u2f(mWindow->getSize()) * sf::Vector2f(mWindowView.getViewport().width, mWindowView.getViewport().height));
 
 		mHasResized = true;
 	}
@@ -317,7 +320,7 @@ void InputManager::RemoveDesktop(sfg::Desktop *d)
 	mDesktops.remove(d);
 }
 
-// Accesseurs
+// Accès relatifs à la vue
 float InputManager::GetCurrentZoom() const
 {
 	return mCurrentZoom;
@@ -326,11 +329,16 @@ const sf::View& InputManager::GetView() const
 {
 	return mView;
 }
+const sf::View& InputManager::GetWindowView() const
+{
+	return mWindowView;
+}
 const sf::Vector2f& InputManager::GetCurrentCenter() const
 {
 	return mView.getCenter();
 }
 
+// Accès à la fenêtre
 sf::RenderWindow* InputManager::GetWindow()
 {
 	return mWindow;
