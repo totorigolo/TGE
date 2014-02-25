@@ -64,6 +64,18 @@ void PolyCreationWindow::DrawPointsOn(sf::RenderTarget &target)
 // Actualisation
 void PolyCreationWindow::Update()
 {
+	// Mets à jour le bouton
+	if (mIsEnterEditMode)
+	{
+		mMode->SetText("Mode : Création");
+		mEnterEditModeBtn->SetLabel("Sortir mode Création");
+	}
+	else
+	{
+		mMode->SetText("Mode : Attente");
+		mEnterEditModeBtn->SetLabel("Entrer mode Création");
+	}
+
 	// Max 8 points
 	if (mPoints.size() >= b2_maxPolygonVertices && mIsEnterEditMode)
 	{
@@ -80,6 +92,7 @@ void PolyCreationWindow::Update()
 			mTexture->AppendItem(tex.first);
 		mTexture->SelectItem(current);
 	}
+
 }
 
 // Accesseurs
@@ -137,7 +150,7 @@ void PolyCreationWindow::Fill()
 	mButtonsHBox->PackEnd(mCloseBtn);
 
 	// Signaux
-	mEnterEditModeBtn->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind(&PolyCreationWindow::OnEnterEditMode, this));
+	mEnterEditModeBtn->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind(&PolyCreationWindow::OnToggleEditMode, this));
 	mCreatePolyBtn->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind(&PolyCreationWindow::OnCreatePoly, this));
 	mCancelBtn->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind(&PolyCreationWindow::OnCancelLast, this));
 	mEmptyBtn->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind(&PolyCreationWindow::OnEmptyPoints, this));
@@ -165,7 +178,6 @@ void PolyCreationWindow::OnEmptyPoints()
 	if (!mApply) return;
 
 	EmptyPoints();
-	OnEnterPassiveMode();
 }
 void PolyCreationWindow::OnCancelLast()
 {
@@ -184,6 +196,13 @@ void PolyCreationWindow::OnCreatePoly()
 	// Il faut au minimum trois points, et max 8 points
 	if (mPoints.size() < 3 || mPoints.size() > b2_maxPolygonVertices) return;
 
+	// Il nous faut une texture
+	if (mTexture->GetSelectedItem() == sfg::ComboBox::NONE)
+	{
+		std::cout << "Aucune texture choisie !" << std::endl;
+		return;
+	}
+
 	// Récupère le type
 	b2BodyType type;
 	if (mType[0]->IsActive()) // Dynamique
@@ -197,24 +216,18 @@ void PolyCreationWindow::OnCreatePoly()
 	}
 
 	// Crée le Poly
-	EntityFactory::CreatePolyBody(mPoints, type, "unknown", static_cast<int>(mLayer->GetValue()));
+	EntityFactory::CreatePolyBody(mPoints, type, mTexture->GetItem(mTexture->GetSelectedItem()), static_cast<int>(mLayer->GetValue()));
 
 	// Supprime les points
 	OnEmptyPoints();
+
+	OnRefresh();
 }
-void PolyCreationWindow::OnEnterEditMode()
+void PolyCreationWindow::OnToggleEditMode()
 {
 	if (!mApply) return;
 
-	mIsEnterEditMode = true;
+	mIsEnterEditMode = !mIsEnterEditMode;
 
-	mMode->SetText("Mode : Création");
-}
-void PolyCreationWindow::OnEnterPassiveMode()
-{
-	if (!mApply) return;
-
-	mIsEnterEditMode = false;
-
-	mMode->SetText("Mode : Attente");
+	OnRefresh();
 }

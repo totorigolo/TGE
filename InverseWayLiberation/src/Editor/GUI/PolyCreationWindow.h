@@ -31,8 +31,7 @@ protected:
 	void OnEmptyPoints();
 	void OnCancelLast();
 	void OnCreatePoly();
-	void OnEnterEditMode();
-	void OnEnterPassiveMode();
+	void OnToggleEditMode();
 
 private:
 	// Etat
