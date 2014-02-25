@@ -33,7 +33,8 @@ function createObjects1()
 		for i=0,nb do
 			vec:push_back(b2Vec2(rand(-3, 3), rand(150, 153)))
 		end
-		EntityFactory.CreatePoly(vec, b2_dynamicBody, "unknown", 1)
+		--EntityFactory.CreatePoly(vec, b2_dynamicBody, "unknown", 1)
+		EntityFactory.CreatePolyChain(vec, PolyChain.Loop, "unknown", 1)
 		
 		-- Incrémente x
 		x = x + 1

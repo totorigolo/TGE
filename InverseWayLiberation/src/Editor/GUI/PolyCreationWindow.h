@@ -15,7 +15,7 @@ public:
 	// Gestion de l'ajout de points
 	void AddPoint(b2Vec2 pos);
 	void EmptyPoints();
-	void DrawPointsOn(sf::RenderTarget &target);
+	void DrawPointsOn(sf::RenderTarget &target, const sf::RenderStates& states = sf::RenderStates::Default);
 
 	// Actualisation
 	virtual void Update();
@@ -32,6 +32,7 @@ protected:
 	void OnCancelLast();
 	void OnCreatePoly();
 	void OnToggleEditMode();
+	void OnTypeClicked();
 
 private:
 	// Etat
@@ -49,10 +50,16 @@ private:
 	sfg::Box::Ptr mVBox;
 	sfg::Label::Ptr mMode;
 	sfg::Label::Ptr mHelpLabel;
+
 	// Type
-	sfg::Table::Ptr mTypeTable;
+	sfg::Box::Ptr mTypeHBox;
 	sfg::Label::Ptr mTypeLabel;
 	std::vector<sfg::RadioButton::Ptr> mType;
+
+	// Type de Body
+	sfg::Box::Ptr mTypeBodyHBox;
+	sfg::Label::Ptr mTypeBodyLabel;
+	std::vector<sfg::RadioButton::Ptr> mTypeBody;
 
 	// Texture
 	sfg::Box::Ptr mTextureHBox;

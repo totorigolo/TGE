@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<level>
+    <world gravity="(0, -9.79993)" PPM="100.000000" bckgcolor="(0, 0, 0)" originview="(-3.38481, -5.3072)" defaultzoom="4.093859"/>
+    <textures>
+        <img name="bckg_1" src="tex/level_1/bckg_1.png"/>
+        <img name="none" src="tex/none.png"/>
+        <img name="unknown" src="tex/unknown.png"/>
+    </textures>
+    <basicbodies>
+        <box id="1" type="dynamic" texture="unknown" pos="(-13.2154, -7.04422)" rotation="277.412994" linvel="(0, -4.0833)"/>
+        <box id="2" type="dynamic" texture="unknown" pos="(-13.3226, -6.41782)" rotation="7.412992" linvel="(0, -4.0833)"/>
+        <box id="3" type="dynamic" texture="unknown" pos="(-17.01, -7.04863)" rotation="-3.443415" linvel="(-2.22179e-011, -4.0833)" angvel="-0.000000"/>
+        <box id="4" type="dynamic" texture="unknown" pos="(-16.3763, -7.08677)" rotation="-3.441285" linvel="(-2.2218e-011, -4.0833)" angvel="-0.000000"/>
+        <box id="5" type="dynamic" texture="unknown" pos="(-9.34902, -5.2629)" rotation="34.570805" linvel="(0, -4.0833)"/>
+        <box id="6" type="dynamic" texture="unknown" pos="(-8.8559, -4.78811)" rotation="43.603706" linvel="(0, -4.0833)"/>
+        <box id="7" type="dynamic" texture="unknown" pos="(-7.22331, -8.31989)" linvel="(0, -4.0833)"/>
+        <box id="8" type="dynamic" texture="unknown" pos="(-11.1081, -8.37096)" rotation="-83.166939" linvel="(0, -4.0833)"/>
+        <box id="9" type="dynamic" texture="unknown" pos="(-12.6144, -8.33647)" rotation="263.653229" linvel="(0, -4.0833)"/>
+        <box id="10" type="dynamic" texture="unknown" pos="(-11.8413, -8.41026)" rotation="175.441025" linvel="(0, -4.0833)"/>
+        <box id="11" type="dynamic" texture="unknown" pos="(-5.06164, -8.21571)" rotation="2.587528" linvel="(0, -4.0833)"/>
+        <box id="12" type="dynamic" texture="unknown" pos="(-3.09802, -8.35208)" rotation="-4.175015" linvel="(0, -4.0833)"/>
+        <box id="13" type="dynamic" texture="unknown" pos="(-1.34875, -8.40985)" rotation="-0.982771" linvel="(0, -4.0833)"/>
+        <box id="14" type="dynamic" texture="unknown" pos="(1.89858, -8.51984)" rotation="-3.531442" linvel="(0, -4.0833)"/>
+        <box id="15" type="dynamic" texture="unknown" pos="(-1.24133, -7.77369)" rotation="-1.782143" linvel="(0, -4.0833)"/>
+        <box id="16" type="dynamic" texture="unknown" pos="(-2.4603, -8.40178)" rotation="-94.248932" linvel="(0, -4.0833)"/>
+        <box id="17" type="dynamic" texture="unknown" pos="(-6.39252, -8.29393)" rotation="94.369019" linvel="(0, -4.0833)"/>
+        <box id="18" type="dynamic" texture="unknown" pos="(-12.0486, -7.75357)" rotation="-5.146217" linvel="(0, -4.0833)"/>
+        <box id="19" type="dynamic" texture="unknown" pos="(-11.7699, -7.14015)" rotation="354.195160" linvel="(0, -4.0833)"/>
+        <box id="20" type="dynamic" texture="unknown" pos="(1.25583, -8.48258)" rotation="-2.460865" linvel="(0, -4.0833)"/>
+        <box id="21" type="dynamic" texture="unknown" pos="(-1.22145, -7.13895)" rotation="-1.871650" linvel="(0, -4.0833)"/>
+        <box id="22" type="dynamic" texture="unknown" pos="(-1.94808, -7.80896)" rotation="-6.985083" linvel="(0, -4.0833)"/>
+        <box id="23" type="dynamic" texture="unknown" pos="(-6.72298, -7.6026)" rotation="35.596405" linvel="(0, -4.0833)"/>
+        <box id="24" type="dynamic" texture="unknown" pos="(-3.73865, -8.29768)" rotation="-185.028336" linvel="(0, -4.0833)"/>
+        <box id="25" type="dynamic" texture="unknown" pos="(-12.4219, -7.05561)" rotation="261.774323" linvel="(0, -4.0833)"/>
+        <box id="26" type="dynamic" texture="unknown" pos="(-18.3623, -8.35634)" rotation="0.384032" linvel="(0, -4.0833)"/>
+        <box id="27" type="dynamic" texture="unknown" pos="(-19.0893, -8.34491)" rotation="-2.483249" linvel="(0, -4.0833)"/>
+        <box id="28" type="dynamic" texture="unknown" pos="(-19.7498, -8.30279)" rotation="-5.124404" linvel="(0, -4.0833)"/>
+        <box id="29" type="dynamic" texture="unknown" pos="(-17.6045, -8.35848)" linvel="(0, -4.0833)"/>
+        <box id="30" type="dynamic" texture="unknown" pos="(-12.2257, -6.44249)" rotation="-8.196963" linvel="(0, -4.0833)"/>
+        <box id="31" type="dynamic" texture="unknown" pos="(-11.5476, -6.52415)" rotation="84.043610" linvel="(0, -4.0833)"/>
+        <box id="32" type="dynamic" texture="unknown" pos="(-10.8621, -6.2156)" rotation="112.472359" linvel="(0, -4.0833)"/>
+        <box id="33" type="dynamic" texture="unknown" pos="(-3.22599, -7.70113)" rotation="-364.973633" linvel="(0, -4.0833)"/>
+        <box id="34" type="dynamic" texture="unknown" pos="(-4.37591, -8.23724)" rotation="-5.061604" linvel="(0, -4.0833)"/>
+        <box id="35" type="dynamic" texture="unknown" pos="(-2.59111, -7.74964)" rotation="174.718491" linvel="(0, -4.0833)"/>
+        <box id="36" type="dynamic" texture="unknown" pos="(0.463179, -8.42506)" rotation="83.459442" linvel="(0, -4.0833)"/>
+        <box id="37" type="dynamic" texture="unknown" pos="(3.52602, -8.05431)" rotation="1.315104" linvel="(0, -4.0833)"/>
+        <box id="38" type="dynamic" texture="unknown" pos="(4.84233, -8.02213)" rotation="1.888183" linvel="(0, -4.0833)"/>
+        <box id="39" type="dynamic" texture="unknown" pos="(7.70273, -8.5058)" linvel="(0, -4.0833)"/>
+        <box id="40" type="dynamic" texture="unknown" pos="(8.60398, -8.51538)" linvel="(0, -4.0833)"/>
+        <box id="41" type="dynamic" texture="unknown" pos="(7.05515, -8.49459)" rotation="-271.994446" linvel="(0, -4.0833)"/>
+        <box id="42" type="dynamic" texture="unknown" pos="(4.17128, -8.04425)" rotation="1.888206" linvel="(0, -4.0833)"/>
+        <box id="43" type="dynamic" texture="unknown" pos="(3.52315, -7.41749)" rotation="1.453426" linvel="(0, -4.0833)"/>
+        <box id="44" type="dynamic" texture="unknown" pos="(2.66929, -8.30131)" rotation="28.056673" linvel="(0, -4.0833)"/>
+        <box id="45" type="dynamic" texture="unknown" pos="(0.645769, -7.80671)" rotation="-6.521249" linvel="(0, -4.0833)"/>
+        <box id="46" type="dynamic" texture="unknown" pos="(-0.900224, -6.46823)" rotation="-27.977783" linvel="(0, -4.0833)"/>
+        <box id="47" type="dynamic" texture="unknown" pos="(-1.87778, -7.16675)" rotation="-5.713770" linvel="(0, -4.0833)"/>
+        <box id="48" type="dynamic" texture="unknown" pos="(-2.51101, -7.1161)" rotation="-5.916981" linvel="(0, -4.0833)"/>
+        <box id="49" type="dynamic" texture="unknown" pos="(-3.85877, -7.64553)" rotation="-5.030875" linvel="(0, -4.0833)"/>
+        <box id="50" type="dynamic" texture="unknown" pos="(-5.77951, -7.83223)" rotation="-137.797577" linvel="(0, -4.0833)"/>
+        <box id="51" type="dynamic" texture="unknown" pos="(-3.16914, -7.06741)" rotation="-274.729248" linvel="(0, -4.0833)"/>
+        <box id="52" type="dynamic" texture="unknown" pos="(-5.24956, -7.45821)" rotation="-48.025311" linvel="(0, -4.0833)"/>
+        <box id="53" type="dynamic" texture="unknown" pos="(-4.49126, -7.58909)" rotation="-95.095375" linvel="(0, -4.0833)"/>
+        <box id="54" type="dynamic" texture="unknown" pos="(-3.8031, -7.01302)" rotation="-184.981491" linvel="(0, -4.0833)"/>
+        <box id="55" type="dynamic" texture="unknown" pos="(-6.1683, -7.28586)" rotation="35.695194" linvel="(0, -4.0833)"/>
+        <box id="56" type="dynamic" texture="unknown" pos="(-5.60528, -6.9247)" rotation="-47.996059" linvel="(0, -4.0833)"/>
+        <box id="57" type="dynamic" texture="unknown" pos="(-4.34345, -6.32582)" rotation="-5.500383" linvel="(0, -4.0833)"/>
+        <box id="58" type="dynamic" texture="unknown" pos="(-4.44366, -6.95582)" rotation="-5.153036" linvel="(0, -4.0833)"/>
+        <box id="59" type="dynamic" texture="unknown" pos="(-3.0793, -6.43247)" rotation="-5.662488" linvel="(0, -4.0833)"/>
+        <box id="60" type="dynamic" texture="unknown" pos="(-2.3073, -6.48962)" rotation="-4.243777" linvel="(0, -4.0833)"/>
+        <box id="61" type="dynamic" texture="unknown" pos="(-1.65278, -6.49091)" rotation="-1.269664" linvel="(0, -4.0833)"/>
+        <box id="62" type="dynamic" texture="unknown" pos="(-1.61162, -5.85625)" rotation="-1.267170" linvel="(0, -4.0833)"/>
+        <box id="63" type="dynamic" texture="unknown" pos="(-2.26567, -5.85491)" rotation="-4.044037" linvel="(0, -4.0833)"/>
+        <box id="64" type="dynamic" texture="unknown" pos="(-3.71155, -6.38089)" rotation="-95.553238" linvel="(0, -4.0833)"/>
+        <box id="65" type="dynamic" texture="unknown" pos="(-5.09257, -6.39712)" rotation="19.113367" linvel="(0, -4.0833)"/>
+        <box id="66" type="dynamic" texture="unknown" pos="(-6.01817, -6.44276)" rotation="-137.896851" linvel="(0, -4.0833)"/>
+        <box id="67" type="dynamic" texture="unknown" pos="(-6.46791, -5.97765)" rotation="-45.518234" linvel="(0, -4.0833)"/>
+        <box id="68" type="dynamic" texture="unknown" pos="(-6.92683, -5.53891)" rotation="-45.454704" linvel="(0, -4.0833)"/>
+        <box id="69" type="dynamic" texture="unknown" pos="(-5.69099, -5.83427)" rotation="-41.851650" linvel="(0, -4.0833)"/>
+        <box id="70" type="dynamic" texture="unknown" pos="(-4.09284, -5.70769)" rotation="-4.714550" linvel="(0, -4.0833)"/>
+        <box id="71" type="dynamic" texture="unknown" pos="(-3.44325, -5.75847)" rotation="176.356308" linvel="(0, -4.0833)"/>
+        <box id="72" type="dynamic" texture="unknown" pos="(1.89251, -7.24585)" rotation="-273.237427" linvel="(0, -4.0833)"/>
+        <box id="73" type="dynamic" texture="unknown" pos="(1.93818, -7.88608)" rotation="-93.531242" linvel="(0, -4.0833)"/>
+        <box id="74" type="dynamic" texture="unknown" pos="(-4.8568, -5.66756)" rotation="-19.156027" linvel="(0, -4.0833)"/>
+        <box id="75" type="dynamic" texture="unknown" pos="(-6.14425, -5.38877)" rotation="-41.865788" linvel="(0, -4.0833)"/>
+        <box id="76" type="dynamic" texture="unknown" pos="(-7.38772, -5.1014)" rotation="-45.341286" linvel="(0, -4.0833)"/>
+        <box id="77" type="dynamic" texture="unknown" pos="(-7.92097, -4.67402)" rotation="-125.975746" linvel="(0, -4.0833)"/>
+        <box id="78" type="dynamic" texture="unknown" pos="(-11.1246, -5.63522)" rotation="202.162415" linvel="(0, -4.0833)"/>
+        <box id="79" type="dynamic" texture="unknown" pos="(-11.8477, -5.8484)" rotation="83.095367" linvel="(0, -4.0833)"/>
+        <box id="80" type="dynamic" texture="unknown" pos="(-12.4773, -5.7654)" rotation="-96.882523" linvel="(0, -4.0833)"/>
+    </basicbodies>
+    <polybodies/>
+    <entities/>
+    <joints/>
+    <deco>
+        <layer z="5">
+            <img texture="bckg_1" position="(4.25, -2.92)"/>
+        </layer>
+    </deco>
+    <actions/>
+    <events>
+        <triggers/>
+    </events>
+</level>

@@ -1,4 +1,5 @@
 #pragma once
+#include "PolyChain.h"
 #include "../Tools/vector_wrappers.h"
 
 namespace EntityFactory
@@ -17,6 +18,9 @@ namespace EntityFactory
 
 	// Crée un PolyBody
 	void CreatePolyBody(const vector_b2Vec2 &vectices, b2BodyType type, const std::string &texture, int layer = 1);
+
+	// Crée un PolyChain
+	void CreatePolyChain(const vector_b2Vec2 &vectices, PolyChain::Type type, const std::string &texture, int layer = 1);
 
 	// Crée un lampadaire
 	void CreateLamp(const b2Vec3 &posRot, int layer = 1);

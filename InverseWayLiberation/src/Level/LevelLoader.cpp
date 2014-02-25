@@ -20,6 +20,7 @@
 #include "../Entities/Player.h"
 #include "../Entities/BaseBody.h"
 #include "../Entities/PolyBody.h"
+#include "../Entities/PolyChain.h"
 #include "../Entities/BasicBody.h"
 #include "../Entities/LivingBeing.h"
 #include "../Entities/EntityFactory.h"
@@ -72,8 +73,8 @@ bool LevelLoader::Process()
 									   "Le chargement des BasicBodies a échoué (" + mPath + ").");
 
 	// Les Bodies polygones
-	myCheckError(ProcessPolyBodies(), "Une erreur est survenue lors du chargement du niveau.\n"
-									  "Le chargement des PolyBodies a échoué (" + mPath + ").");
+	myCheckError(ProcessPoly(), "Une erreur est survenue lors du chargement du niveau.\n"
+								"Le chargement des Poly a échoué (" + mPath + ").");
 
 	// Les Entities
 	myCheckError(ProcessEntities(), "Une erreur est survenue lors du chargement du niveau.\n"
@@ -166,7 +167,7 @@ bool LevelLoader::ProcessTextures()
 
 	return true;
 }
-bool LevelLoader::ProcessPolyBodies()
+bool LevelLoader::ProcessPoly()
 {
 	// Récupère <polybodies>
 	tinyxml2::XMLHandle hdl(mFile);
@@ -178,6 +179,7 @@ bool LevelLoader::ProcessPolyBodies()
 
 	// On crée les attributs
 	PolyBody *pb = nullptr;
+	PolyChain *pc = nullptr;
 	int layer = 1;
 	bool bullet = false, osp = false;
 	float density = 1.f, friction = 0.2f, restitution = 0.0f;
@@ -187,17 +189,37 @@ bool LevelLoader::ProcessPolyBodies()
 	unsigned int id = 0U;
 	std::string texture, type;
 	b2BodyType b2type;
+	PolyChain::Type chainType = PolyChain::None;
 	b2Vec3 posRot;
 	b2Vec2 linvel; // Linear velocity
 	float angvel = 0.f; // Angular velocity
 	std::vector<b2Vec2> vertices;
 
 	// Pour tous les bodies
+	bool polyBodiesDone = false;
 	tinyxml2::XMLElement *body = bodies.FirstChildElement().ToElement();
+
+	// S'il n'y a pas de PolyBody, on passe aux PolyChains
+	if (!polyBodiesDone && !body)
+	{
+		polyBodiesDone = true;
+
+		// Récupère <polychains>
+		bodies = hdl.FirstChildElement("level").FirstChildElement("polychains");
+
+		// Vérifie que <polychains> existe
+		if (!bodies.ToElement())
+			return true;
+
+		// Récupère le premier
+		body = bodies.FirstChildElement().ToElement();
+	}
+
 	while (body)
 	{
 		// Réinitialise les attributs
 		pb = nullptr;
+		pc = nullptr;
 		layer = 1;
 		id = 0U;
 		rotation = 0.f;
@@ -208,6 +230,7 @@ bool LevelLoader::ProcessPolyBodies()
 		categoryBits = 0x0001;
 		maskBits = 0xFFFF;
 		b2type = b2BodyType::b2_staticBody;
+		chainType = PolyChain::None;
 		osp = false;
 		bullet = false;
 		linvel = b2Vec2_zero;
@@ -228,7 +251,19 @@ bool LevelLoader::ProcessPolyBodies()
 				Dialog::Error("PolyBody type inconnu (" + type + ") !\nStatique par défaut.");
 		}
 		else
-			Dialog::Error("PolyBody type introuvable !\nStatique par défaut.");
+			Dialog::Error("Poly type introuvable !\nStatique par défaut.");
+
+		// Récupère le type de chaine
+		if (polyBodiesDone)
+		{
+			std::string pct = body->Name();
+			if (pct == "chain")
+				chainType = PolyChain::Chain;
+			else if (pct == "loop")
+				chainType = PolyChain::Loop;
+			else
+				Dialog::Error("Poly ChainType inconnu (" + pct + ") !\nChaine par défaut.");
+		}
 
 		// Récupère la texture et vérifie si elle existe
 		if (body->Attribute("texture")) texture = body->Attribute("texture");
@@ -293,8 +328,18 @@ bool LevelLoader::ProcessPolyBodies()
 		}
 
 		// Crée le body
-		pb = new PolyBody(layer, id);
-		pb->Create(posRot, vertices, b2type, mLevel.mResourceManager.GetTexture(texture), density, friction, restitution, groupIndex, categoryBits, maskBits);
+		if (!polyBodiesDone)
+		{
+			pb = new PolyBody(layer, id);
+			pb->Create(posRot, vertices, b2type, mLevel.mResourceManager.GetTexture(texture),
+					   density, friction, restitution, groupIndex, categoryBits, maskBits);
+		}
+		else
+		{
+			pc = new PolyChain(layer, id);
+			pc->Create(posRot, vertices, chainType, mLevel.mResourceManager.GetTexture(texture),
+					   density, friction, restitution, groupIndex, categoryBits, maskBits);
+		}
 
 		// Restore l'état
 		if (type == "dynamic" || type == "kinematic")
@@ -303,7 +348,7 @@ bool LevelLoader::ProcessPolyBodies()
 			pb->GetBody()->SetAngularVelocity(angvel);
 		}
 
-		// Si le PolyBody a été créé
+		// Si le Poly a été créé
 		if (pb)
 		{
 			// Propriétés de collision
@@ -330,6 +375,22 @@ bool LevelLoader::ProcessPolyBodies()
 
 		// On récupère le prochain body
 		body = body->NextSiblingElement();
+
+		// Si on n'a plus de body, on passe aux PolyChains
+		if (!polyBodiesDone && !body)
+		{
+			polyBodiesDone = true;
+
+			// Récupère <polychains>
+			bodies = hdl.FirstChildElement("level").FirstChildElement("polychains");
+
+			// Vérifie que <polychains> existe
+			if (!bodies.ToElement())
+				return true;
+
+			// Récupère le premier
+			body = bodyHandle.FirstChildElement().ToElement();
+		}
 	}
 
 	return true;

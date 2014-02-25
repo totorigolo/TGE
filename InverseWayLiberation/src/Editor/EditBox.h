@@ -22,8 +22,9 @@ public:
 	enum class SelectionType {
 		Null,
 		Entity,
-			PolyBody,
 			BasicBody,
+			PolyBody,
+			PolyChain,
 			Deco,
 			Grapnel,
 			LivingBeing,

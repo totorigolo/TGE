@@ -41,6 +41,9 @@ void DecoScenario::Update()
 	mPosY->SetText(Parser::floatToString(mSelection->GetPosition().y, 4));
 	float rot = mSelection->GetRotationD(); rot = float(int(rot) % 360) + rot - float(int(rot));
 	mRot->SetText(Parser::floatToString(rot, 4));
+
+	// Gère le Layer
+	mLayer->SetValue(static_cast<float>(mSelection->GetLayer()));
 }
 
 // Construit la fenêtre et les éléments
@@ -98,7 +101,7 @@ void DecoScenario::Fill()
 	mLayerHBox = sfg::Box::Create(sfg::Box::Orientation::HORIZONTAL);
 	mLayerLabel = sfg::Label::Create("Layer : ");
 	mLayer = sfg::SpinButton::Create(-1000.f, 1000.f, 1.f);
-	mLayer->SetValue(1);
+	mLayer->SetValue(5);
 	mLayer->SetDigits(0);
 	mLayer->GetSignal(sfg::SpinButton::OnValueChanged).Connect(std::bind(&DecoScenario::OnChangeLayer, this));
 	mLayerHBox->PackEnd(mLayerLabel, false);

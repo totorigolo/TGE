@@ -24,7 +24,21 @@ public:
 		b2Body* body = fixture->GetBody();
 		if (body->GetType() == b2_dynamicBody || !mOnlyDynamicsBody)
 		{
-			if (fixture->TestPoint(mPoint))
+			// Regarde si il ne s'agit pas d'un type de fixture dans TestPoint
+			bool dontCheck = false;
+			if (fixture->GetBody()->GetUserData())
+			{
+				Entity *e = (Entity*) fixture->GetBody()->GetUserData();
+
+				if (e)
+				{
+					if (e->GetType() == EntityType::PolyChain)
+						dontCheck = ((PolyChain*) e)->Getb2BodyType() == b2_dynamicBody || !mOnlyDynamicsBody;
+				}
+			}
+
+			// Test si le point est effectivement dans le fixture
+			if (fixture->TestPoint(mPoint) || dontCheck)
 			{
 				mFixture = fixture;
 

@@ -3,6 +3,7 @@
 #include "../EditBox.h"
 #include "../../App/InputManager.h"
 #include "../../Entities/PolyBody.h"
+#include "../../Entities/PolyChain.h"
 #include "../../Entities/EntityFactory.h"
 
 // Ctor
@@ -19,8 +20,8 @@ PolyCreationWindow::PolyCreationWindow()
 // Gestion de l'ajout de points
 void PolyCreationWindow::AddPoint(b2Vec2 pos)
 {
-	// Max 8 points
-	if (mPoints.size() >= b2_maxPolygonVertices)
+	// Max 8 points pour les Bodies
+	if (mPoints.size() >= b2_maxPolygonVertices && mType[0]->IsActive())
 		return;
 
 	// Ajoute le point
@@ -32,13 +33,14 @@ void PolyCreationWindow::EmptyPoints()
 {
 	mPoints.clear();
 }
-void PolyCreationWindow::DrawPointsOn(sf::RenderTarget &target)
+void PolyCreationWindow::DrawPointsOn(sf::RenderTarget &target, const sf::RenderStates& states)
 {
 	if (!mIsEnterEditMode || mPoints.size() == 0) return;
 
 	// Dessine
-	sf::VertexArray edges(sf::LinesStrip, mPoints.size() + 1);
-	edges[mPoints.size()].position = b22sfVec(mPoints.front(), mPhysicMgr.GetPPM());
+	sf::VertexArray edges(sf::LinesStrip, mPoints.size() + ((mType[1]->IsActive()) ? 0 : 1));
+	if (!mType[1]->IsActive())
+		edges[mPoints.size()].position = b22sfVec(mPoints.front(), mPhysicMgr.GetPPM());
 
 	// Crée le disque
 	sf::CircleShape cs;
@@ -54,11 +56,11 @@ void PolyCreationWindow::DrawPointsOn(sf::RenderTarget &target)
 	for (unsigned int i = 0; i < mPoints.size(); ++i)
 	{
 		cs.setPosition(b22sfVec(mPoints[i], mPhysicMgr.GetPPM()));
-		target.draw(cs);
+		target.draw(cs, states);
 
 		edges[i].position = cs.getPosition();
 	}
-	target.draw(edges);
+	target.draw(edges, states);
 }
 
 // Actualisation
@@ -77,10 +79,10 @@ void PolyCreationWindow::Update()
 	}
 
 	// Max 8 points
-	if (mPoints.size() >= b2_maxPolygonVertices && mIsEnterEditMode)
-	{
+	if (mPoints.size() == b2_maxPolygonVertices && mIsEnterEditMode && mType[0]->IsActive())
 		mMode->SetText("Mode : Création -> limite atteinte");
-	}
+	else if (mPoints.size() > b2_maxPolygonVertices && mIsEnterEditMode && mType[0]->IsActive())
+		mMode->SetText("Mode : Création -> limite atteinte");
 
 	// Mets à jour la liste de texture
 	if (mTexture.get())
@@ -112,16 +114,30 @@ void PolyCreationWindow::Fill()
 	mHelpLabel = sfg::Label::Create("Créer pts : Ctrl + clic gauche");
 
 	// Type
-	mTypeTable = sfg::Table::Create();
-	mTypeTable->SetRequisition(sf::Vector2f(0, 30.f));
+	mTypeHBox = sfg::Box::Create(sfg::Box::Orientation::HORIZONTAL);
 	mTypeLabel = sfg::Label::Create("Type :");
-	mType.resize(2);//(3);
-	mType[0] = sfg::RadioButton::Create("Dynamique");
-	mType[1] = sfg::RadioButton::Create("Statique", mType[0]->GetGroup());
-	//mType[2] = sfg::RadioButton::Create("Kinématique", mType[1]->GetGroup());
-	mTypeTable->Attach(mTypeLabel, sf::Rect<sf::Uint32>(1, 1, 1, 1));
-	mTypeTable->Attach(mType[0], sf::Rect<sf::Uint32>(2, 1, 5, 1));
-	mTypeTable->Attach(mType[1], sf::Rect<sf::Uint32>(8, 1, 5, 1));
+	mType.resize(3);
+	mType[0] = sfg::RadioButton::Create("Body");
+	mType[1] = sfg::RadioButton::Create("Chaine", mType[0]->GetGroup());
+	mType[2] = sfg::RadioButton::Create("Loop", mType[1]->GetGroup());
+	mTypeHBox->PackEnd(mTypeLabel);
+	mTypeHBox->PackEnd(mType[0]);
+	mTypeHBox->PackEnd(mType[1]);
+	mTypeHBox->PackEnd(mType[2]);
+	mType[0]->GetSignal(sfg::RadioButton::OnLeftClick).Connect(std::bind(&PolyCreationWindow::OnTypeClicked, this));
+	mType[1]->GetSignal(sfg::RadioButton::OnLeftClick).Connect(std::bind(&PolyCreationWindow::OnTypeClicked, this));
+	mType[2]->GetSignal(sfg::RadioButton::OnLeftClick).Connect(std::bind(&PolyCreationWindow::OnTypeClicked, this));
+
+	// Type de Body
+	mTypeBodyHBox = sfg::Box::Create(sfg::Box::Orientation::HORIZONTAL);
+	mTypeBodyLabel = sfg::Label::Create("BodyType :");
+	mTypeBody.resize(2);//(3);
+	mTypeBody[0] = sfg::RadioButton::Create("Dynamique");
+	mTypeBody[1] = sfg::RadioButton::Create("Statique", mTypeBody[0]->GetGroup());
+	//mTypeBody[2] = sfg::RadioButton::Create("Kinématique", mTypeBody[1]->GetGroup());
+	mTypeBodyHBox->PackEnd(mTypeBodyLabel);
+	mTypeBodyHBox->PackEnd(mTypeBody[0]);
+	mTypeBodyHBox->PackEnd(mTypeBody[1]);
 
 	// Texture
 	mTextureHBox = sfg::Box::Create(sfg::Box::Orientation::HORIZONTAL);
@@ -160,7 +176,8 @@ void PolyCreationWindow::Fill()
 	// Ajoute les éléments à la fenêtre
 	mVBox->PackEnd(mMode);
 	mVBox->PackEnd(mHelpLabel);
-	mVBox->PackEnd(mTypeTable);
+	mVBox->PackEnd(mTypeHBox);
+	mVBox->PackEnd(mTypeBodyHBox);
 	mVBox->PackEnd(mTextureHBox);
 	mVBox->PackEnd(mLayerHBox);
 	mVBox->PackEnd(mEnterEditModeBtn);
@@ -193,8 +210,12 @@ void PolyCreationWindow::OnCreatePoly()
 {
 	if (!mApply) return;
 
-	// Il faut au minimum trois points, et max 8 points
-	if (mPoints.size() < 3 || mPoints.size() > b2_maxPolygonVertices) return;
+	// Il faut au minimum trois points, et max 8 points pour les Bodies
+	if (mPoints.size() < 3 || (mPoints.size() > b2_maxPolygonVertices) && mType[0]->IsActive())
+	{
+		mMode->SetText("Mode : Création -> nb pts invalide");
+		return;
+	}
 
 	// Il nous faut une texture
 	if (mTexture->GetSelectedItem() == sfg::ComboBox::NONE)
@@ -203,20 +224,43 @@ void PolyCreationWindow::OnCreatePoly()
 		return;
 	}
 
-	// Récupère le type
-	b2BodyType type;
-	if (mType[0]->IsActive()) // Dynamique
-		type = b2BodyType::b2_dynamicBody;
-	else if (mType[1]->IsActive()) // Statique
-		type = b2BodyType::b2_staticBody;
+	// Agit en fx du type
+	if (mType[0]->IsActive()) // Body
+	{
+		// Récupère le type de Body
+		b2BodyType type;
+		if (mTypeBody[0]->IsActive()) // Dynamique
+			type = b2BodyType::b2_dynamicBody;
+		else if (mTypeBody[1]->IsActive()) // Statique
+			type = b2BodyType::b2_staticBody;
+		/*else if (mTypeBody[2]->IsActive()) // Kinématic
+		type = b2BodyType::b2_kinematicBody;*/
+		else
+		{
+			std::cout << "Aucun type de Body choisi !" << std::endl;
+			return;
+		}
+
+		// Crée le Poly
+		EntityFactory::CreatePolyBody(mPoints, type, mTexture->GetItem(mTexture->GetSelectedItem()), static_cast<int>(mLayer->GetValue()));
+	}
+	else if (mType[1]->IsActive()) // Chain
+	{
+		// Crée la Chaine
+		auto type = PolyChain::Type::Chain;
+		EntityFactory::CreatePolyChain(mPoints, type, mTexture->GetItem(mTexture->GetSelectedItem()), static_cast<int>(mLayer->GetValue()));
+	}
+	else if (mType[2]->IsActive()) // Loop
+	{
+		// Crée la Loop
+		auto type = PolyChain::Type::Loop;
+		EntityFactory::CreatePolyChain(mPoints, type, mTexture->GetItem(mTexture->GetSelectedItem()), static_cast<int>(mLayer->GetValue()));
+	}
 	else
 	{
 		std::cout << "Aucun type choisi !" << std::endl;
 		return;
 	}
-
-	// Crée le Poly
-	EntityFactory::CreatePolyBody(mPoints, type, mTexture->GetItem(mTexture->GetSelectedItem()), static_cast<int>(mLayer->GetValue()));
 
 	// Supprime les points
 	OnEmptyPoints();
@@ -228,6 +272,15 @@ void PolyCreationWindow::OnToggleEditMode()
 	if (!mApply) return;
 
 	mIsEnterEditMode = !mIsEnterEditMode;
+
+	OnRefresh();
+}
+void PolyCreationWindow::OnTypeClicked()
+{
+	if (!mApply) return;
+
+	// Si pas Body, pas de BodyType (et inversement)
+	mTypeBodyHBox->Show(mType[0]->IsActive());
 
 	OnRefresh();
 }

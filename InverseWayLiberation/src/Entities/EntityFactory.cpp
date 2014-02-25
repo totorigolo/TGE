@@ -8,6 +8,7 @@
 #include "EntityManager.h"
 #include "BasicBody.h"
 #include "PolyBody.h"
+#include "PolyChain.h"
 #include "Deco.h"
 
 namespace EntityFactory
@@ -62,6 +63,17 @@ namespace EntityFactory
 	{
 		// Crée le PolyBody
 		PolyBody *b = new PolyBody(layer);
+		b->Create(vectices.GetVector(), type, mResourceManager.GetTexture(texture));
+
+		// Trie les Entities
+		mEntityManager.SortByLayer();
+	}
+
+	// Crée un PolyChain
+	void CreatePolyChain(const vector_b2Vec2 &vectices, PolyChain::Type type, const std::string &texture, int layer)
+	{
+		// Crée le PolyBody
+		PolyChain *b = new PolyChain(layer);
 		b->Create(vectices.GetVector(), type, mResourceManager.GetTexture(texture));
 
 		// Trie les Entities

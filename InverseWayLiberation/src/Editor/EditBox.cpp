@@ -2,8 +2,9 @@
 #include "EditBox.h"
 #include "../App/InputManager.h"
 
-#include "../Entities/PolyBody.h"
 #include "../Entities/BasicBody.h"
+#include "../Entities/PolyBody.h"
+#include "../Entities/PolyChain.h"
 #include "../Entities/Deco.h"
 #include "../Entities/Grapnel.h"
 #include "../Entities/LivingBeing.h"
@@ -228,6 +229,15 @@ void EditBox::UpdateGUI()
 			// Sélectionne les objets et montre le scénario des Body
 			mBodyScenario.Select((PolyBody*) e);
 			mColFilteringWindow.Select((PolyBody*) e);
+			ShowBodyScenario();
+		}
+		else if (e->GetType() == EntityType::PolyChain)
+		{
+			mSelectionType = SelectionType::PolyChain;
+
+			// Sélectionne les objets et montre le scénario des Body
+			mBodyScenario.Select((PolyChain*) e);
+			mColFilteringWindow.Select((PolyChain*) e);
 			ShowBodyScenario();
 		}
 		else if (e->GetType() == EntityType::Deco)

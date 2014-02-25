@@ -8,6 +8,7 @@
 #include "../Entities/Player.h"
 #include "../Entities/BaseBody.h"
 #include "../Entities/PolyBody.h"
+#include "../Entities/PolyChain.h"
 #include "../Entities/BasicBody.h"
 #include "../Entities/LivingBeing.h"
 #include "../Entities/EntityManager.h"
@@ -132,19 +133,21 @@ bool LevelSaver::ProcessBodies()
 	tinyxml2::XMLHandle handle(mDoc);
 	tinyxml2::XMLNode *level = handle.FirstChildElement("level").ToNode();
 
-	// Crée les balise <basicbodies> et <polybodies>
+	// Crée les balise <basicbodies>, <polybodies> et <polychains>
 	tinyxml2::XMLElement *basicbodies = mDoc.NewElement("basicbodies");
 	tinyxml2::XMLElement *polybodies = mDoc.NewElement("polybodies");
+	tinyxml2::XMLElement *polychains = mDoc.NewElement("polychains");
 	
 	// Ajoute <basicbodies> et <polybodies> à <level>
 	level->LinkEndChild(basicbodies);
 	level->LinkEndChild(polybodies);
+	level->LinkEndChild(polychains);
 
 	// Parcours toutes les Entities
 	for (auto it = mLevel.mEntityManager.GetEntities().begin(); it != mLevel.mEntityManager.GetEntities().end(); ++it)
 	{
 		// Vérifie le type de l'Entity
-		if ((*it)->GetType() == EntityType::BasicBody || (*it)->GetType() == EntityType::PolyBody)
+		if ((*it)->GetType() == EntityType::BasicBody || (*it)->GetType() == EntityType::PolyBody || (*it)->GetType() == EntityType::PolyChain)
 		{
 			BaseBody *bb = ((BaseBody*) *it);
 
@@ -155,8 +158,8 @@ bool LevelSaver::ProcessBodies()
 				continue;
 			}
 
-			// Définit le nom de la balise
-			std::string forme, type;
+			// Récupère la Forme
+			std::string forme;
 			if ((*it)->GetType() == EntityType::BasicBody)
 			{
 				BasicBody *bbtmp = ((BasicBody*) bb);
@@ -171,34 +174,40 @@ bool LevelSaver::ProcessBodies()
 					Dialog::Error("Erreur lors de la sauvegarde :\nBasicBody::Shape == Null\nBasicBody ignoré.");
 					continue;
 				}
+			}
+			if ((*it)->GetType() == EntityType::PolyChain)
+			{
+				PolyChain *bbtmp = ((PolyChain*) bb);
 
-				// Type
-				if (bb->Getb2BodyType() == b2BodyType::b2_dynamicBody)
-					type = "dynamic";
-				else if (bb->Getb2BodyType() == b2BodyType::b2_staticBody)
-					type = "static";
-				else if (bb->Getb2BodyType() == b2BodyType::b2_kinematicBody)
-					type = "kinematic";
+				// Forme
+				if (bbtmp->GetType() == PolyChain::Chain)
+					forme = "chain";
+				else if (bbtmp->GetType() == PolyChain::Loop)
+					forme = "loop";
 				else
 				{
-					Dialog::Error("Erreur lors de la sauvegarde :\nBasicBody::Type == Null\nBasicBody ignoré.");
+					Dialog::Error("Erreur lors de la sauvegarde :\nPolyChain::Shape == Null\nPolyChain ignoré.");
 					continue;
 				}
+
 			}
 			else
 			{
 				forme = "poly";
-				if (bb->Getb2BodyType() == b2BodyType::b2_dynamicBody)
-					type = "dynamic";
-				else if (bb->Getb2BodyType() == b2BodyType::b2_staticBody)
-					type = "static";
-				else if (bb->Getb2BodyType() == b2BodyType::b2_kinematicBody)
-					type = "kinematic";
-				else
-				{
-					Dialog::Error("Erreur lors de la sauvegarde :\nPolyBody::Type == Null\nPolyBody ignoré.");
-					continue;
-				}
+			}
+
+			// Récupère le Type
+			std::string type;
+			if (bb->Getb2BodyType() == b2BodyType::b2_dynamicBody)
+				type = "dynamic";
+			else if (bb->Getb2BodyType() == b2BodyType::b2_staticBody)
+				type = "static";
+			else if (bb->Getb2BodyType() == b2BodyType::b2_kinematicBody)
+				type = "kinematic";
+			else
+			{
+				Dialog::Error("Erreur lors de la sauvegarde :\nBody::Type == Null\nBody ignoré.");
+				continue;
 			}
 			
 			// Récupère le nom de la texture
@@ -220,7 +229,7 @@ bool LevelSaver::ProcessBodies()
 			b2Vec2 linvel = bb->GetBody()->GetLinearVelocity();
 			float angvel = bb->GetBody()->GetAngularVelocity();
 
-			// Vérifie que le BasicBody n'a qu'une Fixture
+			// Vérifie que le Body n'a qu'une Fixture
 			b2Fixture *f = bb->GetBody()->GetFixtureList();
 			if (f->GetNext())
 			{
@@ -262,23 +271,30 @@ bool LevelSaver::ProcessBodies()
 			if (categoryBits != 0x0001) balise->SetAttribute("categoryBits", categoryBits);
 			if (maskBits != 0xFFFF) balise->SetAttribute("maskBits", maskBits);
 
-			// Ajoute la position des points pour les PolyBodies
-			if ((*it)->GetType() == EntityType::PolyBody)
+			// Ajoute la position des points pour les PolyBodies et PolyChains
+			if ((*it)->GetType() == EntityType::PolyBody || (*it)->GetType() == EntityType::PolyChain)
 			{
-				const std::vector<b2Vec2>& pts = ((PolyBody*) (*it))->GetPoints();
-				for (unsigned int p = 0; p < pts.size(); ++p)
+				const std::vector<b2Vec2> *pts = nullptr;
+				if ((*it)->GetType() == EntityType::PolyBody)
+					pts = &((PolyBody*) (*it))->GetPoints();
+				else
+					pts = &((PolyChain*) (*it))->GetPoints();
+
+				for (unsigned int p = 0; p < pts->size(); ++p)
 				{
 					tinyxml2::XMLElement *point = mDoc.NewElement("point");
-					point->SetAttribute("pos", Parser::b2Vec2ToString(pts[p]).c_str());
+					point->SetAttribute("pos", Parser::b2Vec2ToString((*pts)[p]).c_str());
 					balise->LinkEndChild(point);
 				}
 			}
 			
-			// Ajoute la balise à <basicbodies> ou <polybodies>
+			// Ajoute la balise à <basicbodies>, <polybodies> ou <polychains>
 			if ((*it)->GetType() == EntityType::BasicBody)
 				basicbodies->LinkEndChild(balise);
-			else
+			else if((*it)->GetType() == EntityType::PolyBody)
 				polybodies->LinkEndChild(balise);
+			else
+				polychains->LinkEndChild(balise);
 		}
 	}
 

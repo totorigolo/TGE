@@ -43,6 +43,7 @@
     <ClCompile Include="src\Entities\LivingBeing.cpp" />
     <ClCompile Include="src\Entities\Player.cpp" />
     <ClCompile Include="src\Entities\PolyBody.cpp" />
+    <ClCompile Include="src\Entities\PolyChain.cpp" />
     <ClCompile Include="src\Game\Game.cpp" />
     <ClCompile Include="src\Level\LevelSaver.cpp" />
     <ClCompile Include="src\Lua\LuaAction.cpp" />
@@ -123,6 +124,7 @@
     <ClInclude Include="src\Entities\LivingBeing.h" />
     <ClInclude Include="src\Entities\Player.h" />
     <ClInclude Include="src\Entities\PolyBody.h" />
+    <ClInclude Include="src\Entities\PolyChain.h" />
     <ClInclude Include="src\Game\Game.h" />
     <ClInclude Include="src\Level\LevelManager.h" />
     <ClInclude Include="src\Level\LevelLoader.h" />

@@ -9,6 +9,7 @@ enum class EntityType
 	BaseBody,
 		BasicBody,
 		PolyBody,
+		PolyChain,
 	Grapnel
 };
 

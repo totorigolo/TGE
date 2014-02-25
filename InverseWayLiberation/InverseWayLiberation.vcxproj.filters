@@ -349,6 +349,9 @@
     <ClCompile Include="src\Editor\GUI\TexturesWindow.cpp">
       <Filter>Fichiers sources\Editor\GUI</Filter>
     </ClCompile>
+    <ClCompile Include="src\Entities\PolyChain.cpp">
+      <Filter>Fichiers sources\Entities</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Physics\Joints\DistanceJoint.h">
@@ -578,6 +581,9 @@
     </ClInclude>
     <ClInclude Include="src\Editor\GUI\TexturesWindow.h">
       <Filter>Fichiers d%27en-tête\Editor\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Entities\PolyChain.h">
+      <Filter>Fichiers d%27en-tête\Entities</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

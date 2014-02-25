@@ -26,7 +26,7 @@ Editor::Editor(sf::RenderWindow &window)
 	mEntityMgr(EntityManager::GetInstance()),
 	// Etats du jeu
 	mPaused(false),
-	mDebugDraw(true),
+	mDebugDraw(false),
 	// GUI
 	mSfGUI(App::GetInstance().GetSfGUI()),
 	// Autre
@@ -202,25 +202,86 @@ void Editor::OnEvent()
 	// Exécute les actions planifiées de la GUI
 	mEditBox->DoScheduledTasks();
 
+	// Retient si la touche Control est enfoncée
+	bool ctrl = mInputManager.IsKeyPressed(sf::Keyboard::LControl) || mInputManager.IsKeyPressed(sf::Keyboard::RControl);
+
 	// Vérifie les évènements
 	if (mInputManager.HasQuitted())
-		mQuit = true;
+	{
+		// Demande si on veut décharger le niveau actuel
+		if (1 == Dialog::ButtonChoice("Quitter l'éditeur ?",
+									  "Voulez-vous quitter l'éditeur ?\nTout changement non sauvegardé sera perdu.",
+									  "Oui", "Non"))
+			mQuit = true;
+	}
 	if (!mInputManager.HasFocus())
+	{
 		return;
+	}
 
 	// Pause physique
-	if (mInputManager.KeyPressed(sf::Keyboard::M))
+	if (mInputManager.KeyPressed(sf::Keyboard::M) && ctrl)
 	{
 		mPaused = !mPaused;
 	}
 	// DebugDraw
-	if (mInputManager.KeyPressed(sf::Keyboard::O))
+	if (mInputManager.KeyPressed(sf::Keyboard::O) && ctrl)
 	{
 		mDebugDraw = !mDebugDraw;
 	}
 
+	// Epingle un objet
+	if (mInputManager.KeyPressed(sf::Keyboard::P) && ctrl)
+	{
+		// Enregistre les bobies et leurs ancres
+		if (!mPinBodyA || !mPinBodyB)
+		{
+			// Demande au monde les formes qui sont sous l'AABB
+			PointCallback callback(mMp, false);
+			mPhysicMgr.GetWorld()->QueryAABB(&callback, callback.GetAABB());
+
+			// Il y a un objet, on le retient
+			if (callback.GetFixture())
+			{
+				// Enregistre le body appuyé
+				if (!mPinBodyA && mPinBodyB != callback.GetFixture()->GetBody())
+				{
+					mPinBodyA = callback.GetFixture()->GetBody();
+					mPinAnchorA = mPinBodyA->GetLocalPoint(mMp);
+				}
+				else if (!mPinBodyB && mPinBodyA != callback.GetFixture()->GetBody())
+				{
+					mPinBodyB = callback.GetFixture()->GetBody();
+					mPinAnchorB = mPinBodyB->GetLocalPoint(mMp);
+				}
+				else
+				{
+					mPinBodyA = nullptr;
+					mPinBodyB = nullptr;
+				}
+			}
+
+			// Si on a cliqué sur rien, on oublie les deux
+			else
+			{
+				mPinBodyA = nullptr;
+				mPinBodyB = nullptr;
+			}
+		}
+
+		// Crée le joint
+		if (mPinBodyA && mPinBodyB)
+		{
+			DistanceJointDef def(mPinBodyA, mPinAnchorA, mPinBodyB, mPinAnchorB);
+			new DistanceJoint(def);
+
+			mPinBodyA = nullptr;
+			mPinBodyB = nullptr;
+		}
+	}
+
 	// EditBox : Poly Creation
-	if (mInputManager.IsLMBClicked() && mInputManager.IsKeyPressed(sf::Keyboard::LControl) && mPolyCreationWindow)
+	if (mInputManager.IsLMBClicked() && ctrl && mPolyCreationWindow)
 	{
 		// Si la fenêtre de création de polygones est en mode création, on transmet les clics
 		if (mPolyCreationWindow->IsInEditMode())
@@ -230,7 +291,7 @@ void Editor::OnEvent()
 	}
 
 	// EditBox : Deco Creation
-	if (mInputManager.IsLMBClicked() && mInputManager.IsKeyPressed(sf::Keyboard::LControl) && mDecoCreationWindow)
+	if (mInputManager.IsLMBClicked() && ctrl && mDecoCreationWindow)
 	{
 		// Si la fenêtre de création est en mode ajout, on transmet les clics
 		if (mDecoCreationWindow->IsInAddMode())
@@ -240,7 +301,7 @@ void Editor::OnEvent()
 	}
 
 	// EditBox : BasicBody Creation
-	if (mInputManager.IsLMBClicked() && mInputManager.IsKeyPressed(sf::Keyboard::LControl) && mBasicBodyCreationWindow)
+	if (mInputManager.IsLMBClicked() && ctrl && mBasicBodyCreationWindow)
 	{
 		// Si la fenêtre de création est en mode ajout, on transmet les clics
 		if (mBasicBodyCreationWindow->IsInAddMode())
@@ -322,7 +383,7 @@ void Editor::OnEvent()
 			if (!mMouseMovingBody) // Si on n'a pas encore d'objet, on le cherche
 			{
 				// Demande au monde les formes qui sont sous l'AABB
-				PointCallback callback(mMp);
+				PointCallback callback(mMp, false);
 				mPhysicMgr.GetWorld()->QueryAABB(&callback, callback.GetAABB());
 
 				// Il y a un objet, on l'attache
@@ -377,9 +438,9 @@ void Editor::OnEvent()
 			// Récupère la position de la souris en mode SFML
 			sf::Vector2f mousePos = mInputManager.GetMousePosRV();
 
-			// Les Entities (Déco, LivingBeing, Player)
+			// Les Entities (Déco)
 			std::list<Entity*> &entities(mEntityMgr.GetEntities());
-			for (auto it = entities.rbegin(); it != entities.rend(); ++it)
+			for (auto it = entities.rbegin(); it != entities.rend(); ++it) // Par Layer
 			{
 				// Pour chaque type
 				if ((*it)->GetType() == EntityType::Deco)
@@ -401,66 +462,16 @@ void Editor::OnEvent()
 			mEditBox->Unselect();
 	}
 
-	// Epingle un objet
-	if (mInputManager.KeyPressed(sf::Keyboard::P))
-	{
-		// Enregistre les bobies et leurs ancres
-		if (!mPinBodyA || !mPinBodyB)
-		{
-			// Demande au monde les formes qui sont sous l'AABB
-			PointCallback callback(mMp, false);
-			mPhysicMgr.GetWorld()->QueryAABB(&callback, callback.GetAABB());
-
-			// Il y a un objet, on le retient
-			if (callback.GetFixture())
-			{
-				// Enregistre le body appuyé
-				if (!mPinBodyA && mPinBodyB != callback.GetFixture()->GetBody())
-				{
-					mPinBodyA = callback.GetFixture()->GetBody();
-					mPinAnchorA = mPinBodyA->GetLocalPoint(mMp);
-				}
-				else if (!mPinBodyB && mPinBodyA != callback.GetFixture()->GetBody())
-				{
-					mPinBodyB = callback.GetFixture()->GetBody();
-					mPinAnchorB = mPinBodyB->GetLocalPoint(mMp);
-				}
-				else
-				{
-					mPinBodyA = nullptr;
-					mPinBodyB = nullptr;
-				}
-			}
-
-			// Si on a cliqué sur rien, on oublie les deux
-			else
-			{
-				mPinBodyA = nullptr;
-				mPinBodyB = nullptr;
-			}
-		}
-
-		// Crée le joint
-		if (mPinBodyA && mPinBodyB)
-		{
-			DistanceJointDef def(mPinBodyA, mPinAnchorA, mPinBodyB, mPinAnchorB);
-			new DistanceJoint(def);
-
-			mPinBodyA = nullptr;
-			mPinBodyB = nullptr;
-		}
-	}
-
 	// Gestion du zoom et déplacement de la vue
-	if (mInputManager.KeyPressed(sf::Keyboard::Add))
+	if (mInputManager.KeyPressed(sf::Keyboard::Add) && ctrl)
 	{
 		mInputManager.Zoom(0.8f);
 	}
-	if (mInputManager.KeyPressed(sf::Keyboard::Subtract))
+	if (mInputManager.KeyPressed(sf::Keyboard::Subtract) && ctrl)
 	{
 		mInputManager.Zoom(1.2f);
 	}
-	if (mInputManager.KeyPressed(sf::Keyboard::Numpad0))
+	if (mInputManager.KeyPressed(sf::Keyboard::Numpad0) && ctrl)
 	{
 		mInputManager.SetZoom(mLevel.GetDefaultZoom());
 		mInputManager.SetCenter(mLevel.GetDefaultCenter());

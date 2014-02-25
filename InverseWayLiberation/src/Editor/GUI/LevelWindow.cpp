@@ -149,6 +149,12 @@ void LevelWindow::OnLoad()
 {
 	if (!mApply) return;
 
+	// Demande si on veut décharger le niveau actuel
+	if (2 == Dialog::ButtonChoice("Charger un niveau ?",
+										   "Voulez-vous charger ce niveau ?\nTout changement non sauvegardé sera perdu.",
+										   "Oui", "Non"))
+		return;
+
 	// Récupère le nom
 	sf::String name = mPath->GetText();
 

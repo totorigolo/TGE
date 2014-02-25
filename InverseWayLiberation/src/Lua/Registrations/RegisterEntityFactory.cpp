@@ -9,7 +9,16 @@ void LuaMachine::RegisterEntityFactory()
 	try
 	{
 		// Enregistre les fonctions
-		module(mLuaState) [
+		module(mLuaState)[
+			// PolyChain::Type
+			class_<PolyChain>("PolyChain")
+				.enum_("Type")
+				[
+					value("None", PolyChain::Type::None),
+					value("Chain", PolyChain::Type::Chain),
+					value("Loop", PolyChain::Type::Loop)
+				],
+
 			// Fxs dans EntityFactory
 			namespace_("EntityFactory") [
 				def("CreateDeco", (void(*)(const b2Vec3&, const std::string&)) EntityFactory::CreateDeco),
@@ -20,6 +29,8 @@ void LuaMachine::RegisterEntityFactory()
 				def("CreateCircle", (void(*)(const b2Vec3&, b2BodyType, const std::string&, int)) EntityFactory::CreateCircle),
 				def("CreatePoly", (void(*)(const vector_b2Vec2&, b2BodyType, const std::string&)) EntityFactory::CreatePolyBody),
 				def("CreatePoly", (void(*)(const vector_b2Vec2&, b2BodyType, const std::string&, int)) EntityFactory::CreatePolyBody),
+				def("CreatePolyChain", (void(*)(const vector_b2Vec2&, PolyChain::Type, const std::string&)) EntityFactory::CreatePolyChain),
+				def("CreatePolyChain", (void(*)(const vector_b2Vec2&, PolyChain::Type, const std::string&, int)) EntityFactory::CreatePolyChain),
 				def("CreateLamp", (void(*)(const b2Vec3&, const std::string&)) EntityFactory::CreateLamp),
 				def("CreateLamp", (void(*)(const b2Vec3&, const std::string&, int)) EntityFactory::CreateLamp),
 				def("CreateRagdoll", (void(*)(const b2Vec2&)) EntityFactory::CreateRagdoll),
