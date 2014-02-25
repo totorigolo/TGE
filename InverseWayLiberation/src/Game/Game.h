@@ -13,7 +13,10 @@ public:
 	// Ctor & dtor
 	Game(sf::RenderWindow &window);
 	virtual ~Game(void);
-	
+
+	// (ré)Initialiser
+	void Init();
+
 	/// Boucle de jeu
 	void Run();
 

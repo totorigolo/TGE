@@ -2,16 +2,10 @@
 #include "Game.h"
 #include "../App/App.h"
 #include "../App/InputManager.h"
-#include "../Entities/Grapnel.h"
-#include "../Level/LevelSaver.h"
 #include "../Level/LevelLoader.h"
 #include "../Level/LevelManager.h"
 #include "../Physics/PhysicManager.h"
-#include "../Entities/EntityFactory.h"
 #include "../Entities/EntityManager.h"
-#include "../Physics/Joints/MouseJoint.h"
-#include "../Physics/Joints/DistanceJoint.h"
-#include "../Physics/Callback/PointCallback.h"
 
 // Ctor
 Game::Game(sf::RenderWindow &window)
@@ -25,7 +19,7 @@ Game::Game(sf::RenderWindow &window)
 	mLevel(LevelManager::GetInstance()),
 	// Etats du jeu
 	mPaused(false),
-	mDebugDraw(true),
+	mDebugDraw(false),
 	// GUI
 	mSfGUI(App::GetInstance().GetSfGUI())
 {
@@ -35,6 +29,14 @@ Game::Game(sf::RenderWindow &window)
 // Dtor
 Game::~Game(void)
 {
+}
+
+// (ré)Initialiser
+void Game::Init()
+{
+	// Etats du jeu
+	mPaused = false;
+	mDebugDraw = false;
 }
 
 // Boucle de jeu
@@ -101,6 +103,15 @@ bool Game::OnInit()
 	mInputManager.AddDesktop(&mDesktop);
 	mGUIElapsedTime.restart();
 
+	// Charge le style de la GUI
+	try {
+		mDesktop.LoadThemeFromFile("data/style.css");
+	}
+	catch (const std::exception &e)
+	{
+		Dialog::Error("Erreur lors de la lecture du thème :\n" + std::string(e.what()));
+	}
+
 	/* Physique */
 	// Initialise le monde
 	mPhysicMgr.SetTimeStep(1.f / 60.f);
@@ -112,8 +123,9 @@ bool Game::OnInit()
 
 	// Demande l'espionnage de touches
 	// Evènements
+	mSpyedKeys.push_back(SpyedKey::Create(sf::Keyboard::M)); // Pause physique
 	mSpyedKeys.push_back(SpyedKey::Create(sf::Keyboard::O)); // Debug Draw
-	mSpyedKeys.push_back(SpyedKey::Create(sf::Keyboard::R)); // Reload
+	mSpyedKeys.push_back(SpyedKey::Create(sf::Keyboard::R)); // Recharger
 
 	// Initialise la machine Lua
 	mConsole.RegisterEntityFactory();
@@ -125,12 +137,13 @@ bool Game::OnInit()
 	mConsole.RegisterGlobalLuaVar("inputMgr", &mInputManager);
 	mConsole.RegisterResourceManager();
 
-	// Charge un niveau
-	LevelLoader("lvls/1.xvl");
-	if (!mLevel.IsCharged())
-		return false;
-
+	// Enregistre la console
 	mLevel.SetLuaConsole(&mConsole);
+
+	// Charge le niveau
+	//Init();
+	//mConsole.Reset();
+	LevelLoader("lvls/level_1.xvl");
 
 	return true;
 }
@@ -150,27 +163,40 @@ void Game::OnEvent()
 
 	// Vérifie les évènements
 	if (mInputManager.HasQuitted())
-		mQuit = true;
+	{
+		// Demande si on veut décharger le niveau actuel
+		if (1 == Dialog::ButtonChoice("Quitter le jeu ?",
+									  "Voulez-vous quitter le jeu ?\nToute progression non sauvegardée sera perdue.",
+									  "Oui", "Non"))
+									  mQuit = true;
+	}
 	if (!mInputManager.HasFocus())
+	{
 		return;
+	}
 
+	// Retient si la touche Control est enfoncée
+	bool ctrl = mInputManager.IsKeyPressed(sf::Keyboard::LControl) || mInputManager.IsKeyPressed(sf::Keyboard::RControl);
+
+	// Pause physique
+	if (mInputManager.KeyPressed(sf::Keyboard::M) && ctrl)
+	{
+		mPaused = !mPaused;
+	}
 	// DebugDraw
-	if (mInputManager.KeyPressed(sf::Keyboard::O))
+	if (mInputManager.KeyPressed(sf::Keyboard::O) && ctrl)
 	{
 		mDebugDraw = !mDebugDraw;
 	}
 
-	// Charge un niveau
-	if (mInputManager.KeyReleased(sf::Keyboard::R))
+	// Recharger le niveau
+	if (mInputManager.KeyPressed(sf::Keyboard::R) && ctrl)
 	{
-		// Réinitialise Lua et Triggers
-		mConsole.Reset();
-
 		// Charge le niveau
-		if (!mInputManager.IsKeyPressed(sf::Keyboard::LControl))
-			LevelLoader("lvls/1.xvl");
-		else
-			LevelLoader("lvls/save.xvl");
+		Init();
+		mConsole.Reset();
+		LevelLoader("lvls/level_1.xvl");
+
 	}
 }
 
@@ -186,7 +212,7 @@ void Game::OnStepPhysics()
 	if (!mPaused)
 	{
 		mPhysicMgr.Step(10, 4);
-		mPhysicMgr.GetWorld()->ClearForces();
+
 		mPhysicMgr.DestroyBodiesOut(b2Vec2(1000.f, -200.f), b2Vec2(-200.f, 200.f));
 	}
 }
@@ -211,7 +237,7 @@ void Game::OnRender()
 	// Rendu
 	mWindow.clear(mLevel.GetBckgColor());
 	mWindow.setView(mInputManager.GetView());
-	
+
 	// Affichage du Level
 	mWindow.draw(mLevel);
 
@@ -231,10 +257,12 @@ void Game::OnRender()
 			f.loadFromFile("data/calibri.ttf"); // TODO: ResourceMgr
 			fontLoaded = true;
 		}
-		sf::Text pause("Pause", f, 50U);
-		pause.setPosition(mWindow.getSize().x / 2.f - pause.getGlobalBounds().width / 2.f, 0.f);
+		sf::Text pause("Pause", f, 60U);
+		sf::Vector2f pos(mInputManager.GetWindowView().getCenter().x - pause.getGlobalBounds().width / 2.f, 0.f);
+		pos.y = mWindow.mapPixelToCoords(f2i(pos), mInputManager.GetWindowView()).y;
+		pause.setPosition(pos);
 
-		mWindow.setView(mWindow.getDefaultView());
+		mWindow.setView(mInputManager.GetWindowView());
 		mWindow.draw(pause);
 		mWindow.setView(mInputManager.GetView());
 	}
@@ -251,8 +279,13 @@ void Game::OnLoopEnd()
 /// Appelé quand le jeu se termine
 void Game::OnQuit()
 {
+	Init();
+
 	// Enlève le Desktop du InputManager
 	mInputManager.RemoveDesktop(&mDesktop);
+
+	// Supprime les SpyedKeys
+	mSpyedKeys.clear();
 
 	// Remet la vue par défaut
 	mWindow.setView(mWindow.getDefaultView());
@@ -262,6 +295,7 @@ void Game::OnQuit()
 	mLevel.Clear();
 
 	// Vide
+	// TODO: Déplacer vers la LuaMachine
 	mConsole.UnregisterGlobalLuaVar("level");
 	mConsole.UnregisterGlobalLuaVar("physicMgr");
 	mConsole.UnregisterGlobalLuaVar("inputMgr");

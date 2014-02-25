@@ -504,7 +504,6 @@ void Editor::OnStepPhysics()
 	if (!mPaused)
 	{
 		mPhysicMgr.Step(10, 4);
-		//mPhysicMgr.GetWorld()->ClearForces();
 
 		b2Body *b = nullptr;
 		Entity *e = mEditBox->GetSelectedEntity();
