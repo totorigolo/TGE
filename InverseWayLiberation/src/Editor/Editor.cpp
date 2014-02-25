@@ -2,9 +2,6 @@
 #include "Editor.h"
 #include "../App/App.h"
 #include "../App/InputManager.h"
-#include "../Entities/Grapnel.h"
-#include "../Level/LevelSaver.h"
-#include "../Level/LevelLoader.h"
 #include "../Level/LevelManager.h"
 #include "../Physics/PhysicManager.h"
 #include "../Entities/Deco.h"
@@ -34,9 +31,6 @@ Editor::Editor(sf::RenderWindow &window)
 	mSfGUI(App::GetInstance().GetSfGUI()),
 	// Autre
 	mPolyCreationWindow(nullptr),
-	mDecoJustAdded(false),
-	mPolyPointJustAdded(false),
-	mBasicBodyJustAdded(false),
 	mMouseMovingBody(nullptr),
 	mMouseJointCreated(false),
 	mMouseJointID(-1),
@@ -51,6 +45,22 @@ Editor::Editor(sf::RenderWindow &window)
 // Dtor
 Editor::~Editor(void)
 {
+}
+
+// (ré)Initialiser
+void Editor::Init()
+{
+	// Etats du jeu
+	mPaused = false;
+	mDebugDraw = false;
+	// Autre
+	mMouseMovingBody = nullptr;
+	mMouseJointCreated = false;
+	mMouseJointID = -1;
+	mPinBodyA = nullptr;
+	mPinBodyB = nullptr;
+	mHookedSBody = nullptr;
+	mGrapnel = nullptr;
 }
 
 // Boucle de jeu
@@ -144,8 +154,6 @@ bool Editor::OnInit()
 	mSpyedKeys.push_back(SpyedKey::Create(sf::Keyboard::M)); // Pause physique
 	mSpyedKeys.push_back(SpyedKey::Create(sf::Keyboard::O)); // Debug Draw
 	mSpyedKeys.push_back(SpyedKey::Create(sf::Keyboard::T)); // Ragdoll
-	mSpyedKeys.push_back(SpyedKey::Create(sf::Keyboard::R)); // Reload
-	mSpyedKeys.push_back(SpyedKey::Create(sf::Keyboard::S)); // Save
 	mSpyedKeys.push_back(SpyedKey::Create(sf::Keyboard::P)); // Pin
 	mSpyedKeys.push_back(SpyedKey::Create(sf::Keyboard::Add)); // Zoom in
 	mSpyedKeys.push_back(SpyedKey::Create(sf::Keyboard::Subtract)); // Zoom out
@@ -161,14 +169,19 @@ bool Editor::OnInit()
 	mConsole.RegisterGlobalLuaVar("inputMgr", &mInputManager);
 	mConsole.RegisterResourceManager();
 
-	// Charge un niveau
-	if (!LoadLevel("lvls/1.xvl"))
-		return false;
-
 	// Enregistre la console
 	mLevel.SetLuaConsole(&mConsole);
 	mEditBox->SetLuaMachine(&mConsole);
 	mConsole.SetLuaConsole(mEditBox->GetLuaConsoleWindow());
+
+	// Passe les objets à la LevelWindow
+	mEditBox->GetLevelWindow()->SetEditor(this);
+	mEditBox->GetLevelWindow()->SetEditBox(&*mEditBox);
+	mEditBox->GetLevelWindow()->SetLuaMachine(&mConsole);
+
+	// Charge les textures vides
+	mResourceManager.LoadTexture("none", "tex/none.png");
+	mResourceManager.LoadTexture("unknown", "tex/unknown.png");
 
 	return true;
 }
@@ -207,51 +220,33 @@ void Editor::OnEvent()
 	}
 
 	// EditBox : Poly Creation
-	if (mInputManager.GetLMBState() && mInputManager.IsKeyPressed(sf::Keyboard::LControl) && mPolyCreationWindow && !mPolyPointJustAdded)
+	if (mInputManager.IsLMBClicked() && mInputManager.IsKeyPressed(sf::Keyboard::LControl) && mPolyCreationWindow)
 	{
 		// Si la fenêtre de création de polygones est en mode création, on transmet les clics
 		if (mPolyCreationWindow->IsInEditMode())
 		{
 			mPolyCreationWindow->AddPoint(mMp);
-			mPolyPointJustAdded = true;
 		}
-	}
-	else if (mPolyPointJustAdded && !mInputManager.GetLMBState())
-	{
-		// Attend le relâchement du clic pour mettre un autre point
-		mPolyPointJustAdded = false;
 	}
 
 	// EditBox : Deco Creation
-	if (mInputManager.GetLMBState() && mInputManager.IsKeyPressed(sf::Keyboard::LControl) && mDecoCreationWindow && !mDecoJustAdded)
+	if (mInputManager.IsLMBClicked() && mInputManager.IsKeyPressed(sf::Keyboard::LControl) && mDecoCreationWindow)
 	{
 		// Si la fenêtre de création est en mode ajout, on transmet les clics
 		if (mDecoCreationWindow->IsInAddMode())
 		{
 			mDecoCreationWindow->Add(mMp);
-			mDecoJustAdded = true;
 		}
-	}
-	else if (mDecoJustAdded && !mInputManager.GetLMBState())
-	{
-		// Attend le relâchement du clic pour créer un autre body
-		mDecoJustAdded = false;
 	}
 
 	// EditBox : BasicBody Creation
-	if (mInputManager.GetLMBState() && mInputManager.IsKeyPressed(sf::Keyboard::LControl) && mBasicBodyCreationWindow && !mBasicBodyJustAdded)
+	if (mInputManager.IsLMBClicked() && mInputManager.IsKeyPressed(sf::Keyboard::LControl) && mBasicBodyCreationWindow)
 	{
 		// Si la fenêtre de création est en mode ajout, on transmet les clics
 		if (mBasicBodyCreationWindow->IsInAddMode())
 		{
 			mBasicBodyCreationWindow->Add(mMp);
-			mBasicBodyJustAdded = true;
 		}
-	}
-	else if (mBasicBodyJustAdded && !mInputManager.GetLMBState())
-	{
-		// Attend le relâchement du clic pour créer un autre body
-		mBasicBodyJustAdded = false;
 	}
 
 	// Déplacements des objets
@@ -404,36 +399,6 @@ void Editor::OnEvent()
 		// Déselectione le body courant si on n'en a pas trouvé de nouveau
 		if (!found)
 			mEditBox->Unselect();
-	}
-
-	// Charge et sauvegarde un niveau
-	if (mInputManager.KeyReleased(sf::Keyboard::R))
-	{
-		// Déselectionne dans l'EditBox
-		mEditBox->Unselect();
-
-		// Supprime les pointeurs
-		mGrapnel = nullptr;
-		mHookedSBody = nullptr;
-		mPinBodyA = nullptr;
-		mPinBodyB = nullptr;
-
-		// Réinitialise Lua
-		mConsole.Reset();
-
-		// Charge le niveau
-		if (!mInputManager.IsKeyPressed(sf::Keyboard::LControl))
-			LoadLevel("lvls/1.xvl");
-		else
-			LoadLevel("lvls/save.xvl");
-	}
-	if (mInputManager.KeyReleased(sf::Keyboard::S))
-	{
-		// Déselectionne dans l'EditBox
-		mEditBox->Unselect();
-
-		// Sauvegarde le niveau
-		LevelSaver(mLevel, "lvls/save.xvl");
 	}
 
 	// Epingle un objet
@@ -605,8 +570,16 @@ void Editor::OnLoopEnd()
 /// Appelé quand le jeu se termine
 void Editor::OnQuit()
 {
+	Init();
+
 	// Enlève le Desktop du InputManager
 	mInputManager.RemoveDesktop(&mDesktop);
+
+	// Supprime l'EditBox
+	mEditBox.reset();
+
+	// Supprime les SpyedKeys
+	mSpyedKeys.clear();
 
 	// Remet la vue par défaut
 	mWindow.setView(mWindow.getDefaultView());
@@ -619,28 +592,9 @@ void Editor::OnQuit()
 	// Vide le niveau
 	mLevel.Clear();
 
-	// Nullifie les pointeurs
-	mGrapnel = nullptr;
-	mHookedSBody = nullptr;
-	mPinBodyA = nullptr;
-	mPinBodyB = nullptr;
-
 	// Vide
+	// TODO: Déplacer vers la LuaMachine
 	mConsole.UnregisterGlobalLuaVar("level");
 	mConsole.UnregisterGlobalLuaVar("physicMgr");
 	mConsole.UnregisterGlobalLuaVar("inputMgr");
-}
-
-// Charge un niveau
-bool Editor::LoadLevel(const std::string &path)
-{
-	// Charge un niveau
-	LevelLoader(path.c_str());
-	if (!mLevel.IsCharged())
-		return false;
-
-	// Charge la texture "vide"
-	mResourceManager.LoadTexture("unknown", "tex/unknown.png");
-
-	return true;
 }

@@ -24,8 +24,8 @@
 #include "../Physics/Joints/PrismaticJoint.h"
 
 // Ctor
-LevelSaver::LevelSaver(const LevelManager &level, const std::string& path)
-	: Saver(path), mLevel(level), mPath(path),
+LevelSaver::LevelSaver(const std::string& path, bool check)
+	: Saver(path, check), mLevel(LevelManager::GetInstance()), mPath(path),
 	mInputManager(InputManager::GetInstance()), mPhysicManager(PhysicManager::GetInstance()),
 	mTextureMap(ResourceManager::GetInstance().GetTextureMap())
 {

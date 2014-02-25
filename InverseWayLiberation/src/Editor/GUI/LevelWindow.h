@@ -4,6 +4,9 @@
 #include "../../Physics/PhysicManager.h"
 #include "../../Entities/EntityManager.h"
 
+class Editor;
+class EditBox;
+class LuaMachine;
 class LevelWindow : public Window
 {
 public:
@@ -13,11 +16,18 @@ public:
 	// Actualisation
 	virtual void Update();
 
+	// Enregistrements
+	void SetEditor(Editor *editor);
+	void SetEditBox(EditBox *editBox);
+	void SetLuaMachine(LuaMachine *luaMachine);
+
 protected:
 	// Construit la fenêtre et les éléments
 	virtual void Fill();
 
 	// Callbacks
+	void OnLoad();
+	void OnSave();
 	void OnChangeGravityX();
 	void OnChangeGravityY();
 	void OnChangeBckgColorR();
@@ -30,9 +40,15 @@ protected:
 	void OnChangeDefaultZoomCurrent();
 
 private:
-	// LevelMgr, PhysicMgr
+	// LevelMgr, PhysicMgr, ResourceMgr
 	LevelManager &mLevelMgr;
 	PhysicManager &mPhysicMgr;
+	ResourceManager &mResourceManager;
+
+	// Enregistrements
+	Editor *mEditor;
+	EditBox *mEditBox;
+	LuaMachine *mLuaMachine;
 
 	// Eléments
 	sfg::Box::Ptr mVBox;
@@ -57,4 +73,12 @@ private:
 	sfg::Box::Ptr mButtonBox;
 	sfg::Button::Ptr mRefreshBtn;
 	sfg::Button::Ptr mCloseBtn;
+
+	// Chargement et sauvegarde
+	sfg::Box::Ptr mPathHBox;
+	sfg::Label::Ptr mPathLabel;
+	sfg::Entry::Ptr mPath;
+	sfg::Box::Ptr mSaveLoadHBox;
+	sfg::Button::Ptr mLoadBtn;
+	sfg::Button::Ptr mSaveBtn;
 };

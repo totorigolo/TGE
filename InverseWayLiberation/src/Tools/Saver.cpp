@@ -2,7 +2,7 @@
 #include "Saver.h"
 
 // Ctor
-Saver::Saver(std::string const& path, bool overwrite)
+Saver::Saver(std::string const& path, bool check)
 	: mPath(path), mExists(false)
 {
 	// Vérifie si le fichier existe déjà
@@ -13,6 +13,15 @@ Saver::Saver(std::string const& path, bool overwrite)
 	// Si il existe
 	if (mExists)
 	{
+		// Si check == true, on demande quoi faire
+		bool overwrite = true;
+		if (check)
+		{
+			overwrite = (1 == Dialog::ButtonChoice("Ecraser la sauvegarde ?",
+												   "Une sauvegarde du même nom existe déjà.\nEcraser la sauvegarde ?",
+												   "Oui", "Non"));
+		}
+
 		// On efface le fichier si overwrite == true
 		if (overwrite)
 		{

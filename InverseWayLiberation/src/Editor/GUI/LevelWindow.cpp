@@ -1,11 +1,17 @@
 #include "stdafx.h"
 #include "LevelWindow.h"
 #include "../../App/InputManager.h"
+#include "../../Level/LevelSaver.h"
+#include "../../Level/LevelLoader.h"
+#include "../Editor.h"
+#include "../EditBox.h"
+#include "../../Lua/LuaMachine.h"
 
 // Ctor
 LevelWindow::LevelWindow()
 	: Window("Level"),
-	mLevelMgr(LevelManager::GetInstance()), mPhysicMgr(PhysicManager::GetInstance())
+	mLevelMgr(LevelManager::GetInstance()), mPhysicMgr(PhysicManager::GetInstance()), mResourceManager(ResourceManager::GetInstance()),
+	mEditor(nullptr), mEditBox(nullptr), mLuaMachine(nullptr)
 {
 	// Rempli la fenêtre
 	Fill();
@@ -32,6 +38,20 @@ void LevelWindow::Update()
 	mDefaultZoom->SetValue(mLevelMgr.GetDefaultZoom());
 }
 
+// Enregistrements
+void LevelWindow::SetEditor(Editor *editor)
+{
+	mEditor = editor;
+}
+void LevelWindow::SetEditBox(EditBox *editBox)
+{
+	mEditBox = editBox;
+}
+void LevelWindow::SetLuaMachine(LuaMachine *luaMachine)
+{
+	mLuaMachine = luaMachine;
+}
+
 // Construit la fenêtre et les éléments
 void LevelWindow::Fill()
 {
@@ -41,8 +61,10 @@ void LevelWindow::Fill()
 	mGravityLabel = sfg::Label::Create("Gravité : ");
 	mGravityX = sfg::SpinButton::Create(-2000.f, 2000.f, 0.2f);
 	mGravityX->SetDigits(2);
+	mGravityX->GetSignal(sfg::SpinButton::OnValueChanged).Connect(std::bind(&LevelWindow::OnChangeGravityX, this));
 	mGravityY = sfg::SpinButton::Create(-2000.f, 2000.f, 0.2f);
 	mGravityY->SetDigits(2);
+	mGravityY->GetSignal(sfg::SpinButton::OnValueChanged).Connect(std::bind(&LevelWindow::OnChangeGravityY, this));
 	mGravityBox->PackEnd(mGravityLabel, false);
 	mGravityBox->PackEnd(mGravityX);
 	mGravityBox->PackEnd(mGravityY);
@@ -51,12 +73,15 @@ void LevelWindow::Fill()
 	mBckgColorR = sfg::SpinButton::Create(0.f, 255.f, 1.f);
 	mBckgColorR->SetDigits(0);
 	mBckgColorR->SetRequisition(sf::Vector2f(60.f, 0.f));
+	mBckgColorR->GetSignal(sfg::SpinButton::OnValueChanged).Connect(std::bind(&LevelWindow::OnChangeBckgColorR, this));
 	mBckgColorG = sfg::SpinButton::Create(0.f, 255.f, 1.f);
 	mBckgColorG->SetDigits(0);
 	mBckgColorG->SetRequisition(sf::Vector2f(60.f, 0.f));
+	mBckgColorG->GetSignal(sfg::SpinButton::OnValueChanged).Connect(std::bind(&LevelWindow::OnChangeBckgColorG, this));
 	mBckgColorB = sfg::SpinButton::Create(0.f, 255.f, 1.f);
 	mBckgColorB->SetDigits(0);
 	mBckgColorB->SetRequisition(sf::Vector2f(60.f, 0.f));
+	mBckgColorB->GetSignal(sfg::SpinButton::OnValueChanged).Connect(std::bind(&LevelWindow::OnChangeBckgColorB, this));
 	mBckgColorBox->PackEnd(mBckgColorLabel, false);
 	mBckgColorBox->PackEnd(mBckgColorR);
 	mBckgColorBox->PackEnd(mBckgColorG);
@@ -65,9 +90,12 @@ void LevelWindow::Fill()
 	mOriginViewLabel = sfg::Label::Create("Origine : ");
 	mOriginViewX = sfg::SpinButton::Create(-1000000.f, 1000000.f, 1.f);
 	mOriginViewX->SetDigits(3);
+	mOriginViewX->GetSignal(sfg::SpinButton::OnValueChanged).Connect(std::bind(&LevelWindow::OnChangeOriginViewX, this));
 	mOriginViewY = sfg::SpinButton::Create(-1000000.f, 1000000.f, 1.f);
 	mOriginViewY->SetDigits(3);
+	mOriginViewY->GetSignal(sfg::SpinButton::OnValueChanged).Connect(std::bind(&LevelWindow::OnChangeOriginViewY, this));
 	mOriginViewCurrentBtn = sfg::Button::Create("C");
+	mOriginViewCurrentBtn->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind(&LevelWindow::OnChangeOriginViewCurrent, this));
 	mOriginViewBox->PackEnd(mOriginViewLabel, false);
 	mOriginViewBox->PackEnd(mOriginViewX);
 	mOriginViewBox->PackEnd(mOriginViewY);
@@ -76,34 +104,40 @@ void LevelWindow::Fill()
 	mDefaultZoomLabel = sfg::Label::Create("Déf Zoom : ");
 	mDefaultZoom = sfg::SpinButton::Create(0.f, 200.f, 0.1f);
 	mDefaultZoom->SetDigits(3);
+	mDefaultZoom->GetSignal(sfg::SpinButton::OnValueChanged).Connect(std::bind(&LevelWindow::OnChangeDefaultZoom, this));
 	mDefaultZoomCurrentBtn = sfg::Button::Create("C");
+	mDefaultZoomCurrentBtn->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind(&LevelWindow::OnChangeDefaultZoomCurrent, this));
 	mDefaultZoomBox->PackEnd(mDefaultZoomLabel, false);
 	mDefaultZoomBox->PackEnd(mDefaultZoom);
 	mDefaultZoomBox->PackEnd(mDefaultZoomCurrentBtn, false);
 	mButtonBox = sfg::Box::Create(sfg::Box::Orientation::HORIZONTAL);
 	mRefreshBtn = sfg::Button::Create("Actualiser");
 	mCloseBtn = sfg::Button::Create("Fermer");
+	mCloseBtn->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind(&LevelWindow::OnClose, this));
 	mButtonBox->PackEnd(mRefreshBtn);
 	mButtonBox->PackEnd(mCloseBtn);
 
-	// Connecte les signaux
-	mGravityX->GetSignal(sfg::SpinButton::OnValueChanged).Connect(std::bind(&LevelWindow::OnChangeGravityX, this));
-	mGravityY->GetSignal(sfg::SpinButton::OnValueChanged).Connect(std::bind(&LevelWindow::OnChangeGravityY, this));
-	mBckgColorR->GetSignal(sfg::SpinButton::OnValueChanged).Connect(std::bind(&LevelWindow::OnChangeBckgColorR, this));
-	mBckgColorG->GetSignal(sfg::SpinButton::OnValueChanged).Connect(std::bind(&LevelWindow::OnChangeBckgColorG, this));
-	mBckgColorB->GetSignal(sfg::SpinButton::OnValueChanged).Connect(std::bind(&LevelWindow::OnChangeBckgColorB, this));
-	mOriginViewX->GetSignal(sfg::SpinButton::OnValueChanged).Connect(std::bind(&LevelWindow::OnChangeOriginViewX, this));
-	mOriginViewY->GetSignal(sfg::SpinButton::OnValueChanged).Connect(std::bind(&LevelWindow::OnChangeOriginViewY, this));
-	mOriginViewCurrentBtn->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind(&LevelWindow::OnChangeOriginViewCurrent, this));
-	mDefaultZoom->GetSignal(sfg::SpinButton::OnValueChanged).Connect(std::bind(&LevelWindow::OnChangeDefaultZoom, this));
-	mDefaultZoomCurrentBtn->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind(&LevelWindow::OnChangeDefaultZoomCurrent, this));
-	mCloseBtn->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind(&LevelWindow::OnClose, this));
+	// Chargement et sauvegarde
+	mPathHBox = sfg::Box::Create(sfg::Box::Orientation::HORIZONTAL);
+	mPathLabel = sfg::Label::Create("Nom sauvegarde : ");
+	mPath = sfg::Entry::Create();
+	mPathHBox->PackEnd(mPathLabel, false);
+	mPathHBox->PackEnd(mPath);
+	mSaveLoadHBox = sfg::Box::Create(sfg::Box::Orientation::HORIZONTAL);
+	mLoadBtn = sfg::Button::Create("Charger");
+	mLoadBtn->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind(&LevelWindow::OnLoad, this));
+	mSaveBtn = sfg::Button::Create("Sauvegarder");
+	mSaveBtn->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind(&LevelWindow::OnSave, this));
+	mSaveLoadHBox->PackEnd(mLoadBtn);
+	mSaveLoadHBox->PackEnd(mSaveBtn);
 
 	// Ajoute les éléments à la fenêtre
 	mVBox->PackEnd(mGravityBox);
 	mVBox->PackEnd(mBckgColorBox);
 	mVBox->PackEnd(mOriginViewBox);
 	mVBox->PackEnd(mDefaultZoomBox);
+	mVBox->PackEnd(mPathHBox);
+	mVBox->PackEnd(mSaveLoadHBox);
 	mVBox->PackEnd(mCloseBtn);
 
 	// Ajoute la mLevelVBox à la fenêtre
@@ -111,6 +145,73 @@ void LevelWindow::Fill()
 }
 
 // Callbacks
+void LevelWindow::OnLoad()
+{
+	if (!mApply) return;
+
+	// Récupère le nom
+	sf::String name = mPath->GetText();
+
+	// Vérifie sa validité
+	if (name.isEmpty()
+		|| name.find("\\") != sf::String::InvalidPos
+		|| name.find("/") != sf::String::InvalidPos)
+	{
+		Dialog::Error("Nom de sauvegarde invalide.\nNiveau non chargé.");
+		return;
+	}
+
+	// Déselectionne dans l'EditBox
+	if (mEditBox)
+		mEditBox->Unselect();
+	else
+		Dialog::Error("EditBox invalide.\nNon déselectionné.");
+
+	// Supprime les pointeurs
+	if (mEditor)
+		mEditor->Init();
+	else
+		Dialog::Error("Editor invalide.\nEditor non réinitialisé.");
+
+	// Réinitialise le Lua
+	if (mLuaMachine)
+		mLuaMachine->Reset();
+	else
+		Dialog::Error("LuaMachine invalide.\nLuaMachine non réinitialisé.");
+
+	// Charge le niveau
+	name = "lvls/" + name + ".xvl";
+	LevelLoader(name.toAnsiString());
+	if (!mLevelMgr.IsCharged())
+	{
+		Dialog::Error("Niveau non chargé.");
+		return;
+	}
+
+	// Charge les textures vides
+	mResourceManager.LoadTexture("none", "tex/none.png");
+	mResourceManager.LoadTexture("unknown", "tex/unknown.png");
+}
+void LevelWindow::OnSave()
+{
+	if (!mApply) return;
+
+	// Récupère le nom
+	sf::String name = mPath->GetText();
+
+	// Vérifie sa validité
+	if (name.isEmpty()
+		|| name.find("\\") != sf::String::InvalidPos
+		|| name.find("/") != sf::String::InvalidPos)
+	{
+		Dialog::Error("Nom de sauvegarde invalide.\nNiveau non sauvegarde.");
+		return;
+	}
+
+	// Sauvegarde le niveau
+	name = "lvls/" + name + ".xvl";
+	LevelSaver(name.toAnsiString());
+}
 void LevelWindow::OnChangeGravityX()
 {
 	if (!mApply) return;

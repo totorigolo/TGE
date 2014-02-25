@@ -8,7 +8,7 @@ class Saver : public NonCopyable
 {
 public:
 	// Ctor & dtor
-	Saver(std::string const& path, bool overwrite = true);
+	Saver(std::string const& path, bool check = true);
 	virtual ~Saver(void);
 
 	// Accesseurs

@@ -49,6 +49,14 @@ void LevelManager::Clear()
 	mPhysicMgr.DestroyAllJoints();
 	mEntityManager.DestroyAllEntities();
 	mPhysicMgr.DestroyAllBody();
+
+	// Vide tout
+	mIsCharged = false;
+	mPlayer = nullptr;
+	mGravity = b2Vec2_zero;
+	mBckgC = sf::Color::White;
+	mDefaultZoom = 1.f;
+	mDefaultCenter = sf::Vector2f();
 }
 
 // Mise à jour

@@ -18,6 +18,9 @@ public:
 	Editor(sf::RenderWindow &window);
 	virtual ~Editor(void);
 	
+	// (ré)Initialiser
+	void Init();
+
 	/// Boucle de jeu
 	void Run();
 
@@ -51,10 +54,6 @@ protected:
 	inline void OnQuit();
 	
 private:
-	// Charge un niveau
-	bool LoadLevel(const std::string &path);
-
-private:
 	// Etats du jeu
 	bool mPaused;
 	bool mDebugDraw;
@@ -71,9 +70,6 @@ private:
 	PolyCreationWindow *mPolyCreationWindow;
 	DecoCreationWindow *mDecoCreationWindow;
 	BasicBodyCreationWindow *mBasicBodyCreationWindow;
-	bool mDecoJustAdded;
-	bool mPolyPointJustAdded;
-	bool mBasicBodyJustAdded;
 
 	// Niveau
 	LevelManager &mLevel;

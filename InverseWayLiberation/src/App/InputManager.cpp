@@ -18,6 +18,12 @@ InputManager::InputManager()
 	mRMBIsDown = false;
 	mLMBIsDown = false;
 	mMMBIsDown = false;
+	mLMBClicked = false;
+	mRMBClicked = false;
+	mMMBClicked = false;
+	mLMBReleased = false;
+	mRMBReleased = false;
+	mMMBReleased = false;
 	mMouseWheelMoved = false;
 	mMouseWheelDelta = 0;
 
@@ -67,6 +73,14 @@ void InputManager::Update()
 {
 	if (!mWindow) return;
 
+	// Réinitialise les infos de la souris
+	mLMBClicked = false;
+	mRMBClicked = false;
+	mMMBClicked = false;
+	mLMBReleased = false;
+	mRMBReleased = false;
+	mMMBReleased = false;
+
 	// Réinitialise les infos de la molette
 	mMouseWheelMoved = false;
 	mMouseWheelDelta = 0;
@@ -113,6 +127,26 @@ void InputManager::AddEvent(const sf::Event &event)
 	else if (event.type == sf::Event::LostFocus)
 	{
 		mHasFocus = false;
+	}
+
+	// Gestion des clics
+	if (event.type == sf::Event::MouseButtonPressed)
+	{
+		if (event.mouseButton.button == sf::Mouse::Left)
+			mLMBClicked = true;
+		if (event.mouseButton.button == sf::Mouse::Right)
+			mRMBClicked = true;
+		if (event.mouseButton.button == sf::Mouse::Middle)
+			mMMBClicked = true;
+	}
+	if (event.type == sf::Event::MouseButtonReleased)
+	{
+		if (event.mouseButton.button == sf::Mouse::Left)
+			mLMBReleased = true;
+		if (event.mouseButton.button == sf::Mouse::Right)
+			mRMBReleased = true;
+		if (event.mouseButton.button == sf::Mouse::Middle)
+			mMMBReleased = true;
 	}
 
 	// Gestion de la molette
@@ -213,6 +247,30 @@ bool InputManager::GetRMBState() const
 bool InputManager::GetMMBState() const
 {
 	return mMMBIsDown;
+}
+bool InputManager::IsLMBClicked() const
+{
+	return mLMBClicked;
+}
+bool InputManager::IsRMBClicked() const
+{
+	return mRMBClicked;
+}
+bool InputManager::IsMMBClicked() const
+{
+	return mMMBClicked;
+}
+bool InputManager::IsLMBReleased() const
+{
+	return mLMBReleased;
+}
+bool InputManager::IsRMBReleased() const
+{
+	return mRMBReleased;
+}
+bool InputManager::IsMMBReleased() const
+{
+	return mMMBReleased;
 }
 bool InputManager::GetMouseWheelState() const
 {

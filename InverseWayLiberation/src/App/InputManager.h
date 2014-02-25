@@ -49,6 +49,12 @@ public:
 	bool GetLMBState() const;
 	bool GetRMBState() const;
 	bool GetMMBState() const;
+	bool IsLMBClicked() const;
+	bool IsRMBClicked() const;
+	bool IsMMBClicked() const;
+	bool IsLMBReleased() const;
+	bool IsRMBReleased() const;
+	bool IsMMBReleased() const;
 	bool GetMouseWheelState() const;
 	int GetMouseWheelDelta() const;
 	bool HasQuitted(); // Réinitialise après appel
@@ -94,6 +100,12 @@ private:
 	bool mRMBIsDown;
 	bool mLMBIsDown;
 	bool mMMBIsDown;
+	bool mLMBClicked;
+	bool mRMBClicked;
+	bool mMMBClicked;
+	bool mLMBReleased;
+	bool mRMBReleased;
+	bool mMMBReleased;
 	bool mMouseWheelMoved;
 	int mMouseWheelDelta;
 

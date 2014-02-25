@@ -9,7 +9,7 @@ class LevelSaver : public Saver
 {
 public:
 	// Ctor & dtor
-	LevelSaver(const LevelManager &level, const std::string &path);
+	LevelSaver(const std::string &path, bool check = true);
 	virtual ~LevelSaver(void);
 	
 private:
