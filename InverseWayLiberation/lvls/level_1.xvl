@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <level>
-    <world gravity="(0, -9.79993)" PPM="100.000000" bckgcolor="(0, 0, 0)" originview="(-0.0281423, 0.160999)" defaultzoom="3.099563"/>
+    <world gravity="(0, -9.79993)" PPM="100.000000" bckgcolor="(0, 0, 0)" originview="(-14, -1)" defaultzoom="1.000000"/>
     <textures>
         <img name="cascade" src="tex/level_1/cascade.png"/>
         <img name="echelle_maison_3" src="tex/level_1/echelle_maison_3.png"/>
@@ -13,30 +13,30 @@
     </textures>
     <basicbodies>
         <box id="1" type="dynamic" texture="unknown" pos="(-15.2156, -4.53694)" rotation="-173.488251"/>
-        <box id="2" type="dynamic" texture="unknown" pos="(-16.4578, -4.56414)" rotation="356.035370"/>
+        <box id="2" type="dynamic" texture="unknown" pos="(-16.4578, -4.56414)" rotation="356.035431"/>
         <box id="3" type="dynamic" texture="unknown" pos="(-17.1076, -3.25421)"/>
-        <box id="4" type="dynamic" texture="unknown" pos="(-21.0252, -3.26768)" rotation="-2.946755"/>
-        <box id="5" type="dynamic" texture="unknown" pos="(-13.6771, -1.49125)" rotation="38.331303"/>
-        <box id="6" type="dynamic" texture="unknown" pos="(-9.60978, 2.05539)" rotation="-52.245590" friction="10.000000"/>
-        <box id="7" type="dynamic" texture="unknown" pos="(-7.88837, 2.43152)" rotation="-22.908689" friction="0.900000"/>
-        <box id="8" type="dynamic" texture="unknown" pos="(-6.32731, -4.58586)" rotation="-0.400003"/>
-        <box id="9" type="dynamic" texture="unknown" pos="(-5.45526, -4.57613)"/>
-        <box id="10" type="dynamic" texture="unknown" pos="(-10.3881, -4.50149)" rotation="2.855035"/>
+        <box id="4" type="dynamic" texture="unknown" pos="(-21.0252, -3.26768)" rotation="-2.946758"/>
+        <box id="5" type="dynamic" texture="unknown" pos="(-13.6771, -1.49125)" rotation="38.331314"/>
+        <box id="6" type="dynamic" texture="unknown" pos="(-9.6098, 2.05537)" rotation="-52.245598" friction="10.000000"/>
+        <box id="7" type="dynamic" texture="unknown" pos="(-7.88833, 2.4315)" rotation="-22.908691" friction="0.900000"/>
+        <box id="8" type="dynamic" texture="unknown" pos="(-6.32726, -4.58586)" rotation="-0.400003"/>
+        <box id="9" type="dynamic" texture="unknown" pos="(-5.45515, -4.57613)"/>
+        <box id="10" type="dynamic" texture="unknown" pos="(-10.3537, -4.50038)" rotation="3.173655"/>
         <box id="11" type="dynamic" texture="unknown" pos="(-8.76335, -4.40306)" rotation="-4.531087"/>
         <box id="12" type="dynamic" texture="unknown" pos="(-7.90997, -4.45951)" rotation="-3.397102"/>
-        <box id="13" type="dynamic" texture="unknown" pos="(-7.09773, -4.53162)" rotation="-6.990945"/>
-        <box id="14" type="dynamic" texture="unknown" pos="(-2.58336, -4.69245)" rotation="-3.659384"/>
-        <box id="15" type="dynamic" texture="unknown" pos="(-0.0395583, -4.1926)" rotation="2.767071"/>
-        <box id="16" type="dynamic" texture="unknown" pos="(4.49602, -4.68668)" rotation="-90.351936"/>
+        <box id="13" type="dynamic" texture="unknown" pos="(-7.09997, -4.53748)" rotation="-6.424212"/>
+        <box id="14" type="dynamic" texture="unknown" pos="(-2.23895, -4.70488)" rotation="-2.814349"/>
+        <box id="15" type="dynamic" texture="unknown" pos="(-0.0395613, -4.1926)" rotation="2.767071"/>
+        <box id="16" type="dynamic" texture="unknown" pos="(4.49602, -4.68668)" rotation="-90.351952"/>
         <box id="17" type="dynamic" texture="unknown" pos="(2.98188, -4.67646)" rotation="4141.046875"/>
         <box id="18" type="dynamic" texture="unknown" pos="(9.51445, -4.75221)" rotation="-1.132610"/>
-        <box id="19" type="dynamic" texture="unknown" pos="(11.8045, -4.66495)" rotation="8.021702"/>
+        <box id="19" type="dynamic" texture="unknown" pos="(11.8045, -4.66495)" rotation="8.021704"/>
         <box id="20" type="dynamic" texture="unknown" pos="(13.5673, -4.42164)" rotation="8.042961"/>
         <box id="21" type="dynamic" texture="unknown" pos="(15.4717, -4.55613)"/>
         <box id="22" type="dynamic" texture="unknown" pos="(17.3207, -4.67504)" rotation="-5.877378"/>
         <box id="23" type="dynamic" texture="unknown" pos="(19.2549, -4.87415)" rotation="-5.877391"/>
-        <box id="24" type="dynamic" texture="unknown" pos="(23.5545, -4.54446)"/>
-        <box id="25" type="dynamic" texture="unknown" pos="(-20.017, -0.644358)" rotation="396.690613" friction="3.000000"/>
+        <box id="24" type="dynamic" texture="unknown" pos="(23.5541, -4.54434)"/>
+        <box id="25" type="dynamic" texture="unknown" pos="(-20.017, -0.64438)" rotation="396.690613" friction="3.000000"/>
     </basicbodies>
     <polybodies/>
     <polychains>
