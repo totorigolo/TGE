@@ -11,7 +11,7 @@ BasicBody::BasicBody(int layer, unsigned int ID)
 }
 
 // Création du body
-bool BasicBody::CreateBox(b2Vec3 posRot, b2BodyType type, const std::shared_ptr<Texture> texture,
+bool BasicBody::CreateBox(b2Vec3 posRot, b2BodyType type, Texture::Ptr texture,
 						  float density, float friction, float restitution, int groupIndex, uint16 categoryBits, uint16 maskBits)
 {
 	// On n'en crée pas de nouveau si il y en a déjà un
@@ -52,7 +52,7 @@ bool BasicBody::CreateBox(b2Vec3 posRot, b2BodyType type, const std::shared_ptr<
 
 	return true;
 }
-bool BasicBody::CreateCircle(b2Vec3 posRot, b2BodyType type, const std::shared_ptr<Texture> texture,
+bool BasicBody::CreateCircle(b2Vec3 posRot, b2BodyType type, Texture::Ptr texture,
 							 float density, float friction, float restitution, int groupIndex, uint16 categoryBits, uint16 maskBits)
 {
 	// On n'en crée pas de nouveau si il y en a déjà un

@@ -1,10 +1,9 @@
 #pragma once
 #include "Texture.h"
 
-
 typedef std::map<std::string, std::shared_ptr<sf::Font>> FontMap;
 typedef std::map<std::string, std::shared_ptr<sf::Sound>> SoundMap;
-typedef std::map<std::string, std::shared_ptr<Texture>> TextureMap;
+typedef std::map<std::string, Texture::Ptr> TextureMap;
 
 class ResourceManager : public Singleton<ResourceManager>
 {
@@ -16,7 +15,7 @@ public:
 
 	// Gestion des textures
 	bool LoadTexture(const std::string &name, const std::string &path);
-	std::shared_ptr<Texture> GetTexture(const std::string &name);
+	Texture::Ptr GetTexture(const std::string &name);
 	bool TextureExists(const std::string &name);
 
 	// Obtient les maps

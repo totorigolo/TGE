@@ -3,7 +3,7 @@
 #include "../Physics/PhysicManager.h"
 
 // Ctor & dtor
-Deco::Deco(int layer, const std::shared_ptr<Texture> &texture, sf::Vector3f posRot, unsigned int ID)
+Deco::Deco(int layer, Texture::Ptr &texture, sf::Vector3f posRot, unsigned int ID)
 	: Entity(layer, ID), mTexture(texture)
 {
 	if (!mTexture.get())
@@ -41,7 +41,7 @@ void Deco::draw(sf::RenderTarget& target, sf::RenderStates states) const
 }
 
 // Texture
-void Deco::SetTexture(const std::shared_ptr<Texture> &texture)
+void Deco::SetTexture(Texture::Ptr &texture)
 {
 	mTexture = texture;
 	mSprite.setTexture(*mTexture);

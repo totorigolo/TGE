@@ -22,7 +22,6 @@
 #include "../Entities/PolyBody.h"
 #include "../Entities/PolyChain.h"
 #include "../Entities/BasicBody.h"
-#include "../Entities/LivingBeing.h"
 #include "../Entities/EntityFactory.h"
 #include "../Entities/EntityManager.h"
 
@@ -592,14 +591,6 @@ bool LevelLoader::ProcessEntities()
 		{
 			EntityFactory::CreateRagdoll(position, layer);
 		}
-		else if (type == "livingbeing")
-		{
-			// Récupère l'animation
-			animation = entity->Attribute("animation");
-			animation = entity->Attribute("texture");
-
-			e = new LivingBeing(position, mLevel.mResourceManager.GetTexture(animation), layer);
-		}
 		else if (type == "player")
 		{
 			// Récupère l'animation
@@ -607,7 +598,7 @@ bool LevelLoader::ProcessEntities()
 			animation = entity->Attribute("texture");
 
 			// Enregistre le Player dans Level
-			e = new Player(position, mLevel.mResourceManager.GetTexture(animation), layer);
+			e = new Player(layer);
 			mLevel.mPlayer = (Player*) e;
 		}
 		else

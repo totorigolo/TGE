@@ -17,7 +17,7 @@ Grapnel::~Grapnel()
 }
 
 // Création du body
-bool Grapnel::Create(const std::shared_ptr<Texture> &textureHook, b2Body *bodyA, b2Vec2 ptA, b2Body *bodyB, b2Vec2 ptB)
+bool Grapnel::Create(Texture::Ptr &textureHook, b2Body *bodyA, b2Vec2 ptA, b2Body *bodyB, b2Vec2 ptB)
 {
 	// On n'en crée pas de nouveau si il y en a déjà un
 	if (mPhysicMgr.JointExists(mJointID))

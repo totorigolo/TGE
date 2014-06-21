@@ -13,7 +13,7 @@ public:
 	virtual ~Grapnel();
 
 	// Création du grapin
-	bool Create(const std::shared_ptr<Texture> &textureHook, b2Body *bodyA, b2Vec2 ptA, b2Body *bodyB, b2Vec2 ptB);
+	bool Create(Texture::Ptr &textureHook, b2Body *bodyA, b2Vec2 ptA, b2Body *bodyB, b2Vec2 ptB);
 
 	// Destruction du grappin
 	void Destroy();
@@ -45,5 +45,5 @@ private:
 
 	// Ressources SFML
 	sf::Sprite mSpriteHook;
-	std::shared_ptr<Texture> mTexture;
+	Texture::Ptr mTexture;
 };

@@ -120,11 +120,11 @@ void BaseBody::SetRestitution(float restitution)
 	mBody->GetFixtureList()->SetRestitution(restitution);
 }
 // Texture
-std::shared_ptr<Texture> BaseBody::GetTexture()
+Texture::Ptr BaseBody::GetTexture()
 {
 	return mTexture;
 }
-void BaseBody::SetTexture(std::shared_ptr<Texture> texture)
+void BaseBody::SetTexture(Texture::Ptr texture)
 {
 	mTexture = texture;
 	myAssert(mTexture.get(), "La texture n'est pas chargée.");

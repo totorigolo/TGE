@@ -5,8 +5,8 @@
 #include "../Level/LevelManager.h"
 #include "../Physics/PhysicManager.h"
 #include "../Entities/Deco.h"
+#include "../Entities/Player.h"
 #include "../Entities/BasicBody.h"
-#include "../Entities/LivingBeing.h"
 #include "../Entities/EntityFactory.h"
 #include "../Entities/EntityManager.h"
 #include "../Physics/Joints/MouseJoint.h"
@@ -511,8 +511,8 @@ void Editor::OnStepPhysics()
 		{
 			if (e->GetType() == EntityType::BasicBody || e->GetType() == EntityType::PolyBody)
 				b = ((BaseBody*) e)->GetBody();
-			else if (e->GetType() == EntityType::LivingBeing || e->GetType() == EntityType::Player)
-				b = ((LivingBeing*) e)->GetBody();
+			else if (e->GetType() == EntityType::Player)
+				b = ((Player*) e)->GetBody();
 		}
 		mPhysicMgr.DestroyBodiesOut(b2Vec2(1000.f, -200.f), b2Vec2(-200.f, 200.f), b);
 	}

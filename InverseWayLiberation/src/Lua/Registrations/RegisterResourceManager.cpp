@@ -36,7 +36,7 @@ void LuaMachine::RegisterResourceManager()
 /*
 	// Gestion des textures
 	bool LoadTexture(const std::string &name, const std::string &path);
-	std::shared_ptr<Texture> GetTexture(const std::string &name);
+	Texture::Ptr GetTexture(const std::string &name);
 
 	// Obtient les maps
 	const FontMap& GetFontMap();

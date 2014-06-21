@@ -110,9 +110,6 @@
   <ItemGroup>
     <None Include="src\_TODO.txt" />
     <None Include="..\README.txt" />
-    <None Include="lvls\1.xvl">
-      <Filter>Fichiers de ressources\Levels</Filter>
-    </None>
     <None Include="anim\player.xas">
       <Filter>Fichiers de ressources\Anims</Filter>
     </None>
@@ -127,6 +124,9 @@
     </None>
     <None Include="scripts\lvl1.lua">
       <Filter>Fichiers de ressources\Scripts</Filter>
+    </None>
+    <None Include="lvls\level_1.xvl">
+      <Filter>Fichiers de ressources\Levels</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -192,12 +192,6 @@
     </ClCompile>
     <ClCompile Include="src\Entities\EntityManager.cpp">
       <Filter>Fichiers sources\Entities</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Entities\LivingBeing.cpp">
-      <Filter>Fichiers sources\Entities</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Resources\AnimatedSprite.cpp">
-      <Filter>Fichiers sources\Resources</Filter>
     </ClCompile>
     <ClCompile Include="src\Entities\Player.cpp">
       <Filter>Fichiers sources\Entities</Filter>
@@ -431,12 +425,6 @@
     </ClInclude>
     <ClInclude Include="src\Entities\EntityManager.h">
       <Filter>Fichiers d%27en-tête\Entities</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Entities\LivingBeing.h">
-      <Filter>Fichiers d%27en-tête\Entities</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Resources\AnimatedSprite.h">
-      <Filter>Fichiers d%27en-tête\Resources</Filter>
     </ClInclude>
     <ClInclude Include="src\Entities\Player.h">
       <Filter>Fichiers d%27en-tête\Entities</Filter>

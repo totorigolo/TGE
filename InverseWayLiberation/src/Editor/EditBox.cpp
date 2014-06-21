@@ -7,7 +7,6 @@
 #include "../Entities/PolyChain.h"
 #include "../Entities/Deco.h"
 #include "../Entities/Grapnel.h"
-#include "../Entities/LivingBeing.h"
 #include "../Entities/Player.h"
 
 #include "../Physics/Joints/DistanceJoint.h"
@@ -252,10 +251,6 @@ void EditBox::UpdateGUI()
 		{
 			mSelectionType = SelectionType::Grapnel;
 		}
-		else if (e->GetType() == EntityType::LivingBeing)
-		{
-			mSelectionType = SelectionType::LivingBeing;
-		}
 		else if (e->GetType() == EntityType::Player)
 		{
 			mSelectionType = SelectionType::Player;
@@ -359,13 +354,13 @@ sf::CircleShape EditBox::GetSelectionMark()
 
 		cs.setPosition(d->GetSprite()->getPosition());
 	}
-	else if (mSelectionType == SelectionType::LivingBeing || mSelectionType == SelectionType::Player)
+	else if (mSelectionType == SelectionType::Player)
 	{
-		// Obtient le LivingBeing
-		LivingBeing *lb = (LivingBeing*) mSelectedEntity;
-		myAssert(lb, "Erreur lors du la détermination du type.");
+		// Obtient le Player
+		Player *p = (Player*) mSelectedEntity;
+		myAssert(p, "Erreur lors du la détermination du type.");
 
-		cs.setPosition(b22sfVec(lb->GetPosition(), mPhysicMgr.GetPPM()));
+		cs.setPosition(b22sfVec(p->GetPosition(), mPhysicMgr.GetPPM()));
 	}
 
 	// Retourne le disque

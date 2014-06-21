@@ -11,7 +11,7 @@ PolyChain::PolyChain(int layer, unsigned int ID)
 }
 
 // Création du body
-bool PolyChain::Create(const std::vector<b2Vec2> &vertices, Type type, const std::shared_ptr<Texture> &texture,
+bool PolyChain::Create(const std::vector<b2Vec2> &vertices, Type type, Texture::Ptr &texture,
 					  float density, float friction, float restitution, int groupIndex, uint16 categoryBits, uint16 maskBits)
 {
 	// On n'en crée pas de nouveau si il y en a déjà un
@@ -41,7 +41,7 @@ bool PolyChain::Create(const std::vector<b2Vec2> &vertices, Type type, const std
 
 	return true;
 }
-bool PolyChain::Create(b2Vec3 posRot, const std::vector<b2Vec2> &vertices, Type type, const std::shared_ptr<Texture> &texture,
+bool PolyChain::Create(b2Vec3 posRot, const std::vector<b2Vec2> &vertices, Type type, Texture::Ptr &texture,
 					  float density, float friction, float restitution, int groupIndex, uint16 categoryBits, uint16 maskBits)
 {
 	// On n'en crée pas de nouveau si il y en a déjà un

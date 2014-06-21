@@ -10,7 +10,6 @@
 #include "../Entities/PolyBody.h"
 #include "../Entities/PolyChain.h"
 #include "../Entities/BasicBody.h"
-#include "../Entities/LivingBeing.h"
 #include "../Entities/EntityManager.h"
 
 #include "../Physics/Joint.h"
@@ -317,32 +316,9 @@ bool LevelSaver::ProcessEntities()
 	for (auto it = mLevel.mEntityManager.GetEntities().begin(); it != mLevel.mEntityManager.GetEntities().end(); ++it)
 	{
 		// Vérifie le type de l'Entity
-		if ((*it)->GetType() == EntityType::LivingBeing)
+		if ((*it)->GetType() == EntityType::Player)
 		{
-			LivingBeing *lb = ((LivingBeing*) *it);
-			
-			// Récupère le nom de la texture
-			std::string textureName(((Texture*) lb->GetSprite()->getTexture())->GetName());
-
-			// Récupère la Layer
-			int layer = lb->GetLayer();
-
-			// Cherche la position
-			b2Vec2 pos(lb->GetPosition());
-
-			// Crée la balise <livingbeing>
-			tinyxml2::XMLElement *balise = mDoc.NewElement("livingbeing");
-			balise->SetAttribute("position", Parser::b2Vec2ToString(pos).c_str());
-			balise->SetAttribute("texture", textureName.c_str());
-			balise->SetAttribute("animation", "anim/TODO");
-			if (layer != 1) balise->SetAttribute("layer", layer);
-
-			// Ajoute la balise à <entities>
-			entities->LinkEndChild(balise);
-		}
-		else if ((*it)->GetType() == EntityType::Player)
-		{
-			Player *pp = ((Player*) *it);
+			/*Player *pp = ((Player*) *it);
 			
 			// Récupère le nom de la texture
 			std::string textureName(((Texture*) pp->GetSprite()->getTexture())->GetName());
@@ -361,7 +337,7 @@ bool LevelSaver::ProcessEntities()
 			if (layer != 1) balise->SetAttribute("layer", layer);
 
 			// Ajoute la balise à <entities>
-			entities->LinkEndChild(balise);
+			entities->LinkEndChild(balise);*/
 		}
 	}
 

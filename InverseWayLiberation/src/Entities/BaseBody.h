@@ -42,8 +42,8 @@ public:
 	float GetRestitution() const;
 	void SetRestitution(float restitution);
 	// Texture
-	std::shared_ptr<Texture> GetTexture();
-	void SetTexture(std::shared_ptr<Texture> texture);
+	Texture::Ptr GetTexture();
+	void SetTexture(Texture::Ptr texture);
 	// Sprite
 	sf::Sprite* GetSprite();
 	const sf::Sprite* GetSprite() const;
@@ -74,5 +74,5 @@ protected:
 
 	// Sprite SFML
 	sf::Sprite mSprite;
-	std::shared_ptr<Texture> mTexture;
+	Texture::Ptr mTexture;
 };

@@ -13,7 +13,7 @@ void ResourceManager::Clear()
 bool ResourceManager::LoadTexture(const std::string &name, const std::string &path)
 {
 	// Charge la texture
-	std::shared_ptr<Texture> texture(new Texture(name, path));
+	Texture::Ptr texture(new Texture(name, path));
 
 	// Si la texture n'est pas chargée, on la supprime
 	if (!texture->IsLoaded())
@@ -27,12 +27,12 @@ bool ResourceManager::LoadTexture(const std::string &name, const std::string &pa
 
 	return true;
 }
-std::shared_ptr<Texture> ResourceManager::GetTexture(const std::string &name)
+Texture::Ptr ResourceManager::GetTexture(const std::string &name)
 {
 	if (mTextureMap.find(name) == mTextureMap.end())
 	{
 		Dialog::Error("La texture [" + name + "] n'existe pas.");
-		return std::shared_ptr<Texture>();
+		return Texture::Ptr();
 	}
 
 	return mTextureMap.find(name)->second;

@@ -4,7 +4,6 @@ enum class EntityType
 {
 	Entity,
 	Deco,
-	LivingBeing,
 	Player,
 	BaseBody,
 		BasicBody,

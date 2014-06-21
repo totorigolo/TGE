@@ -1,90 +1,52 @@
 #include "stdafx.h"
 #include "Player.h"
-#include "EntityManager.h"
-#include "../App/InputManager.h"
+#include "../Resources/ResourceManager.h"
 
-// Ctor & dtor
-Player::Player(b2Vec2 position, std::shared_ptr<Texture> texture, int layer, unsigned int ID)
-	: LivingBeing(position, texture, layer, ID), mInputManager(InputManager::GetInstance())
+// Ctor
+Player::Player(int layer, unsigned int ID)
+: Entity(layer, ID), mResourceMgr(ResourceManager::GetInstance()), mBody(nullptr)
 {
-	// Change le type
+	// Défini le type de l'Entity
 	mType = EntityType::Player;
-
-	// Tout est Ok
-	mIsAlive = true;
-	mIsDead = false;
-
-	// Demande l'espionnage de touches
-	mInputManager.AddSpyedKey(sf::Keyboard::Space);
 }
+
+// Dtor
 Player::~Player()
 {
-	mIsAlive = false;
+}
 
-	// Arrête l'espionnage de touches
-	mInputManager.RemoveSpyedKey(sf::Keyboard::Space);
+// Création du Player
+bool Player::Create(b2Vec3 posRot)
+{
+	// Remplit la TextureMap
+
+
+	// Création du Body
+
+
+	mIsAlive = true;
+	return true;
 }
 
 // Mise à jour
 void Player::Update()
 {
-	// Appel de la mise à jour de LivingBeing
-	LivingBeing::Update();
-
-	// Met à jour suivant les évènements
-	UpdateEvents();
+	if (mTexturesMap.size() > 0)
+		mSprite.setTexture(*mTexturesMap.begin()->second.get());
 }
 
-// Gestion des évènements
-void Player::UpdateEvents()
+// Accesseurs
+b2Body* Player::GetBody()
 {
-	// Si on est vivant
-	if (mIsAlive && !mIsDead)
-	{
-		myAssert(mBody, "La b2Body n'est pas valide.");
+	return mBody;
+}
+b2Vec2 Player::GetPosition() const
+{
+	return b2Vec2_zero;
+}
 
-		/* Traite les différents mouvements (http://www.iforce2d.net/b2dtut/constant-speed) */
-		// Calcule la vitesse max
-		float maxVspeed = 4.f;
-		float desiredVel = 0.f;
-
-		// Obtient la vitesse actuelle
-		b2Vec2 vel = mBody->GetLinearVelocity();
-
-		bool moved = false;
-		// Gauche
-		if (mInputManager.IsKeyPressed(sf::Keyboard::Q))
-		{
-			desiredVel = b2Max(vel.x - 0.1f, -maxVspeed);
-			moved = true;
-		}
-		// Droite
-		if (mInputManager.IsKeyPressed(sf::Keyboard::D))
-		{
-			desiredVel = b2Min(vel.x + 0.1f, maxVspeed);
-			moved = true;
-		}
-		// On évite que le Player soit une savonette
-		if (!moved)
-		{
-			desiredVel = vel.x * 0.8f;
-		}
-
-		// Applique le déplacement
-		float velChange = desiredVel - vel.x;
-		float impulse = mBody->GetMass() * velChange * 100;
-		mBody->ApplyForceToCenter(b2Vec2(impulse, 0.f), true);
-
-		// Saut
-		if (mInputManager.KeyPressed(sf::Keyboard::Space))
-		{
-			if (mCanJump)
-			{
-				//mBody->ApplyForceToCenter(b2Vec2(0.f, 370.f));
-				float impulse = mBody->GetMass() * 6.3f;
-				mBody->ApplyLinearImpulse(b2Vec2(0,impulse), mBody->GetWorldCenter(), true);
-				mCanJump = false;
-			}
-		}
-	}
+// Pour le rendu
+void Player::draw(sf::RenderTarget& target, sf::RenderStates states) const
+{
+	target.draw(mSprite, states);
 }

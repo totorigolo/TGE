@@ -1,32 +1,36 @@
 #pragma once
-#include "LivingBeing.h"
+#include "Entity.h"
 #include "../Resources/Texture.h"
 
-class InputManager;
-class Player : public LivingBeing
+class Player : public Entity
 {
 public:
-	enum MovementEvent
-	{
-		Left,
-		Right,
-		Jump,
-		Crounch
-	};
-
-public:
 	// Ctor & dtor
-	Player(b2Vec2 position, std::shared_ptr<Texture> texture, int layer = 1, unsigned int ID = 0U);
+	Player(int layer = 1, unsigned int ID = 0U);
 	virtual ~Player();
+
+	// Création du Player
+	bool Create(b2Vec3 posRot);
 
 	// Mise à jour
 	virtual void Update();
 
-private:
-	// Gestion des évènements
-	void UpdateEvents();
+	// Accesseurs
+	b2Body* GetBody();
+	b2Vec2 GetPosition() const;
+
+protected:
+	// Pour le rendu
+	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
 private:
-	// Gestionnaire d'évènements
-	InputManager &mInputManager;
+	// ResourceMgr
+	ResourceManager &mResourceMgr;
+
+	// b2Body
+	b2Body *mBody;
+
+	// Textures
+	sf::Sprite mSprite;
+	std::map<std::string, Texture::Ptr> mTexturesMap;
 };

@@ -6,7 +6,7 @@ class Deco : public Entity
 {
 public:
 	// Ctor & dtor
-	Deco(int layer, const std::shared_ptr<Texture> &texture, sf::Vector3f posRot, unsigned int ID = 0U); // PosRot pixel / degrés
+	Deco(int layer, Texture::Ptr &texture, sf::Vector3f posRot, unsigned int ID = 0U); // PosRot pixel / degrés
 	virtual ~Deco();
 
 	// Mise à jour
@@ -16,7 +16,7 @@ public:
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
 	// Texture
-	void SetTexture(const std::shared_ptr<Texture> &texture);
+	void SetTexture(Texture::Ptr &texture);
 
 	// Position et rotation
 	void SetPosition(const b2Vec2 &pos);
@@ -34,5 +34,5 @@ public:
 
 private:
 	sf::Sprite mSprite;
-	std::shared_ptr<Texture> mTexture;
+	Texture::Ptr mTexture;
 };

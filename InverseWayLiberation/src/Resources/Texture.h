@@ -3,6 +3,10 @@
 class Texture : public sf::Texture
 {
 public:
+	typedef std::shared_ptr<Texture> Ptr;
+	typedef std::shared_ptr<const Texture> PtrConst;
+
+public:
 	Texture(const std::string &name, const std::string &path)
 		: mLoaded(false), mName(name), mPath(path)
 	{
