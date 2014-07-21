@@ -1,7 +1,12 @@
 #include "stdafx.h"
 #include "LevelSaver.h"
+#include "LevelManager.h"
 #include "../Lua/TriggersManager.h"
 #include "../Physics/PhysicManager.h"
+
+#include "../App/InputManager.h"
+#include "../Physics/PhysicManager.h"
+#include "../Resources/ResourceManager.h"
 
 #include "../Entities/Entity.h"
 #include "../Entities/Deco.h"
@@ -10,6 +15,7 @@
 #include "../Entities/PolyBody.h"
 #include "../Entities/PolyChain.h"
 #include "../Entities/BasicBody.h"
+#include "../Entities/PointLight.h"
 #include "../Entities/EntityManager.h"
 
 #include "../Physics/Joint.h"
@@ -26,7 +32,8 @@
 // Ctor
 LevelSaver::LevelSaver(const std::string& path, bool check)
 	: Saver(path, check), mLevel(LevelManager::GetInstance()), mPath(path),
-	mInputManager(InputManager::GetInstance()), mPhysicManager(PhysicManager::GetInstance()),
+	mInputManager(InputManager::GetInstance()),
+	mPhysicManager(PhysicManager::GetInstance()),
 	mTextureMap(ResourceManager::GetInstance().GetTextureMap())
 {
 	// On procède à la sauvegarde que si le fichier est valide
@@ -51,15 +58,46 @@ bool LevelSaver::Process()
 	// Crée la balise <level>
 	mDoc.LinkEndChild(mDoc.NewElement("level"));
 
-	// Enregistre tout
-	if (!ProcessWorld()) return false;
-	if (!ProcessTextures()) return false;
-	if (!ProcessBodies()) return false;
-	if (!ProcessEntities()) return false;
-	if (!ProcessJoints()) return false;
-	if (!ProcessDeco()) return false;
-	if (!ProcessActions()) return false;
-	if (!ProcessTriggers()) return false;
+	/* Charge tout */
+	// Le Monde
+	myCheckError(ProcessWorld(), "Une erreur est survenue lors de la sauvegarde du niveau.\n"
+		"La sauvegarde de World a échoué (" + mPath + ").");
+
+	// Les textures
+	myCheckError(ProcessTextures(), "Une erreur est survenue lors de la sauvegarde du niveau.\n"
+		"La sauvegarde des textures a échoué (" + mPath + ").");
+
+	// Les Bodies basiques
+	myCheckError(ProcessBodies(), "Une erreur est survenue lors de la sauvegarde du niveau.\n"
+		"La sauvegarde des ProcessBodies a échoué (" + mPath + ").");
+
+	// Les Bodies polygones
+	/*myCheckError(ProcessPoly(), "Une erreur est survenue lors de la sauvegarde du niveau.\n"
+		"La sauvegarde des Poly a échoué (" + mPath + ").");*/
+
+	// Les Entities
+	myCheckError(ProcessEntities(), "Une erreur est survenue lors de la sauvegarde du niveau.\n"
+		"La sauvegarde des Entities a échoué (" + mPath + ").");
+
+	// Les joints
+	myCheckError(ProcessJoints(), "Une erreur est survenue lors de la sauvegarde du niveau.\n"
+		"La sauvegarde des joints a échoué (" + mPath + ").");
+
+	// La déco
+	myCheckError(ProcessDeco(), "Une erreur est survenue lors de la sauvegarde du niveau.\n"
+		"La sauvegarde de la déco a échoué (" + mPath + ").");
+
+	// Les actions
+	myCheckError(ProcessActions(), "Une erreur est survenue lors de la sauvegarde du niveau.\n"
+		"La sauvegarde des actions a échoué (" + mPath + ").");
+
+	// Les déclencheurs
+	myCheckError(ProcessTriggers(), "Une erreur est survenue lors de la sauvegarde du niveau.\n"
+		"La sauvegarde des triggers a échoué (" + mPath + ").");
+
+	// Les lumières
+	myCheckError(ProcessLights(), "Une erreur est survenue lors de la sauvegarde du niveau.\n"
+		"La sauvegarde des lumières a échoué (" + mPath + ").");
 
 	// Enregistre dans le fichier
 	mDoc.SaveFile(mPath.c_str());
@@ -179,9 +217,9 @@ bool LevelSaver::ProcessBodies()
 				PolyChain *bbtmp = ((PolyChain*) bb);
 
 				// Forme
-				if (bbtmp->GetType() == PolyChain::Chain)
+				if (bbtmp->GetChainType() == PolyChain::Chain)
 					forme = "chain";
-				else if (bbtmp->GetType() == PolyChain::Loop)
+				else if (bbtmp->GetChainType() == PolyChain::Loop)
 					forme = "loop";
 				else
 				{
@@ -269,6 +307,9 @@ bool LevelSaver::ProcessBodies()
 			if (groupIndex != 0) balise->SetAttribute("groupIndex", groupIndex);
 			if (categoryBits != 0x0001) balise->SetAttribute("categoryBits", categoryBits);
 			if (maskBits != 0xFFFF) balise->SetAttribute("maskBits", maskBits);
+
+			if (bb->IsActiveShadows())
+				balise->SetAttribute("shadows", "true"); // Ombres
 
 			// Ajoute la position des points pour les PolyBodies et PolyChains
 			if ((*it)->GetType() == EntityType::PolyBody || (*it)->GetType() == EntityType::PolyChain)
@@ -710,6 +751,8 @@ bool LevelSaver::ProcessDeco()
 			balise->SetAttribute("texture", textureName.c_str());
 			balise->SetAttribute("position", Parser::b2Vec2ToString(pos).c_str());
 			if (rotation != 0.f) balise->SetAttribute("rotation", rotation);
+			if (d->IsActiveShadows())
+				balise->SetAttribute("shadows", "true"); // Ombres
 
 			// Ajoute la balise à <layer>
 			layer->LinkEndChild(balise);
@@ -795,6 +838,48 @@ bool LevelSaver::ProcessTriggers()
 
 		// Ajoute l'<area> à <triggers>
 		triggers->LinkEndChild(area);
+	}
+
+	// Tout s'est bien passé
+	return true;
+}
+bool LevelSaver::ProcessLights()
+{
+	// Récupère la balise <level>
+	tinyxml2::XMLHandle handle(mDoc);
+	tinyxml2::XMLNode *level = handle.FirstChildElement("level").ToNode();
+
+	// Crée la balise <lights>
+	tinyxml2::XMLElement *lights = mDoc.NewElement("lights");
+
+	// Ajoute <lights> à <level>
+	level->LinkEndChild(lights);
+
+	// Parcours toutes les Entities à la recherche de lumières
+	for (auto it = mLevel.mEntityManager.GetEntities().begin(); it != mLevel.mEntityManager.GetEntities().end(); ++it)
+	{
+		// Vérifie le type de l'Entity
+		if ((*it)->GetType() == EntityType::PointLight)
+		{
+			// Récupère la lumière
+			PointLight *l = ((PointLight*) *it);
+
+			// Récupère les propriétés
+			b2Vec2 pos = l->GetPosition();
+			sf::Color color = l->GetLightColor();
+			unsigned int radius = l->GetLightRadius();
+			int layer = l->GetLayer();
+
+			// Crée la balise <point>
+			tinyxml2::XMLElement *balise = mDoc.NewElement("point");
+			balise->SetAttribute("layer", layer);
+			balise->SetAttribute("pos", Parser::b2Vec2ToString(pos).c_str());
+			balise->SetAttribute("radius", radius);
+			balise->SetAttribute("color", Parser::colorToString(color).c_str());
+
+			// Ajoute la balise à <layer>
+			lights->LinkEndChild(balise);
+		}
 	}
 
 	// Tout s'est bien passé

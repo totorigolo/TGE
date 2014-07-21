@@ -4,10 +4,28 @@
 
 // Ctor & dtor
 BasicBody::BasicBody(int layer, unsigned int ID)
-	: BaseBody(layer, ID), mShape(Shape::Null)
+: BaseBody(layer, ID), mShape(Shape::Null)
 {
 	// Défini le type de l'Entity
 	mType = EntityType::BasicBody;
+
+	// Définit le shadow caster
+	mHull.SetShadowCaster(this);
+}
+
+// Mise à jour
+void BasicBody::Update()
+{
+	BaseBody::Update();
+
+	if (!mBody || !mBodyIsCreated || !mIsAlive) return;
+
+	// Mise à jour du Hull
+	if (mBody->IsAwake())
+	{
+		auto gb = mSprite.getGlobalBounds();
+		mHull.SetPosAndSize(sf::Vector2f(gb.left, gb.top), sf::Vector2f(gb.width, gb.height));
+	}
 }
 
 // Création du body
@@ -50,6 +68,10 @@ bool BasicBody::CreateBox(b2Vec3 posRot, b2BodyType type, Texture::Ptr texture,
 	mShape = Shape::Box;
 	mIsAlive = true;
 
+	// Règle le Hull
+	//mHull.SetPosAndSize(b22sfVec(getVec2(posRot), mPhysicMgr.GetPPM()), u2f(mTexture->getSize()));
+	mHull.SetDrawable(true);
+
 	return true;
 }
 bool BasicBody::CreateCircle(b2Vec3 posRot, b2BodyType type, Texture::Ptr texture,
@@ -89,6 +111,10 @@ bool BasicBody::CreateCircle(b2Vec3 posRot, b2BodyType type, Texture::Ptr textur
 	mBodyIsCreated = true;
 	mShape = Shape::Circle;
 	mIsAlive = true;
+
+	// Règle le Hull
+	//mHull.SetPosAndSize(b22sfVec(getVec2(posRot), mPhysicMgr.GetPPM()), u2f(mTexture->getSize()));
+	mHull.SetDrawable(true);
 
 	return true;
 }

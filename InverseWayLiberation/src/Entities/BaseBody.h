@@ -1,5 +1,6 @@
 #pragma once
 #include "Entity.h"
+#include "Hull.h"
 #include "../Resources/Texture.h"
 
 class PhysicManager;
@@ -24,6 +25,16 @@ public:
 
 	// Destruction du body
 	virtual void Destroy();
+
+	// Ombres
+	void ActivateShadows(void);
+	void DeactivateShadows(void);
+	void SetShadowsActive(bool active);
+	bool IsActiveShadows(void) const;
+
+	// Boite englobante
+	b2AABB GetBoundingBox(void) const;
+	sf::FloatRect GetsfBoundingBox(void) const;
 
 	/* Accesseurs */
 	// Est-ce que le Body est créé
@@ -75,4 +86,7 @@ protected:
 	// Sprite SFML
 	sf::Sprite mSprite;
 	Texture::Ptr mTexture;
+
+	// Ombres
+	Hull mHull;
 };

@@ -18,6 +18,7 @@ Entity::~Entity()
 // Mise à jour
 void Entity::Update()
 {
+	this->Update();
 }
 
 // Gestion du Layer

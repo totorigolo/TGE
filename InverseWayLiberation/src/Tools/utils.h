@@ -106,21 +106,33 @@ b2Vec2 operator/(b2Vec2 a, T b)
 }
 
 // Convertion sf::Vector <> b2Vec2 (avec inversion y)
-inline b2Vec2 sf2b2Vec(sf::Vector2f const& vector, float mpp)
+inline b2Vec2 sf2b2Vec(sf::Vector2f const& vector, float mpp, bool absolute = false)
 {
-	return b2Vec2(vector.x * mpp, - vector.y * mpp);
+	if (!absolute)
+		return b2Vec2(vector.x * mpp, - vector.y * mpp);
+	else
+		return b2Vec2(vector.x * mpp, vector.y * mpp);
 }
-inline sf::Vector2f b22sfVec(b2Vec2 const& vector, float ppm)
+inline sf::Vector2f b22sfVec(b2Vec2 const& vector, float ppm, bool absolute = false)
 {
-	return sf::Vector2f(vector.x, - vector.y) * ppm;
+	if (!absolute)
+		return sf::Vector2f(vector.x, - vector.y) * ppm;
+	else
+		return sf::Vector2f(vector.x, vector.y) * ppm;
 }
-inline b2Vec3 sf3b2Vec(sf::Vector3f const& vector, float mpp)
+inline b2Vec3 sf3b2Vec(sf::Vector3f const& vector, float mpp, bool absolute = false)
 {
-	return b2Vec3(vector.x * mpp, - vector.y * mpp, vector.z);
+	if (!absolute)
+		return b2Vec3(vector.x * mpp, - vector.y * mpp, vector.z);
+	else
+		return b2Vec3(vector.x * mpp, vector.y * mpp, vector.z);
 }
-inline sf::Vector3f b32sfVec(b2Vec3 const& vector, float ppm)
+inline sf::Vector3f b32sfVec(b2Vec3 const& vector, float ppm, bool absolute = false)
 {
-	return sf::Vector3f(vector.x * ppm, - vector.y * ppm, vector.z);
+	if (!absolute)
+		return sf::Vector3f(vector.x * ppm, - vector.y * ppm, vector.z);
+	else
+		return sf::Vector3f(vector.x * ppm, vector.y * ppm, vector.z);
 }
 
 // Convertion b2Vec2 <> b2Vec3

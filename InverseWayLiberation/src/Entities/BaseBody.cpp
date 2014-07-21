@@ -6,7 +6,8 @@
 BaseBody::BaseBody(int layer, unsigned int ID)
 	: Entity(layer, ID), mCollisionType(CollisionType::Default),
 	mBody(nullptr), mBodyIsCreated(false),
-	mPhysicMgr(PhysicManager::GetInstance())
+	mPhysicMgr(PhysicManager::GetInstance()),
+	mHull(nullptr)
 {
 	// Défini le type de l'Entity
 	mType = EntityType::BaseBody;
@@ -20,11 +21,23 @@ BaseBody::~BaseBody()
 void BaseBody::Update()
 {
 	// Si le body est valide
-	if (mBody)
+	if (mBody && mBodyIsCreated && mIsAlive)
 	{
 		// Mise à jour de la texture
 		mSprite.setPosition(b22sfVec(mBody->GetPosition(), mPhysicMgr.GetPPM()));
-		mSprite.setRotation(- mBody->GetAngle() * DPR);
+		mSprite.setRotation(-mBody->GetAngle() * DPR);
+
+		/*/ Pour chaque fixture
+		if (mBody->GetFixtureList())
+		{
+			// Mise à jour du Hull
+			b2AABB aabb = GetBoundingBox();
+			b2Vec2 pos = aabb.upperBound;
+			b2Vec2 size = b2Abs(aabb.upperBound - aabb.lowerBound);
+			sf::Vector2f sfpos = b22sfVec(pos, PhysicManager::GetInstance().GetPPM());
+			sf::Vector2f sfsize = b22sfVec(size, PhysicManager::GetInstance().GetPPM(), true);
+			mHull.SetPosAndSize(sfpos, sfsize);
+		}*/
 	}
 }
 
@@ -40,6 +53,62 @@ void BaseBody::Destroy()
 	mBodyIsCreated = false;
 	mIsAlive = false;
 	mTexture.reset();
+}
+
+// Ombres
+void BaseBody::ActivateShadows(void)
+{
+	/*/ Donne le Shadow Caster
+	if (mBody && mBodyIsCreated)
+		mHull.SetBodyShadowCaster(mBody);
+
+	// Si il y a un shadow caster, c'est bon
+	if (mHull.GetBodyShadowCaster())*/
+		mHull.Activate();
+}
+void BaseBody::DeactivateShadows(void)
+{
+	mHull.Deactivate();
+}
+void BaseBody::SetShadowsActive(bool active)
+{
+	if (active)
+		ActivateShadows();
+	else
+		DeactivateShadows();
+}
+bool BaseBody::IsActiveShadows(void) const
+{
+	return mHull.IsActive();
+}
+
+// Boite englobante
+b2AABB BaseBody::GetBoundingBox(void) const
+{
+	// Crée le aabb final
+	b2AABB aabb;
+	aabb.lowerBound = b2Vec2(FLT_MAX, FLT_MAX);
+	aabb.upperBound = b2Vec2(-FLT_MAX, -FLT_MAX);
+
+	// Parcours toutes les Fixtures
+	for (b2Fixture* fixture = mBody->GetFixtureList(); fixture; fixture = fixture->GetNext())
+	{
+		// Pour chaque élément de la forme
+		// Un pour les formes simples, un par segment pour les chaines
+		for (int32 i = 0; i < fixture->GetShape()->GetChildCount(); ++i)
+		{
+			// Combine cette aabb avec l'aabb générale
+			aabb.Combine(aabb, fixture->GetAABB(i));
+		}
+	}
+
+	return aabb;
+}
+sf::FloatRect BaseBody::GetsfBoundingBox(void) const
+{
+	b2AABB aabb(GetBoundingBox());
+	float ppm = PhysicManager::GetInstance().GetPPM();
+	return sf::FloatRect(aabb.upperBound.x * ppm, aabb.upperBound.y * ppm, aabb.lowerBound.x * ppm, aabb.lowerBound.y * ppm);
 }
 
 // Pour le rendu

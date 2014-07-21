@@ -1,10 +1,10 @@
 #pragma once
-#include "LevelManager.h"
-#include "../App/InputManager.h"
-#include "../Physics/PhysicManager.h"
 #include "../Resources/ResourceManager.h"
 #include "../Tools/Saver.h"
 
+class LevelManager;
+class InputManager;
+class PhysicManager;
 class LevelSaver : public Saver
 {
 public:
@@ -25,12 +25,13 @@ private:
 	bool ProcessDeco();
 	bool ProcessActions();
 	bool ProcessTriggers();
+	bool ProcessLights();
 
 private:
 	const LevelManager &mLevel;
+	const TextureMap &mTextureMap;
 	const InputManager &mInputManager;
 	const PhysicManager &mPhysicManager;
-	const TextureMap &mTextureMap;
 
 	std::string mPath;
 

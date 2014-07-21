@@ -106,6 +106,15 @@
     <Filter Include="Fichiers d%27en-tête\Editor\GUI">
       <UniqueIdentifier>{229c767c-2fd9-4efe-afa7-84e0ba80c22d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Fichiers de ressources\Shaders">
+      <UniqueIdentifier>{309a26c4-c496-4013-bce8-03b75e590078}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers d%27en-tête\Graphics">
+      <UniqueIdentifier>{ee656804-3ab9-4cf3-bf8b-6f7f9a48d7be}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers sources\Graphics">
+      <UniqueIdentifier>{1e530929-5c11-4deb-be9b-c957359447b4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="src\_TODO.txt" />
@@ -126,6 +135,18 @@
       <Filter>Fichiers de ressources\Scripts</Filter>
     </None>
     <None Include="lvls\level_1.xvl">
+      <Filter>Fichiers de ressources\Levels</Filter>
+    </None>
+    <None Include="lvls\level_2.xvl">
+      <Filter>Fichiers de ressources\Levels</Filter>
+    </None>
+    <None Include="lvls\level_3.xvl">
+      <Filter>Fichiers de ressources\Levels</Filter>
+    </None>
+    <None Include="lvls\level_4.xvl">
+      <Filter>Fichiers de ressources\Levels</Filter>
+    </None>
+    <None Include="lvls\level_5.xvl">
       <Filter>Fichiers de ressources\Levels</Filter>
     </None>
   </ItemGroup>
@@ -322,9 +343,6 @@
     <ClCompile Include="src\Editor\GUI\PolyCreationWindow.cpp">
       <Filter>Fichiers sources\Editor\GUI</Filter>
     </ClCompile>
-    <ClCompile Include="src\Entities\PolyBody.cpp">
-      <Filter>Fichiers sources\Entities</Filter>
-    </ClCompile>
     <ClCompile Include="src\Editor\GUI\BodyScenario.cpp">
       <Filter>Fichiers sources\Editor\GUI</Filter>
     </ClCompile>
@@ -344,6 +362,21 @@
       <Filter>Fichiers sources\Editor\GUI</Filter>
     </ClCompile>
     <ClCompile Include="src\Entities\PolyChain.cpp">
+      <Filter>Fichiers sources\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Entities\PointLight.cpp">
+      <Filter>Fichiers sources\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Entities\PartitioningTree.cpp">
+      <Filter>Fichiers sources\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Entities\Hull.cpp">
+      <Filter>Fichiers sources\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Graphics\LightEngine.cpp">
+      <Filter>Fichiers sources\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Entities\PolyBody.cpp">
       <Filter>Fichiers sources\Entities</Filter>
     </ClCompile>
   </ItemGroup>
@@ -389,9 +422,6 @@
     </ClInclude>
     <ClInclude Include="src\Resources\ResourceManager.h">
       <Filter>Fichiers d%27en-tête\Resources</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Tools\utils.h">
-      <Filter>Fichiers d%27en-tête\Tools</Filter>
     </ClInclude>
     <ClInclude Include="src\Level\LevelLoader.h">
       <Filter>Fichiers d%27en-tête\Level</Filter>
@@ -546,9 +576,6 @@
     <ClInclude Include="src\Editor\GUI\PolyCreationWindow.h">
       <Filter>Fichiers d%27en-tête\Editor\GUI</Filter>
     </ClInclude>
-    <ClInclude Include="src\Entities\PolyBody.h">
-      <Filter>Fichiers d%27en-tête\Entities</Filter>
-    </ClInclude>
     <ClInclude Include="src\Editor\GUI\BodyScenario.h">
       <Filter>Fichiers d%27en-tête\Editor\GUI</Filter>
     </ClInclude>
@@ -573,5 +600,40 @@
     <ClInclude Include="src\Entities\PolyChain.h">
       <Filter>Fichiers d%27en-tête\Entities</Filter>
     </ClInclude>
+    <ClInclude Include="src\Tools\utils.h">
+      <Filter>Fichiers d%27en-tête\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Entities\PointLight.h">
+      <Filter>Fichiers d%27en-tête\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Entities\PartitioningTree.h">
+      <Filter>Fichiers d%27en-tête\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Entities\Hull.h">
+      <Filter>Fichiers d%27en-tête\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Graphics\LightEngine.h">
+      <Filter>Fichiers d%27en-tête\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Entities\PolyBody.h">
+      <Filter>Fichiers d%27en-tête\Entities</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="fx\blurH.fx">
+      <Filter>Fichiers de ressources\Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="fx\blurV.fx">
+      <Filter>Fichiers de ressources\Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="fx\distort.fx">
+      <Filter>Fichiers de ressources\Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="fx\reduce.fx">
+      <Filter>Fichiers de ressources\Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="fx\shadow.fx">
+      <Filter>Fichiers de ressources\Shaders</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

@@ -120,7 +120,7 @@ void LevelWindow::Fill()
 	// Chargement et sauvegarde
 	mPathHBox = sfg::Box::Create(sfg::Box::Orientation::HORIZONTAL);
 	mPathLabel = sfg::Label::Create("Nom sauvegarde : ");
-	mPath = sfg::Entry::Create();
+	mPath = sfg::Entry::Create("level_1");
 	mPathHBox->PackEnd(mPathLabel, false);
 	mPathHBox->PackEnd(mPath);
 	mSaveLoadHBox = sfg::Box::Create(sfg::Box::Orientation::HORIZONTAL);
@@ -151,8 +151,8 @@ void LevelWindow::OnLoad()
 
 	// Demande si on veut décharger le niveau actuel
 	if (2 == Dialog::ButtonChoice("Charger un niveau ?",
-										   "Voulez-vous charger ce niveau ?\nTout changement non sauvegardé sera perdu.",
-										   "Oui", "Non"))
+								  "Voulez-vous charger ce niveau ?\nTout changement non sauvegardé sera perdu.",
+								  "Oui", "Non"))
 		return;
 
 	// Récupère le nom

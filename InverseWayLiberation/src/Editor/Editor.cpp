@@ -12,6 +12,7 @@
 #include "../Physics/Joints/MouseJoint.h"
 #include "../Physics/Joints/DistanceJoint.h"
 #include "../Physics/Callback/PointCallback.h"
+#include "../Entities/PartitioningTree.h"
 
 // Ctor
 Editor::Editor(sf::RenderWindow &window)
@@ -77,7 +78,7 @@ void Editor::Run()
 			if (!focus)
 				mWindow.setFramerateLimit(20U);
 			else
-				mWindow.setFramerateLimit(60U);
+				mWindow.setFramerateLimit(6000U);
 
 			if (focus)
 			{

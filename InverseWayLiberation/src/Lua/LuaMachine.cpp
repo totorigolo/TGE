@@ -41,10 +41,10 @@ void LuaMachine::UnregisterGlobalLuaVar(const std::string &name)
 }
 
 // Exécution
-int LuaMachine::DoFile(const std::string &path, OutputInterface *interface)
+int LuaMachine::DoFile(const std::string &path, OutputInterface *_interface)
 {
 	// Normalise l'interface
-	auto output = GetInterface(interface);
+	auto output = GetInterface(_interface);
 
 	try
 	{
@@ -66,10 +66,10 @@ int LuaMachine::DoFile(const std::string &path, OutputInterface *interface)
 	// Si on est là, c'est à cause d'une erreur
 	return -1;
 }
-int LuaMachine::LoadFile(const std::string &path, OutputInterface *interface)
+int LuaMachine::LoadFile(const std::string &path, OutputInterface *_interface)
 {
 	// Normalise l'interface
-	auto output = GetInterface(interface);
+	auto output = GetInterface(_interface);
 
 	try
 	{
@@ -91,10 +91,10 @@ int LuaMachine::LoadFile(const std::string &path, OutputInterface *interface)
 	// Si on est là, c'est à cause d'une erreur
 	return -1;
 }
-int LuaMachine::DoString(const std::string &command, OutputInterface *interface)
+int LuaMachine::DoString(const std::string &command, OutputInterface *_interface)
 {
 	// Normalise l'interface
-	auto output = GetInterface(interface);
+	auto output = GetInterface(_interface);
 
 	try
 	{
@@ -123,9 +123,9 @@ void LuaMachine::SetLuaConsole(LuaConsoleWindow *window)
 	myCheckError_v(window, "LuaConsoleWindow passée invalide.");
 	mLuaConsoleWindow = window;
 }
-OutputInterface* LuaMachine::GetInterface(OutputInterface *interface)
+OutputInterface* LuaMachine::GetInterface(OutputInterface *_interface)
 {
-	auto tmp = interface;
+	auto tmp = _interface;
 
 	// Crée une interface si on en a pas
 	if (!tmp)
@@ -160,7 +160,7 @@ void LuaMachine::InitLua()
 }
 
 // Affichage des erreurs
-int LuaMachine::ReportLuaError(int errorCode, OutputInterface *interface)
+int LuaMachine::ReportLuaError(int errorCode, OutputInterface *_interface)
 {
 	// Pas d'erreur
 	if (errorCode == 0)
@@ -171,26 +171,26 @@ int LuaMachine::ReportLuaError(int errorCode, OutputInterface *interface)
 
 	// Erreurs connus
 	else if (errorCode == LUA_ERRSYNTAX)
-		*interface << "Lua: Erreur de syntaxe (LUA_ERRSYNTAX)." << std::endl;
+		*_interface << "Lua: Erreur de syntaxe (LUA_ERRSYNTAX)." << std::endl;
 
 	else if (errorCode == LUA_ERRRUN)
-		*interface << "Lua: Erreur de Runtime (LUA_ERRRUN)." << std::endl;
+		*_interface << "Lua: Erreur de Runtime (LUA_ERRRUN)." << std::endl;
 
 	else if (errorCode == LUA_ERRMEM)
-		*interface << "Lua: Pas assez de mémoire (LUA_ERRMEM)." << std::endl;
+		*_interface << "Lua: Pas assez de mémoire (LUA_ERRMEM)." << std::endl;
 	
 	else if (errorCode == LUA_ERRERR)
-		*interface << "Lua: Erreur intraitable (LUA_ERRERR)." << std::endl;
+		*_interface << "Lua: Erreur intraitable (LUA_ERRERR)." << std::endl;
 
 	else if (errorCode == LUA_ERRFILE)
-		*interface << "Lua: Fichier introuvable (LUA_ERRFILE)." << std::endl;
+		*_interface << "Lua: Fichier introuvable (LUA_ERRFILE)." << std::endl;
 
 	// Erreur inconnu
 	else
-		*interface << "Lua: Erreur inconnue (" << errorCode << ")." << std::endl;
+		*_interface << "Lua: Erreur inconnue (" << errorCode << ")." << std::endl;
 	
 	// Affiche l'erreur sur la pile
-	*interface << lua_tostring(mLuaState, -1) << std::endl;
+	*_interface << lua_tostring(mLuaState, -1) << std::endl;
 
 	return errorCode;
 }

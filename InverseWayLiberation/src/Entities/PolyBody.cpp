@@ -10,8 +10,30 @@ PolyBody::PolyBody(int layer, unsigned int ID)
 	mType = EntityType::PolyBody;
 }
 
+// Mise à jour
+void PolyBody::Update()
+{
+	BaseBody::Update();
+
+	if (!mBody || !mBodyIsCreated || !mIsAlive) return;
+
+	// Pour chaque fixture
+	if (mBody->GetFixtureList() && mBody->IsAwake())
+	{
+		// Mise à jour du Hull
+		b2AABB aabb = GetBoundingBox();
+		b2Vec2 pos;
+		pos.x = aabb.lowerBound.x;
+		pos.y = aabb.upperBound.y;
+		b2Vec2 size = aabb.upperBound - aabb.lowerBound;
+		sf::Vector2f sfpos = b22sfVec(pos, PhysicManager::GetInstance().GetPPM());
+		sf::Vector2f sfsize = b22sfVec(size, PhysicManager::GetInstance().GetPPM(), true);
+		mHull.SetPosAndSize(sfpos, sfsize);
+	}
+}
+
 // Création du body
-bool PolyBody::Create(const std::vector<b2Vec2> &vertices, b2BodyType type, Texture::Ptr &texture,
+bool PolyBody::Create(const std::vector<b2Vec2> &vertices, b2BodyType type, Texture::Ptr texture,
 					  float density, float friction, float restitution, int groupIndex, uint16 categoryBits, uint16 maskBits)
 {
 	// On n'en crée pas de nouveau si il y en a déjà un
@@ -21,7 +43,7 @@ bool PolyBody::Create(const std::vector<b2Vec2> &vertices, b2BodyType type, Text
 	// Vérifie les points
 	if (!CheckPoints(vertices))
 	{
-		//Dialog::Error("Le PolyBody n'a pas été créé :\nPoints invalides.");
+		Dialog::Error("Le PolyBody n'a pas été créé :\nPoints invalides.");
 		return false;
 	}
 
@@ -41,7 +63,7 @@ bool PolyBody::Create(const std::vector<b2Vec2> &vertices, b2BodyType type, Text
 
 	return true;
 }
-bool PolyBody::Create(b2Vec3 posRot, const std::vector<b2Vec2> &vertices, b2BodyType type, Texture::Ptr &texture,
+bool PolyBody::Create(b2Vec3 posRot, const std::vector<b2Vec2> &vertices, b2BodyType type, Texture::Ptr texture,
 					  float density, float friction, float restitution, int groupIndex, uint16 categoryBits, uint16 maskBits)
 {
 	// On n'en crée pas de nouveau si il y en a déjà un
@@ -51,7 +73,7 @@ bool PolyBody::Create(b2Vec3 posRot, const std::vector<b2Vec2> &vertices, b2Body
 	// Vérifie les points
 	if (!CheckPoints(vertices))
 	{
-		//Dialog::Error("Le PolyBody n'a pas été créé :\nPoints invalides.");
+		Dialog::Error("Le PolyBody n'a pas été créé :\nPoints invalides.");
 		return false;
 	}
 
@@ -93,6 +115,11 @@ bool PolyBody::Create(b2Vec3 posRot, const std::vector<b2Vec2> &vertices, b2Body
 	mBody->SetUserData(this);
 	mBodyIsCreated = true;
 	mIsAlive = true;
+
+	// Active les ombres
+	mHull.SetBodyShadowCaster(mBody);
+	mHull.SetPhysicallyDrawable(true);
+	mHull.Activate();
 
 	return true;
 }

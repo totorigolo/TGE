@@ -9,7 +9,8 @@ enum class EntityType
 		BasicBody,
 		PolyBody,
 		PolyChain,
-	Grapnel
+	Grapnel,
+	PointLight
 };
 
 class Entity : public sf::Drawable, public NonCopyable

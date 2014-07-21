@@ -107,6 +107,7 @@ void EntityManager::RemoveID(unsigned int id)
 void EntityManager::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
 	// Affiche toutes les Entities
+	// TODO: Uniquement seules les présentes
 	for (std::list<Entity*>::const_iterator it = mEntities.begin(); it != mEntities.end(); ++it)
 	{
 		target.draw(**it, states);

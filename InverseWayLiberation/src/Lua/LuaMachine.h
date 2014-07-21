@@ -36,13 +36,13 @@ public:
 	void UnregisterGlobalLuaVar(const std::string &name);
 
 	// Exécution
-	int DoFile(const std::string &path, OutputInterface *interface = nullptr);//new ostreamInterface());
-	int LoadFile(const std::string &path, OutputInterface *interface = nullptr);//new ostreamInterface());
-	int DoString(const std::string &command, OutputInterface *interface = nullptr);//new ostreamInterface());
+	int DoFile(const std::string &path, OutputInterface *_interface = nullptr);//new ostreamInterface());
+	int LoadFile(const std::string &path, OutputInterface *_interface = nullptr);//new ostreamInterface());
+	int DoString(const std::string &command, OutputInterface *_interface = nullptr);//new ostreamInterface());
 
 	// Enregistre la console Lua
 	void SetLuaConsole(LuaConsoleWindow *window);
-	OutputInterface* GetInterface(OutputInterface *interface = nullptr);
+	OutputInterface* GetInterface(OutputInterface *_interface = nullptr);
 
 	// Accesseur
 	lua_State* GetLuaState();
@@ -57,7 +57,7 @@ private:
 	void InitLua();
 
 	// Affichage des erreurs
-	int ReportLuaError(int errorCode, OutputInterface *interface = new ostreamInterface());
+	int ReportLuaError(int errorCode, OutputInterface *_interface = new ostreamInterface());
 
 private:
 	// State Lua

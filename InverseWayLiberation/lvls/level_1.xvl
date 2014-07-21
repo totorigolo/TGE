@@ -40,7 +40,7 @@
     </basicbodies>
     <polybodies/>
     <polychains>
-        <loop id="26" type="static" texture="none" pos="(-19.0881, -3.15398)">
+        <loop id="26" type="static" texture="none" pos="(-19.0881, -3.15398)" shadows="true">
             <point pos="(0.0613785, 2.82378)"/>
             <point pos="(2.07538, 1.33994)"/>
             <point pos="(1.75854, 1.31798)"/>
@@ -65,7 +65,7 @@
             <point pos="(-2.16281, 0.828597)"/>
             <point pos="(-2.13457, 1.1925)"/>
         </loop>
-        <loop id="27" type="static" texture="none" pos="(-12.8258, -2.46741)">
+        <loop id="27" type="static" texture="none" pos="(-12.8258, -2.46741)" shadows="true">
             <point pos="(0.0797949, 1.42422)"/>
             <point pos="(0.267139, 1.33402)"/>
             <point pos="(0.451015, 1.21953)"/>
@@ -100,7 +100,7 @@
             <point pos="(-0.336527, 0.95933)"/>
             <point pos="(-0.163059, 1.11892)"/>
         </loop>
-        <loop id="28" type="static" texture="none" pos="(-8.55802, 0.906441)">
+        <loop id="28" type="static" texture="none" pos="(-8.55802, 0.906441)" shadows="true">
             <point pos="(-0.0791178, 1.48867)"/>
             <point pos="(2.03366, 0.59582)"/>
             <point pos="(1.34413, 0.529519)"/>
@@ -112,7 +112,7 @@
             <point pos="(-1.27695, 0.277578)"/>
             <point pos="(-1.53773, 0.352718)"/>
         </loop>
-        <chain id="29" type="static" texture="none" pos="(-22.6015, -4.86354)">
+        <chain id="29" type="static" texture="none" pos="(-22.6015, -4.86354)" shadows="true">
             <point pos="(2.26005, 0.0244994)"/>
             <point pos="(2.21107, -0.0171437)"/>
             <point pos="(0.598938, -0.0089817)"/>
@@ -120,7 +120,7 @@
             <point pos="(-1.94579, 0.0828495)"/>
             <point pos="(-2.40086, -0.0844865)"/>
         </chain>
-        <chain id="30" type="static" texture="none" pos="(-15.7501, -4.82422)">
+        <chain id="30" type="static" texture="none" pos="(-15.7501, -4.82422)" shadows="true">
             <point pos="(-1.61192, 0.0563307)"/>
             <point pos="(-1.56642, -0.00216675)"/>
             <point pos="(-0.0617485, -0.119161)"/>
@@ -128,7 +128,7 @@
             <point pos="(1.10819, 0.00758266)"/>
             <point pos="(1.13094, 0.0563307)"/>
         </chain>
-        <chain id="31" type="static" texture="none" pos="(-7.05299, -4.87691)">
+        <chain id="31" type="static" texture="none" pos="(-7.05299, -4.87691)" shadows="true">
             <point pos="(-4.08239, 0.0862675)"/>
             <point pos="(-4.01414, 0.0407696)"/>
             <point pos="(-3.39342, 0.0310202)"/>
@@ -141,7 +141,7 @@
             <point pos="(4.2372, -0.141218)"/>
             <point pos="(5.1309, -0.176966)"/>
         </chain>
-        <chain id="32" type="static" texture="none" pos="(0.283692, -4.67611)">
+        <chain id="32" type="static" texture="none" pos="(0.283692, -4.67611)" shadows="true">
             <point pos="(-2.30008, -0.379323)"/>
             <point pos="(-2.21477, -0.375911)"/>
             <point pos="(-1.79162, -0.140449)"/>
@@ -164,7 +164,7 @@
             <point pos="(1.79036, -0.135625)"/>
             <point pos="(2.05733, -0.356472)"/>
         </chain>
-        <chain id="33" type="static" texture="none" pos="(12.4847, -4.97519)">
+        <chain id="33" type="static" texture="none" pos="(12.4847, -4.97519)" shadows="true">
             <point pos="(-10.1755, -0.0513296)"/>
             <point pos="(-10.1485, -0.0537844)"/>
             <point pos="(-9.94477, -0.0316896)"/>
@@ -187,7 +187,7 @@
             <point pos="(11.6484, 0.109274)"/>
             <point pos="(12.5133, 0.113988)"/>
         </chain>
-        <chain id="34" type="static" texture="none" pos="(-21.3924, 3.46552)">
+        <chain id="34" type="static" texture="none" pos="(-21.3924, 3.46552)" shadows="true">
             <point pos="(-3.61633, -2.26503)"/>
             <point pos="(-3.01981, -2.12467)"/>
             <point pos="(-2.88725, -1.87515)"/>
@@ -216,7 +216,7 @@
             <point pos="(4.53164, 1.59756)"/>
             <point pos="(4.64143, 1.92943)"/>
         </chain>
-        <loop id="35" type="static" texture="none" pos="(-22.7838, 2.38087)">
+        <loop id="35" type="static" texture="none" pos="(-22.7838, 2.38087)" shadows="true">
             <point pos="(-0.170561, 0.774695)"/>
             <point pos="(-0.193678, 0.229804)"/>
             <point pos="(-0.140892, 0.196054)"/>
@@ -243,7 +243,7 @@
             <point pos="(0.193886, 0.725278)"/>
             <point pos="(0.188814, 0.8132)"/>
         </loop>
-        <loop id="36" type="static" texture="none" pos="(-22.4602, 2.79702)">
+        <loop id="36" type="static" texture="none" pos="(-22.4602, 2.79702)" shadows="true">
             <point pos="(0.131021, 0.437459)"/>
             <point pos="(0.143194, 0.329247)"/>
             <point pos="(0.156721, 0.230504)"/>
@@ -267,7 +267,7 @@
             <point pos="(-0.0935192, 0.267025)"/>
             <point pos="(-0.105694, 0.400938)"/>
         </loop>
-        <loop id="37" type="static" texture="none" pos="(-21.6865, 2.02342)">
+        <loop id="37" type="static" texture="none" pos="(-21.6865, 2.02342)" shadows="true">
             <point pos="(-0.255812, 1.35715)"/>
             <point pos="(-0.243635, 0.806619)"/>
             <point pos="(-0.223349, 0.675413)"/>
@@ -312,7 +312,7 @@
             <point pos="(0.159452, 1.44101)"/>
             <point pos="(0.170273, 1.62903)"/>
         </loop>
-        <chain id="38" type="static" texture="none" pos="(3.23317, 3.10748)">
+        <chain id="38" type="static" texture="none" pos="(3.23317, 3.10748)" shadows="true">
             <point pos="(-17.8688, 2.28956)"/>
             <point pos="(-17.8717, 2.05064)"/>
             <point pos="(-17.1929, 1.86125)"/>
@@ -350,7 +350,7 @@
             <point pos="(15.4938, 1.60893)"/>
             <point pos="(21.77, 1.64031)"/>
         </chain>
-        <loop id="39" type="static" texture="none" pos="(2.51371, 2.92988)">
+        <loop id="39" type="static" texture="none" pos="(2.51371, 2.92988)" shadows="true">
             <point pos="(-0.143293, 0.738888)"/>
             <point pos="(-0.151497, 0.430426)"/>
             <point pos="(-0.126886, 0.348388)"/>
@@ -370,7 +370,7 @@
             <point pos="(0.175014, 0.343466)"/>
             <point pos="(0.204548, 0.724121)"/>
         </loop>
-        <loop id="40" type="static" texture="none" pos="(2.9162, 3.00701)">
+        <loop id="40" type="static" texture="none" pos="(2.9162, 3.00701)" shadows="true">
             <point pos="(-0.112622, 0.656829)"/>
             <point pos="(-0.112622, 0.53049)"/>
             <point pos="(-0.0912917, 0.450093)"/>
@@ -397,7 +397,7 @@
             <point pos="(0.0957553, 0.589557)"/>
             <point pos="(0.0908332, 0.656829)"/>
         </loop>
-        <loop id="41" type="static" texture="none" pos="(3.7946, 2.62344)">
+        <loop id="41" type="static" texture="none" pos="(3.7946, 2.62344)" shadows="true">
             <point pos="(-0.36917, 1.02728)"/>
             <point pos="(-0.370811, 0.416914)"/>
             <point pos="(-0.3462, 0.123218)"/>
@@ -440,7 +440,7 @@
             <point pos="(0.36753, 0.69092)"/>
             <point pos="(0.382297, 1.0322)"/>
         </loop>
-        <chain id="42" type="static" texture="none" pos="(0.453656, -4.94834)">
+        <chain id="42" type="static" texture="none" pos="(0.453656, -4.94834)" shadows="true">
             <point pos="(-1.16162, -0.449707)"/>
             <point pos="(-1.08957, -0.320028)"/>
             <point pos="(-1.01032, -0.201155)"/>
@@ -470,13 +470,21 @@
         </layer>
         <layer z="-1">
             <img texture="echelle_maison_3" position="(-8.40406, -2.54472)"/>
-            <img texture="maison_1" position="(-19.0559, -2.72178)"/>
-            <img texture="maison_2" position="(-13.1698, -3.12442)"/>
-            <img texture="maison_3" position="(-8.30593, 1.82596)"/>
+            <img texture="maison_1" position="(-19.0559, -2.72178)" shadows="true"/>
+            <img texture="maison_2" position="(-13.1698, -3.12442)" shadows="true"/>
+            <img texture="maison_3" position="(-8.30593, 1.82596)" shadows="true"/>
         </layer>
     </deco>
     <actions/>
     <events>
         <triggers/>
     </events>
+    <lights>
+      <point layer="1" pos="(1, 2)" radius="600" color="(140, 20, 200)" />
+      <point layer="1" pos="(3, 1)" radius="200" color="(0, 200, 100)" />
+      <point layer="10" pos="(2, -1)" radius="400" color="(59, 0, 100)" />
+      <point layer="10" pos="(-2, -1)" radius="400" color="(100, 255, 0)" />
+      <point layer="10" pos="(-12, 2)" radius="400" color="(255, 20, 50)" />
+      <point layer="10" pos="(-10, -2)" radius="400" color="(37, 50, 168)" />
+    </lights>
 </level>

@@ -1,12 +1,13 @@
 #pragma once
 #include "Entity.h"
+#include "Hull.h"
 #include "../Resources/Texture.h"
 
 class Deco : public Entity
 {
 public:
 	// Ctor & dtor
-	Deco(int layer, Texture::Ptr &texture, sf::Vector3f posRot, unsigned int ID = 0U); // PosRot pixel / degrés
+	Deco(int layer, Texture::Ptr texture, sf::Vector3f posRot, unsigned int ID = 0U); // PosRot pixel / degrés
 	virtual ~Deco();
 
 	// Mise à jour
@@ -16,7 +17,14 @@ public:
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
 	// Texture
-	void SetTexture(Texture::Ptr &texture);
+	Texture::Ptr& GetTexture(void);
+	void SetTexture(Texture::Ptr texture);
+
+	// Ombres
+	void ActivateShadows(void);
+	void DeactivateShadows(void);
+	void SetShadowsActive(bool active);
+	bool IsActiveShadows(void) const;
 
 	// Position et rotation
 	void SetPosition(const b2Vec2 &pos);
@@ -35,4 +43,7 @@ public:
 private:
 	sf::Sprite mSprite;
 	Texture::Ptr mTexture;
+
+	// Ombres
+	Hull mHull;
 };

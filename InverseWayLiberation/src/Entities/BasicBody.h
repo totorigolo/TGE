@@ -1,5 +1,6 @@
 #pragma once
 #include "BaseBody.h"
+#include "Hull.h"
 
 class PhysicManager;
 class BasicBody : public BaseBody
@@ -16,6 +17,9 @@ public:
 public:
 	// Ctor & dtor
 	BasicBody(int layer = 1, unsigned int ID = 0U);
+
+	// Mise à jour
+	virtual void Update();
 
 	// Création du body
 	bool CreateBox(b2Vec3 posRot, b2BodyType type, Texture::Ptr texture,

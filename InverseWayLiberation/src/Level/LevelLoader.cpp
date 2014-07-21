@@ -22,6 +22,7 @@
 #include "../Entities/PolyBody.h"
 #include "../Entities/PolyChain.h"
 #include "../Entities/BasicBody.h"
+#include "../Entities/PointLight.h"
 #include "../Entities/EntityFactory.h"
 #include "../Entities/EntityManager.h"
 
@@ -94,6 +95,10 @@ bool LevelLoader::Process()
 	// Les déclencheurs
 	myCheckError(ProcessTriggers(), "Une erreur est survenue lors du chargement du niveau.\n"
 									"Le chargement des triggers a échoué (" + mPath + ").");
+
+	// Les lumières
+	myCheckError(ProcessLights(), "Une erreur est survenue lors du chargement du niveau.\n"
+		"Le chargement des lumières a échoué (" + mPath + ").");
 
 	return true;
 }
@@ -193,6 +198,7 @@ bool LevelLoader::ProcessPoly()
 	b2Vec2 linvel; // Linear velocity
 	float angvel = 0.f; // Angular velocity
 	std::vector<b2Vec2> vertices;
+	bool shadows = true;
 
 	// Pour tous les bodies
 	bool polyBodiesDone = false;
@@ -235,6 +241,7 @@ bool LevelLoader::ProcessPoly()
 		linvel = b2Vec2_zero;
 		angvel = 0.f;
 		vertices.clear();
+		shadows = true;
 
 		// Récupère le type
 		if (body->Attribute("type"))
@@ -306,6 +313,9 @@ bool LevelLoader::ProcessPoly()
 		body->QueryIntAttribute("maskBits", &tmp);
 		maskBits = static_cast<uint16>(tmp);
 
+		// Récupère s'il projette une ombre
+		body->QueryBoolAttribute("shadows", &shadows);
+
 		// Récupère les points
 		tinyxml2::XMLHandle bodyHandle(body);
 		tinyxml2::XMLElement *point = bodyHandle.FirstChildElement().ToElement();
@@ -348,7 +358,12 @@ bool LevelLoader::ProcessPoly()
 		}
 
 		// Si le Poly a été créé
-		if (pb)
+		BaseBody *bb = nullptr;
+		if (pc)
+			bb = (BaseBody*) pc;
+		else if (pb)
+			bb = (BaseBody*) pb;
+		if (bb)
 		{
 			// Propriétés de collision
 			body->QueryBoolAttribute("osp", &osp);
@@ -358,9 +373,12 @@ bool LevelLoader::ProcessPoly()
 			if (osp && bullet)
 				Dialog::Error("Impossible d'avoir osp et bullet en même temps !");
 			else if (osp)
-				pb->SetCollisionType(BasicBody::CollisionType::OneSidedPlatform);
+				bb->SetCollisionType(BasicBody::CollisionType::OneSidedPlatform);
 			else if (bullet)
-				pb->SetCollisionType(BasicBody::CollisionType::Bullet);
+				bb->SetCollisionType(BasicBody::CollisionType::Bullet);
+
+			// Gère l'activation des ombres
+			bb->SetShadowsActive(shadows);
 
 			// Enregiste l'ID
 			if (id != 0)
@@ -368,7 +386,7 @@ bool LevelLoader::ProcessPoly()
 				// On regarde si l'ID n'est pas déjà utilisé
 				if (mBodyIDMap.find(id) != mBodyIDMap.end())
 					Dialog::Error("L'ID " + Parser::intToString(id) + " n'est pas unique !");
-				mBodyIDMap[id] = pb->GetBody();
+				mBodyIDMap[id] = bb->GetBody();
 			}
 		}
 
@@ -388,7 +406,7 @@ bool LevelLoader::ProcessPoly()
 				return true;
 
 			// Récupère le premier
-			body = bodyHandle.FirstChildElement().ToElement();
+			body = bodies.FirstChildElement().ToElement();
 		}
 	}
 
@@ -418,6 +436,7 @@ bool LevelLoader::ProcessBasicBodies()
 	b2Vec3 posRot;
 	b2Vec2 linvel; // Linear velocity
 	float angvel = 0.f; // Angular velocity
+	bool shadows = true;
 
 	// Pour tous les bodies
 	tinyxml2::XMLElement *body = bodies.FirstChildElement().ToElement();
@@ -439,6 +458,7 @@ bool LevelLoader::ProcessBasicBodies()
 		bullet = false;
 		linvel = b2Vec2_zero;
 		angvel = 0.f;
+		shadows = true;
 
 		// Récupère la forme
 		forme = body->Name();
@@ -499,6 +519,9 @@ bool LevelLoader::ProcessBasicBodies()
 		body->QueryIntAttribute("maskBits", &tmp);
 		maskBits = static_cast<uint16>(tmp);
 
+		// Récupère s'il projette une ombre
+		body->QueryBoolAttribute("shadows", &shadows);
+
 		// Crée le body
 		if (forme == "box")
 		{
@@ -534,6 +557,9 @@ bool LevelLoader::ProcessBasicBodies()
 				bb->SetCollisionType(BasicBody::CollisionType::OneSidedPlatform);
 			else if (bullet)
 				bb->SetCollisionType(BasicBody::CollisionType::Bullet);
+
+			// Gère l'activation des ombres
+			bb->SetShadowsActive(shadows);
 
 			// Enregiste l'ID
 			if (id != 0)
@@ -937,6 +963,7 @@ bool LevelLoader::ProcessDeco()
 	// On crée les attributs
 	Deco *d = nullptr;
 	bool hasID = false;
+	bool shadows = false;
 	unsigned int id = 0U;
 	std::string texture;
 	b2Vec3 posRot;
@@ -958,6 +985,7 @@ bool LevelLoader::ProcessDeco()
 			// Réinitialise les attributs
 			d = nullptr;
 			hasID = false;
+			shadows = false;
 			id = 0U;
 			rotation = 0.f;
 			zindex = 0;
@@ -968,9 +996,11 @@ bool LevelLoader::ProcessDeco()
 			if (img->Attribute("position")) posRot = Parser::stringToB2Vec3(img->Attribute("position"));
 			img->QueryFloatAttribute("rotation", &rotation);
 			posRot.z = rotation;
+			img->QueryBoolAttribute("shadows", &shadows);
 			
 			// Ajoute la déco
 			d = new Deco(z, mLevel.mResourceManager.GetTexture(texture), getVec3(b22sfVec(getVec2(posRot), mPhysicManager.GetPPM()), posRot.z));
+			d->SetShadowsActive(shadows);
 
 			// On récupère la prochaine image
 			img = img->NextSiblingElement();
@@ -1110,6 +1140,67 @@ bool LevelLoader::ProcessTriggers()
 
 		// On récupère le prochain level
 		trigger = trigger->NextSiblingElement();
+	}
+
+	return true;
+}
+bool LevelLoader::ProcessLights()
+{
+	// Récupère <lights>
+	tinyxml2::XMLHandle hdl(mFile);
+	tinyxml2::XMLHandle lights = hdl.FirstChildElement("level").FirstChildElement("lights");
+
+	// Vérifie que <lights> existe
+	myCheckError(lights.ToElement(), "Une erreur est survenue lors du chargement du niveau.\n<lights> non trouvé (" + mPath + ").");
+
+	// On crée les attributs
+	PointLight *l = nullptr;
+	int layer = 1;
+	b2Vec2 position;
+	unsigned int radius;
+	sf::Color color;
+	std::string type;
+
+	// Pour toutes les lumières
+	tinyxml2::XMLElement *light = lights.FirstChildElement().ToElement();
+	while (light)
+	{
+		// Réinitialise les attributs
+		l = nullptr;
+		position = b2Vec2_zero;
+		radius = 0;
+		color = sf::Color::White;
+		type = "";
+
+		// Récupère le type
+		type = light->Name();
+
+		// Récupère la position
+		if (light->Attribute("pos")) position = Parser::stringToB2Vec2(light->Attribute("pos"));
+
+		// Récupère le layer
+		light->QueryIntAttribute("layer", &layer);
+
+		// Récupère le rayon
+		light->QueryUnsignedAttribute("radius", &radius);
+
+		// Récupère la couleur
+		if (light->Attribute("color")) color = Parser::stringToColor(light->Attribute("color"));
+
+		// Crée l'Entity
+		if (type == "point")
+		{
+			// Crée la lumière
+			l = new PointLight(radius, color, layer);
+			l->SetPosition(b22sfVec(position, mPhysicManager.GetPPM()));
+		}
+		else
+		{
+			Dialog::Error("Light type inconnu (" + type + ") !");
+		}
+
+		// On récupère la prochaine entity
+		light = light->NextSiblingElement();
 	}
 
 	return true;

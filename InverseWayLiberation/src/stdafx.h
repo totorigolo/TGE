@@ -9,6 +9,7 @@
 #include <SFML/Audio.hpp>
 #include <SFML/Graphics.hpp>
 #include <SFML/Network.hpp>
+#include <SFML/OpenGL.hpp>
 
 // SFGUI
 #include <SFGUI/SFGUI.hpp>

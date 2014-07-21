@@ -27,6 +27,7 @@ protected:
 	void OnChangePosition();
 	void OnChangeTexture();
 	void OnChangeLayer();
+	void OnChangeShadows();
 	void OnChangePosXp();
 	void OnChangePosXm();
 	void OnChangePosYp();
@@ -61,15 +62,20 @@ private:
 	sfg::Button::Ptr mPosRp;
 	sfg::Button::Ptr mPosRm;
 
+	// Layer
+	sfg::Box::Ptr mLayerHBox;
+	sfg::Label::Ptr mLayerLabel;
+	sfg::SpinButton::Ptr mLayer;
+
 	// Texture
 	sfg::Box::Ptr mTextureHBox;
 	sfg::Label::Ptr mTextureLabel;
 	sfg::ComboBox::Ptr mTexture;
 
-	// Layer
-	sfg::Box::Ptr mLayerHBox;
-	sfg::Label::Ptr mLayerLabel;
-	sfg::SpinButton::Ptr mLayer;
+	// Ombres
+	sfg::Box::Ptr mShadowsHBox;
+	sfg::Label::Ptr mShadowsLabel;
+	std::vector<sfg::RadioButton::Ptr> mShadows;
 
 	// Bouton
 	sfg::Button::Ptr mRefresh;

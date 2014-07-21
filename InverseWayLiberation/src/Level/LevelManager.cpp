@@ -44,10 +44,10 @@ void LevelManager::LoadFromFile(const std::string &path)
 void LevelManager::Clear()
 {
 	// Vide tous les objets du jeu
+	mEntityManager.DestroyAllEntities();
 	mResourceManager.Clear();
 	mTriggersManager.Clear();
 	mPhysicMgr.DestroyAllJoints();
-	mEntityManager.DestroyAllEntities();
 	mPhysicMgr.DestroyAllBody();
 
 	// Vide tout

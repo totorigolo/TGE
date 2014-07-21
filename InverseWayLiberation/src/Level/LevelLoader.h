@@ -1,8 +1,8 @@
 #pragma once
 #include "../Tools/Loader.h"
 
-class InputManager;
 class LevelManager;
+class InputManager;
 class PhysicManager;
 class LevelLoader : public Loader
 {
@@ -25,7 +25,7 @@ private:
 	bool ProcessDeco();
 	bool ProcessActions();
 	bool ProcessTriggers();
-	//bool ProcessLights();
+	bool ProcessLights();
 
 private:
 	LevelManager &mLevel;
