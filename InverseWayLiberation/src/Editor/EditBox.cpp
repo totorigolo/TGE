@@ -338,9 +338,9 @@ sf::CircleShape EditBox::GetSelectionMark()
 	cs.setOrigin(sf::Vector2f(9.f, 9.f));
 
 	// Gère chaque type
-	if (mSelectionType == SelectionType::BasicBody || mSelectionType == SelectionType::PolyBody)
+	if (mSelectionType == SelectionType::BasicBody || mSelectionType == SelectionType::PolyBody || mSelectionType == SelectionType::PolyChain)
 	{
-		// Obtient le BasicBody
+		// Obtient le BaseBody
 		BaseBody *bb = (BaseBody*) mSelectedEntity;
 		myAssert(bb, "Erreur lors du la détermination du type.");
 

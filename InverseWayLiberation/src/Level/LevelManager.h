@@ -6,6 +6,7 @@ class Player;
 class LevelSaver;
 class LevelLoader;
 class EntityManager;
+class PartitioningTree;
 class PhysicManager;
 class LuaMachine;
 class LevelManager : public sf::Drawable, public Singleton<LevelManager>
@@ -71,6 +72,7 @@ private:
 
 	// Entities
 	EntityManager &mEntityManager;
+	PartitioningTree &mPartitioningTree;
 
 	// Triggers
 	TriggersManager mTriggersManager;

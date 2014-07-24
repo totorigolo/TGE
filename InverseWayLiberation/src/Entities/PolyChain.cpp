@@ -4,21 +4,19 @@
 
 // Ctor & dtor
 PolyChain::PolyChain(int layer, unsigned int ID)
-	: BaseBody(layer, ID), mChainType(Type::None)
+	: BaseBody(layer, ID), mChainType(Type::None), mHasMoved(true)
 {
 	// Défini le type de l'Entity
 	mType = EntityType::PolyChain;
 }
 
 // Mise à jour
-void PolyChain::Update()
+void PolyChain::PreUpdate()
 {
-	BaseBody::Update();
-
 	if (!mBody || !mBodyIsCreated || !mIsAlive) return;
 
 	// Pour chaque fixture
-	if (mBody->GetFixtureList() && mBody->IsAwake())
+	if (mBody->GetFixtureList() && mHasMoved)
 	{
 		// Mise à jour du Hull
 		b2AABB aabb = GetBoundingBox();
@@ -29,6 +27,8 @@ void PolyChain::Update()
 		sf::Vector2f sfpos = b22sfVec(pos, PhysicManager::GetInstance().GetPPM());
 		sf::Vector2f sfsize = b22sfVec(size, PhysicManager::GetInstance().GetPPM(), true);
 		mHull.SetPosAndSize(sfpos, sfsize);
+
+		mHasMoved = false;
 	}
 }
 
@@ -126,6 +126,7 @@ bool PolyChain::Create(b2Vec3 posRot, const std::vector<b2Vec2> &vertices, Type 
 	mBody->SetUserData(this);
 	mBodyIsCreated = true;
 	mIsAlive = true;
+	mHasMoved = true;
 
 	// Active les ombres
 	mHull.SetBodyShadowCaster(mBody);
@@ -165,4 +166,11 @@ const std::vector<b2Vec2>& PolyChain::GetPoints() const
 PolyChain::Type PolyChain::GetChainType() const
 {
 	return mChainType;
+}
+// Héritage pour savoir qu'on a bougé
+void PolyChain::SetTransform(const b2Vec2 &position, float angle)
+{
+	BaseBody::SetTransform(position, angle);
+
+	mHasMoved = true;
 }

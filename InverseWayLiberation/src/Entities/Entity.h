@@ -21,7 +21,9 @@ public:
 	virtual ~Entity();
 
 	// Mise à jour
+	virtual void PreUpdate();
 	virtual void Update();
+	virtual void PostUpdate();
 
 	// Pour le rendu
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const = 0;

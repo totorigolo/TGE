@@ -6,6 +6,7 @@
 #include "../Lua/LuaMachine.h" // TODO
 #include "../Physics/PhysicManager.h"
 #include "../Entities/EntityManager.h"
+#include "../Entities/PartitioningTree.h"
 
 // Ctor
 LevelManager::LevelManager()
@@ -14,6 +15,7 @@ LevelManager::LevelManager()
 	mPhysicMgr(PhysicManager::GetInstance()),
 	// Entities
 	mEntityManager(EntityManager::GetInstance()),
+	mPartitioningTree(PartitioningTree::GetInstance()),
 	// Config de la fenêtre de rendu
 	mBckgC(sf::Color::White),
 	// Zoom initial
@@ -64,6 +66,7 @@ void LevelManager::Update()
 {
 	mEntityManager.Update();
 	mTriggersManager.Update();
+	mPartitioningTree.PostUpdateAll();
 }
 
 // Appelé juste avant la boucle de jeu, après son remplissage

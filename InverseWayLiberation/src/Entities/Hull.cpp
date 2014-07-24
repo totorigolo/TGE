@@ -4,13 +4,20 @@
 
 // Ctor
 Hull::Hull(sf::Drawable const * shadowCaster)
-	: mIsValid(false), mIsActive(true), mIsDrawable(false), mShadowCaster(shadowCaster), mIsPhysicallyDrawable(false), mBodyShadowCaster(nullptr)
+	: mMoved(true), mIsValid(false), mIsActive(true), mIsDrawable(false),
+	mShadowCaster(shadowCaster), mIsPhysicallyDrawable(false), mBodyShadowCaster(nullptr)
 {
+	// On vient d'apparaitre, donc on a bougé
+	Moved();
+
+	// Enregistre le hull
 	PartitioningTree::GetInstance().RegisterHull(this);
 }
 Hull::Hull(sf::Drawable const * shadowCaster, const sf::Vector2f& pos, const sf::Vector2f& size)
-	: mPosition(pos), mSize(size), mIsValid(true), mIsActive(true), mShadowCaster(shadowCaster), mBodyShadowCaster(nullptr)
+	: mMoved(true), mPosition(pos), mSize(size), mIsValid(true), mIsActive(true),
+	mShadowCaster(shadowCaster), mBodyShadowCaster(nullptr)
 {
+	Moved();
 	PartitioningTree::GetInstance().RegisterHull(this);
 }
 
@@ -24,6 +31,8 @@ Hull::~Hull(void)
 // Changement de position / taille
 void Hull::SetPosition(const sf::Vector2f& pos)
 {
+	Moved();
+
 	if (pos != mPosition)
 	{
 		mPosition = pos;
@@ -36,6 +45,8 @@ void Hull::SetPosition(const sf::Vector2f& pos)
 }
 void Hull::SetSize(const sf::Vector2f& size)
 {
+	Moved();
+
 	if (size != mSize)
 	{
 		mSize = size;
@@ -45,6 +56,8 @@ void Hull::SetSize(const sf::Vector2f& size)
 }
 void Hull::SetPosAndSize(const sf::Vector2f& pos, const sf::Vector2f& size)
 {
+	Moved();
+
 	if (pos != mPosition || size != mSize)
 	{
 		mPosition = pos;
@@ -57,18 +70,25 @@ void Hull::SetPosAndSize(const sf::Vector2f& pos, const sf::Vector2f& size)
 // Mise à jour dans le Partitioning System
 void Hull::Update(void)
 {
-	if (mIsValid && mIsActive)
+	if (mIsValid && mIsActive && mMoved)
 		PartitioningTree::GetInstance().UpdateHull(this);
+}
+void Hull::PostUpdate(void)
+{
+	if (mIsValid && mIsActive)
+		mMoved = false;
 }
 
 // Gestion de l'activité du Hull
 void Hull::Activate(void)
 {
+	Moved();
 	mIsActive = true;
-	Update();
+	PartitioningTree::GetInstance().RegisterHull(this);
 }
 void Hull::Deactivate(void)
 {
+	Moved();
 	mIsActive = false;
 	PartitioningTree::GetInstance().UnregisterHull(this);
 }
@@ -156,4 +176,17 @@ sf::Vector2f Hull::GetSize(void) const
 bool Hull::IsValid(void) const
 {
 	return mIsValid;
+}
+bool Hull::HasMoved(void) const
+{
+	return mMoved;
+}
+void Hull::Moved(void)
+{
+	// Retient que l'on a bougé
+	mMoved = true;
+
+	// Informe toutes les Cells survolées qu'on a bougé
+	for each (auto &cell in mCells)
+		cell->Moved();
 }

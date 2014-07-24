@@ -7,7 +7,6 @@ A faire :
  - Rule of Three !!
  - Transformer tous les "int foo = 1;" en "int foo(1);"
  - Box2D 2.3.0
-
- - Mettre des Layers pour les lights
- - Utiliser le Partitioning Tree avec tout
  - Upscaling Lights ?
+ - Cell vide demande à être supprimée quand loin de la caméra
+ - Mettre à jour les fonctions disponibles dans Lua

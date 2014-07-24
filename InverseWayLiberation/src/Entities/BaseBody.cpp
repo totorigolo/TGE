@@ -26,18 +26,6 @@ void BaseBody::Update()
 		// Mise à jour de la texture
 		mSprite.setPosition(b22sfVec(mBody->GetPosition(), mPhysicMgr.GetPPM()));
 		mSprite.setRotation(-mBody->GetAngle() * DPR);
-
-		/*/ Pour chaque fixture
-		if (mBody->GetFixtureList())
-		{
-			// Mise à jour du Hull
-			b2AABB aabb = GetBoundingBox();
-			b2Vec2 pos = aabb.upperBound;
-			b2Vec2 size = b2Abs(aabb.upperBound - aabb.lowerBound);
-			sf::Vector2f sfpos = b22sfVec(pos, PhysicManager::GetInstance().GetPPM());
-			sf::Vector2f sfsize = b22sfVec(size, PhysicManager::GetInstance().GetPPM(), true);
-			mHull.SetPosAndSize(sfpos, sfsize);
-		}*/
 	}
 }
 

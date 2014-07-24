@@ -10,9 +10,6 @@ public:
 	Deco(int layer, Texture::Ptr texture, sf::Vector3f posRot, unsigned int ID = 0U); // PosRot pixel / degrés
 	virtual ~Deco();
 
-	// Mise à jour
-	virtual void Update();
-
 	// Pour le rendu
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 

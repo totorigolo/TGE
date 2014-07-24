@@ -8,7 +8,7 @@ public:
 	PolyBody(int layer = 1, unsigned int ID = 0U);
 
 	// Mise à jour
-	void Update();
+	void PreUpdate();
 
 	// Création du body, centre calculé par rapport aux points
 	bool Create(const std::vector<b2Vec2> &vertices, b2BodyType type, Texture::Ptr texture,

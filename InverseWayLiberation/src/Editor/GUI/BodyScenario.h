@@ -30,6 +30,7 @@ protected:
 	void OnChangeCollisionType();
 	void OnChangeTexture();
 	void OnChangeLayer();
+	void OnChangeShadows();
 	void OnChangePosXp();
 	void OnChangePosXm();
 	void OnChangePosYp();
@@ -95,6 +96,11 @@ private:
 	sfg::Box::Ptr mLayerHBox;
 	sfg::Label::Ptr mLayerLabel;
 	sfg::SpinButton::Ptr mLayer;
+
+	// Ombres
+	sfg::Box::Ptr mShadowsHBox;
+	sfg::Label::Ptr mShadowsLabel;
+	std::vector<sfg::RadioButton::Ptr> mShadows;
 
 	// Boutons
 	sfg::Box::Ptr mButtonsHBox1;

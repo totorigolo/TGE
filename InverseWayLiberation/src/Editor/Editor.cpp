@@ -12,7 +12,6 @@
 #include "../Physics/Joints/MouseJoint.h"
 #include "../Physics/Joints/DistanceJoint.h"
 #include "../Physics/Callback/PointCallback.h"
-#include "../Entities/PartitioningTree.h"
 
 // Ctor
 Editor::Editor(sf::RenderWindow &window)

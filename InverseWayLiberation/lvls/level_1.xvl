@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <level>
-    <world gravity="(0, -9.79993)" PPM="100.000000" bckgcolor="(0, 0, 0)" originview="(-14, -1)" defaultzoom="1.000000"/>
+    <world gravity="(0, -9.79993)" PPM="100.000000" bckgcolor="(0, 0, 0)" originview="(-10.8464, -1.1152)" defaultzoom="1.440000"/>
     <textures>
         <img name="cascade" src="tex/level_1/cascade.png"/>
         <img name="echelle_maison_3" src="tex/level_1/echelle_maison_3.png"/>
@@ -12,31 +12,32 @@
         <img name="unknown" src="tex/unknown.png"/>
     </textures>
     <basicbodies>
-        <box id="1" type="dynamic" texture="unknown" pos="(-15.2156, -4.53694)" rotation="-173.488251"/>
-        <box id="2" type="dynamic" texture="unknown" pos="(-16.4578, -4.56414)" rotation="356.035431"/>
-        <box id="3" type="dynamic" texture="unknown" pos="(-17.1076, -3.25421)"/>
-        <box id="4" type="dynamic" texture="unknown" pos="(-21.0252, -3.26768)" rotation="-2.946758"/>
-        <box id="5" type="dynamic" texture="unknown" pos="(-13.6771, -1.49125)" rotation="38.331314"/>
-        <box id="6" type="dynamic" texture="unknown" pos="(-9.6098, 2.05537)" rotation="-52.245598" friction="10.000000"/>
-        <box id="7" type="dynamic" texture="unknown" pos="(-7.88833, 2.4315)" rotation="-22.908691" friction="0.900000"/>
-        <box id="8" type="dynamic" texture="unknown" pos="(-6.32726, -4.58586)" rotation="-0.400003"/>
-        <box id="9" type="dynamic" texture="unknown" pos="(-5.45515, -4.57613)"/>
-        <box id="10" type="dynamic" texture="unknown" pos="(-10.3537, -4.50038)" rotation="3.173655"/>
-        <box id="11" type="dynamic" texture="unknown" pos="(-8.76335, -4.40306)" rotation="-4.531087"/>
-        <box id="12" type="dynamic" texture="unknown" pos="(-7.90997, -4.45951)" rotation="-3.397102"/>
-        <box id="13" type="dynamic" texture="unknown" pos="(-7.09997, -4.53748)" rotation="-6.424212"/>
-        <box id="14" type="dynamic" texture="unknown" pos="(-2.23895, -4.70488)" rotation="-2.814349"/>
-        <box id="15" type="dynamic" texture="unknown" pos="(-0.0395613, -4.1926)" rotation="2.767071"/>
-        <box id="16" type="dynamic" texture="unknown" pos="(4.49602, -4.68668)" rotation="-90.351952"/>
-        <box id="17" type="dynamic" texture="unknown" pos="(2.98188, -4.67646)" rotation="4141.046875"/>
-        <box id="18" type="dynamic" texture="unknown" pos="(9.51445, -4.75221)" rotation="-1.132610"/>
-        <box id="19" type="dynamic" texture="unknown" pos="(11.8045, -4.66495)" rotation="8.021704"/>
-        <box id="20" type="dynamic" texture="unknown" pos="(13.5673, -4.42164)" rotation="8.042961"/>
-        <box id="21" type="dynamic" texture="unknown" pos="(15.4717, -4.55613)"/>
-        <box id="22" type="dynamic" texture="unknown" pos="(17.3207, -4.67504)" rotation="-5.877378"/>
-        <box id="23" type="dynamic" texture="unknown" pos="(19.2549, -4.87415)" rotation="-5.877391"/>
-        <box id="24" type="dynamic" texture="unknown" pos="(23.5541, -4.54434)"/>
-        <box id="25" type="dynamic" texture="unknown" pos="(-20.017, -0.64438)" rotation="396.690613" friction="3.000000"/>
+        <box id="1" type="dynamic" texture="unknown" pos="(-15.2156, -4.53694)" rotation="-173.488251" shadows="true"/>
+        <box id="2" type="dynamic" texture="unknown" pos="(-16.4578, -4.56414)" rotation="356.035461" shadows="true"/>
+        <box id="3" type="dynamic" texture="unknown" pos="(-17.1076, -3.25421)" shadows="true"/>
+        <box id="4" type="dynamic" texture="unknown" pos="(-21.0252, -3.26768)" rotation="-2.946760" shadows="true"/>
+        <box id="5" type="dynamic" texture="unknown" pos="(-14.538, 2.01673)" rotation="-3358.561279" linvel="(0.75111, -0.927915)" angvel="6.271861" shadows="true"/>
+        <box id="6" type="dynamic" texture="unknown" pos="(-9.60981, 2.05536)" rotation="-52.245598" friction="10.000000" shadows="true"/>
+        <box id="7" type="dynamic" texture="unknown" pos="(-7.88831, 2.43149)" rotation="-22.908691" friction="0.900000" shadows="true"/>
+        <box id="8" type="dynamic" texture="unknown" pos="(-6.32726, -4.58586)" rotation="-0.400003" shadows="true"/>
+        <box id="9" type="dynamic" texture="unknown" pos="(-5.45519, -4.57613)" shadows="true"/>
+        <box id="10" type="dynamic" texture="unknown" pos="(-10.3537, -4.50038)" rotation="3.173655" shadows="true"/>
+        <box id="11" type="dynamic" texture="unknown" pos="(-8.76335, -4.40306)" rotation="-4.531087" shadows="true"/>
+        <box id="12" type="dynamic" texture="unknown" pos="(-7.90997, -4.45951)" rotation="-3.397102" shadows="true"/>
+        <box id="13" type="dynamic" texture="unknown" pos="(-7.09997, -4.53748)" rotation="-6.424212" shadows="true"/>
+        <box id="14" type="dynamic" texture="unknown" pos="(-2.23895, -4.70488)" rotation="-2.814280" shadows="true"/>
+        <box id="15" type="dynamic" texture="unknown" pos="(-0.0395628, -4.1926)" rotation="2.767071" shadows="true"/>
+        <box id="16" type="dynamic" texture="unknown" pos="(4.49602, -4.68668)" rotation="-90.351959" shadows="true"/>
+        <box id="17" type="dynamic" texture="unknown" pos="(2.98188, -4.67646)" rotation="4141.046875" shadows="true"/>
+        <box id="18" type="dynamic" texture="unknown" pos="(9.51445, -4.75221)" rotation="-1.132610" shadows="true"/>
+        <box id="19" type="dynamic" texture="unknown" pos="(11.8045, -4.66495)" rotation="8.021704" shadows="true"/>
+        <box id="20" type="dynamic" texture="unknown" pos="(13.5673, -4.42164)" rotation="8.042961" shadows="true"/>
+        <box id="21" type="dynamic" texture="unknown" pos="(15.4717, -4.55613)" shadows="true"/>
+        <box id="22" type="dynamic" texture="unknown" pos="(17.3207, -4.67504)" rotation="-5.877378" shadows="true"/>
+        <box id="23" type="dynamic" texture="unknown" pos="(19.2549, -4.87415)" rotation="-5.877391" shadows="true"/>
+        <box id="24" type="dynamic" texture="unknown" pos="(23.5539, -4.54428)" shadows="true"/>
+        <box id="25" type="dynamic" texture="unknown" pos="(-20.017, -0.644391)" rotation="396.690613" friction="3.000000" shadows="true"/>
+        <box id="54" type="dynamic" texture="unknown" pos="(-2.71376, -0.66417)" rotation="917.806213" linvel="(-3.21153, -1.19053)" angvel="-4.890520" shadows="true"/>
     </basicbodies>
     <polybodies/>
     <polychains>
@@ -463,9 +464,12 @@
         </chain>
     </polychains>
     <entities/>
-    <joints/>
+    <joints>
+        <distance body1="38" pt1="(-16.398, 1.71732)" body2="5" pt2="(-0.00684845, 0.0796168)"/>
+        <distance body1="38" pt1="(-6.93717, 0.39252)" body2="54" pt2="(0.0697505, -0.131066)"/>
+    </joints>
     <deco>
-        <layer z="5">
+        <layer z="10">
             <img texture="fond_1" position="(0, 0)"/>
         </layer>
         <layer z="-1">
@@ -480,11 +484,11 @@
         <triggers/>
     </events>
     <lights>
-      <point layer="1" pos="(1, 2)" radius="600" color="(140, 20, 200)" />
-      <point layer="1" pos="(3, 1)" radius="200" color="(0, 200, 100)" />
-      <point layer="10" pos="(2, -1)" radius="400" color="(59, 0, 100)" />
-      <point layer="10" pos="(-2, -1)" radius="400" color="(100, 255, 0)" />
-      <point layer="10" pos="(-12, 2)" radius="400" color="(255, 20, 50)" />
-      <point layer="10" pos="(-10, -2)" radius="400" color="(37, 50, 168)" />
+        <point layer="1" pos="(1, 2)" radius="600" color="(140, 20, 200)"/>
+        <point layer="1" pos="(3, 1)" radius="200" color="(0, 200, 100)"/>
+        <point layer="1" pos="(2, -1)" radius="400" color="(59, 0, 100)"/>
+        <point layer="1" pos="(-2, -1)" radius="400" color="(100, 255, 0)"/>
+        <point layer="1" pos="(-12, 2)" radius="400" color="(255, 20, 50)"/>
+        <point layer="1" pos="(-10, -2)" radius="400" color="(37, 50, 168)"/>
     </lights>
 </level>

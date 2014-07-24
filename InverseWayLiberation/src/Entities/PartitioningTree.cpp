@@ -2,8 +2,6 @@
 #include "PartitioningTree.h"
 #include "Hull.h"
 
-#define INT(x) ((x >= 0.0) ? int(x) : (int(x) - 1)) // TODO: Limits
-
 // Ctor
 Cell::Cell(void)
 {
@@ -20,11 +18,27 @@ Cell::~Cell(void)
 // Gestion des Hulls
 void Cell::AddHull(Hull *hull)
 {
+	Moved();
 	mHulls.push_back(hull);
 }
 void Cell::RemoveHull(Hull *hull)
 {
+	Moved();
 	mHulls.remove(hull);
+}
+
+// Gestion de l'info de déplacement
+bool Cell::HasMoved(void) const
+{
+	return mMoved;
+}
+void Cell::Moved(void)
+{
+	mMoved = true;
+}
+void Cell::PostUpdate(void)
+{
+	mMoved = false;
 }
 
 // Récupération des Hulls
@@ -35,7 +49,7 @@ std::list<Hull*>& Cell::GetHulls(void)
 
 // Ctor
 PartitioningTree::PartitioningTree(void)
-	: mCellSize(1000U) // 10m
+	: mCellSize(600U) // 6m
 {
 }
 
@@ -52,7 +66,8 @@ void PartitioningTree::UpdateHull(Hull *hull)
 {
 	if (!hull->IsValid()) return;
 
-	// Enlève le hull de ses Cells
+	// Enlève le hull de ses Cells en les prévenant qu'on s'en va
+	hull->Moved();
 	hull->RemoveFromCells();
 
 	// Récupère l'index de la position
@@ -73,10 +88,12 @@ void PartitioningTree::UpdateHull(Hull *hull)
 		}
 	}
 }
-void PartitioningTree::UpdateAll(void)
+void PartitioningTree::PostUpdateAll(void)
 {
 	for (auto &hull : mHulls)
-		hull->Update();
+		hull->PostUpdate();
+	for (auto &cell : mCells)
+		cell.second.PostUpdate();
 }
 void PartitioningTree::RegisterHull(Hull *hull)
 {
@@ -90,7 +107,38 @@ void PartitioningTree::UnregisterHull(Hull *hull)
 }
 
 // Recherche
-std::list<Hull*> PartitioningTree::GetHulls(const sf::FloatRect &rect)
+bool PartitioningTree::HasMovedIn(const sf::FloatRect &rect)
+{
+	// Retour
+	bool moved = false;
+
+	// Récupère l'index de la position
+	int ix = static_cast<int>(floor(rect.left / mCellSize));
+	int iy = static_cast<int>(floor(rect.top / mCellSize));
+
+	// Parcours toutes les Cells survollées par le rect
+	int imax = static_cast<int>(floor((rect.left + rect.width) / mCellSize)) - ix;
+	int jmax = static_cast<int>(floor((rect.top + rect.height) / mCellSize)) - iy;
+	for (int i = 0; i <= imax; ++i)
+	{
+		for (int j = 0; j <= jmax; ++j)
+		{
+			// Cherche la cellule actuelle
+			auto it = mCells.find(std::make_pair(ix + i, iy + j));
+			if (it == mCells.end()) continue;
+
+			// Récupère la Cell
+			Cell& c(it->second);
+
+			// Regarde la Cell a bougé
+			if (c.HasMoved())
+				moved = true;
+		}
+	}
+
+	return moved;
+}
+std::list<Hull*> PartitioningTree::GetHulls(const sf::FloatRect &rect, bool *moved)
 {
 	// Liste de retour
 	std::list<Hull*> ret;
@@ -111,8 +159,12 @@ std::list<Hull*> PartitioningTree::GetHulls(const sf::FloatRect &rect)
 			if (it == mCells.end()) continue;
 
 			// Récupère la Cell et copie les Hulls
-			Cell* c(&it->second);
-			std::copy(c->GetHulls().begin(), c->GetHulls().end(), std::back_inserter(ret));
+			Cell& c(it->second);
+			std::copy(c.GetHulls().begin(), c.GetHulls().end(), std::back_inserter(ret));
+
+			// Regarde la Cell a bougé
+			if (c.HasMoved() && moved)
+				*moved = true;
 		}
 	}
 

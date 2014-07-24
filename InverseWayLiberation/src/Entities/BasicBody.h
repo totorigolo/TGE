@@ -19,7 +19,7 @@ public:
 	BasicBody(int layer = 1, unsigned int ID = 0U);
 
 	// Mise à jour
-	virtual void Update();
+	virtual void PreUpdate();
 
 	// Création du body
 	bool CreateBox(b2Vec3 posRot, b2BodyType type, Texture::Ptr texture,

@@ -14,10 +14,8 @@ BasicBody::BasicBody(int layer, unsigned int ID)
 }
 
 // Mise à jour
-void BasicBody::Update()
+void BasicBody::PreUpdate()
 {
-	BaseBody::Update();
-
 	if (!mBody || !mBodyIsCreated || !mIsAlive) return;
 
 	// Mise à jour du Hull
@@ -69,7 +67,6 @@ bool BasicBody::CreateBox(b2Vec3 posRot, b2BodyType type, Texture::Ptr texture,
 	mIsAlive = true;
 
 	// Règle le Hull
-	//mHull.SetPosAndSize(b22sfVec(getVec2(posRot), mPhysicMgr.GetPPM()), u2f(mTexture->getSize()));
 	mHull.SetDrawable(true);
 
 	return true;
@@ -113,7 +110,6 @@ bool BasicBody::CreateCircle(b2Vec3 posRot, b2BodyType type, Texture::Ptr textur
 	mIsAlive = true;
 
 	// Règle le Hull
-	//mHull.SetPosAndSize(b22sfVec(getVec2(posRot), mPhysicMgr.GetPPM()), u2f(mTexture->getSize()));
 	mHull.SetDrawable(true);
 
 	return true;

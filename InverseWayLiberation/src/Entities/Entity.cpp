@@ -16,9 +16,14 @@ Entity::~Entity()
 }
 
 // Mise à jour
+void Entity::PreUpdate()
+{
+}
 void Entity::Update()
 {
-	this->Update();
+}
+void Entity::PostUpdate()
+{
 }
 
 // Gestion du Layer

@@ -11,10 +11,8 @@ PolyBody::PolyBody(int layer, unsigned int ID)
 }
 
 // Mise à jour
-void PolyBody::Update()
+void PolyBody::PreUpdate()
 {
-	BaseBody::Update();
-
 	if (!mBody || !mBodyIsCreated || !mIsAlive) return;
 
 	// Pour chaque fixture

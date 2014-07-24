@@ -131,7 +131,6 @@ void LightEngine::DrawPhysicalHull(PointLight *light, const b2Body& body)
 				va[chain->m_count].position = b22sfVec(b2Mul(t, chain->m_vertices[0]), PhysicManager::GetInstance().GetPPM());
 
 			// Dessine le polygone
-			light->textures->casterTex.resetGLStates();
 			glLineWidth(3.5f);
 			light->textures->casterTex.draw(va);
 			glLineWidth(1.f);
@@ -164,52 +163,17 @@ void LightEngine::DrawPhysicalHull(PointLight *light, const b2Body& body)
 			mRenderWindows["physicalHull"]->draw(sfpoly);
 #endif
 		}
-		/*if (shape->GetType() == b2Shape::e_chain)
-		{
-			// Récupère le shape
-			b2ChainShape *chain = (b2ChainShape*) shape;
-
-			// Crée le polygone
-			sf::ConvexShape sfpoly;
-			sfpoly.setPointCount(chain->m_count + 1U);
-
-			// Remplit le polygone
-			for (int32 i = 0; i < chain->m_count; ++i)
-			{
-				sfpoly.setPoint(i, b22sfVec(b2Mul(t, chain->m_vertices[i]), PhysicManager::GetInstance().GetPPM()));
-			}
-			sfpoly.setPoint(chain->m_count, b22sfVec(b2Mul(t, chain->m_vertices[0]), PhysicManager::GetInstance().GetPPM()));
-
-			// Dessine le polygone
-			light->textures->casterTex.draw(sfpoly);
-			mRenderWindow.draw(sfpoly);
-		}
-		else if (shape->GetType() == b2Shape::e_polygon)
-		{
-			// Récupère le shape
-			b2PolygonShape *poly = (b2PolygonShape*) shape;
-
-			// Crée le polygone
-			sf::ConvexShape sfpoly;
-			sfpoly.setPointCount(poly->m_count + 1U);
-
-			// Remplit le polygone
-			for (int32 i = 0; i < poly->m_count; ++i)
-			{
-				sfpoly.setPoint(i, b22sfVec(b2Mul(t, poly->m_vertices[i]), PhysicManager::GetInstance().GetPPM()));
-			}
-			sfpoly.setPoint(poly->m_count, b22sfVec(b2Mul(t, poly->m_vertices[0]), PhysicManager::GetInstance().GetPPM()));
-
-			// Dessine le polygone
-			light->textures->casterTex.draw(sfpoly);
-			mRenderWindow.draw(sfpoly);
-		}*/
 	}
 
 	// Debug Draw
 #if LIGHTENGINE_DEBUGDRAW
 	mRenderWindows["physicalHull"]->display();
 #endif
+}
+void LightEngine::Clear(PointLight *light)
+{
+	// Efface la casterTexture
+	light->textures->casterTex.clear(sf::Color::Transparent);
 }
 
 // Crée les ombres
@@ -220,13 +184,13 @@ void LightEngine::CreateShadows(PointLight *light)
 
 	// Applique le distort shader
 	mShaderStates.shader = &distortShader;
-	light->textures->distortTex.draw(light->textures->casterSprite, mShaderStates);
+	light->textures->distortTex.draw(light->textures->casterSprite , mShaderStates);
 	light->textures->distortTex.display();
 	
 	// Applique le reduce shader
 	reduceShader.setParameter("renderTargetWidth", light->GetBoundingBox().width);
 	mShaderStates.shader = &reduceShader;
-	light->textures->reduceTex.draw(light->textures->distortSprite, mShaderStates);
+	light->textures->reduceTex.draw(light->textures->distortSprite , mShaderStates);
 
 	// Applique le shadow shader
 	shadowShader.setParameter("reduce", light->textures->reduceTex.getTexture());
@@ -234,7 +198,7 @@ void LightEngine::CreateShadows(PointLight *light)
 	shadowShader.setParameter("lightColor", light->mLightColor);
 	mShaderStates.shader = &shadowShader;
 	light->shadowTex.clear();
-	light->shadowTex.draw(light->textures->casterSprite, mShaderStates);
+	light->shadowTex.draw(light->textures->casterSprite , mShaderStates);
 	light->shadowTex.display();
 	
 	// Applique le blur shader
@@ -247,7 +211,6 @@ void LightEngine::CreateShadows(PointLight *light)
 
 	// Efface la casterTexture
 	light->textures->casterTex.clear(sf::Color::Transparent);
-
 
 #if LIGHTENGINE_DEBUGDRAW
 	mRenderWindows["casterTex"]->clear();

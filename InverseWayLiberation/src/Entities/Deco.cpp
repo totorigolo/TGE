@@ -32,12 +32,6 @@ Deco::~Deco()
 {
 }
 
-// Mise à jour
-void Deco::Update()
-{
-	// Rien à faire
-}
-
 // Pour le rendu
 void Deco::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {

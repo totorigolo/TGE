@@ -23,10 +23,20 @@ void EntityManager::Update()
 			++it;
 	}
 
-	// Met à jour toutes les Entities
+	// PreUpdate toutes les Entities
+	for (std::list<Entity*>::iterator it = mEntities.begin(); it != mEntities.end(); ++it)
+	{
+		(*it)->PreUpdate();
+	}
+	// Update toutes les Entities
 	for (std::list<Entity*>::iterator it = mEntities.begin(); it != mEntities.end(); ++it)
 	{
 		(*it)->Update();
+	}
+	// PostUpdate toutes les Entities
+	for (std::list<Entity*>::iterator it = mEntities.begin(); it != mEntities.end(); ++it)
+	{
+		(*it)->PostUpdate();
 	}
 }
 

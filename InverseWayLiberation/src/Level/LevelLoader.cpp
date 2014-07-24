@@ -536,16 +536,16 @@ bool LevelLoader::ProcessBasicBodies()
 		else
 			Dialog::Error("BasicBody forme inconnu (" + forme + ") !");
 
-		// Restore l'état
-		if (type == b2BodyType::b2_dynamicBody || type == b2BodyType::b2_kinematicBody)
-		{
-			bb->GetBody()->SetLinearVelocity(linvel);
-			bb->GetBody()->SetAngularVelocity(angvel);
-		}
-
 		// Si le BasicBody a été créé
 		if (bb)
 		{
+			// Restore l'état
+			if (type == b2BodyType::b2_dynamicBody || type == b2BodyType::b2_kinematicBody)
+			{
+				bb->GetBody()->SetLinearVelocity(linvel);
+				bb->GetBody()->SetAngularVelocity(angvel);
+			}
+
 			// Propriétés de collision
 			body->QueryBoolAttribute("osp", &osp);
 			body->QueryBoolAttribute("bullet", &bullet);

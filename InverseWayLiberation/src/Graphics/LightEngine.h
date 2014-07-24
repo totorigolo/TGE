@@ -41,6 +41,7 @@ public:
 	// Dessiner les obstables
 	void DrawHull(PointLight *light, const sf::Drawable& hull);
 	void DrawPhysicalHull(PointLight *light, const b2Body& body);
+	void Clear(PointLight *light);
 
 	// Crée les ombres
 	void CreateShadows(PointLight *light);

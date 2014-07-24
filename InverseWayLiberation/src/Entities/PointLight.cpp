@@ -62,17 +62,48 @@ const sf::Vector2f& PointLight::GetPosition_sf(void) const
 void PointLight::Update(void)
 {
 	// Met à jour les ombres si besoin
-	if (mUpdate)
+	if (mIsAlive)
 	{
+		bool hullMoved = false;
+
+		// Récupère un petit nom pour le PartitioningTree
 		PartitioningTree &pt = PartitioningTree::GetInstance();
-		pt.ApplyOnHulls(this->GetBoundingBox(), [this](Hull *h) {
+
+		/*// Regarde si au moins un hull a bougé dans le périmètre de la lumière, et dessine les shadow casters
+		pt.ApplyOnHulls(this->GetBoundingBox(), [this, &hullMoved](Hull *h) {
+			if (h->HasMoved())
+				hullMoved = true;
+
 			if (h->IsDrawable())
 				LightEngine::GetInstance().DrawHull(this, *h->GetShadowCaster());
-			if (h->IsPhysicallyDrawable())
+			else if (h->IsPhysicallyDrawable())
 				LightEngine::GetInstance().DrawPhysicalHull(this, *h->GetBodyShadowCaster());
-		});
-		// Crée et affiche les ombres
-		mEngine.CreateShadows(this);
+		}, &hullMoved);*/
+
+		// Regarde si au moins un hull a bougé dans le périmètre de la lumière, et dessine les shadow casters
+		hullMoved = pt.HasMovedIn(this->GetBoundingBox());
+
+		// Si les ombres ne sont plus à jour
+		if (mUpdate || hullMoved)
+		{
+			// Regarde si au moins un hull a bougé dans le périmètre de la lumière, et dessine les shadow casters
+			pt.ApplyOnHulls(this->GetBoundingBox(), [this, &hullMoved](Hull *h) {
+				if (h->IsDrawable())
+					LightEngine::GetInstance().DrawHull(this, *h->GetShadowCaster());
+				else if (h->IsPhysicallyDrawable())
+					LightEngine::GetInstance().DrawPhysicalHull(this, *h->GetBodyShadowCaster());
+			});
+
+			// Crée et affiche les ombres
+			mEngine.CreateShadows(this);
+		}
+		else
+		{
+			// Efface la caster texture
+			LightEngine::GetInstance().Clear(this);
+		}
+
+		mUpdate = false;
 	}
 }
 
@@ -139,6 +170,9 @@ void PointLight::CreateTextures(void)
 
 	// Règle la vue
 	view = textures->casterTex.getDefaultView();
+
+	// Initialise l'état OpenGL, pour éviter le reset plus tard
+	textures->casterTex.resetGLStates();
 }
 
 // Rendu

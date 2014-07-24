@@ -93,7 +93,7 @@ void InputManager::Update()
 		AddEvent(mEvent);
 
 		// Passe l'évènement à chaque Desktop
-		for each (auto desktop in mDesktops)
+		for each (auto &desktop in mDesktops)
 		{
 			desktop->HandleEvent(mEvent);
 		}

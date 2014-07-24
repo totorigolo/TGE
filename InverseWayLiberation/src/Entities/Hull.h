@@ -16,6 +16,7 @@ public:
 
 	// Mise à jour dans le Partitioning System
 	void Update(void);
+	void PostUpdate(void);
 
 	// Gestion de l'activité du Hull
 	void Activate(void);
@@ -41,6 +42,10 @@ public:
 	sf::Drawable const* GetShadowCaster() const;
 	b2Body const* GetBodyShadowCaster() const;
 
+	// Gestion de l'info de déplacement
+	bool HasMoved(void) const;
+	void Moved(void);
+
 	// Accesseurs
 	sf::Vector2f GetPosition(void) const;
 	sf::Vector2f GetSize(void) const;
@@ -48,6 +53,7 @@ public:
 
 private:
 	// Propriétés
+	bool mMoved;
 	bool mIsValid;
 	bool mIsActive;
 	bool mIsDrawable;

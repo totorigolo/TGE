@@ -35,6 +35,7 @@ void BodyScenario::Unselect()
 void BodyScenario::Update()
 {
 	if (!mSelection) return;
+	mApply = false;
 
 	// Met à jour les valeurs
 	mPosX->SetText(Parser::floatToString(mSelection->GetPosition().x, 4));
@@ -80,6 +81,14 @@ void BodyScenario::Update()
 
 	// Gère le Layer
 	mLayer->SetValue(static_cast<float>(mSelection->GetLayer()));
+
+	// Mets à jour pour les ombres
+	if (mSelection->IsActiveShadows())
+		mShadows[0]->SetActive(true);
+	else
+		mShadows[1]->SetActive(true);
+
+	mApply = true;
 }
 
 // Construit la fenêtre et les éléments
@@ -189,6 +198,18 @@ void BodyScenario::Fill()
 	mLayerHBox->PackEnd(mLayerLabel, false);
 	mLayerHBox->PackEnd(mLayer);
 
+	// Ombres
+	mShadowsHBox = sfg::Box::Create(sfg::Box::Orientation::HORIZONTAL);
+	mShadowsLabel = sfg::Label::Create("Ombres :");
+	mShadows.resize(2);
+	mShadows[0] = sfg::RadioButton::Create("Oui");
+	mShadows[0]->GetSignal(sfg::RadioButton::OnToggle).Connect(std::bind(&BodyScenario::OnChangeShadows, this));
+	mShadows[1] = sfg::RadioButton::Create("Non", mShadows[0]->GetGroup());
+	mShadows[1]->GetSignal(sfg::RadioButton::OnToggle).Connect(std::bind(&BodyScenario::OnChangeShadows, this));
+	mShadowsHBox->PackEnd(mShadowsLabel);
+	mShadowsHBox->PackEnd(mShadows[0]);
+	mShadowsHBox->PackEnd(mShadows[1]);
+
 	// Bouton Détruire & ClearForces
 	mButtonsHBox1 = sfg::Box::Create(sfg::Box::Orientation::HORIZONTAL);
 	mDestroy = sfg::Button::Create("Détruire");
@@ -214,6 +235,7 @@ void BodyScenario::Fill()
 	AddToVBox(mPhysicsParamsTable);
 	AddToVBox(mTextureHBox);
 	AddToVBox(mLayerHBox);
+	AddToVBox(mShadowsHBox);
 	AddToVBox(mButtonsHBox1);
 	AddToVBox(mButtonsHBox2);
 }
@@ -255,6 +277,14 @@ void BodyScenario::OnChangeLayer()
 	if (!mApply || !mSelection) return;
 
 	mSelection->SetLayer(static_cast<int>(mLayer->GetValue()));
+}
+void BodyScenario::OnChangeShadows()
+{
+	if (!mApply || !mSelection) return;
+
+	// Change les ombres
+	mSelection->SetShadowsActive(mShadows[0]->IsActive());
+	Update();
 }
 void BodyScenario::OnChangePosXp()
 {
