@@ -79,6 +79,9 @@ public:
 		}
 	}
 
+	// Debug Draw
+	void DrawDebug(sf::RenderTarget& target) const;
+
 private:
 	// Taille des zones et nb de zones
 	unsigned int mCellSize;

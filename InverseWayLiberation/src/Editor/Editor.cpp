@@ -9,6 +9,7 @@
 #include "../Entities/BasicBody.h"
 #include "../Entities/EntityFactory.h"
 #include "../Entities/EntityManager.h"
+#include "../Entities/PartitioningTree.h"
 #include "../Physics/Joints/MouseJoint.h"
 #include "../Physics/Joints/DistanceJoint.h"
 #include "../Physics/Callback/PointCallback.h"
@@ -543,7 +544,11 @@ void Editor::OnRender()
 	mWindow.draw(mLevel);
 
 	// Affichage du debug
-	if (!mDebugDraw) mPhysicMgr.DrawDebugData();
+	if (!mDebugDraw)
+	{
+		mPhysicMgr.DrawDebugData();
+		PartitioningTree::GetInstance().DrawDebug(mWindow);
+	}
 
 	// Affichage de la GUI
 	if (mEditBox.get()) mWindow.draw(mEditBox->GetSelectionMark());

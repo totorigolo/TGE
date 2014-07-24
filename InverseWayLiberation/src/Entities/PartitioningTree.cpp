@@ -49,7 +49,7 @@ std::list<Hull*>& Cell::GetHulls(void)
 
 // Ctor
 PartitioningTree::PartitioningTree(void)
-	: mCellSize(600U) // 6m
+	: mCellSize(500U) // 5m
 {
 }
 
@@ -169,4 +169,30 @@ std::list<Hull*> PartitioningTree::GetHulls(const sf::FloatRect &rect, bool *mov
 	}
 
 	return ret;
+}
+
+// Debug Draw
+void PartitioningTree::DrawDebug(sf::RenderTarget& target) const
+{
+	// TODO: Se limiter à l'écran
+	sf::VertexArray va(sf::Lines, (100+100+1)*2*2);
+
+	for (int i = -100; i <= 100; ++i)
+	{
+		int j = i + 100;
+
+		// Horizontalement
+		va[(4 * j) + 0].position = sf::Vector2f(float(i * float(mCellSize)), -100.f * float(mCellSize));
+		va[(4 * j) + 1].position = sf::Vector2f(float(i * float(mCellSize)), 100.f * float(mCellSize));
+		va[(4 * j) + 0].color = sf::Color(100, 50, 0);
+		va[(4 * j) + 1].color = sf::Color(100, 50, 0);
+
+		// Verticalement
+		va[(4 * j) + 2].position = sf::Vector2f(-100.f * float(mCellSize), float(i * float(mCellSize)));
+		va[(4 * j) + 3].position = sf::Vector2f(100.f * float(mCellSize), float(i * float(mCellSize)));
+		va[(4 * j) + 2].color = sf::Color(100, 50, 0);
+		va[(4 * j) + 3].color = sf::Color(100, 50, 0);
+	}
+
+	target.draw(va);
 }
