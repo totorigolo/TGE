@@ -2,7 +2,6 @@
 #include "DecoCreationWindow.h"
 #include "../EditBox.h"
 #include "../../App/InputManager.h"
-#include "../../Entities/PolyBody.h"
 #include "../../Entities/EntityFactory.h"
 
 // Ctor

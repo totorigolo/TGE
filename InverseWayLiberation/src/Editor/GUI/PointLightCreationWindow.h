@@ -5,11 +5,11 @@
 #include "../../Entities/EntityManager.h"
 
 class EditBox;
-class DecoCreationWindow : public Window
+class PointLightCreationWindow : public Window
 {
 public:
 	// Ctor
-	DecoCreationWindow();
+	PointLightCreationWindow();
 
 	// Gestion de l'ajout
 	void Add(b2Vec2 pos);
@@ -34,17 +34,23 @@ private:
 	// EntityManager, PhysicMgr
 	EntityManager &mEntityMgr;
 	PhysicManager &mPhysicMgr;
-	ResourceManager &mResourceMgr;
 
 	/* Eléments */
 	sfg::Box::Ptr mVBox;
 	sfg::Label::Ptr mMode;
 	sfg::Label::Ptr mHelpLabel;
 
-	// Texture
-	sfg::Box::Ptr mTextureHBox;
-	sfg::Label::Ptr mTextureLabel;
-	sfg::ComboBox::Ptr mTexture;
+	// Couleur
+	sfg::Box::Ptr mColorHBox;
+	sfg::Label::Ptr mColorLabel;
+	sfg::SpinButton::Ptr mColorR;
+	sfg::SpinButton::Ptr mColorG;
+	sfg::SpinButton::Ptr mColorB;
+
+	// Rayon
+	sfg::Box::Ptr mRadiusHBox;
+	sfg::Label::Ptr mRadiusLabel;
+	sfg::SpinButton::Ptr mRadius;
 
 	// Layer
 	sfg::Box::Ptr mLayerHBox;

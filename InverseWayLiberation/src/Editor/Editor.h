@@ -5,6 +5,7 @@
 #include "../Editor/GUI/PolyCreationWindow.h"
 #include "../Editor/GUI/DecoCreationWindow.h"
 #include "../Editor/GUI/BasicBodyCreationWindow.h"
+#include "../Editor/GUI/PointLightCreationWindow.h"
 #include "../App/SpyedKey.h"
 
 class PhysicManager;
@@ -70,6 +71,7 @@ private:
 	PolyCreationWindow *mPolyCreationWindow;
 	DecoCreationWindow *mDecoCreationWindow;
 	BasicBodyCreationWindow *mBasicBodyCreationWindow;
+	PointLightCreationWindow *mPointLightCreationWindow;
 
 	// Niveau
 	LevelManager &mLevel;

@@ -10,6 +10,7 @@
 #include "PolyBody.h"
 #include "PolyChain.h"
 #include "Deco.h"
+#include "PointLight.h"
 
 namespace EntityFactory
 {
@@ -29,7 +30,7 @@ namespace EntityFactory
 	// Crée une déco
 	void CreateDeco(const b2Vec3 &posRot, const std::string &texture, int layer)
 	{
-		// Crée le BasicBody / la Box
+		// Crée la déco
 		new Deco(layer, mResourceManager.GetTexture(texture), b32sfVec(posRot, mPhysicManager.GetPPM()));
 
 		// Trie les Entities
@@ -80,15 +81,15 @@ namespace EntityFactory
 		mEntityManager.SortByLayer();
 	}
 
-	// Crée un lampadaire
-	void CreateLamp(const b2Vec3 &posRot, int layer)
+	// Crée une PointLight
+	void CreatePointLight(const b2Vec2 &pos, int lightRadius, sf::Color lightColor, int layer)
 	{
-		// Crée le BasicBody / le lampadaire
-		BasicBody *b = new BasicBody(layer);
-		b->CreateBox(posRot, b2BodyType::b2_staticBody, mResourceManager.GetTexture("lampadere"), 0.1f, 0.05f);
-		
+		// Crée la PointLight
+		PointLight *l = new PointLight(lightRadius, lightColor, layer);
+		l->SetPosition(pos);
+
 		// Trie les Entities
-		EntityManager::GetInstance().SortByLayer();
+		mEntityManager.SortByLayer();
 	}
 
 	// Crée un Ragdoll

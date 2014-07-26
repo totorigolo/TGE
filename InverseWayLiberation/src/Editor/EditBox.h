@@ -10,6 +10,7 @@
 #include "GUI/DecoCreationWindow.h"
 #include "GUI/PolyCreationWindow.h"
 #include "GUI/BasicBodyCreationWindow.h"
+#include "GUI/PointLightCreationWindow.h"
 #include "../Entities/Entity.h"
 #include "../Physics/Joint.h"
 #include "../Lua/TriggersManager.h"
@@ -87,6 +88,7 @@ public:
 	void ShowDecoCreationWindow();
 	void ShowPolyCreationWindow();
 	void ShowBasicBodyCreationWindow();
+	void ShowPointLightCreationWindow();
 
 	// Fermeture des fenêtres / scénarios
 	void OnCloseLevelWindow(); // Callback
@@ -103,6 +105,7 @@ public:
 	DecoCreationWindow* GetDecoCreationWindow();
 	PolyCreationWindow* GetPolyCreationWindow();
 	BasicBodyCreationWindow* GetBasicBodyCreationWindow();
+	PointLightCreationWindow* GetPointLightCreationWindow();
 
 private:
 	// Actions différées
@@ -136,6 +139,7 @@ private:
 	DecoCreationWindow mDecoCreationWindow;
 	PolyCreationWindow mPolyCreationWindow;
 	BasicBodyCreationWindow mBasicBodyCreationWindow;
+	PointLightCreationWindow mPointLightCreationWindow;
 
 	// Etat des fenêtres / scénarios
 	bool mLevelWindowAdded;
@@ -146,4 +150,5 @@ private:
 	bool mDecoCreationWindowAdded;
 	bool mPolyCreationWindowAdded;
 	bool mBasicBodyCreationWindowAdded;
+	bool mPointLightCreationWindowAdded;
 };

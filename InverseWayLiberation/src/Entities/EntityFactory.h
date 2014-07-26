@@ -22,8 +22,8 @@ namespace EntityFactory
 	// Crée un PolyChain
 	void CreatePolyChain(const vector_b2Vec2 &vectices, PolyChain::Type type, const std::string &texture, int layer = 1);
 
-	// Crée un lampadaire
-	void CreateLamp(const b2Vec3 &posRot, int layer = 1);
+	// Crée une PointLight
+	void CreatePointLight(const b2Vec2 &pos, int lightRadius = 256, sf::Color lightColor = sf::Color::White, int layer = 1);
 
 	// Crée un Ragdoll
 	void CreateRagdoll(const b2Vec2 &position, int layer = 1);

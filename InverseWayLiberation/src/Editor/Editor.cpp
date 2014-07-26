@@ -31,8 +31,11 @@ Editor::Editor(sf::RenderWindow &window)
 	mDebugDraw(false),
 	// GUI
 	mSfGUI(App::GetInstance().GetSfGUI()),
-	// Autre
 	mPolyCreationWindow(nullptr),
+	mDecoCreationWindow(nullptr),
+	mBasicBodyCreationWindow(nullptr),
+	mPointLightCreationWindow(nullptr),
+	// Autre
 	mMouseMovingBody(nullptr),
 	mMouseJointCreated(false),
 	mMouseJointID(-1),
@@ -132,6 +135,7 @@ bool Editor::OnInit()
 	mPolyCreationWindow = mEditBox->GetPolyCreationWindow();
 	mDecoCreationWindow = mEditBox->GetDecoCreationWindow();
 	mBasicBodyCreationWindow = mEditBox->GetBasicBodyCreationWindow();
+	mPointLightCreationWindow = mEditBox->GetPointLightCreationWindow();
 
 	// Charge le style de la GUI
 	try {
@@ -299,6 +303,16 @@ void Editor::OnEvent()
 		if (mDecoCreationWindow->IsInAddMode())
 		{
 			mDecoCreationWindow->Add(mMp);
+		}
+	}
+
+	// EditBox : PointLight Creation
+	if (mInputManager.IsLMBClicked() && ctrl && mPointLightCreationWindow)
+	{
+		// Si la fenêtre de création est en mode ajout, on transmet les clics
+		if (mPointLightCreationWindow->IsInAddMode())
+		{
+			mPointLightCreationWindow->Add(mMp);
 		}
 	}
 

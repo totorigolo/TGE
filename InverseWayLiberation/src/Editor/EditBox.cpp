@@ -27,7 +27,7 @@ EditBox::EditBox(sfg::Desktop &desktop)
 	mSelectedEntity(nullptr), mSelectedJoint(nullptr), mSelectionType(SelectionType::Null), mSelectionChanged(false),
 	mEmptyScenario(*this), mDecoScenario(*this), mBodyScenario(*this), mPointLightScenario(*this),
 	mLevelWindowAdded(false), mLuaConsoleWindowAdded(false), mColFilteringWindowAdded(false), mDecoCreationWindowAdded(false),
-	mPolyCreationWindowAdded(false), mBasicBodyCreationWindowAdded(false), mTexturesWindowAdded(false)
+	mPolyCreationWindowAdded(false), mBasicBodyCreationWindowAdded(false), mPointLightCreationWindowAdded(false), mTexturesWindowAdded(false)
 {
 	// Crée la fenêtre
 	mWindow = sfg::Window::Create();
@@ -475,6 +475,16 @@ void EditBox::ShowBasicBodyCreationWindow()
 
 	mBasicBodyCreationWindow.Show();
 }
+void EditBox::ShowPointLightCreationWindow()
+{
+	if (!mPointLightCreationWindowAdded)
+	{
+		mPointLightCreationWindow.RegisterInDesktop(&mDesktop);
+		mPointLightCreationWindowAdded = true;
+	}
+
+	mPointLightCreationWindow.Show();
+}
 
 // Fermeture des fenêtres / scénarios
 void EditBox::OnCloseLevelWindow()
@@ -522,4 +532,8 @@ PolyCreationWindow* EditBox::GetPolyCreationWindow()
 BasicBodyCreationWindow* EditBox::GetBasicBodyCreationWindow()
 {
 	return &mBasicBodyCreationWindow;
+}
+PointLightCreationWindow* EditBox::GetPointLightCreationWindow()
+{
+	return &mPointLightCreationWindow;
 }

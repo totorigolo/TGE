@@ -31,8 +31,10 @@ void LuaMachine::RegisterEntityFactory()
 				def("CreatePoly", (void(*)(const vector_b2Vec2&, b2BodyType, const std::string&, int)) EntityFactory::CreatePolyBody),
 				def("CreatePolyChain", (void(*)(const vector_b2Vec2&, PolyChain::Type, const std::string&)) EntityFactory::CreatePolyChain),
 				def("CreatePolyChain", (void(*)(const vector_b2Vec2&, PolyChain::Type, const std::string&, int)) EntityFactory::CreatePolyChain),
-				def("CreateLamp", (void(*)(const b2Vec3&, const std::string&)) EntityFactory::CreateLamp),
-				def("CreateLamp", (void(*)(const b2Vec3&, const std::string&, int)) EntityFactory::CreateLamp),
+				def("CreatePointLight", (void(*)(const b2Vec2&)) EntityFactory::CreatePointLight),
+				def("CreatePointLight", (void(*)(const b2Vec2&, int)) EntityFactory::CreatePointLight),
+				def("CreatePointLight", (void(*)(const b2Vec2&, int, const sf::Color&)) EntityFactory::CreatePointLight),
+				def("CreatePointLight", (void(*)(const b2Vec2&, int, const sf::Color&, int)) EntityFactory::CreatePointLight),
 				def("CreateRagdoll", (void(*)(const b2Vec2&)) EntityFactory::CreateRagdoll),
 				def("CreateRagdoll", (void(*)(const b2Vec2&, int)) EntityFactory::CreateRagdoll)
 			]

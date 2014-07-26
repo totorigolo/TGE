@@ -205,7 +205,7 @@ void PointLightScenario::OnChangeColorR()
 
 	// Change sa couleur
 	sf::Color c = mSelection->GetLightColor();
-	c.r = mColorR->GetValue();
+	c.r = (sf::Uint8) mColorR->GetValue();
 	mSelection->SetLightColor(c);
 	OnRefresh();
 }
@@ -215,7 +215,7 @@ void PointLightScenario::OnChangeColorG()
 
 	// Change sa couleur
 	sf::Color c = mSelection->GetLightColor();
-	c.g = mColorG->GetValue();
+	c.g = (sf::Uint8) mColorG->GetValue();
 	mSelection->SetLightColor(c);
 	OnRefresh();
 }
@@ -225,7 +225,7 @@ void PointLightScenario::OnChangeColorB()
 
 	// Change sa couleur
 	sf::Color c = mSelection->GetLightColor();
-	c.b = mColorB->GetValue();
+	c.b = (sf::Uint8) mColorB->GetValue();
 	mSelection->SetLightColor(c);
 	OnRefresh();
 }
