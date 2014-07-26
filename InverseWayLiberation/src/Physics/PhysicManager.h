@@ -77,8 +77,9 @@ private:
 	float mPPM;
 
 protected:
-	// Propriétés
+	// Variables pour le Step
 	float mTimeStep;
+	sf::Clock mStepClock;
 
 	// Monde Box2D
 	b2World mWorld;

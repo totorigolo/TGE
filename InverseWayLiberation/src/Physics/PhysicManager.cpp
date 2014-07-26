@@ -210,7 +210,8 @@ float PhysicManager::GetTimeStep() const
 void PhysicManager::Step(int velocityIt, int positionIt)
 {
 	// TODO: Fixer le Timestep
-	mWorld.Step(mTimeStep, velocityIt, positionIt);
+	mWorld.Step(mStepClock.getElapsedTime().asSeconds(), velocityIt, positionIt);
+	mStepClock.restart();
 }
 
 // Gestion des propriétés du monde
