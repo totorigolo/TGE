@@ -5,6 +5,7 @@
 #include "GUI/LuaConsoleWindow.h"
 #include "GUI/BodyScenario.h"
 #include "GUI/TexturesWindow.h"
+#include "GUI/PointLightScenario.h"
 #include "GUI/ColFilteringWindow.h"
 #include "GUI/DecoCreationWindow.h"
 #include "GUI/PolyCreationWindow.h"
@@ -26,6 +27,7 @@ public:
 			PolyBody,
 			PolyChain,
 			Deco,
+			PointLight,
 			Grapnel,
 			LivingBeing,
 				Player,
@@ -78,6 +80,7 @@ public:
 	void OnShowLevelWindow(); // Callback
 	void ShowBodyScenario();
 	void ShowDecoScenario();
+	void ShowPointLightScenario();
 	void OnShowLuaConsoleWindow(); // Callback
 	void OnShowColFilteringWindow(); // Callback
 	void ShowTexturesWindow();
@@ -95,6 +98,7 @@ public:
 	BodyScenario* GetBodyScenario();
 	TexturesWindow* GetTexturesWindow();
 	LuaConsoleWindow* GetLuaConsoleWindow();
+	PointLightScenario* GetPointLightScenario();
 	ColFilteringWindow* GetColFilteringWindow();
 	DecoCreationWindow* GetDecoCreationWindow();
 	PolyCreationWindow* GetPolyCreationWindow();
@@ -125,6 +129,7 @@ private:
 	LevelWindow mLevelWindow;
 	DecoScenario mDecoScenario;
 	BodyScenario mBodyScenario;
+	PointLightScenario mPointLightScenario;
 	TexturesWindow mTexturesWindow;
 	LuaConsoleWindow mLuaConsoleWindow;
 	ColFilteringWindow mColFilteringWindow;

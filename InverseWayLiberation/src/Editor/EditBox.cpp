@@ -25,7 +25,7 @@ EditBox::EditBox(sfg::Desktop &desktop)
 	mUpdateScheduled(false), mUnselectionScheduled(false),
 	mLevelMgr(LevelManager::GetInstance()), mPhysicMgr(PhysicManager::GetInstance()), mEntityMgr(EntityManager::GetInstance()),
 	mSelectedEntity(nullptr), mSelectedJoint(nullptr), mSelectionType(SelectionType::Null), mSelectionChanged(false),
-	mEmptyScenario(*this), mDecoScenario(*this), mBodyScenario(*this),
+	mEmptyScenario(*this), mDecoScenario(*this), mBodyScenario(*this), mPointLightScenario(*this),
 	mLevelWindowAdded(false), mLuaConsoleWindowAdded(false), mColFilteringWindowAdded(false), mDecoCreationWindowAdded(false),
 	mPolyCreationWindowAdded(false), mBasicBodyCreationWindowAdded(false), mTexturesWindowAdded(false)
 {
@@ -184,6 +184,7 @@ void EditBox::EmptyGUI()
 	mDecoScenario.Hide();
 	mEmptyScenario.Hide();
 	mBodyScenario.Hide();
+	mPointLightScenario.Hide();
 
 	// Vide la fenêtre
 	mWindow->RemoveAll();
@@ -246,6 +247,14 @@ void EditBox::UpdateGUI()
 			// Montre le scénario de la Deco
 			mDecoScenario.Select((Deco*) e);
 			ShowDecoScenario();
+		}
+		else if (e->GetType() == EntityType::PointLight)
+		{
+			mSelectionType = SelectionType::PointLight;
+
+			// Montre le scénario de la Deco
+			mPointLightScenario.Select((PointLight*) e);
+			ShowPointLightScenario();
 		}
 		else if (e->GetType() == EntityType::Grapnel)
 		{
@@ -354,6 +363,14 @@ sf::CircleShape EditBox::GetSelectionMark()
 
 		cs.setPosition(d->GetSprite()->getPosition());
 	}
+	else if (mSelectionType == SelectionType::PointLight)
+	{
+		// Obtient la PointLight
+		PointLight *pl = (PointLight*) mSelectedEntity;
+		myAssert(pl, "Erreur lors du la détermination du type.");
+
+		cs.setPosition(pl->GetPosition_sf());
+	}
 	else if (mSelectionType == SelectionType::Player)
 	{
 		// Obtient le Player
@@ -392,6 +409,11 @@ void EditBox::ShowDecoScenario()
 {
 	mDecoScenario.AddInWindow(mWindow);
 	mDecoScenario.Show();
+}
+void EditBox::ShowPointLightScenario()
+{
+	mPointLightScenario.AddInWindow(mWindow);
+	mPointLightScenario.Show();
 }
 void EditBox::ShowTexturesWindow()
 {

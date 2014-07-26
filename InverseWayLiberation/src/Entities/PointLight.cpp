@@ -69,19 +69,9 @@ void PointLight::Update(void)
 		// Récupère un petit nom pour le PartitioningTree
 		PartitioningTree &pt = PartitioningTree::GetInstance();
 
-		/*// Regarde si au moins un hull a bougé dans le périmètre de la lumière, et dessine les shadow casters
-		pt.ApplyOnHulls(this->GetBoundingBox(), [this, &hullMoved](Hull *h) {
-			if (h->HasMoved())
-				hullMoved = true;
-
-			if (h->IsDrawable())
-				LightEngine::GetInstance().DrawHull(this, *h->GetShadowCaster());
-			else if (h->IsPhysicallyDrawable())
-				LightEngine::GetInstance().DrawPhysicalHull(this, *h->GetBodyShadowCaster());
-		}, &hullMoved);*/
-
 		// Regarde si au moins un hull a bougé dans le périmètre de la lumière, et dessine les shadow casters
-		hullMoved = pt.HasMovedIn(this->GetBoundingBox());
+		if (!mUpdate)
+			hullMoved = pt.HasMovedIn(this->GetBoundingBox());
 
 		// Si les ombres ne sont plus à jour
 		if (mUpdate || hullMoved)
@@ -89,9 +79,9 @@ void PointLight::Update(void)
 			// Regarde si au moins un hull a bougé dans le périmètre de la lumière, et dessine les shadow casters
 			pt.ApplyOnHulls(this->GetBoundingBox(), [this, &hullMoved](Hull *h) {
 				if (h->IsDrawable())
-					LightEngine::GetInstance().DrawHull(this, *h->GetShadowCaster());
+					mEngine.DrawHull(this, *h->GetShadowCaster());
 				else if (h->IsPhysicallyDrawable())
-					LightEngine::GetInstance().DrawPhysicalHull(this, *h->GetBodyShadowCaster());
+					mEngine.DrawPhysicalHull(this, *h->GetBodyShadowCaster());
 			});
 
 			// Crée et affiche les ombres
@@ -100,7 +90,7 @@ void PointLight::Update(void)
 		else
 		{
 			// Efface la caster texture
-			LightEngine::GetInstance().Clear(this);
+			mEngine.Clear(this);
 		}
 
 		mUpdate = false;
@@ -125,6 +115,7 @@ sf::Color PointLight::GetLightColor(void) const
 void PointLight::SetLightColor(const sf::Color& lightColor)
 {
 	mLightColor = lightColor;
+	mUpdate = true;
 }
 
 // Gère la taille de la lampe
@@ -134,8 +125,11 @@ unsigned int PointLight::GetLightRadius(void) const
 }
 void PointLight::SetLightRadius(unsigned int radius)
 {
+	mUpdate = true;
 	mLightRadius = radius;
 	CreateTextures();
+	view.setCenter(mPosition);
+	mRenderSprite.setPosition(mPosition - (u2f(shadowTex.getSize()) / 2.f));
 }
 
 // Récupère la boîte englobante

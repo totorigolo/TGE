@@ -7,6 +7,7 @@
 #include "../Entities/Deco.h"
 #include "../Entities/Player.h"
 #include "../Entities/BasicBody.h"
+#include "../Entities/PointLight.h"
 #include "../Entities/EntityFactory.h"
 #include "../Entities/EntityManager.h"
 #include "../Entities/PartitioningTree.h"
@@ -439,7 +440,7 @@ void Editor::OnEvent()
 			// Récupère la position de la souris en mode SFML
 			sf::Vector2f mousePos = mInputManager.GetMousePosRV();
 
-			// Les Entities (Déco)
+			// Les Entities (Déco et PointLight)
 			std::list<Entity*> &entities(mEntityMgr.GetEntities());
 			for (auto it = entities.rbegin(); it != entities.rend(); ++it) // Par Layer
 			{
@@ -451,6 +452,17 @@ void Editor::OnEvent()
 					if (d->GetSprite()->getGlobalBounds().contains(mousePos))
 					{
 						mEditBox->ChangeSelectedObject(d);
+						found = true;
+						break;
+					}
+				}
+				else if ((*it)->GetType() == EntityType::PointLight)
+				{
+					// Vérifie si le curseur est dessus
+					PointLight *pl = (PointLight*) (*it);
+					if (pl->GetBoundingBox().contains(mousePos))
+					{
+						mEditBox->ChangeSelectedObject(pl);
 						found = true;
 						break;
 					}

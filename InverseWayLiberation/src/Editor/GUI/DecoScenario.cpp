@@ -35,7 +35,6 @@ void DecoScenario::Unselect()
 void DecoScenario::Update()
 {
 	if (!mSelection) return;
-	mApply = false;
 
 	// Met à jour les valeurs
 	mPosX->SetText(Parser::floatToString(mSelection->GetPosition().x, 4));
@@ -64,8 +63,6 @@ void DecoScenario::Update()
 		mShadows[0]->SetActive(true);
 	else
 		mShadows[1]->SetActive(true);
-
-	mApply = true;
 }
 
 // Construit la fenêtre et les éléments
@@ -164,21 +161,21 @@ void DecoScenario::OnChangePosition()
 	// Change sa position et sa rotation
 	mSelection->SetPosition(b2Vec2(Parser::stringToFloat(mPosX->GetText()), Parser::stringToFloat(mPosY->GetText())));
 	mSelection->SetRotationD(Parser::stringToFloat(mRot->GetText()));
-	Update();
+	OnRefresh();
 }
 void DecoScenario::OnChangeTexture()
 {
 	if (!mApply || !mSelection) return;
 
 	mSelection->SetTexture(mResourceMgr.GetTexture(mTexture->GetItem(mTexture->GetSelectedItem())));
-	Update();
+	OnRefresh();
 }
 void DecoScenario::OnChangeLayer()
 {
 	if (!mApply || !mSelection) return;
 
 	mSelection->SetLayer(static_cast<int>(mLayer->GetValue()));
-	Update();
+	OnRefresh();
 }
 void DecoScenario::OnChangeShadows()
 {
@@ -186,7 +183,7 @@ void DecoScenario::OnChangeShadows()
 
 	// Change les ombres
 	mSelection->SetShadowsActive(mShadows[0]->IsActive());
-	Update();
+	OnRefresh();
 }
 void DecoScenario::OnChangePosXp()
 {
@@ -194,7 +191,7 @@ void DecoScenario::OnChangePosXp()
 
 	// Change sa position
 	mSelection->SetPosition(mSelection->GetPositionPx() - sf::Vector2f(-mPosStep->GetValue() * mPhysicMgr.GetPPM(), 0.f));
-	Update();
+	OnRefresh();
 }
 void DecoScenario::OnChangePosXm()
 {
@@ -202,7 +199,7 @@ void DecoScenario::OnChangePosXm()
 
 	// Change sa position
 	mSelection->SetPosition(mSelection->GetPositionPx() - sf::Vector2f(mPosStep->GetValue() * mPhysicMgr.GetPPM(), 0.f));
-	Update();
+	OnRefresh();
 }
 void DecoScenario::OnChangePosYp()
 {
@@ -210,7 +207,7 @@ void DecoScenario::OnChangePosYp()
 
 	// Change sa position
 	mSelection->SetPosition(mSelection->GetPositionPx() - sf::Vector2f(0.f, mPosStep->GetValue() * mPhysicMgr.GetPPM()));
-	Update();
+	OnRefresh();
 }
 void DecoScenario::OnChangePosYm()
 {
@@ -218,7 +215,7 @@ void DecoScenario::OnChangePosYm()
 
 	// Change sa position
 	mSelection->SetPosition(mSelection->GetPositionPx() - sf::Vector2f(0.f, -mPosStep->GetValue() * mPhysicMgr.GetPPM()));
-	Update();
+	OnRefresh();
 }
 void DecoScenario::OnChangePosRp()
 {
@@ -226,7 +223,7 @@ void DecoScenario::OnChangePosRp()
 
 	// Change sa rotation
 	mSelection->SetRotationD(mSelection->GetRotationD() + 2);
-	Update();
+	OnRefresh();
 }
 void DecoScenario::OnChangePosRm()
 {
@@ -234,7 +231,7 @@ void DecoScenario::OnChangePosRm()
 
 	// Change sa rotation
 	mSelection->SetRotationD(mSelection->GetRotationD() - 2);
-	Update();
+	OnRefresh();
 }
 void DecoScenario::OnDestroy()
 {

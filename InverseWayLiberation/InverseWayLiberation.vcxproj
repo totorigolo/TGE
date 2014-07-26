@@ -29,6 +29,7 @@
     <ClCompile Include="src\Editor\GUI\EmptyScenario.cpp" />
     <ClCompile Include="src\Editor\GUI\LevelWindow.cpp" />
     <ClCompile Include="src\Editor\GUI\LuaConsoleWindow.cpp" />
+    <ClCompile Include="src\Editor\GUI\PointLightScenario.cpp" />
     <ClCompile Include="src\Editor\GUI\PolyCreationWindow.cpp" />
     <ClCompile Include="src\Editor\GUI\Scenario.cpp" />
     <ClCompile Include="src\Editor\GUI\TexturesWindow.cpp" />
@@ -112,6 +113,7 @@
     <ClInclude Include="src\Editor\GUI\EmptyScenario.h" />
     <ClInclude Include="src\Editor\GUI\LevelWindow.h" />
     <ClInclude Include="src\Editor\GUI\LuaConsoleWindow.h" />
+    <ClInclude Include="src\Editor\GUI\PointLightScenario.h" />
     <ClInclude Include="src\Editor\GUI\PolyCreationWindow.h" />
     <ClInclude Include="src\Editor\GUI\Scenario.h" />
     <ClInclude Include="src\Editor\GUI\TexturesWindow.h" />

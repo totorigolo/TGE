@@ -379,6 +379,9 @@
     <ClCompile Include="src\Entities\PolyBody.cpp">
       <Filter>Fichiers sources\Entities</Filter>
     </ClCompile>
+    <ClCompile Include="src\Editor\GUI\PointLightScenario.cpp">
+      <Filter>Fichiers sources\Editor\GUI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Physics\Joints\DistanceJoint.h">
@@ -617,6 +620,9 @@
     </ClInclude>
     <ClInclude Include="src\Entities\PolyBody.h">
       <Filter>Fichiers d%27en-tête\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Editor\GUI\PointLightScenario.h">
+      <Filter>Fichiers d%27en-tête\Editor\GUI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
