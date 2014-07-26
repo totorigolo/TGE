@@ -13,10 +13,12 @@ PolyBody::PolyBody(int layer, unsigned int ID)
 // Mise à jour
 void PolyBody::PreUpdate()
 {
+	BaseBody::PreUpdate();
+
 	if (!mBody || !mBodyIsCreated || !mIsAlive) return;
 
 	// Pour chaque fixture
-	if (mBody->GetFixtureList() && mBody->IsAwake())
+	if (mHasMoved || (mBody->IsAwake() && mBody->GetType() != b2BodyType::b2_staticBody))
 	{
 		// Mise à jour du Hull
 		b2AABB aabb = GetBoundingBox();

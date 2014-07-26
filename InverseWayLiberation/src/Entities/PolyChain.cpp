@@ -4,7 +4,7 @@
 
 // Ctor & dtor
 PolyChain::PolyChain(int layer, unsigned int ID)
-	: BaseBody(layer, ID), mChainType(Type::None), mHasMoved(true)
+	: BaseBody(layer, ID), mChainType(Type::None)
 {
 	// Défini le type de l'Entity
 	mType = EntityType::PolyChain;
@@ -13,6 +13,8 @@ PolyChain::PolyChain(int layer, unsigned int ID)
 // Mise à jour
 void PolyChain::PreUpdate()
 {
+	BaseBody::PreUpdate();
+
 	if (!mBody || !mBodyIsCreated || !mIsAlive) return;
 
 	// Pour chaque fixture
@@ -27,8 +29,6 @@ void PolyChain::PreUpdate()
 		sf::Vector2f sfpos = b22sfVec(pos, PhysicManager::GetInstance().GetPPM());
 		sf::Vector2f sfsize = b22sfVec(size, PhysicManager::GetInstance().GetPPM(), true);
 		mHull.SetPosAndSize(sfpos, sfsize);
-
-		mHasMoved = false;
 	}
 }
 
@@ -166,11 +166,4 @@ const std::vector<b2Vec2>& PolyChain::GetPoints() const
 PolyChain::Type PolyChain::GetChainType() const
 {
 	return mChainType;
-}
-// Héritage pour savoir qu'on a bougé
-void PolyChain::SetTransform(const b2Vec2 &position, float angle)
-{
-	BaseBody::SetTransform(position, angle);
-
-	mHasMoved = true;
 }

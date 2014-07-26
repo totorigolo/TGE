@@ -21,6 +21,7 @@ public:
 	virtual ~BaseBody();
 
 	// Mise à jour
+	virtual void PreUpdate();
 	virtual void Update();
 
 	// Destruction du body
@@ -89,4 +90,5 @@ protected:
 
 	// Ombres
 	Hull mHull;
+	bool mHasMoved;
 };

@@ -35,13 +35,8 @@ public:
 	const std::vector<b2Vec2>& GetPoints() const;
 	// Type
 	Type GetChainType() const;
-	// Héritage pour savoir qu'on a bougé
-	virtual void SetTransform(const b2Vec2 &position, float angle = 0.f);
 
 private:
-	// Etat
-	bool mHasMoved; // Les PolyChain sont toujours b2Awake, donc il faut stocker ça nous même
-
 	// Type
 	Type mChainType;
 

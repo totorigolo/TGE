@@ -7,7 +7,7 @@ BaseBody::BaseBody(int layer, unsigned int ID)
 	: Entity(layer, ID), mCollisionType(CollisionType::Default),
 	mBody(nullptr), mBodyIsCreated(false),
 	mPhysicMgr(PhysicManager::GetInstance()),
-	mHull(nullptr)
+	mHull(nullptr), mHasMoved(true)
 {
 	// Défini le type de l'Entity
 	mType = EntityType::BaseBody;
@@ -18,7 +18,7 @@ BaseBody::~BaseBody()
 }
 
 // Mise à jour
-void BaseBody::Update()
+void BaseBody::PreUpdate()
 {
 	// Si le body est valide
 	if (mBody && mBodyIsCreated && mIsAlive)
@@ -26,6 +26,14 @@ void BaseBody::Update()
 		// Mise à jour de la texture
 		mSprite.setPosition(b22sfVec(mBody->GetPosition(), mPhysicMgr.GetPPM()));
 		mSprite.setRotation(-mBody->GetAngle() * DPR);
+	}
+}
+void BaseBody::Update()
+{
+	// Si le body est valide
+	if (mBody && mBodyIsCreated && mIsAlive)
+	{
+		mHasMoved = false;
 	}
 }
 
@@ -46,17 +54,15 @@ void BaseBody::Destroy()
 // Ombres
 void BaseBody::ActivateShadows(void)
 {
-	/*/ Donne le Shadow Caster
-	if (mBody && mBodyIsCreated)
-		mHull.SetBodyShadowCaster(mBody);
+	mHull.Activate();
 
-	// Si il y a un shadow caster, c'est bon
-	if (mHull.GetBodyShadowCaster())*/
-		mHull.Activate();
+	mHasMoved = true;
 }
 void BaseBody::DeactivateShadows(void)
 {
 	mHull.Deactivate();
+
+	mHasMoved = true;
 }
 void BaseBody::SetShadowsActive(bool active)
 {
@@ -122,6 +128,7 @@ void BaseBody::Setb2BodyType(const b2BodyType &type)
 {
 	// Change le type
 	mBody->SetType(type);
+	mHasMoved = true;
 
 	// Rétablie la masse
 	if (type == b2_dynamicBody && mBody->GetMass() == 0)
@@ -133,6 +140,7 @@ void BaseBody::Setb2BodyType(const b2BodyType &type)
 void BaseBody::SetCollisionType(BaseBody::CollisionType type)
 {
 	mCollisionType = type;
+	mHasMoved = true;
 }
 BaseBody::CollisionType BaseBody::GetCollisionType() const
 {
@@ -188,6 +196,8 @@ void BaseBody::SetTexture(Texture::Ptr texture)
 	mSprite.setTexture(*mTexture);
 	mSprite.setTextureRect(sf::IntRect(sf::Vector2i(0, 0), u2i(mTexture->getSize())));
 	mSprite.setOrigin(mSprite.getTextureRect().width / 2.f, mSprite.getTextureRect().height / 2.f);
+
+	mHasMoved = true;
 }
 // Sprite
 sf::Sprite* BaseBody::GetSprite()
@@ -229,4 +239,5 @@ void BaseBody::SetTransform(const b2Vec2 &position, float angle)
 	myAssert(mBody, "b2Body null");
 	mBody->SetTransform(position, angle);
 	mBody->SetAwake(true);
+	mHasMoved = true;
 }

@@ -16,10 +16,12 @@ BasicBody::BasicBody(int layer, unsigned int ID)
 // Mise à jour
 void BasicBody::PreUpdate()
 {
+	BaseBody::PreUpdate();
+
 	if (!mBody || !mBodyIsCreated || !mIsAlive) return;
 
 	// Mise à jour du Hull
-	if (mBody->IsAwake())
+	if (mHasMoved || (mBody->IsAwake() && mBody->GetType() != b2BodyType::b2_staticBody))
 	{
 		auto gb = mSprite.getGlobalBounds();
 		mHull.SetPosAndSize(sf::Vector2f(gb.left, gb.top), sf::Vector2f(gb.width, gb.height));
@@ -62,6 +64,7 @@ bool BasicBody::CreateBox(b2Vec3 posRot, b2BodyType type, Texture::Ptr texture,
 
 	// Enregistrements
 	mBody->SetUserData(this);
+	mBody->SetAwake(true);
 	mBodyIsCreated = true;
 	mShape = Shape::Box;
 	mIsAlive = true;
