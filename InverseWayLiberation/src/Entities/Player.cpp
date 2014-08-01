@@ -3,8 +3,8 @@
 #include "../Resources/ResourceManager.h"
 
 // Ctor
-Player::Player(int layer, unsigned int ID)
-: Entity(layer, ID), mResourceMgr(ResourceManager::GetInstance()), mBody(nullptr)
+Player::Player()
+	: Hum(0), mInputManager(InputManager::GetInstance()), mJumpKey(sf::Keyboard::Space)
 {
 	// Défini le type de l'Entity
 	mType = EntityType::Player;
@@ -15,38 +15,67 @@ Player::~Player()
 {
 }
 
-// Création du Player
-bool Player::Create(b2Vec3 posRot)
-{
-	// Remplit la TextureMap
-
-
-	// Création du Body
-
-
-	mIsAlive = true;
-	return true;
-}
-
 // Mise à jour
 void Player::Update()
 {
-	if (mTexturesMap.size() > 0)
-		mSprite.setTexture(*mTexturesMap.begin()->second.get());
+	Hum::Update();
+
+	// Met à jour les évènements
+	UpdateEvents();
 }
 
-// Accesseurs
-b2Body* Player::GetBody()
+// Gestion des évènements
+void Player::UpdateEvents()
 {
-	return mBody;
-}
-b2Vec2 Player::GetPosition() const
-{
-	return b2Vec2_zero;
-}
+	// Si on est vivant
+	if (mIsAlive && !mIsDead)
+	{
+		float strenghFactor = 0.5f + ((static_cast<float>(GetStrengh()) + 20.f) / 40.f) / 2.f;
 
-// Pour le rendu
-void Player::draw(sf::RenderTarget& target, sf::RenderStates states) const
-{
-	target.draw(mSprite, states);
+		/* Traite les différents mouvements (http://www.iforce2d.net/b2dtut/constant-speed) */
+		// Calcule la vitesse max
+		float maxVspeed = 4.f;
+		float desiredVel = 0.f;
+
+		// Obtient la vitesse actuelle
+		b2Vec2 vel = GetBody()->GetLinearVelocity();
+
+		bool moved = false;
+		// Gauche
+		if (mInputManager.IsKeyPressed(sf::Keyboard::Q))
+		{
+			desiredVel = b2Max(vel.x - 0.1f, -maxVspeed);
+			moved = true;
+		}
+		// Droite
+		if (mInputManager.IsKeyPressed(sf::Keyboard::D))
+		{
+			desiredVel = b2Min(vel.x + 0.1f, maxVspeed);
+			moved = true;
+		}
+		// On évite que le Player soit une savonette
+		if (!moved)
+		{
+			desiredVel = vel.x * 0.8f;
+		}
+
+		// Déplacement pour le Hull
+		if (moved) mHasMoved = true;
+
+		// Applique le déplacement
+		float velChange = desiredVel - vel.x;
+		float impulse = GetBody()->GetMass() * velChange * 100.f;
+		GetBody()->ApplyForceToCenter(b2Vec2(impulse, 0.f), true);
+
+		// Saut
+		if (mInputManager.KeyPressed(sf::Keyboard::Space))
+		{
+			if (mCanJump)
+			{
+				float impulse = GetBody()->GetMass() * 6.3f * strenghFactor;
+				GetBody()->ApplyLinearImpulse(b2Vec2(0, impulse), GetBody()->GetWorldCenter(), true);
+				mCanJump = false;
+			}
+		}
+	}
 }

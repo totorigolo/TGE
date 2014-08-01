@@ -27,4 +27,7 @@ namespace EntityFactory
 
 	// Crée un Ragdoll
 	void CreateRagdoll(const b2Vec2 &position, int layer = 1);
+
+	// Crée un Hum
+	void CreateHum(b2Vec2 pos, double age, double strengh, int layer = 1);
 }

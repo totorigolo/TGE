@@ -40,9 +40,7 @@ Editor::Editor(sf::RenderWindow &window)
 	mMouseJointCreated(false),
 	mMouseJointID(-1),
 	mPinBodyA(nullptr),
-	mPinBodyB(nullptr),
-	mHookedSBody(nullptr),
-	mGrapnel(nullptr)
+	mPinBodyB(nullptr)
 {
 	myAssert(mSfGUI, "La GUI n'a pas été créée.");
 }
@@ -64,8 +62,6 @@ void Editor::Init()
 	mMouseJointID = -1;
 	mPinBodyA = nullptr;
 	mPinBodyB = nullptr;
-	mHookedSBody = nullptr;
-	mGrapnel = nullptr;
 }
 
 // Boucle de jeu
@@ -161,6 +157,7 @@ bool Editor::OnInit()
 	mSpyedKeys.push_back(SpyedKey::Create(sf::Keyboard::O)); // Debug Draw
 	mSpyedKeys.push_back(SpyedKey::Create(sf::Keyboard::T)); // Ragdoll
 	mSpyedKeys.push_back(SpyedKey::Create(sf::Keyboard::P)); // Pin
+	mSpyedKeys.push_back(SpyedKey::Create(sf::Keyboard::H)); // Hum -> TODO: Delete
 	mSpyedKeys.push_back(SpyedKey::Create(sf::Keyboard::Add)); // Zoom in
 	mSpyedKeys.push_back(SpyedKey::Create(sf::Keyboard::Subtract)); // Zoom out
 	mSpyedKeys.push_back(SpyedKey::Create(sf::Keyboard::Numpad0)); // Reset vue
@@ -234,6 +231,15 @@ void Editor::OnEvent()
 	if (mInputManager.KeyPressed(sf::Keyboard::O) && ctrl)
 	{
 		mDebugDraw = !mDebugDraw;
+	}
+
+	// Test des Hums
+	if (mInputManager.KeyPressed(sf::Keyboard::H) && ctrl)
+	{
+		EntityFactory::CreateHum(b2Vec2(-3, 8), 2, 8);
+		EntityFactory::CreateHum(b2Vec2(-1, 8), 8, 20);
+		EntityFactory::CreateHum(b2Vec2(1, 8), 20, -20);
+		EntityFactory::CreateHum(b2Vec2(3, 8), 60, -8);
 	}
 
 	// Epingle un objet

@@ -149,6 +149,15 @@
     <None Include="lvls\level_5.xvl">
       <Filter>Fichiers de ressources\Levels</Filter>
     </None>
+    <None Include="lvls\level_hum.xvl">
+      <Filter>Fichiers de ressources\Levels</Filter>
+    </None>
+    <None Include="lvls\level_jmp.xvl">
+      <Filter>Fichiers de ressources\Levels</Filter>
+    </None>
+    <None Include="lvls\level_lot.xvl">
+      <Filter>Fichiers de ressources\Levels</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Physics\Joints\DistanceJoint.cpp">
@@ -227,9 +236,6 @@
       <Filter>Fichiers sources\Physics</Filter>
     </ClCompile>
     <ClCompile Include="src\Entities\BasicBody.cpp">
-      <Filter>Fichiers sources\Entities</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Entities\Grapnel.cpp">
       <Filter>Fichiers sources\Entities</Filter>
     </ClCompile>
     <ClCompile Include="src\Physics\DebugDraw.cpp">
@@ -385,6 +391,9 @@
     <ClCompile Include="src\Editor\GUI\PointLightCreationWindow.cpp">
       <Filter>Fichiers sources\Editor\GUI</Filter>
     </ClCompile>
+    <ClCompile Include="src\Entities\Hum.cpp">
+      <Filter>Fichiers sources\Entities</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Physics\Joints\DistanceJoint.h">
@@ -481,9 +490,6 @@
       <Filter>Fichiers d%27en-tête\Physics</Filter>
     </ClInclude>
     <ClInclude Include="src\Entities\BasicBody.h">
-      <Filter>Fichiers d%27en-tête\Entities</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Entities\Grapnel.h">
       <Filter>Fichiers d%27en-tête\Entities</Filter>
     </ClInclude>
     <ClInclude Include="src\Physics\DebugDraw.h">
@@ -629,6 +635,9 @@
     </ClInclude>
     <ClInclude Include="src\Editor\GUI\PointLightCreationWindow.h">
       <Filter>Fichiers d%27en-tête\Editor\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Entities\Hum.h">
+      <Filter>Fichiers d%27en-tête\Entities</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

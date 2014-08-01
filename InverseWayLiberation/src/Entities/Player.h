@@ -1,36 +1,28 @@
 #pragma once
 #include "Entity.h"
+#include "Hum.h"
+#include "App/SpyedKey.h"
 #include "../Resources/Texture.h"
 
-class Player : public Entity
+class InputManager;
+class Player : public Hum
 {
 public:
 	// Ctor & dtor
-	Player(int layer = 1, unsigned int ID = 0U);
+	Player();
 	virtual ~Player();
-
-	// Création du Player
-	bool Create(b2Vec3 posRot);
 
 	// Mise à jour
 	virtual void Update();
 
-	// Accesseurs
-	b2Body* GetBody();
-	b2Vec2 GetPosition() const;
-
 protected:
-	// Pour le rendu
-	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
+	// Gestion des évènements
+	void UpdateEvents();
 
 private:
-	// ResourceMgr
-	ResourceManager &mResourceMgr;
+	// Managers
+	InputManager &mInputManager;
 
-	// b2Body
-	b2Body *mBody;
-
-	// Textures
-	sf::Sprite mSprite;
-	std::map<std::string, Texture::Ptr> mTexturesMap;
+	// Touches surveillées
+	SpyedKey mJumpKey;
 };

@@ -174,6 +174,7 @@ void LightEngine::Clear(PointLight *light)
 {
 	// Efface la casterTexture
 	light->textures->casterTex.clear(sf::Color::Transparent);
+	glLineWidth(1.f);
 }
 
 // Crée les ombres
@@ -211,6 +212,7 @@ void LightEngine::CreateShadows(PointLight *light)
 
 	// Efface la casterTexture
 	light->textures->casterTex.clear(sf::Color::Transparent);
+	glLineWidth(1.f);
 
 #if LIGHTENGINE_DEBUGDRAW
 	mRenderWindows["casterTex"]->clear();

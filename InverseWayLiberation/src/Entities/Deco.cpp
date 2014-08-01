@@ -3,8 +3,8 @@
 #include "../Physics/PhysicManager.h"
 
 // Ctor & dtor
-Deco::Deco(int layer, Texture::Ptr texture, sf::Vector3f posRot, unsigned int ID)
-	: Entity(layer, ID), mTexture(texture), mHull(this)
+Deco::Deco(int layer, Texture::Ptr texture, sf::Vector3f posRot)
+	: Entity(layer), mTexture(texture), mHull(this)
 {
 	if (!mTexture.get())
 	{

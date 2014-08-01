@@ -9,6 +9,7 @@
 #include "../Resources/ResourceManager.h"
 
 #include "../Entities/Entity.h"
+#include "../Entities/Hum.h"
 #include "../Entities/Deco.h"
 #include "../Entities/Player.h"
 #include "../Entities/BaseBody.h"
@@ -250,9 +251,6 @@ bool LevelSaver::ProcessBodies()
 			// Récupère le nom de la texture
 			std::string textureName(((Texture*) bb->GetSprite()->getTexture())->GetName());
 
-			// Récupère l'ID
-			unsigned int id = bb->GetID();
-
 			// Récupère la Layer
 			int layer = bb->GetLayer();
 
@@ -287,7 +285,6 @@ bool LevelSaver::ProcessBodies()
 
 			// Crée la balise <type>
 			tinyxml2::XMLElement *balise = mDoc.NewElement(forme.c_str());
-			if (id != 0) balise->SetAttribute("id", id);
 			balise->SetAttribute("type", type.c_str());
 			balise->SetAttribute("texture", textureName.c_str());
 			balise->SetAttribute("pos", Parser::b2Vec2ToString(pos).c_str());
@@ -359,26 +356,31 @@ bool LevelSaver::ProcessEntities()
 		// Vérifie le type de l'Entity
 		if ((*it)->GetType() == EntityType::Player)
 		{
-			/*Player *pp = ((Player*) *it);
+			Player *pp = ((Player*) *it);
 			
-			// Récupère le nom de la texture
-			std::string textureName(((Texture*) pp->GetSprite()->getTexture())->GetName());
-
-			// Récupère la Layer
-			int layer = pp->GetLayer();
-
-			// Cherche la position
-			b2Vec2 pos(pp->GetPosition());
-
-			// Crée la balise <livingbeing>
+			// Crée la balise <player>
 			tinyxml2::XMLElement *balise = mDoc.NewElement("player");
-			balise->SetAttribute("position", Parser::b2Vec2ToString(pos).c_str());
-			balise->SetAttribute("texture", textureName.c_str());
-			balise->SetAttribute("animation", "anim/TODO");
-			if (layer != 1) balise->SetAttribute("layer", layer);
+			balise->SetAttribute("pos", Parser::b2Vec2ToString(pp->GetPosition()).c_str());
+			balise->SetAttribute("age", pp->GetAge());
+			balise->SetAttribute("strengh", pp->GetStrengh());
+			balise->SetAttribute("color", Parser::colorToString(pp->GetTrunkColor()).c_str());
 
 			// Ajoute la balise à <entities>
-			entities->LinkEndChild(balise);*/
+			entities->LinkEndChild(balise);
+		}
+		else if ((*it)->GetType() == EntityType::Hum)
+		{
+			Hum *h = ((Hum*) *it);
+
+			// Crée la balise <hum>
+			tinyxml2::XMLElement *balise = mDoc.NewElement("hum");
+			balise->SetAttribute("pos", Parser::b2Vec2ToString(h->GetPosition()).c_str());
+			balise->SetAttribute("age", h->GetAge());
+			balise->SetAttribute("strengh", h->GetStrengh());
+			balise->SetAttribute("color", Parser::colorToString(h->GetTrunkColor()).c_str());
+
+			// Ajoute la balise à <entities>
+			entities->LinkEndChild(balise);
 		}
 	}
 

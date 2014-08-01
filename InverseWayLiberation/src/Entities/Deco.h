@@ -7,7 +7,7 @@ class Deco : public Entity
 {
 public:
 	// Ctor & dtor
-	Deco(int layer, Texture::Ptr texture, sf::Vector3f posRot, unsigned int ID = 0U); // PosRot pixel / degrés
+	Deco(int layer, Texture::Ptr texture, sf::Vector3f posRot); // PosRot pixel / degrés
 	virtual ~Deco();
 
 	// Pour le rendu

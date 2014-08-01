@@ -11,7 +11,6 @@
 class PhysicManager;
 class LevelManager;
 class InputManager;
-class Grapnel;
 class Editor : public NonCopyable
 {
 public:
@@ -88,12 +87,6 @@ private:
 
 	// Positions de la souris
 	b2Vec2 mMp;
-
-	// Grapin
-	b2Body *mHookedSBody;
-	b2Vec2 mHookedSAnchor;
-	Grapnel *mGrapnel;
-	sf::Clock mHookClock;
 
 	// Déplacement des objets
 	bool mMouseJointCreated;

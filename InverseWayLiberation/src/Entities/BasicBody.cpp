@@ -3,8 +3,8 @@
 #include "../Physics/PhysicManager.h"
 
 // Ctor & dtor
-BasicBody::BasicBody(int layer, unsigned int ID)
-: BaseBody(layer, ID), mShape(Shape::Null)
+BasicBody::BasicBody(int layer)
+: BaseBody(layer), mShape(Shape::Null)
 {
 	// Défini le type de l'Entity
 	mType = EntityType::BasicBody;

@@ -3,8 +3,8 @@
 #include "../Physics/PhysicManager.h"
 
 // Ctor & dtor
-PolyChain::PolyChain(int layer, unsigned int ID)
-	: BaseBody(layer, ID), mChainType(Type::None)
+PolyChain::PolyChain(int layer)
+	: BaseBody(layer), mChainType(Type::None)
 {
 	// Défini le type de l'Entity
 	mType = EntityType::PolyChain;

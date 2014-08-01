@@ -36,7 +36,11 @@ void LuaMachine::RegisterEntityFactory()
 				def("CreatePointLight", (void(*)(const b2Vec2&, int, const sf::Color&)) EntityFactory::CreatePointLight),
 				def("CreatePointLight", (void(*)(const b2Vec2&, int, const sf::Color&, int)) EntityFactory::CreatePointLight),
 				def("CreateRagdoll", (void(*)(const b2Vec2&)) EntityFactory::CreateRagdoll),
-				def("CreateRagdoll", (void(*)(const b2Vec2&, int)) EntityFactory::CreateRagdoll)
+				def("CreateRagdoll", (void(*)(const b2Vec2&, int)) EntityFactory::CreateRagdoll),
+				def("CreateHum", (void(*)(const b2Vec2&)) EntityFactory::CreateHum),
+				def("CreateHum", (void(*)(const b2Vec2&, unsigned int)) EntityFactory::CreateHum),
+				def("CreateHum", (void(*)(const b2Vec2&, unsigned int, int)) EntityFactory::CreateHum),
+				def("CreateHum", (void(*)(const b2Vec2&, unsigned int, int, int)) EntityFactory::CreateHum)
 			]
 		];
 	}

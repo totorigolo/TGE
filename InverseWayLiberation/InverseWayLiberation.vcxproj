@@ -41,8 +41,8 @@
     <ClCompile Include="src\Entities\Entity.cpp" />
     <ClCompile Include="src\Entities\EntityFactory.cpp" />
     <ClCompile Include="src\Entities\EntityManager.cpp" />
-    <ClCompile Include="src\Entities\Grapnel.cpp" />
     <ClCompile Include="src\Entities\Hull.cpp" />
+    <ClCompile Include="src\Entities\Hum.cpp" />
     <ClCompile Include="src\Entities\PartitioningTree.cpp" />
     <ClCompile Include="src\Entities\Player.cpp" />
     <ClCompile Include="src\Entities\PointLight.cpp" />
@@ -126,8 +126,8 @@
     <ClInclude Include="src\Entities\Entity.h" />
     <ClInclude Include="src\Entities\EntityFactory.h" />
     <ClInclude Include="src\Entities\EntityManager.h" />
-    <ClInclude Include="src\Entities\Grapnel.h" />
     <ClInclude Include="src\Entities\Hull.h" />
+    <ClInclude Include="src\Entities\Hum.h" />
     <ClInclude Include="src\Entities\PartitioningTree.h" />
     <ClInclude Include="src\Entities\Player.h" />
     <ClInclude Include="src\Entities\PointLight.h" />
@@ -187,6 +187,9 @@
     <None Include="lvls\level_3.xvl" />
     <None Include="lvls\level_4.xvl" />
     <None Include="lvls\level_5.xvl" />
+    <None Include="lvls\level_hum.xvl" />
+    <None Include="lvls\level_jmp.xvl" />
+    <None Include="lvls\level_lot.xvl" />
     <None Include="scripts\contact.lua" />
     <None Include="scripts\lvl1.lua" />
     <None Include="scripts\test1.lua" />

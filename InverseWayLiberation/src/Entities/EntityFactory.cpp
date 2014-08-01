@@ -11,6 +11,7 @@
 #include "PolyChain.h"
 #include "Deco.h"
 #include "PointLight.h"
+#include "Hum.h"
 
 namespace EntityFactory
 {
@@ -199,6 +200,17 @@ namespace EntityFactory
 		}
 	
 		// Prévient l'EntityManager qu'on a ajouté des Entities
+		mEntityManager.SortByLayer();
+	}
+
+	// Crée un Hum
+	void CreateHum(b2Vec2 pos, double age, double strengh, int layer)
+	{
+		// Crée le Hum
+		Hum *h = new Hum(layer);
+		h->Create(pos, age, strengh);
+
+		// Trie les Entities
 		mEntityManager.SortByLayer();
 	}
 

@@ -3,8 +3,8 @@
 #include "EntityManager.h"
 
 // Ctor & dtor
-Entity::Entity(int layer, unsigned int ID)
-	: mIsAlive(false), mID(ID), mLayer(layer), mOwner(nullptr)
+Entity::Entity(int layer)
+	: mIsAlive(false), mID(0U), mLayer(layer), mOwner(nullptr)
 {
 	mType = EntityType::Entity;
 

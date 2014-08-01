@@ -9,15 +9,15 @@ enum class EntityType
 		BasicBody,
 		PolyBody,
 		PolyChain,
-	Grapnel,
-	PointLight
+	PointLight,
+	Hum
 };
 
 class Entity : public sf::Drawable, public NonCopyable
 {
 public:
 	// Ctor & dtor
-	Entity(int layer = 0, unsigned int ID = 0U);
+	Entity(int layer = 0);
 	virtual ~Entity();
 
 	// Mise à jour

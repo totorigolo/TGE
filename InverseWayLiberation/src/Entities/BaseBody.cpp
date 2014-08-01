@@ -3,8 +3,8 @@
 #include "../Physics/PhysicManager.h"
 
 // Ctor & dtor
-BaseBody::BaseBody(int layer, unsigned int ID)
-	: Entity(layer, ID), mCollisionType(CollisionType::Default),
+BaseBody::BaseBody(int layer)
+	: Entity(layer), mCollisionType(CollisionType::Default),
 	mBody(nullptr), mBodyIsCreated(false),
 	mPhysicMgr(PhysicManager::GetInstance()),
 	mHull(nullptr), mHasMoved(true)

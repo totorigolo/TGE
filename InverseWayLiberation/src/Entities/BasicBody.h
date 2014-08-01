@@ -16,7 +16,7 @@ public:
 
 public:
 	// Ctor & dtor
-	BasicBody(int layer = 1, unsigned int ID = 0U);
+	BasicBody(int layer = 1);
 
 	// Mise à jour
 	virtual void PreUpdate();

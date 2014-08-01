@@ -5,7 +5,7 @@ class PolyBody : public BaseBody
 {
 public:
 	// Ctor & dtor
-	PolyBody(int layer = 1, unsigned int ID = 0U);
+	PolyBody(int layer = 1);
 
 	// Mise à jour
 	void PreUpdate();

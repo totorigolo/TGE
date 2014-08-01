@@ -17,7 +17,7 @@ public:
 
 public:
 	// Ctor & dtor
-	BaseBody(int layer = 1, unsigned int ID = 0U);
+	BaseBody(int layer = 1);
 	virtual ~BaseBody();
 
 	// Mise à jour

@@ -12,7 +12,7 @@ public:
 
 public:
 	// Ctor & dtor
-	PolyChain(int layer = 1, unsigned int ID = 0U);
+	PolyChain(int layer = 1);
 
 	// Mise à jour
 	void PreUpdate();

@@ -3,8 +3,8 @@
 #include "../Physics/PhysicManager.h"
 
 // Ctor & dtor
-PolyBody::PolyBody(int layer, unsigned int ID)
-	: BaseBody(layer, ID)
+PolyBody::PolyBody(int layer)
+	: BaseBody(layer)
 {
 	// Défini le type de l'Entity
 	mType = EntityType::PolyBody;

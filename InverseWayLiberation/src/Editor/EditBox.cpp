@@ -6,7 +6,6 @@
 #include "../Entities/PolyBody.h"
 #include "../Entities/PolyChain.h"
 #include "../Entities/Deco.h"
-#include "../Entities/Grapnel.h"
 #include "../Entities/Player.h"
 
 #include "../Physics/Joints/DistanceJoint.h"
@@ -255,10 +254,6 @@ void EditBox::UpdateGUI()
 			// Montre le scénario de la Deco
 			mPointLightScenario.Select((PointLight*) e);
 			ShowPointLightScenario();
-		}
-		else if (e->GetType() == EntityType::Grapnel)
-		{
-			mSelectionType = SelectionType::Grapnel;
 		}
 		else if (e->GetType() == EntityType::Player)
 		{

@@ -16,6 +16,7 @@
 #include "../Physics/Joints/PrismaticJoint.h"
 
 #include "../Entities/Entity.h"
+#include "../Entities/Hum.h"
 #include "../Entities/Deco.h"
 #include "../Entities/Player.h"
 #include "../Entities/BaseBody.h"
@@ -190,7 +191,6 @@ bool LevelLoader::ProcessPoly()
 	int16 groupIndex = 0;
 	uint16 categoryBits = 0x0001, maskBits = 0xFFFF;
 	float rotation = 0.f;
-	unsigned int id = 0U;
 	std::string texture, type;
 	b2BodyType b2type;
 	PolyChain::Type chainType = PolyChain::None;
@@ -226,7 +226,6 @@ bool LevelLoader::ProcessPoly()
 		pb = nullptr;
 		pc = nullptr;
 		layer = 1;
-		id = 0U;
 		rotation = 0.f;
 		density = 1.f;
 		friction = 0.2f;
@@ -282,9 +281,6 @@ bool LevelLoader::ProcessPoly()
 			continue;
 		}
 
-		// Récupère l'ID
-		if (body->Attribute("id")) body->QueryUnsignedAttribute("id", &id);
-
 		// Récupère la position et la rotation
 		body->QueryFloatAttribute("rotation", &rotation);
 		if (body->Attribute("pos")) posRot = Parser::stringToB2Vec3(body->Attribute("pos"));
@@ -339,13 +335,13 @@ bool LevelLoader::ProcessPoly()
 		// Crée le body
 		if (!polyBodiesDone)
 		{
-			pb = new PolyBody(layer, id);
+			pb = new PolyBody(layer);
 			pb->Create(posRot, vertices, b2type, mLevel.mResourceManager.GetTexture(texture),
 					   density, friction, restitution, groupIndex, categoryBits, maskBits);
 		}
 		else
 		{
-			pc = new PolyChain(layer, id);
+			pc = new PolyChain(layer);
 			pc->Create(posRot, vertices, chainType, mLevel.mResourceManager.GetTexture(texture),
 					   density, friction, restitution, groupIndex, categoryBits, maskBits);
 		}
@@ -379,15 +375,6 @@ bool LevelLoader::ProcessPoly()
 
 			// Gère l'activation des ombres
 			bb->SetShadowsActive(shadows);
-
-			// Enregiste l'ID
-			if (id != 0)
-			{
-				// On regarde si l'ID n'est pas déjà utilisé
-				if (mBodyIDMap.find(id) != mBodyIDMap.end())
-					Dialog::Error("L'ID " + Parser::intToString(id) + " n'est pas unique !");
-				mBodyIDMap[id] = bb->GetBody();
-			}
 		}
 
 		// On récupère le prochain body
@@ -430,7 +417,6 @@ bool LevelLoader::ProcessBasicBodies()
 	int16 groupIndex = 0;
 	uint16 categoryBits = 0x0001, maskBits = 0xFFFF;
 	float rotation = 0.f;
-	unsigned int id = 0U;
 	std::string texture, forme;
 	b2BodyType type;
 	b2Vec3 posRot;
@@ -445,7 +431,6 @@ bool LevelLoader::ProcessBasicBodies()
 		// Réinitialise les attributs
 		bb = nullptr;
 		layer = 1;
-		id = 0U;
 		rotation = 0.f;
 		density = 1.f;
 		friction = 0.2f;
@@ -488,9 +473,6 @@ bool LevelLoader::ProcessBasicBodies()
 			continue;
 		}
 
-		// Récupère l'ID
-		if (body->Attribute("id")) body->QueryUnsignedAttribute("id", &id);
-
 		// Récupère la position et la rotation
 		body->QueryFloatAttribute("rotation", &rotation);
 		if (body->Attribute("pos")) posRot = Parser::stringToB2Vec3(body->Attribute("pos"));
@@ -525,12 +507,12 @@ bool LevelLoader::ProcessBasicBodies()
 		// Crée le body
 		if (forme == "box")
 		{
-			bb = new BasicBody(layer, id);
+			bb = new BasicBody(layer);
 			bb->CreateBox(posRot, type, mLevel.mResourceManager.GetTexture(texture), density, friction, restitution, groupIndex, categoryBits, maskBits);
 		}
 		else if (forme == "circle")
 		{
-			bb = new BasicBody(layer, id);
+			bb = new BasicBody(layer);
 			bb->CreateCircle(posRot, type, mLevel.mResourceManager.GetTexture(texture), density, friction, restitution, groupIndex, categoryBits, maskBits);
 		}
 		else
@@ -560,15 +542,6 @@ bool LevelLoader::ProcessBasicBodies()
 
 			// Gère l'activation des ombres
 			bb->SetShadowsActive(shadows);
-
-			// Enregiste l'ID
-			if (id != 0)
-			{
-				// On regarde si l'ID n'est pas déjà utilisé
-				if (mBodyIDMap.find(id) != mBodyIDMap.end())
-					Dialog::Error("L'ID " + Parser::intToString(id) + " n'est pas unique !");
-				mBodyIDMap[id] = bb->GetBody();
-			}
 		}
 
 		// On récupère le prochain body
@@ -608,6 +581,7 @@ bool LevelLoader::ProcessEntities()
 
 		// Récupère la position et la rotation
 		if (entity->Attribute("position")) position = Parser::stringToB2Vec2(entity->Attribute("position"));
+		else if (entity->Attribute("pos")) position = Parser::stringToB2Vec2(entity->Attribute("pos"));
 		
 		// Récupère le layer
 		entity->QueryIntAttribute("layer", &layer);
@@ -619,13 +593,30 @@ bool LevelLoader::ProcessEntities()
 		}
 		else if (type == "player")
 		{
-			// Récupère l'animation
-			animation = entity->Attribute("animation");
-			animation = entity->Attribute("texture");
+			// Récupère les infos du player
+			double age = 5.0, strengh = 0.0;
+			entity->QueryDoubleAttribute("age", &age);
+			entity->QueryDoubleAttribute("strengh", &strengh);
+			sf::Color color(35, 35, 35);
+			if (entity->Attribute("color")) color = Parser::stringToColor(entity->Attribute("color"));
 
 			// Enregistre le Player dans Level
-			e = new Player(layer);
+			e = new Player();
 			mLevel.mPlayer = (Player*) e;
+			mLevel.mPlayer->Create(position, age, strengh, color);
+		}
+		else if (type == "hum")
+		{
+			// Récupère les infos du hum
+			double age = 5.0, strengh = 0.0;
+			entity->QueryDoubleAttribute("age", &age);
+			entity->QueryDoubleAttribute("strengh", &strengh);
+			sf::Color color(35, 35, 35);
+			if (entity->Attribute("color")) color = Parser::stringToColor(entity->Attribute("color"));
+
+			// Enregistre le Player dans Level
+			e = new Hum();
+			((Hum*) e)->Create(position, age, strengh, color);
 		}
 		else
 		{
