@@ -6,10 +6,12 @@ uniform sampler2D texture;
 
 void main()
 {
-	// Distance of this pixel from the center
+	/*/ Distance of this pixel from the center
 	float dist = distance(gl_TexCoord[0].xy, vec2(0.5, 0.5)) + 0.01;
 
-	vec2 off = vec2(0.0, 0.035) * dist;
+	vec2 off = vec2(0.0, 0.035) * dist;*/
+
+	vec2 off = vec2(0.0, 0.004);
 
 	gl_FragColor = gl_Color * (
 		texture2D(texture, gl_TexCoord[0].xy + off * 1.0)  * 0.06 + 
