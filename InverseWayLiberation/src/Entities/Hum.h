@@ -21,6 +21,10 @@ public:
 	// Mise à jour
 	virtual void PreUpdate();
 	virtual void Update();
+	void CheckSensors();
+
+	// Intelligence artificielle
+	void SimulateAI();
 
 	// Animation
 	void LookAt(b2Vec2 location);
@@ -54,7 +58,11 @@ protected:
 	// Etat
 	bool mHasMoved;
 	bool mIsDead;
+
+	// Sensors
 	bool mCanJump;
+	bool mCanMoveLeft;
+	bool mCanMoveRight;
 
 private:
 	/* Pour le dessin */
@@ -77,6 +85,8 @@ private:
 
 	// Sensors pour les déplacements
 	b2Fixture *mSensorJump;
+	b2Fixture *mSensorMoveLeft;
+	b2Fixture *mSensorMoveRight;
 
 	// Formes SFML
 	sf::ConvexShape mTrunk;

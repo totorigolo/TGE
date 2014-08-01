@@ -128,6 +128,12 @@ void Hum::PreUpdate()
 	// Si le body est valide
 	if (mBody && mBodyIsCreated && mIsAlive)
 	{
+		// Vérifie les Sensors
+		CheckSensors();
+
+		// Intelligence artificielle
+		SimulateAI();
+
 		/* Mise à jour des position des éléments dessinables */
 		// Corps
 		mTrunk.setPosition(b22sfVec(mBody->GetPosition(), mPhysicMgr.GetPPM()));
@@ -139,22 +145,6 @@ void Hum::PreUpdate()
 		mEyeRight.setPosition(mTrunk.getPosition() + sf::Vector2f(-(4.f + mEyeRight.getRadius() * 2.f), (float) -mEyeHeight));
 		mPupilLeft.setPosition(mEyeLeft.getPosition() + sf::Vector2f(mEyeLeft.getRadius() - mPupilLeft.getRadius(), mEyeLeft.getRadius() - mPupilLeft.getRadius()));
 		mPupilRight.setPosition(mEyeRight.getPosition() + sf::Vector2f(mEyeRight.getRadius() - mPupilRight.getRadius(), mEyeRight.getRadius() - mPupilRight.getRadius()));
-
-		// Vérifie le saut
-		mCanJump = false;
-		for (b2ContactEdge* ce = mBody->GetContactList(); ce; ce = ce->next)
-		{
-			b2Contact* c = ce->contact;
-
-			if (c->GetFixtureA() == mSensorJump || c->GetFixtureB() == mSensorJump)
-			{
-				if (c->IsTouching())
-				{
-					mCanJump = true;
-					break;
-				}
-			}
-		}
 
 		/* Mise à jour du Hull */
 		if (mHasMoved || (mBody->IsAwake() && mBody->GetType() != b2BodyType::b2_staticBody))
@@ -171,6 +161,41 @@ void Hum::Update()
 	{
 		mHasMoved = false;
 	}
+}
+void Hum::CheckSensors()
+{
+	static auto check = [&mBody](b2Fixture *f, bool *result)
+	{
+		result = false;
+		for (b2ContactEdge* ce = mBody->GetContactList(); ce; ce = ce->next)
+		{
+			b2Contact* c = ce->contact;
+
+			if (c->GetFixtureA() == f || c->GetFixtureB() == f)
+			{
+				if (c->IsTouching())
+				{
+					result = true;
+					break;
+				}
+			}
+		}
+	};
+
+	// Vérifie le saut
+	check(mSensorJump, mCanJump);
+
+	// Vérifie le déplacement à gauche
+	check(mSensorMoveLeft, mCanMoveLeft);
+
+	// Vérifie le déplacement à droite
+	check(mSensorMoveRight, mCanMoveRight);
+}
+
+// Intelligence artificielle
+void Hum::SimulateAI()
+{
+
 }
 
 // Gestion de la couleur
