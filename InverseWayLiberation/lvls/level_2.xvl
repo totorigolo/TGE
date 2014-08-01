@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<level>
+    <world gravity="(0, -9.79993)" PPM="100.000000" bckgcolor="(0, 0, 0)" originview="(-0.02, -0.07)" defaultzoom="1.000000"/>
+    <textures>
+        <img name="cascade" src="tex/level_1/cascade.png"/>
+        <img name="echelle_maison_3" src="tex/level_1/echelle_maison_3.png"/>
+        <img name="fond_1" src="tex/level_1/fond_1.png"/>
+        <img name="maison_1" src="tex/level_1/maison_1.png"/>
+        <img name="maison_2" src="tex/level_1/maison_2.png"/>
+        <img name="maison_3" src="tex/level_1/maison_3.png"/>
+        <img name="none" src="tex/none.png"/>
+        <img name="unknown" src="tex/unknown.png"/>
+    </textures>
+    <basicbodies/>
+    <polybodies/>
+    <polychains/>
+    <entities/>
+    <joints/>
+    <deco>
+        <layer z="-1">
+            <img texture="echelle_maison_3" position="(-8.40406, -2.54472)"/>
+        </layer>
+    </deco>
+    <actions/>
+    <events>
+        <triggers/>
+    </events>
+    <lights>
+        <point layer="10" pos="(-2, -1)" radius="400" color="(59, 0, 100)"/>
+        <point layer="1" pos="(1, 2)" radius="600" color="(140, 20, 200)"/>
+        <point layer="1" pos="(3, 1)" radius="200" color="(0, 200, 100)"/>
+    </lights>
+</level>
