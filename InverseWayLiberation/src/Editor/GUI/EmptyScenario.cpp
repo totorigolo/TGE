@@ -42,6 +42,9 @@ void EmptyScenario::Fill()
 	mPointLightCreationBtn = sfg::Button::Create("PointLight Creation");
 	mPointLightCreationBtn->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind(&EditBox::ShowPointLightCreationWindow, &mEditBox));
 
+	mHumCreationBtn = sfg::Button::Create("Hum Creation");
+	mHumCreationBtn->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind(&EditBox::ShowHumCreationWindow, &mEditBox));
+
 	// Ajoute les éléments à la fenêtre
 	AddToVBox(mOpenLevelBtn);
 	AddToVBox(mOpenLuaConsoleBtn);
@@ -50,4 +53,5 @@ void EmptyScenario::Fill()
 	AddToVBox(mPolyCreationBtn);
 	AddToVBox(mBasicBodyCreationBtn);
 	AddToVBox(mPointLightCreationBtn);
+	AddToVBox(mHumCreationBtn);
 }

@@ -2,9 +2,11 @@
 #include "GUI/LevelWindow.h"
 #include "GUI/DecoScenario.h"
 #include "GUI/EmptyScenario.h"
-#include "GUI/LuaConsoleWindow.h"
+#include "GUI/HumScenario.h"
 #include "GUI/BodyScenario.h"
 #include "GUI/TexturesWindow.h"
+#include "GUI/LuaConsoleWindow.h"
+#include "GUI/HumCreationWindow.h"
 #include "GUI/PointLightScenario.h"
 #include "GUI/ColFilteringWindow.h"
 #include "GUI/DecoCreationWindow.h"
@@ -30,8 +32,8 @@ public:
 			Deco,
 			PointLight,
 			Grapnel,
-			LivingBeing,
-				Player,
+			Hum,
+			Player,
 		Joint,
 			DistanceJoint,
 			FrictionJoint,
@@ -79,9 +81,11 @@ public:
 	// Mise en place des différents scénarios
 	void ShowEmptyScenario();
 	void OnShowLevelWindow(); // Callback
+	void ShowHumScenario();
 	void ShowBodyScenario();
 	void ShowDecoScenario();
 	void ShowPointLightScenario();
+	void ShowHumCreationWindow();
 	void OnShowLuaConsoleWindow(); // Callback
 	void OnShowColFilteringWindow(); // Callback
 	void ShowTexturesWindow();
@@ -96,10 +100,12 @@ public:
 	// Accesseurs des fenêtres et scénarii
 	EmptyScenario* GetEmptyScenario();
 	LevelWindow* GetLevelWindow();
+	HumScenario* GetHumScenario();
 	DecoScenario* GetDecoScenario();
 	BodyScenario* GetBodyScenario();
 	TexturesWindow* GetTexturesWindow();
 	LuaConsoleWindow* GetLuaConsoleWindow();
+	HumCreationWindow* GetHumCreationWindow();
 	PointLightScenario* GetPointLightScenario();
 	ColFilteringWindow* GetColFilteringWindow();
 	DecoCreationWindow* GetDecoCreationWindow();
@@ -130,11 +136,13 @@ private:
 	// Différentes fenêtres / scénarios
 	EmptyScenario mEmptyScenario;
 	LevelWindow mLevelWindow;
+	HumScenario mHumScenario;
 	DecoScenario mDecoScenario;
 	BodyScenario mBodyScenario;
 	PointLightScenario mPointLightScenario;
 	TexturesWindow mTexturesWindow;
 	LuaConsoleWindow mLuaConsoleWindow;
+	HumCreationWindow mHumCreationWindow;
 	ColFilteringWindow mColFilteringWindow;
 	DecoCreationWindow mDecoCreationWindow;
 	PolyCreationWindow mPolyCreationWindow;
@@ -146,6 +154,7 @@ private:
 	bool mEditBoxGUICreated;
 	bool mTexturesWindowAdded;
 	bool mLuaConsoleWindowAdded;
+	bool mHumCreationWindowAdded;
 	bool mColFilteringWindowAdded;
 	bool mDecoCreationWindowAdded;
 	bool mPolyCreationWindowAdded;

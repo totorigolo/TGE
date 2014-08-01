@@ -31,6 +31,7 @@ Editor::Editor(sf::RenderWindow &window)
 	mDebugDraw(false),
 	// GUI
 	mSfGUI(App::GetInstance().GetSfGUI()),
+	mHumCreationWindow(nullptr),
 	mPolyCreationWindow(nullptr),
 	mDecoCreationWindow(nullptr),
 	mBasicBodyCreationWindow(nullptr),
@@ -128,6 +129,7 @@ bool Editor::OnInit()
 	mInputManager.AddDesktop(&mDesktop);
 	mGUIElapsedTime.restart();
 	mEditBox = std::unique_ptr<EditBox>(new EditBox(mDesktop));
+	mHumCreationWindow = mEditBox->GetHumCreationWindow();
 	mPolyCreationWindow = mEditBox->GetPolyCreationWindow();
 	mDecoCreationWindow = mEditBox->GetDecoCreationWindow();
 	mBasicBodyCreationWindow = mEditBox->GetBasicBodyCreationWindow();
@@ -329,6 +331,16 @@ void Editor::OnEvent()
 		if (mBasicBodyCreationWindow->IsInAddMode())
 		{
 			mBasicBodyCreationWindow->Add(mMp);
+		}
+	}
+
+	// EditBox : BasicBody Creation
+	if (mInputManager.IsLMBClicked() && ctrl && mHumCreationWindow)
+	{
+		// Si la fenêtre de création est en mode ajout, on transmet les clics
+		if (mHumCreationWindow->IsInAddMode())
+		{
+			mHumCreationWindow->Add(mMp);
 		}
 	}
 

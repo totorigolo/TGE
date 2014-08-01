@@ -29,5 +29,5 @@ namespace EntityFactory
 	void CreateRagdoll(const b2Vec2 &position, int layer = 1);
 
 	// Crée un Hum
-	void CreateHum(b2Vec2 pos, double age, double strengh, int layer = 1);
+	void CreateHum(b2Vec2 pos, double age, double strengh, sf::Color color = sf::Color(35, 35, 35), int layer = 1);
 }

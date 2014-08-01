@@ -26,6 +26,10 @@ public:
 	void LookAt(b2Vec2 location);
 	void Blink(void);
 
+	// Gestion de la couleur
+	void SetTrunkColor(const sf::Color &color);
+	sf::Color GetTrunkColor() const;
+
 	// Accesseurs
 	b2Body* GetBody();
 	const b2Body* GetBody() const;
@@ -39,7 +43,8 @@ public:
 	double GetTopWidth() const;
 	double GetBottomWidth() const;
 	double GetEyeHeight() const;
-	sf::Color GetTrunkColor() const;
+	// Fonction à n'employer que pour éditer les niveaux
+	void SetTransform(const b2Vec2 &position);
 
 protected:
 	// Pour le rendu

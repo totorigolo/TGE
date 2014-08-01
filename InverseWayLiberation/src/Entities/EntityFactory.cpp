@@ -204,11 +204,11 @@ namespace EntityFactory
 	}
 
 	// Crée un Hum
-	void CreateHum(b2Vec2 pos, double age, double strengh, int layer)
+	void CreateHum(b2Vec2 pos, double age, double strengh, sf::Color color, int layer)
 	{
 		// Crée le Hum
 		Hum *h = new Hum(layer);
-		h->Create(pos, age, strengh);
+		h->Create(pos, age, strengh, color);
 
 		// Trie les Entities
 		mEntityManager.SortByLayer();

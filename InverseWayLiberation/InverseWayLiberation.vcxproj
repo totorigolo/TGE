@@ -27,6 +27,8 @@
     <ClCompile Include="src\Editor\GUI\DecoCreationWindow.cpp" />
     <ClCompile Include="src\Editor\GUI\DecoScenario.cpp" />
     <ClCompile Include="src\Editor\GUI\EmptyScenario.cpp" />
+    <ClCompile Include="src\Editor\GUI\HumCreationWindow.cpp" />
+    <ClCompile Include="src\Editor\GUI\HumScenario.cpp" />
     <ClCompile Include="src\Editor\GUI\LevelWindow.cpp" />
     <ClCompile Include="src\Editor\GUI\LuaConsoleWindow.cpp" />
     <ClCompile Include="src\Editor\GUI\PointLightCreationWindow.cpp" />
@@ -112,6 +114,8 @@
     <ClInclude Include="src\Editor\GUI\DecoCreationWindow.h" />
     <ClInclude Include="src\Editor\GUI\DecoScenario.h" />
     <ClInclude Include="src\Editor\GUI\EmptyScenario.h" />
+    <ClInclude Include="src\Editor\GUI\HumCreationWindow.h" />
+    <ClInclude Include="src\Editor\GUI\HumScenario.h" />
     <ClInclude Include="src\Editor\GUI\LevelWindow.h" />
     <ClInclude Include="src\Editor\GUI\LuaConsoleWindow.h" />
     <ClInclude Include="src\Editor\GUI\PointLightCreationWindow.h" />

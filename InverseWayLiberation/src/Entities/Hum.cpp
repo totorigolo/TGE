@@ -173,6 +173,17 @@ void Hum::Update()
 	}
 }
 
+// Gestion de la couleur
+void Hum::SetTrunkColor(const sf::Color &color)
+{
+	mTrunkColor = color;
+	mTrunk.setFillColor(mTrunkColor);
+}
+sf::Color Hum::GetTrunkColor() const
+{
+	return mTrunkColor;
+}
+
 // Accesseurs
 b2Body* Hum::GetBody()
 {
@@ -222,9 +233,13 @@ double Hum::GetEyeHeight() const
 {
 	return mEyeHeight;
 }
-sf::Color Hum::GetTrunkColor() const
+// Fonction à n'employer que pour éditer les niveaux
+void Hum::SetTransform(const b2Vec2 &position)
 {
-	return mTrunkColor;
+	myAssert(mBody, "b2Body null");
+	mBody->SetTransform(position, 0.f);
+	mBody->SetAwake(true);
+	mHasMoved = true;
 }
 
 // Pour le rendu

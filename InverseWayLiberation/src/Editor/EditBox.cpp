@@ -24,9 +24,10 @@ EditBox::EditBox(sfg::Desktop &desktop)
 	mUpdateScheduled(false), mUnselectionScheduled(false),
 	mLevelMgr(LevelManager::GetInstance()), mPhysicMgr(PhysicManager::GetInstance()), mEntityMgr(EntityManager::GetInstance()),
 	mSelectedEntity(nullptr), mSelectedJoint(nullptr), mSelectionType(SelectionType::Null), mSelectionChanged(false),
-	mEmptyScenario(*this), mDecoScenario(*this), mBodyScenario(*this), mPointLightScenario(*this),
+	mEmptyScenario(*this), mDecoScenario(*this), mHumScenario(*this), mBodyScenario(*this), mPointLightScenario(*this),
 	mLevelWindowAdded(false), mLuaConsoleWindowAdded(false), mColFilteringWindowAdded(false), mDecoCreationWindowAdded(false),
-	mPolyCreationWindowAdded(false), mBasicBodyCreationWindowAdded(false), mPointLightCreationWindowAdded(false), mTexturesWindowAdded(false)
+	mHumCreationWindowAdded(false),	mPolyCreationWindowAdded(false), mBasicBodyCreationWindowAdded(false), mPointLightCreationWindowAdded(false),
+	mTexturesWindowAdded(false)
 {
 	// Crée la fenêtre
 	mWindow = sfg::Window::Create();
@@ -145,8 +146,8 @@ std::string EditBox::SelectionTypeToString(const SelectionType &type)
 		return "Deco";
 	else if (type == SelectionType::Grapnel)
 		return "Grapnel";
-	else if (type == SelectionType::LivingBeing)
-		return "LivingBeing";
+	else if (type == SelectionType::Hum)
+		return "Hum";
 	else if (type == SelectionType::Player)
 		return "Player";
 	else if (type == SelectionType::Joint)
@@ -182,6 +183,7 @@ void EditBox::EmptyGUI()
 	// Cache les scénari
 	mDecoScenario.Hide();
 	mEmptyScenario.Hide();
+	mHumScenario.Hide();
 	mBodyScenario.Hide();
 	mPointLightScenario.Hide();
 
@@ -251,13 +253,20 @@ void EditBox::UpdateGUI()
 		{
 			mSelectionType = SelectionType::PointLight;
 
-			// Montre le scénario de la Deco
+			// Montre le scénario de la lumière
 			mPointLightScenario.Select((PointLight*) e);
 			ShowPointLightScenario();
 		}
-		else if (e->GetType() == EntityType::Player)
+		else if (e->GetType() == EntityType::Player || e->GetType() == EntityType::Hum)
 		{
-			mSelectionType = SelectionType::Player;
+			if (e->GetType() == EntityType::Player)
+				mSelectionType = SelectionType::Player;
+			else
+				mSelectionType = SelectionType::Hum;
+
+			// Montre le scénario des Hums
+			mHumScenario.Select((Hum*) e);
+			ShowHumScenario();
 		}
 	}
 	else if (mSelectedJoint)
@@ -374,6 +383,14 @@ sf::CircleShape EditBox::GetSelectionMark()
 
 		cs.setPosition(b22sfVec(p->GetPosition(), mPhysicMgr.GetPPM()));
 	}
+	else if (mSelectionType == SelectionType::Hum)
+	{
+		// Obtient le Hum
+		Hum *h = (Hum*) mSelectedEntity;
+		myAssert(h, "Erreur lors du la détermination du type.");
+
+		cs.setPosition(b22sfVec(h->GetPosition(), mPhysicMgr.GetPPM()));
+	}
 
 	// Retourne le disque
 	return cs;
@@ -394,6 +411,11 @@ void EditBox::OnShowLevelWindow()
 	}
 
 	mLevelWindow.Show();
+}
+void EditBox::ShowHumScenario()
+{
+	mHumScenario.AddInWindow(mWindow);
+	mHumScenario.Show();
 }
 void EditBox::ShowBodyScenario()
 {
@@ -450,6 +472,16 @@ void EditBox::ShowDecoCreationWindow()
 
 	mDecoCreationWindow.Show();
 }
+void EditBox::ShowHumCreationWindow()
+{
+	if (!mHumCreationWindowAdded)
+	{
+		mHumCreationWindow.RegisterInDesktop(&mDesktop);
+		mHumCreationWindowAdded = true;
+	}
+
+	mHumCreationWindow.Show();
+}
 void EditBox::ShowPolyCreationWindow()
 {
 	if (!mLuaConsoleWindowAdded)
@@ -496,6 +528,10 @@ LevelWindow* EditBox::GetLevelWindow()
 {
 	return &mLevelWindow;
 }
+HumScenario* EditBox::GetHumScenario()
+{
+	return &mHumScenario;
+}
 DecoScenario* EditBox::GetDecoScenario()
 {
 	return &mDecoScenario;
@@ -519,6 +555,10 @@ ColFilteringWindow* EditBox::GetColFilteringWindow()
 DecoCreationWindow* EditBox::GetDecoCreationWindow()
 {
 	return &mDecoCreationWindow;
+}
+HumCreationWindow* EditBox::GetHumCreationWindow()
+{
+	return &mHumCreationWindow;
 }
 PolyCreationWindow* EditBox::GetPolyCreationWindow()
 {

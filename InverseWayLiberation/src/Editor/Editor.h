@@ -2,6 +2,7 @@
 #include "../Lua/LuaMachine.h"
 #include "../Resources/ResourceManager.h"
 #include "../Editor/EditBox.h"
+#include "../Editor/GUI/HumCreationWindow.h"
 #include "../Editor/GUI/PolyCreationWindow.h"
 #include "../Editor/GUI/DecoCreationWindow.h"
 #include "../Editor/GUI/BasicBodyCreationWindow.h"
@@ -69,6 +70,7 @@ private:
 	// Ajout d'Entities
 	PolyCreationWindow *mPolyCreationWindow;
 	DecoCreationWindow *mDecoCreationWindow;
+	HumCreationWindow *mHumCreationWindow;
 	BasicBodyCreationWindow *mBasicBodyCreationWindow;
 	PointLightCreationWindow *mPointLightCreationWindow;
 

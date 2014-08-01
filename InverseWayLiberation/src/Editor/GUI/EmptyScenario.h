@@ -25,4 +25,5 @@ private:
 	sfg::Button::Ptr mPolyCreationBtn;
 	sfg::Button::Ptr mBasicBodyCreationBtn;
 	sfg::Button::Ptr mPointLightCreationBtn;
+	sfg::Button::Ptr mHumCreationBtn;
 };
