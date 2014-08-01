@@ -12,6 +12,7 @@ public:
 	{
 		mLoaded = loadFromFile(path);
 		myCheckError_c(mLoaded, "Impossible de charger :\n" + path);
+		setSmooth(true);
 	}
 
 	// Gestion de l'état
