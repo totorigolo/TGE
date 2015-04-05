@@ -6,90 +6,33 @@
 #include "../Physics/PhysicManager.h"
 
 // Ctor
-TextureHolder::TextureHolder(std::pair<int, int> size)
-	: size(size)
-{
-	// CasterTexture
-	casterTex.create(size.first, size.second);
-	casterSprite.setTexture(casterTex.getTexture(), true);
-	
-	// DistortTexture
-	distortTex.create(size.first, size.second);
-	distortSprite.setTexture(distortTex.getTexture(), true);
-	
-	// ReduceTexture
-	reduceTex.create(2, size.second);
-
-	// BlurVTexture
-	blurTex.create(size.first, size.second);
-	blurSprite.setTexture(blurTex.getTexture(), true);
-}
-
-// Ctor
 LightEngine::LightEngine(void)
+: mZero(0.f, 0.f), mOne(1.f, 1.f), mIsActive(true)
 {
-	// Charge les shaders
-	LoadShaders();
-
 	// Configure l'état additif
 	addStates.blendMode = sf::BlendAdd;
 
-#if LIGHTENGINE_DEBUGDRAW
-	mRenderWindows["physicalHull"] = new sf::RenderWindow(sf::VideoMode(800U, 600U), "Light physical hull debug");
-	mRenderWindows["casterTex"] = new sf::RenderWindow(sf::VideoMode(800U, 600U), "Light debug - caster");
-	mRenderWindows["distortShader"] = new sf::RenderWindow(sf::VideoMode(800U, 600U), "Light debug - distort");
-	mRenderWindows["reduceShader"] = new sf::RenderWindow(sf::VideoMode(800U, 600U), "Light debug - reduce");
-	mRenderWindows["shadowShader"] = new sf::RenderWindow(sf::VideoMode(800U, 600U), "Light debug - shadow");
-	mRenderWindows["blurShader"] = new sf::RenderWindow(sf::VideoMode(800U, 600U), "Light debug - blur");
-#endif
+	// Charge les shaders
+	LoadShaders();
 }
 
 // Dtor
 LightEngine::~LightEngine(void)
 {
-	// Charge les shaders
-	LoadShaders();
 }
 
 // Charge les shaders
 void LightEngine::LoadShaders(void)
 {
-	// Distort shader
-	distortShader.loadFromFile("fx/distort.fx", sf::Shader::Fragment);
-	distortShader.setParameter("texture", sf::Shader::CurrentTexture);
-
-	// Reduce shader
-	reduceShader.loadFromFile("fx/reduce.fx", sf::Shader::Fragment);
-	reduceShader.setParameter("texture", sf::Shader::CurrentTexture);
-
-	// Shadow shader
-	shadowShader.loadFromFile("fx/shadow.fx", sf::Shader::Fragment);
-
-	// BlurV shader
-	blurVShader.loadFromFile("fx/blurV.fx", sf::Shader::Fragment);
-	blurVShader.setParameter("texture", sf::Shader::CurrentTexture);
-
-	// BlurH shader
-	blurHShader.loadFromFile("fx/blurH.fx", sf::Shader::Fragment);
-	blurHShader.setParameter("texture", sf::Shader::CurrentTexture);
+	myCheckError_v(mShadowShader.loadFromFile("fx/shadow.fx", sf::Shader::Fragment),
+		"Erreur pas encore gérée : shader introuvable"); // TODO
+	mShadowShader.setParameter("texture", sf::Shader::CurrentTexture);
 }
 
 // Dessiner les obstables
-void LightEngine::DrawHull(PointLight *light, const sf::Drawable& hull)
-{
-	light->textures->casterTex.setView(light->view);
-	light->textures->casterTex.draw(hull);
-}
 void LightEngine::DrawPhysicalHull(PointLight *light, const b2Body& body)
 {
-	// Debug draw
-#if LIGHTENGINE_DEBUGDRAW
-	mRenderWindows["physicalHull"]->clear();
-	mRenderWindows["physicalHull"]->setView(light->view);
-#endif
-
-	// Change la vue de la texture
-	light->textures->casterTex.setView(light->view);
+	if (!mIsActive) return;
 
 	// Parcours toutes les Fixtures du body
 	for (const b2Fixture* fixture = body.GetFixtureList(); fixture; fixture = fixture->GetNext())
@@ -98,172 +41,134 @@ void LightEngine::DrawPhysicalHull(PointLight *light, const b2Body& body)
 		b2Transform t = body.GetTransform();
 		const b2Shape *shape = fixture->GetShape();
 
+		// TODO : Ne pas dupliquer la projection pour chaque type
+
 		// Pour chaque type différent de Body
-		if (shape->GetType() == b2Shape::e_chain)
+		/*
+			e_circle = 0,
+			e_edge = 1,
+		*/
+		if (shape->GetType() == b2Shape::e_chain) // Chain et loop
 		{
 			// Détermine s'il s'agit d'un loop ou d'un chain
 			bool isLoop = false;
 			if (body.GetUserData())
 			{
-				Entity* e = (Entity*) body.GetUserData();
+				Entity* e = (Entity*)body.GetUserData();
 				if (e->GetType() == EntityType::PolyChain)
 				{
-					PolyChain* pc = (PolyChain*) e;
+					PolyChain* pc = (PolyChain*)e;
 					if (pc->GetChainType() == PolyChain::Type::Loop)
 						isLoop = true;
 				}
 			}
 
 			// Récupère le shape
-			b2ChainShape *chain = (b2ChainShape*) shape;
+			b2ChainShape *chain = (b2ChainShape*)shape;
 
-			// Crée le polygone
-			sf::VertexArray va;
-			va.setPrimitiveType(sf::LinesStrip);
-			va.resize(chain->m_count + ((isLoop) ? 1U : 0U));
-
-			// Remplit le polygone
-			for (int32 i = 0; i < chain->m_count; ++i)
+			// Crée les ombres
+			const float ppm = PhysicManager::GetInstance().GetPPM();
+			const sf::Color &c = sf::Color::Green;
+			const sf::Vector2f lpos = light->GetPosition_sf();
+			for (int32 i = 0; i < chain->m_count - ((!isLoop) ? 1 : 0); ++i) // Chaque pt -> chaque arrête
 			{
-				va[i].position = b22sfVec(b2Mul(t, chain->m_vertices[i]), PhysicManager::GetInstance().GetPPM());
-			}
-			if (isLoop)
-				va[chain->m_count].position = b22sfVec(b2Mul(t, chain->m_vertices[0]), PhysicManager::GetInstance().GetPPM());
+				// N° pt suivant (overflow)
+				int j = ((i + 1) < chain->m_count) ? (i + 1) : 0;
 
-			// Dessine le polygone
-			glLineWidth(3.5f);
-			light->textures->casterTex.draw(va);
-			glLineWidth(1.f);
-#if LIGHTENGINE_DEBUGDRAW
-			mRenderWindows["physicalHull"]->resetGLStates();
-			glLineWidth(3.5f);
-			mRenderWindows["physicalHull"]->draw(va);
-			glLineWidth(1.f);
-#endif
+				// Pts formant l'arrête
+				sf::Vector2f pt1 = b22sfVec(b2Mul(t, chain->m_vertices[i]), ppm);
+				sf::Vector2f pt2 = b22sfVec(b2Mul(t, chain->m_vertices[j]), ppm);
+
+				// Ajoute les pts au VertexArray
+				light->mShadowsVertexArray.append(sf::Vertex(pt1, c, mZero));
+				light->mShadowsVertexArray.append(sf::Vertex(pt2, c, mZero));
+
+				// Projette les points
+				// Pt1
+				float dist = sqrtf((pt2.y - lpos.y)*(pt2.y - lpos.y) + (pt2.x - lpos.x)*(pt2.x - lpos.x));
+				pt2 = pt2 + (((pt2 - lpos) / dist) * float(light->mLightRadius) * 10000.f);
+				light->mShadowsVertexArray.append(sf::Vertex(pt2, c, mZero));
+				// Pt2
+				dist = sqrtf((pt1.y - lpos.y)*(pt1.y - lpos.y) + (pt1.x - lpos.x)*(pt1.x - lpos.x));
+				pt1 = pt1 + (((pt1 - lpos) / dist) * float(light->mLightRadius) * 10000.f);
+				light->mShadowsVertexArray.append(sf::Vertex(pt1, c, mZero));
+			}
 		}
-		else if (shape->GetType() == b2Shape::e_polygon)
+		else if (shape->GetType() == b2Shape::e_polygon) // polygon
 		{
 			// Récupère le shape
 			b2PolygonShape *poly = (b2PolygonShape*) shape;
 
-			// Crée le polygone
-			sf::ConvexShape sfpoly;
-			sfpoly.setPointCount(poly->m_count + 1U);
-
-			// Remplit le polygone
-			for (int32 i = 0; i < poly->m_count; ++i)
+			// Crée les ombres
+			const float ppm = PhysicManager::GetInstance().GetPPM();
+			const sf::Color &c = sf::Color::Green;
+			const sf::Vector2f lpos = light->GetPosition_sf();
+			for (int32 i = 0; i < poly->m_count; ++i) // Chaque pt -> chaque arrête
 			{
-				sfpoly.setPoint(i, b22sfVec(b2Mul(t, poly->m_vertices[i]), PhysicManager::GetInstance().GetPPM()));
-			}
-			sfpoly.setPoint(poly->m_count, b22sfVec(b2Mul(t, poly->m_vertices[0]), PhysicManager::GetInstance().GetPPM()));
+				// N° pt suivant (overflow)
+				int j = ((i + 1) < poly->m_count) ? (i + 1) : 0;
 
-			// Dessine le polygone
-			light->textures->casterTex.draw(sfpoly);
-#if LIGHTENGINE_DEBUGDRAW
-			mRenderWindows["physicalHull"]->draw(sfpoly);
-#endif
+				// Pts formant l'arrête
+				sf::Vector2f pt1 = b22sfVec(b2Mul(t, poly->m_vertices[i]), ppm);
+				sf::Vector2f pt2 = b22sfVec(b2Mul(t, poly->m_vertices[j]), ppm);
+
+				// Ajoute les pts au VertexArray
+				light->mShadowsVertexArray.append(sf::Vertex(pt1, c, mZero));
+				light->mShadowsVertexArray.append(sf::Vertex(pt2, c, mZero));
+
+				// Projette les points
+				// Pt1
+				float dist = sqrtf((pt2.y - lpos.y)*(pt2.y - lpos.y) + (pt2.x - lpos.x)*(pt2.x - lpos.x));
+				pt2 = pt2 + (((pt2 - lpos) / dist) * float(light->mLightRadius) * 10000.f);
+				light->mShadowsVertexArray.append(sf::Vertex(pt2, c, mZero));
+				// Pt2
+				dist = sqrtf((pt1.y - lpos.y)*(pt1.y - lpos.y) + (pt1.x - lpos.x)*(pt1.x - lpos.x));
+				pt1 = pt1 + (((pt1 - lpos) / dist) * float(light->mLightRadius) * 10000.f);
+				light->mShadowsVertexArray.append(sf::Vertex(pt1, c, mZero));
+			}
 		}
 	}
-
-	// Debug Draw
-#if LIGHTENGINE_DEBUGDRAW
-	mRenderWindows["physicalHull"]->display();
-#endif
 }
 void LightEngine::Clear(PointLight *light)
 {
+	if (!mIsActive) return;
+
 	// Efface la casterTexture
-	light->textures->casterTex.clear(sf::Color::Transparent);
-	glLineWidth(1.f);
+	light->mShadowsVertexArray.clear();
 }
 
 // Crée les ombres
 void LightEngine::CreateShadows(PointLight *light)
 {
-	// Fini le rendu de la casterTexture
-	light->textures->casterTex.display();
+	if (!mIsActive) return;
 
-	// Applique le distort shader
-	mShaderStates.shader = &distortShader;
-	light->textures->distortTex.draw(light->textures->casterSprite , mShaderStates);
-	light->textures->distortTex.display();
-	
-	// Applique le reduce shader
-	reduceShader.setParameter("renderTargetWidth", light->GetBoundingBox().width);
-	mShaderStates.shader = &reduceShader;
-	light->textures->reduceTex.draw(light->textures->distortSprite , mShaderStates);
+	// Change la vue de la texture
+	light->mLightTex.setView(light->view);
 
 	// Applique le shadow shader
-	shadowShader.setParameter("reduce", light->textures->reduceTex.getTexture());
-	shadowShader.setParameter("renderTargetSize", light->GetBoundingBox().width);//light->mLightRadius * 2.f); // Fix ?
-	shadowShader.setParameter("lightColor", light->mLightColor);
-	mShaderStates.shader = &shadowShader;
-	light->shadowTex.clear();
-	light->shadowTex.draw(light->textures->casterSprite , mShaderStates);
-	light->shadowTex.display();
-	
-	// Applique le blur shader
-	mShaderStates.shader = &blurHShader;
-	light->textures->blurTex.draw(light->shadowSprite, mShaderStates);
-	light->textures->blurTex.display();
-	mShaderStates.shader = &blurVShader;
-	light->shadowTex.draw(light->textures->blurSprite, mShaderStates);
-	light->shadowTex.display();
-
-	// Efface la casterTexture
-	light->textures->casterTex.clear(sf::Color::Transparent);
-	glLineWidth(1.f);
-
-#if LIGHTENGINE_DEBUGDRAW
-	mRenderWindows["casterTex"]->clear();
-	mRenderWindows["distortShader"]->clear();
-	mRenderWindows["reduceShader"]->clear();
-	mRenderWindows["shadowShader"]->clear();
-	mRenderWindows["blurShader"]->clear();
-
-	mRenderWindows["casterTex"]->draw(light->textures->casterSprite);
-	mRenderWindows["distortShader"]->draw(light->textures->distortSprite);
-	mRenderWindows["reduceShader"]->draw(sf::Sprite(light->textures->reduceTex.getTexture()));
-	mRenderWindows["shadowShader"]->draw(light->shadowSprite);
-	mRenderWindows["blurShader"]->draw(light->textures->blurSprite);
-
-	mRenderWindows["casterTex"]->display();
-	mRenderWindows["distortShader"]->display();
-	mRenderWindows["reduceShader"]->display();
-	mRenderWindows["shadowShader"]->display();
-	mRenderWindows["blurShader"]->display();
-#endif
+	mShadowShader.setParameter("renderTargetSize", light->GetBoundingBox().width);//light->mLightRadius * 2.f); // Fix ?
+	mShadowShader.setParameter("lightColor", light->mLightColor);
+	sf::RenderStates mShaderStates;
+	mShaderStates.shader = &mShadowShader;
+	light->mLightTex.clear();
+	light->mLightTex.draw(light->mShadowsVertexArray, mShaderStates);
+	light->mLightTex.display();
 }
 
-// Nettoie la mémoire
-void LightEngine::Clean(void)
+// Gère l'état du LightEngine
+void LightEngine::Activate()
 {
-	// Parcours toutes les TexturesHolders
-	for (auto it = mTextures.begin(); it != mTextures.end(); )
-	{
-		// Si il n'y a aucune référence à cette taille
-		if (it->second.use_count() == 1)
-			it = mTextures.erase(it);
-		else
-			++it;
-	}
+	mIsActive = true;
 }
-
-// Récupérer les textures
-std::shared_ptr<TextureHolder>& LightEngine::GetTextures(std::pair<int, int> size)
+void LightEngine::Deactivate()
 {
-	// Cherche si on a les textures correspondantes
-	auto textures = mTextures.find(size);
-
-	// Si on n'a pas, on crée
-	if (textures == mTextures.end())
-	{
-		std::cout << "Cr\x82""ation d'une texture " << size.first << "x" << size.second << "..."; // TODO: Log
-		mTextures[size] = std::shared_ptr<TextureHolder>(new TextureHolder(size));
-		textures = mTextures.find(size);
-		std::cout << " Fait." << std::endl;
-	}
-
-	// Retourne les textures
-	return textures->second;
+	mIsActive = false;
+}
+void LightEngine::SetActive(bool state)
+{
+	mIsActive = state;
+}
+bool LightEngine::IsActive() const
+{
+	return mIsActive;
 }

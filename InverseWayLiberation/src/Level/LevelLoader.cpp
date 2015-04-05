@@ -954,7 +954,6 @@ bool LevelLoader::ProcessDeco()
 	// On crée les attributs
 	Deco *d = nullptr;
 	bool hasID = false;
-	bool shadows = false;
 	unsigned int id = 0U;
 	std::string texture;
 	b2Vec3 posRot;
@@ -976,7 +975,6 @@ bool LevelLoader::ProcessDeco()
 			// Réinitialise les attributs
 			d = nullptr;
 			hasID = false;
-			shadows = false;
 			id = 0U;
 			rotation = 0.f;
 			zindex = 0;
@@ -987,11 +985,9 @@ bool LevelLoader::ProcessDeco()
 			if (img->Attribute("position")) posRot = Parser::stringToB2Vec3(img->Attribute("position"));
 			img->QueryFloatAttribute("rotation", &rotation);
 			posRot.z = rotation;
-			img->QueryBoolAttribute("shadows", &shadows);
 			
 			// Ajoute la déco
 			d = new Deco(z, mLevel.mResourceManager.GetTexture(texture), getVec3(b22sfVec(getVec2(posRot), mPhysicManager.GetPPM()), posRot.z));
-			d->SetShadowsActive(shadows);
 
 			// On récupère la prochaine image
 			img = img->NextSiblingElement();

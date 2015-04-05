@@ -57,12 +57,6 @@ void DecoScenario::Update()
 			mTexture->SelectItem(index);
 		++index;
 	}
-
-	// Mets à jour pour les ombres
-	if (mSelection->IsActiveShadows())
-		mShadows[0]->SetActive(true);
-	else
-		mShadows[1]->SetActive(true);
 }
 
 // Construit la fenêtre et les éléments
@@ -126,18 +120,6 @@ void DecoScenario::Fill()
 	mTextureHBox->PackEnd(mTextureLabel, false);
 	mTextureHBox->PackEnd(mTexture);
 
-	// Ombres
-	mShadowsHBox = sfg::Box::Create(sfg::Box::Orientation::HORIZONTAL);
-	mShadowsLabel = sfg::Label::Create("Ombres :");
-	mShadows.resize(2);
-	mShadows[0] = sfg::RadioButton::Create("Oui");
-	mShadows[0]->GetSignal(sfg::RadioButton::OnToggle).Connect(std::bind(&DecoScenario::OnChangeShadows, this));
-	mShadows[1] = sfg::RadioButton::Create("Non", mShadows[0]->GetGroup());
-	mShadows[1]->GetSignal(sfg::RadioButton::OnToggle).Connect(std::bind(&DecoScenario::OnChangeShadows, this));
-	mShadowsHBox->PackEnd(mShadowsLabel);
-	mShadowsHBox->PackEnd(mShadows[0]);
-	mShadowsHBox->PackEnd(mShadows[1]);
-
 	// Boutons
 	mRefresh = sfg::Button::Create("Actualiser");
 	mRefresh->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind(&DecoScenario::OnRefresh, this));
@@ -148,7 +130,6 @@ void DecoScenario::Fill()
 	AddToVBox(mPosTable);
 	AddToVBox(mLayerHBox);
 	AddToVBox(mTextureHBox);
-	AddToVBox(mShadowsHBox);
 	AddToVBox(mRefresh);
 	AddToVBox(mDestroy);
 }
@@ -175,14 +156,6 @@ void DecoScenario::OnChangeLayer()
 	if (!mApply || !mSelection) return;
 
 	mSelection->SetLayer(static_cast<int>(mLayer->GetValue()));
-	OnRefresh();
-}
-void DecoScenario::OnChangeShadows()
-{
-	if (!mApply || !mSelection) return;
-
-	// Change les ombres
-	mSelection->SetShadowsActive(mShadows[0]->IsActive());
 	OnRefresh();
 }
 void DecoScenario::OnChangePosXp()

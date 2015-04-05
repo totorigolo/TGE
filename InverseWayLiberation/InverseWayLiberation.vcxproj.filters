@@ -137,25 +137,13 @@
     <None Include="lvls\level_1.xvl">
       <Filter>Fichiers de ressources\Levels</Filter>
     </None>
-    <None Include="lvls\level_2.xvl">
-      <Filter>Fichiers de ressources\Levels</Filter>
-    </None>
-    <None Include="lvls\level_3.xvl">
-      <Filter>Fichiers de ressources\Levels</Filter>
-    </None>
-    <None Include="lvls\level_4.xvl">
-      <Filter>Fichiers de ressources\Levels</Filter>
-    </None>
-    <None Include="lvls\level_5.xvl">
-      <Filter>Fichiers de ressources\Levels</Filter>
-    </None>
-    <None Include="lvls\level_hum.xvl">
-      <Filter>Fichiers de ressources\Levels</Filter>
-    </None>
     <None Include="lvls\level_jmp.xvl">
       <Filter>Fichiers de ressources\Levels</Filter>
     </None>
     <None Include="lvls\level_lot.xvl">
+      <Filter>Fichiers de ressources\Levels</Filter>
+    </None>
+    <None Include="lvls\level_l.xvl">
       <Filter>Fichiers de ressources\Levels</Filter>
     </None>
   </ItemGroup>
@@ -379,9 +367,6 @@
     <ClCompile Include="src\Entities\Hull.cpp">
       <Filter>Fichiers sources\Entities</Filter>
     </ClCompile>
-    <ClCompile Include="src\Graphics\LightEngine.cpp">
-      <Filter>Fichiers sources\Graphics</Filter>
-    </ClCompile>
     <ClCompile Include="src\Entities\PolyBody.cpp">
       <Filter>Fichiers sources\Entities</Filter>
     </ClCompile>
@@ -399,6 +384,9 @@
     </ClCompile>
     <ClCompile Include="src\Editor\GUI\HumScenario.cpp">
       <Filter>Fichiers sources\Editor\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Graphics\LightEngine.cpp">
+      <Filter>Fichiers sources\Graphics</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -630,9 +618,6 @@
     <ClInclude Include="src\Entities\Hull.h">
       <Filter>Fichiers d%27en-tête\Entities</Filter>
     </ClInclude>
-    <ClInclude Include="src\Graphics\LightEngine.h">
-      <Filter>Fichiers d%27en-tête\Graphics</Filter>
-    </ClInclude>
     <ClInclude Include="src\Entities\PolyBody.h">
       <Filter>Fichiers d%27en-tête\Entities</Filter>
     </ClInclude>
@@ -651,20 +636,11 @@
     <ClInclude Include="src\Editor\GUI\HumScenario.h">
       <Filter>Fichiers d%27en-tête\Editor\GUI</Filter>
     </ClInclude>
+    <ClInclude Include="src\Graphics\LightEngine.h">
+      <Filter>Fichiers d%27en-tête\Graphics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="fx\blurH.fx">
-      <Filter>Fichiers de ressources\Shaders</Filter>
-    </FxCompile>
-    <FxCompile Include="fx\blurV.fx">
-      <Filter>Fichiers de ressources\Shaders</Filter>
-    </FxCompile>
-    <FxCompile Include="fx\distort.fx">
-      <Filter>Fichiers de ressources\Shaders</Filter>
-    </FxCompile>
-    <FxCompile Include="fx\reduce.fx">
-      <Filter>Fichiers de ressources\Shaders</Filter>
-    </FxCompile>
     <FxCompile Include="fx\shadow.fx">
       <Filter>Fichiers de ressources\Shaders</Filter>
     </FxCompile>

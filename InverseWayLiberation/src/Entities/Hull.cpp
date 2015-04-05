@@ -3,22 +3,24 @@
 #include "PartitioningTree.h"
 
 // Ctor
-Hull::Hull(sf::Drawable const * shadowCaster)
-	: mMoved(true), mIsValid(false), mIsActive(true), mIsDrawable(false),
-	mShadowCaster(shadowCaster), mIsPhysicallyDrawable(false), mBodyShadowCaster(nullptr)
+Hull::Hull(b2Body const * bodyShadowCaster)
+	: mMoved(true), mIsValid(false), mIsActive(true),
+	mIsPhysicallyDrawable(false), mBodyShadowCaster(bodyShadowCaster)
 {
 	// On vient d'apparaitre, donc on a bougé
 	Moved();
 
 	// Enregistre le hull
-	PartitioningTree::GetInstance().RegisterHull(this);
+	if (mBodyShadowCaster)
+		PartitioningTree::GetInstance().RegisterHull(this);
 }
-Hull::Hull(sf::Drawable const * shadowCaster, const sf::Vector2f& pos, const sf::Vector2f& size)
+Hull::Hull(b2Body const * bodyShadowCaster, const sf::Vector2f& pos, const sf::Vector2f& size)
 	: mMoved(true), mPosition(pos), mSize(size), mIsValid(true), mIsActive(true),
-	mShadowCaster(shadowCaster), mBodyShadowCaster(nullptr)
+	mBodyShadowCaster(bodyShadowCaster)
 {
 	Moved();
-	PartitioningTree::GetInstance().RegisterHull(this);
+	if (mBodyShadowCaster)
+		PartitioningTree::GetInstance().RegisterHull(this);
 }
 
 // Dtor
@@ -70,7 +72,7 @@ void Hull::SetPosAndSize(const sf::Vector2f& pos, const sf::Vector2f& size)
 // Mise à jour dans le Partitioning System
 void Hull::Update(void)
 {
-	if (mIsValid && mIsActive && mMoved)
+	if (mIsValid && mIsActive && mMoved && mBodyShadowCaster)
 		PartitioningTree::GetInstance().UpdateHull(this);
 }
 void Hull::PostUpdate(void)
@@ -83,8 +85,9 @@ void Hull::PostUpdate(void)
 void Hull::Activate(void)
 {
 	Moved();
+	if (mBodyShadowCaster && !mIsActive)
+		PartitioningTree::GetInstance().RegisterHull(this);
 	mIsActive = true;
-	PartitioningTree::GetInstance().RegisterHull(this);
 }
 void Hull::Deactivate(void)
 {
@@ -127,37 +130,24 @@ void Hull::RemoveFromCells(void)
 }
 
 // Gestion du Shadow Caster
-void Hull::SetDrawable(bool drawable)
-{
-	mIsDrawable = drawable;
-	if (mIsDrawable)
-		mIsPhysicallyDrawable = false;
-}
-bool Hull::IsDrawable(void) const
-{
-	return mIsDrawable;
-}
 void Hull::SetPhysicallyDrawable(bool physicallyDrawable)
 {
-	mIsPhysicallyDrawable = physicallyDrawable;
-	if (mIsPhysicallyDrawable)
-		mIsDrawable = false;
+	if (mBodyShadowCaster)
+		mIsPhysicallyDrawable = physicallyDrawable;
+	else {
+		mIsPhysicallyDrawable = false;
+		PartitioningTree::GetInstance().UnregisterHull(this);
+	}
+	//if (mIsPhysicallyDrawable)
+	//	mIsDrawable = false;
 }
 bool Hull::IsPhysicallyDrawable(void) const
 {
 	return mIsPhysicallyDrawable;
 }
-void Hull::SetShadowCaster(sf::Drawable const * shadowCaster)
-{
-	mShadowCaster = shadowCaster;
-}
 void Hull::SetBodyShadowCaster(b2Body const * bodyShadowCaster)
 {
 	mBodyShadowCaster = bodyShadowCaster;
-}
-sf::Drawable const* Hull::GetShadowCaster() const
-{
-	return mShadowCaster;
 }
 b2Body const* Hull::GetBodyShadowCaster() const
 {

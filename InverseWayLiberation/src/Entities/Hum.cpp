@@ -4,7 +4,7 @@
 
 // Ctor & dtor
 Hum::Hum(int layer)
-	: Entity(layer), mPhysicMgr(PhysicManager::GetInstance()), mBodyIsCreated(false), mBody(nullptr), mHull(this),
+	: Entity(layer), mPhysicMgr(PhysicManager::GetInstance()), mBodyIsCreated(false), mBody(nullptr), mHull(nullptr),
 	mAge(0.0), mStrengh(0.0), mHeight(0.0), mAgeFactor(0.0), mTopWidth(0.0), mBottomWidth(0.0), mEyeHeight(0.0),
 	mHasMoved(true), mIsDead(true), mCanJump(true),
 	mSensorJump(nullptr)
@@ -102,8 +102,8 @@ bool Hum::Create(b2Vec2 pos, double age, double strengh, sf::Color color)
 	mIsDead = false;
 
 	// Active les ombres
-	mHull.SetDrawable(true);
-	mHull.SetShadowCaster(this);
+	mHull.SetBodyShadowCaster(mBody);
+	mHull.SetPhysicallyDrawable(true);
 	mHull.Activate();
 
 	return true;
@@ -164,7 +164,7 @@ void Hum::Update()
 }
 void Hum::CheckSensors()
 {
-	static auto check = [&mBody](b2Fixture *f, bool *result)
+	/*static auto check = [&mBody](b2Fixture *f, bool *result)
 	{
 		result = false;
 		for (b2ContactEdge* ce = mBody->GetContactList(); ce; ce = ce->next)
@@ -189,7 +189,7 @@ void Hum::CheckSensors()
 	check(mSensorMoveLeft, mCanMoveLeft);
 
 	// Vérifie le déplacement à droite
-	check(mSensorMoveRight, mCanMoveRight);
+	check(mSensorMoveRight, mCanMoveRight);*/
 }
 
 // Intelligence artificielle

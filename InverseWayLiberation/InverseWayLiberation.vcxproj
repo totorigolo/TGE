@@ -187,12 +187,8 @@
     <None Include="lvls\level_1.xvl">
       <SubType>Designer</SubType>
     </None>
-    <None Include="lvls\level_2.xvl" />
-    <None Include="lvls\level_3.xvl" />
-    <None Include="lvls\level_4.xvl" />
-    <None Include="lvls\level_5.xvl" />
-    <None Include="lvls\level_hum.xvl" />
     <None Include="lvls\level_jmp.xvl" />
+    <None Include="lvls\level_l.xvl" />
     <None Include="lvls\level_lot.xvl" />
     <None Include="scripts\contact.lua" />
     <None Include="scripts\lvl1.lua" />
@@ -200,22 +196,6 @@
     <None Include="src\_TODO.txt" />
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="fx\blurH.fx">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-    </FxCompile>
-    <FxCompile Include="fx\blurV.fx">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-    </FxCompile>
-    <FxCompile Include="fx\distort.fx">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-    </FxCompile>
-    <FxCompile Include="fx\reduce.fx">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-    </FxCompile>
     <FxCompile Include="fx\shadow.fx">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
@@ -253,6 +233,12 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
     <CodeAnalysisRuleSet>MixedRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <IncludePath>D:\Users\Thomas\Programmation\Boost\boost_1_56_0;$(IncludePath)</IncludePath>
+    <LibraryPath>D:\Users\Thomas\Programmation\Boost\boost_1_56_0;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <IncludePath>D:\Users\Thomas\Programmation\Boost\boost_1_56_0;$(IncludePath)</IncludePath>
+    <LibraryPath>D:\Users\Thomas\Programmation\Boost\boost_1_56_0;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -266,7 +252,7 @@
       <DisableSpecificWarnings>4503</DisableSpecificWarnings>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <ForcedIncludeFiles>%(ForcedIncludeFiles)</ForcedIncludeFiles>
-      <AdditionalIncludeDirectories>C:\Users\Thomas\Programmation\SFML\InverseWayLiberation\InverseWayLiberation\src</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)\src</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -290,7 +276,8 @@
       <DisableSpecificWarnings>4503</DisableSpecificWarnings>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <ForcedIncludeFiles>%(ForcedIncludeFiles)</ForcedIncludeFiles>
-      <AdditionalIncludeDirectories>C:\Users\Thomas\Programmation\SFML\InverseWayLiberation\InverseWayLiberation\src</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)\src</AdditionalIncludeDirectories>
+      <MinimalRebuild>true</MinimalRebuild>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>

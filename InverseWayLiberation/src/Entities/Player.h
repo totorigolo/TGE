@@ -1,7 +1,7 @@
 #pragma once
 #include "Entity.h"
 #include "Hum.h"
-#include "App/SpyedKey.h"
+#include "../App/SpyedKey.h"
 #include "../Resources/Texture.h"
 
 class InputManager;

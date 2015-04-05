@@ -17,12 +17,6 @@ public:
 	Texture::Ptr& GetTexture(void);
 	void SetTexture(Texture::Ptr texture);
 
-	// Ombres
-	void ActivateShadows(void);
-	void DeactivateShadows(void);
-	void SetShadowsActive(bool active);
-	bool IsActiveShadows(void) const;
-
 	// Position et rotation
 	void SetPosition(const b2Vec2 &pos);
 	void SetPosition(const sf::Vector2f &pos);
@@ -40,7 +34,4 @@ public:
 private:
 	sf::Sprite mSprite;
 	Texture::Ptr mTexture;
-
-	// Ombres
-	Hull mHull;
 };

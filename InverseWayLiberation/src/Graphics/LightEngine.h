@@ -1,30 +1,7 @@
 #pragma once
 #include "../Tools/Singleton.h"
 
-#define LIGHTENGINE_DEBUGDRAW 0
-
 class PointLight;
-struct TextureHolder
-{
-public:
-	// Ctor
-	TextureHolder(std::pair<int, int> size);
-
-public:
-	// Taille
-	std::pair<int, int> size;
-
-	// RenderTexture
-	sf::RenderTexture casterTex;
-	sf::RenderTexture distortTex;
-	sf::RenderTexture reduceTex;
-	sf::RenderTexture blurTex;
-	sf::Sprite casterSprite;
-	sf::Sprite distortSprite;
-	sf::Sprite blurSprite;
-};
-
-class Light;
 class LightEngine : public Singleton<LightEngine>
 {
 protected:
@@ -39,46 +16,37 @@ public:
 	void LoadShaders(void);
 
 	// Dessiner les obstables
-	void DrawHull(PointLight *light, const sf::Drawable& hull);
 	void DrawPhysicalHull(PointLight *light, const b2Body& body);
 	void Clear(PointLight *light);
 
 	// Crée les ombres
 	void CreateShadows(PointLight *light);
 
-	// Nettoie la mémoire
-	void Clean();
+	// Gère l'état du LightEngine
+	void Activate();
+	void Deactivate();
+	void SetActive(bool state);
+	bool IsActive() const;
 
-protected:
+private:
 	// Accès de PointLight
 	friend class PointLight;
 
-	// Récupérer les textures
-	std::shared_ptr<TextureHolder>& GetTextures(std::pair<int, int> size);
-	
-	// Crée les ombres
-	void CreateShadows(void);
+	// State of the LightEngine
+	bool mIsActive;
 
-	// Shaders
-	sf::Shader distortShader;
-	sf::Shader reduceShader;
-	sf::Shader shadowShader;
-	sf::Shader blurVShader;
-	sf::Shader blurHShader;
-	
 	// States
 	sf::RenderStates addStates;
 
-private:
-	// States
-	sf::RenderStates mShaderStates;
+	// Shader
+	sf::Shader mShadowShader;
 
-	// RenderTextures
-	std::map<std::pair<int, int>, std::shared_ptr<TextureHolder>> mTextures;
-
-#if LIGHTENGINE_DEBUGDRAW
-	// Fenêtre de rendu debug
-	std::map<std::string, sf::RenderWindow*> mRenderWindows;
-#endif
+	// sf::Vector particuliers pour le ShadowVertexArray
+	/* L'idée est que quand on dessine les ombres, on mets les coordonnées de texture à 0, alors que
+	 * le fond dessiné sous les ombres sur toute la surface de la lumière a ses coordonnées à 1.
+	 * De cette façon on sait très facilement si on est dans une ombre ou non.
+	 */
+	sf::Vector2f mZero;
+	sf::Vector2f mOne;
 };
 

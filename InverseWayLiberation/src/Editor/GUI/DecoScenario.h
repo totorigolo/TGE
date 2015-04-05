@@ -27,7 +27,6 @@ protected:
 	void OnChangePosition();
 	void OnChangeTexture();
 	void OnChangeLayer();
-	void OnChangeShadows();
 	void OnChangePosXp();
 	void OnChangePosXm();
 	void OnChangePosYp();
@@ -71,11 +70,6 @@ private:
 	sfg::Box::Ptr mTextureHBox;
 	sfg::Label::Ptr mTextureLabel;
 	sfg::ComboBox::Ptr mTexture;
-
-	// Ombres
-	sfg::Box::Ptr mShadowsHBox;
-	sfg::Label::Ptr mShadowsLabel;
-	std::vector<sfg::RadioButton::Ptr> mShadows;
 
 	// Bouton
 	sfg::Button::Ptr mRefresh;

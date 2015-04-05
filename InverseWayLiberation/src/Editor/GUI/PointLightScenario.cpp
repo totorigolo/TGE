@@ -196,7 +196,6 @@ void PointLightScenario::OnChangeRadius()
 
 	// Change son rayon
 	mSelection->SetLightRadius(static_cast<unsigned int>(mRadius->GetValue()));
-	LightEngine::GetInstance().Clean();
 	OnRefresh();
 }
 void PointLightScenario::OnChangeColorR()

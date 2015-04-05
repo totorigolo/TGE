@@ -753,8 +753,6 @@ bool LevelSaver::ProcessDeco()
 			balise->SetAttribute("texture", textureName.c_str());
 			balise->SetAttribute("position", Parser::b2Vec2ToString(pos).c_str());
 			if (rotation != 0.f) balise->SetAttribute("rotation", rotation);
-			if (d->IsActiveShadows())
-				balise->SetAttribute("shadows", "true"); // Ombres
 
 			// Ajoute la balise à <layer>
 			layer->LinkEndChild(balise);

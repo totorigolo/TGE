@@ -14,22 +14,6 @@ PolyBody::PolyBody(int layer)
 void PolyBody::PreUpdate()
 {
 	BaseBody::PreUpdate();
-
-	if (!mBody || !mBodyIsCreated || !mIsAlive) return;
-
-	// Pour chaque fixture
-	if (mHasMoved || (mBody->IsAwake() && mBody->GetType() != b2BodyType::b2_staticBody))
-	{
-		// Mise à jour du Hull
-		b2AABB aabb = GetBoundingBox();
-		b2Vec2 pos;
-		pos.x = aabb.lowerBound.x;
-		pos.y = aabb.upperBound.y;
-		b2Vec2 size = aabb.upperBound - aabb.lowerBound;
-		sf::Vector2f sfpos = b22sfVec(pos, PhysicManager::GetInstance().GetPPM());
-		sf::Vector2f sfsize = b22sfVec(size, PhysicManager::GetInstance().GetPPM(), true);
-		mHull.SetPosAndSize(sfpos, sfsize);
-	}
 }
 
 // Création du body

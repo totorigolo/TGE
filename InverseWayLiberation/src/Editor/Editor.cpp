@@ -14,6 +14,7 @@
 #include "../Physics/Joints/MouseJoint.h"
 #include "../Physics/Joints/DistanceJoint.h"
 #include "../Physics/Callback/PointCallback.h"
+#include "../Graphics/LightEngine.h"
 
 // Ctor
 Editor::Editor(sf::RenderWindow &window)
@@ -155,14 +156,20 @@ bool Editor::OnInit()
 
 	// Demande l'espionnage de touches
 	// Evènements
+	mSpyedKeys.push_back(SpyedKey::Create(sf::Keyboard::R)); // Reload (ex: shaders)
 	mSpyedKeys.push_back(SpyedKey::Create(sf::Keyboard::M)); // Pause physique
 	mSpyedKeys.push_back(SpyedKey::Create(sf::Keyboard::O)); // Debug Draw
 	mSpyedKeys.push_back(SpyedKey::Create(sf::Keyboard::T)); // Ragdoll
 	mSpyedKeys.push_back(SpyedKey::Create(sf::Keyboard::P)); // Pin
 	mSpyedKeys.push_back(SpyedKey::Create(sf::Keyboard::H)); // Hum -> TODO: Delete
+	mSpyedKeys.push_back(SpyedKey::Create(sf::Keyboard::L)); // Toggle LightEngine
 	mSpyedKeys.push_back(SpyedKey::Create(sf::Keyboard::Add)); // Zoom in
 	mSpyedKeys.push_back(SpyedKey::Create(sf::Keyboard::Subtract)); // Zoom out
 	mSpyedKeys.push_back(SpyedKey::Create(sf::Keyboard::Numpad0)); // Reset vue
+	mSpyedKeys.push_back(SpyedKey::Create(sf::Keyboard::Numpad2)); // Déplacement au clavier (bas)
+	mSpyedKeys.push_back(SpyedKey::Create(sf::Keyboard::Numpad4)); // Déplacement au clavier (gauche)
+	mSpyedKeys.push_back(SpyedKey::Create(sf::Keyboard::Numpad6)); // Déplacement au clavier (droite)
+	mSpyedKeys.push_back(SpyedKey::Create(sf::Keyboard::Numpad8)); // Déplacement au clavier (haut)
 
 	// Initialise la machine Lua
 	mConsole.RegisterEntityFactory();
@@ -223,6 +230,13 @@ void Editor::OnEvent()
 	{
 		return;
 	}
+	
+	// Reload (ex: shaders)
+	if (mInputManager.KeyPressed(sf::Keyboard::R) && ctrl)
+	{
+		std::cout << "Reload shaders" << std::endl;
+		LightEngine::GetInstance().LoadShaders();
+	}
 
 	// Pause physique
 	if (mInputManager.KeyPressed(sf::Keyboard::M) && ctrl)
@@ -233,6 +247,11 @@ void Editor::OnEvent()
 	if (mInputManager.KeyPressed(sf::Keyboard::O) && ctrl)
 	{
 		mDebugDraw = !mDebugDraw;
+	}
+	// DebugDraw
+	if (mInputManager.KeyPressed(sf::Keyboard::L) && ctrl)
+	{
+		LightEngine::GetInstance().SetActive(!LightEngine::GetInstance().IsActive());
 	}
 
 	// Test des Hums
@@ -534,6 +553,22 @@ void Editor::OnEvent()
 	if (mInputManager.GetMMBState())
 	{
 		mInputManager.MoveCenter(-i2f(mInputManager.GetMousePos() - mInputManager.GetLastMousePos()) * mInputManager.GetCurrentZoom());
+	}
+	if (mInputManager.KeyPressed(sf::Keyboard::Numpad8))
+	{
+		mInputManager.MoveCenter(sf::Vector2f(0.f, -20.f));
+	}
+	if (mInputManager.KeyPressed(sf::Keyboard::Numpad2))
+	{
+		mInputManager.MoveCenter(sf::Vector2f(0.f, 20.f));
+	}
+	if (mInputManager.KeyPressed(sf::Keyboard::Numpad4))
+	{
+		mInputManager.MoveCenter(sf::Vector2f(-20.f, 0.f));
+	}
+	if (mInputManager.KeyPressed(sf::Keyboard::Numpad6))
+	{
+		mInputManager.MoveCenter(sf::Vector2f(20.f, 0.f));
 	}
 }
 

@@ -8,24 +8,12 @@ BasicBody::BasicBody(int layer)
 {
 	// Défini le type de l'Entity
 	mType = EntityType::BasicBody;
-
-	// Définit le shadow caster
-	mHull.SetShadowCaster(this);
 }
 
 // Mise à jour
 void BasicBody::PreUpdate()
 {
 	BaseBody::PreUpdate();
-
-	if (!mBody || !mBodyIsCreated || !mIsAlive) return;
-
-	// Mise à jour du Hull
-	if (mHasMoved || (mBody->IsAwake() && mBody->GetType() != b2BodyType::b2_staticBody))
-	{
-		auto gb = mSprite.getGlobalBounds();
-		mHull.SetPosAndSize(sf::Vector2f(gb.left, gb.top), sf::Vector2f(gb.width, gb.height));
-	}
 }
 
 // Création du body
@@ -70,7 +58,9 @@ bool BasicBody::CreateBox(b2Vec3 posRot, b2BodyType type, Texture::Ptr texture,
 	mIsAlive = true;
 
 	// Règle le Hull
-	mHull.SetDrawable(true);
+	mHull.SetBodyShadowCaster(mBody);
+	mHull.SetPhysicallyDrawable(true);
+	mHull.Activate();
 
 	return true;
 }
@@ -113,7 +103,9 @@ bool BasicBody::CreateCircle(b2Vec3 posRot, b2BodyType type, Texture::Ptr textur
 	mIsAlive = true;
 
 	// Règle le Hull
-	mHull.SetDrawable(true);
+	mHull.SetBodyShadowCaster(mBody);
+	mHull.SetPhysicallyDrawable(true);
+	mHull.Activate();
 
 	return true;
 }

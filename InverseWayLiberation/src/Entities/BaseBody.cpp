@@ -21,11 +21,23 @@ BaseBody::~BaseBody()
 void BaseBody::PreUpdate()
 {
 	// Si le body est valide
-	if (mBody && mBodyIsCreated && mIsAlive)
+	if (!mBody || !mBodyIsCreated || !mIsAlive) return;
+
+	// Mise à jour de la texture
+	mSprite.setPosition(b22sfVec(mBody->GetPosition(), mPhysicMgr.GetPPM()));
+	mSprite.setRotation(-mBody->GetAngle() * DPR);
+
+	// Mise à jour du Hull
+	if (mHasMoved || (mBody->IsAwake() && mBody->GetType() != b2BodyType::b2_staticBody))
 	{
-		// Mise à jour de la texture
-		mSprite.setPosition(b22sfVec(mBody->GetPosition(), mPhysicMgr.GetPPM()));
-		mSprite.setRotation(-mBody->GetAngle() * DPR);
+		b2AABB aabb = GetBoundingBox();
+		b2Vec2 pos;
+		pos.x = aabb.lowerBound.x;
+		pos.y = aabb.upperBound.y;
+		b2Vec2 size = aabb.upperBound - aabb.lowerBound;
+		sf::Vector2f sfpos = b22sfVec(pos, PhysicManager::GetInstance().GetPPM());
+		sf::Vector2f sfsize = b22sfVec(size, PhysicManager::GetInstance().GetPPM(), true);
+		mHull.SetPosAndSize(sfpos, sfsize);
 	}
 }
 void BaseBody::Update()

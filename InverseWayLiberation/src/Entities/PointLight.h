@@ -21,9 +21,11 @@ public:
 	// Mise à jour
 	void Update(void);
 
-	// Retourne la texture ombrée
-	const sf::Texture& GetShadowTexture(void) const;
-	const sf::Sprite& GetShadowSprite(void) const;
+	// Crée les textures
+	void CreateTextures(void);
+
+	// Retourne les ombres
+	const sf::VertexArray& GetVertexArray(void) const;
 
 	// Gère la couleur de la lumière
 	sf::Color GetLightColor(void) const;
@@ -43,15 +45,15 @@ protected:
 	// Accès du LightEngine
 	friend class LightEngine;
 
-	// RenderTexture
-	sf::RenderTexture shadowTex;
-	sf::Sprite shadowSprite;
-
-	// Autres textures
-	std::shared_ptr<TextureHolder> textures;
-
 	// Vue
 	sf::View view;
+
+	// Géométrie des ombres
+	sf::VertexArray mShadowsVertexArray;
+
+	// Lumière
+	sf::RenderTexture mLightTex;
+	sf::Sprite mLightSprite;
 
 private:
 	friend class LightManager;
@@ -60,9 +62,6 @@ private:
 	unsigned int mID;
 
 protected:
-	// Crée les textures
-	void CreateTextures(void);
-
 	// Rendu
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
@@ -79,7 +78,4 @@ private:
 	// Propriétés de la lumières
 	sf::Color mLightColor;
 	unsigned int mLightRadius;
-
-	// Sprite de rendu
-	sf::Sprite mRenderSprite;
 };

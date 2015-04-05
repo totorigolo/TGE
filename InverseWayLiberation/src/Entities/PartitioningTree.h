@@ -80,6 +80,7 @@ public:
 	}
 
 	// Debug Draw
+	void CreateDebug();
 	void DrawDebug(sf::RenderTarget& target) const;
 
 private:
@@ -91,5 +92,8 @@ private:
 
 	// Liste des Hulls
 	std::list<Hull*> mHulls;
+
+	// Debug Draw
+	sf::VertexArray mDebugDrawGrid;
 };
 

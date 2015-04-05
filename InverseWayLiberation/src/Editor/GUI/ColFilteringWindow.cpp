@@ -117,7 +117,6 @@ void ColFilteringWindow::OnColFilteringApply()
 		cb = (cb << 1) | (mCatBits[16 - i]->IsActive() ? 1 : 0);
 		mb = (mb << 1) | (mMaskBits[16 - i]->IsActive() ? 1 : 0);
 	}
-	std::cout << cb << std::endl;
 	fd.categoryBits = cb;
 	fd.maskBits = mb;
 

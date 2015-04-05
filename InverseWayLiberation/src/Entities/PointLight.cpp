@@ -3,7 +3,7 @@
 #include "../Graphics/LightEngine.h"
 #include "PartitioningTree.h"
 #include "Hull.h"
-#include "Physics/PhysicManager.h"
+#include "../Physics/PhysicManager.h"
 
 // Ctor
 PointLight::PointLight(int lightRadius, sf::Color lightColor, int layer)
@@ -17,6 +17,9 @@ PointLight::PointLight(int lightRadius, sf::Color lightColor, int layer)
 
 	// Crée les textures
 	CreateTextures();
+
+	// Configure le VertexArray
+	mShadowsVertexArray.setPrimitiveType(sf::PrimitiveType::Quads);
 
 	mIsAlive = true;
 }
@@ -35,7 +38,7 @@ void PointLight::SetPosition(const sf::Vector2f& pos)
 {
 	mPosition = pos;
 	view.setCenter(mPosition);
-	mRenderSprite.setPosition(mPosition - (u2f(shadowTex.getSize()) / 2.f));
+	mLightSprite.setPosition(mPosition - (u2f(mLightTex.getSize()) / 2.f));
 	mUpdate = true;
 }
 void PointLight::Move(const b2Vec2& off)
@@ -46,7 +49,7 @@ void PointLight::Move(const sf::Vector2f& off)
 {
 	mPosition += off;
 	view.setCenter(mPosition);
-	mRenderSprite.setPosition(mPosition - (u2f(shadowTex.getSize()) / 2.f));
+	mLightSprite.setPosition(mPosition - (u2f(mLightTex.getSize()) / 2.f));
 	mUpdate = true;
 }
 const b2Vec2& PointLight::GetPosition(void) const
@@ -62,7 +65,7 @@ const sf::Vector2f& PointLight::GetPosition_sf(void) const
 void PointLight::Update(void)
 {
 	// Met à jour les ombres si besoin
-	if (mIsAlive)
+	if (mIsAlive && mEngine.IsActive())
 	{
 		bool hullMoved = false;
 
@@ -76,11 +79,18 @@ void PointLight::Update(void)
 		// Si les ombres ne sont plus à jour
 		if (mUpdate || hullMoved)
 		{
+			mShadowsVertexArray.clear();
+			mShadowsVertexArray.resize(4);
+			auto bb = GetBoundingBox();
+			const sf::Color &b = sf::Color::Blue;
+			mShadowsVertexArray[0] = sf::Vertex(sf::Vector2f(bb.left, bb.top), b, mEngine.mOne);
+			mShadowsVertexArray[1] = sf::Vertex(sf::Vector2f(bb.left + bb.width, bb.top), b, mEngine.mOne);
+			mShadowsVertexArray[2] = sf::Vertex(sf::Vector2f(bb.left + bb.width, bb.top + bb.height), b, mEngine.mOne);
+			mShadowsVertexArray[3] = sf::Vertex(sf::Vector2f(bb.left, bb.top + bb.height), b, mEngine.mOne);
+
 			// Regarde si au moins un hull a bougé dans le périmètre de la lumière, et dessine les shadow casters
 			pt.ApplyOnHulls(this->GetBoundingBox(), [this, &hullMoved](Hull *h) {
-				if (h->IsDrawable())
-					mEngine.DrawHull(this, *h->GetShadowCaster());
-				else if (h->IsPhysicallyDrawable())
+				if (h->IsPhysicallyDrawable())
 					mEngine.DrawPhysicalHull(this, *h->GetBodyShadowCaster());
 			});
 
@@ -89,7 +99,7 @@ void PointLight::Update(void)
 		}
 		else
 		{
-			// Efface la caster texture
+			// Efface la caster texture // TODO : Euh...
 			mEngine.Clear(this);
 		}
 
@@ -97,14 +107,23 @@ void PointLight::Update(void)
 	}
 }
 
-// Retourne la texture ombrée
-const sf::Texture& PointLight::GetShadowTexture(void) const
+// Crée les textures
+void PointLight::CreateTextures(void)
 {
-	return shadowTex.getTexture();
+	// LightTexture
+	auto bb = this->GetBoundingBox();
+	mLightTex.create((int) bb.width, (int) bb.height);
+	mLightTex.setSmooth(true);
+	mLightSprite.setTexture(mLightTex.getTexture(), true);
+
+	// Règle la vue
+	view = mLightTex.getDefaultView();
 }
-const sf::Sprite& PointLight::GetShadowSprite(void) const
+
+// Retourne la texture ombrée
+const sf::VertexArray& PointLight::GetVertexArray(void) const
 {
-	return mRenderSprite;
+	return mShadowsVertexArray;
 }
 
 // Gère la couleur de la lumière
@@ -129,7 +148,7 @@ void PointLight::SetLightRadius(unsigned int radius)
 	mLightRadius = radius;
 	CreateTextures();
 	view.setCenter(mPosition);
-	mRenderSprite.setPosition(mPosition - (u2f(shadowTex.getSize()) / 2.f));
+	mLightSprite.setPosition(mPosition - (u2f(mLightTex.getSize()) / 2.f));
 }
 
 // Récupère la boîte englobante
@@ -150,30 +169,11 @@ unsigned int PointLight::GetID() const
 	return mID;
 }
 
-// Crée les textures
-void PointLight::CreateTextures(void)
-{
-	// ShadowTexture
-	shadowTex.create((int) this->GetBoundingBox().width, (int) this->GetBoundingBox().height);
-	shadowTex.setSmooth(true);
-	shadowSprite.setTexture(shadowTex.getTexture(), true);
-	mRenderSprite.setTexture(shadowTex.getTexture(), true);
-
-	// Obtient les textures de l'engine
-	textures = mEngine.GetTextures(std::make_pair((int) this->GetBoundingBox().width, (int) this->GetBoundingBox().height));
-
-	// Règle la vue
-	view = textures->casterTex.getDefaultView();
-
-	// Initialise l'état OpenGL, pour éviter le reset plus tard
-	textures->casterTex.resetGLStates();
-}
-
 // Rendu
 void PointLight::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
-	if (!mIsAlive) return;
+	if (!mIsAlive || !mEngine.IsActive()) return;
 
 	// Dessine la lumière avec les ombres
-	target.draw(mRenderSprite, mEngine.addStates);
+	target.draw(mLightSprite, mEngine.addStates);
 }

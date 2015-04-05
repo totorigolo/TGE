@@ -45,7 +45,7 @@
 #include <exception>
 #include <unordered_map>
 
-// Project
+// Projet
 #include "Tools/Dialog.h"
 #include "Tools/Error.h"
 #include "Tools/NonCopyable.h"

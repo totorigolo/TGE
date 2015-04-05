@@ -5,8 +5,8 @@ class Hull
 {
 public:
 	// Ctor & dtor
-	Hull(sf::Drawable const * shadowCaster);
-	Hull(sf::Drawable const * shadowCaster, const sf::Vector2f& pos, const sf::Vector2f& size); // pos : top left
+	Hull(b2Body const * bodyShadowCaster);
+	Hull(b2Body const * bodyShadowCaster, const sf::Vector2f& pos, const sf::Vector2f& size); // pos : top left
 	virtual ~Hull(void);
 
 	// Changement de position / taille
@@ -33,13 +33,9 @@ public:
 	void RemoveFromCells(void);
 
 	// Gestion du Shadow Caster
-	void SetDrawable(bool drawable);
-	bool IsDrawable(void) const;
 	void SetPhysicallyDrawable(bool physicallyDrawable);
 	bool IsPhysicallyDrawable(void) const;
-	void SetShadowCaster(sf::Drawable const * shadowCaster);
 	void SetBodyShadowCaster(b2Body const * bodyShadowCaster);
-	sf::Drawable const* GetShadowCaster() const;
 	b2Body const* GetBodyShadowCaster() const;
 
 	// Gestion de l'info de déplacement
@@ -56,11 +52,9 @@ private:
 	bool mMoved;
 	bool mIsValid;
 	bool mIsActive;
-	bool mIsDrawable;
 	bool mIsPhysicallyDrawable;
 
 	// Shadow Caster
-	sf::Drawable const * mShadowCaster;
 	b2Body const * mBodyShadowCaster;
 
 	// Positionement dans le plan
