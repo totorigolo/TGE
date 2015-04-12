@@ -1,7 +1,8 @@
 #pragma once
 #include "Texture.h"
+#include "Font.h"
 
-typedef std::map<std::string, std::shared_ptr<sf::Font>> FontMap;
+typedef std::map<std::string, Font::Ptr> FontMap;
 typedef std::map<std::string, std::shared_ptr<sf::Sound>> SoundMap;
 typedef std::map<std::string, Texture::Ptr> TextureMap;
 
@@ -17,6 +18,11 @@ public:
 	bool LoadTexture(const std::string &name, const std::string &path);
 	Texture::Ptr GetTexture(const std::string &name);
 	bool TextureExists(const std::string &name);
+
+	// Gestion des fonts
+	bool LoadFont(const std::string &name, const std::string &path);
+	Font::Ptr GetFont(const std::string &name);
+	bool FontExists(const std::string &name);
 
 	// Obtient les maps
 	const FontMap& GetFontMap();

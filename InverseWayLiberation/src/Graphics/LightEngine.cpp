@@ -37,6 +37,8 @@ void LightEngine::DrawPhysicalHull(PointLight *light, const b2Body& body)
 	// Parcours toutes les Fixtures du body
 	for (const b2Fixture* fixture = body.GetFixtureList(); fixture; fixture = fixture->GetNext())
 	{
+		if (fixture->IsSensor()) continue;
+
 		// Récupère la transformation du Body et le shape de la Fixture
 		b2Transform t = body.GetTransform();
 		const b2Shape *shape = fixture->GetShape();

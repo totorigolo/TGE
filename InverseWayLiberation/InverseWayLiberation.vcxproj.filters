@@ -639,6 +639,9 @@
     <ClInclude Include="src\Graphics\LightEngine.h">
       <Filter>Fichiers d%27en-tête\Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="src\Resources\Font.h">
+      <Filter>Fichiers d%27en-tête\Resources</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="fx\shadow.fx">

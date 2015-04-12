@@ -27,8 +27,9 @@ public:
 	void SimulateAI();
 
 	// Animation
-	void LookAt(b2Vec2 location);
-	void Blink(void);
+	void LookAt(b2Vec2 location); // TODO
+	void Blink(void); // TODO
+	void Speak(const std::string &msg, float time);
 
 	// Gestion de la couleur
 	void SetTrunkColor(const sf::Color &color);
@@ -51,6 +52,9 @@ public:
 	void SetTransform(const b2Vec2 &position);
 
 protected:
+	// Mise à jour
+	bool CheckOneSensor(b2Fixture *f);
+
 	// Pour le rendu
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
@@ -61,8 +65,6 @@ protected:
 
 	// Sensors
 	bool mCanJump;
-	bool mCanMoveLeft;
-	bool mCanMoveRight;
 
 private:
 	/* Pour le dessin */
@@ -83,10 +85,15 @@ private:
 	sf::Vector2f mPupilLeftPos;
 	sf::Vector2f mPupilRightPos;
 
+	// Bulle de texte
+	bool mSpeaking;
+	float mSpeakTime; // ms
+	sf::Clock mSpeakClock;
+	sf::Text mBallonText;
+	sf::RectangleShape mBallonBckg;
+
 	// Sensors pour les déplacements
 	b2Fixture *mSensorJump;
-	b2Fixture *mSensorMoveLeft;
-	b2Fixture *mSensorMoveRight;
 
 	// Formes SFML
 	sf::ConvexShape mTrunk;

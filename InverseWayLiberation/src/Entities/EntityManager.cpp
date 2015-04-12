@@ -89,6 +89,14 @@ void EntityManager::SortByLayer()
 }
 
 // Accès aux Entities
+Entity* EntityManager::GetEntity(unsigned int id)
+{
+	// TODO: La liste est triée
+
+	for each (auto entity in mEntities)
+		if (entity->GetID() == id)
+			return entity;
+}
 std::list<Entity*>& EntityManager::GetEntities()
 {
 	return mEntities;

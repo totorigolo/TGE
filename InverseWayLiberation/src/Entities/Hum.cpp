@@ -1,16 +1,24 @@
 #include "stdafx.h"
 #include "Hum.h"
 #include "../Physics/PhysicManager.h"
+#include "../Resources/ResourceManager.h"
 
 // Ctor & dtor
 Hum::Hum(int layer)
 	: Entity(layer), mPhysicMgr(PhysicManager::GetInstance()), mBodyIsCreated(false), mBody(nullptr), mHull(nullptr),
 	mAge(0.0), mStrengh(0.0), mHeight(0.0), mAgeFactor(0.0), mTopWidth(0.0), mBottomWidth(0.0), mEyeHeight(0.0),
-	mHasMoved(true), mIsDead(true), mCanJump(true),
-	mSensorJump(nullptr)
+	mHasMoved(true), mIsDead(true), mCanJump(true), mSensorJump(nullptr), mSpeaking(false)
 {
 	mType = EntityType::Hum;
 	mIsAlive = false;
+
+	// Bulle de texte
+	ResourceManager::GetInstance().LoadFont("calibri", "data/calibri.ttf");
+	mBallonText.setFont(*ResourceManager::GetInstance().GetFont("calibri"));
+	mBallonBckg.setFillColor(sf::Color(30, 30, 30, 210));
+	mBallonBckg.setOutlineColor(mBallonBckg.getFillColor());
+	mBallonBckg.setOutlineThickness(5.f);
+	mBallonBckg.setOrigin(0, -7.f);
 }
 Hum::~Hum()
 {
@@ -33,6 +41,7 @@ bool Hum::Create(b2Vec2 pos, double age, double strengh, sf::Color color)
 	mAgeFactor = min(pow(0.15 * mAge, mAge * 2.0), 1.0);
 	mTopWidth = 0.3 + 0.006 * mStrengh * mAgeFactor;
 	mBottomWidth = 0.3 - 0.006 * mStrengh * mAgeFactor;
+	mEyeHeight = 85.0 * mHeight + mStrengh * 0.4;
 
 	// b2Shape
 	b2Vec2 *v = new b2Vec2[4];
@@ -140,7 +149,6 @@ void Hum::PreUpdate()
 		mTrunk.setRotation(-mBody->GetAngle() * DPR);
 
 		// Yeux
-		mEyeHeight = 85.0 * mHeight + mStrengh * 0.4;
 		mEyeLeft.setPosition(mTrunk.getPosition() + sf::Vector2f(4.f, (float) -mEyeHeight));
 		mEyeRight.setPosition(mTrunk.getPosition() + sf::Vector2f(-(4.f + mEyeRight.getRadius() * 2.f), (float) -mEyeHeight));
 		mPupilLeft.setPosition(mEyeLeft.getPosition() + sf::Vector2f(mEyeLeft.getRadius() - mPupilLeft.getRadius(), mEyeLeft.getRadius() - mPupilLeft.getRadius()));
@@ -160,42 +168,50 @@ void Hum::Update()
 	if (mBody && mBodyIsCreated && mIsAlive)
 	{
 		mHasMoved = false;
+
+		// Gestion du blabla
+		if (mSpeaking)
+		{
+			// Regarde si le temps de parole est écoulé
+			if (mSpeakClock.getElapsedTime().asMilliseconds() > mSpeakTime)
+				mSpeaking = false;
+
+			// Position de la bulle
+			sf::Vector2f pos = b22sfVec(GetPosition(), mPhysicMgr.GetPPM());
+			pos += sf::Vector2f(- mBallonText.getGlobalBounds().width / 2.f, - mBallonText.getGlobalBounds().height * 2.f);
+			pos += b22sfVec(b2Vec2(0.f, 3.f / 2.f * this->GetHeight()), mPhysicMgr.GetPPM());
+			mBallonText.setPosition(pos);
+			mBallonBckg.setPosition(pos);
+		}
 	}
 }
 void Hum::CheckSensors()
 {
-	/*static auto check = [&mBody](b2Fixture *f, bool *result)
-	{
-		result = false;
-		for (b2ContactEdge* ce = mBody->GetContactList(); ce; ce = ce->next)
-		{
-			b2Contact* c = ce->contact;
-
-			if (c->GetFixtureA() == f || c->GetFixtureB() == f)
-			{
-				if (c->IsTouching())
-				{
-					result = true;
-					break;
-				}
-			}
-		}
-	};
-
 	// Vérifie le saut
-	check(mSensorJump, mCanJump);
-
-	// Vérifie le déplacement à gauche
-	check(mSensorMoveLeft, mCanMoveLeft);
-
-	// Vérifie le déplacement à droite
-	check(mSensorMoveRight, mCanMoveRight);*/
+	if (mSensorJump)
+		mCanJump = CheckOneSensor(mSensorJump);
 }
 
 // Intelligence artificielle
 void Hum::SimulateAI()
 {
 
+}
+
+// Animation
+void Hum::Speak(const std::string &msg, float time)
+{
+	// Gestion du temps
+	mSpeaking = true;
+	mSpeakTime = time;
+	mSpeakClock.restart();
+	
+	// Gestion du texte
+	mBallonText.setString(msg);
+	mBallonText.setColor(sf::Color::White);
+	
+	// Gestion du fond
+	mBallonBckg.setSize(sf::Vector2f(mBallonText.getGlobalBounds().width, mBallonText.getGlobalBounds().height));
 }
 
 // Gestion de la couleur
@@ -267,6 +283,25 @@ void Hum::SetTransform(const b2Vec2 &position)
 	mHasMoved = true;
 }
 
+// Mise à jour
+bool Hum::CheckOneSensor(b2Fixture *f)
+{
+	for (b2ContactEdge* ce = mBody->GetContactList(); ce; ce = ce->next)
+	{
+		b2Contact* c = ce->contact;
+
+		if (c->GetFixtureA() == f || c->GetFixtureB() == f)
+		{
+			if (c->IsTouching())
+			{
+				return true;
+			}
+		}
+	}
+
+	return false;
+}
+
 // Pour le rendu
 void Hum::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
@@ -277,4 +312,9 @@ void Hum::draw(sf::RenderTarget& target, sf::RenderStates states) const
 	target.draw(mEyeRight, states);
 	target.draw(mPupilLeft, states);
 	target.draw(mPupilRight, states);
+	if (mSpeaking)
+	{
+		target.draw(mBallonBckg, states);
+		target.draw(mBallonText, states);
+	}
 }

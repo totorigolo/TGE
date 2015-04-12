@@ -120,7 +120,7 @@ void LevelWindow::Fill()
 	// Chargement et sauvegarde
 	mPathHBox = sfg::Box::Create(sfg::Box::Orientation::HORIZONTAL);
 	mPathLabel = sfg::Label::Create("Nom sauvegarde : ");
-	mPath = sfg::Entry::Create("level_jmp");
+	mPath = sfg::Entry::Create("level_1");
 	mPathHBox->PackEnd(mPathLabel, false);
 	mPathHBox->PackEnd(mPath);
 	mSaveLoadHBox = sfg::Box::Create(sfg::Box::Orientation::HORIZONTAL);

@@ -154,6 +154,7 @@
     <ClInclude Include="src\Physics\Joint.h" />
     <ClInclude Include="src\Physics\JointFactory.h" />
     <ClInclude Include="src\Physics\PhysicManager.h" />
+    <ClInclude Include="src\Resources\Font.h" />
     <ClInclude Include="src\Resources\ResourceManager.h" />
     <ClInclude Include="src\Resources\Texture.h" />
     <ClInclude Include="src\Sounds\SoundManager.h" />
@@ -247,7 +248,7 @@
       <PreprocessorDefinitions>TIXML_USE_STL;LUABIND_DYNAMIC_LINK;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BrowseInformation>true</BrowseInformation>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
-      <MultiProcessorCompilation>false</MultiProcessorCompilation>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <MinimalRebuild>false</MinimalRebuild>
       <DisableSpecificWarnings>4503</DisableSpecificWarnings>
       <PrecompiledHeader>Use</PrecompiledHeader>
@@ -271,13 +272,13 @@
       <PreprocessorDefinitions>TIXML_USE_STL;LUABIND_DYNAMIC_LINK;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
-      <MultiProcessorCompilation>false</MultiProcessorCompilation>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <BrowseInformation>true</BrowseInformation>
       <DisableSpecificWarnings>4503</DisableSpecificWarnings>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <ForcedIncludeFiles>%(ForcedIncludeFiles)</ForcedIncludeFiles>
       <AdditionalIncludeDirectories>$(ProjectDir)\src</AdditionalIncludeDirectories>
-      <MinimalRebuild>true</MinimalRebuild>
+      <MinimalRebuild>false</MinimalRebuild>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>

@@ -80,7 +80,7 @@ void Editor::Run()
 			if (!focus)
 				mWindow.setFramerateLimit(20U);
 			else
-				mWindow.setFramerateLimit(6000U);
+				mWindow.setFramerateLimit(60U);
 
 			if (focus)
 			{
@@ -155,21 +155,15 @@ bool Editor::OnInit()
 	mInputManager.SetView(mWindow.getDefaultView());
 
 	// Demande l'espionnage de touches
-	// Evènements
 	mSpyedKeys.push_back(SpyedKey::Create(sf::Keyboard::R)); // Reload (ex: shaders)
 	mSpyedKeys.push_back(SpyedKey::Create(sf::Keyboard::M)); // Pause physique
 	mSpyedKeys.push_back(SpyedKey::Create(sf::Keyboard::O)); // Debug Draw
-	mSpyedKeys.push_back(SpyedKey::Create(sf::Keyboard::T)); // Ragdoll
 	mSpyedKeys.push_back(SpyedKey::Create(sf::Keyboard::P)); // Pin
 	mSpyedKeys.push_back(SpyedKey::Create(sf::Keyboard::H)); // Hum -> TODO: Delete
 	mSpyedKeys.push_back(SpyedKey::Create(sf::Keyboard::L)); // Toggle LightEngine
 	mSpyedKeys.push_back(SpyedKey::Create(sf::Keyboard::Add)); // Zoom in
 	mSpyedKeys.push_back(SpyedKey::Create(sf::Keyboard::Subtract)); // Zoom out
 	mSpyedKeys.push_back(SpyedKey::Create(sf::Keyboard::Numpad0)); // Reset vue
-	mSpyedKeys.push_back(SpyedKey::Create(sf::Keyboard::Numpad2)); // Déplacement au clavier (bas)
-	mSpyedKeys.push_back(SpyedKey::Create(sf::Keyboard::Numpad4)); // Déplacement au clavier (gauche)
-	mSpyedKeys.push_back(SpyedKey::Create(sf::Keyboard::Numpad6)); // Déplacement au clavier (droite)
-	mSpyedKeys.push_back(SpyedKey::Create(sf::Keyboard::Numpad8)); // Déplacement au clavier (haut)
 
 	// Initialise la machine Lua
 	mConsole.RegisterEntityFactory();
@@ -191,9 +185,10 @@ bool Editor::OnInit()
 	mEditBox->GetLevelWindow()->SetEditBox(&*mEditBox);
 	mEditBox->GetLevelWindow()->SetLuaMachine(&mConsole);
 
-	// Charge les textures vides
+	// Charge les textures vides et la police
 	mResourceManager.LoadTexture("none", "tex/none.png");
 	mResourceManager.LoadTexture("unknown", "tex/unknown.png");
+	mResourceManager.LoadFont("calibri", "data/calibri.ttf");
 
 	return true;
 }
@@ -248,7 +243,7 @@ void Editor::OnEvent()
 	{
 		mDebugDraw = !mDebugDraw;
 	}
-	// DebugDraw
+	// Light Draw toggle
 	if (mInputManager.KeyPressed(sf::Keyboard::L) && ctrl)
 	{
 		LightEngine::GetInstance().SetActive(!LightEngine::GetInstance().IsActive());
@@ -554,19 +549,19 @@ void Editor::OnEvent()
 	{
 		mInputManager.MoveCenter(-i2f(mInputManager.GetMousePos() - mInputManager.GetLastMousePos()) * mInputManager.GetCurrentZoom());
 	}
-	if (mInputManager.KeyPressed(sf::Keyboard::Numpad8))
+	if (mInputManager.IsKeyPressed(sf::Keyboard::Numpad8))
 	{
 		mInputManager.MoveCenter(sf::Vector2f(0.f, -20.f));
 	}
-	if (mInputManager.KeyPressed(sf::Keyboard::Numpad2))
+	if (mInputManager.IsKeyPressed(sf::Keyboard::Numpad2))
 	{
 		mInputManager.MoveCenter(sf::Vector2f(0.f, 20.f));
 	}
-	if (mInputManager.KeyPressed(sf::Keyboard::Numpad4))
+	if (mInputManager.IsKeyPressed(sf::Keyboard::Numpad4))
 	{
 		mInputManager.MoveCenter(sf::Vector2f(-20.f, 0.f));
 	}
-	if (mInputManager.KeyPressed(sf::Keyboard::Numpad6))
+	if (mInputManager.IsKeyPressed(sf::Keyboard::Numpad6))
 	{
 		mInputManager.MoveCenter(sf::Vector2f(20.f, 0.f));
 	}
@@ -637,14 +632,7 @@ void Editor::OnRender()
 	// Si on n'a pas le focus
 	if (!mInputManager.HasFocus())
 	{
-		static sf::Font f;
-		static bool fontLoaded = false;
-		if (!fontLoaded)
-		{
-			f.loadFromFile("data/calibri.ttf"); // TODO: ResourceMgr
-			fontLoaded = true;
-		}
-		sf::Text pause("Pause", f, 60U);
+		sf::Text pause("Pause", *ResourceManager::GetInstance().GetFont("calibri"), 60U);
 		sf::Vector2f pos(mInputManager.GetWindowView().getCenter().x - pause.getGlobalBounds().width / 2.f, 0.f);
 		pos.y = mWindow.mapPixelToCoords(f2i(pos), mInputManager.GetWindowView()).y;
 		pause.setPosition(pos);
