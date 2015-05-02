@@ -47,8 +47,8 @@ namespace Parser
 	std::string boolToString(bool b);
 
 	// Transforme un float en string
-	// nbOfDecimals définit le nb de chiffres après la virgule (-1 = toutes)
-	std::string floatToString(float n, int nbOfDecimals = -1);
+	// nbOfDecimals définit le nb de chiffres après la virgule
+	std::string floatToString(float n, int nbOfDecimals = 30);
 	
 	// Transforme un sf::Uint32 en string
 	std::string Uint32ToString(sf::Uint32 value);

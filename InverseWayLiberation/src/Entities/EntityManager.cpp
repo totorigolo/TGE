@@ -57,6 +57,9 @@ void EntityManager::DestroyEntity(Entity *entity)
 	// Vérifie que le pointeur soit valide
 	myAssert(entity, "L'entity n'est pas valide !");
 
+	// Enlève le nom si elle est nommée
+	this->Anonymize(this->GetName(entity));
+
 	// Enlève son ID de la liste des IDs
 	this->RemoveID(entity->mID);
 
@@ -73,6 +76,9 @@ void EntityManager::DestroyAllEntities()
 		it = mEntities.erase(it);
 	}
 	mEntities.clear();
+
+	// Vide les noms
+	mNames.clear();
 
 	// Vide les IDs
 	mIDs.clear();
@@ -96,6 +102,15 @@ Entity* EntityManager::GetEntity(unsigned int id)
 	for each (auto entity in mEntities)
 		if (entity->GetID() == id)
 			return entity;
+
+	return nullptr;
+}
+Entity* EntityManager::GetEntity(const std::string &name)
+{
+	auto it = mNames.left.find(name);
+	if (it == mNames.left.end())
+		return nullptr;
+	return it->second;
 }
 std::list<Entity*>& EntityManager::GetEntities()
 {
@@ -121,6 +136,29 @@ void EntityManager::RemoveID(unsigned int id)
 	mIDs.erase(id);
 }
 
+// Gestion des noms
+bool EntityManager::Name(const std::string &name, Entity *entity)
+{
+	bool r = false;
+	auto it = mNames.left.find(name);
+	if (it != mNames.left.end())
+		r = true;
+	mNames.insert(name_bimap_position(name, entity));
+	return r;
+}
+void EntityManager::Anonymize(const std::string &name)
+{
+	if (name.empty()) return;
+	mNames.left.erase(name);
+}
+std::string EntityManager::GetName(Entity *const entity) const
+{
+	auto it = mNames.right.find(entity);
+	if (it == mNames.right.end())
+		return "";
+	return it->second;
+}
+
 // Pour le rendu
 void EntityManager::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
@@ -130,4 +168,30 @@ void EntityManager::draw(sf::RenderTarget& target, sf::RenderStates states) cons
 	{
 		target.draw(**it, states);
 	}
+}
+
+// Changement d'ID pendant le chargement de niveau
+void EntityManager::ChangeID(unsigned int id, unsigned int newID)
+{
+	if (id == newID) return;
+
+	// Vérifie que les ID sont valides
+	myAssert(id >= 0, "L'ID donné n'est pas valide n'est pas valide (#" + Parser::intToString(id) + ") !");
+	myAssert(newID >= 0, "Le nouvel ID donné n'est pas valide n'est pas valide (#" + Parser::intToString(id) + ") !");
+
+	// Récupère un pointeur vers l'Entity
+	Entity* e1 = GetEntity(id);
+	myAssert(e1, "Impossible de trouver d'Entity avec l'ID #" + Parser::intToString(id) + " !");
+
+	// Regarde s'il y a une entity avec le nouvel ID
+	Entity* e2 = GetEntity(newID);
+	if (e2)
+	{
+		e2->mID = GetNewID();
+	}
+	else
+	{
+		this->RemoveID(id);
+	}
+	e1->mID = newID;
 }

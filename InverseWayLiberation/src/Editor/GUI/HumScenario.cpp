@@ -54,7 +54,7 @@ void HumScenario::Fill()
 {
 	// Position et rotation
 	mPosTable = sfg::Table::Create();
-	mPosLabel = sfg::Label::Create("PosRot :");
+	mPosLabel = sfg::Label::Create("Pos :");
 	mPosX = sfg::Entry::Create();
 	mPosX->SetRequisition(sf::Vector2f(60.f, 0.f));
 	mPosY = sfg::Entry::Create();

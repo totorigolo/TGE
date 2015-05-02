@@ -4,7 +4,7 @@
 
 // Ctor & dtor
 BasicBody::BasicBody(int layer)
-: BaseBody(layer), mShape(Shape::Null)
+	: BaseBody(layer), mShape(Shape::Null)
 {
 	// Défini le type de l'Entity
 	mType = EntityType::BasicBody;

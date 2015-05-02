@@ -32,7 +32,8 @@ LevelLoader::LevelLoader(const std::string& path)
 	: Loader(path),
 	mLevel(LevelManager::GetInstance()),
 	mInputManager(InputManager::GetInstance()),
-	mPhysicManager(PhysicManager::GetInstance())
+	mPhysicManager(PhysicManager::GetInstance()),
+	mEntityManager(EntityManager::GetInstance())
 {
 	// Si loader n'est pas valide, on ne fait rien
 	if (mIsValid)
@@ -185,6 +186,8 @@ bool LevelLoader::ProcessPoly()
 	// On crée les attributs
 	PolyBody *pb = nullptr;
 	PolyChain *pc = nullptr;
+	unsigned int id = 0U;
+	std::string name;
 	int layer = 1;
 	bool bullet = false, osp = false;
 	float density = 1.f, friction = 0.2f, restitution = 0.0f;
@@ -225,6 +228,8 @@ bool LevelLoader::ProcessPoly()
 		// Réinitialise les attributs
 		pb = nullptr;
 		pc = nullptr;
+		id = 0U;
+		name = "";
 		layer = 1;
 		rotation = 0.f;
 		density = 1.f;
@@ -241,6 +246,14 @@ bool LevelLoader::ProcessPoly()
 		angvel = 0.f;
 		vertices.clear();
 		shadows = true;
+
+		// Récupère l'ID
+		if (body->Attribute("id"))
+			body->QueryUnsignedAttribute("id", &id);
+
+		// Récupère le nom
+		if (body->Attribute("name"))
+			name = body->Attribute("name");
 
 		// Récupère le type
 		if (body->Attribute("type"))
@@ -361,6 +374,17 @@ bool LevelLoader::ProcessPoly()
 			bb = (BaseBody*) pb;
 		if (bb)
 		{
+			// Change l'ID
+			if (id != 0)
+				mEntityManager.ChangeID(bb->GetID(), id);
+
+			// Enregistre le nom s'il y en a un
+			if (!name.empty())
+			{
+				bool r = mEntityManager.Name(name, bb);
+				if (r) Dialog::Error("Le nom "+name+" apparait plusieurs fois !");
+			}
+
 			// Propriétés de collision
 			body->QueryBoolAttribute("osp", &osp);
 			body->QueryBoolAttribute("bullet", &bullet);
@@ -411,6 +435,8 @@ bool LevelLoader::ProcessBasicBodies()
 
 	// On crée les attributs
 	BasicBody *bb = nullptr;
+	unsigned int id = 0U;
+	std::string name;
 	int layer = 1;
 	bool bullet = false, osp = false;
 	float density = 1.f, friction = 0.2f, restitution = 0.0f;
@@ -430,6 +456,8 @@ bool LevelLoader::ProcessBasicBodies()
 	{
 		// Réinitialise les attributs
 		bb = nullptr;
+		id = 0U;
+		name = "";
 		layer = 1;
 		rotation = 0.f;
 		density = 1.f;
@@ -444,6 +472,14 @@ bool LevelLoader::ProcessBasicBodies()
 		linvel = b2Vec2_zero;
 		angvel = 0.f;
 		shadows = true;
+
+		// Récupère l'ID
+		if (body->Attribute("id"))
+			body->QueryUnsignedAttribute("id", &id);
+
+		// Récupère le nom
+		if (body->Attribute("name"))
+			name = body->Attribute("name");
 
 		// Récupère la forme
 		forme = body->Name();
@@ -521,6 +557,17 @@ bool LevelLoader::ProcessBasicBodies()
 		// Si le BasicBody a été créé
 		if (bb)
 		{
+			// Change l'ID
+			if (id != 0)
+				mEntityManager.ChangeID(bb->GetID(), id);
+
+			// Enregistre le nom s'il y en a un
+			if (!name.empty())
+			{
+				bool r = mEntityManager.Name(name, bb);
+				if (r) Dialog::Error("Le nom " + name + " apparait plusieurs fois !");
+			}
+
 			// Restore l'état
 			if (type == b2BodyType::b2_dynamicBody || type == b2BodyType::b2_kinematicBody)
 			{
@@ -561,6 +608,8 @@ bool LevelLoader::ProcessEntities()
 
 	// On crée les attributs
 	Entity *e = nullptr;
+	unsigned int id = 0U;
+	std::string name;
 	int layer = 1;
 	b2Vec2 position;
 	std::string type, animation;
@@ -571,10 +620,20 @@ bool LevelLoader::ProcessEntities()
 	{
 		// Réinitialise les attributs
 		e = nullptr;
+		id = 0U;
+		name = "";
 		layer = 1;
 		type = "";
 		animation = "";
 		position = b2Vec2_zero;
+
+		// Récupère l'ID
+		if (entity->Attribute("id"))
+			entity->QueryUnsignedAttribute("id", &id);
+
+		// Récupère le nom
+		if (entity->Attribute("name"))
+			entity->Attribute("name");
 
 		// Récupère le type
 		type = entity->Name();
@@ -590,6 +649,10 @@ bool LevelLoader::ProcessEntities()
 		if (type == "ragdoll")
 		{
 			EntityFactory::CreateRagdoll(position, layer);
+
+			// Impossible d'avoir un nom
+			if (!name.empty())
+				Dialog::Error("Impossible de nommer un Ragdoll (" + name + ").");
 		}
 		else if (type == "player")
 		{
@@ -604,6 +667,14 @@ bool LevelLoader::ProcessEntities()
 			e = new Player();
 			mLevel.mPlayer = (Player*) e;
 			mLevel.mPlayer->Create(position, age, strengh, color);
+			if (id != 0)
+				mEntityManager.ChangeID(e->GetID(), id);
+			if (!name.empty())
+			{
+				bool r = mEntityManager.Name(name, e);
+				if (r) Dialog::Error("Le nom " + name + " apparait plusieurs fois !");
+			}
+
 		}
 		else if (type == "hum")
 		{
@@ -617,6 +688,14 @@ bool LevelLoader::ProcessEntities()
 			// Enregistre le Player dans Level
 			e = new Hum();
 			((Hum*) e)->Create(position, age, strengh, color);
+			if (id != 0)
+				mEntityManager.ChangeID(e->GetID(), id);
+			if (!name.empty())
+			{
+				bool r = mEntityManager.Name(name, e);
+				if (r) Dialog::Error("Le nom " + name + " apparait plusieurs fois !");
+			}
+
 		}
 		else
 		{
@@ -646,6 +725,7 @@ bool LevelLoader::ProcessJoints()
 	Joint *j = nullptr;
 	bool hasID = false;
 	unsigned int id = 0U;
+	std::string name;
 	std::string type;
 	unsigned int IDb1 = 0U, IDb2 = 0U;
 	b2Body *b1 = nullptr, *b2 = nullptr;
@@ -660,6 +740,7 @@ bool LevelLoader::ProcessJoints()
 		j = nullptr;
 		hasID = false;
 		id = 0U;
+		name = "";
 		IDb1 = 0U, IDb2 = 0U;
 		b1 = nullptr, b2 = nullptr;
 		collision = true;
@@ -670,6 +751,10 @@ bool LevelLoader::ProcessJoints()
 			joint->QueryUnsignedAttribute("id", &id);
 			hasID = true;
 		}
+
+		// Récupère le nom
+		if (joint->Attribute("name"))
+			name = joint->Attribute("name");
 
 		// Récupère le type
 		type = joint->Name();
@@ -689,25 +774,54 @@ bool LevelLoader::ProcessJoints()
 		joint->QueryBoolAttribute("collision", &collision);
 		
 		// Récupère les bodies
-		if (mBodyIDMap.find(IDb1) == mBodyIDMap.end())
+		Entity* e1 = mEntityManager.GetEntity(IDb1);
+		Entity* e2 = mEntityManager.GetEntity(IDb2);
+		if (e1 == nullptr)
 		{
-			Dialog::Error("Le body #"+ Parser::uintToString(IDb1) +" est introuvable !");
+			Dialog::Error("L'entity #"+ Parser::uintToString(IDb1) +" est introuvable !");
 
 			// On récupère le prochain body
 			joint = joint->NextSiblingElement();
 			continue;
 		}
-		if (mBodyIDMap.find(IDb2) == mBodyIDMap.end())
+		if (e2 == nullptr)
 		{
-			Dialog::Error("Le body #"+ Parser::uintToString(IDb2) +" est introuvable !");
+			Dialog::Error("L'entity #"+ Parser::uintToString(IDb2) +" est introuvable !");
 
 			// On récupère le prochain body
 			joint = joint->NextSiblingElement();
 			continue;
 		}
-		b1 = mBodyIDMap[IDb1];
-		b2 = mBodyIDMap[IDb2];
+		std::function<b2Body*(Entity*)> getBody = [](Entity* e) {
+			if (e->GetType() == EntityType::BaseBody || e->GetType() == EntityType::BasicBody || e->GetType() == EntityType::PolyBody || e->GetType() == EntityType::PolyChain)
+			{
+				return ((BaseBody*)e)->GetBody();
+			}
+			if (e->GetType() == EntityType::Hum || e->GetType() == EntityType::Player)
+			{
+				return ((Hum*)e)->GetBody();
+			}
+			return (b2Body*)nullptr;
+		};
+		b1 = getBody(e1);
+		b2 = getBody(e2);
+		if (!b1)
+		{
+			Dialog::Error("L'entity #" + Parser::uintToString(IDb1) + " n'est pas utilisable avec des Joints !");
 
+			// On récupère le prochain body
+			joint = joint->NextSiblingElement();
+			continue;
+		}
+		if (!b2)
+		{
+			Dialog::Error("L'entity #" + Parser::uintToString(IDb2) + " n'est pas utilisable avec des Joints !");
+
+			// On récupère le prochain body
+			joint = joint->NextSiblingElement();
+			continue;
+		}
+		
 		// Crée le joint
 		if (type == "gear")
 		{
@@ -932,6 +1046,12 @@ bool LevelLoader::ProcessJoints()
 			mJointIDMap[id] = j->GetJoint();
 		}
 
+		// Enregiste le nom
+		if (j != nullptr && !name.empty())
+		{
+			mPhysicManager.Name(name, j);
+		}
+
 		// On récupère le prochain body
 		joint = joint->NextSiblingElement();
 	}
@@ -1117,13 +1237,6 @@ bool LevelLoader::ProcessTriggers()
 			// Crée le trigger
 			mLevel.mTriggersManager.CreateArea(rect, action);
 		}
-
-		/*/ Récupère les attributs
-		if (img->Attribute("texture")) texture = img->Attribute("texture");
-		img->QueryIntAttribute("z-index", &zindex);
-		if (img->Attribute("position")) posRot = Parser::string2b2Vec3(img->Attribute("position"));
-		img->QueryFloatAttribute("rotation", &rotation);
-		posRot.z = rotation;*/
 
 		// On récupère le prochain level
 		trigger = trigger->NextSiblingElement();

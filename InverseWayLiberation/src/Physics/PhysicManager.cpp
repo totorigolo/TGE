@@ -116,11 +116,17 @@ void PhysicManager::DestroyJoint(int jointID)
 	//myAssert(itJoint != mJointList.end(), "Le joint #"+ Parser::intToString(jointID) +" n'existe pas.");
 	if (itJoint == mJointList.end()) return;
 
+	// Supprime le nom s'il est nommé
+	this->Anonymize(this->GetName(itJoint->second.get()));
+
 	// Supprime le joint
 	mJointList.erase(itJoint);
 }
 void PhysicManager::DestroyAllJoints()
 {
+	// Vide les noms
+	mNames.clear();
+
 	// Détruit les Joints
 	for (auto it = mJointList.begin(); it != mJointList.end(); )
 	{
@@ -158,6 +164,28 @@ void PhysicManager::UpdateJoints()
 			++it;
 	}
 }
+// Gestion des noms
+bool PhysicManager::Name(const std::string &name, Joint *joint)
+{
+	bool r = false;
+	auto it = mNames.left.find(name);
+	if (it != mNames.left.end())
+		r = true;
+	mNames.insert(name_bimap_position(name, joint));
+	return r;
+}
+void PhysicManager::Anonymize(const std::string &name)
+{
+	if (name.empty()) return;
+	mNames.left.erase(name);
+}
+std::string PhysicManager::GetName(Joint *const joint) const
+{
+	auto it = mNames.right.find(joint);
+	if (it == mNames.right.end())
+		return "";
+	return it->second;
+}
 // Accesseurs
 bool PhysicManager::JointExists(int jointID) const
 {
@@ -186,6 +214,13 @@ Joint* PhysicManager::GetJoint(int jointID)
 	// Le retourne
 	return mJointList.at(jointID).get();
 }
+Joint* PhysicManager::GetJoint(const std::string &name)
+{
+	auto it = mNames.left.find(name);
+	if (it == mNames.left.end())
+		return nullptr;
+	return it->second;
+}
 const Joint* PhysicManager::GetJoint(int jointID) const
 {
 	// Vérifie qu'il est valide
@@ -194,6 +229,13 @@ const Joint* PhysicManager::GetJoint(int jointID) const
 
 	// Le retourne
 	return mJointList.at(jointID).get();
+}
+const Joint* PhysicManager::GetJoint(const std::string &name) const
+{
+	auto it = mNames.left.find(name);
+	if (it == mNames.left.end())
+		return nullptr;
+	return it->second;
 }
 
 // Simulation

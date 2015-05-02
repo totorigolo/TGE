@@ -146,6 +146,13 @@
     <None Include="lvls\level_l.xvl">
       <Filter>Fichiers de ressources\Levels</Filter>
     </None>
+    <None Include="lvls\level_name.xvl">
+      <Filter>Fichiers de ressources\Levels</Filter>
+    </None>
+    <None Include="scripts\splash.lua">
+      <Filter>Fichiers de ressources\Scripts</Filter>
+    </None>
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Physics\Joints\DistanceJoint.cpp">

@@ -3,6 +3,7 @@
 
 class LevelManager;
 class InputManager;
+class EntityManager;
 class PhysicManager;
 class LevelLoader : public Loader
 {
@@ -30,8 +31,8 @@ private:
 private:
 	LevelManager &mLevel;
 	InputManager &mInputManager;
+	EntityManager &mEntityManager;
 	PhysicManager &mPhysicManager;
 	
-	std::map<unsigned int, b2Body*> mBodyIDMap;
 	std::map<unsigned int, b2Joint*> mJointIDMap;
 };

@@ -185,14 +185,19 @@
     <None Include="..\README.txt" />
     <None Include="anim\player.xas" />
     <None Include="anim\player.xim" />
+    <None Include="ClassDiagram.cd" />
     <None Include="lvls\level_1.xvl">
       <SubType>Designer</SubType>
     </None>
     <None Include="lvls\level_jmp.xvl" />
     <None Include="lvls\level_l.xvl" />
     <None Include="lvls\level_lot.xvl" />
+    <None Include="lvls\level_name.xvl">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="scripts\contact.lua" />
     <None Include="scripts\lvl1.lua" />
+    <None Include="scripts\splash.lua" />
     <None Include="scripts\test1.lua" />
     <None Include="src\_TODO.txt" />
   </ItemGroup>

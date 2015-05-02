@@ -177,7 +177,7 @@ void PartitioningTree::CreateDebug()
 {
 	// TODO: Se limiter à l'écran
 	mDebugDrawGrid.clear();
-	mDebugDrawGrid.setPrimitiveType(sf::LinesStrip);
+	mDebugDrawGrid.setPrimitiveType(sf::Lines);
 	mDebugDrawGrid.resize((100 + 100 + 1) * 2 * 2);
 
 	for (int i = -100; i <= 100; ++i)

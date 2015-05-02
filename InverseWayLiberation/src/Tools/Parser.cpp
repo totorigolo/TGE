@@ -176,15 +176,8 @@ std::string boolToString(bool b)
 
 std::string floatToString(float n, int nbOfDecimals)
 {
-	if (nbOfDecimals != -1)
-	{
-		float m = 1.f;
-		for (int i = 0; i < nbOfDecimals; ++i)
-			m *= 10.f;
-		n = static_cast<float>(static_cast<int>(n * m)) / m;
-	}
-
 	std::ostringstream oss;
+	oss.precision(nbOfDecimals);
 	oss << n;
 	std::string s = oss.str();
 	return s;

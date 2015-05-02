@@ -5,7 +5,7 @@
 void ResourceManager::Clear()
 {
 	mTextureMap.clear();
-	mFontMap.clear();
+	//mFontMap.clear();
 	mSoundMap.clear();
 }
 

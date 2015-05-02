@@ -45,6 +45,9 @@
 #include <exception>
 #include <unordered_map>
 
+// Boost
+#include <boost/bimap.hpp>
+
 // Projet
 #include "Tools/Dialog.h"
 #include "Tools/Error.h"

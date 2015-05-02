@@ -35,6 +35,7 @@ LevelSaver::LevelSaver(const std::string& path, bool check)
 	: Saver(path, check), mLevel(LevelManager::GetInstance()), mPath(path),
 	mInputManager(InputManager::GetInstance()),
 	mPhysicManager(PhysicManager::GetInstance()),
+	mEntityManager(EntityManager::GetInstance()),
 	mTextureMap(ResourceManager::GetInstance().GetTextureMap())
 {
 	// On procède à la sauvegarde que si le fichier est valide
@@ -254,6 +255,9 @@ bool LevelSaver::ProcessBodies()
 			// Récupère la Layer
 			int layer = bb->GetLayer();
 
+			// Récupère le nom
+			std::string name = mEntityManager.GetName(bb);
+
 			// Cherche la position et la rotation
 			b2Vec2 pos(bb->GetPosition());
 			float rotation = bb->GetRotationD();
@@ -285,6 +289,8 @@ bool LevelSaver::ProcessBodies()
 
 			// Crée la balise <type>
 			tinyxml2::XMLElement *balise = mDoc.NewElement(forme.c_str());
+			balise->SetAttribute("id", bb->GetID());
+			if (!name.empty()) balise->SetAttribute("name", name.c_str());
 			balise->SetAttribute("type", type.c_str());
 			balise->SetAttribute("texture", textureName.c_str());
 			balise->SetAttribute("pos", Parser::b2Vec2ToString(pos).c_str());
@@ -357,9 +363,14 @@ bool LevelSaver::ProcessEntities()
 		if ((*it)->GetType() == EntityType::Player)
 		{
 			Player *pp = ((Player*) *it);
-			
+
+			// Récupère le nom
+			std::string name = mEntityManager.GetName(pp);
+
 			// Crée la balise <player>
 			tinyxml2::XMLElement *balise = mDoc.NewElement("player");
+			balise->SetAttribute("id", pp->GetID());
+			if (!name.empty()) balise->SetAttribute("name", name.c_str());
 			balise->SetAttribute("pos", Parser::b2Vec2ToString(pp->GetPosition()).c_str());
 			balise->SetAttribute("age", pp->GetAge());
 			balise->SetAttribute("strengh", pp->GetStrengh());
@@ -372,8 +383,13 @@ bool LevelSaver::ProcessEntities()
 		{
 			Hum *h = ((Hum*) *it);
 
+			// Récupère le nom
+			std::string name = mEntityManager.GetName(h);
+
 			// Crée la balise <hum>
 			tinyxml2::XMLElement *balise = mDoc.NewElement("hum");
+			balise->SetAttribute("id", h->GetID());
+			if (!name.empty()) balise->SetAttribute("name", name.c_str());
 			balise->SetAttribute("pos", Parser::b2Vec2ToString(h->GetPosition()).c_str());
 			balise->SetAttribute("age", h->GetAge());
 			balise->SetAttribute("strengh", h->GetStrengh());
@@ -417,6 +433,9 @@ bool LevelSaver::ProcessJoints()
 			// Ajoute le joint dans la liste
 			mJointIDMap[j->GetJoint()] = id;
 		}
+
+		// Récupère le nom
+		std::string name = mPhysicManager.GetName(j);
 
 		// Récupère les propriétés de cassure
 		bool isBreakableMaxForce = j->IsBreakableMaxForce();
@@ -678,8 +697,9 @@ bool LevelSaver::ProcessJoints()
 		// Si la balise a été créée
 		if (balise)
 		{
-			// ID
+			// ID et nom
 			if (id >= 0) balise->SetAttribute("id", id);
+			if (!name.empty()) balise->SetAttribute("name", name.c_str());
 
 			// Propriétés communes des joints
 			if (isBreakableMaxForce != false) balise->SetAttribute("isBreakableMaxForce", "true");
@@ -738,7 +758,10 @@ bool LevelSaver::ProcessDeco()
 				// Ajoute la balise à <deco>
 				deco->LinkEndChild(layer);
 			}
-			
+
+			// Récupère le nom de l,entité
+			std::string name = mEntityManager.GetName(d);
+
 			// Récupère le nom de la texture
 			std::string textureName(((Texture*) d->GetSprite()->getTexture())->GetName());
 
@@ -750,6 +773,7 @@ bool LevelSaver::ProcessDeco()
 
 			// Crée la balise <img>
 			tinyxml2::XMLElement *balise = mDoc.NewElement("img");
+			if (!name.empty()) balise->SetAttribute("name", name.c_str());
 			balise->SetAttribute("texture", textureName.c_str());
 			balise->SetAttribute("position", Parser::b2Vec2ToString(pos).c_str());
 			if (rotation != 0.f) balise->SetAttribute("rotation", rotation);
@@ -863,6 +887,9 @@ bool LevelSaver::ProcessLights()
 		{
 			// Récupère la lumière
 			PointLight *l = ((PointLight*) *it);
+
+			// Récupère le nom
+			std::string name = mEntityManager.GetName(l);
 
 			// Récupère les propriétés
 			b2Vec2 pos = l->GetPosition();

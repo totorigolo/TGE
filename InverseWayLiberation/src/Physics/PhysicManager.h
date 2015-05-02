@@ -30,10 +30,16 @@ public:
 	void Destroyb2Joint(b2Joint *joint);
 	// Mide à jour
 	void UpdateJoints();
+	// Gestion des noms
+	bool Name(const std::string &name, Joint *joint); // true if already exists
+	void Anonymize(const std::string &name);
+	std::string GetName(Joint *const joint) const;
 	// Accesseurs
 	bool JointExists(int jointID) const;
 	Joint* GetJoint(int jointID);
+	Joint* GetJoint(const std::string &name);
 	const Joint* GetJoint(int jointID) const;
+	const Joint* GetJoint(const std::string &name) const;
 
 	// Simulation
 	void SetTimeStep(float timeStep);
@@ -96,4 +102,9 @@ protected:
 	// Liste des Joints
 	int mLastJointID;
 	std::map<int, std::unique_ptr<Joint>> mJointList; // <id, unique_ptr<joint>>
+
+	// Liste des noms des joints
+	typedef boost::bimap<std::string, Joint*> name_bimap;
+	typedef name_bimap::value_type name_bimap_position;
+	name_bimap mNames;
 };
