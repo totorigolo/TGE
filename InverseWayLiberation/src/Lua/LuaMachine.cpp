@@ -165,8 +165,8 @@ int LuaMachine::ReportLuaError(int errorCode, OutputInterface *_interface)
 	// Pas d'erreur
 	if (errorCode == 0)
 	{
-		//*interface << "Aucune erreur." << std::endl;
-		return errorCode;
+		//*_interface << "Aucune erreur." << std::endl;
+		//return errorCode;
 	}
 
 	// Erreurs connus
@@ -190,12 +190,25 @@ int LuaMachine::ReportLuaError(int errorCode, OutputInterface *_interface)
 		*_interface << "Lua: Erreur inconnue (" << errorCode << ")." << std::endl;
 	
 	// Affiche l'erreur sur la pile
-	*_interface << lua_tostring(mLuaState, -1) << std::endl;
+	lua_Debug debugInfo;
+	int r = lua_getstack(mLuaState, -1, &debugInfo);
+	if (r == 0)
+	{
+		*_interface << "Requested stack depth exceeded current stack depth" << std::endl;
+	}
+	lua_getinfo(mLuaState, "Slun", &debugInfo);
+	const char * er = lua_tostring(mLuaState, -1);
+	lua_pop(mLuaState, 1);
+
+	std::string error = "Failure to convert error to string";
+	if (er)
+	{
+		error = er;
+	}
+	*_interface <<
+		"Error " << debugInfo.event << " at (line " << debugInfo.currentline << "): " << error << "\n" <<
+		"\tIn a " << debugInfo.namewhat << " " << debugInfo.source << " function called " << debugInfo.name << ".\n" <<
+		"\tIn " << debugInfo.short_src << " defined at " << debugInfo.linedefined << ".\n";
 
 	return errorCode;
 }
-
-/*
-JointFactory.CreatePulleyJoint(1, b2Vec2(0.f, 0.f), 2, b2Vec2(0.f, 0.f), b2Vec2(-2.f, 0.5f), b2Vec2(1.9f, 4.f), 1.5f)
-JointFactory.CreateRopeJoint(3, b2Vec2(0.f, 0.f), 4, b2Vec2(0.f, 0.f), 1.f, true, (0, 255, 255))
-*/
