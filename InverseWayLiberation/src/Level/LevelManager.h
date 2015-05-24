@@ -1,11 +1,11 @@
 #pragma once
-#include "../Lua/TriggersManager.h"
 #include "../Resources/ResourceManager.h"
 
 class Player;
 class LevelSaver;
 class LevelLoader;
 class EntityManager;
+class TriggersManager;
 class PartitioningTree;
 class PhysicManager;
 class LuaMachine;
@@ -56,10 +56,6 @@ public:
 	void SetBckgColor(const sf::Color &color);
 	sf::Color const& GetBckgColor() const;
 
-	// TriggersManager
-	TriggersManager& GetTriggersMgr();
-	const TriggersManager& GetTriggersMgr() const;
-
 	// TODO
 	void SetLuaConsole(LuaMachine *machine);
 
@@ -75,7 +71,7 @@ private:
 	PartitioningTree &mPartitioningTree;
 
 	// Triggers
-	TriggersManager mTriggersManager;
+	TriggersManager &mTriggersManager;
 
 	// Config de la fenêtre de rendu
 	sf::Color mBckgC;

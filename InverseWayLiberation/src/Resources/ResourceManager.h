@@ -25,9 +25,9 @@ public:
 	bool FontExists(const std::string &name);
 
 	// Obtient les maps
-	const FontMap& GetFontMap();
-	const SoundMap& GetSoundMap();
-	const TextureMap& GetTextureMap();
+	const FontMap& GetFontMap() const;
+	const SoundMap& GetSoundMap() const;
+	const TextureMap& GetTextureMap() const;
 
 private:
 	// Conteneurs

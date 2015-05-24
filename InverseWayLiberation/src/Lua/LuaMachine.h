@@ -13,6 +13,8 @@ public:
 	void Reset();
 
 	// Enregistrements
+	void RegisterJoint();
+	void RegisterEntity();
 	void RegisterEntityFactory();
 	void RegisterJointFactory();
 	void RegisterLevelManager();

@@ -6,6 +6,8 @@ class LevelManager;
 class InputManager;
 class EntityManager;
 class PhysicManager;
+class TriggersManager;
+class ResourceManager;
 class LevelSaver : public Saver
 {
 public:
@@ -30,10 +32,11 @@ private:
 
 private:
 	const LevelManager &mLevel;
-	const TextureMap &mTextureMap;
 	const InputManager &mInputManager;
 	const EntityManager &mEntityManager;
 	const PhysicManager &mPhysicManager;
+	const TriggersManager &mTriggersManager;
+	const ResourceManager &mResourceManager;
 
 	std::string mPath;
 

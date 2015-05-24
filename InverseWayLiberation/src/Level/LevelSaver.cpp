@@ -36,7 +36,8 @@ LevelSaver::LevelSaver(const std::string& path, bool check)
 	mInputManager(InputManager::GetInstance()),
 	mPhysicManager(PhysicManager::GetInstance()),
 	mEntityManager(EntityManager::GetInstance()),
-	mTextureMap(ResourceManager::GetInstance().GetTextureMap())
+	mTriggersManager(TriggersManager::GetInstance()),
+	mResourceManager(ResourceManager::GetInstance())
 {
 	// On procède à la sauvegarde que si le fichier est valide
 	if (mIsValid)
@@ -126,7 +127,7 @@ bool LevelSaver::ProcessWorld()
 
 	// Crée les attributs
 	world->SetAttribute("gravity", Parser::b2Vec2ToString(mPhysicManager.GetGravity()).c_str());
-	world->SetAttribute("PPM", mLevel.mPhysicMgr.GetPPM());
+	world->SetAttribute("PPM", mPhysicManager.GetPPM());
 	world->SetAttribute("bckgcolor", Parser::colorToString(mLevel.mBckgC).c_str());
 	world->SetAttribute("originview", Parser::b2Vec2ToString(sf2b2Vec(centreVue, mPhysicManager.GetMPP())).c_str());
 	world->SetAttribute("defaultzoom", zoom);
@@ -150,7 +151,7 @@ bool LevelSaver::ProcessTextures()
 	level->LinkEndChild(textures);
 
 	// Ajoute toutes les textures
-	for (auto it = mLevel.mResourceManager.GetTextureMap().begin(); it != mLevel.mResourceManager.GetTextureMap().end(); ++it)
+	for (auto it = mResourceManager.GetTextureMap().begin(); it != mResourceManager.GetTextureMap().end(); ++it)
 	{
 		// Crée la balise <img>
 		tinyxml2::XMLElement *img = mDoc.NewElement("img");
@@ -183,7 +184,7 @@ bool LevelSaver::ProcessBodies()
 	level->LinkEndChild(polychains);
 
 	// Parcours toutes les Entities
-	for (auto it = mLevel.mEntityManager.GetEntities().begin(); it != mLevel.mEntityManager.GetEntities().end(); ++it)
+	for (auto it = mEntityManager.GetEntities().begin(); it != mEntityManager.GetEntities().end(); ++it)
 	{
 		// Vérifie le type de l'Entity
 		if ((*it)->GetType() == EntityType::BasicBody || (*it)->GetType() == EntityType::PolyBody || (*it)->GetType() == EntityType::PolyChain)
@@ -357,7 +358,7 @@ bool LevelSaver::ProcessEntities()
 	level->LinkEndChild(entities);
 
 	// Parcours toutes les Entities
-	for (auto it = mLevel.mEntityManager.GetEntities().begin(); it != mLevel.mEntityManager.GetEntities().end(); ++it)
+	for (auto it = mEntityManager.GetEntities().begin(); it != mEntityManager.GetEntities().end(); ++it)
 	{
 		// Vérifie le type de l'Entity
 		if ((*it)->GetType() == EntityType::Player)
@@ -419,7 +420,7 @@ bool LevelSaver::ProcessJoints()
 	int lastID = -1;
 
 	// Parcours tous les Joints
-	for (auto it = mLevel.mPhysicMgr.GetJointList().begin(); it != mLevel.mPhysicMgr.GetJointList().end(); ++it)
+	for (auto it = mPhysicManager.GetJointList().begin(); it != mPhysicManager.GetJointList().end(); ++it)
 	{
 		Joint *j = ((Joint*) it->second.get());
 
@@ -734,7 +735,7 @@ bool LevelSaver::ProcessDeco()
 	tinyxml2::XMLElement *layer = nullptr;
 	
 	// Parcours toutes les Entities
-	for (auto it = mLevel.mEntityManager.GetEntities().begin(); it != mLevel.mEntityManager.GetEntities().end(); ++it)
+	for (auto it = mEntityManager.GetEntities().begin(); it != mEntityManager.GetEntities().end(); ++it)
 	{
 		// Vérifie le type de l'Entity
 		if ((*it)->GetType() == EntityType::Deco)
@@ -799,7 +800,7 @@ bool LevelSaver::ProcessActions()
 	level->LinkEndChild(actions);
 
 	// Ajoute toutes les actions
-	for (auto it = mLevel.mTriggersManager.GetActionMap().begin(); it != mLevel.mTriggersManager.GetActionMap().end(); ++it)
+	for (auto it = mTriggersManager.GetActionMap().begin(); it != mTriggersManager.GetActionMap().end(); ++it)
 	{
 		// L'action est un fichier
 		if (!it->second->HasFunction())
@@ -810,6 +811,7 @@ bool LevelSaver::ProcessActions()
 			// Crée les attributs
 			file->SetAttribute("name", it->second->GetName().c_str());
 			file->SetAttribute("path", it->second->GetFile().c_str());
+			if (it->second->IsOnce()) file->SetAttribute("once", it->second->IsOnce());
 
 			// Ajoute le <file> à <actions>
 			actions->LinkEndChild(file);
@@ -824,6 +826,7 @@ bool LevelSaver::ProcessActions()
 			function->SetAttribute("name", it->second->GetName().c_str());
 			function->SetAttribute("func", it->second->GetFunction().c_str());
 			function->SetAttribute("file", it->second->GetFile().c_str());
+			if (it->second->IsOnce()) function->SetAttribute("once", it->second->IsOnce());
 
 			// Ajoute la <function> à <actions>
 			actions->LinkEndChild(function);
@@ -848,17 +851,21 @@ bool LevelSaver::ProcessTriggers()
 	events->LinkEndChild(triggers);
 
 	// Ajoute toutes les actions
-	for (auto it = mLevel.mTriggersManager.GetAreas().begin(); it != mLevel.mTriggersManager.GetAreas().end(); ++it)
+	for (auto it = mTriggersManager.GetAreas().begin(); it != mTriggersManager.GetAreas().end(); ++it)
 	{
 		// Crée la balise <area>
 		tinyxml2::XMLElement *area = mDoc.NewElement("area");
 
 		// Crée les attributs
-		area->SetAttribute("top", it->first.upperBound.y);
-		area->SetAttribute("left", it->first.lowerBound.x);
-		area->SetAttribute("bottom", it->first.lowerBound.y);
-		area->SetAttribute("right", it->first.upperBound.x);
-		area->SetAttribute("action", it->second.c_str());
+		auto once = it->get()->IsOnce();
+		auto aabb = it->get()->GetAABB();
+		auto action = it->get()->GetAction();
+		area->SetAttribute("top", aabb.upperBound.y);
+		area->SetAttribute("left", aabb.lowerBound.x);
+		area->SetAttribute("bottom", aabb.lowerBound.y);
+		area->SetAttribute("right", aabb.upperBound.x);
+		area->SetAttribute("action", action.c_str());
+		if (once) area->SetAttribute("once", once);
 
 		// Ajoute l'<area> à <triggers>
 		triggers->LinkEndChild(area);
@@ -880,7 +887,7 @@ bool LevelSaver::ProcessLights()
 	level->LinkEndChild(lights);
 
 	// Parcours toutes les Entities à la recherche de lumières
-	for (auto it = mLevel.mEntityManager.GetEntities().begin(); it != mLevel.mEntityManager.GetEntities().end(); ++it)
+	for (auto it = mEntityManager.GetEntities().begin(); it != mEntityManager.GetEntities().end(); ++it)
 	{
 		// Vérifie le type de l'Entity
 		if ((*it)->GetType() == EntityType::PointLight)

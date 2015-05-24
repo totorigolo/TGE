@@ -1,26 +1,32 @@
 #pragma once
 
-enum class ForceType
+namespace ForceType
 {
-	Null,
-	Float,
-	Vector
-};
+	enum ForceType
+	{
+		Null,
+		Float,
+		Vector
+	};
+}
 
-enum class JointType
+namespace JointType
 {
-	Null,
-	DistanceJoint,
-	FrictionJoint,
-	GearJoint,
-	MouseJoint,
-	PrismaticJoint,
-	PulleyJoint,
-	RevoluteJoint,
-	RopeJoint,
-	WeldJoint,
-	WheelJoint
-};
+	enum JointType
+	{
+		Null,
+		DistanceJoint,
+		FrictionJoint,
+		GearJoint,
+		MouseJoint,
+		PrismaticJoint,
+		PulleyJoint,
+		RevoluteJoint,
+		RopeJoint,
+		WeldJoint,
+		WheelJoint
+	};
+}
 
 struct JointDef
 {
@@ -37,7 +43,7 @@ struct JointDef
 
 	// Propriétés cassable
 	bool isBreakableMaxForce;
-	ForceType maxForceType;
+	ForceType::ForceType maxForceType;
 	float maxForce;
 	b2Vec2 maxVecForce;
 	bool isBreakableMaxTorque;
@@ -75,7 +81,7 @@ public:
 	void SetBreakableByTorque(bool breakable);
 	void SetMaxTorque(float maxTorque);
 	bool IsBreakableMaxForce() const;
-	ForceType GetMaxForceType() const;
+	ForceType::ForceType GetMaxForceType() const;
 	float GetMaxForce() const;
 	b2Vec2 GetMaxVecForce() const;
 	bool IsBreakableMaxTorque() const;
@@ -85,7 +91,7 @@ public:
 	bool IsAlive() const { return mIsAlive; }
 	bool ToDestroy() const { return mToDestroy; }
 
-	JointType GetType() const;
+	JointType::JointType GetType() const;
 	int GetID() const { return mID; }
 
 	b2Joint* GetJoint() { return mJoint; }
@@ -108,7 +114,7 @@ protected:
 	bool mToDestroy;
 
 	// Type de joint
-	JointType mType;
+	JointType::JointType mType;
 
 	// Objets physiques
 	int mID;
@@ -117,7 +123,7 @@ protected:
 
 	// Propriétés cassable
 	bool mIsBreakableMaxForce;
-	ForceType mMaxForceType;
+	ForceType::ForceType mMaxForceType;
 	float mMaxForce;
 	b2Vec2 mMaxVecForce;
 	bool mIsBreakableMaxTorque;

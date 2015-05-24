@@ -179,7 +179,7 @@ void Hum::Update()
 			// Position de la bulle
 			sf::Vector2f pos = b22sfVec(GetPosition(), mPhysicMgr.GetPPM());
 			pos += sf::Vector2f(- mBallonText.getGlobalBounds().width / 2.f, - mBallonText.getGlobalBounds().height * 2.f);
-			pos += b22sfVec(b2Vec2(0.f, 3.f / 2.f * this->GetHeight()), mPhysicMgr.GetPPM());
+			pos += b22sfVec(b2Vec2(0.f, 3.f / 2.f * static_cast<float>(this->GetHeight())), mPhysicMgr.GetPPM());
 			mBallonText.setPosition(pos);
 			mBallonBckg.setPosition(pos);
 		}

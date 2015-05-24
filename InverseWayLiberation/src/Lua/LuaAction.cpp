@@ -1,19 +1,23 @@
 #include "stdafx.h"
 #include "LuaAction.h"
+#include "LuaArea.h"
+#include "TriggersManager.h"
 
 // Ctors
-LuaAction::LuaAction(const std::string &_name, const std::string &_file)
-	: mName(_name), mFile(_file)
+LuaAction::LuaAction(const std::string &_name, const std::string &_file, bool once)
+	: mName(_name), mFile(_file), mOnce(once), mDone(false)
 {
 }
-LuaAction::LuaAction(const std::string &_name, const std::string &_file, std::string &_function)
-	: mName(_name), mFile(_file), mFunction(_function)
+LuaAction::LuaAction(const std::string &_name, const std::string &_file, std::string &_function, bool once)
+	: mName(_name), mFile(_file), mFunction(_function), mOnce(once), mDone(false)
 {
 }
 
 // Exécute l'action
 void LuaAction::Execute(LuaMachine *luaMachine)
 {
+	if (mOnce && mDone) return;
+
 	// Si on a une fonction, on charge le fichier et exécute la fx
 	if (HasFunction())
 	{
@@ -22,6 +26,7 @@ void LuaAction::Execute(LuaMachine *luaMachine)
 		try
 		{
 			luabind::call_function<void>(luaMachine->GetLuaState(), mFunction.c_str());
+			mDone = true;
 		}
 		catch (const std::exception &e)
 		{
@@ -33,10 +38,40 @@ void LuaAction::Execute(LuaMachine *luaMachine)
 	else
 	{
 		luaMachine->DoFile(mFile);
+		mDone = true;
+	}
+
+	// Gère la singularité
+	if (mDone)
+	{
+		// Préviens toutes les areas liées à cette Action qu'elle vient d'être exécutée
+		for each (auto area in mAreas)
+		{
+			if (area.expired()) continue;
+			area.lock().get()->Done();
+		}
+
+		// Demande à être supprimée
+		if (mOnce)
+			TriggersManager::GetInstance().ScheduleRemove(mName);
 	}
 }
 
+// Gestion des Areas
+void LuaAction::RegisterArea(std::weak_ptr<LuaArea> area)
+{
+	mAreas.push_back(area);
+}
+
 // Accesseurs
+bool LuaAction::IsOnce()
+{
+	return mOnce;
+}
+bool LuaAction::IsDone()
+{
+	return mDone;
+}
 bool LuaAction::HasFunction()
 {
 	return !mFunction.empty();

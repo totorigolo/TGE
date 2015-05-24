@@ -166,6 +166,8 @@ bool Editor::OnInit()
 	mSpyedKeys.push_back(SpyedKey::Create(sf::Keyboard::Numpad0)); // Reset vue
 
 	// Initialise la machine Lua
+	mConsole.RegisterJoint();
+	mConsole.RegisterEntity();
 	mConsole.RegisterEntityFactory();
 	mConsole.RegisterLevelManager();
 	mConsole.RegisterGlobalLuaVar("level", &mLevel);
@@ -622,6 +624,7 @@ void Editor::OnRender()
 	{
 		mPhysicMgr.DrawDebugData();
 		PartitioningTree::GetInstance().DrawDebug(mWindow);
+		TriggersManager::GetInstance().DebugDraw(mWindow);
 	}
 
 	// Affichage de la GUI

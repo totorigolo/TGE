@@ -54,10 +54,13 @@
     <ClCompile Include="src\Graphics\LightEngine.cpp" />
     <ClCompile Include="src\Level\LevelSaver.cpp" />
     <ClCompile Include="src\Lua\LuaAction.cpp" />
+    <ClCompile Include="src\Lua\LuaArea.cpp" />
     <ClCompile Include="src\Lua\LuaMachine.cpp" />
     <ClCompile Include="src\Lua\Registrations\RegisterBox2D.cpp" />
+    <ClCompile Include="src\Lua\Registrations\RegisterEntity.cpp" />
     <ClCompile Include="src\Lua\Registrations\RegisterEntityFactory.cpp" />
     <ClCompile Include="src\Lua\Registrations\RegisterInputManager.cpp" />
+    <ClCompile Include="src\Lua\Registrations\RegisterJoint.cpp" />
     <ClCompile Include="src\Lua\Registrations\RegisterJointFactory.cpp" />
     <ClCompile Include="src\Lua\Registrations\RegisterLevelManager.cpp" />
     <ClCompile Include="src\Lua\Registrations\RegisterPhysicManager.cpp" />
@@ -143,6 +146,7 @@
     <ClInclude Include="src\Level\LevelLoader.h" />
     <ClInclude Include="src\Level\LevelSaver.h" />
     <ClInclude Include="src\Lua\LuaAction.h" />
+    <ClInclude Include="src\Lua\LuaArea.h" />
     <ClInclude Include="src\Lua\LuaMachine.h" />
     <ClInclude Include="src\Lua\OutputInterfaces.h" />
     <ClInclude Include="src\Lua\TriggersManager.h" />
@@ -259,6 +263,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <ForcedIncludeFiles>%(ForcedIncludeFiles)</ForcedIncludeFiles>
       <AdditionalIncludeDirectories>$(ProjectDir)\src</AdditionalIncludeDirectories>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -284,6 +289,7 @@
       <ForcedIncludeFiles>%(ForcedIncludeFiles)</ForcedIncludeFiles>
       <AdditionalIncludeDirectories>$(ProjectDir)\src</AdditionalIncludeDirectories>
       <MinimalRebuild>false</MinimalRebuild>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>

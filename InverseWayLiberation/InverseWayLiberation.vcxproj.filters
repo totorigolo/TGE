@@ -395,6 +395,15 @@
     <ClCompile Include="src\Graphics\LightEngine.cpp">
       <Filter>Fichiers sources\Graphics</Filter>
     </ClCompile>
+    <ClCompile Include="src\Lua\Registrations\RegisterEntity.cpp">
+      <Filter>Fichiers sources\Lua\Registrations</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Lua\Registrations\RegisterJoint.cpp">
+      <Filter>Fichiers sources\Lua\Registrations</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Lua\LuaArea.cpp">
+      <Filter>Fichiers sources\Lua</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Physics\Joints\DistanceJoint.h">
@@ -648,6 +657,9 @@
     </ClInclude>
     <ClInclude Include="src\Resources\Font.h">
       <Filter>Fichiers d%27en-tête\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Lua\LuaArea.h">
+      <Filter>Fichiers d%27en-tête\Lua</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

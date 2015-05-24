@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <level>
-    <world gravity="(0, -9.7999296188354492)" PPM="100.000000" bckgcolor="(0, 0, 0)" originview="(5.3683395385742187, -0.26427000761032104)" defaultzoom="2.189415"/>
+    <world gravity="(0, -9.81)" PPM="100.000000" bckgcolor="(0, 0, 0)" originview="(5.3683395385742187, -0.26427000761032104)" defaultzoom="2.189415"/>
     <textures>
         <img name="none" src="tex/none.png"/>
         <img name="unknown" src="tex/unknown.png"/>
@@ -51,7 +51,7 @@
         </chain>
     </polychains>
     <entities>
-        <player id="4" pos="(11.254799842834473, -5.0784687995910645)" age="3.000000" strengh="2.000000" color="(35, 35, 255)"/>
+        <player id="4" pos="(12, -5.0784687995910645)" age="3.000000" strengh="2.000000" color="(35, 35, 255)"/>
     </entities>
     <joints>
         <distance body1="1" pt1="(1.4297301769256592, 0.047683432698249817)" body2="3" pt2="(3.239030122756958, 1.6921399831771851)" name="ecrase_j1"/>
@@ -59,11 +59,15 @@
     </joints>
     <deco/>
     <actions>
-        <function name="splash" func="createObjects1" file="scripts/splash.lua"/>
+      <function name="splash" func="breakJoints" file="scripts/splash.lua" once="true"/>
+      <file name="splash" path="scripts/splash.lua" once="true"/>
     </actions>
     <events>
         <triggers>
-            <area top="-4.000000" left="3.000000" bottom="-6.000000" right="7.000000" action="splash"/>
+          <!--area top="-4.000000" left="8.000000" bottom="-6.000000" right="10.000000" action="splash" once="true"/-->
+          <area top="-4.000000" left="8.000000" bottom="-5.000000" right="10.000000" action="splash" once="true"/>
+          <area top="-5.000000" left="8.000000" bottom="-6.000000" right="9.000000" action="splash" once="true"/>
+          <area top="-5.000000" left="9.000000" bottom="-6.000000" right="10.000000" action="splash" once="true"/>
         </triggers>
     </events>
     <lights>

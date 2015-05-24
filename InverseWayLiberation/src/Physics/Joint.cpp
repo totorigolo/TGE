@@ -111,7 +111,7 @@ bool Joint::IsBreakableMaxForce() const
 {
 	return mIsBreakableMaxForce;
 }
-ForceType Joint::GetMaxForceType() const
+ForceType::ForceType Joint::GetMaxForceType() const
 {
 	return mMaxForceType;
 }
@@ -133,7 +133,7 @@ float Joint::GetMaxTorque() const
 }
 
 // Accesseurs
-JointType Joint::GetType() const
+JointType::JointType Joint::GetType() const
 {
 	return mType;
 }

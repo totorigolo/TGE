@@ -1,11 +1,12 @@
 #pragma once
 #include "../Lua/LuaMachine.h"
 #include "LuaAction.h"
+#include "LuaArea.h"
 
-typedef std::unordered_map<std::string, std::shared_ptr<LuaAction>> ActionMap;
+typedef std::map<std::string, std::shared_ptr<LuaAction>> ActionMap;
 
 class PhysicManager;
-class TriggersManager : public NonCopyable
+class TriggersManager : public Singleton<TriggersManager>
 {
 public:
 	// Ctor & dtor
@@ -23,14 +24,19 @@ public:
 	void AddAction(LuaAction *action);
 	void DeleteAction(LuaAction *action);
 	void DeleteAction(const std::string &name);
+	std::shared_ptr<LuaAction> GetAction(const std::string &name);
 	ActionMap& GetActionMap();
 	const ActionMap& GetActionMap() const;
 
 	// Gère les Areas
-	void CreateArea(b2AABB area, const std::string &action);
-	// TODO: DestroyArea
-	std::list<std::pair<b2AABB, std::string>>& GetAreas();
-	const std::list<std::pair<b2AABB, std::string>>& GetAreas() const;
+	void CreateArea(b2AABB area, const std::string &action, bool once = false);
+	void DestroyArea(LuaArea *area);
+	std::list<std::shared_ptr<LuaArea>>& GetAreas();
+	const std::list<std::shared_ptr<LuaArea>>& GetAreas() const;
+
+	// Suppressions planifiées
+	void ScheduleRemove(std::shared_ptr<LuaArea> area);
+	void ScheduleRemove(const std::string &action);
 
 	// Gestion de la machine Lua
 	LuaMachine* GetLuaMachine();
@@ -44,12 +50,15 @@ private:
 	ActionMap mActionMap;
 
 	// Liste de zones
-	// TODO: Créer une table de correspondance string <> unsigned int
-	std::list<std::pair<b2AABB, std::string>> mAreas; // TODO: multi-map
+	std::list<std::shared_ptr<LuaArea>> mAreas;
 
 	// Machine Lua
 	LuaMachine *mLuaMachine;
 
 	// PhysicManager
 	PhysicManager &mPhysicMgr;
+
+	// Suppressions planifiées
+	std::list<std::weak_ptr<LuaArea>> mAreasToDelete;
+	std::list<std::string> mActionsToDelete;
 };

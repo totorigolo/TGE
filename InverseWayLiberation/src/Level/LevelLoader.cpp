@@ -4,6 +4,11 @@
 
 #include "../App/InputManager.h"
 #include "../Physics/PhysicManager.h"
+#include "../Resources/ResourceManager.h"
+
+#include "../Lua/LuaArea.h"
+#include "../Lua/LuaAction.h"
+#include "../Lua/TriggersManager.h"
 
 #include "../Physics/Joints/RopeJoint.h"
 #include "../Physics/Joints/WeldJoint.h"
@@ -33,7 +38,9 @@ LevelLoader::LevelLoader(const std::string& path)
 	mLevel(LevelManager::GetInstance()),
 	mInputManager(InputManager::GetInstance()),
 	mPhysicManager(PhysicManager::GetInstance()),
-	mEntityManager(EntityManager::GetInstance())
+	mEntityManager(EntityManager::GetInstance()),
+	mTriggersManager(TriggersManager::GetInstance()),
+	mResourceManager(ResourceManager::GetInstance())
 {
 	// Si loader n'est pas valide, on ne fait rien
 	if (mIsValid)
@@ -165,7 +172,7 @@ bool LevelLoader::ProcessTextures()
 		if (texture->Attribute("src")) path = texture->Attribute("src");
 
 		// Charge la texture
-		mLevel.mResourceManager.LoadTexture(name, path);
+		mResourceManager.LoadTexture(name, path);
 
 		// On récupère la prochaine texture
 		texture = texture->NextSiblingElement();
@@ -285,7 +292,7 @@ bool LevelLoader::ProcessPoly()
 
 		// Récupère la texture et vérifie si elle existe
 		if (body->Attribute("texture")) texture = body->Attribute("texture");
-		if (!mLevel.mResourceManager.TextureExists(texture))
+		if (!mResourceManager.TextureExists(texture))
 		{
 			Dialog::Error("Texture \"" + texture + "\" inconnue. Body ignoré !");
 
@@ -349,13 +356,13 @@ bool LevelLoader::ProcessPoly()
 		if (!polyBodiesDone)
 		{
 			pb = new PolyBody(layer);
-			pb->Create(posRot, vertices, b2type, mLevel.mResourceManager.GetTexture(texture),
+			pb->Create(posRot, vertices, b2type, mResourceManager.GetTexture(texture),
 					   density, friction, restitution, groupIndex, categoryBits, maskBits);
 		}
 		else
 		{
 			pc = new PolyChain(layer);
-			pc->Create(posRot, vertices, chainType, mLevel.mResourceManager.GetTexture(texture),
+			pc->Create(posRot, vertices, chainType, mResourceManager.GetTexture(texture),
 					   density, friction, restitution, groupIndex, categoryBits, maskBits);
 		}
 
@@ -500,7 +507,7 @@ bool LevelLoader::ProcessBasicBodies()
 
 		// Récupère la texture et vérifie si elle existe
 		if (body->Attribute("texture")) texture = body->Attribute("texture");
-		if (!mLevel.mResourceManager.TextureExists(texture))
+		if (!mResourceManager.TextureExists(texture))
 		{
 			Dialog::Error("Texture \"" + texture + "\" inconnue. Body ignoré !");
 
@@ -544,12 +551,12 @@ bool LevelLoader::ProcessBasicBodies()
 		if (forme == "box")
 		{
 			bb = new BasicBody(layer);
-			bb->CreateBox(posRot, type, mLevel.mResourceManager.GetTexture(texture), density, friction, restitution, groupIndex, categoryBits, maskBits);
+			bb->CreateBox(posRot, type, mResourceManager.GetTexture(texture), density, friction, restitution, groupIndex, categoryBits, maskBits);
 		}
 		else if (forme == "circle")
 		{
 			bb = new BasicBody(layer);
-			bb->CreateCircle(posRot, type, mLevel.mResourceManager.GetTexture(texture), density, friction, restitution, groupIndex, categoryBits, maskBits);
+			bb->CreateCircle(posRot, type, mResourceManager.GetTexture(texture), density, friction, restitution, groupIndex, categoryBits, maskBits);
 		}
 		else
 			Dialog::Error("BasicBody forme inconnu (" + forme + ") !");
@@ -1107,7 +1114,7 @@ bool LevelLoader::ProcessDeco()
 			posRot.z = rotation;
 			
 			// Ajoute la déco
-			d = new Deco(z, mLevel.mResourceManager.GetTexture(texture), getVec3(b22sfVec(getVec2(posRot), mPhysicManager.GetPPM()), posRot.z));
+			d = new Deco(z, mResourceManager.GetTexture(texture), getVec3(b22sfVec(getVec2(posRot), mPhysicManager.GetPPM()), posRot.z));
 
 			// On récupère la prochaine image
 			img = img->NextSiblingElement();
@@ -1135,6 +1142,7 @@ bool LevelLoader::ProcessActions()
 	std::string file;
 	std::string function;
 	std::string type;
+	bool once = false;
 
 	// Pour toutes les actions
 	tinyxml2::XMLElement *action = actions.FirstChildElement().ToElement();
@@ -1145,6 +1153,7 @@ bool LevelLoader::ProcessActions()
 		file.clear();
 		function.clear();
 		type.clear();
+		once = false;
 
 		// Obtient le type
 		type = action->Name();
@@ -1155,10 +1164,11 @@ bool LevelLoader::ProcessActions()
 			// Récupère les attributs
 			if (action->Attribute("name")) name = action->Attribute("name");
 			if (action->Attribute("path")) file = action->Attribute("path");
+			if (action->Attribute("once")) action->QueryBoolAttribute("once", &once);
 
 			// Crée l'action
-			LuaAction *a = new LuaAction(name, file);
-			mLevel.mTriggersManager.AddAction(a);
+			LuaAction *a = new LuaAction(name, file, once);
+			mTriggersManager.AddAction(a);
 		}
 		else if (type == "function")
 		{
@@ -1167,10 +1177,11 @@ bool LevelLoader::ProcessActions()
 			if (action->Attribute("name")) name = action->Attribute("name");
 			if (action->Attribute("file")) file = action->Attribute("file");
 			if (action->Attribute("func")) function = action->Attribute("func");
+			if (action->Attribute("once")) action->QueryBoolAttribute("once", &once);
 
 			// Crée l'action
-			LuaAction *a = new LuaAction(name, file, function);
-			mLevel.mTriggersManager.AddAction(a);
+			LuaAction *a = new LuaAction(name, file, function, once);
+			mTriggersManager.AddAction(a);
 		}
 		else
 		{
@@ -1206,6 +1217,7 @@ bool LevelLoader::ProcessTriggers()
 	
 	// On crée les attributs
 	b2AABB rect;
+	bool once = false;
 	std::string action;
 	std::string type;
 
@@ -1214,6 +1226,7 @@ bool LevelLoader::ProcessTriggers()
 	while (trigger)
 	{
 		// Réinitialise les attributs
+		once = false;
 		rect.lowerBound = b2Vec2_zero;
 		rect.upperBound = b2Vec2_zero;
 		action.clear();
@@ -1233,9 +1246,10 @@ bool LevelLoader::ProcessTriggers()
 			trigger->QueryFloatAttribute("bottom", &rect.lowerBound.y);
 			trigger->QueryFloatAttribute("left", &rect.lowerBound.x);
 			trigger->QueryFloatAttribute("right", &rect.upperBound.x);
+			if (trigger->Attribute("once")) trigger->QueryBoolAttribute("once", &once);
 
 			// Crée le trigger
-			mLevel.mTriggersManager.CreateArea(rect, action);
+			mTriggersManager.CreateArea(rect, action, once);
 		}
 
 		// On récupère le prochain level

@@ -1,9 +1,10 @@
 #include "stdafx.h"
 #include "LevelManager.h"
 #include "LevelLoader.h"
+#include "../Lua/LuaMachine.h"
 #include "../Entities/Player.h"
 #include "../App/InputManager.h"
-#include "../Lua/LuaMachine.h" // TODO
+#include "../Lua/TriggersManager.h"
 #include "../Physics/PhysicManager.h"
 #include "../Entities/EntityManager.h"
 #include "../Entities/PartitioningTree.h"
@@ -16,6 +17,8 @@ LevelManager::LevelManager()
 	// Entities
 	mEntityManager(EntityManager::GetInstance()),
 	mPartitioningTree(PartitioningTree::GetInstance()),
+	// Triggers
+	mTriggersManager(TriggersManager::GetInstance()),
 	// Config de la fenêtre de rendu
 	mBckgC(sf::Color::White),
 	// Zoom initial
@@ -81,7 +84,6 @@ void LevelManager::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
 	// Affiche les Entities
 	target.draw(mEntityManager, states);
-	mTriggersManager.DebugDraw(target);
 }
 
 // Réglages de la vue initiale
@@ -133,16 +135,6 @@ void LevelManager::SetBckgColor(const sf::Color &color)
 sf::Color const& LevelManager::GetBckgColor() const
 {
 	return mBckgC;
-}
-
-// TriggersManager
-TriggersManager& LevelManager::GetTriggersMgr()
-{
-	return mTriggersManager;
-}
-const TriggersManager& LevelManager::GetTriggersMgr() const
-{
-	return mTriggersManager;
 }
 
 // TODO

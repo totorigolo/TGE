@@ -5,6 +5,8 @@ class LevelManager;
 class InputManager;
 class EntityManager;
 class PhysicManager;
+class TriggersManager;
+class ResourceManager;
 class LevelLoader : public Loader
 {
 public:
@@ -33,6 +35,8 @@ private:
 	InputManager &mInputManager;
 	EntityManager &mEntityManager;
 	PhysicManager &mPhysicManager;
+	TriggersManager &mTriggersManager;
+	ResourceManager &mResourceManager;
 	
 	std::map<unsigned int, b2Joint*> mJointIDMap;
 };

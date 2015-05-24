@@ -18,6 +18,8 @@
 #include <lua.hpp>
 // Désactive les warning "warning C4251: ...nécessite une interface DLL pour être utilisé(e) par les clients..."
 #pragma warning (disable : 4251)
+// Désactive les warning "warning C4512: assignment operator could not be generated"
+#pragma warning (disable : 4512)
 #include <luabind/luabind.hpp>
 #include <luabind/object.hpp>
 #include <luabind/operator.hpp>

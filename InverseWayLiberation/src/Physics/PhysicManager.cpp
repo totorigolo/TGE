@@ -205,6 +205,13 @@ bool PhysicManager::JointExists(int jointID) const
 		return true;
 	return false;
 }
+bool PhysicManager::JointExists(const std::string &name) const
+{
+	auto it = mNames.left.find(name);
+	if (it == mNames.left.end())
+		return false;
+	return true;
+}
 Joint* PhysicManager::GetJoint(int jointID)
 {
 	// Vérifie qu'il est valide

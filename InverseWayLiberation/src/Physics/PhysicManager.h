@@ -36,6 +36,7 @@ public:
 	std::string GetName(Joint *const joint) const;
 	// Accesseurs
 	bool JointExists(int jointID) const;
+	bool JointExists(const std::string &name) const;
 	Joint* GetJoint(int jointID);
 	Joint* GetJoint(const std::string &name);
 	const Joint* GetJoint(int jointID) const;

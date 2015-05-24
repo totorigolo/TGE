@@ -97,15 +97,15 @@ bool ResourceManager::FontExists(const std::string &name)
 }
 
 // Obtient les maps
-const FontMap& ResourceManager::GetFontMap()
+const FontMap& ResourceManager::GetFontMap() const
 {
 	return mFontMap;
 }
-const SoundMap& ResourceManager::GetSoundMap()
+const SoundMap& ResourceManager::GetSoundMap() const
 {
 	return mSoundMap;
 }
-const TextureMap& ResourceManager::GetTextureMap()
+const TextureMap& ResourceManager::GetTextureMap() const
 {
 	return mTextureMap;
 }
