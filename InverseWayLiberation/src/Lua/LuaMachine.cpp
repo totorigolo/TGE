@@ -166,7 +166,7 @@ int LuaMachine::ReportLuaError(int errorCode, OutputInterface *_interface)
 	if (errorCode == 0)
 	{
 		//*_interface << "Aucune erreur." << std::endl;
-		//return errorCode;
+		return errorCode;
 	}
 
 	// Erreurs connus
