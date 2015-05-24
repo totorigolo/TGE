@@ -494,6 +494,7 @@ bool LevelSaver::ProcessJoints()
 
 			// Crée la balise <friction>
 			balise = mDoc.NewElement("friction");
+			if (!name.empty()) balise->SetAttribute("name", name.c_str());
 			balise->SetAttribute("body1", body1);
 			balise->SetAttribute("pt1", Parser::b2Vec2ToString(pt1).c_str());
 			balise->SetAttribute("body2", body2);
@@ -537,6 +538,7 @@ bool LevelSaver::ProcessJoints()
 
 			// Crée la balise <gear>
 			balise = mDoc.NewElement("gear");
+			if (!name.empty()) balise->SetAttribute("name", name.c_str());
 			balise->SetAttribute("body1", body1);
 			balise->SetAttribute("body2", body2);
 			balise->SetAttribute("joint1", j1);
@@ -562,6 +564,7 @@ bool LevelSaver::ProcessJoints()
 
 			// Crée la balise <prismatic>
 			balise = mDoc.NewElement("prismatic");
+			if (!name.empty()) balise->SetAttribute("name", name.c_str());
 			balise->SetAttribute("body1", body1);
 			balise->SetAttribute("anchor", Parser::b2Vec2ToString(anchor).c_str());
 			balise->SetAttribute("body2", body2);
@@ -589,6 +592,7 @@ bool LevelSaver::ProcessJoints()
 
 			// Crée la balise <pulley>
 			balise = mDoc.NewElement("pulley");
+			if (!name.empty()) balise->SetAttribute("name", name.c_str());
 			balise->SetAttribute("body1", body1);
 			balise->SetAttribute("pt1", Parser::b2Vec2ToString(pt1).c_str());
 			balise->SetAttribute("body2", body2);
@@ -615,6 +619,7 @@ bool LevelSaver::ProcessJoints()
 
 			// Crée la balise <revolute>
 			balise = mDoc.NewElement("revolute");
+			if (!name.empty()) balise->SetAttribute("name", name.c_str());
 			balise->SetAttribute("body1", body1);
 			balise->SetAttribute("anchor", Parser::b2Vec2ToString(anchor).c_str());
 			balise->SetAttribute("body2", body2);
@@ -639,6 +644,7 @@ bool LevelSaver::ProcessJoints()
 
 			// Crée la balise <rope>
 			balise = mDoc.NewElement("rope");
+			if (!name.empty()) balise->SetAttribute("name", name.c_str());
 			balise->SetAttribute("body1", body1);
 			balise->SetAttribute("pt1", Parser::b2Vec2ToString(pt1).c_str());
 			balise->SetAttribute("body2", body2);
@@ -659,6 +665,7 @@ bool LevelSaver::ProcessJoints()
 
 			// Crée la balise <weld>
 			balise = mDoc.NewElement("weld");
+			if (!name.empty()) balise->SetAttribute("name", name.c_str());
 			balise->SetAttribute("body1", body1);
 			balise->SetAttribute("anchor", Parser::b2Vec2ToString(anchor).c_str());
 			balise->SetAttribute("body2", body2);
@@ -683,6 +690,7 @@ bool LevelSaver::ProcessJoints()
 
 			// Crée la balise <wheel>
 			balise = mDoc.NewElement("wheel");
+			if (!name.empty()) balise->SetAttribute("name", name.c_str());
 			balise->SetAttribute("body1", body1);
 			balise->SetAttribute("anchor", Parser::b2Vec2ToString(anchor).c_str());
 			balise->SetAttribute("body2", body2);
@@ -700,7 +708,6 @@ bool LevelSaver::ProcessJoints()
 		{
 			// ID et nom
 			if (id >= 0) balise->SetAttribute("id", id);
-			if (!name.empty()) balise->SetAttribute("name", name.c_str());
 
 			// Propriétés communes des joints
 			if (isBreakableMaxForce != false) balise->SetAttribute("isBreakableMaxForce", "true");
