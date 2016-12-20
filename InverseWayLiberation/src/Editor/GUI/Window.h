@@ -1,4 +1,8 @@
 #pragma once
+#include <SFGUI/Desktop.hpp>
+#include <SFGUI/Window.hpp>
+#include <SFGUI/Widget.hpp>
+#include "../../Tools/NonCopyable.h"
 
 class Window : public NonCopyable
 {
@@ -7,23 +11,23 @@ public:
 	Window(const std::string &title);
 	virtual ~Window();
 
-	// Obtient la fenêtre
+	// Obtient la fenÃªtre
 	sfg::Window::Ptr GetWindow();
 
-	// Enregistre la fenêtre dans le Desktop
+	// Enregistre la fenÃªtre dans le Desktop
 	void RegisterInDesktop(sfg::Desktop *desktop);
 	void UnregisterInDesktop();
 
 	// Actualisation
 	virtual void Update() = 0;
 
-	// Gestion de la visibilité
+	// Gestion de la visibilitÃ©
 	void Show();
 	void Hide();
 	bool IsVisible();
 
 protected:
-	// Remplit la fenêtre d'éléments
+	// Remplit la fenÃªtre d'Ã©lÃ©ments
 	virtual void Fill() = 0;
 	void AddToWindow(sfg::Widget::Ptr widget);
 
@@ -42,7 +46,7 @@ private:
 	// Etat
 	bool mVisible;
 
-	// Fenêtre
+	// FenÃªtre
 	sfg::Desktop *mDesktop;
 	sfg::Window::Ptr mWindow;
 };

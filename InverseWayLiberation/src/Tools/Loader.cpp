@@ -1,5 +1,5 @@
-#include "stdafx.h"
 #include "Loader.h"
+#include "Error.h"
 
 // Ctor
 Loader::Loader(std::string const& path)
@@ -8,7 +8,7 @@ Loader::Loader(std::string const& path)
 	// Gestion de crise
 	if (mFile.LoadFile(mPath.c_str()))
 	{
-		// Crée le message d'erreur
+		// CrÃ©e le message d'erreur
 		std::string msg = "Impossible d'ouvrir le niveau \""+ mPath + "\".\n";
 		msg += "Erreur #" + Parser::intToString(mFile.ErrorID()) + ".\n";
 
@@ -23,7 +23,7 @@ Loader::Loader(std::string const& path)
 		// Ajoute l'explication 2 si elle existe
 		if (mFile.GetErrorStr2())
 		{
-			msg += "\nPlus précisément : \"";
+			msg += "\nPlus prÃ©cisÃ©ment : \"";
 			msg += mFile.GetErrorStr2();
 			msg += "\".";
 		}

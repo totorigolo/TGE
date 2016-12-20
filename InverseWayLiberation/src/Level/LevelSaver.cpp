@@ -1,4 +1,3 @@
-#include "stdafx.h"
 #include "LevelSaver.h"
 #include "LevelManager.h"
 #include "../Lua/TriggersManager.h"
@@ -29,6 +28,7 @@
 #include "../Physics/Joints/FrictionJoint.h"
 #include "../Physics/Joints/RevoluteJoint.h"
 #include "../Physics/Joints/PrismaticJoint.h"
+#include "../Tools/utils.h"
 
 // Ctor
 LevelSaver::LevelSaver(const std::string& path, bool check)
@@ -39,7 +39,7 @@ LevelSaver::LevelSaver(const std::string& path, bool check)
 	mTriggersManager(TriggersManager::GetInstance()),
 	mResourceManager(ResourceManager::GetInstance())
 {
-	// On procËde ‡ la sauvegarde que si le fichier est valide
+	// On proc√®de √† la sauvegarde que si le fichier est valide
 	if (mIsValid)
 		Process();
 
@@ -55,52 +55,52 @@ LevelSaver::~LevelSaver(void)
 // Sauvegarde tout le niveau
 bool LevelSaver::Process()
 {
-	// CrÈe la dÈclaration XML
+	// Cr√©e la d√©claration XML
 	mDoc.LinkEndChild(mDoc.NewDeclaration());
 
-	// CrÈe la balise <level>
+	// Cr√©e la balise <level>
 	mDoc.LinkEndChild(mDoc.NewElement("level"));
 
 	/* Charge tout */
 	// Le Monde
 	myCheckError(ProcessWorld(), "Une erreur est survenue lors de la sauvegarde du niveau.\n"
-		"La sauvegarde de World a ÈchouÈ (" + mPath + ").");
+		"La sauvegarde de World a √©chou√© (" + mPath + ").");
 
 	// Les textures
 	myCheckError(ProcessTextures(), "Une erreur est survenue lors de la sauvegarde du niveau.\n"
-		"La sauvegarde des textures a ÈchouÈ (" + mPath + ").");
+		"La sauvegarde des textures a √©chou√© (" + mPath + ").");
 
 	// Les Bodies basiques
 	myCheckError(ProcessBodies(), "Une erreur est survenue lors de la sauvegarde du niveau.\n"
-		"La sauvegarde des ProcessBodies a ÈchouÈ (" + mPath + ").");
+		"La sauvegarde des ProcessBodies a √©chou√© (" + mPath + ").");
 
 	// Les Bodies polygones
 	/*myCheckError(ProcessPoly(), "Une erreur est survenue lors de la sauvegarde du niveau.\n"
-		"La sauvegarde des Poly a ÈchouÈ (" + mPath + ").");*/
+		"La sauvegarde des Poly a √©chou√© (" + mPath + ").");*/
 
 	// Les Entities
 	myCheckError(ProcessEntities(), "Une erreur est survenue lors de la sauvegarde du niveau.\n"
-		"La sauvegarde des Entities a ÈchouÈ (" + mPath + ").");
+		"La sauvegarde des Entities a √©chou√© (" + mPath + ").");
 
 	// Les joints
 	myCheckError(ProcessJoints(), "Une erreur est survenue lors de la sauvegarde du niveau.\n"
-		"La sauvegarde des joints a ÈchouÈ (" + mPath + ").");
+		"La sauvegarde des joints a √©chou√© (" + mPath + ").");
 
-	// La dÈco
+	// La d√©co
 	myCheckError(ProcessDeco(), "Une erreur est survenue lors de la sauvegarde du niveau.\n"
-		"La sauvegarde de la dÈco a ÈchouÈ (" + mPath + ").");
+		"La sauvegarde de la d√©co a √©chou√© (" + mPath + ").");
 
 	// Les actions
 	myCheckError(ProcessActions(), "Une erreur est survenue lors de la sauvegarde du niveau.\n"
-		"La sauvegarde des actions a ÈchouÈ (" + mPath + ").");
+		"La sauvegarde des actions a √©chou√© (" + mPath + ").");
 
-	// Les dÈclencheurs
+	// Les d√©clencheurs
 	myCheckError(ProcessTriggers(), "Une erreur est survenue lors de la sauvegarde du niveau.\n"
-		"La sauvegarde des triggers a ÈchouÈ (" + mPath + ").");
+		"La sauvegarde des triggers a √©chou√© (" + mPath + ").");
 
-	// Les lumiËres
+	// Les lumi√®res
 	myCheckError(ProcessLights(), "Une erreur est survenue lors de la sauvegarde du niveau.\n"
-		"La sauvegarde des lumiËres a ÈchouÈ (" + mPath + ").");
+		"La sauvegarde des lumi√®res a √©chou√© (" + mPath + ").");
 
 	// Enregistre dans le fichier
 	mDoc.SaveFile(mPath.c_str());
@@ -109,76 +109,76 @@ bool LevelSaver::Process()
 	return true;
 }
 
-// Une fonction par catÈgorie
+// Une fonction par cat√©gorie
 bool LevelSaver::ProcessWorld()
 {
-	// RÈcupËre la balise <level>
+	// R√©cup√®re la balise <level>
 	tinyxml2::XMLHandle handle(mDoc);
 	tinyxml2::XMLNode *level = handle.FirstChildElement("level").ToNode();
 
-	// CrÈe la balise <world>
+	// Cr√©e la balise <world>
 	tinyxml2::XMLElement *world = mDoc.NewElement("world");
 
-	// Vue et zoom enregistrÈs
+	// Vue et zoom enregistr√©s
 	//sf::Vector2f centreVue = mInputManager.GetDefaultCenter();
 	sf::Vector2f centreVue = mInputManager.GetCurrentCenter();
 	//float zoom = mInputManager.GetDefaultZoom();
 	float zoom = mInputManager.GetCurrentZoom();
 
-	// CrÈe les attributs
+	// Cr√©e les attributs
 	world->SetAttribute("gravity", Parser::b2Vec2ToString(mPhysicManager.GetGravity()).c_str());
 	world->SetAttribute("PPM", mPhysicManager.GetPPM());
 	world->SetAttribute("bckgcolor", Parser::colorToString(mLevel.mBckgC).c_str());
 	world->SetAttribute("originview", Parser::b2Vec2ToString(sf2b2Vec(centreVue, mPhysicManager.GetMPP())).c_str());
 	world->SetAttribute("defaultzoom", zoom);
 	
-	// Ajoute <world> ‡ <level>
+	// Ajoute <world> √† <level>
 	level->LinkEndChild(world);
 
-	// Tout s'est bien passÈ
+	// Tout s'est bien pass√©
 	return true;
 }
 bool LevelSaver::ProcessTextures()
 {
-	// RÈcupËre la balise <level>
+	// R√©cup√®re la balise <level>
 	tinyxml2::XMLHandle handle(mDoc);
 	tinyxml2::XMLNode *level = handle.FirstChildElement("level").ToNode();
 
-	// CrÈe la balise <textures>
+	// Cr√©e la balise <textures>
 	tinyxml2::XMLElement *textures = mDoc.NewElement("textures");
 	
-	// Ajoute <textures> ‡ <level>
+	// Ajoute <textures> √† <level>
 	level->LinkEndChild(textures);
 
 	// Ajoute toutes les textures
 	for (auto it = mResourceManager.GetTextureMap().begin(); it != mResourceManager.GetTextureMap().end(); ++it)
 	{
-		// CrÈe la balise <img>
+		// Cr√©e la balise <img>
 		tinyxml2::XMLElement *img = mDoc.NewElement("img");
 
 		// Modifie les attributs
 		img->SetAttribute("name", (*it).second->GetName().c_str());
 		img->SetAttribute("src", (*it).second->GetPath().c_str());
 
-		// Ajoute l'<img> ‡ <textures>
+		// Ajoute l'<img> √† <textures>
 		textures->LinkEndChild(img);
 	}
 
-	// Tout s'est bien passÈ
+	// Tout s'est bien pass√©
 	return true;
 }
 bool LevelSaver::ProcessBodies()
 {
-	// RÈcupËre la balise <level>
+	// R√©cup√®re la balise <level>
 	tinyxml2::XMLHandle handle(mDoc);
 	tinyxml2::XMLNode *level = handle.FirstChildElement("level").ToNode();
 
-	// CrÈe les balise <basicbodies>, <polybodies> et <polychains>
+	// Cr√©e les balise <basicbodies>, <polybodies> et <polychains>
 	tinyxml2::XMLElement *basicbodies = mDoc.NewElement("basicbodies");
 	tinyxml2::XMLElement *polybodies = mDoc.NewElement("polybodies");
 	tinyxml2::XMLElement *polychains = mDoc.NewElement("polychains");
 	
-	// Ajoute <basicbodies> et <polybodies> ‡ <level>
+	// Ajoute <basicbodies> et <polybodies> √† <level>
 	level->LinkEndChild(basicbodies);
 	level->LinkEndChild(polybodies);
 	level->LinkEndChild(polychains);
@@ -186,19 +186,19 @@ bool LevelSaver::ProcessBodies()
 	// Parcours toutes les Entities
 	for (auto it = mEntityManager.GetEntities().begin(); it != mEntityManager.GetEntities().end(); ++it)
 	{
-		// VÈrifie le type de l'Entity
+		// V√©rifie le type de l'Entity
 		if ((*it)->GetType() == EntityType::BasicBody || (*it)->GetType() == EntityType::PolyBody || (*it)->GetType() == EntityType::PolyChain)
 		{
 			BaseBody *bb = ((BaseBody*) *it);
 
-			// VÈrifie que l'Entity est crÈÈe
+			// V√©rifie que l'Entity est cr√©√©e
 			if (!bb->IsCreated())
 			{
-				Dialog::Error("Erreur lors de la sauvegarde :\nBaseBody non crÈÈ\nBaseBody ignorÈ.");
+				Dialog::Error("Erreur lors de la sauvegarde :\nBaseBody non cr√©√©\nBaseBody ignor√©.");
 				continue;
 			}
 
-			// RÈcupËre la Forme
+			// R√©cup√®re la Forme
 			std::string forme;
 			if ((*it)->GetType() == EntityType::BasicBody)
 			{
@@ -211,7 +211,7 @@ bool LevelSaver::ProcessBodies()
 					forme = "circle";
 				else
 				{
-					Dialog::Error("Erreur lors de la sauvegarde :\nBasicBody::Shape == Null\nBasicBody ignorÈ.");
+					Dialog::Error("Erreur lors de la sauvegarde :\nBasicBody::Shape == Null\nBasicBody ignor√©.");
 					continue;
 				}
 			}
@@ -226,7 +226,7 @@ bool LevelSaver::ProcessBodies()
 					forme = "loop";
 				else
 				{
-					Dialog::Error("Erreur lors de la sauvegarde :\nPolyChain::Shape == Null\nPolyChain ignorÈ.");
+					Dialog::Error("Erreur lors de la sauvegarde :\nPolyChain::Shape == Null\nPolyChain ignor√©.");
 					continue;
 				}
 
@@ -236,7 +236,7 @@ bool LevelSaver::ProcessBodies()
 				forme = "poly";
 			}
 
-			// RÈcupËre le Type
+			// R√©cup√®re le Type
 			std::string type;
 			if (bb->Getb2BodyType() == b2BodyType::b2_dynamicBody)
 				type = "dynamic";
@@ -246,17 +246,17 @@ bool LevelSaver::ProcessBodies()
 				type = "kinematic";
 			else
 			{
-				Dialog::Error("Erreur lors de la sauvegarde :\nBody::Type == Null\nBody ignorÈ.");
+				Dialog::Error("Erreur lors de la sauvegarde :\nBody::Type == Null\nBody ignor√©.");
 				continue;
 			}
 			
-			// RÈcupËre le nom de la texture
+			// R√©cup√®re le nom de la texture
 			std::string textureName(((Texture*) bb->GetSprite()->getTexture())->GetName());
 
-			// RÈcupËre la Layer
+			// R√©cup√®re la Layer
 			int layer = bb->GetLayer();
 
-			// RÈcupËre le nom
+			// R√©cup√®re le nom
 			std::string name = mEntityManager.GetName(bb);
 
 			// Cherche la position et la rotation
@@ -265,11 +265,11 @@ bool LevelSaver::ProcessBodies()
 			if (abs(rotation - 90) < 0.05) rotation = 90.f;
 			else if (abs(rotation) < 0.05) rotation = 0.f;
 
-			// RÈcupËre l'Ètat
+			// R√©cup√®re l'√©tat
 			b2Vec2 linvel = bb->GetBody()->GetLinearVelocity();
 			float angvel = bb->GetBody()->GetAngularVelocity();
 
-			// VÈrifie que le Body n'a qu'une Fixture
+			// V√©rifie que le Body n'a qu'une Fixture
 			b2Fixture *f = bb->GetBody()->GetFixtureList();
 			if (f->GetNext())
 			{
@@ -277,18 +277,18 @@ bool LevelSaver::ProcessBodies()
 				continue;
 			}
 
-			// RÈcupËre les propriÈtÈs
+			// R√©cup√®re les propri√©t√©s
 			float density = f->GetDensity();
 			float friction = f->GetFriction();
 			float restitution = f->GetRestitution();
 
-			// RÈcupËre les propriÈtÈs de groupe
+			// R√©cup√®re les propri√©t√©s de groupe
 			b2Filter filter = f->GetFilterData();
 			int16 groupIndex = filter.groupIndex;
 			uint16 categoryBits = filter.categoryBits;
 			uint16 maskBits = filter.maskBits;
 
-			// CrÈe la balise <type>
+			// Cr√©e la balise <type>
 			tinyxml2::XMLElement *balise = mDoc.NewElement(forme.c_str());
 			balise->SetAttribute("id", bb->GetID());
 			if (!name.empty()) balise->SetAttribute("name", name.c_str());
@@ -332,7 +332,7 @@ bool LevelSaver::ProcessBodies()
 				}
 			}
 			
-			// Ajoute la balise ‡ <basicbodies>, <polybodies> ou <polychains>
+			// Ajoute la balise √† <basicbodies>, <polybodies> ou <polychains>
 			if ((*it)->GetType() == EntityType::BasicBody)
 				basicbodies->LinkEndChild(balise);
 			else if((*it)->GetType() == EntityType::PolyBody)
@@ -342,33 +342,33 @@ bool LevelSaver::ProcessBodies()
 		}
 	}
 
-	// Tout s'est bien passÈ
+	// Tout s'est bien pass√©
 	return true;
 }
 bool LevelSaver::ProcessEntities()
 {
-	// RÈcupËre la balise <level>
+	// R√©cup√®re la balise <level>
 	tinyxml2::XMLHandle handle(mDoc);
 	tinyxml2::XMLNode *level = handle.FirstChildElement("level").ToNode();
 
-	// CrÈe la balise <entities>
+	// Cr√©e la balise <entities>
 	tinyxml2::XMLElement *entities = mDoc.NewElement("entities");
 	
-	// Ajoute <entities> ‡ <level>
+	// Ajoute <entities> √† <level>
 	level->LinkEndChild(entities);
 
 	// Parcours toutes les Entities
 	for (auto it = mEntityManager.GetEntities().begin(); it != mEntityManager.GetEntities().end(); ++it)
 	{
-		// VÈrifie le type de l'Entity
+		// V√©rifie le type de l'Entity
 		if ((*it)->GetType() == EntityType::Player)
 		{
 			Player *pp = ((Player*) *it);
 
-			// RÈcupËre le nom
+			// R√©cup√®re le nom
 			std::string name = mEntityManager.GetName(pp);
 
-			// CrÈe la balise <player>
+			// Cr√©e la balise <player>
 			tinyxml2::XMLElement *balise = mDoc.NewElement("player");
 			balise->SetAttribute("id", pp->GetID());
 			if (!name.empty()) balise->SetAttribute("name", name.c_str());
@@ -377,17 +377,17 @@ bool LevelSaver::ProcessEntities()
 			balise->SetAttribute("strengh", pp->GetStrengh());
 			balise->SetAttribute("color", Parser::colorToString(pp->GetTrunkColor()).c_str());
 
-			// Ajoute la balise ‡ <entities>
+			// Ajoute la balise √† <entities>
 			entities->LinkEndChild(balise);
 		}
 		else if ((*it)->GetType() == EntityType::Hum)
 		{
 			Hum *h = ((Hum*) *it);
 
-			// RÈcupËre le nom
+			// R√©cup√®re le nom
 			std::string name = mEntityManager.GetName(h);
 
-			// CrÈe la balise <hum>
+			// Cr√©e la balise <hum>
 			tinyxml2::XMLElement *balise = mDoc.NewElement("hum");
 			balise->SetAttribute("id", h->GetID());
 			if (!name.empty()) balise->SetAttribute("name", name.c_str());
@@ -396,27 +396,27 @@ bool LevelSaver::ProcessEntities()
 			balise->SetAttribute("strengh", h->GetStrengh());
 			balise->SetAttribute("color", Parser::colorToString(h->GetTrunkColor()).c_str());
 
-			// Ajoute la balise ‡ <entities>
+			// Ajoute la balise √† <entities>
 			entities->LinkEndChild(balise);
 		}
 	}
 
-	// Tout s'est bien passÈ
+	// Tout s'est bien pass√©
 	return true;
 }
 bool LevelSaver::ProcessJoints()
 {
-	// RÈcupËre la balise <level>
+	// R√©cup√®re la balise <level>
 	tinyxml2::XMLHandle handle(mDoc);
 	tinyxml2::XMLNode *level = handle.FirstChildElement("level").ToNode();
 
-	// CrÈe la balise <joints>
+	// Cr√©e la balise <joints>
 	tinyxml2::XMLElement *joints = mDoc.NewElement("joints");
 	
-	// Ajoute <joints> ‡ <level>
+	// Ajoute <joints> √† <level>
 	level->LinkEndChild(joints);
 
-	// Variable pour gÈrer l'enregistrement des IDs des joints
+	// Variable pour g√©rer l'enregistrement des IDs des joints
 	int lastID = -1;
 
 	// Parcours tous les Joints
@@ -424,28 +424,28 @@ bool LevelSaver::ProcessJoints()
 	{
 		Joint *j = ((Joint*) it->second.get());
 
-		// Si le joint est liÈ ‡ un/des autres, il doit Ítre accessible (ID)
+		// Si le joint est li√© √† un/des autres, il doit √™tre accessible (ID)
 		int id = -1;
 		if (j->GetLinkedJoints().size() > 0)
 		{
-			// CrÈe une ID (donc id != -1)
+			// Cr√©e une ID (donc id != -1)
 			id = ++lastID;
 
 			// Ajoute le joint dans la liste
 			mJointIDMap[j->GetJoint()] = id;
 		}
 
-		// RÈcupËre le nom
+		// R√©cup√®re le nom
 		std::string name = mPhysicManager.GetName(j);
 
-		// RÈcupËre les propriÈtÈs de cassure
+		// R√©cup√®re les propri√©t√©s de cassure
 		bool isBreakableMaxForce = j->IsBreakableMaxForce();
 		float maxForce = j->GetMaxForce();
 		b2Vec2 maxVecForce = j->GetMaxVecForce();
 		bool isBreakableMaxTorque = j->IsBreakableMaxTorque();
 		float maxTorque = j->GetMaxTorque();
 
-		// RÈcupËre les propriÈtÈs du joint
+		// R√©cup√®re les propri√©t√©s du joint
 		myAssert(j->GetBodyA(), "Le Joint #" + Parser::intToString(j->GetID()) + " n'a pas de bodyA.");
 		myAssert(j->GetBodyB(), "Le Joint #" + Parser::intToString(j->GetID()) + " n'a pas de bodyB.");
 		myAssert(j->GetBodyA()->GetUserData(), "Le Joint #" + Parser::intToString(j->GetID()) + " a un b2BodyA sans Entity.");
@@ -457,20 +457,20 @@ bool LevelSaver::ProcessJoints()
 		// Balise XML du joint
 		tinyxml2::XMLElement *balise = nullptr;
 
-		// GËre tous les types de Joints
+		// G√®re tous les types de Joints
 		if (j->GetType() == JointType::DistanceJoint)
 		{
 			DistanceJoint *dj = ((DistanceJoint*) j);
 
-			// RÈcupËre les points d'ancrage
+			// R√©cup√®re les points d'ancrage
 			b2Vec2 pt1 = dj->GetRelativeAnchorA();
 			b2Vec2 pt2 = dj->GetRelativeAnchorB();
 
-			// RÈcupËre les propriÈtÈs
+			// R√©cup√®re les propri√©t√©s
 			float frequency = dj->GetFrequencyHz();
 			float damping = dj->GetDampingRatio();
 
-			// CrÈe la balise <distance>
+			// Cr√©e la balise <distance>
 			balise = mDoc.NewElement("distance");
 			balise->SetAttribute("body1", body1);
 			balise->SetAttribute("pt1", Parser::b2Vec2ToString(pt1).c_str());
@@ -484,15 +484,15 @@ bool LevelSaver::ProcessJoints()
 		{
 			FrictionJoint *fj = ((FrictionJoint*)j);
 
-			// RÈcupËre les points d'ancrage
+			// R√©cup√®re les points d'ancrage
 			b2Vec2 pt1 = fj->GetRelativeAnchorA();
 			b2Vec2 pt2 = fj->GetRelativeAnchorB();
 
-			// RÈcupËre les propriÈtÈs
+			// R√©cup√®re les propri√©t√©s
 			float maxFrictionForce = fj->GetMaxFrictionForce();
 			float maxFrictionTorque = fj->GetMaxFrictionTorque();
 
-			// CrÈe la balise <friction>
+			// Cr√©e la balise <friction>
 			balise = mDoc.NewElement("friction");
 			if (!name.empty()) balise->SetAttribute("name", name.c_str());
 			balise->SetAttribute("body1", body1);
@@ -507,7 +507,7 @@ bool LevelSaver::ProcessJoints()
 		{
 			GearJoint *gj = ((GearJoint*)j);
 
-			// RÈcupËre les joints liÈs
+			// R√©cup√®re les joints li√©s
 			if (mJointIDMap.find(gj->GetJoint1()) == mJointIDMap.end())
 			{
 				Joint *j1 = (Joint*)gj->GetJoint1()->GetUserData();
@@ -516,7 +516,7 @@ bool LevelSaver::ProcessJoints()
 				unsigned int IDj1 = j1->GetID();
 
 				Dialog::Error("Le joint #" + Parser::uintToString(IDj1) + " est introuvable !\n"
-					"Il doit Ítre sauvegardÈ avant.");
+					"Il doit √™tre sauvegard√© avant.");
 				continue;
 			}
 			if (mJointIDMap.find(gj->GetJoint2()) == mJointIDMap.end())
@@ -527,16 +527,16 @@ bool LevelSaver::ProcessJoints()
 				unsigned int IDj2 = j2->GetID();
 
 				Dialog::Error("Le joint #" + Parser::uintToString(IDj2) + " est introuvable !\n"
-					"Il doit Ítre sauvegardÈ avant.");
+					"Il doit √™tre sauvegard√© avant.");
 				continue;
 			}
 			int j1 = mJointIDMap[gj->GetJoint1()];
 			int j2 = mJointIDMap[gj->GetJoint2()];
 
-			// RÈcupËre les propriÈtÈs
+			// R√©cup√®re les propri√©t√©s
 			float ratio = gj->GetRatio();
 
-			// CrÈe la balise <gear>
+			// Cr√©e la balise <gear>
 			balise = mDoc.NewElement("gear");
 			if (!name.empty()) balise->SetAttribute("name", name.c_str());
 			balise->SetAttribute("body1", body1);
@@ -550,10 +550,10 @@ bool LevelSaver::ProcessJoints()
 		{
 			PrismaticJoint *pj = ((PrismaticJoint*)j);
 
-			// RÈcupËre le point d'ancrage
+			// R√©cup√®re le point d'ancrage
 			b2Vec2 anchor = pj->GetAnchorRelativeToBodyA();
 
-			// RÈcupËre les propriÈtÈs
+			// R√©cup√®re les propri√©t√©s
 			b2Vec2 axis = pj->GetAxis();
 			bool enableLimit = pj->IsLimitEnabled();
 			float lowerTranslation = pj->GetLowerTranslation();
@@ -562,7 +562,7 @@ bool LevelSaver::ProcessJoints()
 			float motorSpeed = pj->GetMotorSpeed();
 			float maxMotorForce = pj->GetMaxMotorForce();
 
-			// CrÈe la balise <prismatic>
+			// Cr√©e la balise <prismatic>
 			balise = mDoc.NewElement("prismatic");
 			if (!name.empty()) balise->SetAttribute("name", name.c_str());
 			balise->SetAttribute("body1", body1);
@@ -581,16 +581,16 @@ bool LevelSaver::ProcessJoints()
 		{
 			PulleyJoint *pj = ((PulleyJoint*)j);
 
-			// RÈcupËre les points d'ancrage
+			// R√©cup√®re les points d'ancrage
 			b2Vec2 pt1 = pj->GetRelativeAnchorA();
 			b2Vec2 pt2 = pj->GetRelativeAnchorB();
 			b2Vec2 gpt1 = pj->GetGroundAnchorA();
 			b2Vec2 gpt2 = pj->GetGroundAnchorB();
 
-			// RÈcupËre les propriÈtÈs
+			// R√©cup√®re les propri√©t√©s
 			float ratio = pj->GetRatio();
 
-			// CrÈe la balise <pulley>
+			// Cr√©e la balise <pulley>
 			balise = mDoc.NewElement("pulley");
 			if (!name.empty()) balise->SetAttribute("name", name.c_str());
 			balise->SetAttribute("body1", body1);
@@ -606,10 +606,10 @@ bool LevelSaver::ProcessJoints()
 		{
 			RevoluteJoint *rj = ((RevoluteJoint*)j);
 
-			// RÈcupËre le point d'ancrage
+			// R√©cup√®re le point d'ancrage
 			b2Vec2 anchor = rj->GetAnchorRelativeToBodyA();
 
-			// RÈcupËre les propriÈtÈs
+			// R√©cup√®re les propri√©t√©s
 			bool enableLimit = rj->IsLimitEnabled();
 			float lowerAngle = rj->GetLowerAngle();
 			float upperAngle = rj->GetUpperAngle();
@@ -617,7 +617,7 @@ bool LevelSaver::ProcessJoints()
 			float motorSpeed = rj->GetMotorSpeed();
 			float maxMotorTorque = rj->GetMaxMotorTorque();
 
-			// CrÈe la balise <revolute>
+			// Cr√©e la balise <revolute>
 			balise = mDoc.NewElement("revolute");
 			if (!name.empty()) balise->SetAttribute("name", name.c_str());
 			balise->SetAttribute("body1", body1);
@@ -635,14 +635,14 @@ bool LevelSaver::ProcessJoints()
 		{
 			RopeJoint *rj = ((RopeJoint*)j);
 
-			// RÈcupËre les points d'ancrage
+			// R√©cup√®re les points d'ancrage
 			b2Vec2 pt1 = rj->GetRelativeAnchorA();
 			b2Vec2 pt2 = rj->GetRelativeAnchorB();
 
-			// RÈcupËre les propriÈtÈs
+			// R√©cup√®re les propri√©t√©s
 			float maxLength = rj->GetMaxLength();
 
-			// CrÈe la balise <rope>
+			// Cr√©e la balise <rope>
 			balise = mDoc.NewElement("rope");
 			if (!name.empty()) balise->SetAttribute("name", name.c_str());
 			balise->SetAttribute("body1", body1);
@@ -656,14 +656,14 @@ bool LevelSaver::ProcessJoints()
 		{
 			WeldJoint *wj = ((WeldJoint*)j);
 
-			// RÈcupËre les points d'ancrage
+			// R√©cup√®re les points d'ancrage
 			b2Vec2 anchor = wj->GetAnchorRelativeToBodyA();
 
-			// RÈcupËre les propriÈtÈs
+			// R√©cup√®re les propri√©t√©s
 			float frequency = wj->GetFrequencyHz();
 			float damping = wj->GetDampingRatio();
 
-			// CrÈe la balise <weld>
+			// Cr√©e la balise <weld>
 			balise = mDoc.NewElement("weld");
 			if (!name.empty()) balise->SetAttribute("name", name.c_str());
 			balise->SetAttribute("body1", body1);
@@ -677,10 +677,10 @@ bool LevelSaver::ProcessJoints()
 		{
 			WheelJoint *wj = ((WheelJoint*)j);
 
-			// RÈcupËre les points d'ancrage
+			// R√©cup√®re les points d'ancrage
 			b2Vec2 anchor = wj->GetAnchorRelativeToBodyA();
 
-			// RÈcupËre les propriÈtÈs
+			// R√©cup√®re les propri√©t√©s
 			b2Vec2 axis = wj->GetAxis();
 			float frequency = wj->GetFrequencyHz();
 			float damping = wj->GetDampingRatio();
@@ -688,7 +688,7 @@ bool LevelSaver::ProcessJoints()
 			float motorSpeed = wj->GetMotorSpeed();
 			float maxMotorTorque = wj->GetMaxMotorTorque();
 
-			// CrÈe la balise <wheel>
+			// Cr√©e la balise <wheel>
 			balise = mDoc.NewElement("wheel");
 			if (!name.empty()) balise->SetAttribute("name", name.c_str());
 			balise->SetAttribute("body1", body1);
@@ -703,40 +703,40 @@ bool LevelSaver::ProcessJoints()
 			if (collideConnected != false) balise->SetAttribute("collision", "true");
 		}
 
-		// Si la balise a ÈtÈ crÈÈe
+		// Si la balise a √©t√© cr√©√©e
 		if (balise)
 		{
 			// ID et nom
 			if (id >= 0) balise->SetAttribute("id", id);
 
-			// PropriÈtÈs communes des joints
+			// Propri√©t√©s communes des joints
 			if (isBreakableMaxForce != false) balise->SetAttribute("isBreakableMaxForce", "true");
 			if (j->GetMaxForceType() == ForceType::Float && maxForce != 0.f) balise->SetAttribute("maxForce", maxForce);
 			if (j->GetMaxForceType() == ForceType::Vector && maxVecForce.LengthSquared() != 0) balise->SetAttribute("maxVecForce", maxForce);
 			if (isBreakableMaxTorque != false) balise->SetAttribute("isBreakableMaxTorque", "true");
 			if (maxTorque != 0.f) balise->SetAttribute("maxTorque", maxTorque);
 
-			// On ajoute la balise ‡ <joints>
+			// On ajoute la balise √† <joints>
 			joints->LinkEndChild(balise);
 		}
 	}
 
-	// Tout s'est bien passÈ
+	// Tout s'est bien pass√©
 	return true;
 }
 bool LevelSaver::ProcessDeco()
 {
-	// RÈcupËre la balise <level>
+	// R√©cup√®re la balise <level>
 	tinyxml2::XMLHandle handle(mDoc);
 	tinyxml2::XMLNode *level = handle.FirstChildElement("level").ToNode();
 
-	// CrÈe la balise <deco>
+	// Cr√©e la balise <deco>
 	tinyxml2::XMLElement *deco = mDoc.NewElement("deco");
 	
-	// Ajoute <deco> ‡ <level>
+	// Ajoute <deco> √† <level>
 	level->LinkEndChild(deco);
 
-	// Layer de la dÈco
+	// Layer de la d√©co
 	bool firstDeco = true;
 	int lastLayer = 0;
 	tinyxml2::XMLElement *layer = nullptr;
@@ -744,12 +744,12 @@ bool LevelSaver::ProcessDeco()
 	// Parcours toutes les Entities
 	for (auto it = mEntityManager.GetEntities().begin(); it != mEntityManager.GetEntities().end(); ++it)
 	{
-		// VÈrifie le type de l'Entity
+		// V√©rifie le type de l'Entity
 		if ((*it)->GetType() == EntityType::Deco)
 		{
 			Deco *d = ((Deco*) *it);
 
-			// RÈcupËre le layer
+			// R√©cup√®re le layer
 			if (lastLayer != d->GetLayer() || firstDeco)
 			{
 				lastLayer = d->GetLayer();
@@ -757,20 +757,20 @@ bool LevelSaver::ProcessDeco()
 				layer = nullptr;
 			}
 
-			// Si c'est un nouveau layer, on crÈe sa balise
+			// Si c'est un nouveau layer, on cr√©e sa balise
 			if (!layer)
 			{
 				layer = mDoc.NewElement("layer");
 				layer->SetAttribute("z", lastLayer);
 
-				// Ajoute la balise ‡ <deco>
+				// Ajoute la balise √† <deco>
 				deco->LinkEndChild(layer);
 			}
 
-			// RÈcupËre le nom de l,entitÈ
+			// R√©cup√®re le nom de l,entit√©
 			std::string name = mEntityManager.GetName(d);
 
-			// RÈcupËre le nom de la texture
+			// R√©cup√®re le nom de la texture
 			std::string textureName(((Texture*) d->GetSprite()->getTexture())->GetName());
 
 			// Cherche la position
@@ -779,31 +779,31 @@ bool LevelSaver::ProcessDeco()
 			if (abs(rotation - 90) < 0.5) rotation = 90.f;
 			else if (abs(rotation) < 0.5) rotation = 0.f;
 
-			// CrÈe la balise <img>
+			// Cr√©e la balise <img>
 			tinyxml2::XMLElement *balise = mDoc.NewElement("img");
 			if (!name.empty()) balise->SetAttribute("name", name.c_str());
 			balise->SetAttribute("texture", textureName.c_str());
 			balise->SetAttribute("position", Parser::b2Vec2ToString(pos).c_str());
 			if (rotation != 0.f) balise->SetAttribute("rotation", rotation);
 
-			// Ajoute la balise ‡ <layer>
+			// Ajoute la balise √† <layer>
 			layer->LinkEndChild(balise);
 		}
 	}
 
-	// Tout s'est bien passÈ
+	// Tout s'est bien pass√©
 	return true;
 }
 bool LevelSaver::ProcessActions()
 {
-	// RÈcupËre la balise <level>
+	// R√©cup√®re la balise <level>
 	tinyxml2::XMLHandle handle(mDoc);
 	tinyxml2::XMLNode *level = handle.FirstChildElement("level").ToNode();
 
-	// CrÈe la balise <actions>
+	// Cr√©e la balise <actions>
 	tinyxml2::XMLElement *actions = mDoc.NewElement("actions");
 
-	// Ajoute <actions> ‡ <level>
+	// Ajoute <actions> √† <level>
 	level->LinkEndChild(actions);
 
 	// Ajoute toutes les actions
@@ -812,58 +812,58 @@ bool LevelSaver::ProcessActions()
 		// L'action est un fichier
 		if (!it->second->HasFunction())
 		{
-			// CrÈe la balise <file>
+			// Cr√©e la balise <file>
 			tinyxml2::XMLElement *file = mDoc.NewElement("file");
 
-			// CrÈe les attributs
+			// Cr√©e les attributs
 			file->SetAttribute("name", it->second->GetName().c_str());
 			file->SetAttribute("path", it->second->GetFile().c_str());
 			if (it->second->IsOnce()) file->SetAttribute("once", it->second->IsOnce());
 
-			// Ajoute le <file> ‡ <actions>
+			// Ajoute le <file> √† <actions>
 			actions->LinkEndChild(file);
 		}
 		// L'action est une fonction
 		else
 		{
-			// CrÈe la balise <function>
+			// Cr√©e la balise <function>
 			tinyxml2::XMLElement *function = mDoc.NewElement("function");
 
-			// CrÈe les attributs
+			// Cr√©e les attributs
 			function->SetAttribute("name", it->second->GetName().c_str());
 			function->SetAttribute("func", it->second->GetFunction().c_str());
 			function->SetAttribute("file", it->second->GetFile().c_str());
 			if (it->second->IsOnce()) function->SetAttribute("once", it->second->IsOnce());
 
-			// Ajoute la <function> ‡ <actions>
+			// Ajoute la <function> √† <actions>
 			actions->LinkEndChild(function);
 		}
 	}
 
-	// Tout s'est bien passÈ
+	// Tout s'est bien pass√©
 	return true;
 }
 bool LevelSaver::ProcessTriggers()
 {
-	// RÈcupËre la balise <level>
+	// R√©cup√®re la balise <level>
 	tinyxml2::XMLHandle handle(mDoc);
 	tinyxml2::XMLNode *level = handle.FirstChildElement("level").ToNode();
 
-	// CrÈe la balise <events>
+	// Cr√©e la balise <events>
 	tinyxml2::XMLElement *events = mDoc.NewElement("events");
 	level->LinkEndChild(events);
 
-	// CrÈe la balise <triggers>
+	// Cr√©e la balise <triggers>
 	tinyxml2::XMLElement *triggers = mDoc.NewElement("triggers");
 	events->LinkEndChild(triggers);
 
 	// Ajoute toutes les actions
 	for (auto it = mTriggersManager.GetAreas().begin(); it != mTriggersManager.GetAreas().end(); ++it)
 	{
-		// CrÈe la balise <area>
+		// Cr√©e la balise <area>
 		tinyxml2::XMLElement *area = mDoc.NewElement("area");
 
-		// CrÈe les attributs
+		// Cr√©e les attributs
 		auto once = it->get()->IsOnce();
 		auto aabb = it->get()->GetAABB();
 		auto action = it->get()->GetAction();
@@ -874,55 +874,55 @@ bool LevelSaver::ProcessTriggers()
 		area->SetAttribute("action", action.c_str());
 		if (once) area->SetAttribute("once", once);
 
-		// Ajoute l'<area> ‡ <triggers>
+		// Ajoute l'<area> √† <triggers>
 		triggers->LinkEndChild(area);
 	}
 
-	// Tout s'est bien passÈ
+	// Tout s'est bien pass√©
 	return true;
 }
 bool LevelSaver::ProcessLights()
 {
-	// RÈcupËre la balise <level>
+	// R√©cup√®re la balise <level>
 	tinyxml2::XMLHandle handle(mDoc);
 	tinyxml2::XMLNode *level = handle.FirstChildElement("level").ToNode();
 
-	// CrÈe la balise <lights>
+	// Cr√©e la balise <lights>
 	tinyxml2::XMLElement *lights = mDoc.NewElement("lights");
 
-	// Ajoute <lights> ‡ <level>
+	// Ajoute <lights> √† <level>
 	level->LinkEndChild(lights);
 
-	// Parcours toutes les Entities ‡ la recherche de lumiËres
+	// Parcours toutes les Entities √† la recherche de lumi√®res
 	for (auto it = mEntityManager.GetEntities().begin(); it != mEntityManager.GetEntities().end(); ++it)
 	{
-		// VÈrifie le type de l'Entity
+		// V√©rifie le type de l'Entity
 		if ((*it)->GetType() == EntityType::PointLight)
 		{
-			// RÈcupËre la lumiËre
+			// R√©cup√®re la lumi√®re
 			PointLight *l = ((PointLight*) *it);
 
-			// RÈcupËre le nom
+			// R√©cup√®re le nom
 			std::string name = mEntityManager.GetName(l);
 
-			// RÈcupËre les propriÈtÈs
+			// R√©cup√®re les propri√©t√©s
 			b2Vec2 pos = l->GetPosition();
 			sf::Color color = l->GetLightColor();
 			unsigned int radius = l->GetLightRadius();
 			int layer = l->GetLayer();
 
-			// CrÈe la balise <point>
+			// Cr√©e la balise <point>
 			tinyxml2::XMLElement *balise = mDoc.NewElement("point");
 			balise->SetAttribute("layer", layer);
 			balise->SetAttribute("pos", Parser::b2Vec2ToString(pos).c_str());
 			balise->SetAttribute("radius", radius);
 			balise->SetAttribute("color", Parser::colorToString(color).c_str());
 
-			// Ajoute la balise ‡ <layer>
+			// Ajoute la balise √† <layer>
 			lights->LinkEndChild(balise);
 		}
 	}
 
-	// Tout s'est bien passÈ
+	// Tout s'est bien pass√©
 	return true;
 }

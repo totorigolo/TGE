@@ -1,4 +1,3 @@
-#include "stdafx.h"
 #include "../LuaMachine.h"
 #include "../../Entities/Player.h"
 #include "../../Level/LevelManager.h"
@@ -7,7 +6,7 @@
 void LuaMachine::RegisterLevelManager()
 {
 	try
-	{
+	{/*
 		// Enregistrement
 		luabind::module(mLuaState) [
 			// Level
@@ -22,7 +21,7 @@ void LuaMachine::RegisterLevelManager()
 				.property("bckgcolor", &LevelManager::GetBckgColor, &LevelManager::SetBckgColor)
 				.property("defaultZoom", &LevelManager::GetDefaultZoom, &LevelManager::SetDefaultZoom)
 				.property("defaultCenter", &LevelManager::GetDefaultCenter, &LevelManager::SetDefaultCenter)
-		];
+		];*/
 	}
 	catch (const std::exception &e)
 	{

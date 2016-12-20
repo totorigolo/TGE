@@ -1,6 +1,6 @@
-#include "stdafx.h"
 #include "Deco.h"
 #include "../Physics/PhysicManager.h"
+#include "../Tools/utils.h"
 
 // Ctor & dtor
 Deco::Deco(int layer, Texture::Ptr texture, sf::Vector3f posRot)
@@ -8,7 +8,7 @@ Deco::Deco(int layer, Texture::Ptr texture, sf::Vector3f posRot)
 {
 	if (!mTexture.get())
 	{
-		Dialog::Error("La texture n'est pas chargée.\nDéco supprimée");
+		Dialog::Error("La texture n'est pas chargÃ©e.\nDÃ©co supprimÃ©e");
 		mIsAlive = false;
 	}
 	else

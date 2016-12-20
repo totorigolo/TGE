@@ -1,4 +1,3 @@
-#include "stdafx.h"
 #include "InputManager.h"
 #include "../Tools/utils.h"
 #include "../Tools/Error.h"
@@ -27,14 +26,14 @@ InputManager::InputManager()
 	mMouseWheelMoved = false;
 	mMouseWheelDelta = 0;
 
-	// Pour l'édition de texte
+	// Pour l'Ã©dition de texte
 	mTipingText = false;
 }
 InputManager::~InputManager()
 {
 }
 
-// Réglages des propriétés
+// RÃ©glages des propriÃ©tÃ©s
 void InputManager::SetWindow(sf::RenderWindow *window)
 {
 	mWindow = window;
@@ -69,12 +68,12 @@ void InputManager::SetCenter(const sf::Vector2f &center)
 	mView.setCenter(center);
 }
 
-// Ajout d'évènement
+// Ajout d'Ã©vÃ¨nement
 void InputManager::Update()
 {
 	if (!mWindow) return;
 
-	// Réinitialise les infos de la souris
+	// RÃ©initialise les infos de la souris
 	mLMBClicked = false;
 	mRMBClicked = false;
 	mMMBClicked = false;
@@ -82,18 +81,18 @@ void InputManager::Update()
 	mRMBReleased = false;
 	mMMBReleased = false;
 
-	// Réinitialise les infos de la molette
+	// RÃ©initialise les infos de la molette
 	mMouseWheelMoved = false;
 	mMouseWheelDelta = 0;
 
-	// Traite tous les évènements
+	// Traite tous les Ã©vÃ¨nements
 	while (mWindow->pollEvent(mEvent))
 	{
-		// Traite l'évènement
+		// Traite l'Ã©vÃ¨nement
 		AddEvent(mEvent);
 
-		// Passe l'évènement à chaque Desktop
-		for each (auto &desktop in mDesktops)
+		// Passe l'Ã©vÃ¨nement Ã  chaque Desktop
+		for (auto &&desktop : mDesktops)
 		{
 			desktop->HandleEvent(mEvent);
 		}
@@ -115,7 +114,7 @@ void InputManager::AddEvent(const sf::Event &event)
 {
 	if (!mWindow) return;
 
-	// Fermeture de la fenêtre ou touche Echap
+	// Fermeture de la fenÃªtre ou touche Echap
 	if (event.type == sf::Event::Closed ||
 		(event.type == sf::Event::KeyReleased && event.key.code == sf::Keyboard::Escape))
 	{
@@ -168,7 +167,7 @@ void InputManager::AddEvent(const sf::Event &event)
 		mHasResized = true;
 	}
 
-	// Espionnage des touches (doit être à la fin)
+	// Espionnage des touches (doit Ãªtre Ã  la fin)
 	else if ((event.type == sf::Event::KeyPressed || event.type == sf::Event::KeyReleased) && mSpyedKeyMap.size() > 0)
 	{
 		auto it = mSpyedKeyMap.find(event.key.code);
@@ -183,7 +182,7 @@ void InputManager::AddEvent(const sf::Event &event)
 	}
 }
 	
-// Gestion des touches espionnées
+// Gestion des touches espionnÃ©es
 void InputManager::AddSpyedKey(const sf::Keyboard::Key &keyCode)
 {
 	mSpyedKeyMap[keyCode] = None;
@@ -194,15 +193,11 @@ void InputManager::RemoveSpyedKey(const sf::Keyboard::Key &keyCode)
 }
 bool InputManager::KeyPressed(const sf::Keyboard::Key &keyCode)
 {
-	if (GetSpyedKeyState(keyCode) == Pressed)
-		return true;
-	return false;
+	return GetSpyedKeyState(keyCode) == Pressed;
 }
 bool InputManager::KeyReleased(const sf::Keyboard::Key &keyCode)
 {
-	if (GetSpyedKeyState(keyCode) == Released)
-		return true;
-	return false;
+	return GetSpyedKeyState(keyCode) == Released;
 }
 KeyState InputManager::GetSpyedKeyState(const sf::Keyboard::Key &keyCode)
 {
@@ -218,7 +213,7 @@ KeyState InputManager::GetSpyedKeyState(const sf::Keyboard::Key &keyCode)
 	return None;
 }
 
-// Accès aux évènements
+// AccÃ¨s aux Ã©vÃ¨nements
 bool InputManager::IsKeyPressed(const sf::Keyboard::Key &keyCode) const
 {
 	return sf::Keyboard::isKeyPressed(keyCode);
@@ -309,18 +304,18 @@ bool InputManager::HasResized()
 // Gestion des Desktops (GUI)
 void InputManager::AddDesktop(sfg::Desktop *d)
 {
-	myAssert(d, "Le Desktop passé est invalide.");
+	myAssert(d, "Le Desktop passÃ© est invalide.");
 
 	mDesktops.push_back(d);
 }
 void InputManager::RemoveDesktop(sfg::Desktop *d)
 {
-	myAssert(d, "Le Desktop passé est invalide.");
+	myAssert(d, "Le Desktop passÃ© est invalide.");
 
 	mDesktops.remove(d);
 }
 
-// Accès relatifs à la vue
+// AccÃ¨s relatifs Ã  la vue
 float InputManager::GetCurrentZoom() const
 {
 	return mCurrentZoom;
@@ -338,7 +333,7 @@ const sf::Vector2f& InputManager::GetCurrentCenter() const
 	return mView.getCenter();
 }
 
-// Accès à la fenêtre
+// AccÃ¨s Ã  la fenÃªtre
 sf::RenderWindow* InputManager::GetWindow()
 {
 	return mWindow;

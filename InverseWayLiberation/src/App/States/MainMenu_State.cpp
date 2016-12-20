@@ -1,9 +1,9 @@
-#include "stdafx.h"
 #include "MainMenu_State.h"
 #include "Game_State.h"
 #include "Editor_State.h"
 #include "Configuration_State.h"
 #include "../SpyedKey.h"
+#include "../../Tools/Error.h"
 
 // Ctor & Dtor
 MainMenu_State::MainMenu_State()
@@ -14,19 +14,19 @@ MainMenu_State::~MainMenu_State()
 {
 }
 
-// Exécute le State
+// ExÃ©cute le State
 State* MainMenu_State::Run(App *app)
 {
-	// Récupère la fenêtre
+	// RÃ©cupÃ¨re la fenÃªtre
 	sf::RenderWindow *window = app->GetRenderWindow();
 	window->setFramerateLimit(30U);
 	
-	// Evènements
+	// EvÃ¨nements
 	SpyedKey key_return(sf::Keyboard::Return);
 	SpyedKey key_up(sf::Keyboard::Up);
 	SpyedKey key_down(sf::Keyboard::Down);
 
-	// Change le titre de la fenêtre
+	// Change le titre de la fenÃªtre
 	window->setTitle("Inverse Way Liberation - Menu principal");
 
 	//return DevGame_State::GetPInstance();
@@ -42,32 +42,33 @@ State* MainMenu_State::Run(App *app)
 	sf::View view(window->getDefaultView());
 	view.reset(sf::FloatRect(0, 0, static_cast<float>(fondTex.getSize().x), static_cast<float>(fondTex.getSize().y)));
 
-	// Charge la flèche
+	// Charge la flÃ¨che
 	sf::Texture arrowTex;
 	if (!arrowTex.loadFromFile("tex/menu_arrow.png"))
-		Dialog::Error("Impossible de charger l'image de flèche du menu.");
+		Dialog::Error("Impossible de charger l'image de flÃ¨che du menu.");
 	sf::Sprite arrow(arrowTex);
 
 	// Charge la police
 	sf::Font font;
-	if (!font.loadFromFile("data/calibri.ttf"))
-		Dialog::Error("Impossible de charger la police du menu.", true);
+	if (!font.loadFromFile("data/calibrib.ttf"))
+		if (!font.loadFromFile("data/Cantarell-Regular.otf"))
+			Dialog::Error("Impossible de charger la police du menu.", true);
 
-	// Crée les entrées du menu
+	// CrÃ©e les entrÃ©es du menu
 	std::vector<sf::Text> entries;
 	entries.push_back(sf::Text("Jouer", font, 60U));
 	entries.push_back(sf::Text("Editeur", font, 60U));
 	entries.push_back(sf::Text("Configuration", font, 60U));
 	entries.push_back(sf::Text("Quitter", font, 60U));
 
-	// Positionne les entrées
+	// Positionne les entrÃ©es
 	float x = 0.41f * static_cast<float>(fondTex.getSize().x);
 	float y = 0.37f * static_cast<float>(fondTex.getSize().y);
 	float stepY = entries.front().getCharacterSize() + 10.f;
 	for (unsigned int i = 0; i < entries.size(); ++i)
 	{
 		entries[i].setPosition(x, y + i * stepY);
-		entries[i].setColor(sf::Color(20, 20, 20));
+		entries[i].setFillColor(sf::Color(20, 20, 20));
 	}
 
 	// Variables pour le menu
@@ -77,7 +78,7 @@ State* MainMenu_State::Run(App *app)
 	bool quit = false;
 	while (window->isOpen() && !quit)
 	{
-		// Evènements
+		// EvÃ¨nements
 		mInputManager.Update();
 		if (mInputManager.HasQuitted())
 		{
@@ -88,21 +89,21 @@ State* MainMenu_State::Run(App *app)
 		{
 			view.reset(sf::FloatRect(0, 0, static_cast<float>(fondTex.getSize().x), static_cast<float>(fondTex.getSize().y)));
 		}
-		// Flèche haut
+		// FlÃ¨che haut
 		if (mInputManager.KeyReleased(sf::Keyboard::Up))
 		{
 			--index;
 			if (index < 0)
 				index = entries.size() - 1;
 		}
-		// Flèche bas
+		// FlÃ¨che bas
 		if (mInputManager.KeyReleased(sf::Keyboard::Down))
 		{
 			++index;
 			if (index >= static_cast<int>(entries.size()))
 				index = 0;
 		}
-		// Entrée
+		// EntrÃ©e
 		if (mInputManager.KeyReleased(sf::Keyboard::Return))
 		{
 			switch (index)
@@ -123,18 +124,18 @@ State* MainMenu_State::Run(App *app)
 			}
 		}
 
-		// Flèche
+		// FlÃ¨che
 		arrow.setPosition(x - arrowTex.getSize().x - 10.f, y + index * stepY + 10.f);
 
 		/* Affichage */
 		window->clear();
 		
-		// Affiche le fond, la flèche
+		// Affiche le fond, la flÃ¨che
 		window->setView(view);
 		window->draw(fond);
 		window->draw(arrow);
 
-		// Affiche les entrées du menu
+		// Affiche les entrÃ©es du menu
 		for (auto it = entries.begin(); it != entries.end(); ++it)
 		{
 			window->draw(*it);

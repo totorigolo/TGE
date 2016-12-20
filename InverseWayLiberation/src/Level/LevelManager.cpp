@@ -1,4 +1,3 @@
-#include "stdafx.h"
 #include "LevelManager.h"
 #include "LevelLoader.h"
 #include "../Lua/LuaMachine.h"
@@ -19,7 +18,7 @@ LevelManager::LevelManager()
 	mPartitioningTree(PartitioningTree::GetInstance()),
 	// Triggers
 	mTriggersManager(TriggersManager::GetInstance()),
-	// Config de la fenêtre de rendu
+	// Config de la fenÃªtre de rendu
 	mBckgC(sf::Color::White),
 	// Zoom initial
 	mDefaultZoom(1.f),
@@ -38,10 +37,10 @@ LevelManager::~LevelManager(void)
 	mIsCharged = false;
 }
 
-// Charge un niveau à partir d'un XVL
+// Charge un niveau Ã  partir d'un XVL
 void LevelManager::LoadFromFile(const std::string &path)
 {
-	// c_str : workaround pour problème de compilation
+	// c_str : workaround pour problÃ¨me de compilation
 	LevelLoader(path.c_str());
 }
 
@@ -64,7 +63,7 @@ void LevelManager::Clear()
 	mDefaultCenter = sf::Vector2f();
 }
 
-// Mise à jour
+// Mise Ã  jour
 void LevelManager::Update()
 {
 	mEntityManager.Update();
@@ -72,7 +71,7 @@ void LevelManager::Update()
 	mPartitioningTree.PostUpdateAll();
 }
 
-// Appelé juste avant la boucle de jeu, après son remplissage
+// AppelÃ© juste avant la boucle de jeu, aprÃ¨s son remplissage
 void LevelManager::PrepareForGame()
 {
 	// Trie les Entities par leur Layer
@@ -86,7 +85,7 @@ void LevelManager::draw(sf::RenderTarget& target, sf::RenderStates states) const
 	target.draw(mEntityManager, states);
 }
 
-// Réglages de la vue initiale
+// RÃ©glages de la vue initiale
 void LevelManager::SetDefaultZoom(float zoom)
 {
 	mDefaultZoom = zoom;

@@ -11,7 +11,7 @@ protected:
 	virtual ~Editor_State();
 
 public:
-	// Exécute le State
+	// ExÃ©cute le State
 	// Retourne un pointeur sur le prochain State
 	virtual State* Run(App *app);
 };

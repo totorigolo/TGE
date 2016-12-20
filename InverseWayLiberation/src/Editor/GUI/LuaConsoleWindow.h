@@ -1,4 +1,9 @@
 #pragma once
+
+#include <SFGUI/Box.hpp>
+#include <SFGUI/Label.hpp>
+#include <SFGUI/Button.hpp>
+#include <SFGUI/ScrolledWindow.hpp>
 #include "Window.h"
 #include "../../Tools/PromptEntry.h"
 
@@ -33,7 +38,7 @@ public:
 	}
 
 protected:
-	// Construit la fenêtre et les éléments
+	// Construit la fenÃªtre et les Ã©lÃ©ments
 	virtual void Fill();
 
 	// Callbacks
@@ -52,7 +57,7 @@ private:
 	int mCurrent;
 	std::vector<sf::String> mHistory;
 
-	/* Eléments */
+	/* ElÃ©ments */
 	sfg::Box::Ptr mVBox;
 	sfg::Box::Ptr mHBox;
 	sfg::Label::Ptr mPromptLabel;

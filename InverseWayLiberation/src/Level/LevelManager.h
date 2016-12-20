@@ -22,22 +22,22 @@ protected:
 	virtual ~LevelManager(void);
 
 public:
-	// Charge un niveau à partir d'un XVL
+	// Charge un niveau Ã  partir d'un XVL
 	void LoadFromFile(const std::string &path);
 
 	// Vide tout le niveau
 	void Clear();
 
-	// Mise à jour
+	// Mise Ã  jour
 	void Update();
 	
-	// Appelé juste avant la boucle de jeu, après son remplissage
+	// AppelÃ© juste avant la boucle de jeu, aprÃ¨s son remplissage
 	void PrepareForGame();
 	
 	// Pour le rendu
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
-	// Réglages de la vue initiale
+	// RÃ©glages de la vue initiale
 	void SetDefaultZoom(float zoom);
 	void SetDefaultCenter(const sf::Vector2f &center);
 	float GetDefaultZoom() const;
@@ -73,7 +73,7 @@ private:
 	// Triggers
 	TriggersManager &mTriggersManager;
 
-	// Config de la fenêtre de rendu
+	// Config de la fenÃªtre de rendu
 	sf::Color mBckgC;
 
 	// Vue initiale

@@ -1,4 +1,6 @@
 #pragma once
+
+#include <SFGUI/SFGUI.hpp>
 #include "../Lua/LuaMachine.h"
 #include "../Resources/ResourceManager.h"
 #include "../Editor/EditBox.h"
@@ -19,39 +21,39 @@ public:
 	Editor(sf::RenderWindow &window);
 	virtual ~Editor(void);
 	
-	// (ré)Initialiser
+	// (rÃ©)Initialiser
 	void Init();
 
 	/// Boucle de jeu
 	void Run();
 
 protected:
-	/* Fonctions évènements */
+	/* Fonctions Ã©vÃ¨nements */
 	/// Initialise le jeu
 	inline bool OnInit();
 
-	/// Appelé quand la boucle commence
+	/// AppelÃ© quand la boucle commence
 	inline void OnLoopBegin();
 
-	/// Appelé pour les évènements
+	/// AppelÃ© pour les Ã©vÃ¨nements
 	inline void OnEvent();
 	
-	/// Appelé pour la logique
+	/// AppelÃ© pour la logique
 	inline void OnLogic();
 
-	/// Appelé pour la physique
+	/// AppelÃ© pour la physique
 	inline void OnStepPhysics();
 	
-	/// Appelé pour les mises à jour
+	/// AppelÃ© pour les mises Ã  jour
 	inline void OnUpdate();
 
-	/// Appelé pour le rendu
+	/// AppelÃ© pour le rendu
 	inline void OnRender();
 
-	/// Appelé quand la boucle se termine
+	/// AppelÃ© quand la boucle se termine
 	inline void OnLoopEnd();
 
-	// Appelé quand le jeu se termine
+	// AppelÃ© quand le jeu se termine
 	inline void OnQuit();
 	
 private:
@@ -59,11 +61,11 @@ private:
 	bool mPaused;
 	bool mDebugDraw;
 
-	// Fenêtre
+	// FenÃªtre
 	bool mQuit;
 	sf::RenderWindow &mWindow;
 	
-	// Evènements
+	// EvÃ¨nements
 	InputManager &mInputManager;
 	std::vector<SpyedKey::Ptr> mSpyedKeys;
 
@@ -90,19 +92,19 @@ private:
 	// Positions de la souris
 	b2Vec2 mMp;
 
-	// Déplacement des objets
+	// DÃ©placement des objets
 	bool mMouseJointCreated;
 	int mMouseJointID;
 	b2Body *mMouseMovingBody;
 	b2Vec2 mMouseMovingBodyAnchor;
 
-	// Variables pour la création de joints
+	// Variables pour la crÃ©ation de joints
 	b2Body *mPinBodyA;
 	b2Vec2 mPinAnchorA; // Ancres locales aux bodies
 	b2Body *mPinBodyB;
 	b2Vec2 mPinAnchorB;
 
-	// Eléments de la GUI
+	// ElÃ©ments de la GUI
 	sfg::SFGUI *mSfGUI;
 	sfg::Desktop mDesktop;
 	sf::Clock mGUIElapsedTime;

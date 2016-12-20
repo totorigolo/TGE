@@ -1,11 +1,11 @@
-#include "stdafx.h"
 #include "Window.h"
+#include "../../Tools/Error.h"
 
 // Ctor
 Window::Window(const std::string &title)
 	: mVisible(false), mApply(false), mDesktop(nullptr)
 {
-	// Crée la fenêtre
+	// CrÃ©e la fenÃªtre
 	mWindow = sfg::Window::Create();
 	mWindow->SetTitle(title);
 	mWindow->Show(false);
@@ -18,16 +18,16 @@ Window::~Window()
 	UnregisterInDesktop();
 }
 
-// Obtient la fenêtre
+// Obtient la fenÃªtre
 sfg::Window::Ptr Window::GetWindow()
 {
 	return mWindow;
 }
 
-// Enregistre la fenêtre dans le Desktop
+// Enregistre la fenÃªtre dans le Desktop
 void Window::RegisterInDesktop(sfg::Desktop *desktop)
 {
-	myAssert(desktop, "Desktop passé invalide.");
+	myAssert(desktop, "Desktop passÃ© invalide.");
 
 	// Retient le Desktop
 	mDesktop = desktop;
@@ -39,26 +39,26 @@ void Window::UnregisterInDesktop()
 {
 	mApply = false;
 
-	// Se désenregistre
+	// Se dÃ©senregistre
 	if (mDesktop)
 		mDesktop->Remove(mWindow);
 	mDesktop = nullptr;
 }
 
-// Gestion de la visibilité
+// Gestion de la visibilitÃ©
 void Window::Show()
 {
 	mApply = false;
 	Update();
 	mApply = true;
 
-	// Montre la fenêtre
+	// Montre la fenÃªtre
 	mWindow->Show(true);
 	mVisible = true;
 }
 void Window::Hide()
 {
-	// Cache la fenêtre
+	// Cache la fenÃªtre
 	mWindow->Show(false);
 	mVisible = false;
 }
@@ -67,7 +67,7 @@ bool Window::IsVisible()
 	return mVisible;
 }
 
-// Remplit la fenêtre d'éléments
+// Remplit la fenÃªtre d'Ã©lÃ©ments
 void Window::AddToWindow(sfg::Widget::Ptr widget)
 {
 	mWindow->Add(widget);

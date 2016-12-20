@@ -1,4 +1,14 @@
 #pragma once
+
+#include <SFGUI/Box.hpp>
+#include <SFGUI/Canvas.hpp>
+#include <SFGUI/Table.hpp>
+#include <SFGUI/Label.hpp>
+#include <SFGUI/Entry.hpp>
+#include <SFGUI/SpinButton.hpp>
+#include <SFGUI/Button.hpp>
+#include <SFGUI/RadioButton.hpp>
+#include <SFGUI/ComboBox.hpp>
 #include "Window.h"
 #include "../../Entities/BasicBody.h"
 #include "../../Level/LevelManager.h"
@@ -16,7 +26,7 @@ public:
 	virtual void Update();
 
 protected:
-	// Construit la fenêtre et les éléments
+	// Construit la fenÃªtre et les Ã©lÃ©ments
 	virtual void Fill();
 
 	// Callbacks
@@ -28,10 +38,10 @@ private:
 	EntityManager &mEntityMgr;
 	ResourceManager &mResourceMgr;
 
-	// Texture sélectionnée
+	// Texture sÃ©lectionnÃ©e
 	std::weak_ptr<Texture> mSelectedTexture;
 
-	/* Eléments */
+	/* ElÃ©ments */
 	sfg::Box::Ptr mVBox;
 	sfg::Label::Ptr mInfosSectionLabel;
 

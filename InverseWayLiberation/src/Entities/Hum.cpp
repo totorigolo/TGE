@@ -1,7 +1,9 @@
-#include "stdafx.h"
+#include <cmath>
+
 #include "Hum.h"
 #include "../Physics/PhysicManager.h"
 #include "../Resources/ResourceManager.h"
+#include "../Tools/utils.h"
 
 // Ctor & dtor
 Hum::Hum(int layer)
@@ -25,18 +27,18 @@ Hum::~Hum()
 	Destroy();
 }
 
-// Crée le Hum
-// Age adulte à 18 ans et musculature entre -20 (obèse) à 20 (taillé en V)
+// CrÃ©e le Hum
+// Age adulte Ã  18 ans et musculature entre -20 (obÃ¨se) Ã  20 (taillÃ© en V)
 bool Hum::Create(b2Vec2 pos, double age, double strengh, sf::Color color)
 {
-	// On n'en crée pas de nouveau si il y en a déjà un
+	// On n'en crÃ©e pas de nouveau si il y en a dÃ©jÃ  un
 	if (mBodyIsCreated)
 		return false;
 
 	/* Shape */
 	mAge = age;
 	mStrengh = strengh;
-	// Propriétés du shape (en m) en fonction de l'age et de la force
+	// PropriÃ©tÃ©s du shape (en m) en fonction de l'age et de la force
 	mHeight = 0.15 + 0.2 * (exp(0.4 * mAge - 3.0) / (1.0 + exp(0.4 * mAge - 3.0)));
 	mAgeFactor = min(pow(0.15 * mAge, mAge * 2.0), 1.0);
 	mTopWidth = 0.3 + 0.006 * mStrengh * mAgeFactor;
@@ -94,7 +96,7 @@ bool Hum::Create(b2Vec2 pos, double age, double strengh, sf::Color color)
 	fixtureDef.shape = &shape;
 	mBody->CreateFixture(&fixtureDef);
 
-	// Shape & Fixture pour la détection du saut
+	// Shape & Fixture pour la dÃ©tection du saut
 	float x = (mTrunk.getGlobalBounds().width / 2.f) * mPhysicMgr.GetMPP();
 	b2PolygonShape shape2;
 	b2Vec2 center(0.f, -0.03f);
@@ -131,19 +133,19 @@ void Hum::Destroy()
 	mIsAlive = false;
 }
 
-// Mise à jour
+// Mise Ã  jour
 void Hum::PreUpdate()
 {
 	// Si le body est valide
 	if (mBody && mBodyIsCreated && mIsAlive)
 	{
-		// Vérifie les Sensors
+		// VÃ©rifie les Sensors
 		CheckSensors();
 
 		// Intelligence artificielle
 		SimulateAI();
 
-		/* Mise à jour des position des éléments dessinables */
+		/* Mise Ã  jour des position des Ã©lÃ©ments dessinables */
 		// Corps
 		mTrunk.setPosition(b22sfVec(mBody->GetPosition(), mPhysicMgr.GetPPM()));
 		mTrunk.setRotation(-mBody->GetAngle() * DPR);
@@ -154,7 +156,7 @@ void Hum::PreUpdate()
 		mPupilLeft.setPosition(mEyeLeft.getPosition() + sf::Vector2f(mEyeLeft.getRadius() - mPupilLeft.getRadius(), mEyeLeft.getRadius() - mPupilLeft.getRadius()));
 		mPupilRight.setPosition(mEyeRight.getPosition() + sf::Vector2f(mEyeRight.getRadius() - mPupilRight.getRadius(), mEyeRight.getRadius() - mPupilRight.getRadius()));
 
-		/* Mise à jour du Hull */
+		/* Mise Ã  jour du Hull */
 		if (mHasMoved || (mBody->IsAwake() && mBody->GetType() != b2BodyType::b2_staticBody))
 		{
 			auto gb = mTrunk.getGlobalBounds();
@@ -172,7 +174,7 @@ void Hum::Update()
 		// Gestion du blabla
 		if (mSpeaking)
 		{
-			// Regarde si le temps de parole est écoulé
+			// Regarde si le temps de parole est Ã©coulÃ©
 			if (mSpeakClock.getElapsedTime().asMilliseconds() > mSpeakTime)
 				mSpeaking = false;
 
@@ -187,7 +189,7 @@ void Hum::Update()
 }
 void Hum::CheckSensors()
 {
-	// Vérifie le saut
+	// VÃ©rifie le saut
 	if (mSensorJump)
 		mCanJump = CheckOneSensor(mSensorJump);
 }
@@ -208,7 +210,7 @@ void Hum::Speak(const std::string &msg, float time)
 	
 	// Gestion du texte
 	mBallonText.setString(msg);
-	mBallonText.setColor(sf::Color::White);
+	mBallonText.setFillColor(sf::Color::White);
 	
 	// Gestion du fond
 	mBallonBckg.setSize(sf::Vector2f(mBallonText.getGlobalBounds().width, mBallonText.getGlobalBounds().height));
@@ -274,7 +276,7 @@ double Hum::GetEyeHeight() const
 {
 	return mEyeHeight;
 }
-// Fonction à n'employer que pour éditer les niveaux
+// Fonction Ã  n'employer que pour Ã©diter les niveaux
 void Hum::SetTransform(const b2Vec2 &position)
 {
 	myAssert(mBody, "b2Body null");
@@ -283,7 +285,7 @@ void Hum::SetTransform(const b2Vec2 &position)
 	mHasMoved = true;
 }
 
-// Mise à jour
+// Mise Ã  jour
 bool Hum::CheckOneSensor(b2Fixture *f)
 {
 	for (b2ContactEdge* ce = mBody->GetContactList(); ce; ce = ce->next)

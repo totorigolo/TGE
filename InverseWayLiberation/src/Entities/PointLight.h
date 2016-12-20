@@ -1,4 +1,6 @@
 #pragma once
+
+#include <Box2D/Box2D.h>
 #include "Entity.h"
 
 class LightEngine;
@@ -15,43 +17,43 @@ public:
 	void SetPosition(const sf::Vector2f& pos);
 	void Move(const b2Vec2& off);
 	void Move(const sf::Vector2f& off);
-	const b2Vec2& GetPosition(void) const;
+	const b2Vec2 GetPosition(void) const;
 	const sf::Vector2f& GetPosition_sf(void) const;
 
-	// Mise à jour
+	// Mise Ã  jour
 	void Update(void);
 
-	// Crée les textures
+	// CrÃ©e les textures
 	void CreateTextures(void);
 
 	// Retourne les ombres
 	const sf::VertexArray& GetVertexArray(void) const;
 
-	// Gère la couleur de la lumière
+	// GÃ¨re la couleur de la lumiÃ¨re
 	sf::Color GetLightColor(void) const;
 	void SetLightColor(const sf::Color& lightColor);
 
-	// Gère la taille de la lampe
+	// GÃ¨re la taille de la lampe
 	unsigned int GetLightRadius(void) const;
 	void SetLightRadius(unsigned int radius);
 
-	// Récupère la boîte englobante
+	// RÃ©cupÃ¨re la boÃ®te englobante
 	sf::FloatRect GetBoundingBox(void) const;
 
 	// Accesseurs
 	unsigned int GetID() const;
 
 protected:
-	// Accès du LightEngine
+	// AccÃ¨s du LightEngine
 	friend class LightEngine;
 
 	// Vue
 	sf::View view;
 
-	// Géométrie des ombres
+	// GÃ©omÃ©trie des ombres
 	sf::VertexArray mShadowsVertexArray;
 
-	// Lumière
+	// LumiÃ¨re
 	sf::RenderTexture mLightTex;
 	sf::Sprite mLightSprite;
 
@@ -66,7 +68,7 @@ protected:
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
 private:
-	// Propriétés
+	// PropriÃ©tÃ©s
 	bool mUpdate;
 	
 	// LightEngine
@@ -75,7 +77,7 @@ private:
 	// Position
 	sf::Vector2f mPosition;
 
-	// Propriétés de la lumières
+	// PropriÃ©tÃ©s de la lumiÃ¨res
 	sf::Color mLightColor;
 	unsigned int mLightRadius;
 };

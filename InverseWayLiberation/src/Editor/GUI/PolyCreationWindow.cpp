@@ -1,10 +1,10 @@
-#include "stdafx.h"
 #include "PolyCreationWindow.h"
 #include "../EditBox.h"
 #include "../../App/InputManager.h"
 #include "../../Entities/PolyBody.h"
 #include "../../Entities/PolyChain.h"
 #include "../../Entities/EntityFactory.h"
+#include "../../Tools/utils.h"
 
 // Ctor
 PolyCreationWindow::PolyCreationWindow()
@@ -12,7 +12,7 @@ PolyCreationWindow::PolyCreationWindow()
 	mEntityMgr(EntityManager::GetInstance()), mPhysicMgr(PhysicManager::GetInstance()), mResourceMgr(ResourceManager::GetInstance()),
 	mIsEnterEditMode(false)
 {
-	// Rempli la fenêtre
+	// Rempli la fenÃªtre
 	Fill();
 	mApply = true;
 }
@@ -42,10 +42,10 @@ void PolyCreationWindow::DrawPointsOn(sf::RenderTarget &target, const sf::Render
 	if (!mType[1]->IsActive())
 		edges[mPoints.size()].position = b22sfVec(mPoints.front(), mPhysicMgr.GetPPM());
 
-	// Crée le disque
+	// CrÃ©e le disque
 	sf::CircleShape cs;
 
-	// Paramètre le cercle
+	// ParamÃ¨tre le cercle
 	cs.setFillColor(sf::Color::Yellow);
 	cs.setOutlineColor(sf::Color(30, 30, 30));
 	cs.setOutlineThickness(1.f);
@@ -66,31 +66,31 @@ void PolyCreationWindow::DrawPointsOn(sf::RenderTarget &target, const sf::Render
 // Actualisation
 void PolyCreationWindow::Update()
 {
-	// Mets à jour le bouton
+	// Mets Ã  jour le bouton
 	if (mIsEnterEditMode)
 	{
-		mMode->SetText("Mode : Création");
-		mEnterEditModeBtn->SetLabel("Sortir mode Création");
+		mMode->SetText("Mode : CrÃ©ation");
+		mEnterEditModeBtn->SetLabel("Sortir mode CrÃ©ation");
 	}
 	else
 	{
 		mMode->SetText("Mode : Attente");
-		mEnterEditModeBtn->SetLabel("Entrer mode Création");
+		mEnterEditModeBtn->SetLabel("Entrer mode CrÃ©ation");
 	}
 
 	// Max 8 points
 	if (mPoints.size() == b2_maxPolygonVertices && mIsEnterEditMode && mType[0]->IsActive())
-		mMode->SetText("Mode : Création -> limite atteinte");
+		mMode->SetText("Mode : CrÃ©ation -> limite atteinte");
 	else if (mPoints.size() > b2_maxPolygonVertices && mIsEnterEditMode && mType[0]->IsActive())
-		mMode->SetText("Mode : Création -> limite atteinte");
+		mMode->SetText("Mode : CrÃ©ation -> limite atteinte");
 
-	// Mets à jour la liste de texture
+	// Mets Ã  jour la liste de texture
 	if (mTexture.get())
 	{
 		auto current = mTexture->GetSelectedItem();
 		for (int i = mTexture->GetItemCount(); i > 0; --i)
 			mTexture->RemoveItem(i - 1);
-		for each (const auto &tex in mResourceMgr.GetTextureMap())
+		for (auto &&tex : mResourceMgr.GetTextureMap())
 			mTexture->AppendItem(tex.first);
 		mTexture->SelectItem(current);
 	}
@@ -103,15 +103,15 @@ bool PolyCreationWindow::IsInEditMode()
 	return mIsEnterEditMode;
 }
 
-// Construit la fenêtre et les éléments
+// Construit la fenÃªtre et les Ã©lÃ©ments
 void PolyCreationWindow::Fill()
 {
-	// Crée le Layout
+	// CrÃ©e le Layout
 	mVBox = sfg::Box::Create(sfg::Box::Orientation::VERTICAL);
 
-	// Eléments
+	// ElÃ©ments
 	mMode = sfg::Label::Create("Mode : Attente");
-	mHelpLabel = sfg::Label::Create("Créer pts : Ctrl + clic gauche");
+	mHelpLabel = sfg::Label::Create("CrÃ©er pts : Ctrl + clic gauche");
 
 	// Type
 	mTypeHBox = sfg::Box::Create(sfg::Box::Orientation::HORIZONTAL);
@@ -134,7 +134,7 @@ void PolyCreationWindow::Fill()
 	mTypeBody.resize(2);//(3);
 	mTypeBody[0] = sfg::RadioButton::Create("Dynamique");
 	mTypeBody[1] = sfg::RadioButton::Create("Statique", mTypeBody[0]->GetGroup());
-	//mTypeBody[2] = sfg::RadioButton::Create("Kinématique", mTypeBody[1]->GetGroup());
+	//mTypeBody[2] = sfg::RadioButton::Create("KinÃ©matique", mTypeBody[1]->GetGroup());
 	mTypeBodyHBox->PackEnd(mTypeBodyLabel);
 	mTypeBodyHBox->PackEnd(mTypeBody[0]);
 	mTypeBodyHBox->PackEnd(mTypeBody[1]);
@@ -156,8 +156,8 @@ void PolyCreationWindow::Fill()
 	mLayerHBox->PackEnd(mLayer);
 
 	// Boutons
-	mEnterEditModeBtn = sfg::Button::Create("Entrer mode Création");
-	mCreatePolyBtn = sfg::Button::Create("Créer poly");
+	mEnterEditModeBtn = sfg::Button::Create("Entrer mode CrÃ©ation");
+	mCreatePolyBtn = sfg::Button::Create("CrÃ©er poly");
 	mButtonsHBox = sfg::Box::Create(sfg::Box::Orientation::HORIZONTAL);
 	mCancelBtn = sfg::Button::Create("Annuler point");
 	mEmptyBtn = sfg::Button::Create("Effacer");
@@ -173,7 +173,7 @@ void PolyCreationWindow::Fill()
 	mCloseBtn->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind(&PolyCreationWindow::OnEmptyPoints, this));
 	mCloseBtn->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind(&PolyCreationWindow::OnClose, this));
 
-	// Ajoute les éléments à la fenêtre
+	// Ajoute les Ã©lÃ©ments Ã  la fenÃªtre
 	mVBox->PackEnd(mMode);
 	mVBox->PackEnd(mHelpLabel);
 	mVBox->PackEnd(mTypeHBox);
@@ -185,7 +185,7 @@ void PolyCreationWindow::Fill()
 	mVBox->PackEnd(mCancelBtn);
 	mVBox->PackEnd(mButtonsHBox);
 
-	// Ajoute la mVBox à la fenêtre
+	// Ajoute la mVBox Ã  la fenÃªtre
 	AddToWindow(mVBox);
 }
 
@@ -213,7 +213,7 @@ void PolyCreationWindow::OnCreatePoly()
 	// Il faut au minimum trois points, et max 8 points pour les Bodies
 	if (mPoints.size() < 3 || (mPoints.size() > b2_maxPolygonVertices) && mType[0]->IsActive())
 	{
-		mMode->SetText("Mode : Création -> nb pts invalide");
+		mMode->SetText("Mode : CrÃ©ation -> nb pts invalide");
 		return;
 	}
 
@@ -227,13 +227,13 @@ void PolyCreationWindow::OnCreatePoly()
 	// Agit en fx du type
 	if (mType[0]->IsActive()) // Body
 	{
-		// Récupère le type de Body
+		// RÃ©cupÃ¨re le type de Body
 		b2BodyType type;
 		if (mTypeBody[0]->IsActive()) // Dynamique
 			type = b2BodyType::b2_dynamicBody;
 		else if (mTypeBody[1]->IsActive()) // Statique
 			type = b2BodyType::b2_staticBody;
-		/*else if (mTypeBody[2]->IsActive()) // Kinématic
+		/*else if (mTypeBody[2]->IsActive()) // KinÃ©matic
 		type = b2BodyType::b2_kinematicBody;*/
 		else
 		{
@@ -241,18 +241,18 @@ void PolyCreationWindow::OnCreatePoly()
 			return;
 		}
 
-		// Crée le Poly
+		// CrÃ©e le Poly
 		EntityFactory::CreatePolyBody(mPoints, type, mTexture->GetItem(mTexture->GetSelectedItem()), static_cast<int>(mLayer->GetValue()));
 	}
 	else if (mType[1]->IsActive()) // Chain
 	{
-		// Crée la Chaine
+		// CrÃ©e la Chaine
 		auto type = PolyChain::Type::Chain;
 		EntityFactory::CreatePolyChain(mPoints, type, mTexture->GetItem(mTexture->GetSelectedItem()), static_cast<int>(mLayer->GetValue()));
 	}
 	else if (mType[2]->IsActive()) // Loop
 	{
-		// Crée la Loop
+		// CrÃ©e la Loop
 		auto type = PolyChain::Type::Loop;
 		EntityFactory::CreatePolyChain(mPoints, type, mTexture->GetItem(mTexture->GetSelectedItem()), static_cast<int>(mLayer->GetValue()));
 	}

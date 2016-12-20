@@ -11,39 +11,39 @@ struct WeldJointDef;
 struct WheelJointDef;
 namespace JointFactory
 {
-	/* Crée un DistanceJoint */
+	/* CrÃ©e un DistanceJoint */
 	// Retourne l'ID du joint
 	int CreateDistanceJoint(const DistanceJointDef &def);
 	
-	/* Crée un FrictionJoint */
+	/* CrÃ©e un FrictionJoint */
 	// Retourne l'ID du joint
 	int CreateFrictionJoint(const FrictionJointDef &def);
 
-	/* Crée un GearJoint */
+	/* CrÃ©e un GearJoint */
 	// Retourne l'ID du joint
 	int CreateGearJoint(const GearJointDef &def);
 
-	/* Crée un PrismaticJoint */
+	/* CrÃ©e un PrismaticJoint */
 	// Retourne l'ID du joint
 	int CreatePrismaticJoint(const PrismaticJointDef &def);
 
-	/* Crée un PulleyJoint */
+	/* CrÃ©e un PulleyJoint */
 	// Retourne l'ID du joint
 	int CreatePulleyJoint(const PulleyJointDef &def);
 
-	/* Crée un RevoluteJoint */
+	/* CrÃ©e un RevoluteJoint */
 	// Retourne l'ID du joint
 	int CreateRevoluteJoint(const RevoluteJointDef &def);
 
-	/* Crée un RopeJoint */
+	/* CrÃ©e un RopeJoint */
 	// Retourne l'ID du joint
 	int CreateRopeJoint(const RopeJointDef &def);
 
-	/* Crée un WeldJoint */
+	/* CrÃ©e un WeldJoint */
 	// Retourne l'ID du joint
 	int CreateWeldJoint(const WeldJointDef &def);
 
-	/* Crée un WheelJoint */
+	/* CrÃ©e un WheelJoint */
 	// Retourne l'ID du joint
 	int CreateWheelJoint(const WheelJointDef &def);
 

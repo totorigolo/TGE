@@ -1,6 +1,6 @@
 #pragma once
 
-// Classe appelée pour chaque fixture trouvé pendant la recherche de correspondance AABB <> fixtures dans le monde
+// Classe appelÃ©e pour chaque fixture trouvÃ© pendant la recherche de correspondance AABB <> fixtures dans le monde
 class PointCallback : public b2QueryCallback, public NonCopyable
 {
 public:
@@ -10,7 +10,7 @@ public:
 		mPoint = point;
 		mFixture = nullptr;
 		
-		// Crée l'AABB
+		// CrÃ©e l'AABB
 		b2Vec2 d(0.001f, 0.001f);
 		mAABB.lowerBound = mPoint - d;
 		mAABB.upperBound = mPoint + d;
@@ -42,7 +42,7 @@ public:
 			{
 				mFixture = fixture;
 
-				// On a trouvé donc on demande d'arreter la recherche
+				// On a trouvÃ© donc on demande d'arreter la recherche
 				return false;
 			}
 		}

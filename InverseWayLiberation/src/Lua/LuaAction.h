@@ -1,4 +1,6 @@
 #pragma once
+
+#include <list>
 #include "../Lua/LuaMachine.h"
 
 class LuaArea;
@@ -10,7 +12,7 @@ public:
 	LuaAction(const std::string &_name, const std::string &_file, bool once = false);
 	LuaAction(const std::string &_name, const std::string &_file, std::string &_function, bool once = false);
 
-	// Exécute l'action
+	// ExÃ©cute l'action
 	void Execute(LuaMachine *luaMachine);
 
 	// Gestion des Areas
@@ -26,7 +28,7 @@ public:
 
 private:
 	bool mDone;
-	bool mOnce; // TODO: Les actions connaissent les areas : une fois faite, toutes les areas sont supprimées (faire une classe Area)
+	bool mOnce; // TODO: Les actions connaissent les areas : une fois faite, toutes les areas sont supprimÃ©es (faire une classe Area)
 	std::string mName;
 	std::string mFile;
 	std::string mFunction;

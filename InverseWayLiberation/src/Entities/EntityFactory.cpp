@@ -1,4 +1,3 @@
-#include "stdafx.h"
 #include "EntityFactory.h"
 #include "../Resources/ResourceManager.h"
 #include "../Physics/Joints/RevoluteJoint.h"
@@ -12,10 +11,11 @@
 #include "Deco.h"
 #include "PointLight.h"
 #include "Hum.h"
+#include "../Tools/utils.h"
 
 namespace EntityFactory
 {
-	// Variables privées
+	// Variables privÃ©es
 	namespace
 	{
 		// Physique
@@ -28,20 +28,20 @@ namespace EntityFactory
 		ResourceManager &mResourceManager(ResourceManager::GetInstance());
 	}
 	
-	// Crée une déco
+	// CrÃ©e une dÃ©co
 	void CreateDeco(const b2Vec3 &posRot, const std::string &texture, int layer)
 	{
-		// Crée la déco
+		// CrÃ©e la dÃ©co
 		new Deco(layer, mResourceManager.GetTexture(texture), b32sfVec(posRot, mPhysicManager.GetPPM()));
 
 		// Trie les Entities
 		mEntityManager.SortByLayer();
 	}
 
-	// Crée un BasicBody : Box
+	// CrÃ©e un BasicBody : Box
 	void CreateBox(const b2Vec3 &posRot, b2BodyType type, const std::string &texture, int layer)
 	{
-		// Crée le BasicBody / la Box
+		// CrÃ©e le BasicBody / la Box
 		BasicBody *b = new BasicBody(layer);
 		b->CreateBox(posRot, type, mResourceManager.GetTexture(texture));
 
@@ -49,10 +49,10 @@ namespace EntityFactory
 		mEntityManager.SortByLayer();
 	}
 
-	// Crée un BasicBody : Circle
+	// CrÃ©e un BasicBody : Circle
 	void CreateCircle(const b2Vec3 &posRot, b2BodyType type, const std::string &texture, int layer)
 	{
-		// Crée le BasicBody / le cercle
+		// CrÃ©e le BasicBody / le cercle
 		BasicBody *b = new BasicBody(layer);
 		b->CreateCircle(posRot, type, mResourceManager.GetTexture(texture));
 
@@ -60,10 +60,10 @@ namespace EntityFactory
 		mEntityManager.SortByLayer();
 	}
 
-	// Crée un PolyBody
+	// CrÃ©e un PolyBody
 	void CreatePolyBody(const vector_b2Vec2 &vectices, b2BodyType type, const std::string &texture, int layer)
 	{
-		// Crée le PolyBody
+		// CrÃ©e le PolyBody
 		PolyBody *b = new PolyBody(layer);
 		b->Create(vectices.GetVector(), type, mResourceManager.GetTexture(texture));
 
@@ -71,10 +71,10 @@ namespace EntityFactory
 		mEntityManager.SortByLayer();
 	}
 
-	// Crée un PolyChain
+	// CrÃ©e un PolyChain
 	void CreatePolyChain(const vector_b2Vec2 &vectices, PolyChain::Type type, const std::string &texture, int layer)
 	{
-		// Crée le PolyBody
+		// CrÃ©e le PolyBody
 		PolyChain *b = new PolyChain(layer);
 		b->Create(vectices.GetVector(), type, mResourceManager.GetTexture(texture));
 
@@ -82,10 +82,10 @@ namespace EntityFactory
 		mEntityManager.SortByLayer();
 	}
 
-	// Crée une PointLight
+	// CrÃ©e une PointLight
 	void CreatePointLight(const b2Vec2 &pos, int lightRadius, sf::Color lightColor, int layer)
 	{
-		// Crée la PointLight
+		// CrÃ©e la PointLight
 		PointLight *l = new PointLight(lightRadius, lightColor, layer);
 		l->SetPosition(pos);
 
@@ -93,7 +93,7 @@ namespace EntityFactory
 		mEntityManager.SortByLayer();
 	}
 
-	// Crée un Ragdoll
+	// CrÃ©e un Ragdoll
 	void CreateRagdoll(const b2Vec2 &position, int layer)
 	{
 		// Charge les textures
@@ -113,7 +113,7 @@ namespace EntityFactory
 		mResourceManager.LoadTexture("hero_footL", "tex/hero/footL.png");
 		mResourceManager.LoadTexture("hero_footR", "tex/hero/footR.png");
 
-		/* Crée les bodies (ordre d'apparition inverse) */
+		/* CrÃ©e les bodies (ordre d'apparition inverse) */
 		// std::map pour les stocker temporairement
 		std::map<std::string, BasicBody*> bodies;
 
@@ -144,7 +144,7 @@ namespace EntityFactory
 		bodies["33_torso1"] = new BasicBody(layer);
 		bodies["33_torso1"]->CreateBox(b2Vec3(0.f, 0.15f, 0.f) + position, td, mResourceManager.GetTexture("hero_torso1"), 1.f, 0.2f, 0.f, -1);
 	
-		// Tête
+		// TÃªte
 		bodies["40_head"] = new BasicBody(layer);
 		bodies["40_head"]->CreateCircle(b2Vec3(0.f, 0.5f, 0.f) + position, td, mResourceManager.GetTexture("hero_head"), 1.f, 0.5f, 0.f, -1);
 
@@ -170,7 +170,7 @@ namespace EntityFactory
 		typedef RevoluteJoint rj;
 		typedef RevoluteJointDef rjd;
 
-		// Création des joints
+		// CrÃ©ation des joints
 		joints.push_back(new rj(rjd(bodies["40_head"]->GetBody(), bodies["33_torso1"]->GetBody(), b2Vec2(0.f, -0.15f), true, -30.f, 50.f, false, 0.f, 0.004f)));
 		joints.push_back(new wj(wjd(bodies["20_neck"]->GetBody(), bodies["33_torso1"]->GetBody(), b2Vec2(0.f, -0.05f), 0.f, 0.f)));
 		
@@ -192,21 +192,21 @@ namespace EntityFactory
 		joints.push_back(new rj(rjd(bodies["12_legL2"]->GetBody(), bodies["13_footL"]->GetBody(), b2Vec2(-0.035f, -0.15f), true, -90.f, 0.f, true, 50.f, 0.03f)));
 		joints.push_back(new rj(rjd(bodies["51_legR2"]->GetBody(), bodies["53_footR"]->GetBody(), b2Vec2(-0.035f, -0.15f), true, -90.f, 0.f, true, 50.f, 0.03f)));
 	
-		// Définit la force des joint
+		// DÃ©finit la force des joint
 		for (auto it = joints.begin(); it != joints.end(); ++it)
 		{
 			(*it)->SetBreakableByForce(true);
 			(*it)->SetMaxForce(80.f);
 		}
 	
-		// Prévient l'EntityManager qu'on a ajouté des Entities
+		// PrÃ©vient l'EntityManager qu'on a ajoutÃ© des Entities
 		mEntityManager.SortByLayer();
 	}
 
-	// Crée un Hum
+	// CrÃ©e un Hum
 	void CreateHum(b2Vec2 pos, double age, double strengh, sf::Color color, int layer)
 	{
-		// Crée le Hum
+		// CrÃ©e le Hum
 		Hum *h = new Hum(layer);
 		h->Create(pos, age, strengh, color);
 

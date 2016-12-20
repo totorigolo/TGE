@@ -1,11 +1,12 @@
-#include "stdafx.h"
+#include <fstream>
 #include "Saver.h"
+#include "Dialog.h"
 
 // Ctor
 Saver::Saver(std::string const& path, bool check)
 	: mPath(path), mExists(false)
 {
-	// Vérifie si le fichier existe déjà
+	// VÃ©rifie si le fichier existe dÃ©jÃ 
 	std::ifstream file(path);
 	mExists = file.good();
 	file.close();
@@ -18,7 +19,7 @@ Saver::Saver(std::string const& path, bool check)
 		if (check)
 		{
 			overwrite = (1 == Dialog::ButtonChoice("Ecraser la sauvegarde ?",
-												   "Une sauvegarde du même nom existe déjà.\nEcraser la sauvegarde ?",
+												   "Une sauvegarde du mÃªme nom existe dÃ©jÃ .\nEcraser la sauvegarde ?",
 												   "Oui", "Non"));
 		}
 

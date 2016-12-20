@@ -12,17 +12,17 @@ public:
 	Player();
 	virtual ~Player();
 
-	// Mise à jour
+	// Mise Ã  jour
 	virtual void Update();
 
 protected:
-	// Gestion des évènements
+	// Gestion des Ã©vÃ¨nements
 	void UpdateEvents();
 
 private:
 	// Managers
 	InputManager &mInputManager;
 
-	// Touches surveillées
+	// Touches surveillÃ©es
 	SpyedKey mJumpKey;
 };

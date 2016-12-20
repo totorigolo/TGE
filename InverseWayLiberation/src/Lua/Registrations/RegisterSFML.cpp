@@ -1,12 +1,11 @@
-#include "stdafx.h"
 #include "../LuaMachine.h"
 
-// Enregistrements privés
+// Enregistrements privÃ©s
 void LuaMachine::RegisterSFML()
 {
 	/* Enregistre les classes */
 	try
-	{
+	{/*
 		// sf::Vector2f
 		luabind::module(mLuaState) [
 			// La classe
@@ -181,7 +180,7 @@ void LuaMachine::RegisterSFML()
 				]
 				// Fxs
 			.def("isKeyPressed", &sf::Keyboard::isKeyPressed)
-		];
+		];*/
 	}
 	catch (const std::exception &e)
 	{

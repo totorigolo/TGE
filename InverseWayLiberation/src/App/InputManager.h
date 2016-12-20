@@ -1,4 +1,8 @@
 #pragma once
+#include <list>
+#include <SFML/Graphics.hpp>
+#include <SFGUI/Desktop.hpp>
+
 #include "../Tools/Singleton.h"
 
 enum KeyState
@@ -8,7 +12,7 @@ enum KeyState
 	Released
 };
 
-// UNDONE: Singleton car une seule fenêtre -> modifier ça :)
+// UNDONE: Singleton car une seule fenÃªtre -> modifier Ã§a :)
 //? -> window dans le ctor
 class InputManager : public Singleton<InputManager>
 {
@@ -20,7 +24,7 @@ protected:
 	~InputManager();
 
 public:
-	// Réglages des propriétés
+	// RÃ©glages des propriÃ©tÃ©s
 	void SetWindow(sf::RenderWindow *window);
 	void Zoom(float zoom);
 	void SetZoom(float zoom);
@@ -28,19 +32,19 @@ public:
 	void MoveCenter(const sf::Vector2f &dep);
 	void SetCenter(const sf::Vector2f &center);
 
-	// Ajout d'évènement
+	// Ajout d'Ã©vÃ¨nement
 	void Update();
 	void AddEvent(const sf::Event &event);
 	
-	// Gestion des touches espionnées
+	// Gestion des touches espionnÃ©es
 	void AddSpyedKey(const sf::Keyboard::Key &keyCode);
 	void RemoveSpyedKey(const sf::Keyboard::Key &keyCode);
 	bool KeyPressed(const sf::Keyboard::Key &keyCode); // #1
 	bool KeyReleased(const sf::Keyboard::Key &keyCode); // #1
 	KeyState GetSpyedKeyState(const sf::Keyboard::Key &keyCode); // #1
-	// #1 => Réinitialise la touche
+	// #1 => RÃ©initialise la touche
 
-	// Accès aux évènements
+	// AccÃ¨s aux Ã©vÃ¨nements
 	bool IsKeyPressed(const sf::Keyboard::Key &keyCode) const;
 	sf::Vector2i GetMousePos() const;
 	sf::Vector2f GetMousePosRV() const;
@@ -57,21 +61,21 @@ public:
 	bool IsMMBReleased() const;
 	bool GetMouseWheelState() const;
 	int GetMouseWheelDelta() const;
-	bool HasQuitted(); // Réinitialise après appel
+	bool HasQuitted(); // RÃ©initialise aprÃ¨s appel
 	bool HasFocus() const;
-	bool HasResized(); // Réinitialise après appel
+	bool HasResized(); // RÃ©initialise aprÃ¨s appel
 
 	// Gestion des Desktops (GUI)
 	void AddDesktop(sfg::Desktop *d);
 	void RemoveDesktop(sfg::Desktop *d);
 
-	// Accès relatifs à la vue
+	// AccÃ¨s relatifs ÃƒÂ  la vue
 	float GetCurrentZoom() const;
 	const sf::View& GetView() const;
 	const sf::View& GetWindowView() const;
 	const sf::Vector2f& GetCurrentCenter() const;
 	
-	// Accès à la fenêtre
+	// AccÃ¨s ÃƒÂ  la fenÃªtre
 	sf::RenderWindow* GetWindow();
 	const sf::RenderWindow* GetWindow() const;
 
@@ -81,7 +85,7 @@ private:
 	bool mHasFocus;
 	bool mHasResized;
 
-	// Fenêtre
+	// FenÃªtre
 	sf::RenderWindow *mWindow;
 
 	// Structure sf::Event
@@ -112,7 +116,7 @@ private:
 	bool mMouseWheelMoved;
 	int mMouseWheelDelta;
 
-	// Pour l'édition de texte
+	// Pour l'Ã©dition de texte
 	bool mTipingText;
 	sf::String mText;
 

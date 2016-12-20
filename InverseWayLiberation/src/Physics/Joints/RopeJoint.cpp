@@ -1,6 +1,7 @@
-#include "stdafx.h"
 #include "RopeJoint.h"
 #include "../PhysicManager.h"
+#include "../../Tools/Error.h"
+#include "../../Tools/utils.h"
 
 //Ctor
 RopeJoint::RopeJoint(const RopeJointDef &def)

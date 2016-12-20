@@ -1,4 +1,3 @@
-#include "stdafx.h"
 #include "StateSystem.h"
 #include "State.h"
 #include "../App.h"
@@ -19,20 +18,20 @@ void StateSystem::ChangeState(State *state)
 	mCurrentState = state;
 }
 
-// Exécute le State actuel
+// ExÃ©cute le State actuel
 bool StateSystem::Run(App *app)
 {
-	// Retient qu'on est en train de s'éxécuter
+	// Retient qu'on est en train de s'Ã©xÃ©cuter
 	mIsRunning = true;
 
-	// Vérifie que le state ne signale pas la fin de l'application
+	// VÃ©rifie que le state ne signale pas la fin de l'application
 	if (mCurrentState == Exit_State)
 	{
 		mIsRunning = false;
 		return false;
 	}
 
-	// Si on le doit, on exécuter le State
+	// Si on le doit, on exÃ©cuter le State
 	if (mIsRunning)
 		mCurrentState = mCurrentState->Run(app);
 

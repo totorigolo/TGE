@@ -1,4 +1,6 @@
 #pragma once
+
+#include <SFGUI/Button.hpp>
 #include "Scenario.h"
 
 class EditBox;
@@ -12,11 +14,11 @@ public:
 	virtual void Update();
 
 protected:
-	// Construit la fenêtre et les éléments
+	// Construit la fenÃªtre et les Ã©lÃ©ments
 	virtual void Fill();
 
 private:
-	/* Eléments */
+	/* ElÃ©ments */
 	// Boutons
 	sfg::Button::Ptr mOpenLevelBtn;
 	sfg::Button::Ptr mOpenLuaConsoleBtn;

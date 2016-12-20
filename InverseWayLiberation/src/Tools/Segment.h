@@ -8,7 +8,7 @@ inline bool intersect(const sf::Vector2f& A, const sf::Vector2f& B, const sf::Ve
 	sf::Vector2f I = B - A;
 	sf::Vector2f J = D - C;
 
-	// Si les vecteurs sont colinÈaires, alors les droites sont parallËles, pas d'intersection.
+	// Si les vecteurs sont colin√©aires, alors les droites sont parall√®les, pas d'intersection.
 	float col = I.x * J.y - I.y * J.x;
 	if (col > -0.01f && col < 0.01f)
 		return false;
@@ -20,21 +20,21 @@ inline bool intersect(const sf::Vector2f& A, const sf::Vector2f& B, const sf::Ve
 	//   P = A + k * I; // equation (1)
 	//   P = C + m * J;
 	//
-	// D'o˘ :
+	// D'o√π :
 	//   A + k*I = C + m*J
 	//
-	// On dÈcompose les points et vecteurs, on a :
+	// On d√©compose les points et vecteurs, on a :
 	//   Ax + k * Ix = Cx + m * Jx
 	//   Ay + k * Iy = Cy + m * Jy
 	//
-	// 2 Èquations, 2 inconnues, en rÈsolvant, on trouve :
+	// 2 √©quations, 2 inconnues, en r√©solvant, on trouve :
 
 	float m = - (- I.x * A.y + I.x * C.y + I.y * A.x - I.y * C.x) / (I.x * J.y - I.y * J.x);
 	float k = - (A.x * J.y - C.x * J.y - J.x * A.y + J.x * C.y) / (I.x * J.y - I.y * J.x);
 
-	// (Notez que les dÈnominateurs sont les mÍmes)
+	// (Notez que les d√©nominateurs sont les m√™mes)
 
-	// On vÈrifie que 0 < m < 1 et 0 < k < 1 --> sinon, cela veut dire que les droites s'intersectent, mais pas au niveau du segment.
+	// On v√©rifie que 0 < m < 1 et 0 < k < 1 --> sinon, cela veut dire que les droites s'intersectent, mais pas au niveau du segment.
 	if (0.f < m && m < 1.f && 0.f < k && k < 1.f)
 		return true;
 	return false;
@@ -71,7 +71,7 @@ inline bool intersect(const Segment& AB, const Segment& CD)
 	sf::Vector2f I = AB.getVector();
 	sf::Vector2f J = CD.getVector();
 
-	// Si les vecteurs sont colinÈaires, alors les droites sont parallËles, pas d'intersection.
+	// Si les vecteurs sont colin√©aires, alors les droites sont parall√®les, pas d'intersection.
 	float col = I.x * J.y - I.y * J.x;
 	if (col > -0.01f && col < 0.01f)
 		return false;
@@ -83,21 +83,21 @@ inline bool intersect(const Segment& AB, const Segment& CD)
 	//   P = A + k * I; // equation (1)
 	//   P = C + m * J;
 	//
-	// D'o˘ :
+	// D'o√π :
 	//   A + k*I = C + m*J
 	//
-	// On dÈcompose les points et vecteurs, on a :
+	// On d√©compose les points et vecteurs, on a :
 	//   Ax + k * Ix = Cx + m * Jx
 	//   Ay + k * Iy = Cy + m * Jy
 	//
-	// 2 Èquations, 2 inconnues, en rÈsolvant, on trouve :
+	// 2 √©quations, 2 inconnues, en r√©solvant, on trouve :
 
 	float m = - (- I.x * AB.pt1.y + I.x * CD.pt1.y + I.y * AB.pt1.x - I.y * CD.pt1.x) / (I.x * J.y - I.y * J.x);
 	float k = - (AB.pt1.x * J.y - CD.pt1.x * J.y - J.x * AB.pt1.y + J.x * CD.pt1.y) / (I.x * J.y - I.y * J.x);
 
-	// (Notez que les dÈnominateurs sont les mÍmes)
+	// (Notez que les d√©nominateurs sont les m√™mes)
 
-	// On vÈrifie que 0 < m < 1 et 0 < k < 1 --> sinon, cela veut dire que les droites s'intersectent, mais pas au niveau du segment.
+	// On v√©rifie que 0 < m < 1 et 0 < k < 1 --> sinon, cela veut dire que les droites s'intersectent, mais pas au niveau du segment.
 	if (0.f < m && m < 1.f && 0.f < k && k < 1.f)
 		return true;
 	return false;

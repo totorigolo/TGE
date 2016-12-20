@@ -1,4 +1,12 @@
 #pragma once
+
+#include <SFGUI/Box.hpp>
+#include <SFGUI/Table.hpp>
+#include <SFGUI/Label.hpp>
+#include <SFGUI/Entry.hpp>
+#include <SFGUI/SpinButton.hpp>
+#include <SFGUI/Button.hpp>
+#include <SFGUI/RadioButton.hpp>
 #include "Window.h"
 #include "../../Entities/BaseBody.h"
 #include "../../Level/LevelManager.h"
@@ -11,7 +19,7 @@ public:
 	// Ctor
 	ColFilteringWindow();
 
-	// Gestion de la sélection
+	// Gestion de la sÃ©lection
 	void Select(BaseBody *selection);
 	void Unselect();
 
@@ -19,7 +27,7 @@ public:
 	virtual void Update();
 
 protected:
-	// Construit la fenêtre et les éléments
+	// Construit la fenÃªtre et les Ã©lÃ©ments
 	virtual void Fill();
 
 	// Callbacks
@@ -32,10 +40,10 @@ private:
 	LevelManager &mLevelMgr;
 	PhysicManager &mPhysicMgr;
 
-	// Sélection
+	// SÃ©lection
 	BaseBody *mSelection;
 
-	// Eléments
+	// ElÃ©ments
 	sfg::Window::Ptr mColFilteringWindow;
 	sfg::Box::Ptr mColFilteringVBox;
 	sfg::Box::Ptr mGroupIndexBox;

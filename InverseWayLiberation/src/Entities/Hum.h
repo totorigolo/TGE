@@ -11,14 +11,14 @@ public:
 	Hum(int layer = 0);
 	virtual ~Hum();
 
-	// Crée le Hum
-	// Age adulte à 18 ans et musculature entre -20 (obèse) à 20 (taillé en V)
+	// CrÃ©e le Hum
+	// Age adulte Ã  18 ans et musculature entre -20 (obÃ¨se) Ã  20 (taillÃ© en V)
 	bool Create(b2Vec2 pos, double age, double strengh, sf::Color color = sf::Color(35, 35, 35));
 
 	// Destruction du body
 	void Destroy();
 
-	// Mise à jour
+	// Mise Ã  jour
 	virtual void PreUpdate();
 	virtual void Update();
 	void CheckSensors();
@@ -48,11 +48,11 @@ public:
 	double GetTopWidth() const;
 	double GetBottomWidth() const;
 	double GetEyeHeight() const;
-	// Fonction à n'employer que pour éditer les niveaux
+	// Fonction Ã  n'employer que pour Ã©diter les niveaux
 	void SetTransform(const b2Vec2 &position);
 
 protected:
-	// Mise à jour
+	// Mise Ã  jour
 	bool CheckOneSensor(b2Fixture *f);
 
 	// Pour le rendu
@@ -92,7 +92,7 @@ private:
 	sf::Text mBallonText;
 	sf::RectangleShape mBallonBckg;
 
-	// Sensors pour les déplacements
+	// Sensors pour les dÃ©placements
 	b2Fixture *mSensorJump;
 
 	// Formes SFML

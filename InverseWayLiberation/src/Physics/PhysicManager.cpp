@@ -1,14 +1,14 @@
-#include "stdafx.h"
 #include "PhysicManager.h"
 #include "Joint.h"
 #include "DebugDraw.h"
 #include "ContactListener.h"
 #include "../Entities/Entity.h"
 #include "../Entities/EntityManager.h"
+#include "../Tools/Error.h"
 
 //Ctor
 PhysicManager::PhysicManager()
-	: // Valeurs par défaut
+	: // Valeurs par dÃ©faut
 	mWorld(b2Vec2(0.f, 0.f)),
 	mPPM(100.f),
 	mTimeStep(1.f / 60.f),
@@ -17,10 +17,10 @@ PhysicManager::PhysicManager()
 	mLastJointID(0),
 	mDebugDraw(*this)
 {
-	// Défini le ContactListener du monde
+	// DÃ©fini le ContactListener du monde
 	mWorld.SetContactListener(&mContactListener);
 
-	// Défini le DebugDraw
+	// DÃ©fini le DebugDraw
 	mWorld.SetDebugDraw(&mDebugDraw);
 }
 
@@ -40,12 +40,12 @@ void PhysicManager::DestroyBody(b2Body *body)
 {
 	myAssert(body, "Le b2Body est invalide.");
 
-	// Supprime les joints attachés
+	// Supprime les joints attachÃ©s
 	b2JointEdge *je = body->GetJointList();
 	while (je)
 	{
 		auto next = je->next;
-		myAssert(je->joint->GetUserData(), "b2Joint rencontré sans Joint lié.");
+		myAssert(je->joint->GetUserData(), "b2Joint rencontrÃ© sans Joint liÃ©.");
 		DestroyJoint(((Joint*) je->joint->GetUserData())->GetID());
 		je = next;
 	}
@@ -74,7 +74,7 @@ void PhysicManager::DestroyBodiesOut(const b2Vec2 &topleft, const b2Vec2 &bottom
 		// On supprime seulement les dynamicBodies
 		if (b->GetType() == b2_dynamicBody && b != skip)
 		{
-			// Vérifie si l'objet est hors du monde
+			// VÃ©rifie si l'objet est hors du monde
 			b2Vec2 pos = b->GetPosition();
 			if (pos.x < topleft.y || pos.x > bottomright.y || pos.y < bottomright.x || pos.y > bottomright.y)
 			{
@@ -94,7 +94,7 @@ void PhysicManager::DestroyBodiesOut(const b2Vec2 &topleft, const b2Vec2 &bottom
 }
 
 // Gestion des joints
-// Création / destruction
+// CrÃ©ation / destruction
 int PhysicManager::RegisterJoint(Joint *joint)
 {
 	mJointList[mLastJointID] = std::unique_ptr<Joint>(joint);
@@ -104,19 +104,19 @@ int PhysicManager::RegisterJoint(Joint *joint)
 }
 void PhysicManager::DestroyJoint(int jointID)
 {
-	// Vérifie que l'ID soit cohérent
+	// VÃ©rifie que l'ID soit cohÃ©rent
 	myAssert(jointID >= 0, "L'ID \""+ Parser::intToString(jointID) +"\" est impossible (< 0).");
 
-	// Vérifie que la liste ne soit pas vide
+	// VÃ©rifie que la liste ne soit pas vide
 	//myAssert(mJointList.size() != 0, "La liste des joints est vide.");
 	if (mJointList.size() == 0) return;
 
-	// Récupère le joint
+	// RÃ©cupÃ¨re le joint
 	auto itJoint = mJointList.find(jointID);
 	//myAssert(itJoint != mJointList.end(), "Le joint #"+ Parser::intToString(jointID) +" n'existe pas.");
 	if (itJoint == mJointList.end()) return;
 
-	// Supprime le nom s'il est nommé
+	// Supprime le nom s'il est nommÃ©
 	this->Anonymize(this->GetName(itJoint->second.get()));
 
 	// Supprime le joint
@@ -127,7 +127,7 @@ void PhysicManager::DestroyAllJoints()
 	// Vide les noms
 	mNames.clear();
 
-	// Détruit les Joints
+	// DÃ©truit les Joints
 	for (auto it = mJointList.begin(); it != mJointList.end(); )
 	{
 		it = mJointList.erase(it);
@@ -146,16 +146,16 @@ void PhysicManager::Destroyb2Joint(b2Joint *joint)
 	myAssert(joint, " Le joint n'est pas valide.");
 	mWorld.DestroyJoint(joint);
 }
-// Mise à jour
+// Mise Ã  jour
 void PhysicManager::UpdateJoints()
 {
-	// Met à jour tous les joints
+	// Met Ã  jour tous les joints
 	for (auto it = mJointList.begin(); it != mJointList.end(); )
 	{
-		// Met à jour
+		// Met Ã  jour
 		it->second->Update();
 
-		// Supprime le joint si nécessaire
+		// Supprime le joint si nÃ©cessaire
 		if (it->second->ToDestroy())
 			it = mJointList.erase(it);
 
@@ -189,18 +189,18 @@ std::string PhysicManager::GetName(Joint *const joint) const
 // Accesseurs
 bool PhysicManager::JointExists(int jointID) const
 {
-	// Vérifie que l'ID soit cohérent
+	// VÃ©rifie que l'ID soit cohÃ©rent
 	if (jointID < 0)
 		return false;
 
-	// Vérifie que la liste ne soit pas vide
+	// VÃ©rifie que la liste ne soit pas vide
 	if (mJointList.size() == 0)
 		return false;
 
-	// Récupère le joint
+	// RÃ©cupÃ¨re le joint
 	auto itJoint = mJointList.find(jointID);
 
-	// Vérifie qu'il est valide
+	// VÃ©rifie qu'il est valide
 	if (itJoint != mJointList.end())
 		return true;
 	return false;
@@ -214,7 +214,7 @@ bool PhysicManager::JointExists(const std::string &name) const
 }
 Joint* PhysicManager::GetJoint(int jointID)
 {
-	// Vérifie qu'il est valide
+	// VÃ©rifie qu'il est valide
 	if (!JointExists(jointID))
 		return nullptr;
 
@@ -230,7 +230,7 @@ Joint* PhysicManager::GetJoint(const std::string &name)
 }
 const Joint* PhysicManager::GetJoint(int jointID) const
 {
-	// Vérifie qu'il est valide
+	// VÃ©rifie qu'il est valide
 	if (!JointExists(jointID))
 		return nullptr;
 
@@ -248,7 +248,7 @@ const Joint* PhysicManager::GetJoint(const std::string &name) const
 // Simulation
 void PhysicManager::SetTimeStep(float timeStep)
 {
-	myAssert(timeStep > 0, "Un timeStep ne peut pas être négatif ("+ Parser::floatToString(timeStep) +").");
+	myAssert(timeStep > 0, "Un timeStep ne peut pas Ãªtre nÃ©gatif ("+ Parser::floatToString(timeStep) +").");
 
 	mTimeStep = mTimeStep;
 }
@@ -263,7 +263,7 @@ void PhysicManager::Step(int velocityIt, int positionIt)
 	mStepClock.restart();
 }
 
-// Gestion des propriétés du monde
+// Gestion des propriÃ©tÃ©s du monde
 void PhysicManager::SetGravity(const b2Vec2 &gravity)
 {
 	mWorld.SetGravity(gravity);

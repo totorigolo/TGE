@@ -1,23 +1,22 @@
-#include "stdafx.h"
 #include "ContactListener.h"
 #include "../Entities/Entity.h"
 #include "../Entities/BasicBody.h"
 
-// Début du contact (début du AABB overlap)
+// DÃ©but du contact (dÃ©but du AABB overlap)
 void ContactListener::BeginContact(b2Contact* contact)
 {
 	B2_NOT_USED(contact);
 	/*
 	contact->GetManifold(); // Les points de contact
 	contact->IsTouching(); // Est-ce que les shapes se touchent effectivement
-	contact->SetEnabled(true); // Activer / Désactiver le contact
+	contact->SetEnabled(true); // Activer / DÃ©sactiver le contact
 	contact->GetFixtureA(); // Le 1er shape
 	contact->GetFixtureB(); // Le 2nd shape
-	contact->GetFriction(); // Obtenir & modifier les propriétés
+	contact->GetFriction(); // Obtenir & modifier les propriÃ©tÃ©s
 	contact->GetRestitution();
 	//*/
 	
-	/*/ Récupère les bodies
+	/*/ RÃ©cupÃ¨re les bodies
 	b2Fixture *fixtureA = contact->GetFixtureA();
 	b2Fixture *fixtureB = contact->GetFixtureB();
 	Entity *entityA = (Entity*) fixtureA->GetBody()->GetUserData();
@@ -32,14 +31,14 @@ void ContactListener::EndContact(b2Contact* contact)
 	/*
 	contact->GetManifold(); // Les points de contact
 	contact->IsTouching(); // Est-ce que les shapes se touchent effectivement
-	contact->SetEnabled(true); // Activer / Désactiver le contact
+	contact->SetEnabled(true); // Activer / DÃ©sactiver le contact
 	contact->GetFixtureA(); // Le 1er shape
 	contact->GetFixtureB(); // Le 2nd shape
-	contact->GetFriction(); // Obtenir & modifier les propriétés
+	contact->GetFriction(); // Obtenir & modifier les propriÃ©tÃ©s
 	contact->GetRestitution();
 	//*/
 	
-	/*/ Récupère les bodies
+	/*/ RÃ©cupÃ¨re les bodies
 	b2Fixture *fixtureA = contact->GetFixtureA();
 	b2Fixture *fixtureB = contact->GetFixtureB();
 	Entity *entityA = (Entity*) fixtureA->GetBody()->GetUserData();
@@ -47,14 +46,14 @@ void ContactListener::EndContact(b2Contact* contact)
 	//*/
 }
 
-// Après la détection de la collision, mais avant la résolution
+// AprÃ¨s la dÃ©tection de la collision, mais avant la rÃ©solution
 void ContactListener::PreSolve(b2Contact* contact, const b2Manifold* oldManifold)
 {
 	B2_NOT_USED(oldManifold);
 
-	// Récupère les bodies
+	// RÃ©cupÃ¨re les bodies
 	Entity *entityA = (Entity*) contact->GetFixtureA()->GetBody()->GetUserData();
-	myAssert(entityA, "Contact avec un b2Body sans Entity associée.");
+	myAssert(entityA, "Contact avec un b2Body sans Entity associÃ©e.");
 
 
 	// Traite les BasicBodies
@@ -63,11 +62,11 @@ void ContactListener::PreSolve(b2Contact* contact, const b2Manifold* oldManifold
 		/* Collision b2Body <> OneSidedPlatform */
 		if (((BasicBody*) entityA)->GetCollisionType() == BasicBody::CollisionType::OneSidedPlatform)
 		{
-			// Récupère les acteurs
+			// RÃ©cupÃ¨re les acteurs
 			b2Fixture *actor = contact->GetFixtureB();
 			b2Fixture *platform = contact->GetFixtureA();
 		
-			// Vérifie si les conditions sont là pour annuler le contact
+			// VÃ©rifie si les conditions sont lÃ  pour annuler le contact
 			if (actor->GetBody()->GetLinearVelocity().y < 5.f && actor->GetBody()->GetLinearVelocity().y > 0.1f
 				|| actor->GetAABB(0).lowerBound.y < platform->GetAABB(0).upperBound.y - 0.2f)
 			{
@@ -77,7 +76,7 @@ void ContactListener::PreSolve(b2Contact* contact, const b2Manifold* oldManifold
 	}
 }
 
-// Après la résolution des collisions
+// AprÃ¨s la rÃ©solution des collisions
 void ContactListener::PostSolve(b2Contact* contact, const b2ContactImpulse* impulse)
 {
 	B2_NOT_USED(contact);
@@ -86,10 +85,10 @@ void ContactListener::PostSolve(b2Contact* contact, const b2ContactImpulse* impu
 	/*
 	contact->GetManifold(); // Les points de contact
 	contact->IsTouching(); // Est-ce que les shapes se touchent effectivement
-	contact->SetEnabled(true); // Activer / Désactiver le contact
+	contact->SetEnabled(true); // Activer / DÃ©sactiver le contact
 	contact->GetFixtureA(); // Le 1er shape
 	contact->GetFixtureB(); // Le 2nd shape
-	contact->GetFriction(); // Obtenir & modifier les propriétés
+	contact->GetFriction(); // Obtenir & modifier les propriÃ©tÃ©s
 	contact->GetRestitution();
 	
 	impulse->count; // Le nombre d'impultions

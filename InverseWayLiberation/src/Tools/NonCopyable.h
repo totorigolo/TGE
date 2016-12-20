@@ -3,7 +3,7 @@
 class NonCopyable
 {
 protected:
-	// Ctor & Dtor (les classes filles peuvent se [cons/dé]truire)
+	// Ctor & Dtor (les classes filles peuvent se [cons/dÃ©]truire)
 	NonCopyable() {}
 	//virtual ~NonCopyable() {}
 

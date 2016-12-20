@@ -1,4 +1,4 @@
-#include "stdafx.h"
+#include <iostream>
 #include "ResourceManager.h"
 
 // Vide toutes les ressources
@@ -15,14 +15,14 @@ bool ResourceManager::LoadTexture(const std::string &name, const std::string &pa
 	// Charge la texture
 	Texture::Ptr texture(new Texture(name, path));
 
-	// Si la texture n'est pas chargée, on la supprime
+	// Si la texture n'est pas chargÃ©e, on la supprime
 	if (!texture->IsLoaded())
 	{
 		texture.reset();
 		return false;
 	}
 
-	// Ajoute la texture à la TextureMap
+	// Ajoute la texture Ã  la TextureMap
 	mTextureMap[name] = std::move(texture);
 
 	return true;
@@ -45,18 +45,18 @@ bool ResourceManager::TextureExists(const std::string &name)
 // Gestion des fonts
 bool ResourceManager::LoadFont(const std::string &name, const std::string &path)
 {
-	// Regarde si la resource est déjà chargée
+	// Regarde si la resource est dÃ©jÃ  chargÃ©e
 	auto it = mFontMap.find(name);
 	if (it != mFontMap.end())
 	{
-		// C'est la même
+		// C'est la mÃªme
 		if (it->second->GetPath() == path)
 		{
-			// Chargée, on ne fait rien
+			// ChargÃ©e, on ne fait rien
 			if (it->second->IsLoaded())
 				return true;
 
-			// Non chargée, on la re-charge dans la même Font (limitation de compatibilité avec la SFML
+			// Non chargÃ©e, on la re-charge dans la mÃªme Font (limitation de compatibilitÃ© avec la SFML)
 			else
 			{
 				myCheckError(it->second->loadFromFile(path), "Impossible de charger :\n" + path);
@@ -68,7 +68,7 @@ bool ResourceManager::LoadFont(const std::string &name, const std::string &path)
 	// Charge la font
 	Font::Ptr font(new Font(name, path));
 
-	// Si la texture n'est pas chargée, on la supprime
+	// Si la texture n'est pas chargÃ©e, on la supprime
 	if (!font->IsLoaded())
 	{
 		font.reset();
@@ -76,7 +76,7 @@ bool ResourceManager::LoadFont(const std::string &name, const std::string &path)
 		return false;
 	}
 
-	// Ajoute la texture à la TextureMap
+	// Ajoute la texture Ã  la TextureMap
 	mFontMap[name] = std::move(font);
 
 	return true;

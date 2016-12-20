@@ -1,6 +1,6 @@
 #pragma once
 
-// Classe appelée pour chaque fixture trouvé pendant la recherche de correspondance AABB <> fixtures dans le monde
+// Classe appelÃ©e pour chaque fixture trouvÃ© pendant la recherche de correspondance AABB <> fixtures dans le monde
 class AABBCallback : public b2QueryCallback, public NonCopyable
 {
 public:
@@ -21,7 +21,7 @@ public:
 		{
 			mFixture = fixture;
 
-			// On a trouvé donc on demande d'arreter la recherche
+			// On a trouvÃ© donc on demande d'arreter la recherche
 			return false;
 		}
 

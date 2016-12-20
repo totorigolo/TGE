@@ -1,4 +1,4 @@
-#include "stdafx.h"
+#include <lua.hpp>
 #include "LuaMachine.h"
 #include "../Game/Game.h"
 #include "../App/InputManager.h"
@@ -21,7 +21,7 @@ LuaMachine::~LuaMachine()
 	lua_close(mLuaState);
 }
 
-// Réinitialisation
+// RÃ©initialisation
 void LuaMachine::Reset()
 {
 	// TODO
@@ -32,7 +32,7 @@ void LuaMachine::UnregisterGlobalLuaVar(const std::string &name)
 {
 	try
 	{
-		luabind::globals(mLuaState)[name] = luabind::nil;
+//		luabind::globals(mLuaState)[name] = luabind::nil;
 	}
 	catch (const std::exception &e)
 	{
@@ -40,7 +40,7 @@ void LuaMachine::UnregisterGlobalLuaVar(const std::string &name)
 	}
 }
 
-// Exécution
+// ExÃ©cution
 int LuaMachine::DoFile(const std::string &path, OutputInterface *_interface)
 {
 	// Normalise l'interface
@@ -63,7 +63,7 @@ int LuaMachine::DoFile(const std::string &path, OutputInterface *_interface)
 		*output << e.what() << std::endl;
 	}
 
-	// Si on est là, c'est à cause d'une erreur
+	// Si on est lÃ , c'est Ã  cause d'une erreur
 	return -1;
 }
 int LuaMachine::LoadFile(const std::string &path, OutputInterface *_interface)
@@ -88,7 +88,7 @@ int LuaMachine::LoadFile(const std::string &path, OutputInterface *_interface)
 		*output << e.what() << std::endl;
 	}
 
-	// Si on est là, c'est à cause d'une erreur
+	// Si on est lÃ , c'est Ã  cause d'une erreur
 	return -1;
 }
 int LuaMachine::DoString(const std::string &command, OutputInterface *_interface)
@@ -113,21 +113,21 @@ int LuaMachine::DoString(const std::string &command, OutputInterface *_interface
 		*output << e.what() << std::endl;
 	}
 
-	// Si on est là, c'est à cause d'une erreur
+	// Si on est lÃ , c'est Ã  cause d'une erreur
 	return -1;
 }
 
 // Enregistre la console Lua
 void LuaMachine::SetLuaConsole(LuaConsoleWindow *window)
 {
-	myCheckError_v(window, "LuaConsoleWindow passée invalide.");
+	myCheckError_v(window, "LuaConsoleWindow passÃ©e invalide.");
 	mLuaConsoleWindow = window;
 }
 OutputInterface* LuaMachine::GetInterface(OutputInterface *_interface)
 {
 	auto tmp = _interface;
 
-	// Crée une interface si on en a pas
+	// CrÃ©e une interface si on en a pas
 	if (!tmp)
 	{
 		if (mLuaConsoleWindow)
@@ -147,12 +147,12 @@ lua_State* LuaMachine::GetLuaState()
 // Initialisation
 void LuaMachine::InitLua()
 {
-	// Crée un Lua State
+	// CrÃ©e un Lua State
 	mLuaState = luaL_newstate();
 	luaL_openlibs(mLuaState);
 
-	// Connecte LuaBind à ce Lua State
-	luabind::open(mLuaState);
+	// Connecte LuaBind Ã  ce Lua State
+//	luabind::open(mLuaState);
 
 	// Enregistre les classes
 	RegisterBox2D();
@@ -177,7 +177,7 @@ int LuaMachine::ReportLuaError(int errorCode, OutputInterface *_interface)
 		*_interface << "Lua: Erreur de Runtime (LUA_ERRRUN)." << std::endl;
 
 	else if (errorCode == LUA_ERRMEM)
-		*_interface << "Lua: Pas assez de mémoire (LUA_ERRMEM)." << std::endl;
+		*_interface << "Lua: Pas assez de mÃ©moire (LUA_ERRMEM)." << std::endl;
 	
 	else if (errorCode == LUA_ERRERR)
 		*_interface << "Lua: Erreur intraitable (LUA_ERRERR)." << std::endl;

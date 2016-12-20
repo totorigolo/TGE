@@ -17,14 +17,14 @@ public:
 	SpyedKey(sf::Keyboard::Key key)
 		: mKey(key)
 	{
-		// Ajoute la touche espionnée
+		// Ajoute la touche espionnÃ©e
 		InputManager::GetInstance().AddSpyedKey(mKey);
 	}
 
 	// Dtor
 	~SpyedKey()
 	{
-		// Enlève la touche espionnée
+		// EnlÃ¨ve la touche espionnÃ©e
 		InputManager::GetInstance().RemoveSpyedKey(mKey);
 	}
 

@@ -1,4 +1,7 @@
 #pragma once
+
+#include <SFML/Graphics.hpp>
+#include <Box2D/Box2D.h>
 #include "../Tools/Singleton.h"
 
 class PointLight;
@@ -19,17 +22,17 @@ public:
 	void DrawPhysicalHull(PointLight *light, const b2Body& body);
 	void Clear(PointLight *light);
 
-	// Crée les ombres
+	// CrÃ©e les ombres
 	void CreateShadows(PointLight *light);
 
-	// Gère l'état du LightEngine
+	// GÃ¨re l'Ã©tat du LightEngine
 	void Activate();
 	void Deactivate();
 	void SetActive(bool state);
 	bool IsActive() const;
 
 private:
-	// Accès de PointLight
+	// AccÃ¨s de PointLight
 	friend class PointLight;
 
 	// State of the LightEngine
@@ -42,9 +45,9 @@ private:
 	sf::Shader mShadowShader;
 
 	// sf::Vector particuliers pour le ShadowVertexArray
-	/* L'idée est que quand on dessine les ombres, on mets les coordonnées de texture à 0, alors que
-	 * le fond dessiné sous les ombres sur toute la surface de la lumière a ses coordonnées à 1.
-	 * De cette façon on sait très facilement si on est dans une ombre ou non.
+	/* L'idÃ©e est que quand on dessine les ombres, on mets les coordonnÃ©es de texture Ã  0, alors que
+	 * le fond dessinÃ© sous les ombres sur toute la surface de la lumiÃ¨re a ses coordonnÃ©es Ã  1.
+	 * De cette faÃ§on on sait trÃ¨s facilement si on est dans une ombre ou non.
 	 */
 	sf::Vector2f mZero;
 	sf::Vector2f mOne;

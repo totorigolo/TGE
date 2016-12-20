@@ -1,6 +1,8 @@
-#include "stdafx.h"
 #include "PulleyJoint.h"
 #include "../PhysicManager.h"
+#include "../../Tools/Error.h"
+#include "../../Tools/Error.h"
+#include "../../Tools/utils.h"
 
 //Ctor
 PulleyJoint::PulleyJoint(const PulleyJointDef &def)

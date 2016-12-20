@@ -1,4 +1,9 @@
 #pragma once
+
+#include <SFGUI/Box.hpp>
+#include <SFGUI/Label.hpp>
+#include <SFGUI/SpinButton.hpp>
+#include <SFGUI/Button.hpp>
 #include "Window.h"
 #include "../../Level/LevelManager.h"
 #include "../../Physics/PhysicManager.h"
@@ -22,7 +27,7 @@ public:
 	void SetLuaMachine(LuaMachine *luaMachine);
 
 protected:
-	// Construit la fenêtre et les éléments
+	// Construit la fenÃªtre et les Ã©lÃ©ments
 	virtual void Fill();
 
 	// Callbacks
@@ -50,7 +55,7 @@ private:
 	EditBox *mEditBox;
 	LuaMachine *mLuaMachine;
 
-	// Eléments
+	// ElÃ©ments
 	sfg::Box::Ptr mVBox;
 	sfg::Box::Ptr mGravityBox;
 	sfg::Label::Ptr mGravityLabel;

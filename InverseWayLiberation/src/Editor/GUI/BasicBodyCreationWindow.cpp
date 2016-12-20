@@ -1,9 +1,9 @@
-#include "stdafx.h"
 #include "BasicBodyCreationWindow.h"
 #include "../EditBox.h"
 #include "../../App/InputManager.h"
 #include "../../Entities/PolyBody.h"
 #include "../../Entities/EntityFactory.h"
+#include "../../Tools/utils.h"
 
 // Ctor
 BasicBodyCreationWindow::BasicBodyCreationWindow()
@@ -11,7 +11,7 @@ BasicBodyCreationWindow::BasicBodyCreationWindow()
 	mEntityMgr(EntityManager::GetInstance()), mPhysicMgr(PhysicManager::GetInstance()), mResourceMgr(ResourceManager::GetInstance()),
 	mIsInAddMode(false)
 {
-	// Rempli la fenÍtre
+	// Rempli la fen√™tre
 	Fill();
 	mApply = true;
 }
@@ -21,7 +21,7 @@ void BasicBodyCreationWindow::Add(b2Vec2 pos)
 {
 	if (!mApply || mTexture->GetSelectedItem() == sfg::ComboBox::NONE) return;
 
-	// Sort du mode crÈation si la fenÍtre est cachÈe
+	// Sort du mode cr√©ation si la fen√™tre est cach√©e
 	if (!this->IsVisible() || !mIsInAddMode)
 	{
 		OnToggleMode();
@@ -38,13 +38,13 @@ void BasicBodyCreationWindow::Add(b2Vec2 pos)
 	// Transforme pos en b2Vec3
 	b2Vec3 posRot = getVec3(pos);
 
-	// RÈcupËre le type
+	// R√©cup√®re le type
 	b2BodyType type = b2BodyType::b2_dynamicBody;
 	if (mType[0]->IsActive()) // Dynamique
 		type = b2BodyType::b2_dynamicBody;
 	else if (mType[1]->IsActive()) // Static
 		type = b2BodyType::b2_staticBody;
-	else if (mType[2]->IsActive()) // KinÈmatique
+	else if (mType[2]->IsActive()) // Kin√©matique
 		type = b2BodyType::b2_kinematicBody;
 	else
 	{
@@ -52,7 +52,7 @@ void BasicBodyCreationWindow::Add(b2Vec2 pos)
 		return;
 	}
 
-	// CrÈe le Body suivant la forme
+	// Cr√©e le Body suivant la forme
 	if (mShape[0]->IsActive()) // Box
 		EntityFactory::CreateBox(posRot, type, mTexture->GetItem(mTexture->GetSelectedItem()), static_cast<int>(mLayer->GetValue()));
 	else if (mShape[1]->IsActive()) // Circle
@@ -69,13 +69,13 @@ void BasicBodyCreationWindow::Add(b2Vec2 pos)
 // Actualisation
 void BasicBodyCreationWindow::Update()
 {
-	// Mets ‡ jour la liste de texture
+	// Mets √† jour la liste de texture
 	if (mTexture.get())
 	{
 		auto current = mTexture->GetSelectedItem();
 		for (int i = mTexture->GetItemCount(); i > 0; --i)
 			mTexture->RemoveItem(i - 1);
-		for each (const auto &tex in mResourceMgr.GetTextureMap())
+		for (auto &&tex : mResourceMgr.GetTextureMap())
 			mTexture->AppendItem(tex.first);
 		mTexture->SelectItem(current);
 	}
@@ -87,15 +87,15 @@ bool BasicBodyCreationWindow::IsInAddMode()
 	return mIsInAddMode;
 }
 
-// Construit la fenÍtre et les ÈlÈments
+// Construit la fen√™tre et les √©l√©ments
 void BasicBodyCreationWindow::Fill()
 {
-	// CrÈe le Layout
+	// Cr√©e le Layout
 	mVBox = sfg::Box::Create(sfg::Box::Orientation::VERTICAL);
 
-	// ElÈments
+	// El√©ments
 	mMode = sfg::Label::Create("Mode : Attente");
-	mHelpLabel = sfg::Label::Create("CrÈer body : Ctrl + clic gauche");
+	mHelpLabel = sfg::Label::Create("Cr√©er body : Ctrl + clic gauche");
 
 	// Forme
 	mShapeBox = sfg::Box::Create(sfg::Box::Orientation::HORIZONTAL);
@@ -113,7 +113,7 @@ void BasicBodyCreationWindow::Fill()
 	mType.resize(3);
 	mType[0] = sfg::RadioButton::Create("Dynamique");
 	mType[1] = sfg::RadioButton::Create("Statique", mType[0]->GetGroup());
-	mType[2] = sfg::RadioButton::Create("KinÈmatique", mType[1]->GetGroup());
+	mType[2] = sfg::RadioButton::Create("Kin√©matique", mType[1]->GetGroup());
 	mTypeBox->PackEnd(mTypeLabel, false);
 	mTypeBox->PackEnd(mType[0]);
 	mTypeBox->PackEnd(mType[1]);
@@ -135,14 +135,14 @@ void BasicBodyCreationWindow::Fill()
 	mLayerHBox->PackEnd(mLayer);
 
 	// Boutons
-	mToggleModeBtn = sfg::Button::Create("Entrer mode CrÈation");
+	mToggleModeBtn = sfg::Button::Create("Entrer mode Cr√©ation");
 	mCloseBtn = sfg::Button::Create("Fermer");
 
 	// Signaux
 	mToggleModeBtn->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind(&BasicBodyCreationWindow::OnToggleMode, this));
 	mCloseBtn->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind(&BasicBodyCreationWindow::OnClose, this));
 
-	// Ajoute les ÈlÈments ‡ la fenÍtre
+	// Ajoute les √©l√©ments √† la fen√™tre
 	mVBox->PackEnd(mMode);
 	mVBox->PackEnd(mHelpLabel);
 	mVBox->PackEnd(mShapeBox);
@@ -152,7 +152,7 @@ void BasicBodyCreationWindow::Fill()
 	mVBox->PackEnd(mToggleModeBtn);
 	mVBox->PackEnd(mCloseBtn);
 
-	// Ajoute la mVBox ‡ la fenÍtre
+	// Ajoute la mVBox √† la fen√™tre
 	AddToWindow(mVBox);
 }
 
@@ -165,12 +165,12 @@ void BasicBodyCreationWindow::OnToggleMode()
 
 	if (mIsInAddMode)
 	{
-		mMode->SetText("Mode : CrÈation");
-		mToggleModeBtn->SetLabel("Sortir mode CrÈation");
+		mMode->SetText("Mode : Cr√©ation");
+		mToggleModeBtn->SetLabel("Sortir mode Cr√©ation");
 	}
 	else
 	{
 		mMode->SetText("Mode : Attente");
-		mToggleModeBtn->SetLabel("Entrer mode CrÈation");
+		mToggleModeBtn->SetLabel("Entrer mode Cr√©ation");
 	}
 }

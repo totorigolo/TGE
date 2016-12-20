@@ -1,4 +1,3 @@
-#include "stdafx.h"
 #include "HumCreationWindow.h"
 #include "../EditBox.h"
 #include "../../App/InputManager.h"
@@ -11,7 +10,7 @@ HumCreationWindow::HumCreationWindow()
 	mEntityMgr(EntityManager::GetInstance()), mPhysicMgr(PhysicManager::GetInstance()), mResourceMgr(ResourceManager::GetInstance()),
 	mIsInAddMode(false)
 {
-	// Rempli la fenÍtre
+	// Rempli la fen√™tre
 	Fill();
 	mApply = true;
 }
@@ -21,17 +20,17 @@ void HumCreationWindow::Add(b2Vec2 pos)
 {
 	if (!mApply) return;
 
-	// Sort du mode crÈation si la fenÍtre est cachÈe
+	// Sort du mode cr√©ation si la fen√™tre est cach√©e
 	if (!this->IsVisible() || !mIsInAddMode)
 	{
 		OnToggleMode();
 		return;
 	}
 
-	// RÈcupËre la couleur
+	// R√©cup√®re la couleur
 	sf::Color c((sf::Uint8) mColorR->GetValue(), (sf::Uint8) mColorG->GetValue(), (sf::Uint8) mColorB->GetValue());
 
-	// CrÈe le Body suivant la forme
+	// Cr√©e le Body suivant la forme
 	EntityFactory::CreateHum(pos, mAge->GetValue(), mStrengh->GetValue(), c, (int) mLayer->GetValue());
 
 	OnRefresh();
@@ -48,15 +47,15 @@ bool HumCreationWindow::IsInAddMode()
 	return mIsInAddMode;
 }
 
-// Construit la fenÍtre et les ÈlÈments
+// Construit la fen√™tre et les √©l√©ments
 void HumCreationWindow::Fill()
 {
-	// CrÈe le Layout
+	// Cr√©e le Layout
 	mVBox = sfg::Box::Create(sfg::Box::Orientation::VERTICAL);
 
-	// ElÈments
+	// El√©ments
 	mMode = sfg::Label::Create("Mode : Attente");
-	mHelpLabel = sfg::Label::Create("CrÈer hum : Ctrl + clic gauche");
+	mHelpLabel = sfg::Label::Create("Cr√©er hum : Ctrl + clic gauche");
 
 	// Age
 	mAgeHBox = sfg::Box::Create(sfg::Box::Orientation::HORIZONTAL);
@@ -106,14 +105,14 @@ void HumCreationWindow::Fill()
 	mLayerHBox->PackEnd(mLayer);
 
 	// Boutons
-	mToggleModeBtn = sfg::Button::Create("Entrer mode CrÈation");
+	mToggleModeBtn = sfg::Button::Create("Entrer mode Cr√©ation");
 	mCloseBtn = sfg::Button::Create("Fermer");
 
 	// Signaux
 	mToggleModeBtn->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind(&HumCreationWindow::OnToggleMode, this));
 	mCloseBtn->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind(&HumCreationWindow::OnClose, this));
 
-	// Ajoute les ÈlÈments ‡ la fenÍtre
+	// Ajoute les √©l√©ments √† la fen√™tre
 	mVBox->PackEnd(mMode);
 	mVBox->PackEnd(mHelpLabel);
 	mVBox->PackEnd(mAgeHBox);
@@ -123,7 +122,7 @@ void HumCreationWindow::Fill()
 	mVBox->PackEnd(mToggleModeBtn);
 	mVBox->PackEnd(mCloseBtn);
 
-	// Ajoute la mVBox ‡ la fenÍtre
+	// Ajoute la mVBox √† la fen√™tre
 	AddToWindow(mVBox);
 }
 
@@ -136,12 +135,12 @@ void HumCreationWindow::OnToggleMode()
 
 	if (mIsInAddMode)
 	{
-		mMode->SetText("Mode : CrÈation");
-		mToggleModeBtn->SetLabel("Sortir mode CrÈation");
+		mMode->SetText("Mode : Cr√©ation");
+		mToggleModeBtn->SetLabel("Sortir mode Cr√©ation");
 	}
 	else
 	{
 		mMode->SetText("Mode : Attente");
-		mToggleModeBtn->SetLabel("Entrer mode CrÈation");
+		mToggleModeBtn->SetLabel("Entrer mode Cr√©ation");
 	}
 }

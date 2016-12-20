@@ -1,5 +1,8 @@
 #pragma once
 
+#include <SFML/Graphics/Texture.hpp>
+#include "../Tools/Error.h"
+
 class Texture : public sf::Texture
 {
 public:
@@ -15,7 +18,7 @@ public:
 		setSmooth(true);
 	}
 
-	// Gestion de l'état
+	// Gestion de l'Ã©tat
 	bool IsLoaded()
 	{
 		return mLoaded;

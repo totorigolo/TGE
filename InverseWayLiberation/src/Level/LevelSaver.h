@@ -19,7 +19,7 @@ private:
 	// Sauvegarde tout le niveau
 	virtual bool Process();
 
-	// Une fonction par catégorie
+	// Une fonction par catÃ©gorie
 	bool ProcessWorld();
 	bool ProcessTextures();
 	bool ProcessBodies();

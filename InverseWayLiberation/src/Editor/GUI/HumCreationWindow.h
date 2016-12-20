@@ -1,8 +1,18 @@
 #pragma once
+
+#include <SFGUI/Box.hpp>
+#include <SFGUI/Table.hpp>
+#include <SFGUI/Label.hpp>
+#include <SFGUI/Entry.hpp>
+#include <SFGUI/SpinButton.hpp>
+#include <SFGUI/Button.hpp>
+#include <SFGUI/RadioButton.hpp>
+#include <SFGUI/ComboBox.hpp>
 #include "Window.h"
 #include "../../Entities/Hum.h"
 #include "../../Physics/PhysicManager.h"
 #include "../../Entities/EntityManager.h"
+#include "../../Resources/ResourceManager.h"
 
 class EditBox;
 class HumCreationWindow : public Window
@@ -21,7 +31,7 @@ public:
 	bool IsInAddMode();
 
 protected:
-	// Construit la fenêtre et les éléments
+	// Construit la fenÃªtre et les Ã©lÃ©ments
 	virtual void Fill();
 
 	// Callbacks
@@ -36,7 +46,7 @@ private:
 	PhysicManager &mPhysicMgr;
 	ResourceManager &mResourceMgr;
 
-	/* Eléments */
+	/* ElÃ©ments */
 	sfg::Box::Ptr mVBox;
 	sfg::Label::Ptr mMode;
 	sfg::Label::Ptr mHelpLabel;

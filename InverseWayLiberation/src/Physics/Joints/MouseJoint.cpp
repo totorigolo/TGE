@@ -1,6 +1,7 @@
-#include "stdafx.h"
 #include "MouseJoint.h"
 #include "../PhysicManager.h"
+#include "../../Tools/Error.h"
+#include "../../Tools/utils.h"
 
 //Ctor
 MouseJoint::MouseJoint(const MouseJointDef &def)
@@ -12,7 +13,7 @@ MouseJoint::MouseJoint(const MouseJointDef &def)
 
 	b2MouseJointDef jointDef;
 	jointDef.bodyA = def.ground; // Le body A ne sert pas, mais doit exister
-	jointDef.bodyB = def.body; // Le body utilisé est le B
+	jointDef.bodyB = def.body; // Le body utilisÃ© est le B
 	jointDef.target = def.target;
 	jointDef.dampingRatio = def.damping;
 	jointDef.frequencyHz = def.frequencyHz;

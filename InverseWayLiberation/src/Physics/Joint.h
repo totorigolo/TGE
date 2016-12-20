@@ -1,5 +1,9 @@
 #pragma once
 
+#include <list>
+#include <Box2D/Box2D.h>
+#include "../Tools/NonCopyable.h"
+
 namespace ForceType
 {
 	enum ForceType
@@ -41,7 +45,7 @@ struct JointDef
 		maxTorque = 0.f;
 	}
 
-	// Propriétés cassable
+	// PropriÃ©tÃ©s cassable
 	bool isBreakableMaxForce;
 	ForceType::ForceType maxForceType;
 	float maxForce;
@@ -64,17 +68,17 @@ public:
 	// Destruction de ce joint
 	void Destroy();
 
-	// Met à jour le joint
+	// Met Ã  jour le joint
 	virtual void Update();
 
-	// Gestion des joints à supprimer avant celui-ci (pour les GearJoints surtout)
+	// Gestion des joints Ã  supprimer avant celui-ci (pour les GearJoints surtout)
 	void RegisterLinkedJoint(int jointID);
 	void RemoveLinkedJoint(int jointID);
 	void DestroyLinkedJoint(int jointID);
 	void DestroyAllLinkedJoints();
 	const std::list<int>& GetLinkedJoints();
 
-	// Définit si le joint est cassable
+	// DÃ©finit si le joint est cassable
 	void SetBreakableByForce(bool breakable);
 	void SetMaxForce(b2Vec2 maxForce);
 	void SetMaxForce(float maxForce);
@@ -104,7 +108,7 @@ public:
 	const b2Body* GetBodyB() const;
 	bool IsCollideConnected() const;
 
-	// Ces deux fonctions peuvent demander qqs calculs, donc à ne pas trop utiliser
+	// Ces deux fonctions peuvent demander qqs calculs, donc Ã  ne pas trop utiliser
 	b2Vec2 GetReactionForce(float inv_dt) const;
 	float GetReactionTorque(float inv_dt) const;
 
@@ -121,7 +125,7 @@ protected:
 	PhysicManager &mPhysicMgr;
 	b2Joint *mJoint;
 
-	// Propriétés cassable
+	// PropriÃ©tÃ©s cassable
 	bool mIsBreakableMaxForce;
 	ForceType::ForceType mMaxForceType;
 	float mMaxForce;
@@ -129,6 +133,6 @@ protected:
 	bool mIsBreakableMaxTorque;
 	float mMaxTorque;
 
-	// Liste des joint à supprimer avant celui-ci
+	// Liste des joint Ã  supprimer avant celui-ci
 	std::list<int> mLinkedJointList;
 };

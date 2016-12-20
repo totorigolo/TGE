@@ -1,4 +1,3 @@
-#include "stdafx.h"
 #include "DecoScenario.h"
 #include "../EditBox.h"
 #include "../../App/InputManager.h"
@@ -13,15 +12,15 @@ PointLightScenario::PointLightScenario(EditBox &editBox)
 	// Initialise le pas
 	mPosStepSaveValue = 1.f;
 
-	// Rempli la fenêtre
+	// Rempli la fenÃªtre
 	Fill();
 	mApply = true;
 }
 
-// Gestion de la sélection
+// Gestion de la sÃ©lection
 void PointLightScenario::Select(PointLight *selection)
 {
-	myAssert(selection, "BasicBody passé invalide.");
+	myAssert(selection, "BasicBody passÃ© invalide.");
 
 	mSelection = selection;
 
@@ -37,23 +36,23 @@ void PointLightScenario::Update()
 {
 	if (!mSelection) return;
 
-	// Met à jour les valeurs
+	// Met Ã  jour les valeurs
 	mPosX->SetText(Parser::floatToString(mSelection->GetPosition().x, 4));
 	mPosY->SetText(Parser::floatToString(mSelection->GetPosition().y, 4));
 
-	// Gère le Layer
+	// GÃ¨re le Layer
 	mLayer->SetValue(static_cast<float>(mSelection->GetLayer()));
 
-	// Met à jour le rayon
+	// Met Ã  jour le rayon
 	mRadius->SetValue(static_cast<float>(mSelection->GetLightRadius()));
 
-	// Met à jour la couleur
+	// Met Ã  jour la couleur
 	mColorR->SetValue(static_cast<float>(mSelection->GetLightColor().r));
 	mColorG->SetValue(static_cast<float>(mSelection->GetLightColor().g));
 	mColorB->SetValue(static_cast<float>(mSelection->GetLightColor().b));
 }
 
-// Construit la fenêtre et les éléments
+// Construit la fenÃªtre et les Ã©lÃ©ments
 void PointLightScenario::Fill()
 {
 	// Position
@@ -130,10 +129,10 @@ void PointLightScenario::Fill()
 	// Boutons
 	mRefresh = sfg::Button::Create("Actualiser");
 	mRefresh->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind(&PointLightScenario::OnRefresh, this));
-	mDestroy = sfg::Button::Create("Détruire");
+	mDestroy = sfg::Button::Create("DÃ©truire");
 	mDestroy->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind(&PointLightScenario::OnDestroy, this));
 
-	// Ajoute les éléments à la fenêtre
+	// Ajoute les Ã©lÃ©ments Ã  la fenÃªtre
 	AddToVBox(mPosTable);
 	AddToVBox(mColorHBox);
 	AddToVBox(mRadiusHBox);
@@ -232,7 +231,7 @@ void PointLightScenario::OnDestroy()
 {
 	if (!mApply || !mSelection) return;
 
-	// Détruit le BasicBody
+	// DÃ©truit le BasicBody
 	mEntityMgr.DestroyEntity(mSelection);
 	Unselect();
 	mEditBox.ScheduleUnselection();

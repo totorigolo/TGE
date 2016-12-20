@@ -1,7 +1,7 @@
 #pragma once
 #include "../App.h"
 
-// State prédéfini.
+// State prÃ©dÃ©fini.
 // Il signale que le programme doit quitter.
 #define Exit_State nullptr
 
@@ -17,7 +17,7 @@ public:
 	{
 	}
 	
-	// Exécute le State
+	// ExÃ©cute le State
 	// Retourne un pointeur sur le prochain State
 	virtual State* Run(App *app) = 0;
 };

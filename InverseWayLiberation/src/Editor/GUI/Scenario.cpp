@@ -1,4 +1,3 @@
-#include "stdafx.h"
 #include "Scenario.h"
 #include "../EditBox.h"
 
@@ -6,7 +5,7 @@
 Scenario::Scenario(EditBox &editBox, const std::string &title)
 	: mVisible(false), mApply(false), mEditBox(editBox), mTitle(title)
 {
-	// Crée la VBox
+	// CrÃ©e la VBox
 	mVBox = sfg::Box::Create(sfg::Box::Orientation::VERTICAL);
 }
 
@@ -16,10 +15,10 @@ Scenario::~Scenario()
 	mApply = false;
 }
 
-// Enregistre la fenêtre dans le Desktop
+// Enregistre la fenÃªtre dans le Desktop
 void Scenario::AddInWindow(sfg::Window::Ptr window)
 {
-	myAssert(window, "Desktop passé invalide.");
+	myAssert(window, "Desktop passÃ© invalide.");
 
 	// Retient le Desktop
 	mWindow = window;
@@ -31,33 +30,33 @@ void Scenario::UnregisterInWindow()
 {
 	mApply = false;
 
-	// Se désenregistre
+	// Se dÃ©senregistre
 	if (mWindow)
 		mWindow->Remove(mVBox);
 }
 
-// Gestion de la visibilité
+// Gestion de la visibilitÃ©
 void Scenario::Show()
 {
 	mApply = false;
 	Update();
 	mApply = true;
 
-	// Montre les éléments
+	// Montre les Ã©lÃ©ments
 	mVBox->Show(true);
 	mVisible = true;
 
-	// Change le titre de la fenêtre
+	// Change le titre de la fenÃªtre
 	SetTitle(mTitle);
 }
 void Scenario::Hide()
 {
-	// Cache les éléments
+	// Cache les Ã©lÃ©ments
 	mVBox->Show(false);
 	mVisible = false;
 }
 
-// Remplit la fenêtre d'éléments
+// Remplit la fenÃªtre d'Ã©lÃ©ments
 void Scenario::AddToVBox(sfg::Widget::Ptr widget)
 {
 	mVBox->PackEnd(widget);

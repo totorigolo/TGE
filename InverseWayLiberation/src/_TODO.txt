@@ -9,5 +9,5 @@ A faire :
  - Transformer tous les "int foo = 1;" en "int foo(1);"
  - Box2D 2.3.0
  - Upscaling Lights ?
- - Cell vide demande à être supprimée quand loin de la caméra
- - Mettre à jour les fonctions disponibles dans Lua
+ - Cell vide demande Ã  Ãªtre supprimÃ©e quand loin de la camÃ©ra
+ - Mettre Ã  jour les fonctions disponibles dans Lua

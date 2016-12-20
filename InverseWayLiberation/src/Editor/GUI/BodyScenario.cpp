@@ -1,7 +1,7 @@
-#include "stdafx.h"
 #include "BodyScenario.h"
 #include "../EditBox.h"
 #include "../../App/InputManager.h"
+#include "../../Tools/utils.h"
 
 // Ctor
 BodyScenario::BodyScenario(EditBox &editBox)
@@ -12,15 +12,15 @@ BodyScenario::BodyScenario(EditBox &editBox)
 	// Initialise le pas
 	mPosStepSaveValue = 1.f;
 
-	// Rempli la fenêtre
+	// Rempli la fenÃªtre
 	Fill();
 	mApply = true;
 }
 
-// Gestion de la sélection
+// Gestion de la sÃ©lection
 void BodyScenario::Select(BaseBody *selection)
 {
-	myAssert(selection, "BasicBody passé invalide.");
+	myAssert(selection, "BasicBody passÃ© invalide.");
 
 	mSelection = selection;
 
@@ -37,21 +37,21 @@ void BodyScenario::Update()
 	if (!mSelection) return;
 	mApply = false;
 
-	// Met à jour les valeurs
+	// Met Ã  jour les valeurs
 	mPosX->SetText(Parser::floatToString(mSelection->GetPosition().x, 4));
 	mPosY->SetText(Parser::floatToString(mSelection->GetPosition().y, 4));
 	float rot = mSelection->GetRotationD(); rot = float(int(rot) % 360) + rot - float(int(rot));
 	mRot->SetText(Parser::floatToString(rot, 4));
 
-	// Gère le type
+	// GÃ¨re le type
 	if (mSelection->Getb2BodyType() == b2BodyType::b2_dynamicBody)
 		mType[0]->SetActive(true);
 	else if (mSelection->Getb2BodyType() == b2BodyType::b2_staticBody)
 		mType[1]->SetActive(true);
 	else
-		myThrowError("Type de BaseBody non géré.");
+		myThrowError("Type de BaseBody non gÃ©rÃ©.");
 
-	// Gère le type de collision
+	// GÃ¨re le type de collision
 	if (mSelection->GetCollisionType() == BaseBody::CollisionType::Default)
 		mCollisionType->SelectItem(0);
 	else if (mSelection->GetCollisionType() == BaseBody::CollisionType::Bullet)
@@ -59,13 +59,13 @@ void BodyScenario::Update()
 	else if (mSelection->GetCollisionType() == BaseBody::CollisionType::OneSidedPlatform)
 		mCollisionType->SelectItem(2);
 	else
-		myThrowError("CollisionType de BaseBody non géré.");
+		myThrowError("CollisionType de BaseBody non gÃ©rÃ©.");
 
-	// Mets à jour la liste de texture, et la texture actuelle
+	// Mets Ã  jour la liste de texture, et la texture actuelle
 	for (int i = mTexture->GetItemCount(); i > 0; --i)
 		mTexture->RemoveItem(i - 1);
 	int index = 0;
-	for each (const auto &tex in mResourceMgr.GetTextureMap())
+	for (auto &&tex : mResourceMgr.GetTextureMap())
 	{
 		mTexture->AppendItem(tex.first);
 
@@ -74,15 +74,15 @@ void BodyScenario::Update()
 		++index;
 	}
 
-	// Gère les paramètres de collision
+	// GÃ¨re les paramÃ¨tres de collision
 	mDensity->SetValue(mSelection->GetDensity());
 	mFriction->SetValue(mSelection->GetFriction());
 	mRestitution->SetValue(mSelection->GetRestitution());
 
-	// Gère le Layer
+	// GÃ¨re le Layer
 	mLayer->SetValue(static_cast<float>(mSelection->GetLayer()));
 
-	// Mets à jour pour les ombres
+	// Mets Ã  jour pour les ombres
 	if (mSelection->IsActiveShadows())
 		mShadows[0]->SetActive(true);
 	else
@@ -91,7 +91,7 @@ void BodyScenario::Update()
 	mApply = true;
 }
 
-// Construit la fenêtre et les éléments
+// Construit la fenÃªtre et les Ã©lÃ©ments
 void BodyScenario::Fill()
 {
 	// Position et rotation
@@ -141,7 +141,7 @@ void BodyScenario::Fill()
 	mType.resize(2);//(3);
 	mType[0] = sfg::RadioButton::Create("Dynamique");
 	mType[1] = sfg::RadioButton::Create("Statique", mType[0]->GetGroup());
-	//mType[2] = sfg::RadioButton::Create("Kinématique", mType[1]->GetGroup());
+	//mType[2] = sfg::RadioButton::Create("KinÃ©matique", mType[1]->GetGroup());
 	mType[0]->GetSignal(sfg::ComboBox::OnLeftClick).Connect(std::bind(&BodyScenario::OnChangeType, this));
 	mType[1]->GetSignal(sfg::ComboBox::OnLeftClick).Connect(std::bind(&BodyScenario::OnChangeType, this));
 	mTypeTable->Attach(mTypeLabel, sf::Rect<sf::Uint32>(1, 1, 1, 1));
@@ -152,16 +152,16 @@ void BodyScenario::Fill()
 	mCollisionTypeTable = sfg::Table::Create();
 	mCollisionTypeLabel = sfg::Label::Create("ColType : ");
 	mCollisionType = sfg::ComboBox::Create();
-	mCollisionType->AppendItem("Défaut");
+	mCollisionType->AppendItem("DÃ©faut");
 	mCollisionType->AppendItem("Bullet");
 	mCollisionType->AppendItem("OneSidedPlatform");
 	mCollisionType->GetSignal(sfg::ComboBox::OnSelect).Connect(std::bind(&BodyScenario::OnChangeCollisionType, this));
 	mCollisionTypeTable->Attach(mCollisionTypeLabel, sf::Rect<sf::Uint32>(1, 1, 1, 1));
 	mCollisionTypeTable->Attach(mCollisionType, sf::Rect<sf::Uint32>(2, 1, 5, 1));
 
-	// Paramètres de collision
+	// ParamÃ¨tres de collision
 	mPhysicsParamsTable = sfg::Table::Create();
-	mDensityLabel = sfg::Label::Create("Densité :");
+	mDensityLabel = sfg::Label::Create("DensitÃ© :");
 	mDensity = sfg::SpinButton::Create(0.f, 100.f, 0.02f);
 	mDensity->SetDigits(2);
 	mDensity->GetSignal(sfg::SpinButton::OnValueChanged).Connect(std::bind(&BodyScenario::OnChangeDensity, this));
@@ -210,9 +210,9 @@ void BodyScenario::Fill()
 	mShadowsHBox->PackEnd(mShadows[0]);
 	mShadowsHBox->PackEnd(mShadows[1]);
 
-	// Bouton Détruire & ClearForces
+	// Bouton DÃ©truire & ClearForces
 	mButtonsHBox1 = sfg::Box::Create(sfg::Box::Orientation::HORIZONTAL);
-	mDestroy = sfg::Button::Create("Détruire");
+	mDestroy = sfg::Button::Create("DÃ©truire");
 	mDestroy->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind(&BodyScenario::OnDestroy, this));
 	mClearForces = sfg::Button::Create("ClearForces");
 	mClearForces->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind(&BodyScenario::OnClearForces, this));
@@ -228,7 +228,7 @@ void BodyScenario::Fill()
 	mButtonsHBox2->PackEnd(mColFilteringButton);
 	mButtonsHBox2->PackEnd(mRefresh);
 
-	// Ajoute les éléments à la fenêtre
+	// Ajoute les Ã©lÃ©ments Ã  la fenÃªtre
 	AddToVBox(mPosTable);
 	AddToVBox(mTypeTable);
 	AddToVBox(mCollisionTypeTable);
@@ -350,21 +350,21 @@ void BodyScenario::OnChangeDensity()
 {
 	if (!mApply || !mSelection) return;
 
-	// Gère les paramètres de collision
+	// GÃ¨re les paramÃ¨tres de collision
 	mSelection->SetDensity(mDensity->GetValue());
 }
 void BodyScenario::OnChangeFriction()
 {
 	if (!mApply || !mSelection) return;
 
-	// Gère les paramètres de collision
+	// GÃ¨re les paramÃ¨tres de collision
 	mSelection->SetFriction(mFriction->GetValue());
 }
 void BodyScenario::OnChangeRestitution()
 {
 	if (!mApply || !mSelection) return;
 
-	// Gère les paramètres de collision
+	// GÃ¨re les paramÃ¨tres de collision
 	mSelection->SetRestitution(mRestitution->GetValue());
 }
 void BodyScenario::OnClearForces()
@@ -372,7 +372,7 @@ void BodyScenario::OnClearForces()
 	if (!mApply || !mSelection) return;
 
 	// Obtient le BasicBody
-	myAssert(mSelection->GetBody(), "Aucun b2Body associé au BaseBody.");
+	myAssert(mSelection->GetBody(), "Aucun b2Body associÃ© au BaseBody.");
 	mSelection->GetBody()->SetLinearVelocity(b2Vec2_zero);
 	mSelection->GetBody()->SetAngularVelocity(0.f);
 }
@@ -380,7 +380,7 @@ void BodyScenario::OnDestroy()
 {
 	if (!mApply || !mSelection) return;
 
-	// Détruit le BaseBody
+	// DÃ©truit le BaseBody
 	mEntityMgr.DestroyEntity(mSelection);
 	Unselect();
 	mEditBox.ScheduleUnselection();

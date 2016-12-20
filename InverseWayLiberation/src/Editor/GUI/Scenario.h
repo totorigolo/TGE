@@ -1,4 +1,8 @@
 #pragma once
+#include <string>
+#include <SFGUI/Window.hpp>
+#include <SFGUI/Box.hpp>
+#include "../../Tools/NonCopyable.h"
 
 class EditBox;
 class Scenario : public NonCopyable
@@ -8,19 +12,19 @@ public:
 	Scenario(EditBox &editBox, const std::string &title);
 	virtual ~Scenario();
 
-	// Ajoute la VBox à la fenêtre
+	// Ajoute la VBox Ã  la fenÃªtre
 	void AddInWindow(sfg::Window::Ptr window);
 	void UnregisterInWindow();
 
 	// Actualisation
 	virtual void Update() = 0;
 
-	// Gestion de la visibilité
+	// Gestion de la visibilitÃ©
 	void Show();
 	void Hide();
 
 protected:
-	// Remplit le scénario d'éléments
+	// Remplit le scÃ©nario d'Ã©lÃ©ments
 	virtual void Fill() = 0;
 	void AddToVBox(sfg::Widget::Ptr widget);
 
@@ -42,10 +46,10 @@ private:
 	// Etat
 	bool mVisible;
 
-	// Titre du scénario
+	// Titre du scÃ©nario
 	std::string mTitle;
 
-	// Fenêtre
+	// FenÃªtre
 	sfg::Window::Ptr mWindow;
 
 	// Conteneur

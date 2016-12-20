@@ -1,12 +1,13 @@
 #pragma once
+#include <cstdlib>
 #include <SFML/System.hpp>
 #include <Box2D/Box2D.h>
 
-// Constantes de convertion Radians -> Degrés
+// Constantes de convertion Radians -> DegrÃ©s
 const float DEGREES_PER_RADIANS = 180.f / b2_pi;
 const float DPR = DEGREES_PER_RADIANS;
 
-// Constantes de convertion Degrés -> Radians
+// Constantes de convertion DegrÃ©s -> Radians
 const float RADIANS_PER_DEGREES = 1.f / DPR;
 const float RPD = RADIANS_PER_DEGREES;
 
@@ -24,7 +25,7 @@ inline std::string randomElement(T list[], int count)
 	return list[randMinMax(0, count - 1)];
 }
 
-// Renvoi le premier élément non égal à la valeur passée, sinon retourne la valeur
+// Renvoi le premier Ã©lÃ©ment non Ã©gal Ã  la valeur passÃ©e, sinon retourne la valeur
 template<typename T>
 inline T first_not_of(T list[], int count, T value)
 {
@@ -81,7 +82,7 @@ inline sf::Vector2u i2u(sf::Vector2i vec)
 	return sf::Vector2u(static_cast<unsigned int>(vec.x), static_cast<unsigned int>(vec.y));
 }
 
-// Surcharges d'opérateurs pour les sf::Vector
+// Surcharges d'opÃ©rateurs pour les sf::Vector
 template<typename T>
 sf::Vector2<T> operator*(sf::Vector2<T> a, sf::Vector2<T> b)
 {
@@ -93,7 +94,7 @@ sf::Vector2<T> operator/(sf::Vector2<T> a, sf::Vector2<T> b)
 	return sf::Vector2<T>(a.x / b.x, a.y / b.y);
 }
 
-// Surcharges d'opérateurs pour les b2Vec2
+// Surcharges d'opÃ©rateurs pour les b2Vec2
 template<typename T>
 b2Vec2 operator*(b2Vec2 a, T b)
 {

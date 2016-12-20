@@ -1,5 +1,8 @@
 #pragma once
 
+#include <SFML/Graphics.hpp>
+#include "../Tools/NonCopyable.h"
+
 enum class EntityType
 {
 	Entity,
@@ -20,7 +23,7 @@ public:
 	Entity(int layer = 0);
 	virtual ~Entity();
 
-	// Mise à jour
+	// Mise Ã  jour
 	virtual void PreUpdate();
 	virtual void Update();
 	virtual void PostUpdate();
@@ -51,7 +54,7 @@ protected:
 	// Etat
 	bool mIsAlive;
 
-	// Propriétés
+	// PropriÃ©tÃ©s
 	int mLayer;
 	EntityType mType;
 	Entity *mOwner;

@@ -1,4 +1,3 @@
-#include "stdafx.h"
 #include "PointLightCreationWindow.h"
 #include "../EditBox.h"
 #include "../../App/InputManager.h"
@@ -11,7 +10,7 @@ PointLightCreationWindow::PointLightCreationWindow()
 	mEntityMgr(EntityManager::GetInstance()), mPhysicMgr(PhysicManager::GetInstance()),
 	mIsInAddMode(false)
 {
-	// Rempli la fenÍtre
+	// Rempli la fen√™tre
 	Fill();
 	mApply = true;
 }
@@ -21,17 +20,17 @@ void PointLightCreationWindow::Add(b2Vec2 pos)
 {
 	if (!mApply) return;
 
-	// Sort du mode crÈation si la fenÍtre est cachÈe
+	// Sort du mode cr√©ation si la fen√™tre est cach√©e
 	if (!this->IsVisible() || !mIsInAddMode)
 	{
 		OnToggleMode();
 		return;
 	}
 
-	// RÈcupËre la couleur
+	// R√©cup√®re la couleur
 	sf::Color c((sf::Uint8) mColorR->GetValue(), (sf::Uint8) mColorG->GetValue(), (sf::Uint8) mColorB->GetValue());
 
-	// CrÈe la dÈco
+	// Cr√©e la d√©co
 	EntityFactory::CreatePointLight(pos, (int) mRadius->GetValue(), c, (int) mLayer->GetValue());
 
 	OnRefresh();
@@ -48,15 +47,15 @@ bool PointLightCreationWindow::IsInAddMode()
 	return mIsInAddMode;
 }
 
-// Construit la fenÍtre et les ÈlÈments
+// Construit la fen√™tre et les √©l√©ments
 void PointLightCreationWindow::Fill()
 {
-	// CrÈe le Layout
+	// Cr√©e le Layout
 	mVBox = sfg::Box::Create(sfg::Box::Orientation::VERTICAL);
 
-	// ElÈments
+	// El√©ments
 	mMode = sfg::Label::Create("Mode : Attente");
-	mHelpLabel = sfg::Label::Create("CrÈer dÈco : Ctrl + clic gauche");
+	mHelpLabel = sfg::Label::Create("Cr√©er d√©co : Ctrl + clic gauche");
 
 	// Couleur
 	mColorHBox = sfg::Box::Create(sfg::Box::Orientation::HORIZONTAL);
@@ -97,7 +96,7 @@ void PointLightCreationWindow::Fill()
 	mLayerHBox->PackEnd(mLayer);
 
 	// Boutons
-	mToggleModeBtn = sfg::Button::Create("Entrer mode CrÈation");
+	mToggleModeBtn = sfg::Button::Create("Entrer mode Cr√©ation");
 	mButtonsHBox = sfg::Box::Create(sfg::Box::Orientation::HORIZONTAL);
 	mRefreshBtn = sfg::Button::Create("Actualiser");
 	mCloseBtn = sfg::Button::Create("Fermer");
@@ -109,7 +108,7 @@ void PointLightCreationWindow::Fill()
 	mRefreshBtn->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind(&PointLightCreationWindow::OnRefresh, this));
 	mCloseBtn->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind(&PointLightCreationWindow::OnClose, this));
 
-	// Ajoute les ÈlÈments ‡ la fenÍtre
+	// Ajoute les √©l√©ments √† la fen√™tre
 	mVBox->PackEnd(mMode);
 	mVBox->PackEnd(mHelpLabel);
 	mVBox->PackEnd(mColorHBox);
@@ -118,7 +117,7 @@ void PointLightCreationWindow::Fill()
 	mVBox->PackEnd(mToggleModeBtn);
 	mVBox->PackEnd(mButtonsHBox);
 
-	// Ajoute la mVBox ‡ la fenÍtre
+	// Ajoute la mVBox √† la fen√™tre
 	AddToWindow(mVBox);
 }
 
@@ -131,12 +130,12 @@ void PointLightCreationWindow::OnToggleMode()
 
 	if (mIsInAddMode)
 	{
-		mMode->SetText("Mode : CrÈation");
-		mToggleModeBtn->SetLabel("Sortir mode CrÈation");
+		mMode->SetText("Mode : Cr√©ation");
+		mToggleModeBtn->SetLabel("Sortir mode Cr√©ation");
 	}
 	else
 	{
 		mMode->SetText("Mode : Attente");
-		mToggleModeBtn->SetLabel("Entrer mode CrÈation");
+		mToggleModeBtn->SetLabel("Entrer mode Cr√©ation");
 	}
 }

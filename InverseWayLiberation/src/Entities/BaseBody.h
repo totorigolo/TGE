@@ -1,4 +1,6 @@
 #pragma once
+
+#include <Box2D/Box2D.h>
 #include "Entity.h"
 #include "Hull.h"
 #include "../Resources/Texture.h"
@@ -7,7 +9,7 @@ class PhysicManager;
 class BaseBody : public Entity
 {
 public:
-	// Propriété de collision
+	// PropriÃ©tÃ© de collision
 	enum class CollisionType
 	{
 		Default,
@@ -20,7 +22,7 @@ public:
 	BaseBody(int layer = 1);
 	virtual ~BaseBody();
 
-	// Mise à jour
+	// Mise Ã  jour
 	virtual void PreUpdate();
 	virtual void Update();
 
@@ -38,7 +40,7 @@ public:
 	sf::FloatRect GetsfBoundingBox(void) const;
 
 	/* Accesseurs */
-	// Est-ce que le Body est créé
+	// Est-ce que le Body est crÃ©Ã©
 	bool IsCreated() const;
 	// Type de b2Body
 	b2BodyType Getb2BodyType() const;
@@ -46,7 +48,7 @@ public:
 	// Type de collision
 	void SetCollisionType(CollisionType type);
 	CollisionType GetCollisionType() const;
-	// Paramètres de collision
+	// ParamÃ¨tres de collision
 	float GetDensity() const;
 	void SetDensity(float density);
 	float GetFriction() const;
@@ -64,9 +66,9 @@ public:
 	const b2Body* GetBody() const;
 	// Position & rotation
 	const b2Vec2 GetPosition() const;
-	const float GetRotationD() const; // Degrés
+	const float GetRotationD() const; // DegrÃ©s
 	const float GetRotationR() const; // Radians
-	// Fonction à n'employer que pour éditer les niveaux
+	// Fonction Ã  n'employer que pour Ã©diter les niveaux
 	void SetTransform(const b2Vec2 &position, float angle = 0.f);
 
 protected:
@@ -74,7 +76,7 @@ protected:
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
 protected:
-	// Propriété de collision
+	// PropriÃ©tÃ© de collision
 	CollisionType mCollisionType;
 
 	// PhysicManager

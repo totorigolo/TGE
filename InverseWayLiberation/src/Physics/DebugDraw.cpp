@@ -1,6 +1,6 @@
-#include "stdafx.h"
 #include "DebugDraw.h"
 #include "PhysicManager.h"
+#include "../Tools/utils.h"
 
 // Ctor
 DebugDraw::DebugDraw(PhysicManager &physicMgr)
@@ -108,7 +108,7 @@ void DebugDraw::DrawPoint(const b2Vec2& p, const b2Color& color)
 
 void DebugDraw::DrawContacts()
 {
-	// Récupère les contacts
+	// RÃ©cupÃ¨re les contacts
 	b2Contact *contact = mPhysicMgr.GetWorld()->GetContactList();
 
 	// Affiche les contacts

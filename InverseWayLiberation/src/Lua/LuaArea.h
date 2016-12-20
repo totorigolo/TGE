@@ -17,7 +17,7 @@ public:
 	b2AABB GetAABB();
 	const std::string& GetAction();
 	
-	// TODO: Les actions connaissent les areas : une fois faite, toutes les areas sont supprimées (faire une classe Area)
+	// TODO: Les actions connaissent les areas : une fois faite, toutes les areas sont supprimÃ©es (faire une classe Area)
 private:
 	bool mDone;
 	bool mOnce;

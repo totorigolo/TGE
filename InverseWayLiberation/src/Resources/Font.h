@@ -11,10 +11,14 @@ public:
 		: mLoaded(false), mName(name), mPath(path)
 	{
 		mLoaded = sf::Font::loadFromFile(path);
+		if (!mLoaded) {
+			// Rescue
+			mLoaded = sf::Font::loadFromFile("/usr/share/fonts/TTF/LiberationSans-Regular.ttf");
+		}
 		myCheckError_c(mLoaded, "Impossible de charger :\n" + path);
 	}
 	
-	// Gestion de l'état
+	// Gestion de l'Ã©tat
 	bool IsLoaded()
 	{
 		return mLoaded;

@@ -1,4 +1,3 @@
-#include "stdafx.h"
 #include "LevelLoader.h"
 #include "LevelManager.h"
 
@@ -31,6 +30,7 @@
 #include "../Entities/PointLight.h"
 #include "../Entities/EntityFactory.h"
 #include "../Entities/EntityManager.h"
+#include "../Tools/utils.h"
 
 // Ctor
 LevelLoader::LevelLoader(const std::string& path)
@@ -48,7 +48,7 @@ LevelLoader::LevelLoader(const std::string& path)
 		// Vide le niveau
 		mLevel.Clear();
 
-		// Analyse le fichier du niveau et crée le Level
+		// Analyse le fichier du niveau et crÃ©e le Level
 		mLevel.mIsCharged = Process();
 		mLevel.PrepareForGame();
 	}
@@ -62,7 +62,7 @@ LevelLoader::~LevelLoader(void)
 // Analyse tout le fichier
 bool LevelLoader::Process()
 {
-	// Vérifie que <level> existe dans le fichier
+	// VÃ©rifie que <level> existe dans le fichier
 	tinyxml2::XMLHandle hdl(mFile);
 	tinyxml2::XMLElement *elem = hdl.FirstChildElement("level").ToElement();
 	myCheckError(elem, "Une erreur est survenue lors du chargement du niveau.\n"
@@ -71,62 +71,62 @@ bool LevelLoader::Process()
 	/* Charge tout */
 	// Le Monde
 	myCheckError(ProcessWorld(), "Une erreur est survenue lors du chargement du niveau.\n"
-								 "Le chargement de World a échoué (" + mPath + ").");
+								 "Le chargement de World a Ã©chouÃ© (" + mPath + ").");
 
 	// Les textures
 	myCheckError(ProcessTextures(), "Une erreur est survenue lors du chargement du niveau.\n"
-									"Le chargement des textures a échoué (" + mPath + ").");
+									"Le chargement des textures a Ã©chouÃ© (" + mPath + ").");
 
 	// Les Bodies basiques
 	myCheckError(ProcessBasicBodies(), "Une erreur est survenue lors du chargement du niveau.\n"
-									   "Le chargement des BasicBodies a échoué (" + mPath + ").");
+									   "Le chargement des BasicBodies a Ã©chouÃ© (" + mPath + ").");
 
 	// Les Bodies polygones
 	myCheckError(ProcessPoly(), "Une erreur est survenue lors du chargement du niveau.\n"
-								"Le chargement des Poly a échoué (" + mPath + ").");
+								"Le chargement des Poly a Ã©chouÃ© (" + mPath + ").");
 
 	// Les Entities
 	myCheckError(ProcessEntities(), "Une erreur est survenue lors du chargement du niveau.\n"
-									"Le chargement des Entities a échoué (" + mPath + ").");
+									"Le chargement des Entities a Ã©chouÃ© (" + mPath + ").");
 
 	// Les joints
 	myCheckError(ProcessJoints(), "Une erreur est survenue lors du chargement du niveau.\n"
-								  "Le chargement des joints a échoué (" + mPath + ").");
+								  "Le chargement des joints a Ã©chouÃ© (" + mPath + ").");
 
-	// La déco
+	// La dÃ©co
 	myCheckError(ProcessDeco(), "Une erreur est survenue lors du chargement du niveau.\n"
-									"Le chargement de la déco a échoué (" + mPath + ").");
+									"Le chargement de la dÃ©co a Ã©chouÃ© (" + mPath + ").");
 
 	// Les actions
 	myCheckError(ProcessActions(), "Une erreur est survenue lors du chargement du niveau.\n"
-									"Le chargement des actions a échoué (" + mPath + ").");
+									"Le chargement des actions a Ã©chouÃ© (" + mPath + ").");
 
-	// Les déclencheurs
+	// Les dÃ©clencheurs
 	myCheckError(ProcessTriggers(), "Une erreur est survenue lors du chargement du niveau.\n"
-									"Le chargement des triggers a échoué (" + mPath + ").");
+									"Le chargement des triggers a Ã©chouÃ© (" + mPath + ").");
 
-	// Les lumières
+	// Les lumiÃ¨res
 	myCheckError(ProcessLights(), "Une erreur est survenue lors du chargement du niveau.\n"
-		"Le chargement des lumières a échoué (" + mPath + ").");
+		"Le chargement des lumiÃ¨res a Ã©chouÃ© (" + mPath + ").");
 
 	return true;
 }
 
-// Une fonction par catégorie
+// Une fonction par catÃ©gorie
 bool LevelLoader::ProcessWorld()
 {
-	// Récupère <world>
+	// RÃ©cupÃ¨re <world>
 	tinyxml2::XMLHandle hdl(mFile);
 	tinyxml2::XMLElement *world = hdl.FirstChildElement("level").FirstChildElement("world").ToElement();
 
-	// Valeurs par défaut
+	// Valeurs par dÃ©faut
 	b2Vec2 gravity(0.f, -9.8f);
 	float PPM = 100.f;
 	sf::Color bckgColor = sf::Color::White;
 	b2Vec2 originView(0.f, 0.f);
 	float defaultZoom = 1.f;
 
-	// Récupère les valeurs
+	// RÃ©cupÃ¨re les valeurs
 	if (world)
 	{
 		if (world->Attribute("gravity")) gravity = Parser::stringToB2Vec2(world->Attribute("gravity"));
@@ -136,10 +136,10 @@ bool LevelLoader::ProcessWorld()
 		world->QueryFloatAttribute("defaultzoom", &defaultZoom);
 	}
 
-	// Si le monde n'est pas défini, on averti
+	// Si le monde n'est pas dÃ©fini, on averti
 	else
 	{
-		Dialog::Information("Les monde n'a pas été défini dans le niveau.\nLes valeurs par défaut ont été utilisées.");
+		Dialog::Information("Les monde n'a pas Ã©tÃ© dÃ©fini dans le niveau.\nLes valeurs par dÃ©faut ont Ã©tÃ© utilisÃ©es.");
 	}
 
 	// Change les attributs
@@ -153,28 +153,28 @@ bool LevelLoader::ProcessWorld()
 }
 bool LevelLoader::ProcessTextures()
 {
-	// Récupère <textures>
+	// RÃ©cupÃ¨re <textures>
 	tinyxml2::XMLHandle hdl(mFile);
 	tinyxml2::XMLHandle textures = hdl.FirstChildElement("level").FirstChildElement("textures");
 
-	// Vérifie que <textures> existe
-	myCheckError(textures.ToElement(), "Une erreur est survenue lors du chargement du niveau.\n<textures> non trouvé (" + mPath + ").");
+	// VÃ©rifie que <textures> existe
+	myCheckError(textures.ToElement(), "Une erreur est survenue lors du chargement du niveau.\n<textures> non trouvÃ© (" + mPath + ").");
 	
-	// On crée les attributs
+	// On crÃ©e les attributs
 	std::string path, name;
 
 	// Pour toutes les textures
 	tinyxml2::XMLElement *texture = textures.FirstChildElement().ToElement();
 	while (texture)
 	{
-		// Récupère les éléments
+		// RÃ©cupÃ¨re les Ã©lÃ©ments
 		if (texture->Attribute("name")) name = texture->Attribute("name");
 		if (texture->Attribute("src")) path = texture->Attribute("src");
 
 		// Charge la texture
 		mResourceManager.LoadTexture(name, path);
 
-		// On récupère la prochaine texture
+		// On rÃ©cupÃ¨re la prochaine texture
 		texture = texture->NextSiblingElement();
 	}
 
@@ -182,15 +182,15 @@ bool LevelLoader::ProcessTextures()
 }
 bool LevelLoader::ProcessPoly()
 {
-	// Récupère <polybodies>
+	// RÃ©cupÃ¨re <polybodies>
 	tinyxml2::XMLHandle hdl(mFile);
 	tinyxml2::XMLHandle bodies = hdl.FirstChildElement("level").FirstChildElement("polybodies");
 
-	// Vérifie que <polybodies> existe
+	// VÃ©rifie que <polybodies> existe
 	if (!bodies.ToElement())
 		return true;
 
-	// On crée les attributs
+	// On crÃ©e les attributs
 	PolyBody *pb = nullptr;
 	PolyChain *pc = nullptr;
 	unsigned int id = 0U;
@@ -219,20 +219,20 @@ bool LevelLoader::ProcessPoly()
 	{
 		polyBodiesDone = true;
 
-		// Récupère <polychains>
+		// RÃ©cupÃ¨re <polychains>
 		bodies = hdl.FirstChildElement("level").FirstChildElement("polychains");
 
-		// Vérifie que <polychains> existe
+		// VÃ©rifie que <polychains> existe
 		if (!bodies.ToElement())
 			return true;
 
-		// Récupère le premier
+		// RÃ©cupÃ¨re le premier
 		body = bodies.FirstChildElement().ToElement();
 	}
 
 	while (body)
 	{
-		// Réinitialise les attributs
+		// RÃ©initialise les attributs
 		pb = nullptr;
 		pc = nullptr;
 		id = 0U;
@@ -254,15 +254,15 @@ bool LevelLoader::ProcessPoly()
 		vertices.clear();
 		shadows = true;
 
-		// Récupère l'ID
+		// RÃ©cupÃ¨re l'ID
 		if (body->Attribute("id"))
 			body->QueryUnsignedAttribute("id", &id);
 
-		// Récupère le nom
+		// RÃ©cupÃ¨re le nom
 		if (body->Attribute("name"))
 			name = body->Attribute("name");
 
-		// Récupère le type
+		// RÃ©cupÃ¨re le type
 		if (body->Attribute("type"))
 		{
 			type = body->Attribute("type");
@@ -273,12 +273,12 @@ bool LevelLoader::ProcessPoly()
 			else if (type == "kinematic")
 				b2type = b2BodyType::b2_kinematicBody;
 			else
-				Dialog::Error("PolyBody type inconnu (" + type + ") !\nStatique par défaut.");
+				Dialog::Error("PolyBody type inconnu (" + type + ") !\nStatique par dÃ©faut.");
 		}
 		else
-			Dialog::Error("Poly type introuvable !\nStatique par défaut.");
+			Dialog::Error("Poly type introuvable !\nStatique par dÃ©faut.");
 
-		// Récupère le type de chaine
+		// RÃ©cupÃ¨re le type de chaine
 		if (polyBodiesDone)
 		{
 			std::string pct = body->Name();
@@ -287,38 +287,38 @@ bool LevelLoader::ProcessPoly()
 			else if (pct == "loop")
 				chainType = PolyChain::Loop;
 			else
-				Dialog::Error("Poly ChainType inconnu (" + pct + ") !\nChaine par défaut.");
+				Dialog::Error("Poly ChainType inconnu (" + pct + ") !\nChaine par dÃ©faut.");
 		}
 
-		// Récupère la texture et vérifie si elle existe
+		// RÃ©cupÃ¨re la texture et vÃ©rifie si elle existe
 		if (body->Attribute("texture")) texture = body->Attribute("texture");
 		if (!mResourceManager.TextureExists(texture))
 		{
-			Dialog::Error("Texture \"" + texture + "\" inconnue. Body ignoré !");
+			Dialog::Error("Texture \"" + texture + "\" inconnue. Body ignorÃ© !");
 
 			// On passe au prochain body
 			body = body->NextSiblingElement();
 			continue;
 		}
 
-		// Récupère la position et la rotation
+		// RÃ©cupÃ¨re la position et la rotation
 		body->QueryFloatAttribute("rotation", &rotation);
 		if (body->Attribute("pos")) posRot = Parser::stringToB2Vec3(body->Attribute("pos"));
 		posRot.z = rotation;
 
-		// Récupère l'état
+		// RÃ©cupÃ¨re l'Ã©tat
 		if (body->Attribute("linvel")) linvel = Parser::stringToB2Vec2(body->Attribute("linvel"));
 		body->QueryFloatAttribute("angvel", &angvel);
 
-		// Récupère le layer
+		// RÃ©cupÃ¨re le layer
 		body->QueryIntAttribute("layer", &layer);
 
-		// Récupère les propriétés
+		// RÃ©cupÃ¨re les propriÃ©tÃ©s
 		body->QueryFloatAttribute("density", &density);
 		body->QueryFloatAttribute("friction", &friction);
 		body->QueryFloatAttribute("restitution", &restitution);
 
-		// Récupère les propriétés de groupe
+		// RÃ©cupÃ¨re les propriÃ©tÃ©s de groupe
 		int tmp = 0;
 		body->QueryIntAttribute("groupIndex", &tmp);
 		groupIndex = static_cast<int16>(tmp);
@@ -329,10 +329,10 @@ bool LevelLoader::ProcessPoly()
 		body->QueryIntAttribute("maskBits", &tmp);
 		maskBits = static_cast<uint16>(tmp);
 
-		// Récupère s'il projette une ombre
+		// RÃ©cupÃ¨re s'il projette une ombre
 		body->QueryBoolAttribute("shadows", &shadows);
 
-		// Récupère les points
+		// RÃ©cupÃ¨re les points
 		tinyxml2::XMLHandle bodyHandle(body);
 		tinyxml2::XMLElement *point = bodyHandle.FirstChildElement().ToElement();
 		while (point)
@@ -340,7 +340,7 @@ bool LevelLoader::ProcessPoly()
 			// Si il s'agit bien d'une balise <point>
 			if (std::string(point->Name()) == std::string("point"))
 			{
-				// Récupère la position
+				// RÃ©cupÃ¨re la position
 				if (point->Attribute("pos"))
 				{
 					b2Vec2 p = Parser::stringToB2Vec2(point->Attribute("pos"));
@@ -348,11 +348,11 @@ bool LevelLoader::ProcessPoly()
 				}
 			}
 
-			// On récupère le prochain point
+			// On rÃ©cupÃ¨re le prochain point
 			point = point->NextSiblingElement();
 		}
 
-		// Crée le body
+		// CrÃ©e le body
 		if (!polyBodiesDone)
 		{
 			pb = new PolyBody(layer);
@@ -366,14 +366,14 @@ bool LevelLoader::ProcessPoly()
 					   density, friction, restitution, groupIndex, categoryBits, maskBits);
 		}
 
-		// Restore l'état
+		// Restore l'Ã©tat
 		if (type == "dynamic" || type == "kinematic")
 		{
 			pb->GetBody()->SetLinearVelocity(linvel);
 			pb->GetBody()->SetAngularVelocity(angvel);
 		}
 
-		// Si le Poly a été créé
+		// Si le Poly a Ã©tÃ© crÃ©Ã©
 		BaseBody *bb = nullptr;
 		if (pc)
 			bb = (BaseBody*) pc;
@@ -392,23 +392,23 @@ bool LevelLoader::ProcessPoly()
 				if (r) Dialog::Error("Le nom "+name+" apparait plusieurs fois !");
 			}
 
-			// Propriétés de collision
+			// PropriÃ©tÃ©s de collision
 			body->QueryBoolAttribute("osp", &osp);
 			body->QueryBoolAttribute("bullet", &bullet);
 
-			// Applique les propriétés
+			// Applique les propriÃ©tÃ©s
 			if (osp && bullet)
-				Dialog::Error("Impossible d'avoir osp et bullet en même temps !");
+				Dialog::Error("Impossible d'avoir osp et bullet en mÃªme temps !");
 			else if (osp)
 				bb->SetCollisionType(BasicBody::CollisionType::OneSidedPlatform);
 			else if (bullet)
 				bb->SetCollisionType(BasicBody::CollisionType::Bullet);
 
-			// Gère l'activation des ombres
+			// GÃ¨re l'activation des ombres
 			bb->SetShadowsActive(shadows);
 		}
 
-		// On récupère le prochain body
+		// On rÃ©cupÃ¨re le prochain body
 		body = body->NextSiblingElement();
 
 		// Si on n'a plus de body, on passe aux PolyChains
@@ -416,14 +416,14 @@ bool LevelLoader::ProcessPoly()
 		{
 			polyBodiesDone = true;
 
-			// Récupère <polychains>
+			// RÃ©cupÃ¨re <polychains>
 			bodies = hdl.FirstChildElement("level").FirstChildElement("polychains");
 
-			// Vérifie que <polychains> existe
+			// VÃ©rifie que <polychains> existe
 			if (!bodies.ToElement())
 				return true;
 
-			// Récupère le premier
+			// RÃ©cupÃ¨re le premier
 			body = bodies.FirstChildElement().ToElement();
 		}
 	}
@@ -432,15 +432,15 @@ bool LevelLoader::ProcessPoly()
 }
 bool LevelLoader::ProcessBasicBodies()
 {
-	// Récupère <basicbodies>
+	// RÃ©cupÃ¨re <basicbodies>
 	tinyxml2::XMLHandle hdl(mFile);
 	tinyxml2::XMLHandle bodies = hdl.FirstChildElement("level").FirstChildElement("basicbodies");
 
-	// Vérifie que <basicbodies> existe
+	// VÃ©rifie que <basicbodies> existe
 	if (!bodies.ToElement())
 		return true;
 
-	// On crée les attributs
+	// On crÃ©e les attributs
 	BasicBody *bb = nullptr;
 	unsigned int id = 0U;
 	std::string name;
@@ -461,7 +461,7 @@ bool LevelLoader::ProcessBasicBodies()
 	tinyxml2::XMLElement *body = bodies.FirstChildElement().ToElement();
 	while (body)
 	{
-		// Réinitialise les attributs
+		// RÃ©initialise les attributs
 		bb = nullptr;
 		id = 0U;
 		name = "";
@@ -480,18 +480,18 @@ bool LevelLoader::ProcessBasicBodies()
 		angvel = 0.f;
 		shadows = true;
 
-		// Récupère l'ID
+		// RÃ©cupÃ¨re l'ID
 		if (body->Attribute("id"))
 			body->QueryUnsignedAttribute("id", &id);
 
-		// Récupère le nom
+		// RÃ©cupÃ¨re le nom
 		if (body->Attribute("name"))
 			name = body->Attribute("name");
 
-		// Récupère la forme
+		// RÃ©cupÃ¨re la forme
 		forme = body->Name();
 
-		// Récupère le type
+		// RÃ©cupÃ¨re le type
 		if (body->Attribute("type"))
 		{
 			std::string stype = body->Attribute("type");
@@ -505,35 +505,35 @@ bool LevelLoader::ProcessBasicBodies()
 				Dialog::Error("BasicBody type inconnu (" + stype + ") !");
 		}
 
-		// Récupère la texture et vérifie si elle existe
+		// RÃ©cupÃ¨re la texture et vÃ©rifie si elle existe
 		if (body->Attribute("texture")) texture = body->Attribute("texture");
 		if (!mResourceManager.TextureExists(texture))
 		{
-			Dialog::Error("Texture \"" + texture + "\" inconnue. Body ignoré !");
+			Dialog::Error("Texture \"" + texture + "\" inconnue. Body ignorÃ© !");
 
 			// On passe au prochain body
 			body = body->NextSiblingElement();
 			continue;
 		}
 
-		// Récupère la position et la rotation
+		// RÃ©cupÃ¨re la position et la rotation
 		body->QueryFloatAttribute("rotation", &rotation);
 		if (body->Attribute("pos")) posRot = Parser::stringToB2Vec3(body->Attribute("pos"));
 		posRot.z = rotation;
 
-		// Récupère l'état
+		// RÃ©cupÃ¨re l'Ã©tat
 		if (body->Attribute("linvel")) linvel = Parser::stringToB2Vec2(body->Attribute("linvel"));
 		body->QueryFloatAttribute("angvel", &angvel);
 
-		// Récupère le layer
+		// RÃ©cupÃ¨re le layer
 		body->QueryIntAttribute("layer", &layer);
 
-		// Récupère les propriétés
+		// RÃ©cupÃ¨re les propriÃ©tÃ©s
 		body->QueryFloatAttribute("density", &density);
 		body->QueryFloatAttribute("friction", &friction);
 		body->QueryFloatAttribute("restitution", &restitution);
 
-		// Récupère les propriétés de groupe
+		// RÃ©cupÃ¨re les propriÃ©tÃ©s de groupe
 		int tmp = 0;
 		body->QueryIntAttribute("groupIndex", &tmp);
 		groupIndex = static_cast<int16>(tmp);
@@ -544,10 +544,10 @@ bool LevelLoader::ProcessBasicBodies()
 		body->QueryIntAttribute("maskBits", &tmp);
 		maskBits = static_cast<uint16>(tmp);
 
-		// Récupère s'il projette une ombre
+		// RÃ©cupÃ¨re s'il projette une ombre
 		body->QueryBoolAttribute("shadows", &shadows);
 
-		// Crée le body
+		// CrÃ©e le body
 		if (forme == "box")
 		{
 			bb = new BasicBody(layer);
@@ -561,7 +561,7 @@ bool LevelLoader::ProcessBasicBodies()
 		else
 			Dialog::Error("BasicBody forme inconnu (" + forme + ") !");
 
-		// Si le BasicBody a été créé
+		// Si le BasicBody a Ã©tÃ© crÃ©Ã©
 		if (bb)
 		{
 			// Change l'ID
@@ -575,30 +575,30 @@ bool LevelLoader::ProcessBasicBodies()
 				if (r) Dialog::Error("Le nom " + name + " apparait plusieurs fois !");
 			}
 
-			// Restore l'état
+			// Restore l'Ã©tat
 			if (type == b2BodyType::b2_dynamicBody || type == b2BodyType::b2_kinematicBody)
 			{
 				bb->GetBody()->SetLinearVelocity(linvel);
 				bb->GetBody()->SetAngularVelocity(angvel);
 			}
 
-			// Propriétés de collision
+			// PropriÃ©tÃ©s de collision
 			body->QueryBoolAttribute("osp", &osp);
 			body->QueryBoolAttribute("bullet", &bullet);
 
-			// Applique les propriétés
+			// Applique les propriÃ©tÃ©s
 			if (osp && bullet)
-				Dialog::Error("Impossible d'avoir osp et bullet en même temps !");
+				Dialog::Error("Impossible d'avoir osp et bullet en mÃªme temps !");
 			else if (osp)
 				bb->SetCollisionType(BasicBody::CollisionType::OneSidedPlatform);
 			else if (bullet)
 				bb->SetCollisionType(BasicBody::CollisionType::Bullet);
 
-			// Gère l'activation des ombres
+			// GÃ¨re l'activation des ombres
 			bb->SetShadowsActive(shadows);
 		}
 
-		// On récupère le prochain body
+		// On rÃ©cupÃ¨re le prochain body
 		body = body->NextSiblingElement();
 	}
 
@@ -606,14 +606,14 @@ bool LevelLoader::ProcessBasicBodies()
 }
 bool LevelLoader::ProcessEntities()
 {
-	// Récupère <entities>
+	// RÃ©cupÃ¨re <entities>
 	tinyxml2::XMLHandle hdl(mFile);
 	tinyxml2::XMLHandle entities = hdl.FirstChildElement("level").FirstChildElement("entities");
 
-	// Vérifie que <entities> existe
-	myCheckError(entities.ToElement(), "Une erreur est survenue lors du chargement du niveau.\n<entities> non trouvé (" + mPath + ").");
+	// VÃ©rifie que <entities> existe
+	myCheckError(entities.ToElement(), "Une erreur est survenue lors du chargement du niveau.\n<entities> non trouvÃ© (" + mPath + ").");
 
-	// On crée les attributs
+	// On crÃ©e les attributs
 	Entity *e = nullptr;
 	unsigned int id = 0U;
 	std::string name;
@@ -625,7 +625,7 @@ bool LevelLoader::ProcessEntities()
 	tinyxml2::XMLElement *entity = entities.FirstChildElement().ToElement();
 	while (entity)
 	{
-		// Réinitialise les attributs
+		// RÃ©initialise les attributs
 		e = nullptr;
 		id = 0U;
 		name = "";
@@ -634,25 +634,25 @@ bool LevelLoader::ProcessEntities()
 		animation = "";
 		position = b2Vec2_zero;
 
-		// Récupère l'ID
+		// RÃ©cupÃ¨re l'ID
 		if (entity->Attribute("id"))
 			entity->QueryUnsignedAttribute("id", &id);
 
-		// Récupère le nom
+		// RÃ©cupÃ¨re le nom
 		if (entity->Attribute("name"))
 			entity->Attribute("name");
 
-		// Récupère le type
+		// RÃ©cupÃ¨re le type
 		type = entity->Name();
 
-		// Récupère la position et la rotation
+		// RÃ©cupÃ¨re la position et la rotation
 		if (entity->Attribute("position")) position = Parser::stringToB2Vec2(entity->Attribute("position"));
 		else if (entity->Attribute("pos")) position = Parser::stringToB2Vec2(entity->Attribute("pos"));
 		
-		// Récupère le layer
+		// RÃ©cupÃ¨re le layer
 		entity->QueryIntAttribute("layer", &layer);
 
-		// Crée l'Entity
+		// CrÃ©e l'Entity
 		if (type == "ragdoll")
 		{
 			EntityFactory::CreateRagdoll(position, layer);
@@ -663,7 +663,7 @@ bool LevelLoader::ProcessEntities()
 		}
 		else if (type == "player")
 		{
-			// Récupère les infos du player
+			// RÃ©cupÃ¨re les infos du player
 			double age = 5.0, strengh = 0.0;
 			entity->QueryDoubleAttribute("age", &age);
 			entity->QueryDoubleAttribute("strengh", &strengh);
@@ -685,7 +685,7 @@ bool LevelLoader::ProcessEntities()
 		}
 		else if (type == "hum")
 		{
-			// Récupère les infos du hum
+			// RÃ©cupÃ¨re les infos du hum
 			double age = 5.0, strengh = 0.0;
 			entity->QueryDoubleAttribute("age", &age);
 			entity->QueryDoubleAttribute("strengh", &strengh);
@@ -709,7 +709,7 @@ bool LevelLoader::ProcessEntities()
 			Dialog::Error("Entity type inconnu ("+ type +") !");
 		}
 
-		// On récupère la prochaine entity
+		// On rÃ©cupÃ¨re la prochaine entity
 		entity = entity->NextSiblingElement();
 	}
 
@@ -717,18 +717,18 @@ bool LevelLoader::ProcessEntities()
 }
 bool LevelLoader::ProcessJoints()
 {
-	// Récupère <joints>
+	// RÃ©cupÃ¨re <joints>
 	tinyxml2::XMLHandle hdl(mFile);
 	tinyxml2::XMLHandle joints = hdl.FirstChildElement("level").FirstChildElement("joints");
 
-	// Vérifie que <joints> existe
+	// VÃ©rifie que <joints> existe
 	if (!joints.ToElement())
 	{
 		// Il n'y a tout simplement pas de joint.
 		return true;
 	}
 
-	// On crée les attributs
+	// On crÃ©e les attributs
 	Joint *j = nullptr;
 	bool hasID = false;
 	unsigned int id = 0U;
@@ -743,7 +743,7 @@ bool LevelLoader::ProcessJoints()
 	tinyxml2::XMLElement *joint = joints.FirstChildElement().ToElement();
 	while (joint)
 	{
-		// Réinitialise les attributs
+		// RÃ©initialise les attributs
 		j = nullptr;
 		hasID = false;
 		id = 0U;
@@ -752,27 +752,27 @@ bool LevelLoader::ProcessJoints()
 		b1 = nullptr, b2 = nullptr;
 		collision = true;
 
-		// Récupère l'ID
+		// RÃ©cupÃ¨re l'ID
 		if (joint->Attribute("id"))
 		{
 			joint->QueryUnsignedAttribute("id", &id);
 			hasID = true;
 		}
 
-		// Récupère le nom
+		// RÃ©cupÃ¨re le nom
 		if (joint->Attribute("name"))
 			name = joint->Attribute("name");
 
-		// Récupère le type
+		// RÃ©cupÃ¨re le type
 		type = joint->Name();
 
-		// Change la valeur de collision par défaut
+		// Change la valeur de collision par dÃ©faut
 		if (type == "weld" || type == "prismatic" || type == "revolute" || type == "wheel")
 		{
 			collision = false;
 		}
 
-		// Récupère les attributs suivant le type
+		// RÃ©cupÃ¨re les attributs suivant le type
 		joint->QueryUnsignedAttribute("body1", &IDb1);
 		joint->QueryUnsignedAttribute("body2", &IDb2);
 		if (joint->Attribute("pt1")) pt1 = Parser::stringToB2Vec2(joint->Attribute("pt1"));
@@ -780,14 +780,14 @@ bool LevelLoader::ProcessJoints()
 		if (joint->Attribute("anchor")) anchor = Parser::stringToB2Vec2(joint->Attribute("anchor"));
 		joint->QueryBoolAttribute("collision", &collision);
 		
-		// Récupère les bodies
+		// RÃ©cupÃ¨re les bodies
 		Entity* e1 = mEntityManager.GetEntity(IDb1);
 		Entity* e2 = mEntityManager.GetEntity(IDb2);
 		if (e1 == nullptr)
 		{
 			Dialog::Error("L'entity #"+ Parser::uintToString(IDb1) +" est introuvable !");
 
-			// On récupère le prochain body
+			// On rÃ©cupÃ¨re le prochain body
 			joint = joint->NextSiblingElement();
 			continue;
 		}
@@ -795,7 +795,7 @@ bool LevelLoader::ProcessJoints()
 		{
 			Dialog::Error("L'entity #"+ Parser::uintToString(IDb2) +" est introuvable !");
 
-			// On récupère le prochain body
+			// On rÃ©cupÃ¨re le prochain body
 			joint = joint->NextSiblingElement();
 			continue;
 		}
@@ -816,7 +816,7 @@ bool LevelLoader::ProcessJoints()
 		{
 			Dialog::Error("L'entity #" + Parser::uintToString(IDb1) + " n'est pas utilisable avec des Joints !");
 
-			// On récupère le prochain body
+			// On rÃ©cupÃ¨re le prochain body
 			joint = joint->NextSiblingElement();
 			continue;
 		}
@@ -824,12 +824,12 @@ bool LevelLoader::ProcessJoints()
 		{
 			Dialog::Error("L'entity #" + Parser::uintToString(IDb2) + " n'est pas utilisable avec des Joints !");
 
-			// On récupère le prochain body
+			// On rÃ©cupÃ¨re le prochain body
 			joint = joint->NextSiblingElement();
 			continue;
 		}
 		
-		// Crée le joint
+		// CrÃ©e le joint
 		if (type == "gear")
 		{
 			b2Joint *j1 = nullptr, *j2 = nullptr;
@@ -839,42 +839,42 @@ bool LevelLoader::ProcessJoints()
 			def.body2 = b2;
 			def.collideconnected = collision;
 
-			// Récupère les attributs
+			// RÃ©cupÃ¨re les attributs
 			joint->QueryUnsignedAttribute("joint1", &IDj1);
 			joint->QueryUnsignedAttribute("joint2", &IDj2);
 			joint->QueryFloatAttribute("ratio", &def.ratio);
 
-			// Récupère les joints
+			// RÃ©cupÃ¨re les joints
 			if (mJointIDMap.find(IDj1) == mJointIDMap.end())
 			{
 				Dialog::Error("Le joint #"+ Parser::uintToString(IDj1) +" est introuvable !\n"
-							  "Il doit être construit avant.");
+							  "Il doit Ãªtre construit avant.");
 
-				// On récupère le prochain body
+				// On rÃ©cupÃ¨re le prochain body
 				joint = joint->NextSiblingElement();
 				continue;
 			}
 			if (mJointIDMap.find(IDj2) == mJointIDMap.end())
 			{
 				Dialog::Error("Le joint #"+ Parser::uintToString(IDj2) +" est introuvable !\n"
-							  "Il doit être construit avant.");
+							  "Il doit Ãªtre construit avant.");
 
-				// On récupère le prochain body
+				// On rÃ©cupÃ¨re le prochain body
 				joint = joint->NextSiblingElement();
 				continue;
 			}
 			j1 = mJointIDMap[IDj1];
 			j2 = mJointIDMap[IDj2];
 
-			// Vérifie qu'il soient bien construits
+			// VÃ©rifie qu'il soient bien construits
 			myAssert(j1->GetUserData(), "Le joint1 #" + Parser::intToString(IDj1) + " du Gear n'existe pas.");
 			myAssert(j2->GetUserData(), "Le joint2 #" + Parser::intToString(IDj2) + " du Gear n'existe pas.");
 
-			// Vérifie qu'il soient bien construits
+			// VÃ©rifie qu'il soient bien construits
 			myAssert(j1->GetUserData(), "Le joint n'existe pas.");
 			myAssert(j2->GetUserData(), "Le joint n'existe pas.");
 
-			// Crée le joint
+			// CrÃ©e le joint
 			def.joint1 = ((Joint*) j1->GetUserData())->GetID();
 			def.joint2 = ((Joint*) j2->GetUserData())->GetID();
 			j = new GearJoint(def);
@@ -888,11 +888,11 @@ bool LevelLoader::ProcessJoints()
 			def.point2 = pt2;
 			def.collideconnected = collision;
 
-			// Récupère les attributs
+			// RÃ©cupÃ¨re les attributs
 			joint->QueryFloatAttribute("frequency", &def.frequencyHz);
 			joint->QueryFloatAttribute("damping", &def.damping);
 
-			// Crée le joint
+			// CrÃ©e le joint
 			j = new DistanceJoint(def);
 		}
 		else if (type == "friction")
@@ -904,11 +904,11 @@ bool LevelLoader::ProcessJoints()
 			def.point2 = pt2;
 			def.collideconnected = collision;
 
-			// Récupère les attributs
+			// RÃ©cupÃ¨re les attributs
 			joint->QueryFloatAttribute("maxFrictionForce", &def.maxFrictionForce);
 			joint->QueryFloatAttribute("maxFrictionTorque", &def.maxFrictionTorque);
 
-			// Crée le joint
+			// CrÃ©e le joint
 			j = new FrictionJoint(def);
 		}
 		else if (type == "rope")
@@ -920,10 +920,10 @@ bool LevelLoader::ProcessJoints()
 			def.point2 = pt2;
 			def.collideconnected = collision;
 
-			// Récupère les attributs
+			// RÃ©cupÃ¨re les attributs
 			joint->QueryFloatAttribute("maxlength", &def.maxLength);
 
-			// Crée le joint
+			// CrÃ©e le joint
 			j = new RopeJoint(def);
 		}
 		else if (type == "weld")
@@ -934,11 +934,11 @@ bool LevelLoader::ProcessJoints()
 			def.anchor = anchor;
 			def.collideconnected = collision;
 
-			// Récupère les attributs
+			// RÃ©cupÃ¨re les attributs
 			joint->QueryFloatAttribute("frequency", &def.frequencyHz);
 			joint->QueryFloatAttribute("damping", &def.damping);
 
-			// Crée le joint
+			// CrÃ©e le joint
 			j = new WeldJoint(def);
 		}
 		else if (type == "pulley")
@@ -950,12 +950,12 @@ bool LevelLoader::ProcessJoints()
 			def.point2 = pt2;
 			def.collideconnected = collision;
 
-			// Récupère les attributs
+			// RÃ©cupÃ¨re les attributs
 			joint->QueryFloatAttribute("ratio", &def.ratio);
 			if (joint->Attribute("groundpt1")) def.groundP1 = Parser::stringToB2Vec2(joint->Attribute("groundpt1"));
 			if (joint->Attribute("groundpt2")) def.groundP2 = Parser::stringToB2Vec2(joint->Attribute("groundpt2"));
 
-			// Crée le joint
+			// CrÃ©e le joint
 			j = new PulleyJoint(def);
 		}
 		else if (type == "prismatic")
@@ -966,7 +966,7 @@ bool LevelLoader::ProcessJoints()
 			def.anchor = anchor;
 			def.collideconnected = collision;
 
-			// Récupère les attributs
+			// RÃ©cupÃ¨re les attributs
 			if (joint->Attribute("axis")) def.axis = Parser::stringToB2Vec2(joint->Attribute("axis"));
 			joint->QueryBoolAttribute("enableLimit", &def.enableLimit);
 			joint->QueryFloatAttribute("lower", &def.lowerTranslation);
@@ -975,7 +975,7 @@ bool LevelLoader::ProcessJoints()
 			joint->QueryFloatAttribute("speed", &def.motorSpeed);
 			joint->QueryFloatAttribute("maxMotorForce", &def.maxMotorForce);
 
-			// Crée le joint
+			// CrÃ©e le joint
 			j = new PrismaticJoint(def);
 		}
 		else if (type == "revolute")
@@ -986,7 +986,7 @@ bool LevelLoader::ProcessJoints()
 			def.anchor = anchor;
 			def.collideconnected = collision;
 
-			// Récupère les attributs
+			// RÃ©cupÃ¨re les attributs
 			joint->QueryBoolAttribute("enableLimit", &def.enableLimit);
 			joint->QueryFloatAttribute("lower", &def.lowerAngle);
 			joint->QueryFloatAttribute("upper", &def.upperAngle);
@@ -994,7 +994,7 @@ bool LevelLoader::ProcessJoints()
 			joint->QueryFloatAttribute("speed", &def.motorSpeed);
 			joint->QueryFloatAttribute("maxMotorTorque", &def.maxMotorTorque);
 
-			// Crée le joint
+			// CrÃ©e le joint
 			j = new RevoluteJoint(def);
 		}
 		else if (type == "wheel")
@@ -1005,7 +1005,7 @@ bool LevelLoader::ProcessJoints()
 			def.pWheel = anchor;
 			def.collideconnected = collision;
 
-			// Récupère les attributs
+			// RÃ©cupÃ¨re les attributs
 			if (joint->Attribute("axis")) def.axis = Parser::stringToB2Vec2(joint->Attribute("axis"));
 			joint->QueryFloatAttribute("frequency", &def.frequencyHz);
 			joint->QueryFloatAttribute("damping", &def.damping);
@@ -1013,11 +1013,11 @@ bool LevelLoader::ProcessJoints()
 			joint->QueryFloatAttribute("speed", &def.motorSpeed);
 			joint->QueryFloatAttribute("maxTorque", &def.maxTorque);
 
-			// Crée le joint
+			// CrÃ©e le joint
 			j = new WheelJoint(def);
 		}
 
-		// Propriétés de cassure communes aux Joints
+		// PropriÃ©tÃ©s de cassure communes aux Joints
 		if (j)
 		{
 			JointDef breakDef;
@@ -1036,7 +1036,7 @@ bool LevelLoader::ProcessJoints()
 			joint->QueryBoolAttribute("isBreakableMaxTorque", &breakDef.isBreakableMaxTorque);
 			joint->QueryFloatAttribute("maxTorque", &breakDef.maxTorque);
 
-			// Appliques les propriétés
+			// Appliques les propriÃ©tÃ©s
 			j->SetBreakableByForce(breakDef.isBreakableMaxForce);
 			if (breakDef.maxForceType == ForceType::Float) j->SetMaxForce(breakDef.maxForce);
 			if (breakDef.maxForceType == ForceType::Vector) j->SetMaxForce(breakDef.maxVecForce);
@@ -1047,7 +1047,7 @@ bool LevelLoader::ProcessJoints()
 		// Enregiste l'ID
 		if (j != nullptr && hasID)
 		{
-			// On regarde si l'ID n'est pas déjà utilisé
+			// On regarde si l'ID n'est pas dÃ©jÃ  utilisÃ©
 			if (mJointIDMap.find(id) != mJointIDMap.end())
 				Dialog::Error("L'ID du Joint " + Parser::intToString(id) + " n'est pas unique !", false);
 			mJointIDMap[id] = j->GetJoint();
@@ -1059,7 +1059,7 @@ bool LevelLoader::ProcessJoints()
 			mPhysicManager.Name(name, j);
 		}
 
-		// On récupère le prochain body
+		// On rÃ©cupÃ¨re le prochain body
 		joint = joint->NextSiblingElement();
 	}
 
@@ -1067,18 +1067,18 @@ bool LevelLoader::ProcessJoints()
 }
 bool LevelLoader::ProcessDeco()
 {
-	// Récupère <deco>
+	// RÃ©cupÃ¨re <deco>
 	tinyxml2::XMLHandle hdl(mFile);
 	tinyxml2::XMLHandle deco = hdl.FirstChildElement("level").FirstChildElement("deco");
 
-	// Vérifie que <deco> existe
+	// VÃ©rifie que <deco> existe
 	if (!deco.ToElement())
 	{
-		// Il n'y a tout simplement pas de déco...
+		// Il n'y a tout simplement pas de dÃ©co...
 		return true;
 	}
 	
-	// On crée les attributs
+	// On crÃ©e les attributs
 	Deco *d = nullptr;
 	bool hasID = false;
 	unsigned int id = 0U;
@@ -1099,27 +1099,27 @@ bool LevelLoader::ProcessDeco()
 		tinyxml2::XMLElement *img = layer.FirstChildElement("img").ToElement();
 		while (img)
 		{
-			// Réinitialise les attributs
+			// RÃ©initialise les attributs
 			d = nullptr;
 			hasID = false;
 			id = 0U;
 			rotation = 0.f;
 			zindex = 0;
 			
-			// Récupère les attributs
+			// RÃ©cupÃ¨re les attributs
 			if (img->Attribute("texture")) texture = img->Attribute("texture");
 			img->QueryIntAttribute("z-index", &zindex);
 			if (img->Attribute("position")) posRot = Parser::stringToB2Vec3(img->Attribute("position"));
 			img->QueryFloatAttribute("rotation", &rotation);
 			posRot.z = rotation;
 			
-			// Ajoute la déco
+			// Ajoute la dÃ©co
 			d = new Deco(z, mResourceManager.GetTexture(texture), getVec3(b22sfVec(getVec2(posRot), mPhysicManager.GetPPM()), posRot.z));
 
-			// On récupère la prochaine image
+			// On rÃ©cupÃ¨re la prochaine image
 			img = img->NextSiblingElement();
 		}
-		// On récupère le prochain layer
+		// On rÃ©cupÃ¨re le prochain layer
 		layer = layer.NextSiblingElement();
 	}
 
@@ -1127,17 +1127,17 @@ bool LevelLoader::ProcessDeco()
 }
 bool LevelLoader::ProcessActions()
 {
-	// Récupère <actions>
+	// RÃ©cupÃ¨re <actions>
 	tinyxml2::XMLHandle hdl(mFile);
 	tinyxml2::XMLHandle actions = hdl.FirstChildElement("level").FirstChildElement("actions");
-	// Vérifie que <actions> existe
+	// VÃ©rifie que <actions> existe
 	if (!actions.ToElement())
 	{
 		// Il n'y a tout simplement pas d'events...
 		return true;
 	}
 
-	// On crée les attributs
+	// On crÃ©e les attributs
 	std::string name;
 	std::string file;
 	std::string function;
@@ -1148,7 +1148,7 @@ bool LevelLoader::ProcessActions()
 	tinyxml2::XMLElement *action = actions.FirstChildElement().ToElement();
 	while (action)
 	{
-		// Réinitialise les attributs
+		// RÃ©initialise les attributs
 		name.clear();
 		file.clear();
 		function.clear();
@@ -1158,28 +1158,28 @@ bool LevelLoader::ProcessActions()
 		// Obtient le type
 		type = action->Name();
 		
-		// Traite les différents types
+		// Traite les diffÃ©rents types
 		if (type == "file")
 		{
-			// Récupère les attributs
+			// RÃ©cupÃ¨re les attributs
 			if (action->Attribute("name")) name = action->Attribute("name");
 			if (action->Attribute("path")) file = action->Attribute("path");
 			if (action->Attribute("once")) action->QueryBoolAttribute("once", &once);
 
-			// Crée l'action
+			// CrÃ©e l'action
 			LuaAction *a = new LuaAction(name, file, once);
 			mTriggersManager.AddAction(a);
 		}
 		else if (type == "function")
 		{
-			// Récupère les attributs
+			// RÃ©cupÃ¨re les attributs
 			// TODO: utiliser myCheck
 			if (action->Attribute("name")) name = action->Attribute("name");
 			if (action->Attribute("file")) file = action->Attribute("file");
 			if (action->Attribute("func")) function = action->Attribute("func");
 			if (action->Attribute("once")) action->QueryBoolAttribute("once", &once);
 
-			// Crée l'action
+			// CrÃ©e l'action
 			LuaAction *a = new LuaAction(name, file, function, once);
 			mTriggersManager.AddAction(a);
 		}
@@ -1188,7 +1188,7 @@ bool LevelLoader::ProcessActions()
 			Dialog::Error("Action type inconnu ("+ type +") !");
 		}
 
-		// On récupère le prochain level
+		// On rÃ©cupÃ¨re le prochain level
 		action = action->NextSiblingElement();
 	}
 
@@ -1196,26 +1196,26 @@ bool LevelLoader::ProcessActions()
 }
 bool LevelLoader::ProcessTriggers()
 {
-	// Récupère <events>
+	// RÃ©cupÃ¨re <events>
 	tinyxml2::XMLHandle hdl(mFile);
 	tinyxml2::XMLHandle events = hdl.FirstChildElement("level").FirstChildElement("events");
-	// Vérifie que <events> existe
+	// VÃ©rifie que <events> existe
 	if (!events.ToElement())
 	{
 		// Il n'y a tout simplement pas d'events...
 		return true;
 	}
 
-	// Récupère <triggers>
+	// RÃ©cupÃ¨re <triggers>
 	tinyxml2::XMLHandle triggers = events.FirstChildElement("triggers");
-	// Vérifie que <triggers> existe
+	// VÃ©rifie que <triggers> existe
 	if (!triggers.ToElement())
 	{
 		// Il n'y a tout simplement pas de triggers...
 		return true;
 	}
 	
-	// On crée les attributs
+	// On crÃ©e les attributs
 	b2AABB rect;
 	bool once = false;
 	std::string action;
@@ -1225,7 +1225,7 @@ bool LevelLoader::ProcessTriggers()
 	tinyxml2::XMLElement *trigger = triggers.FirstChildElement().ToElement();
 	while (trigger)
 	{
-		// Réinitialise les attributs
+		// RÃ©initialise les attributs
 		once = false;
 		rect.lowerBound = b2Vec2_zero;
 		rect.upperBound = b2Vec2_zero;
@@ -1235,24 +1235,24 @@ bool LevelLoader::ProcessTriggers()
 		// Obtient le type
 		type = trigger->Name();
 
-		// Récupère l'action
+		// RÃ©cupÃ¨re l'action
 		if (trigger->Attribute("action")) action = trigger->Attribute("action");
 
-		// Traite les différents types
+		// Traite les diffÃ©rents types
 		if (type == "area")
 		{
-			// Récupère la zone
+			// RÃ©cupÃ¨re la zone
 			trigger->QueryFloatAttribute("top", &rect.upperBound.y);
 			trigger->QueryFloatAttribute("bottom", &rect.lowerBound.y);
 			trigger->QueryFloatAttribute("left", &rect.lowerBound.x);
 			trigger->QueryFloatAttribute("right", &rect.upperBound.x);
 			if (trigger->Attribute("once")) trigger->QueryBoolAttribute("once", &once);
 
-			// Crée le trigger
+			// CrÃ©e le trigger
 			mTriggersManager.CreateArea(rect, action, once);
 		}
 
-		// On récupère le prochain level
+		// On rÃ©cupÃ¨re le prochain level
 		trigger = trigger->NextSiblingElement();
 	}
 
@@ -1260,14 +1260,14 @@ bool LevelLoader::ProcessTriggers()
 }
 bool LevelLoader::ProcessLights()
 {
-	// Récupère <lights>
+	// RÃ©cupÃ¨re <lights>
 	tinyxml2::XMLHandle hdl(mFile);
 	tinyxml2::XMLHandle lights = hdl.FirstChildElement("level").FirstChildElement("lights");
 
-	// Vérifie que <lights> existe
-	myCheckError(lights.ToElement(), "Une erreur est survenue lors du chargement du niveau.\n<lights> non trouvé (" + mPath + ").");
+	// VÃ©rifie que <lights> existe
+	myCheckError(lights.ToElement(), "Une erreur est survenue lors du chargement du niveau.\n<lights> non trouvÃ© (" + mPath + ").");
 
-	// On crée les attributs
+	// On crÃ©e les attributs
 	PointLight *l = nullptr;
 	int layer = 1;
 	b2Vec2 position;
@@ -1275,36 +1275,36 @@ bool LevelLoader::ProcessLights()
 	sf::Color color;
 	std::string type;
 
-	// Pour toutes les lumières
+	// Pour toutes les lumiÃ¨res
 	tinyxml2::XMLElement *light = lights.FirstChildElement().ToElement();
 	while (light)
 	{
-		// Réinitialise les attributs
+		// RÃ©initialise les attributs
 		l = nullptr;
 		position = b2Vec2_zero;
 		radius = 0;
 		color = sf::Color::White;
 		type = "";
 
-		// Récupère le type
+		// RÃ©cupÃ¨re le type
 		type = light->Name();
 
-		// Récupère la position
+		// RÃ©cupÃ¨re la position
 		if (light->Attribute("pos")) position = Parser::stringToB2Vec2(light->Attribute("pos"));
 
-		// Récupère le layer
+		// RÃ©cupÃ¨re le layer
 		light->QueryIntAttribute("layer", &layer);
 
-		// Récupère le rayon
+		// RÃ©cupÃ¨re le rayon
 		light->QueryUnsignedAttribute("radius", &radius);
 
-		// Récupère la couleur
+		// RÃ©cupÃ¨re la couleur
 		if (light->Attribute("color")) color = Parser::stringToColor(light->Attribute("color"));
 
-		// Crée l'Entity
+		// CrÃ©e l'Entity
 		if (type == "point")
 		{
-			// Crée la lumière
+			// CrÃ©e la lumiÃ¨re
 			l = new PointLight(radius, color, layer);
 			l->SetPosition(b22sfVec(position, mPhysicManager.GetPPM()));
 		}
@@ -1313,7 +1313,7 @@ bool LevelLoader::ProcessLights()
 			Dialog::Error("Light type inconnu (" + type + ") !");
 		}
 
-		// On récupère la prochaine entity
+		// On rÃ©cupÃ¨re la prochaine entity
 		light = light->NextSiblingElement();
 	}
 

@@ -1,8 +1,8 @@
-#include "stdafx.h"
 #include "DecoCreationWindow.h"
 #include "../EditBox.h"
 #include "../../App/InputManager.h"
 #include "../../Entities/EntityFactory.h"
+#include "../../Tools/utils.h"
 
 // Ctor
 DecoCreationWindow::DecoCreationWindow()
@@ -10,7 +10,7 @@ DecoCreationWindow::DecoCreationWindow()
 	mEntityMgr(EntityManager::GetInstance()), mPhysicMgr(PhysicManager::GetInstance()), mResourceMgr(ResourceManager::GetInstance()),
 	mIsInAddMode(false)
 {
-	// Rempli la fenÍtre
+	// Rempli la fen√™tre
 	Fill();
 	mApply = true;
 }
@@ -20,7 +20,7 @@ void DecoCreationWindow::Add(b2Vec2 pos)
 {
 	if (!mApply || mTexture->GetSelectedItem() == sfg::ComboBox::NONE) return;
 
-	// Sort du mode crÈation si la fenÍtre est cachÈe
+	// Sort du mode cr√©ation si la fen√™tre est cach√©e
 	if (!this->IsVisible() || !mIsInAddMode)
 	{
 		OnToggleMode();
@@ -37,7 +37,7 @@ void DecoCreationWindow::Add(b2Vec2 pos)
 	// Transforme pos en b2Vec3
 	b2Vec3 posRot = getVec3(pos);
 
-	// CrÈe la dÈco
+	// Cr√©e la d√©co
 	EntityFactory::CreateDeco(posRot, mTexture->GetItem(mTexture->GetSelectedItem()), static_cast<int>(mLayer->GetValue()));
 
 	OnRefresh();
@@ -46,13 +46,13 @@ void DecoCreationWindow::Add(b2Vec2 pos)
 // Actualisation
 void DecoCreationWindow::Update()
 {
-	// Mets ‡ jour la liste de texture
+	// Mets √† jour la liste de texture
 	if (mTexture.get())
 	{
 		auto current = mTexture->GetSelectedItem();
 		for (int i = mTexture->GetItemCount(); i > 0; --i)
 			mTexture->RemoveItem(i - 1);
-		for each (const auto &tex in mResourceMgr.GetTextureMap())
+		for (auto &&tex : mResourceMgr.GetTextureMap())
 			mTexture->AppendItem(tex.first);
 		mTexture->SelectItem(current);
 	}
@@ -64,15 +64,15 @@ bool DecoCreationWindow::IsInAddMode()
 	return mIsInAddMode;
 }
 
-// Construit la fenÍtre et les ÈlÈments
+// Construit la fen√™tre et les √©l√©ments
 void DecoCreationWindow::Fill()
 {
-	// CrÈe le Layout
+	// Cr√©e le Layout
 	mVBox = sfg::Box::Create(sfg::Box::Orientation::VERTICAL);
 
-	// ElÈments
+	// El√©ments
 	mMode = sfg::Label::Create("Mode : Attente");
-	mHelpLabel = sfg::Label::Create("CrÈer dÈco : Ctrl + clic gauche");
+	mHelpLabel = sfg::Label::Create("Cr√©er d√©co : Ctrl + clic gauche");
 
 	// Texture
 	mTextureHBox = sfg::Box::Create(sfg::Box::Orientation::HORIZONTAL);
@@ -91,7 +91,7 @@ void DecoCreationWindow::Fill()
 	mLayerHBox->PackEnd(mLayer);
 
 	// Boutons
-	mToggleModeBtn = sfg::Button::Create("Entrer mode CrÈation");
+	mToggleModeBtn = sfg::Button::Create("Entrer mode Cr√©ation");
 	mButtonsHBox = sfg::Box::Create(sfg::Box::Orientation::HORIZONTAL);
 	mRefreshBtn = sfg::Button::Create("Actualiser");
 	mCloseBtn = sfg::Button::Create("Fermer");
@@ -103,7 +103,7 @@ void DecoCreationWindow::Fill()
 	mRefreshBtn->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind(&DecoCreationWindow::OnRefresh, this));
 	mCloseBtn->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind(&DecoCreationWindow::OnClose, this));
 
-	// Ajoute les ÈlÈments ‡ la fenÍtre
+	// Ajoute les √©l√©ments √† la fen√™tre
 	mVBox->PackEnd(mMode);
 	mVBox->PackEnd(mHelpLabel);
 	mVBox->PackEnd(mTextureHBox);
@@ -111,7 +111,7 @@ void DecoCreationWindow::Fill()
 	mVBox->PackEnd(mToggleModeBtn);
 	mVBox->PackEnd(mButtonsHBox);
 
-	// Ajoute la mVBox ‡ la fenÍtre
+	// Ajoute la mVBox √† la fen√™tre
 	AddToWindow(mVBox);
 }
 
@@ -124,12 +124,12 @@ void DecoCreationWindow::OnToggleMode()
 
 	if (mIsInAddMode)
 	{
-		mMode->SetText("Mode : CrÈation");
-		mToggleModeBtn->SetLabel("Sortir mode CrÈation");
+		mMode->SetText("Mode : Cr√©ation");
+		mToggleModeBtn->SetLabel("Sortir mode Cr√©ation");
 	}
 	else
 	{
 		mMode->SetText("Mode : Attente");
-		mToggleModeBtn->SetLabel("Entrer mode CrÈation");
+		mToggleModeBtn->SetLabel("Entrer mode Cr√©ation");
 	}
 }

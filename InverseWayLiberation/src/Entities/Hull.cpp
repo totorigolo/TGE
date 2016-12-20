@@ -1,4 +1,3 @@
-#include "stdafx.h"
 #include "Hull.h"
 #include "PartitioningTree.h"
 
@@ -7,7 +6,7 @@ Hull::Hull(b2Body const * bodyShadowCaster)
 	: mMoved(true), mIsValid(false), mIsActive(true),
 	mIsPhysicallyDrawable(false), mBodyShadowCaster(bodyShadowCaster)
 {
-	// On vient d'apparaitre, donc on a bougé
+	// On vient d'apparaitre, donc on a bougÃ©
 	Moved();
 
 	// Enregistre le hull
@@ -69,7 +68,7 @@ void Hull::SetPosAndSize(const sf::Vector2f& pos, const sf::Vector2f& size)
 	}
 }
 
-// Mise à jour dans le Partitioning System
+// Mise Ã  jour dans le Partitioning System
 void Hull::Update(void)
 {
 	if (mIsValid && mIsActive && mMoved && mBodyShadowCaster)
@@ -81,7 +80,7 @@ void Hull::PostUpdate(void)
 		mMoved = false;
 }
 
-// Gestion de l'activité du Hull
+// Gestion de l'activitÃ© du Hull
 void Hull::Activate(void)
 {
 	Moved();
@@ -121,7 +120,7 @@ std::list<Cell*>& Hull::GetRegisteredCells(void)
 	return mCells;
 }
 
-// S'enlève de toutes les Cells
+// S'enlÃ¨ve de toutes les Cells
 void Hull::RemoveFromCells(void)
 {
 	for (auto it = mCells.begin(); it != mCells.end(); ++it)
@@ -173,10 +172,10 @@ bool Hull::HasMoved(void) const
 }
 void Hull::Moved(void)
 {
-	// Retient que l'on a bougé
+	// Retient que l'on a bougÃ©
 	mMoved = true;
 
-	// Informe toutes les Cells survolées qu'on a bougé
-	for each (auto &cell in mCells)
+	// Informe toutes les Cells survolÃ©es qu'on a bougÃ©
+	for (auto &&cell : mCells)
 		cell->Moved();
 }

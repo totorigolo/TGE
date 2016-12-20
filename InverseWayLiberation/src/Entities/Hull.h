@@ -1,5 +1,9 @@
 #pragma once
 
+#include <list>
+#include <Box2D/Box2D.h>
+#include <SFML/Graphics.hpp>
+
 class Cell;
 class Hull
 {
@@ -14,11 +18,11 @@ public:
 	void SetSize(const sf::Vector2f& size);
 	void SetPosAndSize(const sf::Vector2f& pos, const sf::Vector2f& size);
 
-	// Mise à jour dans le Partitioning System
+	// Mise Ã  jour dans le Partitioning System
 	void Update(void);
 	void PostUpdate(void);
 
-	// Gestion de l'activité du Hull
+	// Gestion de l'activitÃ© du Hull
 	void Activate(void);
 	void Deactivate(void);
 	void SetActive(bool active);
@@ -29,7 +33,7 @@ public:
 	void UnregisterCell(Cell *cell);
 	std::list<Cell*>& GetRegisteredCells(void);
 
-	// S'enlève de toutes les Cells
+	// S'enlÃ¨ve de toutes les Cells
 	void RemoveFromCells(void);
 
 	// Gestion du Shadow Caster
@@ -38,7 +42,7 @@ public:
 	void SetBodyShadowCaster(b2Body const * bodyShadowCaster);
 	b2Body const* GetBodyShadowCaster() const;
 
-	// Gestion de l'info de déplacement
+	// Gestion de l'info de dÃ©placement
 	bool HasMoved(void) const;
 	void Moved(void);
 
@@ -48,7 +52,7 @@ public:
 	bool IsValid(void) const;
 
 private:
-	// Propriétés
+	// PropriÃ©tÃ©s
 	bool mMoved;
 	bool mIsValid;
 	bool mIsActive;
@@ -61,6 +65,6 @@ private:
 	sf::Vector2f mPosition; // haut gauche
 	sf::Vector2f mSize;
 
-	// Cells auxquelles le Hull est rataché
+	// Cells auxquelles le Hull est ratachÃ©
 	std::list<Cell*> mCells;
 };

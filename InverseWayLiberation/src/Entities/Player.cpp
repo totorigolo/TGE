@@ -1,4 +1,3 @@
-#include "stdafx.h"
 #include "Player.h"
 #include "../Resources/ResourceManager.h"
 
@@ -6,7 +5,7 @@
 Player::Player()
 	: Hum(0), mInputManager(InputManager::GetInstance()), mJumpKey(sf::Keyboard::Space)
 {
-	// Défini le type de l'Entity
+	// DÃ©fini le type de l'Entity
 	mType = EntityType::Player;
 }
 
@@ -15,16 +14,16 @@ Player::~Player()
 {
 }
 
-// Mise à jour
+// Mise Ã  jour
 void Player::Update()
 {
 	Hum::Update();
 
-	// Met à jour les évènements
+	// Met Ã  jour les Ã©vÃ¨nements
 	UpdateEvents();
 }
 
-// Gestion des évènements
+// Gestion des Ã©vÃ¨nements
 void Player::UpdateEvents()
 {
 	// Si on est vivant
@@ -32,7 +31,7 @@ void Player::UpdateEvents()
 	{
 		float strenghFactor = 0.5f + ((static_cast<float>(GetStrengh()) + 20.f) / 40.f) / 2.f;
 
-		/* Traite les différents mouvements (http://www.iforce2d.net/b2dtut/constant-speed) */
+		/* Traite les diffÃ©rents mouvements (http://www.iforce2d.net/b2dtut/constant-speed) */
 		// Calcule la vitesse max
 		float maxVspeed = 4.f;
 		float desiredVel = 0.f;
@@ -53,16 +52,16 @@ void Player::UpdateEvents()
 			desiredVel = b2Min(vel.x + 0.1f, maxVspeed);
 			moved = true;
 		}
-		// On évite que le Player soit une savonette
+		// On Ã©vite que le Player soit une savonette
 		if (!moved)
 		{
 			desiredVel = vel.x * 0.8f;
 		}
 
-		// Déplacement pour le Hull
+		// DÃ©placement pour le Hull
 		if (moved) mHasMoved = true;
 
-		// Applique le déplacement
+		// Applique le dÃ©placement
 		float velChange = desiredVel - vel.x;
 		float impulse = GetBody()->GetMass() * velChange * 100.f;
 		GetBody()->ApplyForceToCenter(b2Vec2(impulse, 0.f), true);

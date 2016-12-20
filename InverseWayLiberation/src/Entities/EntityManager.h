@@ -1,5 +1,9 @@
 #pragma once
 
+#include <boost/bimap.hpp>
+#include <SFML/Graphics.hpp>
+#include "../Tools/Singleton.h"
+
 class Entity;
 class EntityManager : public Singleton<EntityManager>, public sf::Drawable
 {
@@ -11,7 +15,7 @@ protected:
 	virtual ~EntityManager();
 
 public:
-	// Mise à jour
+	// Mise Ã  jour
 	void Update();
 
 	// Gestion des Entities
@@ -20,15 +24,15 @@ public:
 	void DestroyAllEntities();
 	void SortByLayer();
 
-	// Accès aux Entities
+	// AccÃ¨s aux Entities
 	Entity* GetEntity(unsigned int id);
 	Entity* GetEntity(const std::string &name);
 	std::list<Entity*>& GetEntities();
 	const std::list<Entity*>& GetEntities() const;
 
 	// Gestion des IDs
-	// Le système actuel garanti qu'il n'y a pas deux fois le même ID lors d'une session
-	// sauf si DestroyAllEntities() est appelé
+	// Le systÃ¨me actuel garanti qu'il n'y a pas deux fois le mÃªme ID lors d'une session
+	// sauf si DestroyAllEntities() est appelÃ©
 	unsigned int GetNewID();
 	void RemoveID(unsigned int id);
 

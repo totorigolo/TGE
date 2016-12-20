@@ -1,13 +1,12 @@
-#include "stdafx.h"
 #include "../LuaMachine.h"
 #include "../../Tools/vector_wrappers.h"
 
-// Enregistrements privés
+// Enregistrements privÃ©s
 void LuaMachine::RegisterBox2D()
 {
 	/* Enregistre les classes */
 	try
-	{
+	{/*
 		// b2BodyType
 		luabind::globals(mLuaState)["b2_dynamicBody"] = b2BodyType::b2_dynamicBody;
 		luabind::globals(mLuaState)["b2_staticBody"] = b2BodyType::b2_staticBody;
@@ -73,7 +72,7 @@ void LuaMachine::RegisterBox2D()
 			// Fxs
 			luabind::def("b2Dot", (float32(*)(const b2Vec3&, const b2Vec3&)) b2Dot),
 			luabind::def("b2Cross", (b2Vec3(*)(const b2Vec3&, const b2Vec3&)) b2Cross)
-		];
+		];*/
 	}
 	catch (const std::exception &e)
 	{

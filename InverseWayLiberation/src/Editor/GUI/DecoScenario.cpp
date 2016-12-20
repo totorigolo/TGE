@@ -1,4 +1,3 @@
-#include "stdafx.h"
 #include "DecoScenario.h"
 #include "../EditBox.h"
 #include "../../App/InputManager.h"
@@ -12,15 +11,15 @@ DecoScenario::DecoScenario(EditBox &editBox)
 	// Initialise le pas
 	mPosStepSaveValue = 1.f;
 
-	// Rempli la fenêtre
+	// Rempli la fenÃªtre
 	Fill();
 	mApply = true;
 }
 
-// Gestion de la sélection
+// Gestion de la sÃ©lection
 void DecoScenario::Select(Deco *selection)
 {
-	myAssert(selection, "BasicBody passé invalide.");
+	myAssert(selection, "BasicBody passÃ© invalide.");
 
 	mSelection = selection;
 
@@ -36,20 +35,20 @@ void DecoScenario::Update()
 {
 	if (!mSelection) return;
 
-	// Met à jour les valeurs
+	// Met Ã  jour les valeurs
 	mPosX->SetText(Parser::floatToString(mSelection->GetPosition().x, 4));
 	mPosY->SetText(Parser::floatToString(mSelection->GetPosition().y, 4));
 	float rot = mSelection->GetRotationD(); rot = float(int(rot) % 360) + rot - float(int(rot));
 	mRot->SetText(Parser::floatToString(rot, 4));
 
-	// Gère le Layer
+	// GÃ¨re le Layer
 	mLayer->SetValue(static_cast<float>(mSelection->GetLayer()));
 
-	// Mets à jour la liste de texture, et la texture actuelle
+	// Mets Ã  jour la liste de texture, et la texture actuelle
 	for (int i = mTexture->GetItemCount(); i > 0; --i)
 		mTexture->RemoveItem(i - 1);
 	int index = 0;
-	for each (const auto &tex in mResourceMgr.GetTextureMap())
+	for (auto &&tex : mResourceMgr.GetTextureMap())
 	{
 		mTexture->AppendItem(tex.first);
 
@@ -59,7 +58,7 @@ void DecoScenario::Update()
 	}
 }
 
-// Construit la fenêtre et les éléments
+// Construit la fenÃªtre et les Ã©lÃ©ments
 void DecoScenario::Fill()
 {
 	// Position et rotation
@@ -123,10 +122,10 @@ void DecoScenario::Fill()
 	// Boutons
 	mRefresh = sfg::Button::Create("Actualiser");
 	mRefresh->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind(&DecoScenario::OnRefresh, this));
-	mDestroy = sfg::Button::Create("Détruire");
+	mDestroy = sfg::Button::Create("DÃ©truire");
 	mDestroy->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind(&DecoScenario::OnDestroy, this));
 
-	// Ajoute les éléments à la fenêtre
+	// Ajoute les Ã©lÃ©ments Ã  la fenÃªtre
 	AddToVBox(mPosTable);
 	AddToVBox(mLayerHBox);
 	AddToVBox(mTextureHBox);
@@ -210,7 +209,7 @@ void DecoScenario::OnDestroy()
 {
 	if (!mApply || !mSelection) return;
 
-	// Détruit le BasicBody
+	// DÃ©truit le BasicBody
 	mEntityMgr.DestroyEntity(mSelection);
 	Unselect();
 	mEditBox.ScheduleUnselection();

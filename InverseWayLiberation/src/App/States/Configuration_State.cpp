@@ -1,6 +1,6 @@
-#include "stdafx.h"
 #include "Configuration_State.h"
 #include "MainMenu_State.h"
+#include "../../Tools/Error.h"
 
 // Ctor & Dtor
 Configuration_State::Configuration_State()
@@ -12,10 +12,10 @@ Configuration_State::~Configuration_State()
 {
 }
 
-// Exécute le State
+// ExÃ©cute le State
 State* Configuration_State::Run(App *app)
 {
-	// Récupère la fenêtre
+	// RÃ©cupÃ¨re la fenÃªtre
 	sf::RenderWindow *window = app->GetRenderWindow();
 	window->setFramerateLimit(30U);
 	
@@ -25,10 +25,10 @@ State* Configuration_State::Run(App *app)
 	}
 	catch (const std::exception &e)
 	{
-		Dialog::Error("Erreur lors de la lecture du thème :\n" + std::string(e.what()));
+		Dialog::Error("Erreur lors de la lecture du thÃ¨me :\n" + std::string(e.what()));
 	}
 
-	// Change le titre de la fenêtre
+	// Change le titre de la fenÃªtre
 	window->setTitle("Inverse Way Liberation - Configuration");
 
 	// Met en place la GUI
@@ -38,14 +38,14 @@ State* Configuration_State::Run(App *app)
 	mQuit = false;
 	while (window->isOpen() && !mQuit)
 	{
-		// Evènements
+		// EvÃ¨nements
 		mInputManager.Update();
 		if (mInputManager.HasQuitted())
 		{
 			OnExit();
 		}
 
-		// Met à jour la GUI
+		// Met Ã  jour la GUI
 		mDesktop.Update(mGUIElapsedTime.getElapsedTime().asSeconds());
 		mGUIElapsedTime.restart();
 
@@ -62,7 +62,7 @@ State* Configuration_State::Run(App *app)
 // Gestion de la GUI
 void Configuration_State::CreateGUI()
 {
-	// Crée la Window et le Desktop une seule fois
+	// CrÃ©e la Window et le Desktop une seule fois
 	static bool once = false;
 	if (!once)
 	{
@@ -71,11 +71,11 @@ void Configuration_State::CreateGUI()
 		once = true;
 	}
 
-	// Crée la fenêtre
+	// CrÃ©e la fenÃªtre
 	mWindow = sfg::Window::Create();
 	mDesktop.Add(mWindow);
 
-	// Initialise les éléments
+	// Initialise les Ã©lÃ©ments
 	mVBox = sfg::Box::Create(sfg::Box::Orientation::VERTICAL);
 	mLabel = sfg::Label::Create("Il n'y a aucune configuration pour le moment.\n\n\nRepassez plus tard :)");
 	mVBox->PackEnd(mLabel);

@@ -1,6 +1,14 @@
 #pragma once
+
+#include <boost/bimap.hpp>
+#include <memory>
+#include <map>
+#include <SFML/System.hpp>
+#include <SFML/Graphics.hpp>
+#include <Box2D/Dynamics/b2World.h>
 #include "DebugDraw.h"
 #include "ContactListener.h"
+#include "../Tools/Singleton.h"
 
 class Joint;
 class Entity;
@@ -21,14 +29,14 @@ public:
 	void DestroyBodiesOut(const b2Vec2 &topleft, const b2Vec2 &bottomright, b2Body *skip = nullptr);
 
 	// Gestion des joints
-	// Création / destruction
+	// CrÃ©ation / destruction
 	int RegisterJoint(Joint *joint);
 	void DestroyJoint(int jointID);
 	void DestroyAllJoints();
 	// b2Joint
 	b2Joint* Createb2Joint(b2JointDef const* jointDef);
 	void Destroyb2Joint(b2Joint *joint);
-	// Mide à jour
+	// Mide Ã  jour
 	void UpdateJoints();
 	// Gestion des noms
 	bool Name(const std::string &name, Joint *joint); // true if already exists
@@ -47,7 +55,7 @@ public:
 	float GetTimeStep() const;
 	void Step(int velocityIt = 6, int positionIt = 2);
 
-	// Gestion des propriétés du monde (gravité)
+	// Gestion des propriÃ©tÃ©s du monde (gravitÃ©)
 	void SetGravity(const b2Vec2 &gravity);
 	b2Vec2 GetGravity() const;
 

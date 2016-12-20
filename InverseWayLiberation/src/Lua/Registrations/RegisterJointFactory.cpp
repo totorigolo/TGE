@@ -1,4 +1,3 @@
-#include "stdafx.h"
 #include "../LuaMachine.h"
 #include "../../Physics/JointFactory.h"
 #include "../../Physics/Joints/DistanceJoint.h"
@@ -15,7 +14,7 @@
 void LuaMachine::RegisterJointFactory()
 {
 	try
-	{
+	{/*
 		// Enregistre les structs
 		luabind::module(mLuaState)
 		[
@@ -61,7 +60,7 @@ void LuaMachine::RegisterJointFactory()
 				.def_readwrite("collideconnected", &GearJointDef::collideconnected)
 			,
 			// PrismaticJointDef
-			// Pas tous les paramètres du ctor sont fournis car il y en a trop
+			// Pas tous les paramÃ¨tres du ctor sont fournis car il y en a trop
 			luabind::class_<PrismaticJointDef>("PrismaticJointDef")
 				// Ctors
 				.def(luabind::constructor<>())
@@ -95,7 +94,7 @@ void LuaMachine::RegisterJointFactory()
 				.def_readwrite("collideconnected", &PulleyJointDef::collideconnected)
 			,
 			// RevoluteJointDef
-			// Pas tous les paramètres du ctor sont fournis car il y en a trop
+			// Pas tous les paramÃ¨tres du ctor sont fournis car il y en a trop
 			luabind::class_<RevoluteJointDef>("RevoluteJointDef")
 				// Ctors
 				.def(luabind::constructor<>())
@@ -178,7 +177,7 @@ void LuaMachine::RegisterJointFactory()
 				// CreateWheelJoint
 				luabind::def("CreateWeldJoint", JointFactory::CreateWeldJoint)
 			]
-		];
+		];*/
 	}
 	catch (const std::exception &e)
 	{

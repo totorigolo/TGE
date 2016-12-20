@@ -1,4 +1,3 @@
-#include "stdafx.h"
 #include "EmptyScenario.h"
 #include "../EditBox.h"
 #include "../../App/InputManager.h"
@@ -7,7 +6,7 @@
 EmptyScenario::EmptyScenario(EditBox &editBox)
 	: Scenario(editBox, "EditBox")
 {
-	// Rempli la fenêtre
+	// Rempli la fenÃªtre
 	Fill();
 	mApply = true;
 }
@@ -17,11 +16,11 @@ void EmptyScenario::Update()
 {
 }
 
-// Construit la fenêtre et les éléments
+// Construit la fenÃªtre et les Ã©lÃ©ments
 void EmptyScenario::Fill()
 {
 	// Widgets
-	mOpenLevelBtn = sfg::Button::Create("Fenêtre Level");
+	mOpenLevelBtn = sfg::Button::Create("FenÃªtre Level");
 	mOpenLevelBtn->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind(&EditBox::OnShowLevelWindow, &mEditBox));
 
 	mOpenLuaConsoleBtn = sfg::Button::Create("Console Lua");
@@ -45,7 +44,7 @@ void EmptyScenario::Fill()
 	mHumCreationBtn = sfg::Button::Create("Hum Creation");
 	mHumCreationBtn->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind(&EditBox::ShowHumCreationWindow, &mEditBox));
 
-	// Ajoute les éléments à la fenêtre
+	// Ajoute les Ã©lÃ©ments Ã  la fenÃªtre
 	AddToVBox(mOpenLevelBtn);
 	AddToVBox(mOpenLuaConsoleBtn);
 	AddToVBox(mTexturesBtn);

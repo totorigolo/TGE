@@ -1,15 +1,17 @@
-#include "stdafx.h"
+#include <cmath>
 #include "LightEngine.h"
+#include "../Entities/Entity.h"
 #include "../Entities/PolyChain.h"
 #include "../Entities/PointLight.h"
 #include "../Physics/DebugDraw.h"
 #include "../Physics/PhysicManager.h"
+#include "../Tools/utils.h"
 
 // Ctor
 LightEngine::LightEngine(void)
 : mZero(0.f, 0.f), mOne(1.f, 1.f), mIsActive(true)
 {
-	// Configure l'état additif
+	// Configure l'Ã©tat additif
 	addStates.blendMode = sf::BlendAdd;
 
 	// Charge les shaders
@@ -25,8 +27,9 @@ LightEngine::~LightEngine(void)
 void LightEngine::LoadShaders(void)
 {
 	myCheckError_v(mShadowShader.loadFromFile("fx/shadow.fx", sf::Shader::Fragment),
-		"Erreur pas encore gérée : shader introuvable"); // TODO
-	mShadowShader.setParameter("texture", sf::Shader::CurrentTexture);
+		"Erreur pas encore gÃ©rÃ©e : shader introuvable"); // TODO
+//	mShadowShader.setParameter("texture", sf::Shader::CurrentTexture);
+	mShadowShader.setUniform("texture", sf::Shader::CurrentTexture);
 }
 
 // Dessiner les obstables
@@ -39,20 +42,20 @@ void LightEngine::DrawPhysicalHull(PointLight *light, const b2Body& body)
 	{
 		if (fixture->IsSensor()) continue;
 
-		// Récupère la transformation du Body et le shape de la Fixture
+		// RÃ©cupÃ¨re la transformation du Body et le shape de la Fixture
 		b2Transform t = body.GetTransform();
 		const b2Shape *shape = fixture->GetShape();
 
 		// TODO : Ne pas dupliquer la projection pour chaque type
 
-		// Pour chaque type différent de Body
+		// Pour chaque type diffÃ©rent de Body
 		/*
 			e_circle = 0,
 			e_edge = 1,
 		*/
 		if (shape->GetType() == b2Shape::e_chain) // Chain et loop
 		{
-			// Détermine s'il s'agit d'un loop ou d'un chain
+			// DÃ©termine s'il s'agit d'un loop ou d'un chain
 			bool isLoop = false;
 			if (body.GetUserData())
 			{
@@ -65,19 +68,19 @@ void LightEngine::DrawPhysicalHull(PointLight *light, const b2Body& body)
 				}
 			}
 
-			// Récupère le shape
+			// RÃ©cupÃ¨re le shape
 			b2ChainShape *chain = (b2ChainShape*)shape;
 
-			// Crée les ombres
+			// CrÃ©e les ombres
 			const float ppm = PhysicManager::GetInstance().GetPPM();
 			const sf::Color &c = sf::Color::Green;
 			const sf::Vector2f lpos = light->GetPosition_sf();
-			for (int32 i = 0; i < chain->m_count - ((!isLoop) ? 1 : 0); ++i) // Chaque pt -> chaque arrête
+			for (int32 i = 0; i < chain->m_count - ((!isLoop) ? 1 : 0); ++i) // Chaque pt -> chaque arrÃªte
 			{
-				// N° pt suivant (overflow)
+				// NÂ° pt suivant (overflow)
 				int j = ((i + 1) < chain->m_count) ? (i + 1) : 0;
 
-				// Pts formant l'arrête
+				// Pts formant l'arrÃªte
 				sf::Vector2f pt1 = b22sfVec(b2Mul(t, chain->m_vertices[i]), ppm);
 				sf::Vector2f pt2 = b22sfVec(b2Mul(t, chain->m_vertices[j]), ppm);
 
@@ -87,30 +90,30 @@ void LightEngine::DrawPhysicalHull(PointLight *light, const b2Body& body)
 
 				// Projette les points
 				// Pt1
-				float dist = sqrtf((pt2.y - lpos.y)*(pt2.y - lpos.y) + (pt2.x - lpos.x)*(pt2.x - lpos.x));
+				float dist = sqrt((pt2.y - lpos.y)*(pt2.y - lpos.y) + (pt2.x - lpos.x)*(pt2.x - lpos.x));
 				pt2 = pt2 + (((pt2 - lpos) / dist) * float(light->mLightRadius) * 10000.f);
 				light->mShadowsVertexArray.append(sf::Vertex(pt2, c, mZero));
 				// Pt2
-				dist = sqrtf((pt1.y - lpos.y)*(pt1.y - lpos.y) + (pt1.x - lpos.x)*(pt1.x - lpos.x));
+				dist = sqrt((pt1.y - lpos.y)*(pt1.y - lpos.y) + (pt1.x - lpos.x)*(pt1.x - lpos.x));
 				pt1 = pt1 + (((pt1 - lpos) / dist) * float(light->mLightRadius) * 10000.f);
 				light->mShadowsVertexArray.append(sf::Vertex(pt1, c, mZero));
 			}
 		}
 		else if (shape->GetType() == b2Shape::e_polygon) // polygon
 		{
-			// Récupère le shape
+			// RÃ©cupÃ¨re le shape
 			b2PolygonShape *poly = (b2PolygonShape*) shape;
 
-			// Crée les ombres
+			// CrÃ©e les ombres
 			const float ppm = PhysicManager::GetInstance().GetPPM();
 			const sf::Color &c = sf::Color::Green;
 			const sf::Vector2f lpos = light->GetPosition_sf();
-			for (int32 i = 0; i < poly->m_count; ++i) // Chaque pt -> chaque arrête
+			for (int32 i = 0; i < poly->m_count; ++i) // Chaque pt -> chaque arrÃªte
 			{
-				// N° pt suivant (overflow)
+				// NÂ° pt suivant (overflow)
 				int j = ((i + 1) < poly->m_count) ? (i + 1) : 0;
 
-				// Pts formant l'arrête
+				// Pts formant l'arrÃªte
 				sf::Vector2f pt1 = b22sfVec(b2Mul(t, poly->m_vertices[i]), ppm);
 				sf::Vector2f pt2 = b22sfVec(b2Mul(t, poly->m_vertices[j]), ppm);
 
@@ -120,11 +123,11 @@ void LightEngine::DrawPhysicalHull(PointLight *light, const b2Body& body)
 
 				// Projette les points
 				// Pt1
-				float dist = sqrtf((pt2.y - lpos.y)*(pt2.y - lpos.y) + (pt2.x - lpos.x)*(pt2.x - lpos.x));
+				float dist = sqrt((pt2.y - lpos.y)*(pt2.y - lpos.y) + (pt2.x - lpos.x)*(pt2.x - lpos.x));
 				pt2 = pt2 + (((pt2 - lpos) / dist) * float(light->mLightRadius) * 10000.f);
 				light->mShadowsVertexArray.append(sf::Vertex(pt2, c, mZero));
 				// Pt2
-				dist = sqrtf((pt1.y - lpos.y)*(pt1.y - lpos.y) + (pt1.x - lpos.x)*(pt1.x - lpos.x));
+				dist = sqrt((pt1.y - lpos.y)*(pt1.y - lpos.y) + (pt1.x - lpos.x)*(pt1.x - lpos.x));
 				pt1 = pt1 + (((pt1 - lpos) / dist) * float(light->mLightRadius) * 10000.f);
 				light->mShadowsVertexArray.append(sf::Vertex(pt1, c, mZero));
 			}
@@ -139,7 +142,7 @@ void LightEngine::Clear(PointLight *light)
 	light->mShadowsVertexArray.clear();
 }
 
-// Crée les ombres
+// CrÃ©e les ombres
 void LightEngine::CreateShadows(PointLight *light)
 {
 	if (!mIsActive) return;
@@ -148,7 +151,8 @@ void LightEngine::CreateShadows(PointLight *light)
 	light->mLightTex.setView(light->view);
 
 	// Applique le shadow shader
-	mShadowShader.setParameter("renderTargetSize", light->GetBoundingBox().width);//light->mLightRadius * 2.f); // Fix ?
+//	mShadowShader.setParameter("renderTargetSize", light->GetBoundingBox().width);//light->mLightRadius * 2.f); // Fix ?
+	mShadowShader.setUniform("renderTargetSize", light->GetBoundingBox().width);//light->mLightRadius * 2.f); // Fix ?
 	mShadowShader.setParameter("lightColor", light->mLightColor);
 	sf::RenderStates mShaderStates;
 	mShaderStates.shader = &mShadowShader;
@@ -157,7 +161,7 @@ void LightEngine::CreateShadows(PointLight *light)
 	light->mLightTex.display();
 }
 
-// Gère l'état du LightEngine
+// GÃ¨re l'Ã©tat du LightEngine
 void LightEngine::Activate()
 {
 	mIsActive = true;

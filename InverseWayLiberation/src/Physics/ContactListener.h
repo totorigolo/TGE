@@ -1,17 +1,20 @@
 #pragma once
 
+#include <Box2D/Box2D.h>
+#include "../Tools/NonCopyable.h"
+
 class ContactListener : public b2ContactListener, public NonCopyable
 {
 public:
-	// Début du contact (début du AABB overlap)
+	// DÃ©but du contact (dÃ©but du AABB overlap)
 	void BeginContact(b2Contact* contact);
 
 	// Fin du contact (fin du AABB overlap)
 	void EndContact(b2Contact* contact);
 
-	// Après la détection de la collision, mais avant de la résolution
+	// AprÃ¨s la dÃ©tection de la collision, mais avant de la rÃ©solution
 	void PreSolve(b2Contact* contact, const b2Manifold* oldManifold);
 
-	// Après la résolution des collisions
+	// AprÃ¨s la rÃ©solution des collisions
 	void PostSolve(b2Contact* contact, const b2ContactImpulse* impulse);
 };

@@ -1,4 +1,3 @@
-#include "stdafx.h"
 #include "LuaAction.h"
 #include "LuaArea.h"
 #include "TriggersManager.h"
@@ -13,19 +12,19 @@ LuaAction::LuaAction(const std::string &_name, const std::string &_file, std::st
 {
 }
 
-// Exécute l'action
+// ExÃ©cute l'action
 void LuaAction::Execute(LuaMachine *luaMachine)
 {
 	if (mOnce && mDone) return;
 
-	// Si on a une fonction, on charge le fichier et exécute la fx
+	// Si on a une fonction, on charge le fichier et exÃ©cute la fx
 	if (HasFunction())
 	{
 		luaMachine->DoFile(mFile);
 
 		try
 		{
-			luabind::call_function<void>(luaMachine->GetLuaState(), mFunction.c_str());
+//			luabind::call_function<void>(luaMachine->GetLuaState(), mFunction.c_str());
 			mDone = true;
 		}
 		catch (const std::exception &e)
@@ -34,24 +33,24 @@ void LuaAction::Execute(LuaMachine *luaMachine)
 		}
 	}
 
-	// Sinon on exécute le fichier
+	// Sinon on exÃ©cute le fichier
 	else
 	{
 		luaMachine->DoFile(mFile);
 		mDone = true;
 	}
 
-	// Gère la singularité
+	// GÃ¨re la singularitÃ©
 	if (mDone)
 	{
-		// Préviens toutes les areas liées à cette Action qu'elle vient d'être exécutée
-		for each (auto area in mAreas)
+		// PrÃ©viens toutes les areas liÃ©es Ã  cette Action qu'elle vient d'Ãªtre exÃ©cutÃ©e
+		for (auto &&area : mAreas)
 		{
 			if (area.expired()) continue;
 			area.lock().get()->Done();
 		}
 
-		// Demande à être supprimée
+		// Demande Ã  Ãªtre supprimÃ©e
 		if (mOnce)
 			TriggersManager::GetInstance().ScheduleRemove(mName);
 	}

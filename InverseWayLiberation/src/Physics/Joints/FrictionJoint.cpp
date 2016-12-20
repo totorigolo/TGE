@@ -1,6 +1,7 @@
-#include "stdafx.h"
 #include "FrictionJoint.h"
 #include "../PhysicManager.h"
+#include "../../Tools/Error.h"
+#include "../../Tools/utils.h"
 
 //Ctor
 FrictionJoint::FrictionJoint(const FrictionJointDef &def)

@@ -1,4 +1,5 @@
 #pragma once
+#include <SFGUI/SFGUI.hpp>
 #include "InputManager.h"
 
 class StateSystem;
@@ -12,7 +13,7 @@ protected:
 	virtual ~App();
 	
 public:
-	// Exécute l'application
+	// ExÃ©cute l'application
 	int Execute();
 
 	// Accesseurs
@@ -20,15 +21,15 @@ public:
 	sf::RenderWindow* GetRenderWindow();
 
 protected:
-	// Appelés par Execute();
+	// AppelÃ©s par Execute();
 	bool Init();
 	void CleanUp();
 
 private:
-	// Système de States
+	// SystÃ¨me de States
 	StateSystem &mStateSystem;
 
-	// Fenêtre de rendu
+	// FenÃªtre de rendu
 	sf::RenderWindow *mRenderWindow;
 
 	// InputManager

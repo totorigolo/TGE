@@ -1,6 +1,7 @@
-#include "stdafx.h"
 #include "RevoluteJoint.h"
 #include "../PhysicManager.h"
+#include "../../Tools/Error.h"
+#include "../../Tools/utils.h"
 
 //Ctor
 RevoluteJoint::RevoluteJoint(const RevoluteJointDef &def)

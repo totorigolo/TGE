@@ -1,8 +1,8 @@
 -----------------------------
--- Création de plein d'objets
+-- CrÃ©ation de plein d'objets
 -----------------------------
 
--- Création de randf
+-- CrÃ©ation de randf
 if (randf == nil) then
 	rand = math.random
 	randf = function(min, max)
@@ -12,22 +12,22 @@ if (randf == nil) then
 end
 
 function createObjects1()
-	-- Boucle de création
+	-- Boucle de crÃ©ation
 	texturesB = {"box", "box2", "way", "caisse", "tonneau"}
 	texturesC = {"ball", "circle"}
 	posRotB = b2Vec3(0, 100, 0)
 	x, xmax = 0, 2
 	while x < xmax do
-		-- Crée la Box
+		-- CrÃ©e la Box
 		texture = texturesB[rand(1, 5)]
 		EntityFactory.CreateBox(posRotB, b2_dynamicBody, texture, 1)
 		EntityFactory.CreateBox(posRotB, b2_dynamicBody, texture)
 		
-		-- Crée le Circle
+		-- CrÃ©e le Circle
 		texture = texturesC[rand(1, 2)]
 		EntityFactory.CreateCircle(posRotB, b2_dynamicBody, texture, 1)
 		
-		-- Crée le Poly
+		-- CrÃ©e le Poly
 		nb = rand(3, 8)
 		vec = vector_b2Vec2()
 		for i=0,nb do
@@ -36,13 +36,13 @@ function createObjects1()
 		--EntityFactory.CreatePoly(vec, b2_dynamicBody, "unknown", 1)
 		EntityFactory.CreatePolyChain(vec, PolyChain.Loop, "unknown", 1)
 		
-		-- Incrémente x
+		-- IncrÃ©mente x
 		x = x + 1
 	end
 end
 
 function testAll()
-	-- Test des évènements
+	-- Test des Ã©vÃ¨nements
 	if (eventCreated == nil) then
 		inputMgr:AddSpyedKey(Keyboard.O)
 		eventCreated = true
@@ -57,44 +57,44 @@ function testAll()
 		-- Charge
 		level:LoadFromFile("lvls/2.xvl")
 
-		-- Charge une petite déco
+		-- Charge une petite dÃ©co
 		if (tex_loaded == nil) then
 			LoadTexture("skyrim", "tex/skyrim.jpg")
 			tex_loaded = true
 			print "Texture Skyrim chargee."
 		end
 
-		-- Crée les variables
+		-- CrÃ©e les variables
 		posRotB = b2Vec3(0, 10, 0)
 		posRotC = b2Vec3(0, 11, 0)
 		texturesB = {"box", "box2", "way", "caisse", "tonneau"}
 		texturesC = {"ball", "circle"}
 
-		-- Boucle de création
+		-- Boucle de crÃ©ation
 		xmin, xmax, y = -20, 20, 20
 		x = xmin
 		while x < xmax do
-			-- Met à your les coordonnées
+			-- Met ÃƒÂ  your les coordonnÃ©es
 			posRotB:Set(x, y - 0.5, 0)
 			posRotC:Set(x, y + 0.5, 0)
 			
-			-- Crée des skyrim à la nawak
+			-- CrÃ©e des skyrim ÃƒÂ  la nawak
 			posRotS = b2Vec3(randf(-20, 20), randf(-20, 20), randf(0, 360))
 			--EntityFactory.CreateDeco(posRotS, "skyrim", 20)
 			
-			-- Crée des lampadaires à la nawak
+			-- CrÃ©e des lampadaires ÃƒÂ  la nawak
 			posRotD = b2Vec3(randf(-20, 20), randf(0, 20), randf(0, 360))
 			--EntityFactory.CreateBox(posRotD, b2BodyType.b2_staticBody, "lampadere", 1)
 
-			-- Crée la Box
+			-- CrÃ©e la Box
 			texture = texturesB[rand(1, 5)]
 			--EntityFactory.CreateBox(posRotB, b2BodyType.b2_dynamicBody, texture, 1)
 			
-			-- Crée le Circle
+			-- CrÃ©e le Circle
 			texture = texturesC[rand(1, 2)]
 			--EntityFactory.CreateCircle(posRotC, b2BodyType.b2_dynamicBody, texture, 1)
 			
-			-- Incrémente x
+			-- IncrÃ©mente x
 			x = x + 1
 		end
 	end

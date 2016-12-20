@@ -1,4 +1,3 @@
-#include "stdafx.h"
 #include "Game.h"
 #include "../App/App.h"
 #include "../App/InputManager.h"
@@ -6,6 +5,7 @@
 #include "../Level/LevelManager.h"
 #include "../Physics/PhysicManager.h"
 #include "../Entities/EntityManager.h"
+#include "../Tools/utils.h"
 
 // Ctor
 Game::Game(sf::RenderWindow &window)
@@ -23,7 +23,7 @@ Game::Game(sf::RenderWindow &window)
 	// GUI
 	mSfGUI(App::GetInstance().GetSfGUI())
 {
-	myAssert(mSfGUI, "La GUI n'a pas été créée.");
+	myAssert(mSfGUI, "La GUI n'a pas Ã©tÃ© crÃ©Ã©e.");
 }
 
 // Dtor
@@ -31,7 +31,7 @@ Game::~Game(void)
 {
 }
 
-// (ré)Initialiser
+// (rÃ©)Initialiser
 void Game::Init()
 {
 	// Etats du jeu
@@ -45,7 +45,7 @@ void Game::Run()
 	// Appel l'initialisation
 	if (this->OnInit())
 	{
-		// Tant que la fenêtre est ouverte
+		// Tant que la fenÃªtre est ouverte
 		while (mWindow.isOpen() && !mQuit)
 		{
 			// Gestion du focus
@@ -61,7 +61,7 @@ void Game::Run()
 				this->OnLoopBegin();
 			}
 
-			// Appel des évènements
+			// Appel des Ã©vÃ¨nements
 			this->OnEvent();
 
 			if (focus)
@@ -72,7 +72,7 @@ void Game::Run()
 				// Gestion de la physique
 				this->OnStepPhysics();
 
-				// Appel des mises à jour
+				// Appel des mises Ã  jour
 				this->OnUpdate();
 			}
 
@@ -91,7 +91,7 @@ void Game::Run()
 	this->OnQuit();
 }
 
-/* Fonctions évènements */
+/* Fonctions Ã©vÃ¨nements */
 /// Initialise le jeu
 bool Game::OnInit()
 {
@@ -99,7 +99,7 @@ bool Game::OnInit()
 	mPaused = false;
 
 	/* GUI */
-	// Crée la Window et le Desktop
+	// CrÃ©e la Window et le Desktop
 	mInputManager.AddDesktop(&mDesktop);
 	mGUIElapsedTime.restart();
 
@@ -109,7 +109,7 @@ bool Game::OnInit()
 	}
 	catch (const std::exception &e)
 	{
-		Dialog::Error("Erreur lors de la lecture du thème :\n" + std::string(e.what()));
+		Dialog::Error("Erreur lors de la lecture du thÃ¨me :\n" + std::string(e.what()));
 	}
 
 	/* Physique */
@@ -117,12 +117,12 @@ bool Game::OnInit()
 	mPhysicMgr.SetTimeStep(1.f / 60.f);
 	mPhysicMgr.SetDebugDrawTarget(&mWindow);
 
-	/* Evènements */
+	/* EvÃ¨nements */
 	// Enregistre la vue
 	mInputManager.SetView(mWindow.getDefaultView());
 
 	// Demande l'espionnage de touches
-	// Evènements
+	// EvÃ¨nements
 	mSpyedKeys.push_back(SpyedKey::Create(sf::Keyboard::M)); // Pause physique
 	mSpyedKeys.push_back(SpyedKey::Create(sf::Keyboard::O)); // Debug Draw
 	mSpyedKeys.push_back(SpyedKey::Create(sf::Keyboard::R)); // Recharger
@@ -148,25 +148,25 @@ bool Game::OnInit()
 	return true;
 }
 
-/// Appelé quand la boucle commence
+/// AppelÃ© quand la boucle commence
 void Game::OnLoopBegin()
 {
-	// Sauvegarde la dernière position de la souris
-	mMp = sf2b2Vec(mInputManager.GetMousePosRV(), mPhysicMgr.GetMPP()); // système Box2D
+	// Sauvegarde la derniÃ¨re position de la souris
+	mMp = sf2b2Vec(mInputManager.GetMousePosRV(), mPhysicMgr.GetMPP()); // systÃ¨me Box2D
 }
 
-/// Appelé pour les évènements
+/// AppelÃ© pour les Ã©vÃ¨nements
 void Game::OnEvent()
 {
-	// Met à jour les évènements
+	// Met Ã  jour les Ã©vÃ¨nements
 	mInputManager.Update();
 
-	// Vérifie les évènements
+	// VÃ©rifie les Ã©vÃ¨nements
 	if (mInputManager.HasQuitted())
 	{
-		// Demande si on veut décharger le niveau actuel
+		// Demande si on veut dÃ©charger le niveau actuel
 		if (1 == Dialog::ButtonChoice("Quitter le jeu ?",
-									  "Voulez-vous quitter le jeu ?\nToute progression non sauvegardée sera perdue.",
+									  "Voulez-vous quitter le jeu ?\nToute progression non sauvegardÃ©e sera perdue.",
 									  "Oui", "Non"))
 									  mQuit = true;
 	}
@@ -175,7 +175,7 @@ void Game::OnEvent()
 		return;
 	}
 
-	// Retient si la touche Control est enfoncée
+	// Retient si la touche Control est enfoncÃ©e
 	bool ctrl = mInputManager.IsKeyPressed(sf::Keyboard::LControl) || mInputManager.IsKeyPressed(sf::Keyboard::RControl);
 
 	// Pause physique
@@ -200,12 +200,12 @@ void Game::OnEvent()
 	}
 }
 
-/// Appelé pour la logique
+/// AppelÃ© pour la logique
 void Game::OnLogic()
 {
 }
 
-/// Appelé pour la physique
+/// AppelÃ© pour la physique
 void Game::OnStepPhysics()
 {
 	// Simule
@@ -217,21 +217,21 @@ void Game::OnStepPhysics()
 	}
 }
 
-/// Appelé pour les mises à jour
+/// AppelÃ© pour les mises Ã  jour
 void Game::OnUpdate()
 {
-	// Met à jour les Joints
+	// Met Ã  jour les Joints
 	mPhysicMgr.UpdateJoints();
 
-	// Met à jour le niveau
+	// Met Ã  jour le niveau
 	mLevel.Update();
 
-	// Met à jour la GUI
+	// Met Ã  jour la GUI
 	mDesktop.Update(mGUIElapsedTime.getElapsedTime().asSeconds());
 	mGUIElapsedTime.restart();
 }
 
-/// Appelé pour le rendu
+/// AppelÃ© pour le rendu
 void Game::OnRender()
 {
 	// Rendu
@@ -271,23 +271,23 @@ void Game::OnRender()
 	mWindow.display();
 }
 
-/// Appelé quand la boucle se termine
+/// AppelÃ© quand la boucle se termine
 void Game::OnLoopEnd()
 {
 }
 
-/// Appelé quand le jeu se termine
+/// AppelÃ© quand le jeu se termine
 void Game::OnQuit()
 {
 	Init();
 
-	// Enlève le Desktop du InputManager
+	// EnlÃ¨ve le Desktop du InputManager
 	mInputManager.RemoveDesktop(&mDesktop);
 
 	// Supprime les SpyedKeys
 	mSpyedKeys.clear();
 
-	// Remet la vue par défaut
+	// Remet la vue par dÃ©faut
 	mWindow.setView(mWindow.getDefaultView());
 	mInputManager.SetView(mWindow.getDefaultView());
 
@@ -295,7 +295,7 @@ void Game::OnQuit()
 	mLevel.Clear();
 
 	// Vide
-	// TODO: Déplacer vers la LuaMachine
+	// TODO: DÃ©placer vers la LuaMachine
 	mConsole.UnregisterGlobalLuaVar("level");
 	mConsole.UnregisterGlobalLuaVar("physicMgr");
 	mConsole.UnregisterGlobalLuaVar("inputMgr");

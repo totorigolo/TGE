@@ -1,4 +1,5 @@
 #pragma once
+#include "../Tools/Parser.h"
 #include "../Editor/GUI/LuaConsoleWindow.h"
 
 // Classe abstraite de base

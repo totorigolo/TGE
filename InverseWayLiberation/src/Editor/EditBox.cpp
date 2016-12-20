@@ -1,4 +1,3 @@
-#include "stdafx.h"
 #include "EditBox.h"
 #include "../App/InputManager.h"
 
@@ -17,6 +16,7 @@
 #include "../Physics/Joints/RopeJoint.h"
 #include "../Physics/Joints/WeldJoint.h"
 #include "../Physics/Joints/WheelJoint.h"
+#include "../Tools/utils.h"
 
 // Ctor
 EditBox::EditBox(sfg::Desktop &desktop)
@@ -29,14 +29,14 @@ EditBox::EditBox(sfg::Desktop &desktop)
 	mHumCreationWindowAdded(false),	mPolyCreationWindowAdded(false), mBasicBodyCreationWindowAdded(false), mPointLightCreationWindowAdded(false),
 	mTexturesWindowAdded(false)
 {
-	// Crée la fenêtre
+	// CrÃ©e la fenÃªtre
 	mWindow = sfg::Window::Create();
 	mDesktop.Add(mWindow);
 	
-	// Change le titre de la fenêtre
+	// Change le titre de la fenÃªtre
 	mWindow->SetTitle("EditBox");
 
-	// Affiche le scénario par défaut
+	// Affiche le scÃ©nario par dÃ©faut
 	ShowEmptyScenario();
 }
 
@@ -45,16 +45,16 @@ EditBox::~EditBox()
 {
 }
 
-// Actions différées
+// Actions diffÃ©rÃ©es
 void EditBox::DoScheduledTasks()
 {
-	// Exécute les actions programmées
+	// ExÃ©cute les actions programmÃ©es
 	if (mUpdateScheduled)
 		UpdateGUI();
 	if (mUnselectionScheduled)
 		Unselect();
 
-	// Réinitialise les variables
+	// RÃ©initialise les variables
 	mUpdateScheduled = false;
 	mUnselectionScheduled = false;
 }
@@ -70,36 +70,36 @@ void EditBox::ScheduleUnselection()
 // Change l'objet actuel
 void EditBox::ChangeSelectedObject(Entity *entity)
 {
-	// Si la sélection n'a pas changé, on ne fait rien
+	// Si la sÃ©lection n'a pas changÃ©, on ne fait rien
 	if (entity == mSelectedEntity)
 		return;
 
-	// Déselectionne l'objet actuel
+	// DÃ©selectionne l'objet actuel
 	Unselect();
 
-	// Retient l'objet donné
-	myAssert(entity, "L'entity passée est invalide.");
+	// Retient l'objet donnÃ©
+	myAssert(entity, "L'entity passÃ©e est invalide.");
 	mSelectedEntity = entity;
 	mSelectionChanged = true;
 
-	// Mise à jour
+	// Mise Ã  jour
 	UpdateGUI();
 }
 void EditBox::ChangeSelectedObject(Joint *joint)
 {
-	// Si la sélection n'a pas changé, on ne fait rien
+	// Si la sÃ©lection n'a pas changÃ©, on ne fait rien
 	if (joint == mSelectedJoint)
 		return;
 
-	// Déselectionne l'objet actuel
+	// DÃ©selectionne l'objet actuel
 	Unselect();
 
-	// Retient l'objet donné
-	myAssert(joint, "Le Joint passé est invalide.");
+	// Retient l'objet donnÃ©
+	myAssert(joint, "Le Joint passÃ© est invalide.");
 	mSelectedJoint = joint;
 	mSelectionChanged = true;
 
-	// Mise à jour
+	// Mise Ã  jour
 	UpdateGUI();
 }
 void EditBox::Unselect()
@@ -118,10 +118,10 @@ void EditBox::Unselect()
 		mSelectionChanged = true;
 	}
 
-	// Déselectionne des différents scénarios
+	// DÃ©selectionne des diffÃ©rents scÃ©narios
 	mColFilteringWindow.Unselect();
 
-	// Mise à jour
+	// Mise Ã  jour
 	UpdateGUI();
 }
 EditBox::SelectionType EditBox::GetSelectionType()
@@ -177,24 +177,24 @@ std::string EditBox::SelectionTypeToString(const SelectionType &type)
 // Vide la EditBox
 void EditBox::EmptyGUI()
 {
-	// Réinitialise le type
+	// RÃ©initialise le type
 	mSelectionType = SelectionType::Null;
 
-	// Cache les scénari
+	// Cache les scÃ©nari
 	mDecoScenario.Hide();
 	mEmptyScenario.Hide();
 	mHumScenario.Hide();
 	mBodyScenario.Hide();
 	mPointLightScenario.Hide();
 
-	// Vide la fenêtre
+	// Vide la fenÃªtre
 	mWindow->RemoveAll();
 }
 
-// Mise à jour des Widgets en f° de la sélection
+// Mise Ã  jour des Widgets en fÂ° de la sÃ©lection
 void EditBox::UpdateGUI()
 {
-	// Si la sélection n'a pas changé, on ne fait rien
+	// Si la sÃ©lection n'a pas changÃ©, on ne fait rien
 	if (!mSelectionChanged)
 		return;
 	mSelectionChanged = false;
@@ -202,7 +202,7 @@ void EditBox::UpdateGUI()
 	// Vide la GUI
 	EmptyGUI();
 
-	// Réinitialise le type
+	// RÃ©initialise le type
 	mSelectionType = SelectionType::Null;
 
 	// Change la GUI en fonction du type d'objet
@@ -210,15 +210,15 @@ void EditBox::UpdateGUI()
 	{
 		mSelectionType = SelectionType::Entity;
 
-		// Récupère un nom raccourci pour l'Entity
+		// RÃ©cupÃ¨re un nom raccourci pour l'Entity
 		Entity *e = mSelectedEntity;
 
-		// Gère les différents types
+		// GÃ¨re les diffÃ©rents types
 		if (e->GetType() == EntityType::BasicBody)
 		{
 			mSelectionType = SelectionType::BasicBody;
 
-			// Sélectionne les objets et montre le scénario des Body
+			// SÃ©lectionne les objets et montre le scÃ©nario des Body
 			mBodyScenario.Select((BasicBody*) e);
 			mColFilteringWindow.Select((BasicBody*) e);
 			ShowBodyScenario();
@@ -227,7 +227,7 @@ void EditBox::UpdateGUI()
 		{
 			mSelectionType = SelectionType::PolyBody;
 
-			// Sélectionne les objets et montre le scénario des Body
+			// SÃ©lectionne les objets et montre le scÃ©nario des Body
 			mBodyScenario.Select((PolyBody*) e);
 			mColFilteringWindow.Select((PolyBody*) e);
 			ShowBodyScenario();
@@ -236,7 +236,7 @@ void EditBox::UpdateGUI()
 		{
 			mSelectionType = SelectionType::PolyChain;
 
-			// Sélectionne les objets et montre le scénario des Body
+			// SÃ©lectionne les objets et montre le scÃ©nario des Body
 			mBodyScenario.Select((PolyChain*) e);
 			mColFilteringWindow.Select((PolyChain*) e);
 			ShowBodyScenario();
@@ -245,7 +245,7 @@ void EditBox::UpdateGUI()
 		{
 			mSelectionType = SelectionType::Deco;
 
-			// Montre le scénario de la Deco
+			// Montre le scÃ©nario de la Deco
 			mDecoScenario.Select((Deco*) e);
 			ShowDecoScenario();
 		}
@@ -253,7 +253,7 @@ void EditBox::UpdateGUI()
 		{
 			mSelectionType = SelectionType::PointLight;
 
-			// Montre le scénario de la lumière
+			// Montre le scÃ©nario de la lumiÃ¨re
 			mPointLightScenario.Select((PointLight*) e);
 			ShowPointLightScenario();
 		}
@@ -264,20 +264,20 @@ void EditBox::UpdateGUI()
 			else
 				mSelectionType = SelectionType::Hum;
 
-			// Montre le scénario des Hums
+			// Montre le scÃ©nario des Hums
 			mHumScenario.Select((Hum*) e);
 			ShowHumScenario();
 		}
 	}
 	else if (mSelectedJoint)
 	{
-		// Texte par défaut
+		// Texte par dÃ©faut
 		mSelectionType = SelectionType::Joint;
 
-		// Récupère un nom raccourci pour l'Entity
+		// RÃ©cupÃ¨re un nom raccourci pour l'Entity
 		Joint *e = mSelectedJoint;
 
-		// Gère les différents types
+		// GÃ¨re les diffÃ©rents types
 		if (e->GetType() == JointType::DistanceJoint)
 		{
 			mSelectionType = SelectionType::DistanceJoint;
@@ -316,7 +316,7 @@ void EditBox::UpdateGUI()
 		}
 	}
 
-	// Affiche le scénario par défaut si on n'a pas de sélection
+	// Affiche le scÃ©nario par dÃ©faut si on n'a pas de sÃ©lection
 	if (mSelectionType == SelectionType::Null)
 		ShowEmptyScenario();
 }
@@ -324,7 +324,7 @@ void EditBox::UpdateGUI()
 // Gestion de la Machine Lua
 void EditBox::SetLuaMachine(LuaMachine *luaMachine)
 {
-	myAssert(luaMachine, "La LuaMachine passée est invalide.");
+	myAssert(luaMachine, "La LuaMachine passÃ©e est invalide.");
 
 	mLuaConsoleWindow.SetLuaMachine(luaMachine);
 }
@@ -333,29 +333,29 @@ LuaMachine* EditBox::GetLuaMachine()
 	return mLuaConsoleWindow.GetLuaMachine();
 }
 
-// Obtient le repère de l'objet sélectionné
+// Obtient le repÃ¨re de l'objet sÃ©lectionnÃ©
 sf::CircleShape EditBox::GetSelectionMark()
 {
-	// Crée le disque
+	// CrÃ©e le disque
 	sf::CircleShape cs;
 
-	// Si on n'a pas de sélection, on renvoi un cercle de rayon nul
+	// Si on n'a pas de sÃ©lection, on renvoi un cercle de rayon nul
 	if (mSelectionType == SelectionType::Null)
 		return cs;
 
-	// Paramètre le cercle
+	// ParamÃ¨tre le cercle
 	cs.setFillColor(sf::Color::Red);
 	cs.setOutlineColor(sf::Color(30, 30, 30));
 	cs.setOutlineThickness(2.f);
 	cs.setRadius(9.f);
 	cs.setOrigin(sf::Vector2f(9.f, 9.f));
 
-	// Gère chaque type
+	// GÃ¨re chaque type
 	if (mSelectionType == SelectionType::BasicBody || mSelectionType == SelectionType::PolyBody || mSelectionType == SelectionType::PolyChain)
 	{
 		// Obtient le BaseBody
 		BaseBody *bb = (BaseBody*) mSelectedEntity;
-		myAssert(bb, "Erreur lors du la détermination du type.");
+		myAssert(bb, "Erreur lors du la dÃ©termination du type.");
 
 		cs.setPosition(b22sfVec(bb->GetPosition(), mPhysicMgr.GetPPM()));
 	}
@@ -363,7 +363,7 @@ sf::CircleShape EditBox::GetSelectionMark()
 	{
 		// Obtient le BasicBody
 		Deco *d = (Deco*) mSelectedEntity;
-		myAssert(d, "Erreur lors du la détermination du type.");
+		myAssert(d, "Erreur lors du la dÃ©termination du type.");
 
 		cs.setPosition(d->GetSprite()->getPosition());
 	}
@@ -371,7 +371,7 @@ sf::CircleShape EditBox::GetSelectionMark()
 	{
 		// Obtient la PointLight
 		PointLight *pl = (PointLight*) mSelectedEntity;
-		myAssert(pl, "Erreur lors du la détermination du type.");
+		myAssert(pl, "Erreur lors du la dÃ©termination du type.");
 
 		cs.setPosition(pl->GetPosition_sf());
 	}
@@ -379,7 +379,7 @@ sf::CircleShape EditBox::GetSelectionMark()
 	{
 		// Obtient le Player
 		Player *p = (Player*) mSelectedEntity;
-		myAssert(p, "Erreur lors du la détermination du type.");
+		myAssert(p, "Erreur lors du la dÃ©termination du type.");
 
 		cs.setPosition(b22sfVec(p->GetPosition(), mPhysicMgr.GetPPM()));
 	}
@@ -387,7 +387,7 @@ sf::CircleShape EditBox::GetSelectionMark()
 	{
 		// Obtient le Hum
 		Hum *h = (Hum*) mSelectedEntity;
-		myAssert(h, "Erreur lors du la détermination du type.");
+		myAssert(h, "Erreur lors du la dÃ©termination du type.");
 
 		cs.setPosition(b22sfVec(h->GetPosition(), mPhysicMgr.GetPPM()));
 	}
@@ -396,7 +396,7 @@ sf::CircleShape EditBox::GetSelectionMark()
 	return cs;
 }
 
-// Mise en place des différents scénarios
+// Mise en place des diffÃ©rents scÃ©narios
 void EditBox::ShowEmptyScenario()
 {
 	mEmptyScenario.AddInWindow(mWindow);
@@ -513,13 +513,13 @@ void EditBox::ShowPointLightCreationWindow()
 	mPointLightCreationWindow.Show();
 }
 
-// Fermeture des fenêtres / scénarios
+// Fermeture des fenÃªtres / scÃ©narios
 void EditBox::OnCloseLevelWindow()
 {
 	mLevelWindow.Hide();
 }
 
-// Accesseurs des fenêtres et scénarii
+// Accesseurs des fenÃªtres et scÃ©narii
 EmptyScenario* EditBox::GetEmptyScenario()
 {
 	return &mEmptyScenario;

@@ -1,16 +1,24 @@
-#include "stdafx.h"
+#include <cstdlib>
+#include <iostream>
+#include "Dialog.h"
+#include "utils.h"
+#include "Parser.h"
+
+// TODO RÃ©parer
+//#define CALIBRI_PATH "data/calibri.ttf"
+#define CALIBRI_PATH "/usr/share/fonts/TTF/LiberationSans-Regular.ttf"
 
 namespace Dialog
 {
 	void Dialog(const std::string &image, const std::string &title, const sf::String &message, bool quit, int output)
 	{
-		// Création de la fenêtre et des évènements
+		// CrÃ©ation de la fenÃªtre et des Ã©vÃ¨nements
 		sf::RenderWindow *window = new sf::RenderWindow(sf::VideoMode(500, 150, 32), title);
 		//window->setFramerateLimit(20);
 		sf::Event event;
 		sf::View windowView(window->getDefaultView());
 
-		// On évite les évènements qui ne nous sont pas destinés
+		// On Ã©vite les Ã©vÃ¨nements qui ne nous sont pas destinÃ©s
 		while (sf::Keyboard::isKeyPressed(sf::Keyboard::Return) || sf::Keyboard::isKeyPressed(sf::Keyboard::Escape));
 
 		// Chargement de l'image
@@ -19,34 +27,35 @@ namespace Dialog
 		if (triangle.loadFromFile(image))
 			afficherImg = true;
 
-		// Création du texte
+		// CrÃ©ation du texte
 		sf::Font f;
-		if (!f.loadFromFile("data/calibri.ttf"))
+		if (!f.loadFromFile(CALIBRI_PATH))
 		{
 #ifdef _WIN32
 			f.loadFromFile("C:/Windows/Fonts/calibri.ttf");
 #else
-			// TODO: Linux, vérifier le dossier des polices
+			// TODO: Linux, vÃ©rifier le dossier des polices
 			f.loadFromFile("/usr/share/fonts/truetype/calibri.ttf");
+			f.loadFromFile("/usr/share/fonts/TTF/LiberationSans-Regular.ttf");
 #endif
 		}
 		sf::Text text(message, f);
 		text.scale(0.8f, 0.8f);
-		text.setColor(sf::Color::Black);
+		text.setFillColor(sf::Color::Black);
 
-		// On compte le nombre de retour à la ligne
+		// On compte le nombre de retour Ã  la ligne
 		int nbRetours = 1;
 		for (unsigned int i = 0; i < message.getSize(); ++i)
 			if (message[i] == '\n')
 				++nbRetours;
 
-		// On place le texte en conséquences
+		// On place le texte en consÃ©quences
 		text.move(140.f, 60.f / nbRetours);
 
 		// Calcul de l'emplacement du bouton
 		float x = text.getGlobalBounds().left + 20.f;
 		float y = text.getGlobalBounds().top + text.getGlobalBounds().height + 20.f;
-		// Création du bouton
+		// CrÃ©ation du bouton
 		sf::RectangleShape button(sf::Vector2f(140.f, 30.f));
 		button.setFillColor(sf::Color::Transparent);
 		button.setOutlineColor(sf::Color::Black);
@@ -54,16 +63,16 @@ namespace Dialog
 		button.setPosition(x, y);
 		sf::Text txtButton((quit) ? ("Quitter") : ("Valider"), f);
 		txtButton.scale(0.6f, 0.6f);
-		txtButton.setColor(sf::Color::Black);
+		txtButton.setFillColor(sf::Color::Black);
 		txtButton.setPosition(x + 5.f, y + 2.f);
 
-		// Taille de la fenêtre par rapport à la taille du bouton et du texte
+		// Taille de la fenÃªtre par rapport Ã  la taille du bouton et du texte
 		window->setSize(sf::Vector2u(static_cast<unsigned int>(text.getGlobalBounds().left + text.getGlobalBounds().width) + 20U,
 									 static_cast<unsigned int>(button.getGlobalBounds().top + button.getGlobalBounds().height) + 20U));
 		window->setPosition(sf::Vector2i(static_cast<int>(sf::VideoMode::getDesktopMode().width / 2U - window->getSize().x / 2U),
 										 static_cast<int>(sf::VideoMode::getDesktopMode().height / 2U - window->getSize().y / 2U)));
 
-		// Création du fond de survol
+		// CrÃ©ation du fond de survol
 		sf::RectangleShape backgroung(sf::Vector2f(140.f, 30.f));
 		backgroung.setFillColor(sf::Color(255, 0, 0, 128));
 
@@ -73,15 +82,15 @@ namespace Dialog
 		{
 			while (window->pollEvent(event))
 			{
-				// Si on appuie sur le bouton rouge ou sur échap : on quitte
+				// Si on appuie sur le bouton rouge ou sur Ã©chap : on quitte
 				if (event.type == sf::Event::Closed ||
 					(event.type == sf::Event::KeyReleased && (event.key.code == sf::Keyboard::Return || event.key.code == sf::Keyboard::Escape)))
 					window->close();
 
-				// On gère le redimentionnement
+				// On gÃ¨re le redimentionnement
 				else if (event.type == sf::Event::Resized)
 				{
-					// Vue de la fenêtre
+					// Vue de la fenÃªtre
 					windowView.reset(sf::FloatRect(sf::Vector2f(0.f, 0.f), u2f(window->getSize())));
 				}
 
@@ -95,14 +104,14 @@ namespace Dialog
 						overFlying = false;
 				}
 
-				// Clic gauche : on vérifie si on est sur un bouton et on quitte la cas échéant
+				// Clic gauche : on vÃ©rifie si on est sur un bouton et on quitte la cas Ã©chÃ©ant
 				else if (event.type == sf::Event::MouseButtonReleased)
 				{
 					if (button.getGlobalBounds().contains(i2f(sf::Vector2i(event.mouseButton.x, event.mouseButton.y))))
 						window->close();
 				}
 			}
-			// On efface l'écran
+			// On efface l'Ã©cran
 			window->clear(sf::Color(240, 240, 240)); // Beige
 			window->setView(windowView);
 
@@ -121,13 +130,15 @@ namespace Dialog
 			window->draw(button);
 			window->draw(txtButton);
 
-			// On affiche l'écran
+			// On affiche l'Ã©cran
 			window->display();
 		}
 
 		// Si l'erreur est importante : on quitte
-		if (quit)
-			exit(output);
+		if (quit) {
+            std::cerr << "Erreur fatale : " << message.toAnsiString() << std::endl;
+            exit(output);
+        }
 	}
 
 	void Error(const sf::String &message, bool quit, int output)
@@ -142,24 +153,24 @@ namespace Dialog
 
 	const sf::String TextInput(const std::string &title, const sf::String &message, const sf::String& _default)
 	{
-		// Création de la fenêtre et des évènements
+		// CrÃ©ation de la fenÃªtre et des Ã©vÃ¨nements
 		sf::RenderWindow *window = new sf::RenderWindow(sf::VideoMode(500, 170, 32), title);
 		window->setFramerateLimit(20);
 		sf::Event event;
 		sf::View windowView(window->getDefaultView());
 
-		// Création du texte
+		// CrÃ©ation du texte
 		sf::Font f;
-		f.loadFromFile("data/calibri.ttf");
+		f.loadFromFile(CALIBRI_PATH);
 		sf::Text text(message, f);
 		text.scale(0.8f, 0.8f);
-		text.setColor(sf::Color::Black);
+		text.setFillColor(sf::Color::Black);
 		text.setPosition(10.f, 10.f);
 
-		// Calcul de l'emplacement de la zone d'entrée
+		// Calcul de l'emplacement de la zone d'entrÃ©e
 		float y = 10.f + text.getGlobalBounds().height + 30.f;
 
-		// Création de la zone d'entrée
+		// CrÃ©ation de la zone d'entrÃ©e
 		sf::Vertex input[] =
 		{
 			sf::Vertex(sf::Vector2f(10.f, y), sf::Color::Black),
@@ -169,17 +180,17 @@ namespace Dialog
 			sf::Vertex(sf::Vector2f(10.f, y), sf::Color::Black)
 		};
 
-		// Création du texte entré
+		// CrÃ©ation du texte entrÃ©
 		sf::Text inputText;
 		inputText.setFont(f);
 		inputText.scale(0.8f, 0.8f);
-		inputText.setColor(sf::Color::Black);
+		inputText.setFillColor(sf::Color::Black);
 		inputText.setPosition(10.f + 5.f, y + 5.f);
 		inputText.setString(_default);
 
 		// Calcul de l'emplacement du bouton
 		y += 40.f + 20.f;
-		// Création du bouton
+		// CrÃ©ation du bouton
 		sf::RectangleShape button(sf::Vector2f(140.f, 30.f));
 		button.setFillColor(sf::Color::Transparent);
 		button.setOutlineColor(sf::Color::Black);
@@ -187,14 +198,14 @@ namespace Dialog
 		button.setPosition(10.f, y);
 		sf::Text txtButton("Valider", f);
 		txtButton.scale(0.6f, 0.6f);
-		txtButton.setColor(sf::Color::Black);
+		txtButton.setFillColor(sf::Color::Black);
 		txtButton.setPosition(10.f + 5.f, y + 2.f);
 		
-		// Taille de la fenêtre par rapport à la taille du bouton
+		// Taille de la fenÃªtre par rapport Ã  la taille du bouton
 		window->setSize(sf::Vector2u(window->getSize().x,
 									static_cast<unsigned int>(button.getGlobalBounds().top + button.getGlobalBounds().height + 20.f)));
 
-		// Création du fond de survol
+		// CrÃ©ation du fond de survol
 		sf::RectangleShape backgroung(sf::Vector2f(140.f, 30.f));
 		backgroung.setFillColor(sf::Color(255, 0, 0, 128));
 
@@ -204,27 +215,27 @@ namespace Dialog
 		{
 			while (window->pollEvent(event))
 			{
-				// Si on appuie sur le bouton rouge ou sur échap : on retourne le texte par défaut
+				// Si on appuie sur le bouton rouge ou sur Ã©chap : on retourne le texte par dÃ©faut
 				if (event.type == sf::Event::Closed || (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape))
 				{
 					window->close();
 					return std::string();
 				}
 
-				// Si on appuie sur  entrée : on retourne le texte
+				// Si on appuie sur  entrÃ©e : on retourne le texte
 				if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Return)
 				{
 					window->close();
 				}
 
-				// On gère le redimentionnement
+				// On gÃ¨re le redimentionnement
 				else if (event.type == sf::Event::Resized)
 				{
-					// Vue de la fenêtre
+					// Vue de la fenÃªtre
 					windowView.reset(sf::FloatRect(sf::Vector2f(0.f, 0.f), u2f(window->getSize())));
 				}
 
-				// Si on appuie sur Retour arrière : on efface la dernière lettre
+				// Si on appuie sur Retour arriÃ¨re : on efface la derniÃ¨re lettre
 				else if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::BackSpace)
 				{
 					sf::String str = inputText.getString();
@@ -233,7 +244,7 @@ namespace Dialog
 					inputText.setString(str);
 				}
 
-				// Si du texte est tappé : on l'ajoute à la zone d'édition
+				// Si du texte est tappÃ© : on l'ajoute Ã  la zone d'Ã©dition
 				else if (event.type == sf::Event::TextEntered)
                 {
 					if (event.text.unicode >= 33 && event.text.unicode < 255 && event.text.unicode != 127 && event.text.unicode != 240) // tri
@@ -250,24 +261,24 @@ namespace Dialog
 						overFlying = false;
 				}
 
-				// Clic gauche : on vérifie si on est sur un bouton et on quitte la cas échéant
+				// Clic gauche : on vÃ©rifie si on est sur un bouton et on quitte la cas Ã©chÃ©ant
 				else if (event.type == sf::Event::MouseButtonReleased)
 				{
 					if (button.getGlobalBounds().contains(i2f(sf::Vector2i(event.mouseButton.x, event.mouseButton.y))))
 						window->close();
 				}
 			}
-			// On efface l'écran
+			// On efface l'Ã©cran
 			window->clear(sf::Color(240, 240, 240)); // Beige
 			window->setView(windowView);
 
 			// On affiche le texte
 			window->draw(text);
 
-			// On affiche la zone d'entrée
+			// On affiche la zone d'entrÃ©e
 			window->draw(input, 5, sf::LinesStrip);
 
-			// On affiche le texte entré
+			// On affiche le texte entrÃ©
 			window->draw(inputText);
 
 			// On affiche le fond de survol du bouton
@@ -278,7 +289,7 @@ namespace Dialog
 			window->draw(button);
 			window->draw(txtButton);
 
-			// On affiche l'écran
+			// On affiche l'Ã©cran
 			window->display();
 		}
 
@@ -291,24 +302,24 @@ namespace Dialog
 
 	int NumberInput(const std::string &title, const sf::String &message, int _default)
 	{
-		// Création de la fenêtre et des évènements
+		// CrÃ©ation de la fenÃªtre et des Ã©vÃ¨nements
 		sf::RenderWindow *window = new sf::RenderWindow(sf::VideoMode(500, 150, 32), title);
 		window->setFramerateLimit(20);
 		sf::Event event;
 		sf::View windowView(window->getDefaultView());
 
-		// Création du texte
+		// CrÃ©ation du texte
 		sf::Font f;
-		f.loadFromFile("data/calibri.ttf");
+		f.loadFromFile(CALIBRI_PATH);
 		sf::Text text(message, f);
 		text.scale(0.8f, 0.8f);
-		text.setColor(sf::Color::Black);
+		text.setFillColor(sf::Color::Black);
 		text.setPosition(10.f, 10.f);
 
-		// Calcul de l'emplacement de la zone d'entrée
+		// Calcul de l'emplacement de la zone d'entrÃ©e
 		float y = 10.f + text.getGlobalBounds().height + 30.f;
 
-		// Création de la zone d'entrée
+		// CrÃ©ation de la zone d'entrÃ©e
 		sf::Vertex input[] =
 		{
 			sf::Vertex(sf::Vector2f(10.f, y), sf::Color::Black),
@@ -318,18 +329,18 @@ namespace Dialog
 			sf::Vertex(sf::Vector2f(10.f, y), sf::Color::Black)
 		};
 
-		// Création du texte entré
+		// CrÃ©ation du texte entrÃ©
 		int number = _default;
 		sf::Text inputText;
 		inputText.setFont(f);
 		inputText.scale(0.8f, 0.8f);
-		inputText.setColor(sf::Color::Black);
+		inputText.setFillColor(sf::Color::Black);
 		inputText.setPosition(10.f + 5.f, y + 5.f);
 		inputText.setString(Parser::intToString(number));
 
 		// Calcul de l'emplacement du bouton
 		y += 40.f + 20.f;
-		// Création du bouton
+		// CrÃ©ation du bouton
 		sf::RectangleShape button(sf::Vector2f(140.f, 30.f));
 		button.setFillColor(sf::Color::Transparent);
 		button.setOutlineColor(sf::Color::Black);
@@ -337,14 +348,14 @@ namespace Dialog
 		button.setPosition(10.f, y);
 		sf::Text txtButton("Valider", f);
 		txtButton.scale(0.6f, 0.6f);
-		txtButton.setColor(sf::Color::Black);
+		txtButton.setFillColor(sf::Color::Black);
 		txtButton.setPosition(10.f + 5.f, y + 2.f);
 		
-		// Taille de la fenêtre par rapport à la taille du bouton
+		// Taille de la fenÃªtre par rapport Ã  la taille du bouton
 		window->setSize(sf::Vector2u(window->getSize().x,
 									static_cast<unsigned int>(button.getGlobalBounds().top + button.getGlobalBounds().height + 20.f)));
 
-		// Création du fond de survol
+		// CrÃ©ation du fond de survol
 		sf::RectangleShape backgroung(sf::Vector2f(140.f, 30.f));
 		backgroung.setFillColor(sf::Color(255, 0, 0, 128));
 
@@ -354,32 +365,32 @@ namespace Dialog
 		{
 			while (window->pollEvent(event))
 			{
-				// Si on appuie sur le bouton rouge ou sur échap : on retourne le texte par défaut
+				// Si on appuie sur le bouton rouge ou sur Ã©chap : on retourne le texte par dÃ©faut
 				if (event.type == sf::Event::Closed || (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape))
 				{
 					window->close();
 					return _default;
 				}
 
-				// Si on appuie sur entrée : on retourne le texte
+				// Si on appuie sur entrÃ©e : on retourne le texte
 				if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Return)
 					window->close();
 
-				// On gère le redimentionnement
+				// On gÃ¨re le redimentionnement
 				else if (event.type == sf::Event::Resized)
 				{
-					// Vue de la fenêtre
+					// Vue de la fenÃªtre
 					windowView.reset(sf::FloatRect(sf::Vector2f(0.f, 0.f), u2f(window->getSize())));
 				}
 
-				// Si on appuie sur retour arrière : on efface la dernière lettre
+				// Si on appuie sur retour arriÃ¨re : on efface la derniÃ¨re lettre
 				else if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::BackSpace)
 				{
 					number /= 10;
 					inputText.setString(Parser::intToString(number));
 				}
 
-				// Si on appuie sur une touche : on ajoute à la zone d'entrée
+				// Si on appuie sur une touche : on ajoute Ã  la zone d'entrÃ©e
 				else if (event.type == sf::Event::KeyPressed)
 				{
 					number = number * 10 + Parser::keyToInt(event.key.code);
@@ -396,24 +407,24 @@ namespace Dialog
 						overFlying = false;
 				}
 
-				// Clic gauche : on vérifie si on est sur un bouton et on quitte la cas échéant
+				// Clic gauche : on vÃ©rifie si on est sur un bouton et on quitte la cas Ã©chÃ©ant
 				else if (event.type == sf::Event::MouseButtonReleased)
 				{
 					if (button.getGlobalBounds().contains(i2f(sf::Vector2i(event.mouseButton.x, event.mouseButton.y))))
 						window->close();
 				}
 			}
-			// On efface l'écran
+			// On efface l'Ã©cran
 			window->clear(sf::Color(240, 240, 240)); // Beige
 			window->setView(windowView);
 
 			// On affiche le texte
 			window->draw(text);
 
-			// On affiche la zone d'entrée
+			// On affiche la zone d'entrÃ©e
 			window->draw(input, 5, sf::LinesStrip);
 
-			// On affiche le texte entré
+			// On affiche le texte entrÃ©
 			window->draw(inputText);
 
 			// On affiche le fond de survol du bouton
@@ -424,7 +435,7 @@ namespace Dialog
 			window->draw(button);
 			window->draw(txtButton);
 
-			// On affiche l'écran
+			// On affiche l'Ã©cran
 			window->display();
 		}
 		return number;
@@ -432,18 +443,18 @@ namespace Dialog
 
 	int ButtonChoice(const std::string &title, const sf::String &message, const sf::String &one, const sf::String &two, int _default)
 	{
-		// Création de la fenêtre et des évènements
+		// CrÃ©ation de la fenÃªtre et des Ã©vÃ¨nements
 		sf::RenderWindow *window = new sf::RenderWindow(sf::VideoMode(500, 150, 32), title);
 		window->setFramerateLimit(20);
 		sf::Event event;
 		sf::View windowView(window->getDefaultView());
 
-		// Création du texte
+		// CrÃ©ation du texte
 		sf::Font f;
-		f.loadFromFile("data/calibri.ttf");
+		f.loadFromFile(CALIBRI_PATH);
 		sf::Text text(message, f);
 		text.scale(0.8f, 0.8f);
-		text.setColor(sf::Color::Black);
+		text.setFillColor(sf::Color::Black);
 		text.setPosition(10.f, 10.f);
 
 		// Calcul de l'emplacement des boutons
@@ -451,7 +462,7 @@ namespace Dialog
 		float x1 = ((500.f / 2.f) / 2.f) - (140.f / 2.f);
 		float x2 = (500.f * (3.f / 4.f)) - (140.f / 2.f);
 
-		// Création du bouton 1
+		// CrÃ©ation du bouton 1
 		sf::RectangleShape button1(sf::Vector2f(140.f, 40.f));
 		button1.setFillColor(sf::Color::Transparent);
 		button1.setOutlineColor(sf::Color::Black);
@@ -459,10 +470,10 @@ namespace Dialog
 		button1.setPosition(x1, y);
 		sf::Text txtButton1(one, f);
 		txtButton1.scale(0.8f, 0.8f);
-		txtButton1.setColor(sf::Color::Black);
+		txtButton1.setFillColor(sf::Color::Black);
 		txtButton1.setPosition(x1 + 5.f, y + 5.f);
 
-		// Création du bouton 2
+		// CrÃ©ation du bouton 2
 		sf::RectangleShape button2(sf::Vector2f(140.f, 40.f));
 		button2.setFillColor(sf::Color::Transparent);
 		button2.setOutlineColor(sf::Color::Black);
@@ -470,14 +481,14 @@ namespace Dialog
 		button2.setPosition(x2, y);
 		sf::Text txtButton2(two, f);
 		txtButton2.scale(0.8f, 0.8f);
-		txtButton2.setColor(sf::Color::Black);
+		txtButton2.setFillColor(sf::Color::Black);
 		txtButton2.setPosition(x2 + 5.f, y + 5.f);
 		
-		// Taille de la fenêtre par rapport à la taille du bouton
+		// Taille de la fenÃªtre par rapport Ã  la taille du bouton
 		window->setSize(sf::Vector2u(window->getSize().x,
 									static_cast<unsigned int>(button1.getGlobalBounds().top + button1.getGlobalBounds().height + 20.f)));
 
-		// Création du fond de survol
+		// CrÃ©ation du fond de survol
 		sf::RectangleShape backgroung(sf::Vector2f(140.f, 40.f));
 		backgroung.setFillColor(sf::Color(255, 0, 0, 128));
 
@@ -488,17 +499,17 @@ namespace Dialog
 		{
 			while (window->pollEvent(event))
 			{
-				// Si on appui sur le bouton rouge ou sur échap ou sur entrée : on fait rien
+				// Si on appui sur le bouton rouge ou sur Ã©chap ou sur entrÃ©e : on fait rien
 				if (event.type == sf::Event::Closed || (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape))
 				{
 					window->close();
 					return _default;
 				}
 
-				// On gère le redimentionnement
+				// On gÃ¨re le redimentionnement
 				else if (event.type == sf::Event::Resized)
 				{
-					// Vue de la fenêtre
+					// Vue de la fenÃªtre
 					windowView.reset(sf::FloatRect(sf::Vector2f(0.f, 0.f), u2f(window->getSize())));
 				}
 				// Si la souris survole un bouton : on met le fond
@@ -513,7 +524,7 @@ namespace Dialog
 						overFlying = false;
 				}
 
-				// Clic gauche : on vérifie si on est sur un bouton et on retourne sa valeur
+				// Clic gauche : on vÃ©rifie si on est sur un bouton et on retourne sa valeur
 				else if (event.type == sf::Event::MouseButtonReleased || event.type == sf::Event::KeyReleased)
 				{
 					if (button1.getGlobalBounds().contains(i2f(sf::Vector2i(event.mouseButton.x, event.mouseButton.y))) ||
@@ -527,7 +538,7 @@ namespace Dialog
 						window->close();
 				}
 			}
-			// On efface l'écran
+			// On efface l'Ã©cran
 			window->clear(sf::Color(240, 240, 240)); // Beige
 			window->setView(windowView);
 
@@ -546,7 +557,7 @@ namespace Dialog
 			window->draw(button2);
 			window->draw(txtButton2);
 
-			// On affiche l'écran
+			// On affiche l'Ã©cran
 			window->display();
 		}
 		return button;

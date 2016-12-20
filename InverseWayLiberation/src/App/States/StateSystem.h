@@ -1,4 +1,5 @@
 #pragma once
+#include "../../Tools/Singleton.h"
 
 class App;
 class State;
@@ -15,8 +16,8 @@ public:
 	// Change le state actuel
 	void ChangeState(State *state);
 
-	// Exécute le State actuel, et retourne en fonction de si il a finit.
-	// Le State actuel passe au suivant à la fin de la fonction.
+	// ExÃ©cute le State actuel, et retourne en fonction de si il a finit.
+	// Le State actuel passe au suivant Ã  la fin de la fonction.
 	bool Run(App *app);
 
 private:

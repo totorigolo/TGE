@@ -1,4 +1,3 @@
-#include "stdafx.h"
 #include "HumScenario.h"
 #include "../EditBox.h"
 #include "../../App/InputManager.h"
@@ -12,15 +11,15 @@ HumScenario::HumScenario(EditBox &editBox)
 	// Initialise le pas
 	mPosStepSaveValue = 1.f;
 
-	// Rempli la fenêtre
+	// Rempli la fenÃªtre
 	Fill();
 	mApply = true;
 }
 
-// Gestion de la sélection
+// Gestion de la sÃ©lection
 void HumScenario::Select(Hum *selection)
 {
-	myAssert(selection, "BasicBody passé invalide.");
+	myAssert(selection, "BasicBody passÃ© invalide.");
 
 	mSelection = selection;
 
@@ -36,7 +35,7 @@ void HumScenario::Update()
 {
 	if (!mSelection) return;
 
-	// Met à jour les valeurs
+	// Met Ã  jour les valeurs
 	mPosX->SetText(Parser::floatToString(mSelection->GetPosition().x, 4));
 	mPosY->SetText(Parser::floatToString(mSelection->GetPosition().y, 4));
 
@@ -45,11 +44,11 @@ void HumScenario::Update()
 	mColorG->SetValue(mSelection->GetTrunkColor().g);
 	mColorB->SetValue(mSelection->GetTrunkColor().b);
 
-	// Gère le Layer
+	// GÃ¨re le Layer
 	mLayer->SetValue(static_cast<float>(mSelection->GetLayer()));
 }
 
-// Construit la fenêtre et les éléments
+// Construit la fenÃªtre et les Ã©lÃ©ments
 void HumScenario::Fill()
 {
 	// Position et rotation
@@ -116,9 +115,9 @@ void HumScenario::Fill()
 	mLayerHBox->PackEnd(mLayerLabel, false);
 	mLayerHBox->PackEnd(mLayer);
 
-	// Bouton Détruire & ClearForces
+	// Bouton DÃ©truire & ClearForces
 	mButtonsHBox1 = sfg::Box::Create(sfg::Box::Orientation::HORIZONTAL);
-	mDestroy = sfg::Button::Create("Détruire");
+	mDestroy = sfg::Button::Create("DÃ©truire");
 	mDestroy->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind(&HumScenario::OnDestroy, this));
 	mClearForces = sfg::Button::Create("ClearForces");
 	mClearForces->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind(&HumScenario::OnClearForces, this));
@@ -131,7 +130,7 @@ void HumScenario::Fill()
 	mRefresh->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind(&HumScenario::OnRefresh, this));
 	mButtonsHBox2->PackEnd(mRefresh);
 
-	// Ajoute les éléments à la fenêtre
+	// Ajoute les Ã©lÃ©ments Ã  la fenÃªtre
 	AddToVBox(mPosTable);
 	AddToVBox(mColorHBox);
 	AddToVBox(mLayerHBox);
@@ -224,7 +223,7 @@ void HumScenario::OnClearForces()
 	if (!mApply || !mSelection) return;
 
 	// Obtient le BasicBody
-	myAssert(mSelection->GetBody(), "Aucun b2Body associé au BaseBody.");
+	myAssert(mSelection->GetBody(), "Aucun b2Body associÃ© au BaseBody.");
 	mSelection->GetBody()->SetLinearVelocity(b2Vec2_zero);
 	mSelection->GetBody()->SetAngularVelocity(0.f);
 }
@@ -232,7 +231,7 @@ void HumScenario::OnDestroy()
 {
 	if (!mApply || !mSelection) return;
 
-	// Détruit le BaseBody
+	// DÃ©truit le BaseBody
 	mEntityMgr.DestroyEntity(mSelection);
 	Unselect();
 	mEditBox.ScheduleUnselection();

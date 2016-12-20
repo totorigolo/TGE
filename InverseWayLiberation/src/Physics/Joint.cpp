@@ -1,6 +1,7 @@
-#include "stdafx.h"
 #include "Joint.h"
 #include "PhysicManager.h"
+#include "../Tools/Parser.h"
+#include "../Tools/Error.h"
 
 //Ctor
 Joint::Joint()
@@ -29,7 +30,7 @@ Joint::~Joint(void)
 	// N'existe plus
 	mIsAlive = false;
 
-	// Supprime les joints dépendants
+	// Supprime les joints dÃ©pendants
 	this->DestroyAllLinkedJoints();
 
 	// Supprime le joint
@@ -39,7 +40,7 @@ Joint::~Joint(void)
 		mJoint = nullptr;
 	}
 
-	// N'a plus à être supprimé
+	// N'a plus Ã  Ãªtre supprimÃ©
 	mToDestroy = false;
 }
 
@@ -50,10 +51,10 @@ void Joint::Destroy()
 	mIsAlive = false;
 }
 
-// Met à jour le body
+// Met Ã  jour le body
 void Joint::Update()
 {
-	// Ne se met à jour que si il existe
+	// Ne se met Ã  jour que si il existe
 	if (!mIsAlive || !mJoint)
 		return;
 	
@@ -84,7 +85,7 @@ void Joint::Update()
 	}
 }
 
-// Définit si le joint est cassable
+// DÃ©finit si le joint est cassable
 void Joint::SetBreakableByForce(bool breakable)
 {
 	mIsBreakableMaxForce = breakable;
@@ -167,7 +168,7 @@ bool Joint::IsCollideConnected() const
 	return mJoint->GetCollideConnected();
 }
 
-// Gestion des joints à supprimer avant celui-ci
+// Gestion des joints Ã  supprimer avant celui-ci
 void Joint::RegisterLinkedJoint(int jointID)
 {
 	myAssert(mPhysicMgr.JointExists(jointID), "Le joint #"+ Parser::intToString(jointID) +" n'existe pas.");

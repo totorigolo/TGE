@@ -1,18 +1,17 @@
-#include "stdafx.h"
 #include "JointFactory.h"
-#include "Joints\DistanceJoint.h"
-#include "Joints\FrictionJoint.h"
-#include "Joints\GearJoint.h"
-#include "Joints\PrismaticJoint.h"
-#include "Joints\PulleyJoint.h"
-#include "Joints\RevoluteJoint.h"
-#include "Joints\RopeJoint.h"
-#include "Joints\WeldJoint.h"
-#include "Joints\WheelJoint.h"
+#include "Joints/DistanceJoint.h"
+#include "Joints/FrictionJoint.h"
+#include "Joints/GearJoint.h"
+#include "Joints/PrismaticJoint.h"
+#include "Joints/PulleyJoint.h"
+#include "Joints/RevoluteJoint.h"
+#include "Joints/RopeJoint.h"
+#include "Joints/WeldJoint.h"
+#include "Joints/WheelJoint.h"
 
 namespace JointFactory
 {
-	/* Crée un DistanceJoint */
+	/* CrÃ©e un DistanceJoint */
 	// Retourne l'ID du joint
 	int CreateDistanceJoint(const DistanceJointDef &def)
 	{
@@ -20,7 +19,7 @@ namespace JointFactory
 		return j->GetID();
 	}
 	
-	/* Crée un FrictionJoint */
+	/* CrÃ©e un FrictionJoint */
 	// Retourne l'ID du joint
 	int CreateFrictionJoint(const FrictionJointDef &def)
 	{
@@ -28,7 +27,7 @@ namespace JointFactory
 		return j->GetID();
 	}
 
-	/* Crée un GearJoint */
+	/* CrÃ©e un GearJoint */
 	// Retourne l'ID du joint
 	int CreateGearJoint(const GearJointDef &def)
 	{
@@ -36,7 +35,7 @@ namespace JointFactory
 		return j->GetID();
 	}
 
-	/* Crée un PrismaticJoint */
+	/* CrÃ©e un PrismaticJoint */
 	// Retourne l'ID du joint
 	int CreatePrismaticJoint(const PrismaticJointDef &def)
 	{
@@ -44,7 +43,7 @@ namespace JointFactory
 		return j->GetID();
 	}
 
-	/* Crée un PulleyJoint */
+	/* CrÃ©e un PulleyJoint */
 	// Retourne l'ID du joint
 	int CreatePulleyJoint(const PulleyJointDef &def)
 	{
@@ -52,7 +51,7 @@ namespace JointFactory
 		return j->GetID();
 	}
 
-	/* Crée un RevoluteJoint */
+	/* CrÃ©e un RevoluteJoint */
 	// Retourne l'ID du joint
 	int CreateRevoluteJoint(const RevoluteJointDef &def)
 	{
@@ -60,7 +59,7 @@ namespace JointFactory
 		return j->GetID();
 	}
 
-	/* Crée un RopeJoint */
+	/* CrÃ©e un RopeJoint */
 	// Retourne l'ID du joint
 	int CreateRopeJoint(const RopeJointDef &def)
 	{
@@ -68,7 +67,7 @@ namespace JointFactory
 		return j->GetID();
 	}
 
-	/* Crée un WeldJoint */
+	/* CrÃ©e un WeldJoint */
 	// Retourne l'ID du joint
 	int CreateWeldJoint(const WeldJointDef &def)
 	{
@@ -76,7 +75,7 @@ namespace JointFactory
 		return j->GetID();
 	}
 
-	/* Crée un WheelJoint */
+	/* CrÃ©e un WheelJoint */
 	// Retourne l'ID du joint
 	int CreateWheelJoint(const WheelJointDef &def)
 	{

@@ -1,4 +1,3 @@
-#include "stdafx.h"
 #include "Game_State.h"
 #include "MainMenu_State.h"
 #include "../../Game/Game.h"
@@ -11,14 +10,14 @@ Game_State::~Game_State()
 {
 }
 
-// Exécute le State
+// ExÃ©cute le State
 State* Game_State::Run(App *app)
 {
-	// Obtient un pointeur vers la fenêtre
+	// Obtient un pointeur vers la fenÃªtre
 	sf::RenderWindow *window = app->GetRenderWindow();
 	window->setFramerateLimit(60U);
 
-	// Change le titre de la fenêtre
+	// Change le titre de la fenÃªtre
 	window->setTitle("Inverse Way Liberation - DevGame");
 
 	// Lance le jeu

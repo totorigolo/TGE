@@ -1,5 +1,9 @@
 #pragma once
 
+#include <SFML/Graphics.hpp>
+#include <Box2D/Box2D.h>
+#include "../Tools/NonCopyable.h"
+
 class PhysicManager;
 class DebugDraw : public b2Draw, public NonCopyable
 {

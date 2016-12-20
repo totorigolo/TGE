@@ -1,4 +1,3 @@
-#include "stdafx.h"
 #include "LevelWindow.h"
 #include "../../App/InputManager.h"
 #include "../../Level/LevelSaver.h"
@@ -13,7 +12,7 @@ LevelWindow::LevelWindow()
 	mLevelMgr(LevelManager::GetInstance()), mPhysicMgr(PhysicManager::GetInstance()), mResourceManager(ResourceManager::GetInstance()),
 	mEditor(nullptr), mEditBox(nullptr), mLuaMachine(nullptr)
 {
-	// Rempli la fenêtre
+	// Rempli la fenÃªtre
 	Fill();
 	mApply = true;
 }
@@ -21,7 +20,7 @@ LevelWindow::LevelWindow()
 // Actualisation
 void LevelWindow::Update()
 {
-	// Gravité
+	// GravitÃ©
 	mGravityX->SetValue(mPhysicMgr.GetGravity().x);
 	mGravityY->SetValue(mPhysicMgr.GetGravity().y);
 
@@ -34,7 +33,7 @@ void LevelWindow::Update()
 	mOriginViewX->SetValue(mLevelMgr.GetDefaultCenter().x * mPhysicMgr.GetMPP());
 	mOriginViewY->SetValue(mLevelMgr.GetDefaultCenter().y * mPhysicMgr.GetMPP());
 
-	// Zoom par défaut
+	// Zoom par dÃ©faut
 	mDefaultZoom->SetValue(mLevelMgr.GetDefaultZoom());
 }
 
@@ -52,13 +51,13 @@ void LevelWindow::SetLuaMachine(LuaMachine *luaMachine)
 	mLuaMachine = luaMachine;
 }
 
-// Construit la fenêtre et les éléments
+// Construit la fenÃªtre et les Ã©lÃ©ments
 void LevelWindow::Fill()
 {
 	// Widgets
 	mVBox = sfg::Box::Create(sfg::Box::Orientation::VERTICAL);
 	mGravityBox = sfg::Box::Create(sfg::Box::Orientation::HORIZONTAL);
-	mGravityLabel = sfg::Label::Create("Gravité : ");
+	mGravityLabel = sfg::Label::Create("GravitÃ© : ");
 	mGravityX = sfg::SpinButton::Create(-2000.f, 2000.f, 0.2f);
 	mGravityX->SetDigits(2);
 	mGravityX->GetSignal(sfg::SpinButton::OnValueChanged).Connect(std::bind(&LevelWindow::OnChangeGravityX, this));
@@ -101,7 +100,7 @@ void LevelWindow::Fill()
 	mOriginViewBox->PackEnd(mOriginViewY);
 	mOriginViewBox->PackEnd(mOriginViewCurrentBtn, false);
 	mDefaultZoomBox = sfg::Box::Create(sfg::Box::Orientation::HORIZONTAL);
-	mDefaultZoomLabel = sfg::Label::Create("Déf Zoom : ");
+	mDefaultZoomLabel = sfg::Label::Create("DÃ©f Zoom : ");
 	mDefaultZoom = sfg::SpinButton::Create(0.f, 200.f, 0.1f);
 	mDefaultZoom->SetDigits(3);
 	mDefaultZoom->GetSignal(sfg::SpinButton::OnValueChanged).Connect(std::bind(&LevelWindow::OnChangeDefaultZoom, this));
@@ -131,7 +130,7 @@ void LevelWindow::Fill()
 	mSaveLoadHBox->PackEnd(mLoadBtn);
 	mSaveLoadHBox->PackEnd(mSaveBtn);
 
-	// Ajoute les éléments à la fenêtre
+	// Ajoute les Ã©lÃ©ments Ã  la fenÃªtre
 	mVBox->PackEnd(mGravityBox);
 	mVBox->PackEnd(mBckgColorBox);
 	mVBox->PackEnd(mOriginViewBox);
@@ -140,7 +139,7 @@ void LevelWindow::Fill()
 	mVBox->PackEnd(mSaveLoadHBox);
 	mVBox->PackEnd(mCloseBtn);
 
-	// Ajoute la mLevelVBox à la fenêtre
+	// Ajoute la mLevelVBox Ã  la fenÃªtre
 	AddToWindow(mVBox);
 }
 
@@ -149,48 +148,48 @@ void LevelWindow::OnLoad()
 {
 	if (!mApply) return;
 
-	// Demande si on veut décharger le niveau actuel
+	// Demande si on veut dÃ©charger le niveau actuel
 	if (2 == Dialog::ButtonChoice("Charger un niveau ?",
-								  "Voulez-vous charger ce niveau ?\nTout changement non sauvegardé sera perdu.",
+								  "Voulez-vous charger ce niveau ?\nTout changement non sauvegardÃ© sera perdu.",
 								  "Oui", "Non"))
 		return;
 
-	// Récupère le nom
+	// RÃ©cupÃ¨re le nom
 	sf::String name = mPath->GetText();
 
-	// Vérifie sa validité
+	// VÃ©rifie sa validitÃ©
 	if (name.isEmpty()
 		|| name.find("\\") != sf::String::InvalidPos
 		|| name.find("/") != sf::String::InvalidPos)
 	{
-		Dialog::Error("Nom de sauvegarde invalide.\nNiveau non chargé.");
+		Dialog::Error("Nom de sauvegarde invalide.\nNiveau non chargÃ©.");
 		return;
 	}
 
-	// Déselectionne dans l'EditBox
+	// DÃ©selectionne dans l'EditBox
 	if (mEditBox)
 		mEditBox->Unselect();
 	else
-		Dialog::Error("EditBox invalide.\nNon déselectionné.");
+		Dialog::Error("EditBox invalide.\nNon dÃ©selectionnÃ©.");
 
 	// Supprime les pointeurs
 	if (mEditor)
 		mEditor->Init();
 	else
-		Dialog::Error("Editor invalide.\nEditor non réinitialisé.");
+		Dialog::Error("Editor invalide.\nEditor non rÃ©initialisÃ©.");
 
-	// Réinitialise le Lua
+	// RÃ©initialise le Lua
 	if (mLuaMachine)
 		mLuaMachine->Reset();
 	else
-		Dialog::Error("LuaMachine invalide.\nLuaMachine non réinitialisé.");
+		Dialog::Error("LuaMachine invalide.\nLuaMachine non rÃ©initialisÃ©.");
 
 	// Charge le niveau
 	name = "lvls/" + name + ".xvl";
 	LevelLoader(name.toAnsiString());
 	if (!mLevelMgr.IsCharged())
 	{
-		Dialog::Error("Niveau non chargé.");
+		Dialog::Error("Niveau non chargÃ©.");
 		return;
 	}
 
@@ -202,10 +201,10 @@ void LevelWindow::OnSave()
 {
 	if (!mApply) return;
 
-	// Récupère le nom
+	// RÃ©cupÃ¨re le nom
 	sf::String name = mPath->GetText();
 
-	// Vérifie sa validité
+	// VÃ©rifie sa validitÃ©
 	if (name.isEmpty()
 		|| name.find("\\") != sf::String::InvalidPos
 		|| name.find("/") != sf::String::InvalidPos)

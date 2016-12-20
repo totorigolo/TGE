@@ -1,4 +1,7 @@
 #pragma once
+
+#include <map>
+#include <Box2D/Box2D.h>
 #include "../Tools/Loader.h"
 
 class LevelManager;
@@ -18,7 +21,7 @@ private:
 	// Analyse tout le fichier
 	virtual bool Process();
 
-	// Une fonction par catégorie
+	// Une fonction par catÃ©gorie
 	bool ProcessWorld();
 	bool ProcessTextures();
 	bool ProcessPoly();

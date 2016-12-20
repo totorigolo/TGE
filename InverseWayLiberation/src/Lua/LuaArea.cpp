@@ -1,4 +1,3 @@
-#include "stdafx.h"
 #include "LuaArea.h"
 #include "TriggersManager.h"
 
@@ -13,7 +12,7 @@ void LuaArea::Done()
 {
 	mDone = true;
 
-	// Demande à être supprimée si once
+	// Demande Ã  Ãªtre supprimÃ©e si once
 	if (mOnce)
 		TriggersManager::GetInstance().ScheduleRemove(shared_from_this());
 }

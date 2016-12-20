@@ -1,6 +1,7 @@
-#include "stdafx.h"
 #include "WeldJoint.h"
 #include "../PhysicManager.h"
+#include "../../Tools/Error.h"
+#include "../../Tools/utils.h"
 
 //Ctor
 WeldJoint::WeldJoint(const WeldJointDef &def)

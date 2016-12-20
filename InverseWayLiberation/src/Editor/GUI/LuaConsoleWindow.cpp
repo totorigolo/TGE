@@ -1,13 +1,13 @@
-#include "stdafx.h"
 #include "LuaConsoleWindow.h"
 #include "../../Lua/LuaMachine.h"
 #include "../../Lua/OutputInterfaces.h"
+#include "../../Tools/Error.h"
 
 // Ctor
 LuaConsoleWindow::LuaConsoleWindow()
 	: Window("Console Lua"), mLuaMachine(nullptr), mCurrent(-1)
 {
-	// Rempli la fenêtre
+	// Rempli la fenÃªtre
 	Fill();
 	mApply = true;
 }
@@ -25,7 +25,7 @@ void LuaConsoleWindow::Update()
 // Gestion de la Machine Lua
 void LuaConsoleWindow::SetLuaMachine(LuaMachine *luaMachine)
 {
-	myAssert(luaMachine, "La LuaMachine passée est invalide.");
+	myAssert(luaMachine, "La LuaMachine passÃ©e est invalide.");
 
 	mLuaMachine = luaMachine;
 }
@@ -34,13 +34,13 @@ LuaMachine* LuaConsoleWindow::GetLuaMachine()
 	return mLuaMachine;
 }
 
-// Construit la fenêtre et les éléments
+// Construit la fenÃªtre et les Ã©lÃ©ments
 void LuaConsoleWindow::Fill()
 {
 	// Widgets
 	mPromptLabel = sfg::Label::Create("Commande :");
 	mPrompt = PromptEntry::Create("");
-	mReturnBtn = sfg::Button::Create("Entrée");
+	mReturnBtn = sfg::Button::Create("EntrÃ©e");
 	mCloseBtn = sfg::Button::Create("Fermer");
 	mScrolledBox = sfg::Box::Create(sfg::Box::Orientation::VERTICAL);
 	mTextLabel = sfg::Label::Create("");
@@ -64,7 +64,7 @@ void LuaConsoleWindow::Fill()
 	mReturnBtn->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind(&LuaConsoleWindow::OnSend, this));
 	mCloseBtn->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind(&LuaConsoleWindow::OnClose, this));
 
-	// Ajoute la Table à la fenêtre
+	// Ajoute la Table Ã  la fenÃªtre
 	AddToWindow(mVBox);
 }
 
@@ -73,7 +73,7 @@ void LuaConsoleWindow::OnSend()
 {
 	if (!mApply) return;
 
-	// Récupère la commande
+	// RÃ©cupÃ¨re la commande
 	sf::String commande = mPrompt->GetText();
 
 	// Ajoute la commande au texte de la console
@@ -84,17 +84,17 @@ void LuaConsoleWindow::OnSend()
 	// Vide la zone de texte
 	mPrompt->SetText("");
 
-	// Ajoute la commande à l'historique
+	// Ajoute la commande Ã  l'historique
 	mHistory.push_back(commande);
 	++mCurrent;
 
-	// Exécution de la commande
+	// ExÃ©cution de la commande
 	if (mLuaMachine)
 	{
 		mLuaMachine->DoString(commande.toAnsiString(), new LuaConsoleInterface(*this));
 	}
 
-	// Mets à jour la fenêtre
+	// Mets Ã  jour la fenÃªtre
 	Update();
 }
 void LuaConsoleWindow::OnUp()

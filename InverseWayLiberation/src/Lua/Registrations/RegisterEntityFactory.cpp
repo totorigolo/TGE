@@ -1,13 +1,12 @@
-#include "stdafx.h"
 #include "../LuaMachine.h"
 #include "../../Entities/EntityFactory.h"
 
-using namespace luabind;
+//using namespace luabind;
 
 void LuaMachine::RegisterEntityFactory()
 {
 	try
-	{
+	{/*
 		// Enregistre les fonctions
 		module(mLuaState)[
 			// PolyChain::Type
@@ -42,7 +41,7 @@ void LuaMachine::RegisterEntityFactory()
 				def("CreateHum", (void(*)(const b2Vec2&, unsigned int, int)) EntityFactory::CreateHum),
 				def("CreateHum", (void(*)(const b2Vec2&, unsigned int, int, int)) EntityFactory::CreateHum)
 			]
-		];
+		];*/
 	}
 	catch (const std::exception &e)
 	{

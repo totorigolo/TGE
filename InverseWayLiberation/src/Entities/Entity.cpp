@@ -1,6 +1,6 @@
-#include "stdafx.h"
 #include "Entity.h"
 #include "EntityManager.h"
+#include "../Tools/Error.h"
 
 // Ctor & dtor
 Entity::Entity(int layer)
@@ -13,9 +13,10 @@ Entity::Entity(int layer)
 }
 Entity::~Entity()
 {
+	// TODO: Ne se désenregistre pas en mourrant ?
 }
 
-// Mise � jour
+// Mise à jour
 void Entity::PreUpdate()
 {
 }

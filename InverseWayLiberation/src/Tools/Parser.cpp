@@ -1,4 +1,4 @@
-#include "stdafx.h"
+#include "Parser.h"
 
 namespace Parser
 {
@@ -95,9 +95,9 @@ sf::Color stringToColor(std::string const& value, sf::Color const& _default)
 	return result;
 }
 
-b2Vec2 stringToB2Vec2(std::string const& value, b2Vec2 const& default)
+b2Vec2 stringToB2Vec2(std::string const& value, b2Vec2 const& _default)
 {
-	b2Vec2 result = default;
+	b2Vec2 result = _default;
 
 	// Cherche le x
 	size_t p1Offset = value.find_first_of('(');
@@ -116,9 +116,9 @@ b2Vec2 stringToB2Vec2(std::string const& value, b2Vec2 const& default)
 	return result;
 }
 	
-b2Vec3 stringToB2Vec3(std::string const& value, b2Vec3 const& default)
+b2Vec3 stringToB2Vec3(std::string const& value, b2Vec3 const& _default)
 {
-	b2Vec3 result = default;
+	b2Vec3 result = _default;
 
 	// Cherche le x
 	size_t p1Offset = value.find_first_of('(');
@@ -249,11 +249,11 @@ std::string keyToString(sf::Keyboard::Key key, bool maj)
 	else if (key >= sf::Keyboard::Numpad0 && key <= sf::Keyboard::Numpad9)
 		str += '0' + static_cast<char>(key - sf::Keyboard::Numpad0);
 
-	// Les autres caractères
+	// Les autres caractÃ¨res
 	// Le point
 	else if (key == sf::Keyboard::Period)
 		str += '.';
-	// Les signes opératoires
+	// Les signes opÃ©ratoires
 	else if (key == sf::Keyboard::Add)
 		str += '+';
 	else if (key == sf::Keyboard::Subtract || key == sf::Keyboard::Dash)
@@ -266,17 +266,17 @@ std::string keyToString(sf::Keyboard::Key key, bool maj)
 	else if (key == sf::Keyboard::BackSlash)
 		str += '\\';
 	// TODO : Trouver les bonnes combinaisons
-	// Les parenthèses ( et )
+	// Les parenthÃ¨ses ( et )
 	else if (key == sf::Keyboard::LBracket)
 		str += '(';
 	else if (key == sf::Keyboard::RBracket)
 		str += ')';
-	// Les caractères [ et ]
+	// Les caractÃ¨res [ et ]
 	else if (key == sf::Keyboard::LBracket && (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift) || sf::Keyboard::isKeyPressed(sf::Keyboard::RShift)))
 		str += '[';
 	else if (key == sf::Keyboard::RBracket && (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift) || sf::Keyboard::isKeyPressed(sf::Keyboard::RShift)))
 		str += ']';
-	// Les caractères { et }
+	// Les caractÃ¨res { et }
 	else if (key == sf::Keyboard::Quote && (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift) || sf::Keyboard::isKeyPressed(sf::Keyboard::RShift)))
 		str += '{';
 	else if (key == sf::Keyboard::Equal && (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift) || sf::Keyboard::isKeyPressed(sf::Keyboard::RShift)))

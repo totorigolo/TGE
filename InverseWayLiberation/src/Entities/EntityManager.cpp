@@ -1,6 +1,6 @@
-#include "stdafx.h"
 #include "EntityManager.h"
 #include "Entity.h"
+#include "../Tools/Error.h"
 
 // Ctor & dtor
 EntityManager::EntityManager()
@@ -11,7 +11,7 @@ EntityManager::~EntityManager()
 {
 }
 
-// Mise ‡ jour
+// Mise √† jour
 void EntityManager::Update()
 {
 	// Supprime les Entities mortes
@@ -43,10 +43,10 @@ void EntityManager::Update()
 // Gestion des Entities
 void EntityManager::RegisterEntity(Entity *entity)
 {
-	// VÈrifie que le pointeur soit valide
+	// V√©rifie que le pointeur soit valide
 	myAssert(entity, "L'entity n'est pas valide !");
 
-	// Ajoute l'Entity ‡ la liste
+	// Ajoute l'Entity √† la liste
 	mEntities.push_back(entity);
 
 	// Change l'ID de l'Entity
@@ -54,16 +54,16 @@ void EntityManager::RegisterEntity(Entity *entity)
 }
 void EntityManager::DestroyEntity(Entity *entity)
 {
-	// VÈrifie que le pointeur soit valide
+	// V√©rifie que le pointeur soit valide
 	myAssert(entity, "L'entity n'est pas valide !");
 
-	// EnlËve le nom si elle est nommÈe
+	// Enl√®ve le nom si elle est nomm√©e
 	this->Anonymize(this->GetName(entity));
 
-	// EnlËve son ID de la liste des IDs
+	// Enl√®ve son ID de la liste des IDs
 	this->RemoveID(entity->mID);
 
-	// Supprime l'entitÈ et l'enlËve de la liste
+	// Supprime l'entit√© et l'enl√®ve de la liste
 	mEntities.remove(entity);
 	delete entity;
 }
@@ -94,12 +94,12 @@ void EntityManager::SortByLayer()
 	mEntities.sort(compareEntities);
 }
 
-// AccËs aux Entities
+// Acc√®s aux Entities
 Entity* EntityManager::GetEntity(unsigned int id)
 {
-	// TODO: La liste est triÈe
+	// TODO: La liste est tri√©e
 
-	for each (auto entity in mEntities)
+	for (auto &&entity : mEntities)
 		if (entity->GetID() == id)
 			return entity;
 
@@ -132,7 +132,7 @@ void EntityManager::RemoveID(unsigned int id)
 	myCheckError_v(id != 0U, "Il est impossible de supprimer l'ID d'Entity 0.");
 	myAssert(mIDs.find(id) != mIDs.end(), "Tentative de suppression d'ID d'Entity inconnu.");
 
-	// EnlËve l'ID de la liste
+	// Enl√®ve l'ID de la liste
 	mIDs.erase(id);
 }
 
@@ -163,7 +163,7 @@ std::string EntityManager::GetName(Entity *const entity) const
 void EntityManager::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
 	// Affiche toutes les Entities
-	// TODO: Uniquement seules les prÈsentes
+	// TODO: Uniquement seules les pr√©sentes
 	for (std::list<Entity*>::const_iterator it = mEntities.begin(); it != mEntities.end(); ++it)
 	{
 		target.draw(**it, states);
@@ -175,11 +175,11 @@ void EntityManager::ChangeID(unsigned int id, unsigned int newID)
 {
 	if (id == newID) return;
 
-	// VÈrifie que les ID sont valides
-	myAssert(id >= 0, "L'ID donnÈ n'est pas valide n'est pas valide (#" + Parser::intToString(id) + ") !");
-	myAssert(newID >= 0, "Le nouvel ID donnÈ n'est pas valide n'est pas valide (#" + Parser::intToString(id) + ") !");
+	// V√©rifie que les ID sont valides
+	myAssert(id >= 0, "L'ID donn√© n'est pas valide n'est pas valide (#" + Parser::intToString(id) + ") !");
+	myAssert(newID >= 0, "Le nouvel ID donn√© n'est pas valide n'est pas valide (#" + Parser::intToString(id) + ") !");
 
-	// RÈcupËre un pointeur vers l'Entity
+	// R√©cup√®re un pointeur vers l'Entity
 	Entity* e1 = GetEntity(id);
 	myAssert(e1, "Impossible de trouver d'Entity avec l'ID #" + Parser::intToString(id) + " !");
 

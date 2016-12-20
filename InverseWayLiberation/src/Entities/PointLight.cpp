@@ -1,9 +1,10 @@
-#include "stdafx.h"
 #include "PointLight.h"
 #include "../Graphics/LightEngine.h"
 #include "PartitioningTree.h"
 #include "Hull.h"
 #include "../Physics/PhysicManager.h"
+#include "../Tools/Error.h"
+#include "../Tools/utils.h"
 
 // Ctor
 PointLight::PointLight(int lightRadius, sf::Color lightColor, int layer)
@@ -15,7 +16,7 @@ PointLight::PointLight(int lightRadius, sf::Color lightColor, int layer)
 	// Change le type
 	mType = EntityType::PointLight;
 
-	// Crée les textures
+	// CrÃ©e les textures
 	CreateTextures();
 
 	// Configure le VertexArray
@@ -52,7 +53,7 @@ void PointLight::Move(const sf::Vector2f& off)
 	mLightSprite.setPosition(mPosition - (u2f(mLightTex.getSize()) / 2.f));
 	mUpdate = true;
 }
-const b2Vec2& PointLight::GetPosition(void) const
+const b2Vec2 PointLight::GetPosition(void) const
 {
 	return sf2b2Vec(mPosition, PhysicManager::GetInstance().GetMPP());
 }
@@ -61,22 +62,22 @@ const sf::Vector2f& PointLight::GetPosition_sf(void) const
 	return mPosition;
 }
 
-// Mise à jour
+// Mise Ã  jour
 void PointLight::Update(void)
 {
-	// Met à jour les ombres si besoin
+	// Met Ã  jour les ombres si besoin
 	if (mIsAlive && mEngine.IsActive())
 	{
 		bool hullMoved = false;
 
-		// Récupère un petit nom pour le PartitioningTree
+		// RÃ©cupÃ¨re un petit nom pour le PartitioningTree
 		PartitioningTree &pt = PartitioningTree::GetInstance();
 
-		// Regarde si au moins un hull a bougé dans le périmètre de la lumière, et dessine les shadow casters
+		// Regarde si au moins un hull a bougÃ© dans le pÃ©rimÃ¨tre de la lumiÃ¨re, et dessine les shadow casters
 		if (!mUpdate)
 			hullMoved = pt.HasMovedIn(this->GetBoundingBox());
 
-		// Si les ombres ne sont plus à jour
+		// Si les ombres ne sont plus Ã  jour
 		if (mUpdate || hullMoved)
 		{
 			mShadowsVertexArray.clear();
@@ -88,13 +89,13 @@ void PointLight::Update(void)
 			mShadowsVertexArray[2] = sf::Vertex(sf::Vector2f(bb.left + bb.width, bb.top + bb.height), b, mEngine.mOne);
 			mShadowsVertexArray[3] = sf::Vertex(sf::Vector2f(bb.left, bb.top + bb.height), b, mEngine.mOne);
 
-			// Regarde si au moins un hull a bougé dans le périmètre de la lumière, et dessine les shadow casters
+			// Regarde si au moins un hull a bougÃ© dans le pÃ©rimÃ¨tre de la lumiÃ¨re, et dessine les shadow casters
 			pt.ApplyOnHulls(this->GetBoundingBox(), [this, &hullMoved](Hull *h) {
 				if (h->IsPhysicallyDrawable())
 					mEngine.DrawPhysicalHull(this, *h->GetBodyShadowCaster());
 			});
 
-			// Crée et affiche les ombres
+			// CrÃ©e et affiche les ombres
 			mEngine.CreateShadows(this);
 		}
 		else
@@ -107,7 +108,7 @@ void PointLight::Update(void)
 	}
 }
 
-// Crée les textures
+// CrÃ©e les textures
 void PointLight::CreateTextures(void)
 {
 	// LightTexture
@@ -116,17 +117,17 @@ void PointLight::CreateTextures(void)
 	mLightTex.setSmooth(true);
 	mLightSprite.setTexture(mLightTex.getTexture(), true);
 
-	// Règle la vue
+	// RÃ¨gle la vue
 	view = mLightTex.getDefaultView();
 }
 
-// Retourne la texture ombrée
+// Retourne la texture ombrÃ©e
 const sf::VertexArray& PointLight::GetVertexArray(void) const
 {
 	return mShadowsVertexArray;
 }
 
-// Gère la couleur de la lumière
+// GÃ¨re la couleur de la lumiÃ¨re
 sf::Color PointLight::GetLightColor(void) const
 {
 	return mLightColor;
@@ -137,7 +138,7 @@ void PointLight::SetLightColor(const sf::Color& lightColor)
 	mUpdate = true;
 }
 
-// Gère la taille de la lampe
+// GÃ¨re la taille de la lampe
 unsigned int PointLight::GetLightRadius(void) const
 {
 	return mLightRadius;
@@ -151,7 +152,7 @@ void PointLight::SetLightRadius(unsigned int radius)
 	mLightSprite.setPosition(mPosition - (u2f(mLightTex.getSize()) / 2.f));
 }
 
-// Récupère la boîte englobante
+// RÃ©cupÃ¨re la boÃ®te englobante
 sf::FloatRect PointLight::GetBoundingBox(void) const
 {
 	sf::FloatRect rect;
@@ -174,6 +175,6 @@ void PointLight::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
 	if (!mIsAlive || !mEngine.IsActive()) return;
 
-	// Dessine la lumière avec les ombres
+	// Dessine la lumiÃ¨re avec les ombres
 	target.draw(mLightSprite, mEngine.addStates);
 }

@@ -18,10 +18,10 @@ public:
 	// Ctor & dtor
 	BasicBody(int layer = 1);
 
-	// Mise à jour
+	// Mise Ã  jour
 	virtual void PreUpdate();
 
-	// Création du body
+	// CrÃ©ation du body
 	bool CreateBox(b2Vec3 posRot, b2BodyType type, Texture::Ptr texture,
 					  float density = 1.f, float friction = 0.2f, float restitution = 0.0f,
 					  int groupIndex = 0, uint16 categoryBits = 0x0001, uint16 maskBits = 0xFFFF);

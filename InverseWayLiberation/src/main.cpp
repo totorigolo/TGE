@@ -1,14 +1,13 @@
-#include "stdafx.h"
 #include "App/App.h"
 #include "Tools/Dialog.h"
 
 int main()
 {
 	// Valeur de retour
-	int r = 0;
+	int r = 51;
 
 	try {
-		// Exécute l'App
+		// ExÃ©cute l'App
 		r = App::GetInstance().Execute();
 	}
 	catch (const std::exception &e)

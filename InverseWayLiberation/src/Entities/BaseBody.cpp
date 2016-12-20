@@ -1,6 +1,6 @@
-#include "stdafx.h"
 #include "BaseBody.h"
 #include "../Physics/PhysicManager.h"
+#include "../Tools/utils.h"
 
 // Ctor & dtor
 BaseBody::BaseBody(int layer)
@@ -9,7 +9,7 @@ BaseBody::BaseBody(int layer)
 	mPhysicMgr(PhysicManager::GetInstance()),
 	mHull(nullptr), mHasMoved(true)
 {
-	// Défini le type de l'Entity
+	// DÃ©fini le type de l'Entity
 	mType = EntityType::BaseBody;
 }
 BaseBody::~BaseBody()
@@ -17,17 +17,17 @@ BaseBody::~BaseBody()
 	Destroy();
 }
 
-// Mise à jour
+// Mise Ã  jour
 void BaseBody::PreUpdate()
 {
 	// Si le body est valide
 	if (!mBody || !mBodyIsCreated || !mIsAlive) return;
 
-	// Mise à jour de la texture
+	// Mise Ã  jour de la texture
 	mSprite.setPosition(b22sfVec(mBody->GetPosition(), mPhysicMgr.GetPPM()));
 	mSprite.setRotation(-mBody->GetAngle() * DPR);
 
-	// Mise à jour du Hull
+	// Mise Ã  jour du Hull
 	if (mHasMoved || (mBody->IsAwake() && mBody->GetType() != b2BodyType::b2_staticBody))
 	{
 		b2AABB aabb = GetBoundingBox();
@@ -91,7 +91,7 @@ bool BaseBody::IsActiveShadows(void) const
 // Boite englobante
 b2AABB BaseBody::GetBoundingBox(void) const
 {
-	// Crée le aabb final
+	// CrÃ©e le aabb final
 	b2AABB aabb;
 	aabb.lowerBound = b2Vec2(FLT_MAX, FLT_MAX);
 	aabb.upperBound = b2Vec2(-FLT_MAX, -FLT_MAX);
@@ -99,11 +99,11 @@ b2AABB BaseBody::GetBoundingBox(void) const
 	// Parcours toutes les Fixtures
 	for (b2Fixture* fixture = mBody->GetFixtureList(); fixture; fixture = fixture->GetNext())
 	{
-		// Pour chaque élément de la forme
+		// Pour chaque Ã©lÃ©ment de la forme
 		// Un pour les formes simples, un par segment pour les chaines
 		for (int32 i = 0; i < fixture->GetShape()->GetChildCount(); ++i)
 		{
-			// Combine cette aabb avec l'aabb générale
+			// Combine cette aabb avec l'aabb gÃ©nÃ©rale
 			aabb.Combine(aabb, fixture->GetAABB(i));
 		}
 	}
@@ -125,7 +125,7 @@ void BaseBody::draw(sf::RenderTarget& target, sf::RenderStates states) const
 }
 
 /* Accesseurs */
-// Est-ce que le Body est créé
+// Est-ce que le Body est crÃ©Ã©
 bool BaseBody::IsCreated() const
 {
 	return mBodyIsCreated;
@@ -142,7 +142,7 @@ void BaseBody::Setb2BodyType(const b2BodyType &type)
 	mBody->SetType(type);
 	mHasMoved = true;
 
-	// Rétablie la masse
+	// RÃ©tablie la masse
 	if (type == b2_dynamicBody && mBody->GetMass() == 0)
 	{
 		mBody->ResetMassData();
@@ -158,42 +158,42 @@ BaseBody::CollisionType BaseBody::GetCollisionType() const
 {
 	return mCollisionType;
 }
-// Paramètres de collision
+// ParamÃ¨tres de collision
 float BaseBody::GetDensity() const
 {
 	myAssert(mBody, "b2Body null");
-	myAssert(mBody->GetFixtureList(), "b2Body sans fixture attaché.");
+	myAssert(mBody->GetFixtureList(), "b2Body sans fixture attachÃ©.");
 	return mBody->GetFixtureList()->GetDensity();
 }
 void BaseBody::SetDensity(float density)
 {
 	myAssert(mBody, "b2Body null");
-	myAssert(mBody->GetFixtureList(), "b2Body sans fixture attaché.");
+	myAssert(mBody->GetFixtureList(), "b2Body sans fixture attachÃ©.");
 	mBody->GetFixtureList()->SetDensity(density);
 	mBody->ResetMassData();
 }
 float BaseBody::GetFriction() const
 {
 	myAssert(mBody, "b2Body null");
-	myAssert(mBody->GetFixtureList(), "b2Body sans fixture attaché.");
+	myAssert(mBody->GetFixtureList(), "b2Body sans fixture attachÃ©.");
 	return mBody->GetFixtureList()->GetFriction();
 }
 void BaseBody::SetFriction(float friction)
 {
 	myAssert(mBody, "b2Body null");
-	myAssert(mBody->GetFixtureList(), "b2Body sans fixture attaché.");
+	myAssert(mBody->GetFixtureList(), "b2Body sans fixture attachÃ©.");
 	mBody->GetFixtureList()->SetFriction(friction);
 }
 float BaseBody::GetRestitution() const
 {
 	myAssert(mBody, "b2Body null");
-	myAssert(mBody->GetFixtureList(), "b2Body sans fixture attaché.");
+	myAssert(mBody->GetFixtureList(), "b2Body sans fixture attachÃ©.");
 	return mBody->GetFixtureList()->GetRestitution();
 }
 void BaseBody::SetRestitution(float restitution)
 {
 	myAssert(mBody, "b2Body null");
-	myAssert(mBody->GetFixtureList(), "b2Body sans fixture attaché.");
+	myAssert(mBody->GetFixtureList(), "b2Body sans fixture attachÃ©.");
 	mBody->GetFixtureList()->SetRestitution(restitution);
 }
 // Texture
@@ -204,7 +204,7 @@ Texture::Ptr BaseBody::GetTexture()
 void BaseBody::SetTexture(Texture::Ptr texture)
 {
 	mTexture = texture;
-	myAssert(mTexture.get(), "La texture n'est pas chargée.");
+	myAssert(mTexture.get(), "La texture n'est pas chargÃ©e.");
 	mSprite.setTexture(*mTexture);
 	mSprite.setTextureRect(sf::IntRect(sf::Vector2i(0, 0), u2i(mTexture->getSize())));
 	mSprite.setOrigin(mSprite.getTextureRect().width / 2.f, mSprite.getTextureRect().height / 2.f);
@@ -235,7 +235,7 @@ const b2Vec2 BaseBody::GetPosition() const
 	myAssert(mBody, "b2Body null");
 	return mBody->GetPosition();
 }
-const float BaseBody::GetRotationD() const // Degrés
+const float BaseBody::GetRotationD() const // DegrÃ©s
 {
 	myAssert(mBody, "b2Body null");
 	return mBody->GetAngle() * DPR;
@@ -245,7 +245,7 @@ const float BaseBody::GetRotationR() const // Radians
 	myAssert(mBody, "b2Body null");
 	return mBody->GetAngle();
 }
-// Fonction à n'employer que pour éditer les niveaux
+// Fonction Ã  n'employer que pour Ã©diter les niveaux
 void BaseBody::SetTransform(const b2Vec2 &position, float angle)
 {
 	myAssert(mBody, "b2Body null");

@@ -1,4 +1,3 @@
-#include "stdafx.h"
 #include "../LuaMachine.h"
 #include "../../App/InputManager.h"
 
@@ -6,7 +5,7 @@
 void LuaMachine::RegisterInputManager()
 {
 	try
-	{
+	{/*
 		// Enregistrement
 		luabind::module(mLuaState) [
 			// Level
@@ -18,7 +17,7 @@ void LuaMachine::RegisterInputManager()
 					luabind::value("Pressed", KeyState::Pressed),
 					luabind::value("Released", KeyState::Released)
 				]
-				/* Fxs */
+				/* Fxs * /
 				// Vue et zoom
 				.def("SetZoom", &InputManager::SetZoom)
 				.def("SetCenter", &InputManager::SetCenter)
@@ -26,7 +25,7 @@ void LuaMachine::RegisterInputManager()
 				.def("GetCurrentCenter", &InputManager::GetCurrentCenter)
 				.property("zoom", &InputManager::GetCurrentZoom, &InputManager::SetZoom)
 				.property("center", &InputManager::GetCurrentCenter, &InputManager::SetCenter)
-				// Evènements
+				// EvÃ¨nements
 				.def("IsKeyPressed", &InputManager::IsKeyPressed)
 				.def("GetMousePos", &InputManager::GetMousePos)
 				.def("GetMousePosRV", &InputManager::GetMousePosRV)
@@ -41,7 +40,7 @@ void LuaMachine::RegisterInputManager()
 				.def("KeyPressed", &InputManager::KeyPressed)
 				.def("KeyReleased", &InputManager::KeyReleased)
 				.def("GetSpyedKeyState", &InputManager::GetSpyedKeyState)
-		];
+		];*/
 	}
 	catch (const std::exception &e)
 	{

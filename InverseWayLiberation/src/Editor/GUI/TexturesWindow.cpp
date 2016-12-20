@@ -1,4 +1,3 @@
-#include "stdafx.h"
 #include "TexturesWindow.h"
 #include "../EditBox.h"
 #include "../../App/InputManager.h"
@@ -12,7 +11,7 @@ TexturesWindow::TexturesWindow()
 	: Window("Textures"),
 	mEntityMgr(EntityManager::GetInstance()), mResourceMgr(ResourceManager::GetInstance())
 {
-	// Rempli la fenêtre
+	// Rempli la fenÃªtre
 	Fill();
 	mApply = true;
 }
@@ -20,16 +19,16 @@ TexturesWindow::TexturesWindow()
 // Actualisation
 void TexturesWindow::Update()
 {
-	// Récupère la texture pointée
+	// RÃ©cupÃ¨re la texture pointÃ©e
 	mSelectedTexture = mResourceMgr.GetTexture(mTexture->GetItem(mTexture->GetSelectedItem()));
 
-	// Met à jour les infos sur la texture sélectionnée
+	// Met Ã  jour les infos sur la texture sÃ©lectionnÃ©e
 	if (!mSelectedTexture.expired())
 	{
 		// Change le nb d'utilisations (1 = TextureMap)
 		mNbUsesLabel->SetText("Utilisations : " + Parser::intToString(mSelectedTexture.use_count() - 1));
 
-		// Récupère la texture
+		// RÃ©cupÃ¨re la texture
 		auto tex = mSelectedTexture.lock();
 		sf::Sprite s(*tex);
 		float factor = 1.f;
@@ -49,29 +48,29 @@ void TexturesWindow::Update()
 		mCanvas->Draw(s);
 		mCanvas->Display();
 	}
-	// Déselectionne la texture si le pointeur n'est plus valide
+	// DÃ©selectionne la texture si le pointeur n'est plus valide
 	else
 	{
 		mSelectedTexture.reset();
 		mTexture->SelectItem(sfg::ComboBox::NONE);
 	}
 
-	// Mets à jour la liste de texture
+	// Mets Ã  jour la liste de texture
 	if (mTexture.get())
 	{
 		auto current = mTexture->GetSelectedItem();
 		for (int i = mTexture->GetItemCount(); i > 0; --i)
 			mTexture->RemoveItem(i - 1);
-		for each (const auto &tex in mResourceMgr.GetTextureMap())
+		for (auto &&tex : mResourceMgr.GetTextureMap())
 			mTexture->AppendItem(tex.first);
 		mTexture->SelectItem(current);
 	}
 }
 
-// Construit la fenêtre et les éléments
+// Construit la fenÃªtre et les Ã©lÃ©ments
 void TexturesWindow::Fill()
 {
-	// Crée le Layout
+	// CrÃ©e le Layout
 	mVBox = sfg::Box::Create(sfg::Box::Orientation::VERTICAL);
 
 	// Labels
@@ -116,7 +115,7 @@ void TexturesWindow::Fill()
 	mRefreshBtn->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind(&TexturesWindow::OnRefresh, this));
 	mCloseBtn->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind(&TexturesWindow::OnClose, this));
 
-	// Ajoute les éléments à la fenêtre
+	// Ajoute les Ã©lÃ©ments Ã  la fenÃªtre
 	mVBox->PackEnd(mNameHBox);
 	mVBox->PackEnd(mPathHBox);
 	mVBox->PackEnd(mLoadLabel);
@@ -127,7 +126,7 @@ void TexturesWindow::Fill()
 	mVBox->PackEnd(mCanvas);
 	mVBox->PackEnd(mButtonsHBox);
 
-	// Ajoute la mVBox à la fenêtre
+	// Ajoute la mVBox Ã  la fenÃªtre
 	AddToWindow(mVBox);
 }
 
@@ -136,14 +135,14 @@ void TexturesWindow::OnLoadTexture()
 {
 	if (!mApply) return;
 
-	// Si les entrées sont invalides, on arrête
+	// Si les entrÃ©es sont invalides, on arrÃªte
 	if (mName->GetText().isEmpty() || mPath->GetText().isEmpty()) return;
 
 	// Charge la texture
 	if (mResourceMgr.LoadTexture(mName->GetText(), "tex/" + mPath->GetText()))
-		mLoadLabel->SetText("Texture chargée.");
+		mLoadLabel->SetText("Texture chargÃ©e.");
 	else
-		mLoadLabel->SetText("Entrées invalides.");
+		mLoadLabel->SetText("EntrÃ©es invalides.");
 
 	OnRefresh();
 }

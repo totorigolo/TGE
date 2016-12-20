@@ -1,4 +1,3 @@
-#include "stdafx.h"
 #include "StartUp_State.h"
 #include "MainMenu_State.h"
 #include "../SpyedKey.h"
@@ -12,18 +11,18 @@ StartUp_State::~StartUp_State()
 {
 }
 
-// Exécute le State
+// ExÃ©cute le State
 State* StartUp_State::Run(App *app)
 {
-	// Récupère la fenêtre
+	// RÃ©cupÃ¨re la fenÃªtre
 	sf::RenderWindow *window = app->GetRenderWindow();
 	window->setFramerateLimit(30U);
 	window->setView(window->getDefaultView());
 
-	// Evènements
+	// EvÃ¨nements
 	SpyedKey key_return(sf::Keyboard::Return);
 
-	// Change le titre de la fenêtre
+	// Change le titre de la fenÃªtre
 	window->setTitle("Inverse Way Liberation - Splash");
 
 	// Charge les textures
@@ -37,7 +36,7 @@ State* StartUp_State::Run(App *app)
 		return &MainMenu_State::GetInstance();
 	textures.push_back(&t2);
 
-	// Crée le sprite
+	// CrÃ©e le sprite
 	sf::Sprite sprite;
 
 	// Variables pour l'effet
@@ -50,7 +49,7 @@ State* StartUp_State::Run(App *app)
 	bool quit = false;
 	while (window->isOpen() && !quit)
 	{
-		// Evènements
+		// EvÃ¨nements
 		mInputManager.Update();
 		if (mInputManager.HasQuitted())
 		{
@@ -108,7 +107,7 @@ State* StartUp_State::Run(App *app)
 			quit = true;
 		}
 
-		// Applique l'opacité
+		// Applique l'opacitÃ©
 		sprite.setColor(sf::Color(255, 255, 255, static_cast<sf::Uint8>(opacity * 255)));
 
 		// Affichage

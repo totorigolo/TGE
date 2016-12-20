@@ -1,26 +1,26 @@
-#include "stdafx.h"
 #include "BasicBody.h"
 #include "../Physics/PhysicManager.h"
+#include "../Tools/utils.h"
 
 // Ctor & dtor
 BasicBody::BasicBody(int layer)
 	: BaseBody(layer), mShape(Shape::Null)
 {
-	// DÈfini le type de l'Entity
+	// D√©fini le type de l'Entity
 	mType = EntityType::BasicBody;
 }
 
-// Mise ‡ jour
+// Mise √† jour
 void BasicBody::PreUpdate()
 {
 	BaseBody::PreUpdate();
 }
 
-// CrÈation du body
+// Cr√©ation du body
 bool BasicBody::CreateBox(b2Vec3 posRot, b2BodyType type, Texture::Ptr texture,
 						  float density, float friction, float restitution, int groupIndex, uint16 categoryBits, uint16 maskBits)
 {
-	// On n'en crÈe pas de nouveau si il y en a dÈj‡ un
+	// On n'en cr√©e pas de nouveau si il y en a d√©j√† un
 	if (mBodyIsCreated)
 		return false;
 
@@ -57,7 +57,7 @@ bool BasicBody::CreateBox(b2Vec3 posRot, b2BodyType type, Texture::Ptr texture,
 	mShape = Shape::Box;
 	mIsAlive = true;
 
-	// RËgle le Hull
+	// R√®gle le Hull
 	mHull.SetBodyShadowCaster(mBody);
 	mHull.SetPhysicallyDrawable(true);
 	mHull.Activate();
@@ -67,7 +67,7 @@ bool BasicBody::CreateBox(b2Vec3 posRot, b2BodyType type, Texture::Ptr texture,
 bool BasicBody::CreateCircle(b2Vec3 posRot, b2BodyType type, Texture::Ptr texture,
 							 float density, float friction, float restitution, int groupIndex, uint16 categoryBits, uint16 maskBits)
 {
-	// On n'en crÈe pas de nouveau si il y en a dÈj‡ un
+	// On n'en cr√©e pas de nouveau si il y en a d√©j√† un
 	if (mBodyIsCreated)
 		return false;
 
@@ -102,7 +102,7 @@ bool BasicBody::CreateCircle(b2Vec3 posRot, b2BodyType type, Texture::Ptr textur
 	mShape = Shape::Circle;
 	mIsAlive = true;
 
-	// RËgle le Hull
+	// R√®gle le Hull
 	mHull.SetBodyShadowCaster(mBody);
 	mHull.SetPhysicallyDrawable(true);
 	mHull.Activate();

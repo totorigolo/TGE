@@ -1,5 +1,11 @@
 #pragma once
 
+#include <map>
+#include <list>
+#include <cmath>
+#include <SFML/Graphics.hpp>
+#include "../Tools/Singleton.h"
+
 class Hull;
 class Cell
 {
@@ -12,12 +18,12 @@ public:
 	void AddHull(Hull *hull);
 	void RemoveHull(Hull *hull);
 
-	// Gestion de l'info de déplacement
+	// Gestion de l'info de dÃ©placement
 	bool HasMoved(void) const;
 	void Moved(void);
 	void PostUpdate(void);
 
-	// Récupération des Hulls
+	// RÃ©cupÃ©ration des Hulls
 	std::list<Hull*>& GetHulls(void);
 
 private:
@@ -50,11 +56,11 @@ public:
 	template<typename F>
 	void ApplyOnHulls(const sf::FloatRect &rect, F &&func, bool *moved = nullptr)
 	{
-		// Récupère l'index de la position
+		// RÃ©cupÃ¨re l'index de la position
 		int ix = static_cast<int>(floor(rect.left / mCellSize));
 		int iy = static_cast<int>(floor(rect.top / mCellSize));
 
-		// Parcours toutes les Cells survollées par le rect
+		// Parcours toutes les Cells survollÃ©es par le rect
 		int imax = static_cast<int>(floor((rect.left + rect.width) / mCellSize)) - ix;
 		int jmax = static_cast<int>(floor((rect.top + rect.height) / mCellSize)) - iy;
 		for (int i = 0; i <= imax; ++i)
@@ -65,15 +71,15 @@ public:
 				auto it = mCells.find(std::make_pair(ix + i, iy + j));
 				if (it == mCells.end()) continue;
 
-				// Récupère la Cell
+				// RÃ©cupÃ¨re la Cell
 				Cell& c(it->second);
 
-				// Regarde la Cell a bougé
+				// Regarde la Cell a bougÃ©
 				if (c.HasMoved() && moved)
 					*moved = true;
 
 				// Applique la fonction sur chaque Hull
-				for each (auto &hull in c.GetHulls())
+				for (auto &&hull : c.GetHulls())
 					func(hull);
 			}
 		}

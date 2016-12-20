@@ -1,4 +1,7 @@
 #pragma once
+
+#include <list>
+#include "../Tools/Singleton.h"
 #include "../Lua/LuaMachine.h"
 #include "LuaAction.h"
 #include "LuaArea.h"
@@ -13,7 +16,7 @@ public:
 	TriggersManager();
 	virtual ~TriggersManager(void);
 
-	// Mise à jour
+	// Mise Ã  jour
 	void Update();
 
 	// Vidage
@@ -28,13 +31,13 @@ public:
 	ActionMap& GetActionMap();
 	const ActionMap& GetActionMap() const;
 
-	// Gère les Areas
+	// GÃ¨re les Areas
 	void CreateArea(b2AABB area, const std::string &action, bool once = false);
 	void DestroyArea(LuaArea *area);
 	std::list<std::shared_ptr<LuaArea>>& GetAreas();
 	const std::list<std::shared_ptr<LuaArea>>& GetAreas() const;
 
-	// Suppressions planifiées
+	// Suppressions planifiÃ©es
 	void ScheduleRemove(std::shared_ptr<LuaArea> area);
 	void ScheduleRemove(const std::string &action);
 
@@ -58,7 +61,7 @@ private:
 	// PhysicManager
 	PhysicManager &mPhysicMgr;
 
-	// Suppressions planifiées
+	// Suppressions planifiÃ©es
 	std::list<std::weak_ptr<LuaArea>> mAreasToDelete;
 	std::list<std::string> mActionsToDelete;
 };

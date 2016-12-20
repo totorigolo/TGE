@@ -1,4 +1,7 @@
 #pragma once
+
+#include <SFML/Audio.hpp>
+#include "../Tools/Singleton.h"
 #include "Texture.h"
 #include "Font.h"
 

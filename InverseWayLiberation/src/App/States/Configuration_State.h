@@ -1,4 +1,8 @@
 #pragma once
+#include <SFGUI/Window.hpp>
+#include <SFGUI/Label.hpp>
+#include <SFGUI/Box.hpp>
+#include <SFGUI/Button.hpp>
 #include "State.h"
 
 class Configuration_State : public State, public Singleton<Configuration_State>
@@ -11,7 +15,7 @@ protected:
 	virtual ~Configuration_State();
 
 public:
-	// Exécute le State
+	// ExÃ©cute le State
 	// Retourne un pointeur sur le prochain State
 	virtual State* Run(App *app);
 
@@ -31,12 +35,12 @@ private:
 	InputManager &mInputManager;
 
 	/* GUI */
-	// Fenêtre et Desktop
+	// FenÃªtre et Desktop
 	sfg::SFGUI *mSfGUI;
 	sfg::Desktop mDesktop;
 	sf::Clock mGUIElapsedTime;
 
-	// Eléments
+	// ElÃ©ments
 	sfg::Window::Ptr mWindow;
 	sfg::Box::Ptr mVBox;
 	sfg::Label::Ptr mLabel;

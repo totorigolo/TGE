@@ -1,4 +1,5 @@
-#include "stdafx.h"
+#include <cstdlib>
+
 #include "App.h"
 #include "../Sounds/SoundManager.h"
 #include "States/StateSystem.h"
@@ -11,7 +12,7 @@ App::App()
 }
 App::~App()
 {
-	// Suppprime la fenêtre de rendu
+	// Suppprime la fenÃªtre de rendu
 	if (mRenderWindow)
 	{
 		delete mRenderWindow;
@@ -23,15 +24,15 @@ bool App::Init()
 {
 	// TODO: Initialiser le son
 
-	// Crée la GUI
+	// CrÃ©e la GUI
 	mSfGUI = new sfg::SFGUI;
 
-	// Charge la fenêtre de rendu
+	// Charge la fenÃªtre de rendu
 	mRenderWindow = new sf::RenderWindow(sf::VideoMode(800U, 600U), "Inverse Way Liberation - Chargement");
 	mRenderWindow->setFramerateLimit(60U);
 	mRenderWindow->setKeyRepeatEnabled(false);
 
-	// Enregistre la fenêtre dans l'InputManager
+	// Enregistre la fenÃªtre dans l'InputManager
 	mInputManager.SetWindow(mRenderWindow);
 	mInputManager.SetView(mRenderWindow->getDefaultView());
 
@@ -41,7 +42,7 @@ bool App::Init()
 	// Plante la graine
 	srand(static_cast<unsigned int>(time(NULL)));
 
-	// L'initialisation a réussi
+	// L'initialisation a rÃ©ussi
     return true;
 }
 
@@ -58,13 +59,13 @@ int App::Execute()
 		return EXIT_FAILURE;
 	}
 
-	// Exécute les states
+	// ExÃ©cute les states
 	while (mStateSystem.Run(this));
 
 	// Nettoie
     CleanUp();
 
-	// Tout s'est bien passé
+	// Tout s'est bien passÃ©
     return EXIT_SUCCESS;
 }
 

@@ -1,6 +1,7 @@
-#include "stdafx.h"
 #include "WheelJoint.h"
 #include "../PhysicManager.h"
+#include "../../Tools/Error.h"
+#include "../../Tools/utils.h"
 
 //Ctor
 WheelJoint::WheelJoint(const WheelJointDef &def)

@@ -1,4 +1,3 @@
-#include "stdafx.h"
 #include "PartitioningTree.h"
 #include "Hull.h"
 
@@ -27,7 +26,7 @@ void Cell::RemoveHull(Hull *hull)
 	mHulls.remove(hull);
 }
 
-// Gestion de l'info de déplacement
+// Gestion de l'info de dÃ©placement
 bool Cell::HasMoved(void) const
 {
 	return mMoved;
@@ -41,7 +40,7 @@ void Cell::PostUpdate(void)
 	mMoved = false;
 }
 
-// Récupération des Hulls
+// RÃ©cupÃ©ration des Hulls
 std::list<Hull*>& Cell::GetHulls(void)
 {
 	return mHulls;
@@ -62,27 +61,27 @@ PartitioningTree::~PartitioningTree(void)
 	mHulls.clear();
 }
 
-// Gestion des éléments
+// Gestion des Ã©lÃ©ments
 void PartitioningTree::UpdateHull(Hull *hull)
 {
 	if (!hull->IsValid()) return;
 
-	// Enlève le hull de ses Cells en les prévenant qu'on s'en va
+	// EnlÃ¨ve le hull de ses Cells en les prÃ©venant qu'on s'en va
 	hull->Moved();
 	hull->RemoveFromCells();
 
-	// Récupère l'index de la position
+	// RÃ©cupÃ¨re l'index de la position
 	int ix = static_cast<int>(floor(hull->GetPosition().x / mCellSize));
 	int iy = static_cast<int>(floor(hull->GetPosition().y / mCellSize));
 
-	// Parcours toutes les Cells survollées par le Hull
+	// Parcours toutes les Cells survollÃ©es par le Hull
 	int imax = static_cast<int>(floor((hull->GetPosition().x + hull->GetSize().x) / mCellSize)) - ix;
 	int jmax = static_cast<int>(floor((hull->GetPosition().y + hull->GetSize().y) / mCellSize)) - iy;
 	for (int i = 0; i <= imax; ++i)
 	{
 		for (int j = 0; j <= jmax; ++j)
 		{
-			// Ajoute le Hull à la Cell
+			// Ajoute le Hull Ã  la Cell
 			Cell* c = &mCells[std::make_pair(ix + i, iy + j)];
 			c->AddHull(hull);
 			hull->RegisterCell(c);
@@ -113,11 +112,11 @@ bool PartitioningTree::HasMovedIn(const sf::FloatRect &rect)
 	// Retour
 	bool moved = false;
 
-	// Récupère l'index de la position
+	// RÃ©cupÃ¨re l'index de la position
 	int ix = static_cast<int>(floor(rect.left / mCellSize));
 	int iy = static_cast<int>(floor(rect.top / mCellSize));
 
-	// Parcours toutes les Cells survollées par le rect
+	// Parcours toutes les Cells survollÃ©es par le rect
 	int imax = static_cast<int>(floor((rect.left + rect.width) / mCellSize)) - ix;
 	int jmax = static_cast<int>(floor((rect.top + rect.height) / mCellSize)) - iy;
 	for (int i = 0; i <= imax; ++i)
@@ -128,10 +127,10 @@ bool PartitioningTree::HasMovedIn(const sf::FloatRect &rect)
 			auto it = mCells.find(std::make_pair(ix + i, iy + j));
 			if (it == mCells.end()) continue;
 
-			// Récupère la Cell
+			// RÃ©cupÃ¨re la Cell
 			Cell& c(it->second);
 
-			// Regarde la Cell a bougé
+			// Regarde la Cell a bougÃ©
 			if (c.HasMoved())
 				moved = true;
 		}
@@ -144,11 +143,11 @@ std::list<Hull*> PartitioningTree::GetHulls(const sf::FloatRect &rect, bool *mov
 	// Liste de retour
 	std::list<Hull*> ret;
 
-	// Récupère l'index de la position
+	// RÃ©cupÃ¨re l'index de la position
 	int ix = static_cast<int>(floor(rect.left / mCellSize));
 	int iy = static_cast<int>(floor(rect.top / mCellSize));
 
-	// Parcours toutes les Cells survollées par le rect
+	// Parcours toutes les Cells survollÃ©es par le rect
 	int imax = static_cast<int>(floor((rect.left + rect.width) / mCellSize)) - ix;
 	int jmax = static_cast<int>(floor((rect.top + rect.height) / mCellSize)) - iy;
 	for (int i = 0; i <= imax; ++i)
@@ -159,11 +158,11 @@ std::list<Hull*> PartitioningTree::GetHulls(const sf::FloatRect &rect, bool *mov
 			auto it = mCells.find(std::make_pair(ix + i, iy + j));
 			if (it == mCells.end()) continue;
 
-			// Récupère la Cell et copie les Hulls
+			// RÃ©cupÃ¨re la Cell et copie les Hulls
 			Cell& c(it->second);
 			std::copy(c.GetHulls().begin(), c.GetHulls().end(), std::back_inserter(ret));
 
-			// Regarde la Cell a bougé
+			// Regarde la Cell a bougÃ©
 			if (c.HasMoved() && moved)
 				*moved = true;
 		}
@@ -175,7 +174,7 @@ std::list<Hull*> PartitioningTree::GetHulls(const sf::FloatRect &rect, bool *mov
 // Debug Draw
 void PartitioningTree::CreateDebug()
 {
-	// TODO: Se limiter à l'écran
+	// TODO: Se limiter Ã  l'Ã©cran
 	mDebugDrawGrid.clear();
 	mDebugDrawGrid.setPrimitiveType(sf::Lines);
 	mDebugDrawGrid.resize((100 + 100 + 1) * 2 * 2);

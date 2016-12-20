@@ -1,7 +1,8 @@
 #pragma once
+#include <sstream>
+#include <string>
 #include <SFML/Graphics.hpp>
 #include <Box2D/Box2D.h>
-#include <string>
 
 namespace Parser
 {
@@ -30,10 +31,10 @@ namespace Parser
 	sf::Color stringToColor(std::string const& value, sf::Color const& _default = sf::Color::White);
 	
 	// Transforme un string en b2Vec2
-	b2Vec2 stringToB2Vec2(std::string const& value, b2Vec2 const& default = b2Vec2(0.f, 0.f));
+	b2Vec2 stringToB2Vec2(std::string const& value, b2Vec2 const& _default = b2Vec2(0.f, 0.f));
 	
 	// Transforme un string en b2Vec3
-	b2Vec3 stringToB2Vec3(std::string const& value, b2Vec3 const& default = b2Vec3(0.f, 0.f, 0.f));
+	b2Vec3 stringToB2Vec3(std::string const& value, b2Vec3 const& _default = b2Vec3(0.f, 0.f, 0.f));
 	
 	////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -47,7 +48,7 @@ namespace Parser
 	std::string boolToString(bool b);
 
 	// Transforme un float en string
-	// nbOfDecimals définit le nb de chiffres après la virgule
+	// nbOfDecimals dÃ©finit le nb de chiffres aprÃ¨s la virgule
 	std::string floatToString(float n, int nbOfDecimals = 30);
 	
 	// Transforme un sf::Uint32 en string

@@ -1,4 +1,13 @@
 #pragma once
+
+#include <SFGUI/Box.hpp>
+#include <SFGUI/Table.hpp>
+#include <SFGUI/Label.hpp>
+#include <SFGUI/Entry.hpp>
+#include <SFGUI/SpinButton.hpp>
+#include <SFGUI/Button.hpp>
+#include <SFGUI/RadioButton.hpp>
+#include <SFGUI/ComboBox.hpp>
 #include "Scenario.h"
 #include "../../Entities/BaseBody.h"
 #include "../../Level/LevelManager.h"
@@ -13,7 +22,7 @@ public:
 	// Ctor
 	BodyScenario(EditBox &editBox);
 
-	// Gestion de la sélection
+	// Gestion de la sÃ©lection
 	void Select(BaseBody *selection);
 	void Unselect();
 
@@ -21,7 +30,7 @@ public:
 	virtual void Update();
 
 protected:
-	// Construit la fenêtre et les éléments
+	// Construit la fenÃªtre et les Ã©lÃ©ments
 	virtual void Fill();
 
 	// Callbacks
@@ -48,10 +57,10 @@ private:
 	EntityManager &mEntityMgr;
 	ResourceManager &mResourceMgr;
 
-	// Sélection
+	// SÃ©lection
 	BaseBody *mSelection;
 
-	/* Eléments */
+	/* ElÃ©ments */
 	// Position
 	sfg::Table::Ptr mPosTable;
 	sfg::Label::Ptr mPosLabel;
@@ -78,7 +87,7 @@ private:
 	sfg::Label::Ptr mCollisionTypeLabel;
 	sfg::ComboBox::Ptr mCollisionType;
 
-	// Densité, friction, restitution
+	// DensitÃ©, friction, restitution
 	sfg::Table::Ptr mPhysicsParamsTable;
 	sfg::Label::Ptr mDensityLabel;
 	sfg::SpinButton::Ptr mDensity;

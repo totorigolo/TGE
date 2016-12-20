@@ -1,4 +1,3 @@
-#include "stdafx.h"
 #include "ColFilteringWindow.h"
 #include "../../App/InputManager.h"
 
@@ -7,15 +6,15 @@ ColFilteringWindow::ColFilteringWindow()
 	: Window("Collision Filtering"), mSelection(nullptr),
 	mLevelMgr(LevelManager::GetInstance()), mPhysicMgr(PhysicManager::GetInstance())
 {
-	// Rempli la fenêtre
+	// Rempli la fenÃªtre
 	Fill();
 	mApply = true;
 }
 
-// Gestion de la sélection
+// Gestion de la sÃ©lection
 void ColFilteringWindow::Select(BaseBody *selection)
 {
-	myAssert(selection, "BaseBody passé invalide.");
+	myAssert(selection, "BaseBody passÃ© invalide.");
 
 	mSelection = selection;
 	SetTitle("Collision Filtering");
@@ -34,13 +33,13 @@ void ColFilteringWindow::Update()
 	// Si on a un BasicBody
 	if (!mSelection) return;
 
-	// Récupère les FilterData
+	// RÃ©cupÃ¨re les FilterData
 	b2Filter fd = mSelection->GetBody()->GetFixtureList()->GetFilterData();
 
-	// Mets à jour le Group Index
+	// Mets Ã  jour le Group Index
 	mGroupIndex->SetValue(fd.groupIndex);
 
-	// Mets à jour les Radios
+	// Mets Ã  jour les Radios
 	auto cb = fd.categoryBits;
 	auto mb = fd.maskBits;
 	for (int i = 0; i < 16; ++i)
@@ -52,10 +51,10 @@ void ColFilteringWindow::Update()
 	}
 }
 
-// Construit la fenêtre et les éléments
+// Construit la fenÃªtre et les Ã©lÃ©ments
 void ColFilteringWindow::Fill()
 {
-	// Crée les éléments
+	// CrÃ©e les Ã©lÃ©ments
 	mColFilteringVBox = sfg::Box::Create(sfg::Box::Orientation::VERTICAL);
 	mGroupIndexBox = sfg::Box::Create(sfg::Box::Orientation::HORIZONTAL);
 	mColFilteringButtonsHBox = sfg::Box::Create(sfg::Box::Orientation::HORIZONTAL);
@@ -73,7 +72,7 @@ void ColFilteringWindow::Fill()
 	mColFilteringClose = sfg::Button::Create("Fermer");
 	mColFilteringClose->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind(&ColFilteringWindow::OnClose, this));
 
-	// Crée les Radios
+	// CrÃ©e les Radios
 	for (int i = 1; i <= 16; ++i)
 	{
 		// Category Bits
@@ -81,12 +80,12 @@ void ColFilteringWindow::Fill()
 		// Mask Bits
 		mMaskBits.push_back(sfg::ToggleButton::Create(Parser::intToString(i)));
 
-		// Ajoute les radios à la table
+		// Ajoute les radios Ã  la table
 		mBitsTable->Attach(mCatBits.back(), sf::Rect<sf::Uint32>(i, 2, 1, 1));
 		mBitsTable->Attach(mMaskBits.back(), sf::Rect<sf::Uint32>(i, 4, 1, 1));
 	}
 
-	// Attache tous les widgets à la fenêtre
+	// Attache tous les widgets Ã  la fenÃªtre
 	mGroupIndexBox->PackEnd(mGroupIndexLabel);
 	mGroupIndexBox->PackEnd(mGroupIndex);
 	mColFilteringButtonsHBox->PackEnd(mColFilteringApply);
@@ -103,13 +102,13 @@ void ColFilteringWindow::OnColFilteringApply()
 {
 	if (!mApply || !mSelection) return;
 
-	// Crée un FilterData
+	// CrÃ©e un FilterData
 	b2Filter fd;
 
-	// Mets à jour le Group Index
+	// Mets Ã  jour le Group Index
 	fd.groupIndex = static_cast<int16>(mGroupIndex->GetValue());
 
-	// Mets à jour les Radios
+	// Mets Ã  jour les Radios
 	uint16 cb = 0;
 	uint16 mb = 0;
 	for (int i = 1; i <= 16; ++i)

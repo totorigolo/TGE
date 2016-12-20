@@ -1,10 +1,10 @@
-#include "stdafx.h"
 #include "Editor.h"
 #include "../App/App.h"
 #include "../App/InputManager.h"
 #include "../Level/LevelManager.h"
 #include "../Physics/PhysicManager.h"
 #include "../Entities/Deco.h"
+#include "../Entities/Entity.h"
 #include "../Entities/Player.h"
 #include "../Entities/BasicBody.h"
 #include "../Entities/PointLight.h"
@@ -15,6 +15,7 @@
 #include "../Physics/Joints/DistanceJoint.h"
 #include "../Physics/Callback/PointCallback.h"
 #include "../Graphics/LightEngine.h"
+#include "../Tools/utils.h"
 
 // Ctor
 Editor::Editor(sf::RenderWindow &window)
@@ -44,7 +45,7 @@ Editor::Editor(sf::RenderWindow &window)
 	mPinBodyA(nullptr),
 	mPinBodyB(nullptr)
 {
-	myAssert(mSfGUI, "La GUI n'a pas été créée.");
+	myAssert(mSfGUI, "La GUI n'a pas Ã©tÃ© crÃ©Ã©e.");
 }
 
 // Dtor
@@ -52,7 +53,7 @@ Editor::~Editor(void)
 {
 }
 
-// (ré)Initialiser
+// (rÃ©)Initialiser
 void Editor::Init()
 {
 	// Etats du jeu
@@ -72,7 +73,7 @@ void Editor::Run()
 	// Appel l'initialisation
 	if (this->OnInit())
 	{
-		// Tant que la fenêtre est ouverte
+		// Tant que la fenÃªtre est ouverte
 		while (mWindow.isOpen() && !mQuit)
 		{
 			// Gestion du focus
@@ -88,7 +89,7 @@ void Editor::Run()
 				this->OnLoopBegin();
 			}
 
-			// Appel des évènements
+			// Appel des Ã©vÃ¨nements
 			this->OnEvent();
 
 			if (focus)
@@ -99,7 +100,7 @@ void Editor::Run()
 				// Gestion de la physique
 				this->OnStepPhysics();
 
-				// Appel des mises à jour
+				// Appel des mises Ã  jour
 				this->OnUpdate();
 			}
 
@@ -118,7 +119,7 @@ void Editor::Run()
 	this->OnQuit();
 }
 
-/* Fonctions évènements */
+/* Fonctions Ã©vÃ¨nements */
 /// Initialise le jeu
 bool Editor::OnInit()
 {
@@ -126,7 +127,7 @@ bool Editor::OnInit()
 	mPaused = false;
 
 	/* GUI */
-	// Crée la Window et le Desktop
+	// CrÃ©e la Window et le Desktop
 	mInputManager.AddDesktop(&mDesktop);
 	mGUIElapsedTime.restart();
 	mEditBox = std::unique_ptr<EditBox>(new EditBox(mDesktop));
@@ -142,7 +143,7 @@ bool Editor::OnInit()
 	}
 	catch (const std::exception &e)
 	{
-		Dialog::Error("Erreur lors de la lecture du thème :\n" + std::string(e.what()));
+		Dialog::Error("Erreur lors de la lecture du thÃ¨me :\n" + std::string(e.what()));
 	}
 
 	/* Physique */
@@ -150,7 +151,7 @@ bool Editor::OnInit()
 	mPhysicMgr.SetTimeStep(1.f / 60.f);
 	mPhysicMgr.SetDebugDrawTarget(&mWindow);
 
-	/* Evènements */
+	/* EvÃ¨nements */
 	// Enregistre la vue
 	mInputManager.SetView(mWindow.getDefaultView());
 
@@ -167,7 +168,7 @@ bool Editor::OnInit()
 
 	// Initialise la machine Lua
 	mConsole.RegisterJoint();
-	mConsole.RegisterEntity();
+//	mConsole.RegisterEntity();
 	mConsole.RegisterEntityFactory();
 	mConsole.RegisterLevelManager();
 	mConsole.RegisterGlobalLuaVar("level", &mLevel);
@@ -182,7 +183,7 @@ bool Editor::OnInit()
 	mEditBox->SetLuaMachine(&mConsole);
 	mConsole.SetLuaConsole(mEditBox->GetLuaConsoleWindow());
 
-	// Passe les objets à la LevelWindow
+	// Passe les objets Ã  la LevelWindow
 	mEditBox->GetLevelWindow()->SetEditor(this);
 	mEditBox->GetLevelWindow()->SetEditBox(&*mEditBox);
 	mEditBox->GetLevelWindow()->SetLuaMachine(&mConsole);
@@ -190,36 +191,37 @@ bool Editor::OnInit()
 	// Charge les textures vides et la police
 	mResourceManager.LoadTexture("none", "tex/none.png");
 	mResourceManager.LoadTexture("unknown", "tex/unknown.png");
-	mResourceManager.LoadFont("calibri", "data/calibri.ttf");
+	if (!mResourceManager.LoadFont("calibri", "data/calibri.ttf"))
+	    mResourceManager.LoadFont("calibri", "data/Cantarell-Regular.otf");
 
 	return true;
 }
 
-/// Appelé quand la boucle commence
+/// AppelÃ© quand la boucle commence
 void Editor::OnLoopBegin()
 {
-	// Sauvegarde la dernière position de la souris
-	mMp = sf2b2Vec(mInputManager.GetMousePosRV(), mPhysicMgr.GetMPP()); // système Box2D
+	// Sauvegarde la derniÃ¨re position de la souris
+	mMp = sf2b2Vec(mInputManager.GetMousePosRV(), mPhysicMgr.GetMPP()); // systÃ¨me Box2D
 }
 
-/// Appelé pour les évènements
+/// AppelÃ© pour les Ã©vÃ¨nements
 void Editor::OnEvent()
 {
-	// Met à jour les évènements
+	// Met Ã  jour les Ã©vÃ¨nements
 	mInputManager.Update();
 
-	// Exécute les actions planifiées de la GUI
+	// ExÃ©cute les actions planifiÃ©es de la GUI
 	mEditBox->DoScheduledTasks();
 
-	// Retient si la touche Control est enfoncée
+	// Retient si la touche Control est enfoncÃ©e
 	bool ctrl = mInputManager.IsKeyPressed(sf::Keyboard::LControl) || mInputManager.IsKeyPressed(sf::Keyboard::RControl);
 
-	// Vérifie les évènements
+	// VÃ©rifie les Ã©vÃ¨nements
 	if (mInputManager.HasQuitted())
 	{
-		// Demande si on veut décharger le niveau actuel
-		if (1 == Dialog::ButtonChoice("Quitter l'éditeur ?",
-									  "Voulez-vous quitter l'éditeur ?\nTout changement non sauvegardé sera perdu.",
+		// Demande si on veut dÃ©charger le niveau actuel
+		if (1 == Dialog::ButtonChoice("Quitter l'Ã©diteur ?",
+									  "Voulez-vous quitter l'Ã©diteur ?\nTout changement non sauvegardÃ© sera perdu.",
 									  "Oui", "Non"))
 			mQuit = true;
 	}
@@ -273,7 +275,7 @@ void Editor::OnEvent()
 			// Il y a un objet, on le retient
 			if (callback.GetFixture())
 			{
-				// Enregistre le body appuyé
+				// Enregistre le body appuyÃ©
 				if (!mPinBodyA && mPinBodyB != callback.GetFixture()->GetBody())
 				{
 					mPinBodyA = callback.GetFixture()->GetBody();
@@ -291,7 +293,7 @@ void Editor::OnEvent()
 				}
 			}
 
-			// Si on a cliqué sur rien, on oublie les deux
+			// Si on a cliquÃ© sur rien, on oublie les deux
 			else
 			{
 				mPinBodyA = nullptr;
@@ -299,7 +301,7 @@ void Editor::OnEvent()
 			}
 		}
 
-		// Crée le joint
+		// CrÃ©e le joint
 		if (mPinBodyA && mPinBodyB)
 		{
 			DistanceJointDef def(mPinBodyA, mPinAnchorA, mPinBodyB, mPinAnchorB);
@@ -313,7 +315,7 @@ void Editor::OnEvent()
 	// EditBox : Poly Creation
 	if (mInputManager.IsLMBClicked() && ctrl && mPolyCreationWindow)
 	{
-		// Si la fenêtre de création de polygones est en mode création, on transmet les clics
+		// Si la fenÃªtre de crÃ©ation de polygones est en mode crÃ©ation, on transmet les clics
 		if (mPolyCreationWindow->IsInEditMode())
 		{
 			mPolyCreationWindow->AddPoint(mMp);
@@ -323,7 +325,7 @@ void Editor::OnEvent()
 	// EditBox : Deco Creation
 	if (mInputManager.IsLMBClicked() && ctrl && mDecoCreationWindow)
 	{
-		// Si la fenêtre de création est en mode ajout, on transmet les clics
+		// Si la fenÃªtre de crÃ©ation est en mode ajout, on transmet les clics
 		if (mDecoCreationWindow->IsInAddMode())
 		{
 			mDecoCreationWindow->Add(mMp);
@@ -333,7 +335,7 @@ void Editor::OnEvent()
 	// EditBox : PointLight Creation
 	if (mInputManager.IsLMBClicked() && ctrl && mPointLightCreationWindow)
 	{
-		// Si la fenêtre de création est en mode ajout, on transmet les clics
+		// Si la fenÃªtre de crÃ©ation est en mode ajout, on transmet les clics
 		if (mPointLightCreationWindow->IsInAddMode())
 		{
 			mPointLightCreationWindow->Add(mMp);
@@ -343,7 +345,7 @@ void Editor::OnEvent()
 	// EditBox : BasicBody Creation
 	if (mInputManager.IsLMBClicked() && ctrl && mBasicBodyCreationWindow)
 	{
-		// Si la fenêtre de création est en mode ajout, on transmet les clics
+		// Si la fenÃªtre de crÃ©ation est en mode ajout, on transmet les clics
 		if (mBasicBodyCreationWindow->IsInAddMode())
 		{
 			mBasicBodyCreationWindow->Add(mMp);
@@ -353,19 +355,19 @@ void Editor::OnEvent()
 	// EditBox : BasicBody Creation
 	if (mInputManager.IsLMBClicked() && ctrl && mHumCreationWindow)
 	{
-		// Si la fenêtre de création est en mode ajout, on transmet les clics
+		// Si la fenÃªtre de crÃ©ation est en mode ajout, on transmet les clics
 		if (mHumCreationWindow->IsInAddMode())
 		{
 			mHumCreationWindow->Add(mMp);
 		}
 	}
 
-	// Déplacements des objets
+	// DÃ©placements des objets
 	if (!mPaused) // Physique en continue, on utilise le MouseJoint
 	{
-		if (mInputManager.GetRMBState()) // Crée ou met à jour le joint
+		if (mInputManager.GetRMBState()) // CrÃ©e ou met Ã  jour le joint
 		{
-			// Si la souris est déjà attachée, on met à jour la position
+			// Si la souris est dÃ©jÃ  attachÃ©e, on met Ã  jour la position
 			if (mMouseJointCreated)
 			{
 				MouseJoint *j = ((MouseJoint*) mPhysicMgr.GetJoint(mMouseJointID));
@@ -395,7 +397,7 @@ void Editor::OnEvent()
 					b2Body *staticBody = mPhysicMgr.GetAnyStaticBody();
 					if (staticBody) // Si il y en a un
 					{
-						// Récupère le Body
+						// RÃ©cupÃ¨re le Body
 						b2Body* body = callback.GetFixture()->GetBody();
 						MouseJointDef def(body, staticBody, mMp, 100000000000.f * body->GetMass());
 						MouseJoint *j = new MouseJoint(def);
@@ -425,7 +427,7 @@ void Editor::OnEvent()
 			}
 		}
 	}
-	else // Physique en pause, on téléporte les objets
+	else // Physique en pause, on tÃ©lÃ©porte les objets
 	{
 		// Si on appuie sur le clic droit, et tant qu'on appuie dessus
 		if (mInputManager.GetRMBState())
@@ -445,21 +447,21 @@ void Editor::OnEvent()
 			}
 			if (mMouseMovingBody)
 			{
-				// Déplace le Body
+				// DÃ©place le Body
 				mMouseMovingBody->SetTransform(mMp - mMouseMovingBodyAnchor, mMouseMovingBody->GetAngle());
 				mMouseMovingBody->SetAwake(true);
 			}
 		}
-		else if (mMouseMovingBody) // Oublie le Body dès qu'on relache le bouton
+		else if (mMouseMovingBody) // Oublie le Body dÃ¨s qu'on relache le bouton
 		{
 			mMouseMovingBody = nullptr;
 		}
 	}
 	
-	// EditBox : Sélection des objets
+	// EditBox : SÃ©lection des objets
 	if (mMouseMovingBody)
 	{
-		myAssert(mMouseMovingBody->GetUserData(), "Un b2Body sans Entity a été sélectionné.");
+		myAssert(mMouseMovingBody->GetUserData(), "Un b2Body sans Entity a Ã©tÃ© sÃ©lectionnÃ©.");
 		mEditBox->ChangeSelectedObject((Entity*) mMouseMovingBody->GetUserData());
 	}
 	else if (mInputManager.GetRMBState())
@@ -473,11 +475,11 @@ void Editor::OnEvent()
 		// Il y a un objet, on l'attache
 		if (callback.GetFixture())
 		{
-			// Récupère le Body
+			// RÃ©cupÃ¨re le Body
 			Entity *e = (Entity*) callback.GetFixture()->GetBody()->GetUserData();
 
-			// Ajoute le Body à l'EditBox
-			myAssert(e, "Un b2Body sans Entity a été sélectionné.");
+			// Ajoute le Body Ã  l'EditBox
+			myAssert(e, "Un b2Body sans Entity a Ã©tÃ© sÃ©lectionnÃ©.");
 			mEditBox->ChangeSelectedObject(e);
 			found = true;
 		}
@@ -485,17 +487,17 @@ void Editor::OnEvent()
 		// Si on n'a pas de b2Body, on cherche ce qui n'est pas physique
 		else
 		{
-			// Récupère la position de la souris en mode SFML
+			// RÃ©cupÃ¨re la position de la souris en mode SFML
 			sf::Vector2f mousePos = mInputManager.GetMousePosRV();
 
-			// Les Entities (Déco et PointLight)
+			// Les Entities (DÃ©co et PointLight)
 			std::list<Entity*> &entities(mEntityMgr.GetEntities());
 			for (auto it = entities.rbegin(); it != entities.rend(); ++it) // Par Layer
 			{
 				// Pour chaque type
 				if ((*it)->GetType() == EntityType::Deco)
 				{
-					// Vérifie si le curseur est dessus
+					// VÃ©rifie si le curseur est dessus
 					Deco *d = (Deco*) (*it);
 					if (d->GetSprite()->getGlobalBounds().contains(mousePos))
 					{
@@ -506,7 +508,7 @@ void Editor::OnEvent()
 				}
 				else if ((*it)->GetType() == EntityType::PointLight)
 				{
-					// Vérifie si le curseur est dessus
+					// VÃ©rifie si le curseur est dessus
 					PointLight *pl = (PointLight*) (*it);
 					if (pl->GetBoundingBox().contains(mousePos))
 					{
@@ -518,12 +520,12 @@ void Editor::OnEvent()
 			}
 		}
 
-		// Déselectione le body courant si on n'en a pas trouvé de nouveau
+		// DÃ©selectione le body courant si on n'en a pas trouvÃ© de nouveau
 		if (!found)
 			mEditBox->Unselect();
 	}
 
-	// Gestion du zoom et déplacement de la vue
+	// Gestion du zoom et dÃ©placement de la vue
 	if (mInputManager.KeyPressed(sf::Keyboard::Add) && ctrl)
 	{
 		mInputManager.Zoom(0.8f);
@@ -543,7 +545,7 @@ void Editor::OnEvent()
 		if (mInputManager.GetMouseWheelDelta() > 0)
 			mInputManager.Zoom(0.8f);
 
-		// Dézoom
+		// DÃ©zoom
 		else
 			mInputManager.Zoom(1.2f);
 	}
@@ -569,12 +571,12 @@ void Editor::OnEvent()
 	}
 }
 
-/// Appelé pour la logique
+/// AppelÃ© pour la logique
 void Editor::OnLogic()
 {
 }
 
-/// Appelé pour la physique
+/// AppelÃ© pour la physique
 void Editor::OnStepPhysics()
 {
 	// Simule
@@ -595,21 +597,21 @@ void Editor::OnStepPhysics()
 	}
 }
 
-/// Appelé pour les mises à jour
+/// AppelÃ© pour les mises Ã  jour
 void Editor::OnUpdate()
 {
-	// Met à jour les Joints
+	// Met Ã  jour les Joints
 	mPhysicMgr.UpdateJoints();
 
-	// Met à jour le niveau
+	// Met Ã  jour le niveau
 	mLevel.Update();
 
-	// Met à jour la GUI
+	// Met Ã  jour la GUI
 	mDesktop.Update(mGUIElapsedTime.getElapsedTime().asSeconds());
 	mGUIElapsedTime.restart();
 }
 
-/// Appelé pour le rendu
+/// AppelÃ© pour le rendu
 void Editor::OnRender()
 {
 	// Rendu
@@ -649,17 +651,17 @@ void Editor::OnRender()
 	mWindow.display();
 }
 
-/// Appelé quand la boucle se termine
+/// AppelÃ© quand la boucle se termine
 void Editor::OnLoopEnd()
 {
 }
 
-/// Appelé quand le jeu se termine
+/// AppelÃ© quand le jeu se termine
 void Editor::OnQuit()
 {
 	Init();
 
-	// Enlève le Desktop du InputManager
+	// EnlÃ¨ve le Desktop du InputManager
 	mInputManager.RemoveDesktop(&mDesktop);
 
 	// Supprime l'EditBox
@@ -668,7 +670,7 @@ void Editor::OnQuit()
 	// Supprime les SpyedKeys
 	mSpyedKeys.clear();
 
-	// Remet la vue par défaut
+	// Remet la vue par dÃ©faut
 	mWindow.setView(mWindow.getDefaultView());
 	mInputManager.SetView(mWindow.getDefaultView());
 
@@ -680,7 +682,7 @@ void Editor::OnQuit()
 	mLevel.Clear();
 
 	// Vide
-	// TODO: Déplacer vers la LuaMachine
+	// TODO: DÃ©placer vers la LuaMachine
 	mConsole.UnregisterGlobalLuaVar("level");
 	mConsole.UnregisterGlobalLuaVar("physicMgr");
 	mConsole.UnregisterGlobalLuaVar("inputMgr");

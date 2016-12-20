@@ -1,4 +1,6 @@
 #pragma once
+
+#include <lua.h>
 #include "OutputInterfaces.h"
 #include "../Editor/GUI/LuaConsoleWindow.h"
 
@@ -9,12 +11,13 @@ public:
 	LuaMachine();
 	virtual ~LuaMachine();
 
-	// Réinitialisation
+	// RÃ©initialisation
 	void Reset();
 
 	// Enregistrements
 	void RegisterJoint();
-	void RegisterEntity();
+// TODO: RegisterEntity
+//	void RegisterEntity();
 	void RegisterEntityFactory();
 	void RegisterJointFactory();
 	void RegisterLevelManager();
@@ -28,7 +31,7 @@ public:
 	{
 		try
 		{
-			luabind::globals(mLuaState)[name] = var;
+//			luabind::globals(mLuaState)[name] = var;
 		}
 		catch (const std::exception &e)
 		{
@@ -37,7 +40,7 @@ public:
 	}
 	void UnregisterGlobalLuaVar(const std::string &name);
 
-	// Exécution
+	// ExÃ©cution
 	int DoFile(const std::string &path, OutputInterface *_interface = nullptr);//new ostreamInterface());
 	int LoadFile(const std::string &path, OutputInterface *_interface = nullptr);//new ostreamInterface());
 	int DoString(const std::string &command, OutputInterface *_interface = nullptr);//new ostreamInterface());
@@ -50,7 +53,7 @@ public:
 	lua_State* GetLuaState();
 
 protected:
-	// Enregistrements privés
+	// Enregistrements privÃ©s
 	void RegisterBox2D();
 	void RegisterSFML();
 

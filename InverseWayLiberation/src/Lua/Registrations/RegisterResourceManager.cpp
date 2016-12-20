@@ -1,11 +1,10 @@
-#include "stdafx.h"
 #include "../LuaMachine.h"
 #include "../../Resources/ResourceManager.h"
 
 void LuaMachine::RegisterResourceManager()
 {
 	try
-	{
+	{/*
 		// Texture
 		luabind::module(mLuaState) [
 			// La classe
@@ -26,7 +25,7 @@ void LuaMachine::RegisterResourceManager()
 				luabind::def("LoadTexture", &ResourceManager::LoadTexture),
 				luabind::def("GetTexture", &ResourceManager::GetTexture, luabind::dependency(luabind::result, _1))
 			]
-		];
+		];*/
 	}
 	catch (const std::exception &e)
 	{

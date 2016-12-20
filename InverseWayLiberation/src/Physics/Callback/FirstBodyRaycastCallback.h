@@ -1,6 +1,6 @@
 #pragma once
 
-// Ce callback est utilisé pour trouver le body le plus près lors d'un raycast
+// Ce callback est utilisÃ© pour trouver le body le plus prÃ¨s lors d'un raycast
 class FirstBodyRaycastCallback : public b2RayCastCallback, public NonCopyable
 {
 public:

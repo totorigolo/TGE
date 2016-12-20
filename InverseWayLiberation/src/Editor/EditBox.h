@@ -52,7 +52,7 @@ public:
 	EditBox(sfg::Desktop &desktop);
 	virtual ~EditBox();
 
-	// Actions différées
+	// Actions diffÃ©rÃ©es
 	void DoScheduledTasks();
 	void ScheduleUpdate();
 	void ScheduleUnselection();
@@ -68,17 +68,17 @@ public:
 	// Vide la EditBox
 	void EmptyGUI();
 
-	// Mise à jour des Widgets en f° de la sélection
+	// Mise Ã  jour des Widgets en fÂ° de la sÃ©lection
 	void UpdateGUI();
 
 	// Gestion de la Machine Lua
 	void SetLuaMachine(LuaMachine *luaMachine);
 	LuaMachine* GetLuaMachine();
 
-	// Obtient le repère de l'objet sélectionné
+	// Obtient le repÃ¨re de l'objet sÃ©lectionnÃ©
 	sf::CircleShape GetSelectionMark();
 
-	// Mise en place des différents scénarios
+	// Mise en place des diffÃ©rents scÃ©narios
 	void ShowEmptyScenario();
 	void OnShowLevelWindow(); // Callback
 	void ShowHumScenario();
@@ -94,10 +94,10 @@ public:
 	void ShowBasicBodyCreationWindow();
 	void ShowPointLightCreationWindow();
 
-	// Fermeture des fenêtres / scénarios
+	// Fermeture des fenÃªtres / scÃ©narios
 	void OnCloseLevelWindow(); // Callback
 
-	// Accesseurs des fenêtres et scénarii
+	// Accesseurs des fenÃªtres et scÃ©narii
 	EmptyScenario* GetEmptyScenario();
 	LevelWindow* GetLevelWindow();
 	HumScenario* GetHumScenario();
@@ -114,11 +114,11 @@ public:
 	PointLightCreationWindow* GetPointLightCreationWindow();
 
 private:
-	// Actions différées
+	// Actions diffÃ©rÃ©es
 	bool mUpdateScheduled;
 	bool mUnselectionScheduled;
 
-	// Fenêtre
+	// FenÃªtre
 	sfg::Desktop &mDesktop;
 	sfg::Window::Ptr mWindow;
 
@@ -127,13 +127,13 @@ private:
 	PhysicManager &mPhysicMgr;
 	EntityManager &mEntityMgr;
 
-	// Objet sélectionné
+	// Objet sÃ©lectionnÃ©
 	Entity *mSelectedEntity;
 	Joint *mSelectedJoint;
 	SelectionType mSelectionType;
 	bool mSelectionChanged;
 
-	// Différentes fenêtres / scénarios
+	// DiffÃ©rentes fenÃªtres / scÃ©narios
 	EmptyScenario mEmptyScenario;
 	LevelWindow mLevelWindow;
 	HumScenario mHumScenario;
@@ -149,7 +149,7 @@ private:
 	BasicBodyCreationWindow mBasicBodyCreationWindow;
 	PointLightCreationWindow mPointLightCreationWindow;
 
-	// Etat des fenêtres / scénarios
+	// Etat des fenÃªtres / scÃ©narios
 	bool mLevelWindowAdded;
 	bool mEditBoxGUICreated;
 	bool mTexturesWindowAdded;

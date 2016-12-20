@@ -1,13 +1,12 @@
-#include "stdafx.h"
 #include "../LuaMachine.h"
 #include "../../Physics/Joint.h"
 
-// Enregistrements privés
+// Enregistrements privÃ©s
 void LuaMachine::RegisterJoint()
 {
 	/* Enregistre les classes */
 	try
-	{
+	{/*
 		// ForceType
 		luabind::globals(mLuaState)["JointForceType_Null"] = ForceType::Null;
 		luabind::globals(mLuaState)["JointForceType_Float"] = ForceType::Float;
@@ -66,7 +65,7 @@ void LuaMachine::RegisterJoint()
 				.property("MaxForce", &Joint::GetMaxForce, (void(Joint::*)(float))&Joint::SetMaxForce)
 				.property("BreakableMaxTorque", &Joint::IsBreakableMaxTorque, &Joint::SetBreakableByTorque)
 				.property("MaxTorque", &Joint::GetMaxTorque, &Joint::SetMaxTorque)
-		];
+		];*/
 	}
 	catch (const std::exception &e)
 	{

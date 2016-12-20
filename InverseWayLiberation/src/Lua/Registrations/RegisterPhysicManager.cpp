@@ -1,4 +1,3 @@
-#include "stdafx.h"
 #include "../LuaMachine.h"
 #include "../../Physics/PhysicManager.h"
 #include "../../Physics/Joint.h"
@@ -7,7 +6,7 @@
 void LuaMachine::RegisterPhysicManager()
 {
 	try
-	{
+	{/*
 		// Enregistrement
 		luabind::module(mLuaState) [
 			// Level
@@ -31,7 +30,7 @@ void LuaMachine::RegisterPhysicManager()
 				.def("JointExists", (bool(PhysicManager::*)(const std::string&) const)&PhysicManager::JointExists)
 				.def("GetJoint", (Joint*(PhysicManager::*)(int))&PhysicManager::GetJoint, luabind::dependency(_1, luabind::result))
 				.def("GetJoint", (Joint*(PhysicManager::*)(const std::string&))&PhysicManager::GetJoint)
-		];
+		];*/
 	}
 	catch (const std::exception &e)
 	{

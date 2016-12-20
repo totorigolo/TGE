@@ -20,14 +20,14 @@ private:
     std::string mMsg;
 };
 
-// Crée une Erreur
+// CrÃ©e une Erreur
 #define myError(msg) { Error __e(msg, __FILE__, __FUNCTION__, __LINE__); Dialog::Error(__e.what()); }
 #define myThrowError(msg) throw Error(msg, __FILE__, __FUNCTION__, __LINE__)
 
 // Assertion
 #define myAssert(exp, msg) if(!(exp)) throw Error(msg, __FILE__, __FUNCTION__, __LINE__)
 
-// Vérification d'erreur
+// VÃ©rification d'erreur
 #define myCheckError(exp, msg) if(!(exp)) { Dialog::Error(msg); return false; }
 #define myCheckError_c(exp, msg) if(!(exp)) { Dialog::Error(msg); } // For constructors
 #define myCheckError_v(exp, msg) if(!(exp)) { Dialog::Error(msg); return; } // For void functions
