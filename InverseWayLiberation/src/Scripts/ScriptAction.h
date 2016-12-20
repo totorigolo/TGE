@@ -1,7 +1,7 @@
 #pragma once
 
 #include <list>
-#include "../Lua/LuaMachine.h"
+#include "ScriptMachine.h"
 
 class LuaArea;
 class TriggersManager;

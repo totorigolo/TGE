@@ -1,4 +1,4 @@
-#include "../LuaMachine.h"
+#include "../ScriptMachine.h"
 #include "../../Tools/vector_wrappers.h"
 
 // Enregistrements privés

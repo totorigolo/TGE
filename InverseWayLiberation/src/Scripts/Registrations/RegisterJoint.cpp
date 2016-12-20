@@ -1,4 +1,4 @@
-#include "../LuaMachine.h"
+#include "../ScriptMachine.h"
 #include "../../Physics/Joint.h"
 
 // Enregistrements privés

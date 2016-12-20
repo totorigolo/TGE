@@ -1,5 +1,5 @@
 #include "LuaConsoleWindow.h"
-#include "../../Lua/LuaMachine.h"
+#include "../../Scripts/ScriptMachine.h"
 #include "../../Lua/OutputInterfaces.h"
 #include "../../Tools/Error.h"
 

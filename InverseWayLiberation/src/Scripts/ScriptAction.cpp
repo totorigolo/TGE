@@ -1,5 +1,5 @@
-#include "LuaAction.h"
-#include "LuaArea.h"
+#include "ScriptAction.h"
+#include "ScriptArea.h"
 #include "TriggersManager.h"
 
 // Ctors

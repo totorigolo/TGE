@@ -1,4 +1,4 @@
-#include "../LuaMachine.h"
+#include "../ScriptMachine.h"
 #include "../../Resources/ResourceManager.h"
 
 void LuaMachine::RegisterResourceManager()

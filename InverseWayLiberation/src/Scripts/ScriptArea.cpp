@@ -1,4 +1,4 @@
-#include "LuaArea.h"
+#include "ScriptArea.h"
 #include "TriggersManager.h"
 
 // Ctors

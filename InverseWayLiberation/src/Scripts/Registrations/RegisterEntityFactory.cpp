@@ -1,4 +1,4 @@
-#include "../LuaMachine.h"
+#include "../ScriptMachine.h"
 #include "../../Entities/EntityFactory.h"
 
 //using namespace luabind;

@@ -3,8 +3,8 @@
 #include <list>
 #include "../Tools/Singleton.h"
 #include "../Lua/LuaMachine.h"
-#include "LuaAction.h"
-#include "LuaArea.h"
+#include "ScriptAction.h"
+#include "ScriptArea.h"
 
 typedef std::map<std::string, std::shared_ptr<LuaAction>> ActionMap;
 

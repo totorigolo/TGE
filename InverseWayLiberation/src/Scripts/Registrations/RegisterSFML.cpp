@@ -1,4 +1,4 @@
-#include "../LuaMachine.h"
+#include "../ScriptMachine.h"
 
 // Enregistrements privés
 void LuaMachine::RegisterSFML()

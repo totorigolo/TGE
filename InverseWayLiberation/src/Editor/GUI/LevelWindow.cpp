@@ -4,7 +4,7 @@
 #include "../../Level/LevelLoader.h"
 #include "../Editor.h"
 #include "../EditBox.h"
-#include "../../Lua/LuaMachine.h"
+#include "../../Scripts/ScriptMachine.h"
 
 // Ctor
 LevelWindow::LevelWindow()

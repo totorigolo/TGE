@@ -1,4 +1,4 @@
-#include "../LuaMachine.h"
+#include "../ScriptMachine.h"
 #include "../../Physics/JointFactory.h"
 #include "../../Physics/Joints/DistanceJoint.h"
 #include "../../Physics/Joints/FrictionJoint.h"

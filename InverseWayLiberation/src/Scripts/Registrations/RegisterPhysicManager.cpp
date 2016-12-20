@@ -1,4 +1,4 @@
-#include "../LuaMachine.h"
+#include "../ScriptMachine.h"
 #include "../../Physics/PhysicManager.h"
 #include "../../Physics/Joint.h"
 

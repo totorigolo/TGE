@@ -6,7 +6,7 @@
 #include "../Resources/ResourceManager.h"
 
 #include "../Lua/LuaArea.h"
-#include "../Lua/LuaAction.h"
+#include "../Scripts/ScriptAction.h"
 #include "../Lua/TriggersManager.h"
 
 #include "../Physics/Joints/RopeJoint.h"

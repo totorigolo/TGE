@@ -1,5 +1,5 @@
 #include <lua.hpp>
-#include "LuaMachine.h"
+#include "ScriptMachine.h"
 #include "../Game/Game.h"
 #include "../App/InputManager.h"
 #include "../Level/LevelManager.h"

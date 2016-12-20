@@ -1,7 +1,7 @@
 #pragma once
 
 #include <SFGUI/SFGUI.hpp>
-#include "../Lua/LuaMachine.h"
+#include "../Scripts/ScriptMachine.h"
 #include "../Resources/ResourceManager.h"
 #include "../Editor/EditBox.h"
 #include "../Editor/GUI/HumCreationWindow.h"

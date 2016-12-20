@@ -15,3 +15,5 @@ zic/
 .sdf
 .sln
 .suo
+.idea/
+Cmake/

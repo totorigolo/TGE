@@ -1,6 +1,6 @@
 #include "LevelManager.h"
 #include "LevelLoader.h"
-#include "../Lua/LuaMachine.h"
+#include "../Scripts/ScriptMachine.h"
 #include "../Entities/Player.h"
 #include "../App/InputManager.h"
 #include "../Lua/TriggersManager.h"

@@ -1,4 +1,4 @@
-#include "../LuaMachine.h"
+#include "../ScriptMachine.h"
 #include "../../Entities/Player.h"
 #include "../../Level/LevelManager.h"
 
