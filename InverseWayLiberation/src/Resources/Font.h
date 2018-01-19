@@ -13,6 +13,7 @@ public:
 		mLoaded = sf::Font::loadFromFile(path);
 		if (!mLoaded) {
 			// Rescue
+			// TODO: Bad bad bad, change the rescue font.
 			mLoaded = sf::Font::loadFromFile("/usr/share/fonts/TTF/LiberationSans-Regular.ttf");
 		}
 		myCheckError_c(mLoaded, "Impossible de charger :\n" + path);

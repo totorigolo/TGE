@@ -15,7 +15,7 @@
 #include "GUI/PointLightCreationWindow.h"
 #include "../Entities/Entity.h"
 #include "../Physics/Joint.h"
-#include "../Lua/TriggersManager.h"
+#include "../Scripts/TriggersManager.h"
 #include "../Level/LevelManager.h"
 #include "../Physics/PhysicManager.h"
 #include "../Entities/EntityManager.h"
@@ -72,8 +72,8 @@ public:
 	void UpdateGUI();
 
 	// Gestion de la Machine Lua
-	void SetLuaMachine(LuaMachine *luaMachine);
-	LuaMachine* GetLuaMachine();
+	void SetLuaMachine(ScriptMachine *luaMachine);
+	ScriptMachine* GetLuaMachine();
 
 	// Obtient le repère de l'objet sélectionné
 	sf::CircleShape GetSelectionMark();

@@ -87,7 +87,7 @@ private:
 	ResourceManager &mResourceManager;
 
 	// Machine Lua
-	LuaMachine mConsole;
+	ScriptMachine mConsole;
 
 	// Positions de la souris
 	b2Vec2 mMp;

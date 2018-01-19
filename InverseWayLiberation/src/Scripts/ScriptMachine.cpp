@@ -9,26 +9,23 @@
 #include "../Entities/Player.h"
 
 // Ctor & dtor
-LuaMachine::LuaMachine()
+ScriptMachine::ScriptMachine()
 	: mLuaConsoleWindow(nullptr)
 {
-	// Initialise le Lua
-	InitLua();
+	Init();
 }
-LuaMachine::~LuaMachine()
+ScriptMachine::~ScriptMachine()
 {
-	// Ferme le State Lua
-	lua_close(mLuaState);
 }
 
 // Réinitialisation
-void LuaMachine::Reset()
+void ScriptMachine::Reset()
 {
 	// TODO
 }
 
 // Enregistrement des attributs
-void LuaMachine::UnregisterGlobalLuaVar(const std::string &name)
+void ScriptMachine::UnregisterGlobalVar(const std::string &name)
 {
 	try
 	{
@@ -41,7 +38,7 @@ void LuaMachine::UnregisterGlobalLuaVar(const std::string &name)
 }
 
 // Exécution
-int LuaMachine::DoFile(const std::string &path, OutputInterface *_interface)
+int ScriptMachine::DoFile(const std::string &path, OutputInterface *_interface)
 {
 	// Normalise l'interface
 	auto output = GetInterface(_interface);
@@ -50,12 +47,12 @@ int LuaMachine::DoFile(const std::string &path, OutputInterface *_interface)
 	{
 #ifdef _DEBUG
 		sf::Clock c;
-		int r = ReportLuaError(luaL_dofile(mLuaState, path.c_str()), output);
+		int r = ReportError(luaL_dofile(mLuaState, path.c_str()), output);
 		*output << "Script \"" << path << "\" ex\x82""cut\x82 en : "
 			<< c.getElapsedTime().asSeconds() << " sec" << std::endl << std::endl;
 		return r;
 #else
-		return ReportLuaError(luaL_dofile(mLuaState, path.c_str()), output);
+		return ReportError(luaL_dofile(mLuaState, path.c_str()), output);
 #endif
 	}
 	catch (const std::exception &e)
@@ -66,7 +63,7 @@ int LuaMachine::DoFile(const std::string &path, OutputInterface *_interface)
 	// Si on est là, c'est à cause d'une erreur
 	return -1;
 }
-int LuaMachine::LoadFile(const std::string &path, OutputInterface *_interface)
+int ScriptMachine::LoadFile(const std::string &path, OutputInterface *_interface)
 {
 	// Normalise l'interface
 	auto output = GetInterface(_interface);
@@ -75,7 +72,7 @@ int LuaMachine::LoadFile(const std::string &path, OutputInterface *_interface)
 	{
 #ifdef _DEBUG
 		sf::Clock c;
-		int r = ReportLuaError(luaL_loadfile(mLuaState, path.c_str()), output);
+		int r = ReportError(luaL_loadfile(mLuaState, path.c_str()), output);
 		*output << "Fichier \"" << path << "\" charg\x82 en : "
 			<< c.getElapsedTime().asSeconds() << " sec" << std::endl << std::endl;
 		return r;
@@ -91,7 +88,7 @@ int LuaMachine::LoadFile(const std::string &path, OutputInterface *_interface)
 	// Si on est là, c'est à cause d'une erreur
 	return -1;
 }
-int LuaMachine::DoString(const std::string &command, OutputInterface *_interface)
+int ScriptMachine::DoString(const std::string &command, OutputInterface *_interface)
 {
 	// Normalise l'interface
 	auto output = GetInterface(_interface);
@@ -100,7 +97,7 @@ int LuaMachine::DoString(const std::string &command, OutputInterface *_interface
 	{
 #ifdef _DEBUG
 		sf::Clock c;
-		int r = ReportLuaError(luaL_dostring(mLuaState, command.c_str()), output);
+		int r = ReportError(luaL_dostring(mLuaState, command.c_str()), output);
 		*output << "Commande \"" << command << "\" ex\x82""cut\x82 en : "
 			<< c.getElapsedTime().asSeconds() << " sec" << std::endl << std::endl;
 		return r;
@@ -117,13 +114,13 @@ int LuaMachine::DoString(const std::string &command, OutputInterface *_interface
 	return -1;
 }
 
-// Enregistre la console Lua
-void LuaMachine::SetLuaConsole(LuaConsoleWindow *window)
+// Enregistre la console de l'IHM
+void ScriptMachine::SetConsole(LuaConsoleWindow *window)
 {
 	myCheckError_v(window, "LuaConsoleWindow passée invalide.");
 	mLuaConsoleWindow = window;
 }
-OutputInterface* LuaMachine::GetInterface(OutputInterface *_interface)
+OutputInterface* ScriptMachine::GetInterface(OutputInterface *_interface)
 {
 	auto tmp = _interface;
 
@@ -138,14 +135,8 @@ OutputInterface* LuaMachine::GetInterface(OutputInterface *_interface)
 	return tmp;
 }
 
-// Accesseur
-lua_State* LuaMachine::GetLuaState()
-{
-	return mLuaState;
-}
-
 // Initialisation
-void LuaMachine::InitLua()
+void ScriptMachine::Init()
 {
 	// Crée un Lua State
 	mLuaState = luaL_newstate();
@@ -160,7 +151,7 @@ void LuaMachine::InitLua()
 }
 
 // Affichage des erreurs
-int LuaMachine::ReportLuaError(int errorCode, OutputInterface *_interface)
+int ScriptMachine::ReportError(int errorCode, OutputInterface *_interface)
 {
 	// Pas d'erreur
 	if (errorCode == 0)

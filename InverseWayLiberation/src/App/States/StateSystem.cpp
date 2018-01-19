@@ -4,7 +4,7 @@
 
 // Ctor & Dtor
 StateSystem::StateSystem()
-	: mCurrentState(nullptr), mIsRunning(false)
+	: mIsRunning(false), mCurrentState(nullptr)
 {
 }
 StateSystem::~StateSystem()

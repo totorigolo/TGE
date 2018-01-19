@@ -69,20 +69,20 @@ void PolyCreationWindow::Update()
 	// Mets à jour le bouton
 	if (mIsEnterEditMode)
 	{
-		mMode->SetText("Mode : Création");
-		mEnterEditModeBtn->SetLabel("Sortir mode Création");
+		mMode->SetText(L"Mode : Création");
+		mEnterEditModeBtn->SetLabel(L"Sortir mode Création");
 	}
 	else
 	{
-		mMode->SetText("Mode : Attente");
-		mEnterEditModeBtn->SetLabel("Entrer mode Création");
+		mMode->SetText(L"Mode : Attente");
+		mEnterEditModeBtn->SetLabel(L"Entrer mode Création");
 	}
 
 	// Max 8 points
 	if (mPoints.size() == b2_maxPolygonVertices && mIsEnterEditMode && mType[0]->IsActive())
-		mMode->SetText("Mode : Création -> limite atteinte");
+		mMode->SetText(L"Mode : Création -> limite atteinte");
 	else if (mPoints.size() > b2_maxPolygonVertices && mIsEnterEditMode && mType[0]->IsActive())
-		mMode->SetText("Mode : Création -> limite atteinte");
+		mMode->SetText(L"Mode : Création -> limite atteinte");
 
 	// Mets à jour la liste de texture
 	if (mTexture.get())
@@ -110,12 +110,12 @@ void PolyCreationWindow::Fill()
 	mVBox = sfg::Box::Create(sfg::Box::Orientation::VERTICAL);
 
 	// Eléments
-	mMode = sfg::Label::Create("Mode : Attente");
-	mHelpLabel = sfg::Label::Create("Créer pts : Ctrl + clic gauche");
+	mMode = sfg::Label::Create(L"Mode : Attente");
+	mHelpLabel = sfg::Label::Create(L"Créer pts : Ctrl + clic gauche");
 
 	// Type
 	mTypeHBox = sfg::Box::Create(sfg::Box::Orientation::HORIZONTAL);
-	mTypeLabel = sfg::Label::Create("Type :");
+	mTypeLabel = sfg::Label::Create(L"Type :");
 	mType.resize(3);
 	mType[0] = sfg::RadioButton::Create("Body");
 	mType[1] = sfg::RadioButton::Create("Chaine", mType[0]->GetGroup());
@@ -130,7 +130,7 @@ void PolyCreationWindow::Fill()
 
 	// Type de Body
 	mTypeBodyHBox = sfg::Box::Create(sfg::Box::Orientation::HORIZONTAL);
-	mTypeBodyLabel = sfg::Label::Create("BodyType :");
+	mTypeBodyLabel = sfg::Label::Create(L"BodyType :");
 	mTypeBody.resize(2);//(3);
 	mTypeBody[0] = sfg::RadioButton::Create("Dynamique");
 	mTypeBody[1] = sfg::RadioButton::Create("Statique", mTypeBody[0]->GetGroup());
@@ -141,14 +141,14 @@ void PolyCreationWindow::Fill()
 
 	// Texture
 	mTextureHBox = sfg::Box::Create(sfg::Box::Orientation::HORIZONTAL);
-	mTextureLabel = sfg::Label::Create("Texture : ");
+	mTextureLabel = sfg::Label::Create(L"Texture : ");
 	mTexture = sfg::ComboBox::Create();
 	mTextureHBox->PackEnd(mTextureLabel, false);
 	mTextureHBox->PackEnd(mTexture);
 
 	// Layer
 	mLayerHBox = sfg::Box::Create(sfg::Box::Orientation::HORIZONTAL);
-	mLayerLabel = sfg::Label::Create("Layer : ");
+	mLayerLabel = sfg::Label::Create(L"Layer : ");
 	mLayer = sfg::SpinButton::Create(-1000.f, 1000.f, 1.f);
 	mLayer->SetValue(1);
 	mLayer->SetDigits(0);
@@ -156,12 +156,12 @@ void PolyCreationWindow::Fill()
 	mLayerHBox->PackEnd(mLayer);
 
 	// Boutons
-	mEnterEditModeBtn = sfg::Button::Create("Entrer mode Création");
-	mCreatePolyBtn = sfg::Button::Create("Créer poly");
+	mEnterEditModeBtn = sfg::Button::Create(L"Entrer mode Création");
+	mCreatePolyBtn = sfg::Button::Create(L"Créer poly");
 	mButtonsHBox = sfg::Box::Create(sfg::Box::Orientation::HORIZONTAL);
-	mCancelBtn = sfg::Button::Create("Annuler point");
-	mEmptyBtn = sfg::Button::Create("Effacer");
-	mCloseBtn = sfg::Button::Create("Fermer");
+	mCancelBtn = sfg::Button::Create(L"Annuler point");
+	mEmptyBtn = sfg::Button::Create(L"Effacer");
+	mCloseBtn = sfg::Button::Create(L"Fermer");
 	mButtonsHBox->PackEnd(mEmptyBtn);
 	mButtonsHBox->PackEnd(mCloseBtn);
 
@@ -213,7 +213,7 @@ void PolyCreationWindow::OnCreatePoly()
 	// Il faut au minimum trois points, et max 8 points pour les Bodies
 	if (mPoints.size() < 3 || (mPoints.size() > b2_maxPolygonVertices) && mType[0]->IsActive())
 	{
-		mMode->SetText("Mode : Création -> nb pts invalide");
+		mMode->SetText(L"Mode : Création -> nb pts invalide");
 		return;
 	}
 
@@ -242,19 +242,19 @@ void PolyCreationWindow::OnCreatePoly()
 		}
 
 		// Crée le Poly
-		EntityFactory::CreatePolyBody(mPoints, type, mTexture->GetItem(mTexture->GetSelectedItem()), static_cast<int>(mLayer->GetValue()));
+		EntityFactory::CreatePolyBody(mPoints, type, mTexture->GetItem(mTexture->GetSelectedItem()).toAnsiString(), static_cast<int>(mLayer->GetValue()));
 	}
 	else if (mType[1]->IsActive()) // Chain
 	{
 		// Crée la Chaine
 		auto type = PolyChain::Type::Chain;
-		EntityFactory::CreatePolyChain(mPoints, type, mTexture->GetItem(mTexture->GetSelectedItem()), static_cast<int>(mLayer->GetValue()));
+		EntityFactory::CreatePolyChain(mPoints, type, mTexture->GetItem(mTexture->GetSelectedItem()).toAnsiString(), static_cast<int>(mLayer->GetValue()));
 	}
 	else if (mType[2]->IsActive()) // Loop
 	{
 		// Crée la Loop
 		auto type = PolyChain::Type::Loop;
-		EntityFactory::CreatePolyChain(mPoints, type, mTexture->GetItem(mTexture->GetSelectedItem()), static_cast<int>(mLayer->GetValue()));
+		EntityFactory::CreatePolyChain(mPoints, type, mTexture->GetItem(mTexture->GetSelectedItem()).toAnsiString(), static_cast<int>(mLayer->GetValue()));
 	}
 	else
 	{

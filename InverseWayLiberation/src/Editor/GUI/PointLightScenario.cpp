@@ -57,24 +57,24 @@ void PointLightScenario::Fill()
 {
 	// Position
 	mPosTable = sfg::Table::Create();
-	mPosLabel = sfg::Label::Create("Pos :");
+	mPosLabel = sfg::Label::Create(L"Pos :");
 	mPosX = sfg::Entry::Create();
 	mPosX->SetRequisition(sf::Vector2f(60.f, 0.f));
 	mPosY = sfg::Entry::Create();
 	mPosY->SetRequisition(sf::Vector2f(60.f, 0.f));
-	mPosButton = sfg::Button::Create("X");
+	mPosButton = sfg::Button::Create(L"X");
 	mPosButton->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind(&PointLightScenario::OnChangePosition, this));
 	mPosStep = sfg::SpinButton::Create(0.f, 200.f, 0.1f);
 	mPosStep->SetValue(mPosStepSaveValue);
 	mPosStep->SetDigits(1);
 	mPosStep->SetRequisition(sf::Vector2f(40.f, 0.f));
-	mPosXp = sfg::Button::Create("+");
+	mPosXp = sfg::Button::Create(L"+");
 	mPosXp->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind(&PointLightScenario::OnChangePosXp, this));
-	mPosXm = sfg::Button::Create("-");
+	mPosXm = sfg::Button::Create(L"-");
 	mPosXm->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind(&PointLightScenario::OnChangePosXm, this));
-	mPosYp = sfg::Button::Create("+");
+	mPosYp = sfg::Button::Create(L"+");
 	mPosYp->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind(&PointLightScenario::OnChangePosYp, this));
-	mPosYm = sfg::Button::Create("-");
+	mPosYm = sfg::Button::Create(L"-");
 	mPosYm->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind(&PointLightScenario::OnChangePosYm, this));
 	mPosTable->Attach(mPosLabel, sf::Rect<sf::Uint32>(1, 1, 1, 1));
 	mPosTable->Attach(mPosX, sf::Rect<sf::Uint32>(2, 1, 4, 1));
@@ -88,7 +88,7 @@ void PointLightScenario::Fill()
 
 	// Couleur
 	mColorHBox = sfg::Box::Create(sfg::Box::Orientation::HORIZONTAL);
-	mColorLabel = sfg::Label::Create("Couleur : ");
+	mColorLabel = sfg::Label::Create(L"Couleur : ");
 	mColorR = sfg::SpinButton::Create(0.f, 255.f, 1.f);
 	mColorR->SetDigits(0);
 	mColorR->SetRequisition(sf::Vector2f(60.f, 0.f));
@@ -108,7 +108,7 @@ void PointLightScenario::Fill()
 
 	// Rayon
 	mRadiusHBox = sfg::Box::Create(sfg::Box::Orientation::HORIZONTAL);
-	mRadiusLabel = sfg::Label::Create("Rayon : ");
+	mRadiusLabel = sfg::Label::Create(L"Rayon : ");
 	mRadius = sfg::SpinButton::Create(0.f, 1000.f, 20.f);
 	mRadius->SetValue(200.f);
 	mRadius->SetDigits(0);
@@ -118,7 +118,7 @@ void PointLightScenario::Fill()
 
 	// Layer
 	mLayerHBox = sfg::Box::Create(sfg::Box::Orientation::HORIZONTAL);
-	mLayerLabel = sfg::Label::Create("Layer : ");
+	mLayerLabel = sfg::Label::Create(L"Layer : ");
 	mLayer = sfg::SpinButton::Create(-1000.f, 1000.f, 1.f);
 	mLayer->SetValue(5);
 	mLayer->SetDigits(0);
@@ -127,9 +127,9 @@ void PointLightScenario::Fill()
 	mLayerHBox->PackEnd(mLayer);
 
 	// Boutons
-	mRefresh = sfg::Button::Create("Actualiser");
+	mRefresh = sfg::Button::Create(L"Actualiser");
 	mRefresh->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind(&PointLightScenario::OnRefresh, this));
-	mDestroy = sfg::Button::Create("Détruire");
+	mDestroy = sfg::Button::Create(L"Détruire");
 	mDestroy->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind(&PointLightScenario::OnDestroy, this));
 
 	// Ajoute les éléments à la fenêtre
@@ -147,7 +147,7 @@ void PointLightScenario::OnChangePosition()
 	if (!mApply || !mSelection) return;
 
 	// Change sa position et sa rotation
-	mSelection->SetPosition(b2Vec2(Parser::stringToFloat(mPosX->GetText()), Parser::stringToFloat(mPosY->GetText())));
+	mSelection->SetPosition(b2Vec2(Parser::stringToFloat(mPosX->GetText().toAnsiString()), Parser::stringToFloat(mPosY->GetText().toAnsiString())));
 	OnRefresh();
 }
 void PointLightScenario::OnChangeLayer()

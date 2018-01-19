@@ -3,7 +3,7 @@
 
 //using namespace luabind;
 
-void LuaMachine::RegisterEntityFactory()
+void ScriptMachine::RegisterEntityFactory()
 {
 	try
 	{/*

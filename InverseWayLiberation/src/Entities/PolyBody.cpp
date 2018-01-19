@@ -27,7 +27,7 @@ bool PolyBody::Create(const std::vector<b2Vec2> &vertices, b2BodyType type, Text
 	// Vérifie les points
 	if (!CheckPoints(vertices))
 	{
-		Dialog::Error("Le PolyBody n'a pas été créé :\nPoints invalides.");
+		Dialog::Error(L"Le PolyBody n'a pas été créé :\nPoints invalides.");
 		return false;
 	}
 
@@ -57,7 +57,7 @@ bool PolyBody::Create(b2Vec3 posRot, const std::vector<b2Vec2> &vertices, b2Body
 	// Vérifie les points
 	if (!CheckPoints(vertices))
 	{
-		Dialog::Error("Le PolyBody n'a pas été créé :\nPoints invalides.");
+		Dialog::Error(L"Le PolyBody n'a pas été créé :\nPoints invalides.");
 		return false;
 	}
 

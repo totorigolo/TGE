@@ -65,9 +65,9 @@ public:
 	b2Body* GetBody();
 	const b2Body* GetBody() const;
 	// Position & rotation
-	const b2Vec2 GetPosition() const;
-	const float GetRotationD() const; // Degrés
-	const float GetRotationR() const; // Radians
+	b2Vec2 GetPosition() const;
+	float GetRotationD() const; // Degrés
+	float GetRotationR() const; // Radians
 	// Fonction à n'employer que pour éditer les niveaux
 	void SetTransform(const b2Vec2 &position, float angle = 0.f);
 

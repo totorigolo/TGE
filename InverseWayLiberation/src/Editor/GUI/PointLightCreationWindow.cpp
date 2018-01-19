@@ -54,12 +54,12 @@ void PointLightCreationWindow::Fill()
 	mVBox = sfg::Box::Create(sfg::Box::Orientation::VERTICAL);
 
 	// Eléments
-	mMode = sfg::Label::Create("Mode : Attente");
-	mHelpLabel = sfg::Label::Create("Créer déco : Ctrl + clic gauche");
+	mMode = sfg::Label::Create(L"Mode : Attente");
+	mHelpLabel = sfg::Label::Create(L"Créer déco : Ctrl + clic gauche");
 
 	// Couleur
 	mColorHBox = sfg::Box::Create(sfg::Box::Orientation::HORIZONTAL);
-	mColorLabel = sfg::Label::Create("Couleur : ");
+	mColorLabel = sfg::Label::Create(L"Couleur : ");
 	mColorR = sfg::SpinButton::Create(0.f, 255.f, 1.f);
 	mColorR->SetDigits(0);
 	mColorR->SetValue(100);
@@ -79,7 +79,7 @@ void PointLightCreationWindow::Fill()
 
 	// Rayon
 	mRadiusHBox = sfg::Box::Create(sfg::Box::Orientation::HORIZONTAL);
-	mRadiusLabel = sfg::Label::Create("Rayon : ");
+	mRadiusLabel = sfg::Label::Create(L"Rayon : ");
 	mRadius = sfg::SpinButton::Create(0.f, 1000.f, 20.f);
 	mRadius->SetValue(200.f);
 	mRadius->SetDigits(0);
@@ -88,7 +88,7 @@ void PointLightCreationWindow::Fill()
 
 	// Layer
 	mLayerHBox = sfg::Box::Create(sfg::Box::Orientation::HORIZONTAL);
-	mLayerLabel = sfg::Label::Create("Layer : ");
+	mLayerLabel = sfg::Label::Create(L"Layer : ");
 	mLayer = sfg::SpinButton::Create(-1000.f, 1000.f, 1.f);
 	mLayer->SetValue(5);
 	mLayer->SetDigits(0);
@@ -96,10 +96,10 @@ void PointLightCreationWindow::Fill()
 	mLayerHBox->PackEnd(mLayer);
 
 	// Boutons
-	mToggleModeBtn = sfg::Button::Create("Entrer mode Création");
+	mToggleModeBtn = sfg::Button::Create(L"Entrer mode Création");
 	mButtonsHBox = sfg::Box::Create(sfg::Box::Orientation::HORIZONTAL);
-	mRefreshBtn = sfg::Button::Create("Actualiser");
-	mCloseBtn = sfg::Button::Create("Fermer");
+	mRefreshBtn = sfg::Button::Create(L"Actualiser");
+	mCloseBtn = sfg::Button::Create(L"Fermer");
 	mButtonsHBox->PackEnd(mRefreshBtn);
 	mButtonsHBox->PackEnd(mCloseBtn);
 
@@ -130,12 +130,12 @@ void PointLightCreationWindow::OnToggleMode()
 
 	if (mIsInAddMode)
 	{
-		mMode->SetText("Mode : Création");
-		mToggleModeBtn->SetLabel("Sortir mode Création");
+		mMode->SetText(L"Mode : Création");
+		mToggleModeBtn->SetLabel(L"Sortir mode Création");
 	}
 	else
 	{
-		mMode->SetText("Mode : Attente");
-		mToggleModeBtn->SetLabel("Entrer mode Création");
+		mMode->SetText(L"Mode : Attente");
+		mToggleModeBtn->SetLabel(L"Entrer mode Création");
 	}
 }

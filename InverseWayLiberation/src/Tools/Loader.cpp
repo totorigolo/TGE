@@ -3,7 +3,7 @@
 
 // Ctor
 Loader::Loader(std::string const& path)
-	: mPath(path), mIsValid(false)
+	: mIsValid(false), mPath(path)
 {
 	// Gestion de crise
 	if (mFile.LoadFile(mPath.c_str()))
@@ -13,18 +13,18 @@ Loader::Loader(std::string const& path)
 		msg += "Erreur #" + Parser::intToString(mFile.ErrorID()) + ".\n";
 
 		// Ajoute l'explication 1 si elle existe
-		if (mFile.GetErrorStr1())
+		if (mFile.ErrorName())
 		{
 			msg += "Raison : \"";
-			msg += mFile.GetErrorStr1();
+			msg += mFile.ErrorName();
 			msg += "\".";
 		}
 
 		// Ajoute l'explication 2 si elle existe
-		if (mFile.GetErrorStr2())
+		if (mFile.ErrorStr())
 		{
 			msg += "\nPlus précisément : \"";
-			msg += mFile.GetErrorStr2();
+			msg += mFile.ErrorStr();
 			msg += "\".";
 		}
 

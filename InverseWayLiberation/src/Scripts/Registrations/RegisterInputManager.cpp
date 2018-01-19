@@ -2,7 +2,7 @@
 #include "../../App/InputManager.h"
 
 // Enregistrements
-void LuaMachine::RegisterInputManager()
+void ScriptMachine::RegisterInputManager()
 {
 	try
 	{/*

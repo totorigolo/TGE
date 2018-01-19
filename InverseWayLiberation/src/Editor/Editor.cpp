@@ -143,7 +143,7 @@ bool Editor::OnInit()
 	}
 	catch (const std::exception &e)
 	{
-		Dialog::Error("Erreur lors de la lecture du thème :\n" + std::string(e.what()));
+		Dialog::Error(L"Erreur lors de la lecture du thème :\n" + sf::String(e.what()));
 	}
 
 	/* Physique */
@@ -171,17 +171,17 @@ bool Editor::OnInit()
 //	mConsole.RegisterEntity();
 	mConsole.RegisterEntityFactory();
 	mConsole.RegisterLevelManager();
-	mConsole.RegisterGlobalLuaVar("level", &mLevel);
+	mConsole.RegisterGlobalVar("level", &mLevel);
 	mConsole.RegisterPhysicManager();
-	mConsole.RegisterGlobalLuaVar("physicMgr", &mPhysicMgr);
+	mConsole.RegisterGlobalVar("physicMgr", &mPhysicMgr);
 	mConsole.RegisterInputManager();
-	mConsole.RegisterGlobalLuaVar("inputMgr", &mInputManager);
+	mConsole.RegisterGlobalVar("inputMgr", &mInputManager);
 	mConsole.RegisterResourceManager();
 
 	// Enregistre la console
 	mLevel.SetLuaConsole(&mConsole);
 	mEditBox->SetLuaMachine(&mConsole);
-	mConsole.SetLuaConsole(mEditBox->GetLuaConsoleWindow());
+	mConsole.SetConsole(mEditBox->GetLuaConsoleWindow());
 
 	// Passe les objets à la LevelWindow
 	mEditBox->GetLevelWindow()->SetEditor(this);
@@ -191,8 +191,8 @@ bool Editor::OnInit()
 	// Charge les textures vides et la police
 	mResourceManager.LoadTexture("none", "tex/none.png");
 	mResourceManager.LoadTexture("unknown", "tex/unknown.png");
-	if (!mResourceManager.LoadFont("calibri", "data/calibri.ttf"))
-	    mResourceManager.LoadFont("calibri", "data/Cantarell-Regular.otf");
+	mResourceManager.LoadFont("default", "data/default.otf");
+	mResourceManager.LoadFont("gui", "data/gui.otf");
 
 	return true;
 }
@@ -221,7 +221,7 @@ void Editor::OnEvent()
 	{
 		// Demande si on veut décharger le niveau actuel
 		if (1 == Dialog::ButtonChoice("Quitter l'éditeur ?",
-									  "Voulez-vous quitter l'éditeur ?\nTout changement non sauvegardé sera perdu.",
+									  L"Voulez-vous quitter l'éditeur ?\nTout changement non sauvegardé sera perdu.",
 									  "Oui", "Non"))
 			mQuit = true;
 	}
@@ -637,7 +637,7 @@ void Editor::OnRender()
 	// Si on n'a pas le focus
 	if (!mInputManager.HasFocus())
 	{
-		sf::Text pause("Pause", *ResourceManager::GetInstance().GetFont("calibri"), 60U);
+		sf::Text pause("Pause", *ResourceManager::GetInstance().GetFont("gui"), 60U);
 		sf::Vector2f pos(mInputManager.GetWindowView().getCenter().x - pause.getGlobalBounds().width / 2.f, 0.f);
 		pos.y = mWindow.mapPixelToCoords(f2i(pos), mInputManager.GetWindowView()).y;
 		pause.setPosition(pos);
@@ -682,8 +682,8 @@ void Editor::OnQuit()
 	mLevel.Clear();
 
 	// Vide
-	// TODO: Déplacer vers la LuaMachine
-	mConsole.UnregisterGlobalLuaVar("level");
-	mConsole.UnregisterGlobalLuaVar("physicMgr");
-	mConsole.UnregisterGlobalLuaVar("inputMgr");
+	// TODO: Déplacer vers la ScriptMachine
+	mConsole.UnregisterGlobalVar("level");
+	mConsole.UnregisterGlobalVar("physicMgr");
+	mConsole.UnregisterGlobalVar("inputMgr");
 }

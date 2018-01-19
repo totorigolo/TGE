@@ -230,17 +230,17 @@ const b2Body* BaseBody::GetBody() const
 	return mBody;
 }
 // Position et rotation
-const b2Vec2 BaseBody::GetPosition() const
+b2Vec2 BaseBody::GetPosition() const
 {
 	myAssert(mBody, "b2Body null");
 	return mBody->GetPosition();
 }
-const float BaseBody::GetRotationD() const // Degrés
+float BaseBody::GetRotationD() const // Degrés
 {
 	myAssert(mBody, "b2Body null");
 	return mBody->GetAngle() * DPR;
 }
-const float BaseBody::GetRotationR() const // Radians
+float BaseBody::GetRotationR() const // Radians
 {
 	myAssert(mBody, "b2Body null");
 	return mBody->GetAngle();

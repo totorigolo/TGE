@@ -1,14 +1,17 @@
 #pragma once
-#include "../Lua/LuaMachine.h"
+
+#include <memory>
+#include <Box2D/Collision/b2Collision.h>
+#include "../Scripts/ScriptMachine.h"
 
 // std::pair<b2AABB, std::string>
 
 class TriggersManager;
-class LuaArea : public std::enable_shared_from_this<LuaArea>
+class ScriptArea : public std::enable_shared_from_this<ScriptArea>
 {
 public:
 	// Ctors
-	LuaArea(b2AABB b2area, const std::string &action, bool once = false);
+	ScriptArea(b2AABB b2area, const std::string &action, bool once = false);
 
 	// Accesseurs
 	void Done();

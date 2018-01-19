@@ -8,7 +8,7 @@ Deco::Deco(int layer, Texture::Ptr texture, sf::Vector3f posRot)
 {
 	if (!mTexture.get())
 	{
-		Dialog::Error("La texture n'est pas chargée.\nDéco supprimée");
+		Dialog::Error(L"La texture n'est pas chargée.\nDéco supprimée");
 		mIsAlive = false;
 	}
 	else
@@ -55,11 +55,11 @@ void Deco::SetPosition(const sf::Vector2f &pos)
 {
 	mSprite.setPosition(pos);
 }
-const b2Vec2 Deco::GetPosition() const
+b2Vec2 Deco::GetPosition() const
 {
 	return sf2b2Vec(mSprite.getPosition(), PhysicManager::GetInstance().GetMPP());
 }
-const sf::Vector2f Deco::GetPositionPx() const
+sf::Vector2f Deco::GetPositionPx() const
 {
 	return mSprite.getPosition();
 }
@@ -71,11 +71,11 @@ void Deco::SetRotationR(float rot)
 {
 	mSprite.setRotation(rot * DPR);
 }
-const float Deco::GetRotationD() const
+float Deco::GetRotationD() const
 {
 	return mSprite.getRotation();
 }
-const float Deco::GetRotationR() const
+float Deco::GetRotationR() const
 {
 	return mSprite.getRotation() * RPD;
 }

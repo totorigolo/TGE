@@ -11,7 +11,7 @@
 
 class Editor;
 class EditBox;
-class LuaMachine;
+class ScriptMachine;
 class LevelWindow : public Window
 {
 public:
@@ -24,7 +24,7 @@ public:
 	// Enregistrements
 	void SetEditor(Editor *editor);
 	void SetEditBox(EditBox *editBox);
-	void SetLuaMachine(LuaMachine *luaMachine);
+	void SetLuaMachine(ScriptMachine *luaMachine);
 
 protected:
 	// Construit la fenêtre et les éléments
@@ -53,7 +53,7 @@ private:
 	// Enregistrements
 	Editor *mEditor;
 	EditBox *mEditBox;
-	LuaMachine *mLuaMachine;
+	ScriptMachine *mLuaMachine;
 
 	// Eléments
 	sfg::Box::Ptr mVBox;

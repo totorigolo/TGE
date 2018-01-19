@@ -109,7 +109,7 @@ bool Game::OnInit()
 	}
 	catch (const std::exception &e)
 	{
-		Dialog::Error("Erreur lors de la lecture du thème :\n" + std::string(e.what()));
+		Dialog::Error(L"Erreur lors de la lecture du thème :\n" + sf::String(e.what()));
 	}
 
 	/* Physique */
@@ -130,11 +130,11 @@ bool Game::OnInit()
 	// Initialise la machine Lua
 	mConsole.RegisterEntityFactory();
 	mConsole.RegisterLevelManager();
-	mConsole.RegisterGlobalLuaVar("level", &mLevel);
+	mConsole.RegisterGlobalVar("level", &mLevel);
 	mConsole.RegisterPhysicManager();
-	mConsole.RegisterGlobalLuaVar("physicMgr", &mPhysicMgr);
+	mConsole.RegisterGlobalVar("physicMgr", &mPhysicMgr);
 	mConsole.RegisterInputManager();
-	mConsole.RegisterGlobalLuaVar("inputMgr", &mInputManager);
+	mConsole.RegisterGlobalVar("inputMgr", &mInputManager);
 	mConsole.RegisterResourceManager();
 
 	// Enregistre la console
@@ -166,7 +166,7 @@ void Game::OnEvent()
 	{
 		// Demande si on veut décharger le niveau actuel
 		if (1 == Dialog::ButtonChoice("Quitter le jeu ?",
-									  "Voulez-vous quitter le jeu ?\nToute progression non sauvegardée sera perdue.",
+									  L"Voulez-vous quitter le jeu ?\nToute progression non sauvegardée sera perdue.",
 									  "Oui", "Non"))
 									  mQuit = true;
 	}
@@ -254,7 +254,7 @@ void Game::OnRender()
 		static bool fontLoaded = false;
 		if (!fontLoaded)
 		{
-			f.loadFromFile("data/calibri.ttf"); // TODO: ResourceMgr
+			f.loadFromFile("data/default.otf"); // TODO: ResourceMgr
 			fontLoaded = true;
 		}
 		sf::Text pause("Pause", f, 60U);
@@ -295,8 +295,8 @@ void Game::OnQuit()
 	mLevel.Clear();
 
 	// Vide
-	// TODO: Déplacer vers la LuaMachine
-	mConsole.UnregisterGlobalLuaVar("level");
-	mConsole.UnregisterGlobalLuaVar("physicMgr");
-	mConsole.UnregisterGlobalLuaVar("inputMgr");
+	// TODO: Déplacer vers la ScriptMachine
+	mConsole.UnregisterGlobalVar("level");
+	mConsole.UnregisterGlobalVar("physicMgr");
+	mConsole.UnregisterGlobalVar("inputMgr");
 }

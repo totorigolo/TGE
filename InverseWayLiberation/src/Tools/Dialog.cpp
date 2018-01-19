@@ -4,9 +4,7 @@
 #include "utils.h"
 #include "Parser.h"
 
-// TODO Réparer
-//#define CALIBRI_PATH "data/calibri.ttf"
-#define CALIBRI_PATH "/usr/share/fonts/TTF/LiberationSans-Regular.ttf"
+#define FONT_PATH "data/dialogs.otf"
 
 namespace Dialog
 {
@@ -29,16 +27,7 @@ namespace Dialog
 
 		// Création du texte
 		sf::Font f;
-		if (!f.loadFromFile(CALIBRI_PATH))
-		{
-#ifdef _WIN32
-			f.loadFromFile("C:/Windows/Fonts/calibri.ttf");
-#else
-			// TODO: Linux, vérifier le dossier des polices
-			f.loadFromFile("/usr/share/fonts/truetype/calibri.ttf");
-			f.loadFromFile("/usr/share/fonts/TTF/LiberationSans-Regular.ttf");
-#endif
-		}
+		f.loadFromFile(FONT_PATH);
 		sf::Text text(message, f);
 		text.scale(0.8f, 0.8f);
 		text.setFillColor(sf::Color::Black);
@@ -161,7 +150,7 @@ namespace Dialog
 
 		// Création du texte
 		sf::Font f;
-		f.loadFromFile(CALIBRI_PATH);
+		f.loadFromFile(FONT_PATH);
 		sf::Text text(message, f);
 		text.scale(0.8f, 0.8f);
 		text.setFillColor(sf::Color::Black);
@@ -310,7 +299,7 @@ namespace Dialog
 
 		// Création du texte
 		sf::Font f;
-		f.loadFromFile(CALIBRI_PATH);
+		f.loadFromFile(FONT_PATH);
 		sf::Text text(message, f);
 		text.scale(0.8f, 0.8f);
 		text.setFillColor(sf::Color::Black);
@@ -451,7 +440,7 @@ namespace Dialog
 
 		// Création du texte
 		sf::Font f;
-		f.loadFromFile(CALIBRI_PATH);
+		f.loadFromFile(FONT_PATH);
 		sf::Text text(message, f);
 		text.scale(0.8f, 0.8f);
 		text.setFillColor(sf::Color::Black);

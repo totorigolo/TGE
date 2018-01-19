@@ -2,7 +2,7 @@
 #include "../../Physics/Joint.h"
 
 // Enregistrements privés
-void LuaMachine::RegisterJoint()
+void ScriptMachine::RegisterJoint()
 {
 	/* Enregistre les classes */
 	try

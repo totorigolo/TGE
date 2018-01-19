@@ -3,7 +3,7 @@
 #include "../Scripts/ScriptMachine.h"
 #include "../Entities/Player.h"
 #include "../App/InputManager.h"
-#include "../Lua/TriggersManager.h"
+#include "../Scripts/TriggersManager.h"
 #include "../Physics/PhysicManager.h"
 #include "../Entities/EntityManager.h"
 #include "../Entities/PartitioningTree.h"
@@ -137,7 +137,7 @@ sf::Color const& LevelManager::GetBckgColor() const
 }
 
 // TODO
-void LevelManager::SetLuaConsole(LuaMachine *machine)
+void LevelManager::SetLuaConsole(ScriptMachine *machine)
 {
 	mTriggersManager.SetLuaMachine(machine);
 }

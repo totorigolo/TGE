@@ -19,7 +19,7 @@ Saver::Saver(std::string const& path, bool check)
 		if (check)
 		{
 			overwrite = (1 == Dialog::ButtonChoice("Ecraser la sauvegarde ?",
-												   "Une sauvegarde du même nom existe déjà.\nEcraser la sauvegarde ?",
+												   L"Une sauvegarde du même nom existe déjà.\nEcraser la sauvegarde ?",
 												   "Oui", "Non"));
 		}
 

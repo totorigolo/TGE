@@ -13,7 +13,7 @@ struct GearJointDef : public JointDef
 		ratio = 1.f;
 		collideconnected = true;
 	}
-	
+
 	// Initialisation
 	GearJointDef(b2Body *b1, b2Body *b2, int j1, int j2, float _ratio = 1.f, bool _collideconnected = true)
 	{
@@ -24,7 +24,7 @@ struct GearJointDef : public JointDef
 		ratio = _ratio;
 		collideconnected = _collideconnected;
 	}
-	
+
 	// Attributs
 	b2Body *body1;
 	b2Body *body2;
@@ -41,11 +41,11 @@ public:
 	// Ctor & dtor
 	GearJoint(const GearJointDef &def);
 	virtual ~GearJoint(void);
-	
+
 	// Accesseurs
 	float GetRatio() const;
-	b2Joint *const GetJoint1();
+	b2Joint * GetJoint1();
 	const b2Joint* GetJoint1() const;
-	b2Joint *const GetJoint2();
+	b2Joint * GetJoint2();
 	const b2Joint* GetJoint2() const;
 };

@@ -2,13 +2,13 @@
 #include "TriggersManager.h"
 
 // Ctors
-LuaArea::LuaArea(b2AABB b2area, const std::string &action, bool once)
+ScriptArea::ScriptArea(b2AABB b2area, const std::string &action, bool once)
 	: mAABB(b2area), mAction(action), mOnce(once), mDone(false)
 {
 }
 
 // Accesseurs
-void LuaArea::Done()
+void ScriptArea::Done()
 {
 	mDone = true;
 
@@ -16,19 +16,19 @@ void LuaArea::Done()
 	if (mOnce)
 		TriggersManager::GetInstance().ScheduleRemove(shared_from_this());
 }
-bool LuaArea::IsOnce()
+bool ScriptArea::IsOnce()
 {
 	return mOnce;
 }
-bool LuaArea::IsDone()
+bool ScriptArea::IsDone()
 {
 	return mDone;
 }
-b2AABB LuaArea::GetAABB()
+b2AABB ScriptArea::GetAABB()
 {
 	return mAABB;
 }
-const std::string& LuaArea::GetAction()
+const std::string& ScriptArea::GetAction()
 {
 	return mAction;
 }

@@ -13,12 +13,12 @@ int main()
 	catch (const std::exception &e)
 	{
 		std::cerr << "Erreur fatale :\n" << std::string(e.what()) << std::endl;
-		Dialog::Error("Erreur fatale :\n" + std::string(e.what()));
+		Dialog::Error(L"Erreur fatale :\n" + sf::String(e.what()));
 	}
 	catch (...)
 	{
 		std::cerr << "Erreur fatale inconnue." << std::endl;
-		Dialog::Error("Erreur fatale inconnue.");
+		Dialog::Error(L"Erreur fatale inconnue.");
 	}
 
 	// Termine l'application

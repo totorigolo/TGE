@@ -8,7 +8,7 @@ class EntityManager;
 class TriggersManager;
 class PartitioningTree;
 class PhysicManager;
-class LuaMachine;
+class ScriptMachine;
 class LevelManager : public sf::Drawable, public Singleton<LevelManager>
 {
 	friend class LevelSaver;
@@ -57,7 +57,7 @@ public:
 	sf::Color const& GetBckgColor() const;
 
 	// TODO
-	void SetLuaConsole(LuaMachine *machine);
+	void SetLuaConsole(ScriptMachine *machine);
 
 private:
 	bool mIsCharged;

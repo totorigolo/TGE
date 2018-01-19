@@ -6,85 +6,77 @@
 #include "States/StartUp_State.h"
 
 App::App()
-	: mStateSystem(StateSystem::GetInstance()),
-	mRenderWindow(nullptr), mInputManager(InputManager::GetInstance()), mSfGUI(nullptr)
-{
-}
-App::~App()
-{
-	// Suppprime la fenêtre de rendu
-	if (mRenderWindow)
-	{
-		delete mRenderWindow;
-		mRenderWindow = nullptr;
-	}
+        : mStateSystem(StateSystem::GetInstance()),
+          mRenderWindow(nullptr), mInputManager(InputManager::GetInstance()), mSfGUI(nullptr) {
 }
 
-bool App::Init()
-{
-	// TODO: Initialiser le son
+App::~App() {
+    // Suppprime la fenêtre de rendu
+    if (mRenderWindow) {
+        delete mRenderWindow;
+        mRenderWindow = nullptr;
+    }
+}
 
-	// Crée la GUI
-	mSfGUI = new sfg::SFGUI;
+bool App::Init() {
+    // TODO: Initialiser le son
 
-	// Charge la fenêtre de rendu
-	mRenderWindow = new sf::RenderWindow(sf::VideoMode(800U, 600U), "Inverse Way Liberation - Chargement");
-	mRenderWindow->setFramerateLimit(60U);
-	mRenderWindow->setKeyRepeatEnabled(false);
+    // Crée la GUI
+    mSfGUI = new sfg::SFGUI;
 
-	// Enregistre la fenêtre dans l'InputManager
-	mInputManager.SetWindow(mRenderWindow);
-	mInputManager.SetView(mRenderWindow->getDefaultView());
+    // Charge la fenêtre de rendu
+    mRenderWindow = new sf::RenderWindow(sf::VideoMode(800U, 600U), "Inverse Way Liberation - Chargement");
+    mRenderWindow->setFramerateLimit(60U);
+    mRenderWindow->setKeyRepeatEnabled(false);
 
-	// Change le state
-	mStateSystem.ChangeState(&StartUp_State::GetInstance());
+    // Enregistre la fenêtre dans l'InputManager
+    mInputManager.SetWindow(mRenderWindow);
+    mInputManager.SetView(mRenderWindow->getDefaultView());
 
-	// Plante la graine
-	srand(static_cast<unsigned int>(time(NULL)));
+    // Change le state
+    mStateSystem.ChangeState(&StartUp_State::GetInstance());
 
-	// L'initialisation a réussi
+    // Plante la graine
+    srand(static_cast<unsigned int>(time(NULL)));
+
+    // L'initialisation a réussi
     return true;
 }
 
-int App::Execute()
-{
-	// Initialise
-    if (!Init())
-	{
-		std::cerr << "Une erreur est survenue lors de l'initialisation. Exiting..." << std::endl;
+int App::Execute() {
+    // Initialise
+    if (!Init()) {
+        std::cerr << "Une erreur est survenue lors de l'initialisation. Exiting..." << std::endl;
 #ifdef _WIN32
-		system("pause");
+        system("pause");
 #endif
 
-		return EXIT_FAILURE;
-	}
+        return EXIT_FAILURE;
+    }
 
-	// Exécute les states
-	while (mStateSystem.Run(this));
+    // Exécute les states
+    while (mStateSystem.Run(this));
 
-	// Nettoie
+    // Nettoie
     CleanUp();
 
-	// Tout s'est bien passé
+    // Tout s'est bien passé
     return EXIT_SUCCESS;
 }
 
-void App::CleanUp()
-{
-	// Suppprime la GUI
-	if (mSfGUI)
-	{
-		delete mSfGUI;
-		mSfGUI = nullptr;
-	}
+void App::CleanUp() {
+    // Suppprime la GUI
+    if (mSfGUI) {
+        delete mSfGUI;
+        mSfGUI = nullptr;
+    }
 }
 
 // Accesseurs
-sfg::SFGUI* App::GetSfGUI()
-{
-	return mSfGUI;
+sfg::SFGUI *App::GetSfGUI() {
+    return mSfGUI;
 }
-sf::RenderWindow* App::GetRenderWindow()
-{
-	return mRenderWindow;
+
+sf::RenderWindow *App::GetRenderWindow() {
+    return mRenderWindow;
 }

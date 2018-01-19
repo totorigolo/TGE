@@ -20,28 +20,28 @@ void EmptyScenario::Update()
 void EmptyScenario::Fill()
 {
 	// Widgets
-	mOpenLevelBtn = sfg::Button::Create("Fenêtre Level");
+	mOpenLevelBtn = sfg::Button::Create(L"Level management");
 	mOpenLevelBtn->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind(&EditBox::OnShowLevelWindow, &mEditBox));
 
-	mOpenLuaConsoleBtn = sfg::Button::Create("Console Lua");
+	mOpenLuaConsoleBtn = sfg::Button::Create(L"Lua Console");
 	mOpenLuaConsoleBtn->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind(&EditBox::OnShowLuaConsoleWindow, &mEditBox));
 
-	mTexturesBtn = sfg::Button::Create("Textures");
+	mTexturesBtn = sfg::Button::Create(L"Textures");
 	mTexturesBtn->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind(&EditBox::ShowTexturesWindow, &mEditBox));
 
-	mDecoCreationBtn = sfg::Button::Create("Deco Creation");
+	mDecoCreationBtn = sfg::Button::Create(L"Deco Creation");
 	mDecoCreationBtn->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind(&EditBox::ShowDecoCreationWindow, &mEditBox));
 
-	mPolyCreationBtn = sfg::Button::Create("Poly Creation");
+	mPolyCreationBtn = sfg::Button::Create(L"Poly Creation");
 	mPolyCreationBtn->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind(&EditBox::ShowPolyCreationWindow, &mEditBox));
 
-	mBasicBodyCreationBtn = sfg::Button::Create("BasicBody Creation");
+	mBasicBodyCreationBtn = sfg::Button::Create(L"BasicBody Creation");
 	mBasicBodyCreationBtn->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind(&EditBox::ShowBasicBodyCreationWindow, &mEditBox));
 
-	mPointLightCreationBtn = sfg::Button::Create("PointLight Creation");
+	mPointLightCreationBtn = sfg::Button::Create(L"PointLight Creation");
 	mPointLightCreationBtn->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind(&EditBox::ShowPointLightCreationWindow, &mEditBox));
 
-	mHumCreationBtn = sfg::Button::Create("Hum Creation");
+	mHumCreationBtn = sfg::Button::Create(L"Hum Creation");
 	mHumCreationBtn->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind(&EditBox::ShowHumCreationWindow, &mEditBox));
 
 	// Ajoute les éléments à la fenêtre

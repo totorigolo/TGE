@@ -2,7 +2,7 @@
 #include "../../Tools/vector_wrappers.h"
 
 // Enregistrements privés
-void LuaMachine::RegisterBox2D()
+void ScriptMachine::RegisterBox2D()
 {
 	/* Enregistre les classes */
 	try

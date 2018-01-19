@@ -3,7 +3,7 @@
 #include "../../Physics/Joint.h"
 
 // Enregistrements
-void LuaMachine::RegisterPhysicManager()
+void ScriptMachine::RegisterPhysicManager()
 {
 	try
 	{/*

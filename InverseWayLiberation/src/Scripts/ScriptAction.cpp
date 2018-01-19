@@ -3,17 +3,17 @@
 #include "TriggersManager.h"
 
 // Ctors
-LuaAction::LuaAction(const std::string &_name, const std::string &_file, bool once)
+ScriptAction::ScriptAction(const std::string &_name, const std::string &_file, bool once)
 	: mName(_name), mFile(_file), mOnce(once), mDone(false)
 {
 }
-LuaAction::LuaAction(const std::string &_name, const std::string &_file, std::string &_function, bool once)
+ScriptAction::ScriptAction(const std::string &_name, const std::string &_file, std::string &_function, bool once)
 	: mName(_name), mFile(_file), mFunction(_function), mOnce(once), mDone(false)
 {
 }
 
 // Exécute l'action
-void LuaAction::Execute(LuaMachine *luaMachine)
+void ScriptAction::Execute(ScriptMachine *luaMachine)
 {
 	if (mOnce && mDone) return;
 
@@ -57,33 +57,33 @@ void LuaAction::Execute(LuaMachine *luaMachine)
 }
 
 // Gestion des Areas
-void LuaAction::RegisterArea(std::weak_ptr<LuaArea> area)
+void ScriptAction::RegisterArea(std::weak_ptr<ScriptArea> area)
 {
 	mAreas.push_back(area);
 }
 
 // Accesseurs
-bool LuaAction::IsOnce()
+bool ScriptAction::IsOnce()
 {
 	return mOnce;
 }
-bool LuaAction::IsDone()
+bool ScriptAction::IsDone()
 {
 	return mDone;
 }
-bool LuaAction::HasFunction()
+bool ScriptAction::HasFunction()
 {
 	return !mFunction.empty();
 }
-const std::string& LuaAction::GetName()
+const std::string& ScriptAction::GetName()
 {
 	return mName;
 }
-const std::string& LuaAction::GetFile()
+const std::string& ScriptAction::GetFile()
 {
 	return mFile;
 }
-const std::string& LuaAction::GetFunction()
+const std::string& ScriptAction::GetFunction()
 {
 	return mFunction;
 }

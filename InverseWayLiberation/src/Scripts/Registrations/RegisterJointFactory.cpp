@@ -11,7 +11,7 @@
 #include "../../Physics/Joints/WheelJoint.h"
 
 // Enregistrements
-void LuaMachine::RegisterJointFactory()
+void ScriptMachine::RegisterJointFactory()
 {
 	try
 	{/*

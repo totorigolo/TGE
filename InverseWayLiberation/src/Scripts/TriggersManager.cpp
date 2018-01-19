@@ -74,11 +74,11 @@ void TriggersManager::Clear()
 }
 
 // Gestion des actions
-void TriggersManager::AddAction(LuaAction *action)
+void TriggersManager::AddAction(ScriptAction *action)
 {
 	myAssert(action, "L'action n'est pas valide.");
 
-	mActionMap[action->GetName()] = std::shared_ptr<LuaAction>(action);
+	mActionMap[action->GetName()] = std::shared_ptr<ScriptAction>(action);
 }
 void TriggersManager::DeleteAction(const std::string &name)
 {
@@ -88,7 +88,7 @@ void TriggersManager::DeleteAction(const std::string &name)
 
 	mActionMap.erase(it);
 }
-std::shared_ptr<LuaAction> TriggersManager::GetAction(const std::string &name)
+std::shared_ptr<ScriptAction> TriggersManager::GetAction(const std::string &name)
 {
 	return mActionMap[name];
 }
@@ -104,26 +104,26 @@ const ActionMap& TriggersManager::GetActionMap() const
 // Gère les Areas
 void TriggersManager::CreateArea(b2AABB area, const std::string &action, bool once)
 {
-	mAreas.push_back(std::make_shared<LuaArea>(area, action, once));
+	mAreas.push_back(std::make_shared<ScriptArea>(area, action, once));
 
 	// Enregistre l'area envers l'action
 	mActionMap[action]->RegisterArea(mAreas.back());
 }
-void TriggersManager::DestroyArea(LuaArea *area)
+void TriggersManager::DestroyArea(ScriptArea *area)
 {
 	mAreas.remove(area->shared_from_this());
 }
-std::list<std::shared_ptr<LuaArea>>& TriggersManager::GetAreas()
+std::list<std::shared_ptr<ScriptArea>>& TriggersManager::GetAreas()
 {
 	return mAreas;
 }
-const std::list<std::shared_ptr<LuaArea>>& TriggersManager::GetAreas() const
+const std::list<std::shared_ptr<ScriptArea>>& TriggersManager::GetAreas() const
 {
 	return mAreas;
 }
 
 // Suppressions planifiées
-void TriggersManager::ScheduleRemove(std::shared_ptr<LuaArea> area)
+void TriggersManager::ScheduleRemove(std::shared_ptr<ScriptArea> area)
 {
 	mAreasToDelete.push_back(area);
 }
@@ -133,13 +133,13 @@ void TriggersManager::ScheduleRemove(const std::string &action)
 }
 
 // Gestion de la machine Lua
-LuaMachine* TriggersManager::GetLuaMachine()
+ScriptMachine* TriggersManager::GetLuaMachine()
 {
 	return mLuaMachine;
 }
-void TriggersManager::SetLuaMachine(LuaMachine *luaMachine)
+void TriggersManager::SetLuaMachine(ScriptMachine *luaMachine)
 {
-	myAssert(luaMachine, "La LuaMachine passée n'est pas valide.");
+	myAssert(luaMachine, "La ScriptMachine passée n'est pas valide.");
 
 	mLuaMachine = luaMachine;
 }
@@ -149,7 +149,7 @@ void TriggersManager::DebugDraw(sf::RenderTarget &target) const
 	sf::VertexArray a(sf::LinesStrip, 5U);
 	
 	sf::Text text;
-	text.setFont(*ResourceManager::GetInstance().GetFont("calibri"));
+	text.setFont(*ResourceManager::GetInstance().GetFont("default"));
 	text.setCharacterSize(40U);
 	text.setFillColor(sf::Color::Green);
 

@@ -29,7 +29,7 @@ bool PolyChain::Create(const std::vector<b2Vec2> &vertices, Type type, Texture::
 	// Vérifie les points
 	if (!CheckPoints(vertices))
 	{
-		Dialog::Error("Le PolyBody n'a pas été créé :\nPoints invalides.");
+		Dialog::Error(L"Le PolyBody n'a pas été créé :\nPoints invalides.");
 		return false;
 	}
 
@@ -59,14 +59,14 @@ bool PolyChain::Create(b2Vec3 posRot, const std::vector<b2Vec2> &vertices, Type 
 	// Vérifie les points
 	if (!CheckPoints(vertices))
 	{
-		Dialog::Error("Le PolyBody n'a pas été créé :\nPoints invalides.");
+		Dialog::Error(L"Le PolyBody n'a pas été créé :\nPoints invalides.");
 		return false;
 	}
 
 	// Vérifie le type
 	if (type == Type::None)
 	{
-		Dialog::Error("Le PolyChain n'a pas été créé :\nType invalide (None).");
+		Dialog::Error(L"Le PolyChain n'a pas été créé :\nType invalide (None).");
 		return false;
 	}
 	mChainType = type;

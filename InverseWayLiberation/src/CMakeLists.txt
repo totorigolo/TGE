@@ -5,8 +5,6 @@ set(SRC_DIR InverseWayLiberation/src)
 
 set(main_src
         ${SRC_DIR}/main.cpp
-        ${SRC_DIR}/stdafx.h
-        ${SRC_DIR}/stdafx.cpp
 
         PARENT_SCOPE
 )
@@ -130,25 +128,25 @@ set(Level_src
         PARENT_SCOPE
 )
 
-set(Lua_src
-        ${SRC_DIR}/Lua/LuaMachine.h
-        ${SRC_DIR}/Lua/LuaMachine.cpp
-        ${SRC_DIR}/Lua/LuaArea.h
-        ${SRC_DIR}/Lua/LuaArea.cpp
-        ${SRC_DIR}/Lua/LuaAction.h
-        ${SRC_DIR}/Lua/LuaAction.cpp
-        ${SRC_DIR}/Lua/OutputInterfaces.h
-        ${SRC_DIR}/Lua/TriggersManager.h
-        ${SRC_DIR}/Lua/TriggersManager.cpp
-        ${SRC_DIR}/Lua/Registrations/RegisterSFML.cpp
-        ${SRC_DIR}/Lua/Registrations/RegisterBox2D.cpp
-        ${SRC_DIR}/Lua/Registrations/RegisterEntityFactory.cpp
-        ${SRC_DIR}/Lua/Registrations/RegisterInputManager.cpp
-        ${SRC_DIR}/Lua/Registrations/RegisterJoint.cpp
-        ${SRC_DIR}/Lua/Registrations/RegisterJointFactory.cpp
-        ${SRC_DIR}/Lua/Registrations/RegisterLevelManager.cpp
-        ${SRC_DIR}/Lua/Registrations/RegisterPhysicManager.cpp
-        ${SRC_DIR}/Lua/Registrations/RegisterResourceManager.cpp
+set(Scripts_src
+        ${SRC_DIR}/Scripts/ScriptMachine.h
+        ${SRC_DIR}/Scripts/ScriptMachine.cpp
+        ${SRC_DIR}/Scripts/ScriptArea.h
+        ${SRC_DIR}/Scripts/ScriptArea.cpp
+        ${SRC_DIR}/Scripts/ScriptAction.h
+        ${SRC_DIR}/Scripts/ScriptAction.cpp
+        ${SRC_DIR}/Scripts/OutputInterfaces.h
+        ${SRC_DIR}/Scripts/TriggersManager.h
+        ${SRC_DIR}/Scripts/TriggersManager.cpp
+        ${SRC_DIR}/Scripts/Registrations/RegisterSFML.cpp
+        ${SRC_DIR}/Scripts/Registrations/RegisterBox2D.cpp
+        ${SRC_DIR}/Scripts/Registrations/RegisterEntityFactory.cpp
+        ${SRC_DIR}/Scripts/Registrations/RegisterInputManager.cpp
+        ${SRC_DIR}/Scripts/Registrations/RegisterJoint.cpp
+        ${SRC_DIR}/Scripts/Registrations/RegisterJointFactory.cpp
+        ${SRC_DIR}/Scripts/Registrations/RegisterLevelManager.cpp
+        ${SRC_DIR}/Scripts/Registrations/RegisterPhysicManager.cpp
+        ${SRC_DIR}/Scripts/Registrations/RegisterResourceManager.cpp
 
         PARENT_SCOPE
 )

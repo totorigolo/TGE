@@ -3,7 +3,7 @@
 #include "../../Level/LevelManager.h"
 
 // Enregistrements
-void LuaMachine::RegisterLevelManager()
+void ScriptMachine::RegisterLevelManager()
 {
 	try
 	{/*

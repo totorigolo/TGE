@@ -1,6 +1,6 @@
 #include "LuaConsoleWindow.h"
 #include "../../Scripts/ScriptMachine.h"
-#include "../../Lua/OutputInterfaces.h"
+#include "../../Scripts/OutputInterfaces.h"
 #include "../../Tools/Error.h"
 
 // Ctor
@@ -23,13 +23,13 @@ void LuaConsoleWindow::Update()
 }
 
 // Gestion de la Machine Lua
-void LuaConsoleWindow::SetLuaMachine(LuaMachine *luaMachine)
+void LuaConsoleWindow::SetLuaMachine(ScriptMachine *luaMachine)
 {
-	myAssert(luaMachine, "La LuaMachine passée est invalide.");
+	myAssert(luaMachine, "La ScriptMachine passée est invalide.");
 
 	mLuaMachine = luaMachine;
 }
-LuaMachine* LuaConsoleWindow::GetLuaMachine()
+ScriptMachine* LuaConsoleWindow::GetLuaMachine()
 {
 	return mLuaMachine;
 }
@@ -38,12 +38,12 @@ LuaMachine* LuaConsoleWindow::GetLuaMachine()
 void LuaConsoleWindow::Fill()
 {
 	// Widgets
-	mPromptLabel = sfg::Label::Create("Commande :");
+	mPromptLabel = sfg::Label::Create(L"Commande :");
 	mPrompt = PromptEntry::Create("");
-	mReturnBtn = sfg::Button::Create("Entrée");
-	mCloseBtn = sfg::Button::Create("Fermer");
+	mReturnBtn = sfg::Button::Create(L"Entrée");
+	mCloseBtn = sfg::Button::Create(L"Fermer");
 	mScrolledBox = sfg::Box::Create(sfg::Box::Orientation::VERTICAL);
-	mTextLabel = sfg::Label::Create("");
+	mTextLabel = sfg::Label::Create(L"");
 	mScrolledBox->Pack(mTextLabel);
 	mScrolled = sfg::ScrolledWindow::Create();
 	mScrolled->AddWithViewport(mScrolledBox);
@@ -82,7 +82,7 @@ void LuaConsoleWindow::OnSend()
 	*this << "> " << commande << std::endl;
 
 	// Vide la zone de texte
-	mPrompt->SetText("");
+	mPrompt->SetText(L"");
 
 	// Ajoute la commande à l'historique
 	mHistory.push_back(commande);
@@ -117,5 +117,5 @@ void LuaConsoleWindow::OnDown()
 		mPrompt->SetText(mHistory.at(++mCurrent));
 	}
 	else
-		mPrompt->SetText("");
+		mPrompt->SetText(L"");
 }

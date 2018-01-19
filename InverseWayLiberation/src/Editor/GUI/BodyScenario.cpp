@@ -96,30 +96,30 @@ void BodyScenario::Fill()
 {
 	// Position et rotation
 	mPosTable = sfg::Table::Create();
-	mPosLabel = sfg::Label::Create("PosRot :");
+	mPosLabel = sfg::Label::Create(L"PosRot :");
 	mPosX = sfg::Entry::Create();
 	mPosX->SetRequisition(sf::Vector2f(60.f, 0.f));
 	mPosY = sfg::Entry::Create();
 	mPosY->SetRequisition(sf::Vector2f(60.f, 0.f));
 	mRot = sfg::Entry::Create();
 	mRot->SetRequisition(sf::Vector2f(60.f, 0.f));
-	mPosButton = sfg::Button::Create("X");
+	mPosButton = sfg::Button::Create(L"X");
 	mPosButton->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind(&BodyScenario::OnChangePosition, this));
 	mPosStep = sfg::SpinButton::Create(0.f, 200.f, 0.1f);
 	mPosStep->SetValue(mPosStepSaveValue);
 	mPosStep->SetDigits(1);
 	mPosStep->SetRequisition(sf::Vector2f(40.f, 0.f));
-	mPosXp = sfg::Button::Create("+");
+	mPosXp = sfg::Button::Create(L"+");
 	mPosXp->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind(&BodyScenario::OnChangePosXp, this));
-	mPosXm = sfg::Button::Create("-");
+	mPosXm = sfg::Button::Create(L"-");
 	mPosXm->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind(&BodyScenario::OnChangePosXm, this));
-	mPosYp = sfg::Button::Create("+");
+	mPosYp = sfg::Button::Create(L"+");
 	mPosYp->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind(&BodyScenario::OnChangePosYp, this));
-	mPosYm = sfg::Button::Create("-");
+	mPosYm = sfg::Button::Create(L"-");
 	mPosYm->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind(&BodyScenario::OnChangePosYm, this));
-	mPosRp = sfg::Button::Create("+");
+	mPosRp = sfg::Button::Create(L"+");
 	mPosRp->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind(&BodyScenario::OnChangePosRp, this));
-	mPosRm = sfg::Button::Create("-");
+	mPosRm = sfg::Button::Create(L"-");
 	mPosRm->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind(&BodyScenario::OnChangePosRm, this));
 	mPosTable->Attach(mPosLabel, sf::Rect<sf::Uint32>(1, 1, 1, 1));
 	mPosTable->Attach(mPosX, sf::Rect<sf::Uint32>(2, 1, 4, 1));
@@ -137,7 +137,7 @@ void BodyScenario::Fill()
 	// Type
 	mTypeTable = sfg::Table::Create();
 	mTypeTable->SetRequisition(sf::Vector2f(0, 30.f));
-	mTypeLabel = sfg::Label::Create("Type :");
+	mTypeLabel = sfg::Label::Create(L"Type :");
 	mType.resize(2);//(3);
 	mType[0] = sfg::RadioButton::Create("Dynamique");
 	mType[1] = sfg::RadioButton::Create("Statique", mType[0]->GetGroup());
@@ -150,7 +150,7 @@ void BodyScenario::Fill()
 
 	// CollisionType
 	mCollisionTypeTable = sfg::Table::Create();
-	mCollisionTypeLabel = sfg::Label::Create("ColType : ");
+	mCollisionTypeLabel = sfg::Label::Create(L"ColType : ");
 	mCollisionType = sfg::ComboBox::Create();
 	mCollisionType->AppendItem("Défaut");
 	mCollisionType->AppendItem("Bullet");
@@ -161,15 +161,15 @@ void BodyScenario::Fill()
 
 	// Paramètres de collision
 	mPhysicsParamsTable = sfg::Table::Create();
-	mDensityLabel = sfg::Label::Create("Densité :");
+	mDensityLabel = sfg::Label::Create(L"Densité :");
 	mDensity = sfg::SpinButton::Create(0.f, 100.f, 0.02f);
 	mDensity->SetDigits(2);
 	mDensity->GetSignal(sfg::SpinButton::OnValueChanged).Connect(std::bind(&BodyScenario::OnChangeDensity, this));
-	mFrictionLabel = sfg::Label::Create("Friction :");
+	mFrictionLabel = sfg::Label::Create(L"Friction :");
 	mFriction = sfg::SpinButton::Create(0.f, 100.f, 0.02f);
 	mFriction->SetDigits(2);
 	mFriction->GetSignal(sfg::SpinButton::OnValueChanged).Connect(std::bind(&BodyScenario::OnChangeFriction, this));
-	mRestitutionLabel = sfg::Label::Create("Restitution :");
+	mRestitutionLabel = sfg::Label::Create(L"Restitution :");
 	mRestitution = sfg::SpinButton::Create(0.f, 100.f, 0.02f);
 	mRestitution->SetDigits(2);
 	mRestitution->GetSignal(sfg::SpinButton::OnValueChanged).Connect(std::bind(&BodyScenario::OnChangeRestitution, this));
@@ -182,7 +182,7 @@ void BodyScenario::Fill()
 
 	// Texture
 	mTextureHBox = sfg::Box::Create(sfg::Box::Orientation::HORIZONTAL);
-	mTextureLabel = sfg::Label::Create("Texture :");
+	mTextureLabel = sfg::Label::Create(L"Texture :");
 	mTexture = sfg::ComboBox::Create();
 	mTexture->GetSignal(sfg::ComboBox::OnSelect).Connect(std::bind(&BodyScenario::OnChangeTexture, this));
 	mTextureHBox->PackEnd(mTextureLabel);
@@ -190,7 +190,7 @@ void BodyScenario::Fill()
 
 	// Layer
 	mLayerHBox = sfg::Box::Create(sfg::Box::Orientation::HORIZONTAL);
-	mLayerLabel = sfg::Label::Create("Layer : ");
+	mLayerLabel = sfg::Label::Create(L"Layer : ");
 	mLayer = sfg::SpinButton::Create(-1000.f, 1000.f, 1.f);
 	mLayer->SetValue(1);
 	mLayer->SetDigits(0);
@@ -200,7 +200,7 @@ void BodyScenario::Fill()
 
 	// Ombres
 	mShadowsHBox = sfg::Box::Create(sfg::Box::Orientation::HORIZONTAL);
-	mShadowsLabel = sfg::Label::Create("Ombres :");
+	mShadowsLabel = sfg::Label::Create(L"Ombres :");
 	mShadows.resize(2);
 	mShadows[0] = sfg::RadioButton::Create("Oui");
 	mShadows[0]->GetSignal(sfg::RadioButton::OnToggle).Connect(std::bind(&BodyScenario::OnChangeShadows, this));
@@ -212,18 +212,18 @@ void BodyScenario::Fill()
 
 	// Bouton Détruire & ClearForces
 	mButtonsHBox1 = sfg::Box::Create(sfg::Box::Orientation::HORIZONTAL);
-	mDestroy = sfg::Button::Create("Détruire");
+	mDestroy = sfg::Button::Create(L"Détruire");
 	mDestroy->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind(&BodyScenario::OnDestroy, this));
-	mClearForces = sfg::Button::Create("ClearForces");
+	mClearForces = sfg::Button::Create(L"ClearForces");
 	mClearForces->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind(&BodyScenario::OnClearForces, this));
 	mButtonsHBox1->PackEnd(mDestroy);
 	mButtonsHBox1->PackEnd(mClearForces);
 
 	// Bouton d'actualisation & de Collision Masking
 	mButtonsHBox2 = sfg::Box::Create(sfg::Box::Orientation::HORIZONTAL);
-	mRefresh = sfg::Button::Create("Actualiser");
+	mRefresh = sfg::Button::Create(L"Actualiser");
 	mRefresh->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind(&BodyScenario::OnRefresh, this));
-	mColFilteringButton = sfg::Button::Create("Col Filtering");
+	mColFilteringButton = sfg::Button::Create(L"Col Filtering");
 	mColFilteringButton->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind(&EditBox::OnShowColFilteringWindow, &mEditBox));
 	mButtonsHBox2->PackEnd(mColFilteringButton);
 	mButtonsHBox2->PackEnd(mRefresh);
@@ -246,8 +246,8 @@ void BodyScenario::OnChangePosition()
 	if (!mApply || !mSelection) return;
 
 	// Change sa position et sa rotation
-	mSelection->SetTransform(b2Vec2(Parser::stringToFloat(mPosX->GetText()), Parser::stringToFloat(mPosY->GetText())),
-		Parser::stringToFloat(mRot->GetText()) * RPD);
+	mSelection->SetTransform(b2Vec2(Parser::stringToFloat(mPosX->GetText().toAnsiString()), Parser::stringToFloat(mPosY->GetText().toAnsiString())),
+		Parser::stringToFloat(mRot->GetText().toAnsiString()) * RPD);
 }
 void BodyScenario::OnChangeType()
 {
@@ -270,7 +270,7 @@ void BodyScenario::OnChangeTexture()
 {
 	if (!mApply || !mSelection) return;
 
-	mSelection->SetTexture(mResourceMgr.GetTexture(mTexture->GetItem(mTexture->GetSelectedItem())));
+	mSelection->SetTexture(mResourceMgr.GetTexture(mTexture->GetItem(mTexture->GetSelectedItem()).toAnsiString()));
 }
 void BodyScenario::OnChangeLayer()
 {

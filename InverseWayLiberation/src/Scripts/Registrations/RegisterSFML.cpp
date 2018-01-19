@@ -1,7 +1,7 @@
 #include "../ScriptMachine.h"
 
 // Enregistrements privés
-void LuaMachine::RegisterSFML()
+void ScriptMachine::RegisterSFML()
 {
 	/* Enregistre les classes */
 	try

@@ -25,7 +25,7 @@ State* Configuration_State::Run(App *app)
 	}
 	catch (const std::exception &e)
 	{
-		Dialog::Error("Erreur lors de la lecture du thème :\n" + std::string(e.what()));
+		Dialog::Error(L"Erreur lors de la lecture du thème :\n" + sf::String(e.what()));
 	}
 
 	// Change le titre de la fenêtre
@@ -77,9 +77,9 @@ void Configuration_State::CreateGUI()
 
 	// Initialise les éléments
 	mVBox = sfg::Box::Create(sfg::Box::Orientation::VERTICAL);
-	mLabel = sfg::Label::Create("Il n'y a aucune configuration pour le moment.\n\n\nRepassez plus tard :)");
+	mLabel = sfg::Label::Create(L"Il n'y a aucune configuration pour le moment.\n\n\nRepassez plus tard :)");
 	mVBox->PackEnd(mLabel);
-	mExit = sfg::Button::Create("Fermer");
+	mExit = sfg::Button::Create(L"Fermer");
 	mExit->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind(&Configuration_State::OnExit, this));
 	mVBox->PackEnd(mExit);
 	mWindow->Add(mVBox);

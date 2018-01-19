@@ -54,12 +54,12 @@ void HumCreationWindow::Fill()
 	mVBox = sfg::Box::Create(sfg::Box::Orientation::VERTICAL);
 
 	// Eléments
-	mMode = sfg::Label::Create("Mode : Attente");
-	mHelpLabel = sfg::Label::Create("Créer hum : Ctrl + clic gauche");
+	mMode = sfg::Label::Create(L"Mode : Attente");
+	mHelpLabel = sfg::Label::Create(L"Créer hum : Ctrl + clic gauche");
 
 	// Age
 	mAgeHBox = sfg::Box::Create(sfg::Box::Orientation::HORIZONTAL);
-	mAgeLabel = sfg::Label::Create("Age : ");
+	mAgeLabel = sfg::Label::Create(L"Age : ");
 	mAge = sfg::SpinButton::Create(0.f, 100.f, 1.f);
 	mAge->SetValue(18.f);
 	mAge->SetDigits(1);
@@ -68,7 +68,7 @@ void HumCreationWindow::Fill()
 
 	// Force
 	mStrenghHBox = sfg::Box::Create(sfg::Box::Orientation::HORIZONTAL);
-	mStrenghLabel = sfg::Label::Create("Force : ");
+	mStrenghLabel = sfg::Label::Create(L"Force : ");
 	mStrengh = sfg::SpinButton::Create(-20.f, 20.f, 1.f);
 	mStrengh->SetValue(0.f);
 	mStrengh->SetDigits(1);
@@ -77,7 +77,7 @@ void HumCreationWindow::Fill()
 
 	// Couleur
 	mColorHBox = sfg::Box::Create(sfg::Box::Orientation::HORIZONTAL);
-	mColorLabel = sfg::Label::Create("Couleur : ");
+	mColorLabel = sfg::Label::Create(L"Couleur : ");
 	mColorR = sfg::SpinButton::Create(0.f, 255.f, 1.f);
 	mColorR->SetDigits(0);
 	mColorR->SetValue(35);
@@ -97,7 +97,7 @@ void HumCreationWindow::Fill()
 
 	// Layer
 	mLayerHBox = sfg::Box::Create(sfg::Box::Orientation::HORIZONTAL);
-	mLayerLabel = sfg::Label::Create("Layer : ");
+	mLayerLabel = sfg::Label::Create(L"Layer : ");
 	mLayer = sfg::SpinButton::Create(-1000.f, 1000.f, 1.f);
 	mLayer->SetValue(1);
 	mLayer->SetDigits(0);
@@ -105,8 +105,8 @@ void HumCreationWindow::Fill()
 	mLayerHBox->PackEnd(mLayer);
 
 	// Boutons
-	mToggleModeBtn = sfg::Button::Create("Entrer mode Création");
-	mCloseBtn = sfg::Button::Create("Fermer");
+	mToggleModeBtn = sfg::Button::Create(L"Entrer mode Création");
+	mCloseBtn = sfg::Button::Create(L"Fermer");
 
 	// Signaux
 	mToggleModeBtn->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind(&HumCreationWindow::OnToggleMode, this));
@@ -135,12 +135,12 @@ void HumCreationWindow::OnToggleMode()
 
 	if (mIsInAddMode)
 	{
-		mMode->SetText("Mode : Création");
-		mToggleModeBtn->SetLabel("Sortir mode Création");
+		mMode->SetText(L"Mode : Création");
+		mToggleModeBtn->SetLabel(L"Sortir mode Création");
 	}
 	else
 	{
-		mMode->SetText("Mode : Attente");
-		mToggleModeBtn->SetLabel("Entrer mode Création");
+		mMode->SetText(L"Mode : Attente");
+		mToggleModeBtn->SetLabel(L"Entrer mode Création");
 	}
 }

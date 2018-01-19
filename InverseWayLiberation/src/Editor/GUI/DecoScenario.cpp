@@ -63,30 +63,30 @@ void DecoScenario::Fill()
 {
 	// Position et rotation
 	mPosTable = sfg::Table::Create();
-	mPosLabel = sfg::Label::Create("PosRot :");
+	mPosLabel = sfg::Label::Create(L"PosRot :");
 	mPosX = sfg::Entry::Create();
 	mPosX->SetRequisition(sf::Vector2f(60.f, 0.f));
 	mPosY = sfg::Entry::Create();
 	mPosY->SetRequisition(sf::Vector2f(60.f, 0.f));
 	mRot = sfg::Entry::Create();
 	mRot->SetRequisition(sf::Vector2f(60.f, 0.f));
-	mPosButton = sfg::Button::Create("X");
+	mPosButton = sfg::Button::Create(L"X");
 	mPosButton->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind(&DecoScenario::OnChangePosition, this));
 	mPosStep = sfg::SpinButton::Create(0.f, 200.f, 0.1f);
 	mPosStep->SetValue(mPosStepSaveValue);
 	mPosStep->SetDigits(1);
 	mPosStep->SetRequisition(sf::Vector2f(40.f, 0.f));
-	mPosXp = sfg::Button::Create("+");
+	mPosXp = sfg::Button::Create(L"+");
 	mPosXp->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind(&DecoScenario::OnChangePosXp, this));
-	mPosXm = sfg::Button::Create("-");
+	mPosXm = sfg::Button::Create(L"-");
 	mPosXm->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind(&DecoScenario::OnChangePosXm, this));
-	mPosYp = sfg::Button::Create("+");
+	mPosYp = sfg::Button::Create(L"+");
 	mPosYp->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind(&DecoScenario::OnChangePosYp, this));
-	mPosYm = sfg::Button::Create("-");
+	mPosYm = sfg::Button::Create(L"-");
 	mPosYm->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind(&DecoScenario::OnChangePosYm, this));
-	mPosRp = sfg::Button::Create("+");
+	mPosRp = sfg::Button::Create(L"+");
 	mPosRp->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind(&DecoScenario::OnChangePosRp, this));
-	mPosRm = sfg::Button::Create("-");
+	mPosRm = sfg::Button::Create(L"-");
 	mPosRm->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind(&DecoScenario::OnChangePosRm, this));
 	mPosTable->Attach(mPosLabel, sf::Rect<sf::Uint32>(1, 1, 1, 1));
 	mPosTable->Attach(mPosX, sf::Rect<sf::Uint32>(2, 1, 4, 1));
@@ -103,7 +103,7 @@ void DecoScenario::Fill()
 
 	// Layer
 	mLayerHBox = sfg::Box::Create(sfg::Box::Orientation::HORIZONTAL);
-	mLayerLabel = sfg::Label::Create("Layer : ");
+	mLayerLabel = sfg::Label::Create(L"Layer : ");
 	mLayer = sfg::SpinButton::Create(-1000.f, 1000.f, 1.f);
 	mLayer->SetValue(5);
 	mLayer->SetDigits(0);
@@ -113,16 +113,16 @@ void DecoScenario::Fill()
 
 	// Texture
 	mTextureHBox = sfg::Box::Create(sfg::Box::Orientation::HORIZONTAL);
-	mTextureLabel = sfg::Label::Create("Texture :");
+	mTextureLabel = sfg::Label::Create(L"Texture :");
 	mTexture = sfg::ComboBox::Create();
 	mTexture->GetSignal(sfg::ComboBox::OnSelect).Connect(std::bind(&DecoScenario::OnChangeTexture, this));
 	mTextureHBox->PackEnd(mTextureLabel, false);
 	mTextureHBox->PackEnd(mTexture);
 
 	// Boutons
-	mRefresh = sfg::Button::Create("Actualiser");
+	mRefresh = sfg::Button::Create(L"Actualiser");
 	mRefresh->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind(&DecoScenario::OnRefresh, this));
-	mDestroy = sfg::Button::Create("Détruire");
+	mDestroy = sfg::Button::Create(L"Détruire");
 	mDestroy->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind(&DecoScenario::OnDestroy, this));
 
 	// Ajoute les éléments à la fenêtre
@@ -139,15 +139,15 @@ void DecoScenario::OnChangePosition()
 	if (!mApply || !mSelection) return;
 
 	// Change sa position et sa rotation
-	mSelection->SetPosition(b2Vec2(Parser::stringToFloat(mPosX->GetText()), Parser::stringToFloat(mPosY->GetText())));
-	mSelection->SetRotationD(Parser::stringToFloat(mRot->GetText()));
+	mSelection->SetPosition(b2Vec2(Parser::stringToFloat(mPosX->GetText().toAnsiString()), Parser::stringToFloat(mPosY->GetText().toAnsiString())));
+	mSelection->SetRotationD(Parser::stringToFloat(mRot->GetText().toAnsiString()));
 	OnRefresh();
 }
 void DecoScenario::OnChangeTexture()
 {
 	if (!mApply || !mSelection) return;
 
-	mSelection->SetTexture(mResourceMgr.GetTexture(mTexture->GetItem(mTexture->GetSelectedItem())));
+	mSelection->SetTexture(mResourceMgr.GetTexture(mTexture->GetItem(mTexture->GetSelectedItem()).toAnsiString()));
 	OnRefresh();
 }
 void DecoScenario::OnChangeLayer()

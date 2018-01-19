@@ -11,7 +11,7 @@ set(IWL_src
         ${Game_src}
         ${Graphics_src}
         ${Level_src}
-        ${Lua_src}
+        ${Scripts_src}
         ${Physics_src}
         ${Resources_src}
         ${Sounds_src}

@@ -1,7 +1,7 @@
 #include "../ScriptMachine.h"
 #include "../../Resources/ResourceManager.h"
 
-void LuaMachine::RegisterResourceManager()
+void ScriptMachine::RegisterResourceManager()
 {
 	try
 	{/*

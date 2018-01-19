@@ -8,147 +8,140 @@
 
 // Ctor
 TexturesWindow::TexturesWindow()
-	: Window("Textures"),
-	mEntityMgr(EntityManager::GetInstance()), mResourceMgr(ResourceManager::GetInstance())
-{
-	// Rempli la fenêtre
-	Fill();
-	mApply = true;
+        : Window("Textures"),
+          mEntityMgr(EntityManager::GetInstance()), mResourceMgr(ResourceManager::GetInstance()) {
+    // Rempli la fenêtre
+    Fill();
+    mApply = true;
 }
 
 // Actualisation
-void TexturesWindow::Update()
-{
-	// Récupère la texture pointée
-	mSelectedTexture = mResourceMgr.GetTexture(mTexture->GetItem(mTexture->GetSelectedItem()));
+void TexturesWindow::Update() {
+    // Récupère la texture pointée
+    mSelectedTexture = mResourceMgr.GetTexture(mTexture->GetItem(mTexture->GetSelectedItem()).toAnsiString());
 
-	// Met à jour les infos sur la texture sélectionnée
-	if (!mSelectedTexture.expired())
-	{
-		// Change le nb d'utilisations (1 = TextureMap)
-		mNbUsesLabel->SetText("Utilisations : " + Parser::intToString(mSelectedTexture.use_count() - 1));
+    // Met à jour les infos sur la texture sélectionnée
+    if (!mSelectedTexture.expired()) {
+        // Change le nb d'utilisations (1 = TextureMap)
+        mNbUsesLabel->SetText(L"Utilisations : " + sf::String(Parser::intToString(
+                (int) mSelectedTexture.use_count() - 1)));
 
-		// Récupère la texture
-		auto tex = mSelectedTexture.lock();
-		sf::Sprite s(*tex);
-		float factor = 1.f;
-		if (tex->getSize().x > CANVAS_SIZE || tex->getSize().y > CANVAS_SIZE)
-		{
-			if (tex->getSize().x > tex->getSize().y)
-				factor = CANVAS_SIZE / tex->getSize().x;
-			else
-				factor = CANVAS_SIZE / tex->getSize().y;
-		}
-		s.setScale(factor, factor);
-		s.setOrigin(tex->getSize().x / 2.f, tex->getSize().y / 2.f);
-		s.setPosition(CANVAS_SIZE / 2.f, CANVAS_SIZE / 2.f);
+        // Récupère la texture
+        auto tex = mSelectedTexture.lock();
+        sf::Sprite s(*tex);
+        float factor = 1.f;
+        if (tex->getSize().x > CANVAS_SIZE || tex->getSize().y > CANVAS_SIZE) {
+            if (tex->getSize().x > tex->getSize().y)
+                factor = CANVAS_SIZE / tex->getSize().x;
+            else
+                factor = CANVAS_SIZE / tex->getSize().y;
+        }
+        s.setScale(factor, factor);
+        s.setOrigin(tex->getSize().x / 2.f, tex->getSize().y / 2.f);
+        s.setPosition(CANVAS_SIZE / 2.f, CANVAS_SIZE / 2.f);
 
-		// Affiche la texture sur le Canvas
-		mCanvas->Clear(sf::Color(30, 30, 30));
-		mCanvas->Draw(s);
-		mCanvas->Display();
-	}
-	// Déselectionne la texture si le pointeur n'est plus valide
-	else
-	{
-		mSelectedTexture.reset();
-		mTexture->SelectItem(sfg::ComboBox::NONE);
-	}
+        // Affiche la texture sur le Canvas
+        mCanvas->Clear(sf::Color(30, 30, 30));
+        mCanvas->Draw(s);
+        mCanvas->Display();
+    }
+        // Déselectionne la texture si le pointeur n'est plus valide
+    else {
+        mSelectedTexture.reset();
+        mTexture->SelectItem(sfg::ComboBox::NONE);
+    }
 
-	// Mets à jour la liste de texture
-	if (mTexture.get())
-	{
-		auto current = mTexture->GetSelectedItem();
-		for (int i = mTexture->GetItemCount(); i > 0; --i)
-			mTexture->RemoveItem(i - 1);
-		for (auto &&tex : mResourceMgr.GetTextureMap())
-			mTexture->AppendItem(tex.first);
-		mTexture->SelectItem(current);
-	}
+    // Mets à jour la liste de texture
+    if (mTexture.get()) {
+        auto current = mTexture->GetSelectedItem();
+        for (int i = mTexture->GetItemCount(); i > 0; --i)
+            mTexture->RemoveItem(i - 1);
+        for (auto &&tex : mResourceMgr.GetTextureMap())
+            mTexture->AppendItem(tex.first);
+        mTexture->SelectItem(current);
+    }
 }
 
 // Construit la fenêtre et les éléments
-void TexturesWindow::Fill()
-{
-	// Crée le Layout
-	mVBox = sfg::Box::Create(sfg::Box::Orientation::VERTICAL);
+void TexturesWindow::Fill() {
+    // Crée le Layout
+    mVBox = sfg::Box::Create(sfg::Box::Orientation::VERTICAL);
 
-	// Labels
-	mInfosSectionLabel = sfg::Label::Create("--");
+    // Labels
+    mInfosSectionLabel = sfg::Label::Create(L"--");
 
-	// Chargement de texture
-	mNameHBox = sfg::Box::Create(sfg::Box::Orientation::HORIZONTAL);
-	mNameLabel = sfg::Label::Create("Nom : ");
-	mName = sfg::Entry::Create();
-	mNameHBox->PackEnd(mNameLabel, false);
-	mNameHBox->PackEnd(mName);
-	mPathHBox = sfg::Box::Create(sfg::Box::Orientation::HORIZONTAL);
-	mPathLabel = sfg::Label::Create("Chemin : ");
-	mPath = sfg::Entry::Create();
-	mPathHBox->PackEnd(mPathLabel, false);
-	mPathHBox->PackEnd(mPath);
-	mLoadBtn = sfg::Button::Create("Charger");
-	mLoadLabel = sfg::Label::Create("--");
+    // Chargement de texture
+    mNameHBox = sfg::Box::Create(sfg::Box::Orientation::HORIZONTAL);
+    mNameLabel = sfg::Label::Create(L"Nom : ");
+    mName = sfg::Entry::Create();
+    mNameHBox->PackEnd(mNameLabel, false);
+    mNameHBox->PackEnd(mName);
+    mPathHBox = sfg::Box::Create(sfg::Box::Orientation::HORIZONTAL);
+    mPathLabel = sfg::Label::Create(L"Chemin : ");
+    mPath = sfg::Entry::Create();
+    mPathHBox->PackEnd(mPathLabel, false);
+    mPathHBox->PackEnd(mPath);
+    mLoadBtn = sfg::Button::Create(L"Charger");
+    mLoadLabel = sfg::Label::Create(L"--");
 
-	// Texture
-	mTextureHBox = sfg::Box::Create(sfg::Box::Orientation::HORIZONTAL);
-	mTextureLabel = sfg::Label::Create("Texture : ");
-	mTexture = sfg::ComboBox::Create();
-	mTextureHBox->PackEnd(mTextureLabel, false);
-	mTextureHBox->PackEnd(mTexture);
+    // Texture
+    mTextureHBox = sfg::Box::Create(sfg::Box::Orientation::HORIZONTAL);
+    mTextureLabel = sfg::Label::Create(L"Texture : ");
+    mTexture = sfg::ComboBox::Create();
+    mTextureHBox->PackEnd(mTextureLabel, false);
+    mTextureHBox->PackEnd(mTexture);
 
-	// Infos texture
-	mNbUsesLabel = sfg::Label::Create("--");
-	mCanvas = sfg::Canvas::Create();
-	mCanvas->SetRequisition(sf::Vector2f(CANVAS_SIZE, CANVAS_SIZE));
+    // Infos texture
+    mNbUsesLabel = sfg::Label::Create(L"--");
+    mCanvas = sfg::Canvas::Create();
+    mCanvas->SetRequisition(sf::Vector2f(CANVAS_SIZE, CANVAS_SIZE));
 
-	// Boutons
-	mButtonsHBox = sfg::Box::Create(sfg::Box::Orientation::HORIZONTAL);
-	mRefreshBtn = sfg::Button::Create("Actualiser");
-	mCloseBtn = sfg::Button::Create("Fermer");
-	mButtonsHBox->PackEnd(mRefreshBtn);
-	mButtonsHBox->PackEnd(mCloseBtn);
+    // Boutons
+    mButtonsHBox = sfg::Box::Create(sfg::Box::Orientation::HORIZONTAL);
+    mRefreshBtn = sfg::Button::Create(L"Actualiser");
+    mCloseBtn = sfg::Button::Create(L"Fermer");
+    mButtonsHBox->PackEnd(mRefreshBtn);
+    mButtonsHBox->PackEnd(mCloseBtn);
 
-	// Signaux
-	mLoadBtn->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind(&TexturesWindow::OnLoadTexture, this));
-	mTexture->GetSignal(sfg::ComboBox::OnSelect).Connect(std::bind(&TexturesWindow::OnSelectTexture, this));
-	mRefreshBtn->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind(&TexturesWindow::OnRefresh, this));
-	mCloseBtn->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind(&TexturesWindow::OnClose, this));
+    // Signaux
+    mLoadBtn->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind(&TexturesWindow::OnLoadTexture, this));
+    mTexture->GetSignal(sfg::ComboBox::OnSelect).Connect(std::bind(&TexturesWindow::OnSelectTexture, this));
+    mRefreshBtn->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind(&TexturesWindow::OnRefresh, this));
+    mCloseBtn->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind(&TexturesWindow::OnClose, this));
 
-	// Ajoute les éléments à la fenêtre
-	mVBox->PackEnd(mNameHBox);
-	mVBox->PackEnd(mPathHBox);
-	mVBox->PackEnd(mLoadLabel);
-	mVBox->PackEnd(mLoadBtn);
-	mVBox->PackEnd(mInfosSectionLabel);
-	mVBox->PackEnd(mTextureHBox);
-	mVBox->PackEnd(mNbUsesLabel);
-	mVBox->PackEnd(mCanvas);
-	mVBox->PackEnd(mButtonsHBox);
+    // Ajoute les éléments à la fenêtre
+    mVBox->PackEnd(mNameHBox);
+    mVBox->PackEnd(mPathHBox);
+    mVBox->PackEnd(mLoadLabel);
+    mVBox->PackEnd(mLoadBtn);
+    mVBox->PackEnd(mInfosSectionLabel);
+    mVBox->PackEnd(mTextureHBox);
+    mVBox->PackEnd(mNbUsesLabel);
+    mVBox->PackEnd(mCanvas);
+    mVBox->PackEnd(mButtonsHBox);
 
-	// Ajoute la mVBox à la fenêtre
-	AddToWindow(mVBox);
+    // Ajoute la mVBox à la fenêtre
+    AddToWindow(mVBox);
 }
 
 // Callbacks
-void TexturesWindow::OnLoadTexture()
-{
-	if (!mApply) return;
+void TexturesWindow::OnLoadTexture() {
+    if (!mApply) return;
 
-	// Si les entrées sont invalides, on arrête
-	if (mName->GetText().isEmpty() || mPath->GetText().isEmpty()) return;
+    // Si les entrées sont invalides, on arrête
+    if (mName->GetText().isEmpty() || mPath->GetText().isEmpty()) return;
 
-	// Charge la texture
-	if (mResourceMgr.LoadTexture(mName->GetText(), "tex/" + mPath->GetText()))
-		mLoadLabel->SetText("Texture chargée.");
-	else
-		mLoadLabel->SetText("Entrées invalides.");
+    // Charge la texture
+    if (mResourceMgr.LoadTexture(mName->GetText().toAnsiString(), "tex/" + mPath->GetText().toAnsiString()))
+        mLoadLabel->SetText(L"Texture chargée.");
+    else
+        mLoadLabel->SetText(L"Entrées invalides.");
 
-	OnRefresh();
+    OnRefresh();
 }
-void TexturesWindow::OnSelectTexture()
-{
-	if (!mApply || mTexture->GetSelectedItem() == sfg::ComboBox::NONE) return;
 
-	OnRefresh();
+void TexturesWindow::OnSelectTexture() {
+    if (!mApply || mTexture->GetSelectedItem() == sfg::ComboBox::NONE) return;
+
+    OnRefresh();
 }

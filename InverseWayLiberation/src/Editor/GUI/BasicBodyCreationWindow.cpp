@@ -54,9 +54,9 @@ void BasicBodyCreationWindow::Add(b2Vec2 pos)
 
 	// Crée le Body suivant la forme
 	if (mShape[0]->IsActive()) // Box
-		EntityFactory::CreateBox(posRot, type, mTexture->GetItem(mTexture->GetSelectedItem()), static_cast<int>(mLayer->GetValue()));
+		EntityFactory::CreateBox(posRot, type, mTexture->GetItem(mTexture->GetSelectedItem()).toAnsiString(), static_cast<int>(mLayer->GetValue()));
 	else if (mShape[1]->IsActive()) // Circle
-		EntityFactory::CreateCircle(posRot, type, mTexture->GetItem(mTexture->GetSelectedItem()), static_cast<int>(mLayer->GetValue()));
+		EntityFactory::CreateCircle(posRot, type, mTexture->GetItem(mTexture->GetSelectedItem()).toAnsiString(), static_cast<int>(mLayer->GetValue()));
 	else
 	{
 		std::cout << "Aucune forme choisie !" << std::endl;
@@ -94,12 +94,12 @@ void BasicBodyCreationWindow::Fill()
 	mVBox = sfg::Box::Create(sfg::Box::Orientation::VERTICAL);
 
 	// Eléments
-	mMode = sfg::Label::Create("Mode : Attente");
-	mHelpLabel = sfg::Label::Create("Créer body : Ctrl + clic gauche");
+	mMode = sfg::Label::Create(L"Mode : Attente");
+	mHelpLabel = sfg::Label::Create(L"Créer body : Ctrl + clic gauche");
 
 	// Forme
 	mShapeBox = sfg::Box::Create(sfg::Box::Orientation::HORIZONTAL);
-	mShapeLabel = sfg::Label::Create("Forme : ");
+	mShapeLabel = sfg::Label::Create(L"Forme : ");
 	mShape.resize(2);
 	mShape[0] = sfg::RadioButton::Create("Rectangle");
 	mShape[1] = sfg::RadioButton::Create("Cercle", mShape[0]->GetGroup());
@@ -109,7 +109,7 @@ void BasicBodyCreationWindow::Fill()
 
 	// Type
 	mTypeBox = sfg::Box::Create(sfg::Box::Orientation::HORIZONTAL);
-	mTypeLabel = sfg::Label::Create("Type : ");
+	mTypeLabel = sfg::Label::Create(L"Type : ");
 	mType.resize(3);
 	mType[0] = sfg::RadioButton::Create("Dynamique");
 	mType[1] = sfg::RadioButton::Create("Statique", mType[0]->GetGroup());
@@ -120,14 +120,14 @@ void BasicBodyCreationWindow::Fill()
 
 	// Texture
 	mTextureHBox = sfg::Box::Create(sfg::Box::Orientation::HORIZONTAL);
-	mTextureLabel = sfg::Label::Create("Texture : ");
+	mTextureLabel = sfg::Label::Create(L"Texture : ");
 	mTexture = sfg::ComboBox::Create();
 	mTextureHBox->PackEnd(mTextureLabel, false);
 	mTextureHBox->PackEnd(mTexture);
 
 	// Layer
 	mLayerHBox = sfg::Box::Create(sfg::Box::Orientation::HORIZONTAL);
-	mLayerLabel = sfg::Label::Create("Layer : ");
+	mLayerLabel = sfg::Label::Create(L"Layer : ");
 	mLayer = sfg::SpinButton::Create(-1000.f, 1000.f, 1.f);
 	mLayer->SetValue(1);
 	mLayer->SetDigits(0);
@@ -135,8 +135,8 @@ void BasicBodyCreationWindow::Fill()
 	mLayerHBox->PackEnd(mLayer);
 
 	// Boutons
-	mToggleModeBtn = sfg::Button::Create("Entrer mode Création");
-	mCloseBtn = sfg::Button::Create("Fermer");
+	mToggleModeBtn = sfg::Button::Create(L"Entrer mode Création");
+	mCloseBtn = sfg::Button::Create(L"Fermer");
 
 	// Signaux
 	mToggleModeBtn->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind(&BasicBodyCreationWindow::OnToggleMode, this));
@@ -165,12 +165,12 @@ void BasicBodyCreationWindow::OnToggleMode()
 
 	if (mIsInAddMode)
 	{
-		mMode->SetText("Mode : Création");
-		mToggleModeBtn->SetLabel("Sortir mode Création");
+		mMode->SetText(L"Mode : Création");
+		mToggleModeBtn->SetLabel(L"Sortir mode Création");
 	}
 	else
 	{
-		mMode->SetText("Mode : Attente");
-		mToggleModeBtn->SetLabel("Entrer mode Création");
+		mMode->SetText(L"Mode : Attente");
+		mToggleModeBtn->SetLabel(L"Entrer mode Création");
 	}
 }

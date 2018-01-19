@@ -3,20 +3,20 @@
 #include <list>
 #include "ScriptMachine.h"
 
-class LuaArea;
+class ScriptArea;
 class TriggersManager;
-class LuaAction
+class ScriptAction
 {
 public:
 	// Ctors
-	LuaAction(const std::string &_name, const std::string &_file, bool once = false);
-	LuaAction(const std::string &_name, const std::string &_file, std::string &_function, bool once = false);
+	ScriptAction(const std::string &_name, const std::string &_file, bool once = false);
+	ScriptAction(const std::string &_name, const std::string &_file, std::string &_function, bool once = false);
 
 	// Exécute l'action
-	void Execute(LuaMachine *luaMachine);
+	void Execute(ScriptMachine *luaMachine);
 
 	// Gestion des Areas
-	void RegisterArea(std::weak_ptr<LuaArea> area);
+	void RegisterArea(std::weak_ptr<ScriptArea> area);
 
 	// Accesseurs
 	bool IsOnce();
@@ -32,5 +32,5 @@ private:
 	std::string mName;
 	std::string mFile;
 	std::string mFunction;
-	std::list <std::weak_ptr<LuaArea>> mAreas;
+	std::list <std::weak_ptr<ScriptArea>> mAreas;
 };

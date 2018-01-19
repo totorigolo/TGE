@@ -7,7 +7,7 @@
 #include "Window.h"
 #include "../../Tools/PromptEntry.h"
 
-class LuaMachine;
+class ScriptMachine;
 class LuaConsoleWindow : public Window
 {
 public:
@@ -18,8 +18,8 @@ public:
 	virtual void Update();
 
 	// Gestion de la Machine Lua
-	void SetLuaMachine(LuaMachine *luaMachine);
-	LuaMachine* GetLuaMachine();
+	void SetLuaMachine(ScriptMachine *luaMachine);
+	ScriptMachine* GetLuaMachine();
 
 public:
 	// Ajoute du texte dans la console
@@ -48,7 +48,7 @@ protected:
 
 private:
 	// Machine Lua
-	LuaMachine *mLuaMachine;
+	ScriptMachine *mLuaMachine;
 
 	// Texte de la console
 	sf::String mText;
