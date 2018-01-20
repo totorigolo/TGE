@@ -1,89 +1,68 @@
 #pragma once
+
 #include "../Tools/Parser.h"
-#include "../Editor/GUI/LuaConsoleWindow.h"
+#include "../Editor/GUI/ScriptConsoleWindow.h"
 
 // Classe abstraite de base
-class OutputInterface : public NonCopyable
-{
+class OutputInterface : public NonCopyable {
 public:
-	// Affichage du texte
-	virtual OutputInterface& operator<<(const std::string &text) = 0;
+    // Affichage du texte
+    virtual OutputInterface &operator<<(const std::string &text) = 0;
 
-	// Prise en charge du std::endl
-	OutputInterface& operator<<(std::ostream& (*f)(std::ostream&))
-	{
-		f;
-		*this << std::string("\n");
-		return *this;
-	}
+    // Prise en charge de tous les types
+    OutputInterface &operator<<(const char *text) {
+		return *this << std::string(text);
+    }
 
-	// Prise en charge de tous les types
-	OutputInterface& operator<<(const char *text)
-	{
-		*this << std::string(text);
-		return *this;
-	}
-	OutputInterface& operator<<(bool val)
-	{
-		if (val)
-			*this << std::string("true");
-		*this << std::string("false");
-		return *this;
-	}
-	OutputInterface& operator<<(int val)
-	{
-		*this << Parser::intToString(val);
-		return *this;
-	}
-	OutputInterface& operator<<(unsigned int val)
-	{
-		*this << Parser::uintToString(val);
-		return *this;
-	}
-	OutputInterface& operator<<(float val)
-	{
-		*this << Parser::floatToString(val);
-		return *this;
-	}
-	OutputInterface& operator<<(double val)
-	{
-		*this << Parser::floatToString(static_cast<float>(val));
-		return *this;
-	}
+    OutputInterface &operator<<(bool val) {
+        return *this << std::string(val ? "true" : "false");
+    }
+
+    OutputInterface &operator<<(int val) {
+        return *this << Parser::intToString(val);
+    }
+
+    OutputInterface &operator<<(unsigned int val) {
+        return *this << Parser::uintToString(val);
+    }
+
+    OutputInterface &operator<<(float val) {
+        return *this << Parser::floatToString(val);
+    }
+
+    OutputInterface &operator<<(double val) {
+        return *this << Parser::floatToString(static_cast<float>(val));
+    }
 };
 
 // Sortie console
-class ostreamInterface : public OutputInterface
-{
+class ostreamInterface : public OutputInterface {
 public:
-	// Affichage du texte
-	virtual OutputInterface& operator<<(const std::string &text)
-	{
-		std::cout << text;
-		return *this;
-	}
+    // Affichage du texte
+    virtual OutputInterface &operator<<(const std::string &text) {
+        std::cout << text;
+        return *this;
+    }
 };
 
-// Sortie par la Console Lua
-class LuaConsoleWindow;
-class LuaConsoleInterface : public OutputInterface
-{
+// Sortie par la Console Script
+class ScriptConsoleWindow;
+
+class ScriptConsoleInterface : public OutputInterface {
 public:
-	// Ctor
-	LuaConsoleInterface(LuaConsoleWindow &luaConsoleWindow)
-		: mluaConsoleWindow(luaConsoleWindow)
-	{
-	}
+    // Ctor
+    ScriptConsoleInterface(ScriptConsoleWindow &luaConsoleWindow)
+            : mluaConsoleWindow(luaConsoleWindow) {
+    }
 
 public:
-	// Affichage du texte
-	virtual OutputInterface& operator<<(const std::string &text)
-	{
-		std::cout << text;
-		mluaConsoleWindow << text;
-		return *this;
-	}
+    // Affichage du texte
+    virtual OutputInterface &operator<<(const std::string &text) {
+        std::cout << text;
+        mluaConsoleWindow << text;
+        return *this;
+    }
 
 private:
-	LuaConsoleWindow &mluaConsoleWindow;
+    ScriptConsoleWindow &mluaConsoleWindow;
 };

@@ -24,7 +24,7 @@ public:
 	// Enregistrements
 	void SetEditor(Editor *editor);
 	void SetEditBox(EditBox *editBox);
-	void SetLuaMachine(ScriptMachine *luaMachine);
+	void SetScriptMachine(ScriptMachine *luaMachine);
 
 protected:
 	// Construit la fenêtre et les éléments
@@ -53,7 +53,7 @@ private:
 	// Enregistrements
 	Editor *mEditor;
 	EditBox *mEditBox;
-	ScriptMachine *mLuaMachine;
+	ScriptMachine *mScriptMachine;
 
 	// Eléments
 	sfg::Box::Ptr mVBox;

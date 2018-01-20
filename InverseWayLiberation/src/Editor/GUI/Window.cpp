@@ -3,7 +3,7 @@
 
 // Ctor
 Window::Window(const std::string &title)
-	: mVisible(false), mApply(false), mDesktop(nullptr)
+	: mApply(false), mVisible(false), mDesktop(nullptr)
 {
 	// Crée la fenêtre
 	mWindow = sfg::Window::Create();

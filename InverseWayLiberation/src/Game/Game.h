@@ -6,81 +6,85 @@
 #include "../App/SpyedKey.h"
 
 class PhysicManager;
+
 class LevelManager;
+
 class InputManager;
+
 class Grapnel;
-class Game : public NonCopyable
-{
+
+class Game : public NonCopyable {
 public:
-	// Ctor & dtor
-	Game(sf::RenderWindow &window);
-	virtual ~Game(void);
+    // Ctor & dtor
+    Game(sf::RenderWindow &window);
 
-	// (ré)Initialiser
-	void Init();
+    virtual ~Game(void);
 
-	/// Boucle de jeu
-	void Run();
+    // (ré)Initialiser
+    void Init();
+
+    /// Boucle de jeu
+    void Run();
 
 protected:
-	/* Fonctions évènements */
-	/// Initialise le jeu
-	inline bool OnInit();
+    /* Fonctions évènements */
+    /// Initialise le jeu
+    inline bool OnInit();
 
-	/// Appelé quand la boucle commence
-	inline void OnLoopBegin();
+    /// Appelé quand la boucle commence
+    inline void OnLoopBegin();
 
-	/// Appelé pour les évènements
-	inline void OnEvent();
-	
-	/// Appelé pour la logique
-	inline void OnLogic();
+    /// Appelé pour les évènements
+    inline void OnEvent();
 
-	/// Appelé pour la physique
-	inline void OnStepPhysics();
-	
-	/// Appelé pour les mises à jour
-	inline void OnUpdate();
+    /// Appelé pour la logique
+    inline void OnLogic();
 
-	/// Appelé pour le rendu
-	inline void OnRender();
+    /// Appelé pour la physique
+    inline void OnStepPhysics();
 
-	/// Appelé quand la boucle se termine
-	inline void OnLoopEnd();
+    /// Appelé pour les mises à jour
+    inline void OnUpdate();
 
-	// Appelé quand le jeu se termine
-	inline void OnQuit();
-	
+    /// Appelé pour le rendu
+    inline void OnRender();
+
+    /// Appelé quand la boucle se termine
+    inline void OnLoopEnd();
+
+    // Appelé quand le jeu se termine
+    inline void OnQuit();
+
 private:
-	// Etats du jeu
-	bool mPaused;
-	bool mDebugDraw;
+    // Etats du jeu
+    bool mPaused;
+    bool mDebugDraw;
 
-	// Fenêtre
-	bool mQuit;
-	sf::RenderWindow &mWindow;
-	
-	// Evènements
-	InputManager &mInputManager;
-	std::vector<SpyedKey::Ptr> mSpyedKeys;
+    // Fenêtre
+    bool mQuit;
+    sf::RenderWindow &mWindow;
 
-	// Niveau
-	LevelManager &mLevel;
+    // Evènements
+    InputManager &mInputManager;
+    std::vector<SpyedKey::Ptr> mSpyedKeys;
 
-	// Monde physique
-	PhysicManager &mPhysicMgr;
+    // Niveau
+    LevelManager &mLevel;
 
-	// Textures
-	ResourceManager &mResourceManager;
+    // Monde physique
+    PhysicManager &mPhysicMgr;
 
-	// Machine Lua
-	ScriptMachine mConsole;
+    // Textures
+    ResourceManager &mResourceManager;
 
-	// Positions de la souris
-	b2Vec2 mMp;
+    // Machine de script
+    ScriptMachine mConsole;
 
-	// Eléments de la GUI
-	sfg::SFGUI *mSfGUI;
-	sfg::Desktop mDesktop;
-	sf::Clock mGUIElapsedTime;
+    // Positions de la souris
+    b2Vec2 mMp;
+
+    // Eléments de la GUI
+    sfg::SFGUI *mSfGUI;
+    sfg::Desktop mDesktop;
+    sf::Clock mGUIElapsedTime;
 };

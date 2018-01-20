@@ -6,7 +6,7 @@
 
 // Ctor
 TriggersManager::TriggersManager()
-	: mLuaMachine(nullptr),
+	: mScriptMachine(nullptr),
 	mPhysicMgr(PhysicManager::GetInstance())
 {
 }
@@ -19,8 +19,8 @@ TriggersManager::~TriggersManager()
 // Mise à jour
 void TriggersManager::Update()
 {
-	// Il nous faut une Machine Lua pour continuer
-	if (!mLuaMachine) return;
+	// Il nous faut une Machine de script pour continuer
+	if (!mScriptMachine) return;
 
 	// Crée un callback
 	AABBCallback callback(true);
@@ -47,7 +47,7 @@ void TriggersManager::Update()
 			// Sinon on l'exécute
 			else
 			{
-				action->second->Execute(mLuaMachine);
+				action->second->Execute(mScriptMachine);
 				it->get()->Done();
 			}
 		}
@@ -132,16 +132,16 @@ void TriggersManager::ScheduleRemove(const std::string &action)
 	mActionsToDelete.push_back(action);
 }
 
-// Gestion de la machine Lua
-ScriptMachine* TriggersManager::GetLuaMachine()
+// Gestion de la machine de script
+ScriptMachine* TriggersManager::GetScriptMachine()
 {
-	return mLuaMachine;
+	return mScriptMachine;
 }
-void TriggersManager::SetLuaMachine(ScriptMachine *luaMachine)
+void TriggersManager::SetScriptMachine(ScriptMachine *luaMachine)
 {
 	myAssert(luaMachine, "La ScriptMachine passée n'est pas valide.");
 
-	mLuaMachine = luaMachine;
+	mScriptMachine = luaMachine;
 }
 
 void TriggersManager::DebugDraw(sf::RenderTarget &target) const

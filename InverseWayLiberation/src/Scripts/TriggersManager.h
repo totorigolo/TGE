@@ -41,9 +41,9 @@ public:
 	void ScheduleRemove(std::shared_ptr<ScriptArea> area);
 	void ScheduleRemove(const std::string &action);
 
-	// Gestion de la machine Lua
-	ScriptMachine* GetLuaMachine();
-	void SetLuaMachine(ScriptMachine *luaMachine);
+	// Gestion de la machine de script
+	ScriptMachine* GetScriptMachine();
+	void SetScriptMachine(ScriptMachine *luaMachine);
 
 	// Affichage debug
 	void DebugDraw(sf::RenderTarget &target) const;
@@ -55,8 +55,8 @@ private:
 	// Liste de zones
 	std::list<std::shared_ptr<ScriptArea>> mAreas;
 
-	// Machine Lua
-	ScriptMachine *mLuaMachine;
+	// Machine de script
+	ScriptMachine *mScriptMachine;
 
 	// PhysicManager
 	PhysicManager &mPhysicMgr;

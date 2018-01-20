@@ -30,20 +30,20 @@ EditBox::EditBox(sfg::Desktop &desktop)
           mSelectedJoint(nullptr),
           mSelectionType(SelectionType::Null),
           mSelectionChanged(false),
-          mEmptyScenario(*this),
-          mDecoScenario(*this),
           mHumScenario(*this),
+          mDecoScenario(*this),
           mBodyScenario(*this),
+          mEmptyScenario(*this),
           mPointLightScenario(*this),
           mLevelWindowAdded(false),
-          mLuaConsoleWindowAdded(false),
+          mTexturesWindowAdded(false),
+          mHumCreationWindowAdded(false),
           mColFilteringWindowAdded(false),
           mDecoCreationWindowAdded(false),
-          mHumCreationWindowAdded(false),
           mPolyCreationWindowAdded(false),
+          mScriptConsoleWindowAdded(false),
           mBasicBodyCreationWindowAdded(false),
-          mPointLightCreationWindowAdded(false),
-          mTexturesWindowAdded(false) {
+          mPointLightCreationWindowAdded(false) {
     // Crée la fenêtre
     mWindow = sfg::Window::Create();
     mDesktop.Add(mWindow);
@@ -307,15 +307,15 @@ void EditBox::UpdateGUI() {
         ShowEmptyScenario();
 }
 
-// Gestion de la Machine Lua
-void EditBox::SetLuaMachine(ScriptMachine *luaMachine) {
+// Gestion de la Machine de script
+void EditBox::SetScriptMachine(ScriptMachine *luaMachine) {
     myAssert(luaMachine, "La ScriptMachine passée est invalide.");
 
-    mLuaConsoleWindow.SetLuaMachine(luaMachine);
+    mScriptConsoleWindow.SetScriptMachine(luaMachine);
 }
 
-ScriptMachine *EditBox::GetLuaMachine() {
-    return mLuaConsoleWindow.GetLuaMachine();
+ScriptMachine *EditBox::GetScriptMachine() {
+    return mScriptConsoleWindow.GetScriptMachine();
 }
 
 // Obtient le repère de l'objet sélectionné
@@ -344,28 +344,28 @@ sf::CircleShape EditBox::GetSelectionMark() {
         cs.setPosition(b22sfVec(bb->GetPosition(), mPhysicMgr.GetPPM()));
     } else if (mSelectionType == SelectionType::Deco) {
         // Obtient le BasicBody
-        Deco * d = (Deco * )
+        Deco *d = (Deco * )
         mSelectedEntity;
         myAssert(d, "Erreur lors du la détermination du type.");
 
         cs.setPosition(d->GetSprite()->getPosition());
     } else if (mSelectionType == SelectionType::PointLight) {
         // Obtient la PointLight
-        PointLight * pl = (PointLight * )
+        PointLight *pl = (PointLight * )
         mSelectedEntity;
         myAssert(pl, "Erreur lors du la détermination du type.");
 
         cs.setPosition(pl->GetPosition_sf());
     } else if (mSelectionType == SelectionType::Player) {
         // Obtient le Player
-        Player * p = (Player * )
+        Player *p = (Player * )
         mSelectedEntity;
         myAssert(p, "Erreur lors du la détermination du type.");
 
         cs.setPosition(b22sfVec(p->GetPosition(), mPhysicMgr.GetPPM()));
     } else if (mSelectionType == SelectionType::Hum) {
         // Obtient le Hum
-        Hum * h = (Hum * )
+        Hum *h = (Hum * )
         mSelectedEntity;
         myAssert(h, "Erreur lors du la détermination du type.");
 
@@ -420,13 +420,13 @@ void EditBox::ShowTexturesWindow() {
     mTexturesWindow.Show();
 }
 
-void EditBox::OnShowLuaConsoleWindow() {
-    if (!mLuaConsoleWindowAdded) {
-        mLuaConsoleWindow.RegisterInDesktop(&mDesktop);
-        mLuaConsoleWindowAdded = true;
+void EditBox::OnShowScriptConsoleWindow() {
+    if (!mScriptConsoleWindowAdded) {
+        mScriptConsoleWindow.RegisterInDesktop(&mDesktop);
+        mScriptConsoleWindowAdded = true;
     }
 
-    mLuaConsoleWindow.Show();
+    mScriptConsoleWindow.Show();
 }
 
 void EditBox::OnShowColFilteringWindow() {
@@ -457,7 +457,7 @@ void EditBox::ShowHumCreationWindow() {
 }
 
 void EditBox::ShowPolyCreationWindow() {
-    if (!mLuaConsoleWindowAdded) {
+    if (!mScriptConsoleWindowAdded) {
         mPolyCreationWindow.RegisterInDesktop(&mDesktop);
         mPolyCreationWindowAdded = true;
     }
@@ -513,8 +513,8 @@ TexturesWindow *EditBox::GetTexturesWindow() {
     return &mTexturesWindow;
 }
 
-LuaConsoleWindow *EditBox::GetLuaConsoleWindow() {
-    return &mLuaConsoleWindow;
+ScriptConsoleWindow *EditBox::GetScriptConsoleWindow() {
+    return &mScriptConsoleWindow;
 }
 
 ColFilteringWindow *EditBox::GetColFilteringWindow() {

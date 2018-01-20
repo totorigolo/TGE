@@ -137,7 +137,7 @@ sf::Color const& LevelManager::GetBckgColor() const
 }
 
 // TODO
-void LevelManager::SetLuaConsole(ScriptMachine *machine)
+void LevelManager::SetScriptConsole(ScriptMachine *machine)
 {
-	mTriggersManager.SetLuaMachine(machine);
+	mTriggersManager.SetScriptMachine(machine);
 }

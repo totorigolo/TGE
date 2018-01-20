@@ -18,6 +18,7 @@ include(cotire)
 # Dépendances
 set(EXTRA_LIBS
         lua
+        luabind
         tinyxml2
         sfml-system
         sfml-audio
@@ -31,7 +32,7 @@ set(EXTRA_LIBS
 include_directories(
         "/usr/local/include/"
         "/usr/include"
-        "../luwra-master/lib"
+#        "../luwra-master/lib"
 )
 
 # Bibliothèques

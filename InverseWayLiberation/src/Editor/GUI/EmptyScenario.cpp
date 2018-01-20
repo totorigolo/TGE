@@ -23,8 +23,8 @@ void EmptyScenario::Fill()
 	mOpenLevelBtn = sfg::Button::Create(L"Level management");
 	mOpenLevelBtn->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind(&EditBox::OnShowLevelWindow, &mEditBox));
 
-	mOpenLuaConsoleBtn = sfg::Button::Create(L"Lua Console");
-	mOpenLuaConsoleBtn->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind(&EditBox::OnShowLuaConsoleWindow, &mEditBox));
+	mOpenScriptConsoleBtn = sfg::Button::Create(L"Script Console");
+	mOpenScriptConsoleBtn->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind(&EditBox::OnShowScriptConsoleWindow, &mEditBox));
 
 	mTexturesBtn = sfg::Button::Create(L"Textures");
 	mTexturesBtn->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind(&EditBox::ShowTexturesWindow, &mEditBox));
@@ -46,7 +46,7 @@ void EmptyScenario::Fill()
 
 	// Ajoute les éléments à la fenêtre
 	AddToVBox(mOpenLevelBtn);
-	AddToVBox(mOpenLuaConsoleBtn);
+	AddToVBox(mOpenScriptConsoleBtn);
 	AddToVBox(mTexturesBtn);
 	AddToVBox(mDecoCreationBtn);
 	AddToVBox(mPolyCreationBtn);

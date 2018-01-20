@@ -1,11 +1,13 @@
 #include "../ScriptMachine.h"
 
+#include <luabind/operator.hpp>
+
 // Enregistrements privés
 void ScriptMachine::RegisterSFML()
 {
 	/* Enregistre les classes */
 	try
-	{/*
+	{
 		// sf::Vector2f
 		luabind::module(mLuaState) [
 			// La classe
@@ -180,7 +182,7 @@ void ScriptMachine::RegisterSFML()
 				]
 				// Fxs
 			.def("isKeyPressed", &sf::Keyboard::isKeyPressed)
-		];*/
+		];
 	}
 	catch (const std::exception &e)
 	{

@@ -18,3 +18,4 @@ zic/
 .idea/
 Cmake/
 SFGUI/
+luabind-deboostified/

@@ -8,8 +8,8 @@
 
 // Ctor
 PointLight::PointLight(int lightRadius, sf::Color lightColor, int layer)
-	: Entity(layer), mEngine(LightEngine::GetInstance()),
-	mLightColor(lightColor), mLightRadius(lightRadius), mUpdate(true)
+	: Entity(layer), mUpdate(true), mEngine(LightEngine::GetInstance()),
+	mLightColor(lightColor), mLightRadius(lightRadius)
 {
 	myAssert(mLightRadius > 0, "Light radius must be > 0");
 

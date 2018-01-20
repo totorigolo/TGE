@@ -5,7 +5,7 @@
 void ScriptMachine::RegisterInputManager()
 {
 	try
-	{/*
+	{
 		// Enregistrement
 		luabind::module(mLuaState) [
 			// Level
@@ -17,7 +17,7 @@ void ScriptMachine::RegisterInputManager()
 					luabind::value("Pressed", KeyState::Pressed),
 					luabind::value("Released", KeyState::Released)
 				]
-				/* Fxs * /
+				/* Fxs */
 				// Vue et zoom
 				.def("SetZoom", &InputManager::SetZoom)
 				.def("SetCenter", &InputManager::SetCenter)
@@ -40,7 +40,7 @@ void ScriptMachine::RegisterInputManager()
 				.def("KeyPressed", &InputManager::KeyPressed)
 				.def("KeyReleased", &InputManager::KeyReleased)
 				.def("GetSpyedKeyState", &InputManager::GetSpyedKeyState)
-		];*/
+		];
 	}
 	catch (const std::exception &e)
 	{

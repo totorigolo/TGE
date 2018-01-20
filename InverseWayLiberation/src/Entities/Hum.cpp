@@ -7,10 +7,23 @@
 
 // Ctor & dtor
 Hum::Hum(int layer)
-        : Entity(layer), mPhysicMgr(PhysicManager::GetInstance()), mBodyIsCreated(false), mBody(nullptr),
-          mHull(nullptr),
-          mAge(0.0), mStrengh(0.0), mHeight(0.0), mAgeFactor(0.0), mTopWidth(0.0), mBottomWidth(0.0), mEyeHeight(0.0),
-          mHasMoved(true), mIsDead(true), mCanJump(true), mSensorJump(nullptr), mSpeaking(false) {
+        : Entity(layer),
+          mHasMoved(true),
+          mIsDead(true),
+          mCanJump(true),
+          mAge(0.0),
+          mStrengh(0.0),
+          mHeight(0.0),
+          mAgeFactor(0.0),
+          mTopWidth(0.0),
+          mBottomWidth(0.0),
+          mEyeHeight(0.0),
+          mSpeaking(false),
+          mSensorJump(nullptr),
+          mPhysicMgr(PhysicManager::GetInstance()),
+          mBodyIsCreated(false),
+          mBody(nullptr),
+          mHull(nullptr) {
     mType = EntityType::Hum;
     mIsAlive = false;
 

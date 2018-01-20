@@ -1,8 +1,9 @@
 #pragma once
 
-#include <lua.h>
+#include <luabind/luabind.hpp>
+#include <lua.hpp>
 #include "OutputInterfaces.h"
-#include "../Editor/GUI/LuaConsoleWindow.h"
+#include "../Editor/GUI/ScriptConsoleWindow.h"
 
 class ScriptMachine : public NonCopyable {
 public:
@@ -35,7 +36,7 @@ public:
     template<typename T>
     void RegisterGlobalVar(const std::string &name, T *var) {
         try {
-//			luabind::globals(mLuaState)[name] = var;
+			luabind::globals(mLuaState)[name] = var;
         }
         catch (const std::exception &e) {
             std::cerr << e.what() << std::endl;
@@ -46,11 +47,10 @@ public:
 
     // Exécution
     int DoFile(const std::string &path, OutputInterface *_interface = nullptr);//new ostreamInterface());
-    int LoadFile(const std::string &path, OutputInterface *_interface = nullptr);//new ostreamInterface());
     int DoString(const std::string &command, OutputInterface *_interface = nullptr);//new ostreamInterface());
 
     // Enregistre la console de scripts
-    void SetConsole(LuaConsoleWindow *window);
+    void SetConsole(ScriptConsoleWindow *window);
 
     OutputInterface *GetInterface(OutputInterface *_interface = nullptr);
 
@@ -71,6 +71,6 @@ private:
     // State Lua
     lua_State *mLuaState;
 
-    // Console Lua
-    LuaConsoleWindow *mLuaConsoleWindow;
+    // Console Script
+    ScriptConsoleWindow *mScriptConsoleWindow;
 };

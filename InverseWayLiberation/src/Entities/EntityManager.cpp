@@ -175,10 +175,6 @@ void EntityManager::ChangeID(unsigned int id, unsigned int newID)
 {
 	if (id == newID) return;
 
-	// Vérifie que les ID sont valides
-	myAssert(id >= 0, "L'ID donné n'est pas valide n'est pas valide (#" + Parser::intToString(id) + ") !");
-	myAssert(newID >= 0, "Le nouvel ID donné n'est pas valide n'est pas valide (#" + Parser::intToString(id) + ") !");
-
 	// Récupère un pointeur vers l'Entity
 	Entity* e1 = GetEntity(id);
 	myAssert(e1, "Impossible de trouver d'Entity avec l'ID #" + Parser::intToString(id) + " !");

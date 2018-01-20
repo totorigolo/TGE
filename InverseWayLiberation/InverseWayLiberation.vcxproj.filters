@@ -91,13 +91,13 @@
     <Filter Include="Fichiers sources\Editor">
       <UniqueIdentifier>{b4aa2464-5162-410a-8401-87a03722d40a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Fichiers sources\Lua">
+    <Filter Include="Fichiers sources\Script">
       <UniqueIdentifier>{d2465575-04f3-4621-ba30-7b0ce9e8f73a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Fichiers d%27en-tête\Lua">
+    <Filter Include="Fichiers d%27en-tête\Script">
       <UniqueIdentifier>{6d9e3da5-ab6a-4356-a25b-c5d2c7dbcdb1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Fichiers sources\Lua\Registrations">
+    <Filter Include="Fichiers sources\Script\Registrations">
       <UniqueIdentifier>{7df680c7-277c-4c5f-acea-69bcb4f93d9f}</UniqueIdentifier>
     </Filter>
     <Filter Include="Fichiers sources\Editor\GUI">
@@ -266,38 +266,38 @@
     <ClCompile Include="src\Editor\Editor.cpp">
       <Filter>Fichiers sources\Editor</Filter>
     </ClCompile>
-    <ClCompile Include="src\Lua\LuaMachine.cpp">
-      <Filter>Fichiers sources\Lua</Filter>
+    <ClCompile Include="src\Script\ScriptMachine.cpp">
+      <Filter>Fichiers sources\Script</Filter>
     </ClCompile>
-    <ClCompile Include="src\Lua\Registrations\RegisterBox2D.cpp">
-      <Filter>Fichiers sources\Lua\Registrations</Filter>
+    <ClCompile Include="src\Script\Registrations\RegisterBox2D.cpp">
+      <Filter>Fichiers sources\Script\Registrations</Filter>
     </ClCompile>
-    <ClCompile Include="src\Lua\Registrations\RegisterEntityFactory.cpp">
-      <Filter>Fichiers sources\Lua\Registrations</Filter>
+    <ClCompile Include="src\Script\Registrations\RegisterEntityFactory.cpp">
+      <Filter>Fichiers sources\Script\Registrations</Filter>
     </ClCompile>
-    <ClCompile Include="src\Lua\Registrations\RegisterInputManager.cpp">
-      <Filter>Fichiers sources\Lua\Registrations</Filter>
+    <ClCompile Include="src\Script\Registrations\RegisterInputManager.cpp">
+      <Filter>Fichiers sources\Script\Registrations</Filter>
     </ClCompile>
-    <ClCompile Include="src\Lua\Registrations\RegisterJointFactory.cpp">
-      <Filter>Fichiers sources\Lua\Registrations</Filter>
+    <ClCompile Include="src\Script\Registrations\RegisterJointFactory.cpp">
+      <Filter>Fichiers sources\Script\Registrations</Filter>
     </ClCompile>
-    <ClCompile Include="src\Lua\Registrations\RegisterLevelManager.cpp">
-      <Filter>Fichiers sources\Lua\Registrations</Filter>
+    <ClCompile Include="src\Script\Registrations\RegisterLevelManager.cpp">
+      <Filter>Fichiers sources\Script\Registrations</Filter>
     </ClCompile>
-    <ClCompile Include="src\Lua\Registrations\RegisterPhysicManager.cpp">
-      <Filter>Fichiers sources\Lua\Registrations</Filter>
+    <ClCompile Include="src\Script\Registrations\RegisterPhysicManager.cpp">
+      <Filter>Fichiers sources\Script\Registrations</Filter>
     </ClCompile>
-    <ClCompile Include="src\Lua\Registrations\RegisterResourceManager.cpp">
-      <Filter>Fichiers sources\Lua\Registrations</Filter>
+    <ClCompile Include="src\Script\Registrations\RegisterResourceManager.cpp">
+      <Filter>Fichiers sources\Script\Registrations</Filter>
     </ClCompile>
-    <ClCompile Include="src\Lua\Registrations\RegisterSFML.cpp">
-      <Filter>Fichiers sources\Lua\Registrations</Filter>
+    <ClCompile Include="src\Script\Registrations\RegisterSFML.cpp">
+      <Filter>Fichiers sources\Script\Registrations</Filter>
     </ClCompile>
-    <ClCompile Include="src\Lua\TriggersManager.cpp">
-      <Filter>Fichiers sources\Lua</Filter>
+    <ClCompile Include="src\Script\TriggersManager.cpp">
+      <Filter>Fichiers sources\Script</Filter>
     </ClCompile>
-    <ClCompile Include="src\Lua\LuaAction.cpp">
-      <Filter>Fichiers sources\Lua</Filter>
+    <ClCompile Include="src\Script\ScriptAction.cpp">
+      <Filter>Fichiers sources\Script</Filter>
     </ClCompile>
     <ClCompile Include="src\App\InputManager.cpp">
       <Filter>Fichiers sources\App</Filter>
@@ -338,7 +338,7 @@
     <ClCompile Include="src\Tools\PromptEntry.cpp">
       <Filter>Fichiers sources\Tools</Filter>
     </ClCompile>
-    <ClCompile Include="src\Editor\GUI\LuaConsoleWindow.cpp">
+    <ClCompile Include="src\Editor\GUI\ScriptConsoleWindow.cpp">
       <Filter>Fichiers sources\Editor\GUI</Filter>
     </ClCompile>
     <ClCompile Include="src\Editor\GUI\PolyCreationWindow.cpp">
@@ -395,14 +395,14 @@
     <ClCompile Include="src\Graphics\LightEngine.cpp">
       <Filter>Fichiers sources\Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="src\Lua\Registrations\RegisterEntity.cpp">
-      <Filter>Fichiers sources\Lua\Registrations</Filter>
+    <ClCompile Include="src\Script\Registrations\RegisterEntity.cpp">
+      <Filter>Fichiers sources\Script\Registrations</Filter>
     </ClCompile>
-    <ClCompile Include="src\Lua\Registrations\RegisterJoint.cpp">
-      <Filter>Fichiers sources\Lua\Registrations</Filter>
+    <ClCompile Include="src\Script\Registrations\RegisterJoint.cpp">
+      <Filter>Fichiers sources\Script\Registrations</Filter>
     </ClCompile>
-    <ClCompile Include="src\Lua\LuaArea.cpp">
-      <Filter>Fichiers sources\Lua</Filter>
+    <ClCompile Include="src\Script\ScriptArea.cpp">
+      <Filter>Fichiers sources\Script</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -538,14 +538,14 @@
     <ClInclude Include="src\Editor\Editor.h">
       <Filter>Fichiers d%27en-tête\Editor</Filter>
     </ClInclude>
-    <ClInclude Include="src\Lua\LuaMachine.h">
-      <Filter>Fichiers d%27en-tête\Lua</Filter>
+    <ClInclude Include="src\Script\ScriptMachine.h">
+      <Filter>Fichiers d%27en-tête\Script</Filter>
     </ClInclude>
-    <ClInclude Include="src\Lua\TriggersManager.h">
-      <Filter>Fichiers d%27en-tête\Lua</Filter>
+    <ClInclude Include="src\Script\TriggersManager.h">
+      <Filter>Fichiers d%27en-tête\Script</Filter>
     </ClInclude>
-    <ClInclude Include="src\Lua\LuaAction.h">
-      <Filter>Fichiers d%27en-tête\Lua</Filter>
+    <ClInclude Include="src\Script\ScriptAction.h">
+      <Filter>Fichiers d%27en-tête\Script</Filter>
     </ClInclude>
     <ClInclude Include="src\App\InputManager.h">
       <Filter>Fichiers d%27en-tête\App</Filter>
@@ -589,11 +589,11 @@
     <ClInclude Include="src\Tools\PromptEntry.h">
       <Filter>Fichiers d%27en-tête\Tools</Filter>
     </ClInclude>
-    <ClInclude Include="src\Editor\GUI\LuaConsoleWindow.h">
+    <ClInclude Include="src\Editor\GUI\ScriptConsoleWindow.h">
       <Filter>Fichiers d%27en-tête\Editor\GUI</Filter>
     </ClInclude>
-    <ClInclude Include="src\Lua\OutputInterfaces.h">
-      <Filter>Fichiers d%27en-tête\Lua</Filter>
+    <ClInclude Include="src\Script\OutputInterfaces.h">
+      <Filter>Fichiers d%27en-tête\Script</Filter>
     </ClInclude>
     <ClInclude Include="src\Editor\GUI\PolyCreationWindow.h">
       <Filter>Fichiers d%27en-tête\Editor\GUI</Filter>
@@ -658,8 +658,8 @@
     <ClInclude Include="src\Resources\Font.h">
       <Filter>Fichiers d%27en-tête\Resources</Filter>
     </ClInclude>
-    <ClInclude Include="src\Lua\LuaArea.h">
-      <Filter>Fichiers d%27en-tête\Lua</Filter>
+    <ClInclude Include="src\Script\ScriptArea.h">
+      <Filter>Fichiers d%27en-tête\Script</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

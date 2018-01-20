@@ -12,101 +12,104 @@
 #include "../App/SpyedKey.h"
 
 class PhysicManager;
-class LevelManager;
-class InputManager;
-class Editor : public NonCopyable
-{
-public:
-	// Ctor & dtor
-	Editor(sf::RenderWindow &window);
-	virtual ~Editor(void);
-	
-	// (ré)Initialiser
-	void Init();
 
-	/// Boucle de jeu
-	void Run();
+class LevelManager;
+
+class InputManager;
+
+class Editor : public NonCopyable {
+public:
+    // Ctor & dtor
+    Editor(sf::RenderWindow &window);
+
+    virtual ~Editor(void);
+
+    // (ré)Initialiser
+    void Init();
+
+    /// Boucle de jeu
+    void Run();
 
 protected:
-	/* Fonctions évènements */
-	/// Initialise le jeu
-	inline bool OnInit();
+    /* Fonctions évènements */
+    /// Initialise le jeu
+    inline bool OnInit();
 
-	/// Appelé quand la boucle commence
-	inline void OnLoopBegin();
+    /// Appelé quand la boucle commence
+    inline void OnLoopBegin();
 
-	/// Appelé pour les évènements
-	inline void OnEvent();
-	
-	/// Appelé pour la logique
-	inline void OnLogic();
+    /// Appelé pour les évènements
+    inline void OnEvent();
 
-	/// Appelé pour la physique
-	inline void OnStepPhysics();
-	
-	/// Appelé pour les mises à jour
-	inline void OnUpdate();
+    /// Appelé pour la logique
+    inline void OnLogic();
 
-	/// Appelé pour le rendu
-	inline void OnRender();
+    /// Appelé pour la physique
+    inline void OnStepPhysics();
 
-	/// Appelé quand la boucle se termine
-	inline void OnLoopEnd();
+    /// Appelé pour les mises à jour
+    inline void OnUpdate();
 
-	// Appelé quand le jeu se termine
-	inline void OnQuit();
-	
+    /// Appelé pour le rendu
+    inline void OnRender();
+
+    /// Appelé quand la boucle se termine
+    inline void OnLoopEnd();
+
+    // Appelé quand le jeu se termine
+    inline void OnQuit();
+
 private:
-	// Etats du jeu
-	bool mPaused;
-	bool mDebugDraw;
+    // Etats du jeu
+    bool mPaused;
+    bool mDebugDraw;
 
-	// Fenêtre
-	bool mQuit;
-	sf::RenderWindow &mWindow;
-	
-	// Evènements
-	InputManager &mInputManager;
-	std::vector<SpyedKey::Ptr> mSpyedKeys;
+    // Fenêtre
+    bool mQuit;
+    sf::RenderWindow &mWindow;
 
-	// Ajout d'Entities
-	PolyCreationWindow *mPolyCreationWindow;
-	DecoCreationWindow *mDecoCreationWindow;
-	HumCreationWindow *mHumCreationWindow;
-	BasicBodyCreationWindow *mBasicBodyCreationWindow;
-	PointLightCreationWindow *mPointLightCreationWindow;
+    // Evènements
+    InputManager &mInputManager;
+    std::vector<SpyedKey::Ptr> mSpyedKeys;
 
-	// Niveau
-	LevelManager &mLevel;
-	EntityManager &mEntityMgr;
+    // Ajout d'Entities
+    PolyCreationWindow *mPolyCreationWindow;
+    DecoCreationWindow *mDecoCreationWindow;
+    HumCreationWindow *mHumCreationWindow;
+    BasicBodyCreationWindow *mBasicBodyCreationWindow;
+    PointLightCreationWindow *mPointLightCreationWindow;
 
-	// Monde physique
-	PhysicManager &mPhysicMgr;
+    // Niveau
+    LevelManager &mLevel;
+    EntityManager &mEntityMgr;
 
-	// Textures
-	ResourceManager &mResourceManager;
+    // Monde physique
+    PhysicManager &mPhysicMgr;
 
-	// Machine Lua
-	ScriptMachine mConsole;
+    // Textures
+    ResourceManager &mResourceManager;
 
-	// Positions de la souris
-	b2Vec2 mMp;
+    // Machine de script
+    ScriptMachine mScriptMachine;
 
-	// Déplacement des objets
-	bool mMouseJointCreated;
-	int mMouseJointID;
-	b2Body *mMouseMovingBody;
-	b2Vec2 mMouseMovingBodyAnchor;
+    // Positions de la souris
+    b2Vec2 mMp;
 
-	// Variables pour la création de joints
-	b2Body *mPinBodyA;
-	b2Vec2 mPinAnchorA; // Ancres locales aux bodies
-	b2Body *mPinBodyB;
-	b2Vec2 mPinAnchorB;
+    // Déplacement des objets
+    bool mMouseJointCreated;
+    int mMouseJointID;
+    b2Body *mMouseMovingBody;
+    b2Vec2 mMouseMovingBodyAnchor;
 
-	// Eléments de la GUI
-	sfg::SFGUI *mSfGUI;
-	sfg::Desktop mDesktop;
-	sf::Clock mGUIElapsedTime;
-	std::unique_ptr<EditBox> mEditBox;
+    // Variables pour la création de joints
+    b2Body *mPinBodyA;
+    b2Vec2 mPinAnchorA; // Ancres locales aux bodies
+    b2Body *mPinBodyB;
+    b2Vec2 mPinAnchorB;
+
+    // Eléments de la GUI
+    sfg::SFGUI *mSfGUI;
+    sfg::Desktop mDesktop;
+    sf::Clock mGUIElapsedTime;
+    std::unique_ptr<EditBox> mEditBox;
 };

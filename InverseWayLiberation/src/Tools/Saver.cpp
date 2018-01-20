@@ -4,7 +4,7 @@
 
 // Ctor
 Saver::Saver(std::string const& path, bool check)
-	: mPath(path), mExists(false)
+	: mExists(false), mPath(path)
 {
 	// Vérifie si le fichier existe déjà
 	std::ifstream file(path);

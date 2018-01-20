@@ -4,80 +4,89 @@
 #include "Entity.h"
 
 class LightEngine;
+
 struct TextureHolder;
-class PointLight : public Entity
-{
+
+class PointLight : public Entity {
 public:
-	// Ctor & dtor
-	PointLight(int lightRadius = 256, sf::Color lightColor = sf::Color::White, int layer = 10);
-	virtual ~PointLight(void);
+    // Ctor & dtor
+    PointLight(int lightRadius = 256, sf::Color lightColor = sf::Color::White, int layer = 10);
 
-	// Gestion de la position
-	void SetPosition(const b2Vec2& pos);
-	void SetPosition(const sf::Vector2f& pos);
-	void Move(const b2Vec2& off);
-	void Move(const sf::Vector2f& off);
-	const b2Vec2 GetPosition(void) const;
-	const sf::Vector2f& GetPosition_sf(void) const;
+    virtual ~PointLight(void);
 
-	// Mise à jour
-	void Update(void);
+    // Gestion de la position
+    void SetPosition(const b2Vec2 &pos);
 
-	// Crée les textures
-	void CreateTextures(void);
+    void SetPosition(const sf::Vector2f &pos);
 
-	// Retourne les ombres
-	const sf::VertexArray& GetVertexArray(void) const;
+    void Move(const b2Vec2 &off);
 
-	// Gère la couleur de la lumière
-	sf::Color GetLightColor(void) const;
-	void SetLightColor(const sf::Color& lightColor);
+    void Move(const sf::Vector2f &off);
 
-	// Gère la taille de la lampe
-	unsigned int GetLightRadius(void) const;
-	void SetLightRadius(unsigned int radius);
+    const b2Vec2 GetPosition(void) const;
 
-	// Récupère la boîte englobante
-	sf::FloatRect GetBoundingBox(void) const;
+    const sf::Vector2f &GetPosition_sf(void) const;
 
-	// Accesseurs
-	unsigned int GetID() const;
+    // Mise à jour
+    void Update(void);
 
-protected:
-	// Accès du LightEngine
-	friend class LightEngine;
+    // Crée les textures
+    void CreateTextures(void);
 
-	// Vue
-	sf::View view;
+    // Retourne les ombres
+    const sf::VertexArray &GetVertexArray(void) const;
 
-	// Géométrie des ombres
-	sf::VertexArray mShadowsVertexArray;
+    // Gère la couleur de la lumière
+    sf::Color GetLightColor(void) const;
 
-	// Lumière
-	sf::RenderTexture mLightTex;
-	sf::Sprite mLightSprite;
+    void SetLightColor(const sf::Color &lightColor);
 
-private:
-	friend class LightManager;
+    // Gère la taille de la lampe
+    unsigned int GetLightRadius(void) const;
 
-	// Identifiant (uniques)
-	unsigned int mID;
+    void SetLightRadius(unsigned int radius);
+
+    // Récupère la boîte englobante
+    sf::FloatRect GetBoundingBox(void) const;
+
+    // Accesseurs
+    unsigned int GetID() const;
 
 protected:
-	// Rendu
-	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
+    // Accès du LightEngine
+    friend class LightEngine;
+
+    // Vue
+    sf::View view;
+
+    // Géométrie des ombres
+    sf::VertexArray mShadowsVertexArray;
+
+    // Lumière
+    sf::RenderTexture mLightTex;
+    sf::Sprite mLightSprite;
 
 private:
-	// Propriétés
-	bool mUpdate;
-	
-	// LightEngine
-	LightEngine &mEngine;
+    friend class LightManager;
 
-	// Position
-	sf::Vector2f mPosition;
+    // Identifiant (uniques)
+    unsigned int mID;
 
-	// Propriétés de la lumières
-	sf::Color mLightColor;
-	unsigned int mLightRadius;
+protected:
+    // Rendu
+    virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const;
+
+private:
+    // Propriétés
+    bool mUpdate;
+
+    // LightEngine
+    LightEngine &mEngine;
+
+    // Position
+    sf::Vector2f mPosition;
+
+    // Propriétés de la lumières
+    sf::Color mLightColor;
+    unsigned int mLightRadius;
 };

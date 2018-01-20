@@ -6,7 +6,7 @@
 void ScriptMachine::RegisterPhysicManager()
 {
 	try
-	{/*
+	{
 		// Enregistrement
 		luabind::module(mLuaState) [
 			// Level
@@ -28,9 +28,10 @@ void ScriptMachine::RegisterPhysicManager()
 				.def("GetJointName", &PhysicManager::GetName)
 				.def("JointExists", (bool(PhysicManager::*)(int) const)&PhysicManager::JointExists)
 				.def("JointExists", (bool(PhysicManager::*)(const std::string&) const)&PhysicManager::JointExists)
-				.def("GetJoint", (Joint*(PhysicManager::*)(int))&PhysicManager::GetJoint, luabind::dependency(_1, luabind::result))
+				.def("GetJoint", (Joint*(PhysicManager::*)(int))&PhysicManager::GetJoint, luabind::dependency_policy<1, 0>())
+//				.def("GetJoint", (Joint*(PhysicManager::*)(int))&PhysicManager::GetJoint, luabind::dependency(_1, luabind::result))
 				.def("GetJoint", (Joint*(PhysicManager::*)(const std::string&))&PhysicManager::GetJoint)
-		];*/
+		];
 	}
 	catch (const std::exception &e)
 	{

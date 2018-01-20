@@ -6,14 +6,14 @@
 void ScriptMachine::RegisterLevelManager()
 {
 	try
-	{/*
+	{
 		// Enregistrement
 		luabind::module(mLuaState) [
 			// Level
 			luabind::class_<LevelManager>("LevelManager")
 				// Fxs
 				.def("LoadFromFile", &LevelManager::LoadFromFile)
-				.def("GetPlayer", &LevelManager::GetPlayer, luabind::dependency(luabind::result, _1))
+				.def("GetPlayer", &LevelManager::GetPlayer, luabind::dependency_policy<0, 1>())//(luabind::result, _1))
 				.def("PrepareForGame", &LevelManager::PrepareForGame)
 				.def("Clear", &LevelManager::Clear)
 				// Attributs
@@ -21,7 +21,7 @@ void ScriptMachine::RegisterLevelManager()
 				.property("bckgcolor", &LevelManager::GetBckgColor, &LevelManager::SetBckgColor)
 				.property("defaultZoom", &LevelManager::GetDefaultZoom, &LevelManager::SetDefaultZoom)
 				.property("defaultCenter", &LevelManager::GetDefaultCenter, &LevelManager::SetDefaultCenter)
-		];*/
+		];
 	}
 	catch (const std::exception &e)
 	{

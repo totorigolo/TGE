@@ -60,8 +60,8 @@ set(Editor_src
         ${SRC_DIR}/Editor/GUI/PointLightScenario.cpp
         ${SRC_DIR}/Editor/GUI/PointLightCreationWindow.h
         ${SRC_DIR}/Editor/GUI/PointLightCreationWindow.cpp
-        ${SRC_DIR}/Editor/GUI/LuaConsoleWindow.h
-        ${SRC_DIR}/Editor/GUI/LuaConsoleWindow.cpp
+        ${SRC_DIR}/Editor/GUI/ScriptConsoleWindow.h
+        ${SRC_DIR}/Editor/GUI/ScriptConsoleWindow.cpp
         ${SRC_DIR}/Editor/GUI/LevelWindow.h
         ${SRC_DIR}/Editor/GUI/LevelWindow.cpp
         ${SRC_DIR}/Editor/GUI/HumScenario.h

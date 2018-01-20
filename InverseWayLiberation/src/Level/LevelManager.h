@@ -1,89 +1,105 @@
 #pragma once
+
 #include "../Resources/ResourceManager.h"
 
 class Player;
+
 class LevelSaver;
+
 class LevelLoader;
+
 class EntityManager;
+
 class TriggersManager;
+
 class PartitioningTree;
+
 class PhysicManager;
+
 class ScriptMachine;
-class LevelManager : public sf::Drawable, public Singleton<LevelManager>
-{
-	friend class LevelSaver;
-	friend class LevelLoader;
+
+class LevelManager : public sf::Drawable, public Singleton<LevelManager> {
+    friend class LevelSaver;
+
+    friend class LevelLoader;
 
 protected:
-	friend class Singleton<LevelManager>;
+    friend class Singleton<LevelManager>;
 
-	// Ctor & dtor
-	LevelManager();
-	virtual ~LevelManager(void);
+    // Ctor & dtor
+    LevelManager();
+
+    virtual ~LevelManager(void);
 
 public:
-	// Charge un niveau à partir d'un XVL
-	void LoadFromFile(const std::string &path);
+    // Charge un niveau à partir d'un XVL
+    void LoadFromFile(const std::string &path);
 
-	// Vide tout le niveau
-	void Clear();
+    // Vide tout le niveau
+    void Clear();
 
-	// Mise à jour
-	void Update();
-	
-	// Appelé juste avant la boucle de jeu, après son remplissage
-	void PrepareForGame();
-	
-	// Pour le rendu
-    virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
+    // Mise à jour
+    void Update();
 
-	// Réglages de la vue initiale
-	void SetDefaultZoom(float zoom);
-	void SetDefaultCenter(const sf::Vector2f &center);
-	float GetDefaultZoom() const;
-	const sf::Vector2f& GetDefaultCenter() const;
+    // Appelé juste avant la boucle de jeu, après son remplissage
+    void PrepareForGame();
 
-	/* Accesseurs */
-	// Etat
-	bool IsCharged() const;
-	void SetCharged(bool charged);
+    // Pour le rendu
+    virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const;
 
-	// Player
-	void SetPlayer(Player *player);
-	Player* GetPlayer();
+    // Réglages de la vue initiale
+    void SetDefaultZoom(float zoom);
 
-	// Couleur de fond
-	void SetBckgColor(const sf::Color &color);
-	sf::Color const& GetBckgColor() const;
+    void SetDefaultCenter(const sf::Vector2f &center);
 
-	// TODO
-	void SetLuaConsole(ScriptMachine *machine);
+    float GetDefaultZoom() const;
+
+    const sf::Vector2f &GetDefaultCenter() const;
+
+    /* Accesseurs */
+    // Etat
+    bool IsCharged() const;
+
+    void SetCharged(bool charged);
+
+    // Player
+    void SetPlayer(Player *player);
+
+    Player *GetPlayer();
+
+    // Couleur de fond
+    void SetBckgColor(const sf::Color &color);
+
+    sf::Color const &GetBckgColor() const;
+
+    // TODO
+    void SetScriptConsole(ScriptMachine *machine);
 
 private:
-	bool mIsCharged;
+    bool mIsCharged;
 
-	// Monde
-	b2Vec2 mGravity;
-	PhysicManager &mPhysicMgr;
+    // Monde
+    b2Vec2 mGravity;
+    PhysicManager &mPhysicMgr;
 
-	// Entities
-	EntityManager &mEntityManager;
-	PartitioningTree &mPartitioningTree;
+    // Entities
+    EntityManager &mEntityManager;
+    PartitioningTree &mPartitioningTree;
 
-	// Triggers
-	TriggersManager &mTriggersManager;
+    // Triggers
+    TriggersManager &mTriggersManager;
 
-	// Config de la fenêtre de rendu
-	sf::Color mBckgC;
+    // Config de la fenêtre de rendu
+    sf::Color mBckgC;
 
-	// Vue initiale
-	float mDefaultZoom;
-	sf::Vector2f mDefaultCenter;
+    // Vue initiale
+    float mDefaultZoom;
+    sf::Vector2f mDefaultCenter;
 
-	// Textures
-	ResourceManager &mResourceManager;
+    // Textures
+    ResourceManager &mResourceManager;
 
-	// Joueur
-	Player *mPlayer;
+    // Joueur
+    Player *mPlayer;
 };
 

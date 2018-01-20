@@ -10,7 +10,7 @@
 LevelWindow::LevelWindow()
 	: Window("Level"),
 	mLevelMgr(LevelManager::GetInstance()), mPhysicMgr(PhysicManager::GetInstance()), mResourceManager(ResourceManager::GetInstance()),
-	mEditor(nullptr), mEditBox(nullptr), mLuaMachine(nullptr)
+	mEditor(nullptr), mEditBox(nullptr), mScriptMachine(nullptr)
 {
 	// Rempli la fenêtre
 	Fill();
@@ -46,9 +46,9 @@ void LevelWindow::SetEditBox(EditBox *editBox)
 {
 	mEditBox = editBox;
 }
-void LevelWindow::SetLuaMachine(ScriptMachine *luaMachine)
+void LevelWindow::SetScriptMachine(ScriptMachine *luaMachine)
 {
-	mLuaMachine = luaMachine;
+	mScriptMachine = luaMachine;
 }
 
 // Construit la fenêtre et les éléments
@@ -178,9 +178,9 @@ void LevelWindow::OnLoad()
 	else
 		Dialog::Error(L"Editor invalide.\nEditor non réinitialisé.");
 
-	// Réinitialise le Lua
-	if (mLuaMachine)
-		mLuaMachine->Reset();
+	// Réinitialise le Script
+	if (mScriptMachine)
+		mScriptMachine->Reset();
 	else
 		Dialog::Error(L"ScriptMachine invalide.\nScriptMachine non réinitialisé.");
 

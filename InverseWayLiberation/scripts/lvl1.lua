@@ -1,8 +1,8 @@
 -----------------------
--- CrÃÂ©ation du niveau 1
+-- Création du niveau 1
 -----------------------
 
--- PropriÃÂ©tÃÂ©s du monde
+-- Propriétés du monde
 level.gravity = b2Vec2(0, -9.8)
 level.PPM = 100
 level.bckgcolor = Color(0, 0, 0, 255)
@@ -25,11 +25,11 @@ LoadTexture("volcan", 		"tex/volcan.png")
 LoadTexture("hero",			"tex/hero/test2.png")
 LoadTexture("hook",			"tex/hook.png")
 
--- CrÃÂ©e la dÃÂ©co
+-- Crée la déco
 EntityFactory.CreateDeco(b2Vec3(0, 5, 0), "volcan", 5)
 EntityFactory.CreateDeco(b2Vec3(3, 1.25, 0), "lampadere", -1)
 
--- CrÃÂ©e les bodies simples
+-- Crée les bodies simples
 EntityFactory.CreateStaticBox(b2Vec3(0, -0.64, 0), "ground", -1)
 EntityFactory.CreateStaticBox(b2Vec3(20.48, -0.64, 0), "ground", -1)
 EntityFactory.CreateStaticBox(b2Vec3(-20.48, -0.64, 0), "ground", -1)
@@ -56,11 +56,11 @@ EntityFactory.CreateDynBox(id="2" "caisse", b2Vec3(1.9, 3))
 EntityFactory.CreateStaticBox(id="5" "caisse", b2Vec3(1.9, 4) restitution="1")
 ]]
 
--- CrÃÂ©e les Entities
+-- Crée les Entities
 EntityFactory.CreateRagdoll(b2Vec2(0, 1.5), 2)
 --EntityFactory.CreatePlayer(b2Vec2(0, 5), "hero", 2)
 
--- CrÃÂ©e les joints
+-- Crée les joints
 --JointFactory.CreatePulleyJoint(1, b2Vec2(0, 0), 2, b2Vec2(0, 0), b2Vec2(-2, 0.5), b2Vec2(1.9, 4), 1.5)
 --JointFactory.CreateRopeJoint(3, b2Vec2(0, 0), 4, b2Vec2(0, 0), 1, true, (0, 255, 255))
 

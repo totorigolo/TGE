@@ -1,11 +1,11 @@
-#include "LuaConsoleWindow.h"
+#include "ScriptConsoleWindow.h"
 #include "../../Scripts/ScriptMachine.h"
 #include "../../Scripts/OutputInterfaces.h"
 #include "../../Tools/Error.h"
 
 // Ctor
-LuaConsoleWindow::LuaConsoleWindow()
-	: Window("Console Lua"), mLuaMachine(nullptr), mCurrent(-1)
+ScriptConsoleWindow::ScriptConsoleWindow()
+	: Window("Console Script"), mScriptMachine(nullptr), mCurrent(-1)
 {
 	// Rempli la fenêtre
 	Fill();
@@ -13,7 +13,7 @@ LuaConsoleWindow::LuaConsoleWindow()
 }
 
 // Actualisation
-void LuaConsoleWindow::Update()
+void ScriptConsoleWindow::Update()
 {
 	// Change le texte de la console
 	mTextLabel->SetText(mText);
@@ -22,20 +22,20 @@ void LuaConsoleWindow::Update()
 	mScrolled->SetPlacement(sfg::ScrolledWindow::Placement::BOTTOM_LEFT);
 }
 
-// Gestion de la Machine Lua
-void LuaConsoleWindow::SetLuaMachine(ScriptMachine *luaMachine)
+// Gestion de la Machine de script
+void ScriptConsoleWindow::SetScriptMachine(ScriptMachine *luaMachine)
 {
 	myAssert(luaMachine, "La ScriptMachine passée est invalide.");
 
-	mLuaMachine = luaMachine;
+	mScriptMachine = luaMachine;
 }
-ScriptMachine* LuaConsoleWindow::GetLuaMachine()
+ScriptMachine* ScriptConsoleWindow::GetScriptMachine()
 {
-	return mLuaMachine;
+	return mScriptMachine;
 }
 
 // Construit la fenêtre et les éléments
-void LuaConsoleWindow::Fill()
+void ScriptConsoleWindow::Fill()
 {
 	// Widgets
 	mPromptLabel = sfg::Label::Create(L"Commande :");
@@ -58,18 +58,18 @@ void LuaConsoleWindow::Fill()
 	mVBox->PackEnd(mHBox, false);
 
 	// Connecte les signaux
-	mPrompt->GetSignal(PromptEntry::OnTextSent).Connect(std::bind(&LuaConsoleWindow::OnSend, this));
-	mPrompt->GetSignal(PromptEntry::OnHistoryUp).Connect(std::bind(&LuaConsoleWindow::OnUp, this));
-	mPrompt->GetSignal(PromptEntry::OnHistoryDown).Connect(std::bind(&LuaConsoleWindow::OnDown, this));
-	mReturnBtn->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind(&LuaConsoleWindow::OnSend, this));
-	mCloseBtn->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind(&LuaConsoleWindow::OnClose, this));
+	mPrompt->GetSignal(PromptEntry::OnTextSent).Connect(std::bind(&ScriptConsoleWindow::OnSend, this));
+	mPrompt->GetSignal(PromptEntry::OnHistoryUp).Connect(std::bind(&ScriptConsoleWindow::OnUp, this));
+	mPrompt->GetSignal(PromptEntry::OnHistoryDown).Connect(std::bind(&ScriptConsoleWindow::OnDown, this));
+	mReturnBtn->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind(&ScriptConsoleWindow::OnSend, this));
+	mCloseBtn->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind(&ScriptConsoleWindow::OnClose, this));
 
 	// Ajoute la Table à la fenêtre
 	AddToWindow(mVBox);
 }
 
 // Callbacks
-void LuaConsoleWindow::OnSend()
+void ScriptConsoleWindow::OnSend()
 {
 	if (!mApply) return;
 
@@ -79,7 +79,7 @@ void LuaConsoleWindow::OnSend()
 	// Ajoute la commande au texte de la console
 	if (!mText.isEmpty())
 		*this << "\n";
-	*this << "> " << commande << std::endl;
+	*this << "> " << commande << "\n";
 
 	// Vide la zone de texte
 	mPrompt->SetText(L"");
@@ -89,15 +89,15 @@ void LuaConsoleWindow::OnSend()
 	++mCurrent;
 
 	// Exécution de la commande
-	if (mLuaMachine)
+	if (mScriptMachine)
 	{
-		mLuaMachine->DoString(commande.toAnsiString(), new LuaConsoleInterface(*this));
+		mScriptMachine->DoString(commande.toAnsiString(), new ScriptConsoleInterface(*this));
 	}
 
 	// Mets à jour la fenêtre
 	Update();
 }
-void LuaConsoleWindow::OnUp()
+void ScriptConsoleWindow::OnUp()
 {
 	if (!mApply) return;
 
@@ -107,7 +107,7 @@ void LuaConsoleWindow::OnUp()
 		mPrompt->SetText(mHistory.at(mCurrent--));
 	}
 }
-void LuaConsoleWindow::OnDown()
+void ScriptConsoleWindow::OnDown()
 {
 	if (!mApply) return;
 
