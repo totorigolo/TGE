@@ -25,7 +25,7 @@ State *MainMenu_State::Run(App *app) {
     SpyedKey key_down(sf::Keyboard::Down);
 
     // Change le titre de la fenêtre
-    window->setTitle("Inverse Way Liberation - Menu principal");
+    window->setTitle("totorigolo's Game Engine - Menu principal");
 
     //return DevGame_State::GetPInstance();
 

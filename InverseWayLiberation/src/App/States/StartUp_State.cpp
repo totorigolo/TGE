@@ -23,7 +23,7 @@ State* StartUp_State::Run(App *app)
 	SpyedKey key_return(sf::Keyboard::Return);
 
 	// Change le titre de la fenêtre
-	window->setTitle("Inverse Way Liberation - Splash");
+	window->setTitle("totorigolo's Game Engine - Splash");
 
 	// Charge les textures
 	std::vector<sf::Texture*> textures;

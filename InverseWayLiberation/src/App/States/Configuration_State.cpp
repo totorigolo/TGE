@@ -29,7 +29,7 @@ State* Configuration_State::Run(App *app)
 	}
 
 	// Change le titre de la fenêtre
-	window->setTitle("Inverse Way Liberation - Configuration");
+	window->setTitle("totorigolo's Game Engine - Configuration");
 
 	// Met en place la GUI
 	CreateGUI();

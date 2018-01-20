@@ -16,7 +16,7 @@ State *Editor_State::Run(App *app) {
     window->setFramerateLimit(60U);
 
     // Change le titre de la fenêtre
-    window->setTitle("Inverse Way Liberation - DevGame");
+    window->setTitle("totorigolo's Game Engine - Editeur");
 
     // Lance le jeu
     Editor *editor = new Editor(*window);

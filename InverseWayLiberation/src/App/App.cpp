@@ -25,7 +25,7 @@ bool App::Init() {
     mSfGUI = new sfg::SFGUI;
 
     // Charge la fenêtre de rendu
-    mRenderWindow = new sf::RenderWindow(sf::VideoMode(800U, 600U), "Inverse Way Liberation - Chargement");
+    mRenderWindow = new sf::RenderWindow(sf::VideoMode(800U, 600U), "totorigolo's Game Engine - Chargement");
     mRenderWindow->setFramerateLimit(60U);
     mRenderWindow->setKeyRepeatEnabled(false);
 

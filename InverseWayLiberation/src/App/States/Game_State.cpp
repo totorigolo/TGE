@@ -18,7 +18,7 @@ State* Game_State::Run(App *app)
 	window->setFramerateLimit(60U);
 
 	// Change le titre de la fenêtre
-	window->setTitle("Inverse Way Liberation - DevGame");
+	window->setTitle("totorigolo's Game Engine - Game");
 
 	// Lance le jeu
 	Game *game = new Game(*window);
