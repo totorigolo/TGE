@@ -39,11 +39,10 @@ protected:
     virtual void Fill();
 
     // Callbacks
-    void OnSend();
-
-    void OnUp();
-
-    void OnDown();
+    void OnSend(); //
+    void OnExecuteFile(); //
+    void OnUp(); //
+    void OnDown(); //
 
     // Auto-scroll
     void autoscroll();
@@ -62,10 +61,12 @@ private:
     /* Eléments */
     sfg::Box::Ptr mVBox;
     sfg::Box::Ptr mHBox;
-    sfg::Label::Ptr mPromptLabel;
     PromptEntry::Ptr mPrompt;
     sfg::Button::Ptr mReturnBtn;
     sfg::Button::Ptr mCloseBtn;
     sfg::ScrolledWindow::Ptr mScrolled;
     sfg::Box::Ptr mScrolledBox;
+    sfg::Box::Ptr mPathHBox;
+    sfg::Entry::Ptr mPath;
+    sfg::Button::Ptr mExecuteFileBtn;
 };

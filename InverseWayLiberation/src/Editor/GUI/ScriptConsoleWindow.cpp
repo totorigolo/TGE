@@ -30,7 +30,6 @@ ScriptMachine *ScriptConsoleWindow::GetScriptMachine() {
 // Construit la fenêtre et les éléments
 void ScriptConsoleWindow::Fill() {
     // Widgets
-    mPromptLabel = sfg::Label::Create(L"Commande :");
     mPrompt = PromptEntry::Create("");
     mReturnBtn = sfg::Button::Create(L"Entrée");
     mCloseBtn = sfg::Button::Create(L"Fermer");
@@ -42,11 +41,20 @@ void ScriptConsoleWindow::Fill() {
     mVBox = sfg::Box::Create(sfg::Box::Orientation::VERTICAL);
     mHBox = sfg::Box::Create(sfg::Box::Orientation::HORIZONTAL);
     mVBox->PackEnd(mScrolled);
-    mHBox->PackEnd(mPromptLabel, false);
+    mHBox->PackEnd(sfg::Label::Create(L"Commande : "), false);
     mHBox->PackEnd(mPrompt);
     mHBox->PackEnd(mReturnBtn, false);
     mHBox->PackEnd(mCloseBtn, false);
+
+    mPath = sfg::Entry::Create();
+    mExecuteFileBtn = sfg::Button::Create(L"Exécuter script");
+    mPathHBox = sfg::Box::Create();
+    mPathHBox->Pack(sfg::Label::Create(L"Fichier : "), false);
+    mPathHBox->Pack(mPath);
+    mPathHBox->Pack(mExecuteFileBtn, false);
+
     mVBox->PackEnd(mHBox, false);
+    mVBox->PackEnd(mPathHBox, false);
 
     // Connecte les signaux
     mPrompt->GetSignal(PromptEntry::OnTextSent).Connect(std::bind(&ScriptConsoleWindow::OnSend, this));
@@ -54,8 +62,9 @@ void ScriptConsoleWindow::Fill() {
     mPrompt->GetSignal(PromptEntry::OnHistoryDown).Connect(std::bind(&ScriptConsoleWindow::OnDown, this));
     mReturnBtn->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind(&ScriptConsoleWindow::OnSend, this));
     mCloseBtn->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind(&ScriptConsoleWindow::OnClose, this));
+    mExecuteFileBtn->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind(&ScriptConsoleWindow::OnExecuteFile, this));
 
-    // Ajoute la Table à la fenêtre
+    // Ajoute les widgets à la fenêtre
     AddToWindow(mVBox);
 }
 
@@ -85,6 +94,12 @@ void ScriptConsoleWindow::OnSend() {
 
     // Mets à jour la fenêtre
     Update();
+}
+
+void ScriptConsoleWindow::OnExecuteFile() {
+    if (mScriptMachine && !mPath->GetText().isEmpty()) {
+        mScriptMachine->DoFile(mPath->GetText(), new ScriptConsoleInterface(*this));
+    }
 }
 
 void ScriptConsoleWindow::OnUp() {

@@ -121,6 +121,8 @@ bool Game::OnInit() {
     mSpyedKeys.push_back(SpyedKey::Create(sf::Keyboard::F12)); // Console de scripts
 
     // Initialise la machine de script
+    mScriptMachine.RegisterJoint();
+//	mScriptMachine.RegisterEntity();
     mScriptMachine.RegisterEntityFactory();
     mScriptMachine.RegisterLevelManager();
     mScriptMachine.RegisterGlobalVar("level", &mLevel);
@@ -129,11 +131,13 @@ bool Game::OnInit() {
     mScriptMachine.RegisterInputManager();
     mScriptMachine.RegisterGlobalVar("inputMgr", &mInputManager);
     mScriptMachine.RegisterResourceManager();
+    mScriptMachine.RegisterGlobalVar("resourceMgr", &mResourceManager);
 
     // Enregistre la console
     mLevel.SetScriptMachine(&mScriptMachine);
     mScriptConsole.SetScriptMachine(&mScriptMachine);
     mScriptConsole.RegisterInDesktop(&mDesktop);
+    mScriptMachine.SetConsole(&mScriptConsole);
 
     // Charge le niveau
     //Init();
@@ -234,7 +238,7 @@ void Game::OnRender() {
     mWindow.draw(mLevel);
 
     // Affichage du debug
-    if (!mDebugDraw) mPhysicMgr.DrawDebugData();
+    if (mDebugDraw) mPhysicMgr.DrawDebugData();
 
     // Affichage de la GUI
     mSfGUI->Display(mWindow);
