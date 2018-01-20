@@ -13,13 +13,17 @@ public:
 	virtual ~Player();
 
 	// Mise à jour
-	virtual void Update();
+	void Update() override;
+
+    void Destituate();
 
 protected:
 	// Gestion des évènements
 	void UpdateEvents();
 
 private:
+    bool mActualPlayer;
+
 	// Managers
 	InputManager &mInputManager;
 

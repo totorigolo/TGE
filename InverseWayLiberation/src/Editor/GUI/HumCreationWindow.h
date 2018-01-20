@@ -73,6 +73,9 @@ private:
 	sfg::Label::Ptr mLayerLabel;
 	sfg::SpinButton::Ptr mLayer;
 
+	// Player
+	sfg::CheckButton::Ptr mIsPlayer;
+
 	// Boutons
 	sfg::Button::Ptr mToggleModeBtn;
 	sfg::Button::Ptr mCloseBtn;

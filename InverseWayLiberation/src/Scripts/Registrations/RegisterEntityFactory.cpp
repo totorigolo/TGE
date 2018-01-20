@@ -39,7 +39,10 @@ void ScriptMachine::RegisterEntityFactory()
 				def("CreateHum", (void(*)(const b2Vec2&)) EntityFactory::CreateHum),
 				def("CreateHum", (void(*)(const b2Vec2&, unsigned int)) EntityFactory::CreateHum),
 				def("CreateHum", (void(*)(const b2Vec2&, unsigned int, int)) EntityFactory::CreateHum),
-				def("CreateHum", (void(*)(const b2Vec2&, unsigned int, int, int)) EntityFactory::CreateHum)
+				def("CreateHum", (void(*)(const b2Vec2&, unsigned int, int, int)) EntityFactory::CreateHum),
+				def("CreatePlayer", (void(*)(const b2Vec2&)) EntityFactory::CreatePlayer),
+				def("CreatePlayer", (void(*)(const b2Vec2&, unsigned int)) EntityFactory::CreatePlayer),
+				def("CreatePlayer", (void(*)(const b2Vec2&, unsigned int, int)) EntityFactory::CreatePlayer)
 			]
 		];
 	}

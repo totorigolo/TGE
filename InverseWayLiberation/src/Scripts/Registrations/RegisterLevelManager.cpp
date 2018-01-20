@@ -17,6 +17,7 @@ void ScriptMachine::RegisterLevelManager() {
                              luabind::dependency_policy<0, 1>())//(luabind::result, _1))
                         .def("PrepareForGame", &LevelManager::PrepareForGame)
                         .def("Clear", &LevelManager::Clear)
+                        .def("MakePlayerSpeak", &LevelManager::MakePlayerSpeak)
                                 // Attributs
                         .property("player", &LevelManager::GetPlayer, &LevelManager::SetPlayer)
                         .property("charged", &LevelManager::IsCharged, &LevelManager::SetCharged)

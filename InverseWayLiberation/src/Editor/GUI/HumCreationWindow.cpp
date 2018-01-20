@@ -29,8 +29,12 @@ void HumCreationWindow::Add(b2Vec2 pos) {
     // Récupère la couleur
     sf::Color c((sf::Uint8) mColorR->GetValue(), (sf::Uint8) mColorG->GetValue(), (sf::Uint8) mColorB->GetValue());
 
-    // Crée le Body suivant la forme
-    EntityFactory::CreateHum(pos, mAge->GetValue(), mStrengh->GetValue(), c, (int) mLayer->GetValue());
+    // Crée le Hum ou Player
+    if (mIsPlayer->IsActive()) {
+        EntityFactory::CreatePlayer(pos, mAge->GetValue(), mStrengh->GetValue(), c);
+    } else {
+        EntityFactory::CreateHum(pos, mAge->GetValue(), mStrengh->GetValue(), c, (int) mLayer->GetValue());
+    }
 
     OnRefresh();
 }
@@ -100,6 +104,8 @@ void HumCreationWindow::Fill() {
     mLayerHBox->PackEnd(mLayerLabel, false);
     mLayerHBox->PackEnd(mLayer);
 
+    mIsPlayer = sfg::CheckButton::Create("Player ?");
+
     // Boutons
     mToggleModeBtn = sfg::Button::Create(L"Entrer mode Création");
     mCloseBtn = sfg::Button::Create(L"Fermer");
@@ -115,6 +121,7 @@ void HumCreationWindow::Fill() {
     mVBox->PackEnd(mStrenghHBox);
     mVBox->PackEnd(mColorHBox);
     mVBox->PackEnd(mLayerHBox);
+    mVBox->PackEnd(mIsPlayer);
     mVBox->PackEnd(mToggleModeBtn);
     mVBox->PackEnd(mCloseBtn);
 

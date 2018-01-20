@@ -5,7 +5,9 @@
 // Ctor
 HumScenario::HumScenario(EditBox &editBox)
         : Scenario(editBox, "Hum"),
-          mEntityMgr(EntityManager::GetInstance()), mResourceMgr(ResourceManager::GetInstance()),
+          mEntityMgr(EntityManager::GetInstance()),
+          mResourceMgr(ResourceManager::GetInstance()),
+          mLevelMgr(LevelManager::GetInstance()),
           mSelection(nullptr) {
     // Initialise le pas
     mPosStepSaveValue = 1.f;

@@ -10,134 +10,131 @@
 
 // Ctor
 LevelManager::LevelManager()
-	: mIsCharged(false),
-	// Monde
-	mPhysicMgr(PhysicManager::GetInstance()),
-	// Entities
-	mEntityManager(EntityManager::GetInstance()),
-	mPartitioningTree(PartitioningTree::GetInstance()),
-	// Triggers
-	mTriggersManager(TriggersManager::GetInstance()),
-	// Config de la fenêtre de rendu
-	mBckgC(sf::Color::White),
-	// Zoom initial
-	mDefaultZoom(1.f),
-	// Textures
-	mResourceManager(ResourceManager::GetInstance()),
-	// Joueur
-	mPlayer(nullptr)
-{
+        : mIsCharged(false),
+        // Monde
+          mPhysicMgr(PhysicManager::GetInstance()),
+        // Entities
+          mEntityManager(EntityManager::GetInstance()),
+          mPartitioningTree(PartitioningTree::GetInstance()),
+        // Triggers
+          mTriggersManager(TriggersManager::GetInstance()),
+        // Config de la fenêtre de rendu
+          mBckgC(sf::Color::White),
+        // Zoom initial
+          mDefaultZoom(1.f),
+        // Textures
+          mResourceManager(ResourceManager::GetInstance()),
+        // Joueur
+          mPlayer(nullptr) {
 }
 
 // Dtor
-LevelManager::~LevelManager(void)
-{
-	Clear();
+LevelManager::~LevelManager(void) {
+    Clear();
 
-	mIsCharged = false;
+    mIsCharged = false;
 }
 
 // Charge un niveau à partir d'un XVL
-void LevelManager::LoadFromFile(const std::string &path)
-{
-	// c_str : workaround pour problème de compilation
-	LevelLoader(path.c_str());
+void LevelManager::LoadFromFile(const std::string &path) {
+    // c_str : workaround pour problème de compilation
+    LevelLoader(path.c_str());
 }
 
 // Vide tout le niveau
-void LevelManager::Clear()
-{
-	// Vide tous les objets du jeu
-	mEntityManager.DestroyAllEntities();
-	mResourceManager.Clear();
-	mTriggersManager.Clear();
-	mPhysicMgr.DestroyAllJoints();
-	mPhysicMgr.DestroyAllBody();
+void LevelManager::Clear() {
+    // Vide tous les objets du jeu
+    mEntityManager.DestroyAllEntities();
+    mResourceManager.Clear();
+    mTriggersManager.Clear();
+    mPhysicMgr.DestroyAllJoints();
+    mPhysicMgr.DestroyAllBody();
 
-	// Vide tout
-	mIsCharged = false;
-	mPlayer = nullptr;
-	mGravity = b2Vec2_zero;
-	mBckgC = sf::Color::White;
-	mDefaultZoom = 1.f;
-	mDefaultCenter = sf::Vector2f();
+    // Vide tout
+    mIsCharged = false;
+    mPlayer = nullptr;
+    mGravity = b2Vec2_zero;
+    mBckgC = sf::Color::White;
+    mDefaultZoom = 1.f;
+    mDefaultCenter = sf::Vector2f();
 }
 
 // Mise à jour
-void LevelManager::Update()
-{
-	mEntityManager.Update();
-	mTriggersManager.Update();
-	mPartitioningTree.PostUpdateAll();
+void LevelManager::Update() {
+    mEntityManager.Update();
+    mTriggersManager.Update();
+    mPartitioningTree.PostUpdateAll();
 }
 
 // Appelé juste avant la boucle de jeu, après son remplissage
-void LevelManager::PrepareForGame()
-{
-	// Trie les Entities par leur Layer
-	mEntityManager.SortByLayer();
+void LevelManager::PrepareForGame() {
+    // Trie les Entities par leur Layer
+    mEntityManager.SortByLayer();
 }
 
 // Pour le rendu
-void LevelManager::draw(sf::RenderTarget& target, sf::RenderStates states) const
-{
-	// Affiche les Entities
-	target.draw(mEntityManager, states);
+void LevelManager::draw(sf::RenderTarget &target, sf::RenderStates states) const {
+    // Affiche les Entities
+    target.draw(mEntityManager, states);
 }
 
 // Réglages de la vue initiale
-void LevelManager::SetDefaultZoom(float zoom)
-{
-	mDefaultZoom = zoom;
-	InputManager::GetInstance().SetZoom(mDefaultZoom);
+void LevelManager::SetDefaultZoom(float zoom) {
+    mDefaultZoom = zoom;
+    InputManager::GetInstance().SetZoom(mDefaultZoom);
 }
-void LevelManager::SetDefaultCenter(const sf::Vector2f &center)
-{
-	mDefaultCenter = center;
-	InputManager::GetInstance().SetCenter(mDefaultCenter);
+
+void LevelManager::SetDefaultCenter(const sf::Vector2f &center) {
+    mDefaultCenter = center;
+    InputManager::GetInstance().SetCenter(mDefaultCenter);
 }
-float LevelManager::GetDefaultZoom() const
-{
-	return mDefaultZoom;
+
+float LevelManager::GetDefaultZoom() const {
+    return mDefaultZoom;
 }
-const sf::Vector2f& LevelManager::GetDefaultCenter() const
-{
-	return mDefaultCenter;
+
+const sf::Vector2f &LevelManager::GetDefaultCenter() const {
+    return mDefaultCenter;
 }
 
 /* Accesseurs */
 // Etat
-bool LevelManager::IsCharged() const
-{
-	return mIsCharged;
+bool LevelManager::IsCharged() const {
+    return mIsCharged;
 }
-void LevelManager::SetCharged(bool charged)
-{
-	mIsCharged = charged;
+
+void LevelManager::SetCharged(bool charged) {
+    mIsCharged = charged;
 }
 
 // Player
-void LevelManager::SetPlayer(Player *player)
-{
-	mPlayer = player;
+void LevelManager::SetPlayer(Player *player) {
+    if (mPlayer) {
+        mPlayer->Destituate();
+    }
+    mPlayer = player;
 }
-Player* LevelManager::GetPlayer()
-{
-	return mPlayer;
+
+Player *LevelManager::GetPlayer() {
+    return mPlayer;
+}
+
+void LevelManager::MakePlayerSpeak(const std::string &msg, float time) {
+    if (!mPlayer) return;
+
+    mPlayer->Speak(msg, time);
 }
 
 // Couleur de fond
-void LevelManager::SetBckgColor(const sf::Color &color)
-{
-	mBckgC = color;
+void LevelManager::SetBckgColor(const sf::Color &color) {
+    mBckgC = color;
 }
-sf::Color const& LevelManager::GetBckgColor() const
-{
-	return mBckgC;
+
+sf::Color const &LevelManager::GetBckgColor() const {
+    return mBckgC;
 }
 
 // TODO
-void LevelManager::SetScriptMachine(ScriptMachine *machine)
-{
-	mTriggersManager.SetScriptMachine(machine);
+void LevelManager::SetScriptMachine(ScriptMachine *machine) {
+    mTriggersManager.SetScriptMachine(machine);
 }

@@ -48,29 +48,24 @@ public:
     virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const;
 
     // Réglages de la vue initiale
-    void SetDefaultZoom(float zoom);
-
-    void SetDefaultCenter(const sf::Vector2f &center);
-
-    float GetDefaultZoom() const;
-
-    const sf::Vector2f &GetDefaultCenter() const;
+    void SetDefaultZoom(float zoom); //
+    void SetDefaultCenter(const sf::Vector2f &center); //
+    float GetDefaultZoom() const; //
+    const sf::Vector2f &GetDefaultCenter() const; //
 
     /* Accesseurs */
     // Etat
-    bool IsCharged() const;
-
-    void SetCharged(bool charged);
+    bool IsCharged() const; //
+    void SetCharged(bool charged); //
 
     // Player
-    void SetPlayer(Player *player);
-
-    Player *GetPlayer();
+    void SetPlayer(Player *player); //
+    Player *GetPlayer(); //
+    void MakePlayerSpeak(const std::string &msg, float time); //
 
     // Couleur de fond
-    void SetBckgColor(const sf::Color &color);
-
-    sf::Color const &GetBckgColor() const;
+    void SetBckgColor(const sf::Color &color); //
+    sf::Color const &GetBckgColor() const; //
 
     // TODO
     void SetScriptMachine(ScriptMachine *machine);
