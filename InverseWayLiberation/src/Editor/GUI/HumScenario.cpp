@@ -206,10 +206,11 @@ void HumScenario::OnChangePosRm() {
 void HumScenario::OnChangeColor() {
     if (!mApply || !mSelection) return;
 
-    mSelection->SetTrunkColor(sf::Color((sf::Uint8) mColorR->GetValue(),
-                                        (sf::Uint8) mColorG->GetValue(),
-                                        (sf::Uint8) mColorB->GetValue()
-    ));
+    mSelection->SetTrunkColor(
+            sf::Color((sf::Uint8) mColorR->GetValue(),
+                      (sf::Uint8) mColorG->GetValue(),
+                      (sf::Uint8) mColorB->GetValue()
+            ));
 }
 
 void HumScenario::OnChangeLayer() {

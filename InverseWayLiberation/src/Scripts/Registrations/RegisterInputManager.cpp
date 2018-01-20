@@ -8,7 +8,7 @@ void ScriptMachine::RegisterInputManager()
 	{
 		// Enregistrement
 		luabind::module(mLuaState) [
-			// Level
+			// InputManager
 			luabind::class_<InputManager>("InputManager")
 				// Enum
 				.enum_("KeyState")

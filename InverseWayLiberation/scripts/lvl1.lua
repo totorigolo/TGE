@@ -10,20 +10,15 @@ level.originview = b2Vec2(-1.7, 2)
 level.defaultzoom = 5
 
 -- Charge les textures
-LoadTexture("way",			"tex/way.png")
-LoadTexture("box", 			"tex/box.png")
-LoadTexture("box2",			"tex/box2.png")
-LoadTexture("caisse", 		"tex/caisse.png")
-LoadTexture("tonneau", 		"tex/tonneau.png")
-LoadTexture("circle", 		"tex/circle.png")
-LoadTexture("ball",			"tex/ball.png")
-LoadTexture("miniball",		"tex/miniball.png")
-LoadTexture("hollowCircle",	"tex/hollowCircle.png")
-LoadTexture("ground", 		"tex/ground.png")
-LoadTexture("lampadere",	"tex/lampadere.png")
-LoadTexture("volcan", 		"tex/volcan.png")
-LoadTexture("hero",			"tex/hero/test2.png")
-LoadTexture("hook",			"tex/hook.png")
+resourceMgr:LoadTexture("way",			"tex/old_assets/way.png")
+resourceMgr:LoadTexture("box", 			"tex/old_assets/box.png")
+resourceMgr:LoadTexture("box2",			"tex/old_assets/box2.png")
+resourceMgr:LoadTexture("caisse", 		"tex/old_assets/caisse.png")
+resourceMgr:LoadTexture("tonneau", 		"tex/old_assets/tonneau.png")
+resourceMgr:LoadTexture("circle", 		"tex/old_assets/circle.png")
+resourceMgr:LoadTexture("ball",			"tex/old_assets/ball.png")
+resourceMgr:LoadTexture("lampadere",	"tex/old_assets/lampadere.png")
+resourceMgr:LoadTexture("volcan", 		"tex/old_assets/volcan.png")
 
 -- Crée la déco
 EntityFactory.CreateDeco(b2Vec3(0, 5, 0), "volcan", 5)
@@ -31,8 +26,8 @@ EntityFactory.CreateDeco(b2Vec3(3, 1.25, 0), "lampadere", -1)
 
 -- Crée les bodies simples
 EntityFactory.CreateStaticBox(b2Vec3(0, -0.64, 0), "ground", -1)
-EntityFactory.CreateStaticBox(b2Vec3(20.48, -0.64, 0), "ground", -1)
-EntityFactory.CreateStaticBox(b2Vec3(-20.48, -0.64, 0), "ground", -1)
+EntityFactory.CreateStaticBox(b2Vec3(20.48, -0.64, 0), "way", -1)
+EntityFactory.CreateStaticBox(b2Vec3(-20.48, -0.64, 0), "way", -1)
 --[[
 EntityFactory.CreateStaticBox("way", b2Vec3(-5, 5.5) rotation="90" osp="true", "-1")
 EntityFactory.CreateDynBox("way", b2Vec3(-5, 6.5))

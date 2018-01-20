@@ -8,7 +8,7 @@ if (randf == nil) then
     randf = function(min, max)
         return rand(min * 100000, max * 100000) / 100000
     end
-    print "Fonction randf creee."
+    cprintln "Fonction randf creee."
 end
 
 function createObjects1()
@@ -49,25 +49,25 @@ function testAll()
     end
 
     -- Mumuse avec le level
-    level.bckgcolor = Color(rand(200, 255), rand(200, 255), rand(200, 255))
+    level.bckgcolor = Color(rand(0, 50), rand(0, 50), rand(0, 50))
 
-    if (inputMgr:KeyReleased(Keyboard.O)) then
+    if (inputMgr:IsKeyPressed(Keyboard.O)) then
         level:Clear()
     else
-        -- Charge
-        level:LoadFromFile("lvls/2.xvl")
-
-        -- Charge une petite déco
-        if (tex_loaded == nil) then
-            LoadTexture("skyrim", "tex/skyrim.jpg")
-            tex_loaded = true
-            print "Texture Skyrim chargee."
+        -- Charge les textures
+        local textures = {
+            "ball", "box", "box2", "caisse", "circle", "lampadere", "tonneau", "volcan", "wall", "way"
+        }
+        for texIndex = 1, #textures do
+            local textureName = textures[texIndex]
+            local texturePath = "tex/old_assets/" .. textureName .. ".png"
+            resourceMgr:LoadTexture(textureName, texturePath)
         end
 
         -- Crée les variables
         local posRotB = b2Vec3(0, 10, 0)
         local posRotC = b2Vec3(0, 11, 0)
-        local texturesB = { "box", "box2", "way", "caisse", "tonneau" }
+        local texturesB = { "box", "box2", "caisse", "tonneau", "way" }
         local texturesC = { "ball", "circle" }
 
         -- Boucle de création
@@ -78,21 +78,21 @@ function testAll()
             posRotB:Set(x, y - 0.5, 0)
             posRotC:Set(x, y + 0.5, 0)
 
-            -- Crée des skyrim à la nawak
+            -- Crée des volcans à la nawak
             local posRotS = b2Vec3(randf(-20, 20), randf(-20, 20), randf(0, 360))
-            EntityFactory.CreateDeco(posRotS, "skyrim", 20)
+            EntityFactory.CreateDeco(posRotS, "volcan", 20)
 
             -- Crée des lampadaires à la nawak
             local posRotD = b2Vec3(randf(-20, 20), randf(0, 20), randf(0, 360))
-            EntityFactory.CreateBox(posRotD, b2BodyType.b2_staticBody, "lampadere", 1)
+            EntityFactory.CreateBox(posRotD, b2_staticBody, "lampadere", 1)
 
-            -- Crée la Box
+            -- Crée une Box
             local texture = texturesB[rand(1, 5)]
-            EntityFactory.CreateBox(posRotB, b2BodyType.b2_dynamicBody, texture, 1)
+            EntityFactory.CreateBox(posRotB, b2_dynamicBody, texture, 1)
 
-            -- Crée le Circle
+            -- Crée un Circle
             local texture = texturesC[rand(1, 2)]
-            EntityFactory.CreateCircle(posRotC, b2BodyType.b2_dynamicBody, texture, 1)
+            EntityFactory.CreateCircle(posRotC, b2_dynamicBody, texture, 1)
 
             -- Incrémente x
             x = x + 1

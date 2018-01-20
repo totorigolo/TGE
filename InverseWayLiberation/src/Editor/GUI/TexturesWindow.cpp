@@ -18,7 +18,10 @@ TexturesWindow::TexturesWindow()
 // Actualisation
 void TexturesWindow::Update() {
     // Récupère la texture pointée
-    mSelectedTexture = mResourceMgr.GetTexture(mTexture->GetItem(mTexture->GetSelectedItem()).toAnsiString());
+    sf::String selectedTextureName{mTexture->GetItem(mTexture->GetSelectedItem()).toAnsiString()};
+    if (!selectedTextureName.isEmpty()) {
+        mSelectedTexture = mResourceMgr.GetTexture(selectedTextureName);
+    }
 
     // Met à jour les infos sur la texture sélectionnée
     if (!mSelectedTexture.expired()) {

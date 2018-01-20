@@ -54,6 +54,9 @@ public:
 
     OutputInterface *GetInterface(OutputInterface *_interface = nullptr);
 
+    // TODO: Mieux encapsuler
+    lua_State* GetLuaState();
+
 protected:
     // Enregistrements privés
     void RegisterBox2D();

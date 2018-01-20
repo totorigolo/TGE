@@ -83,9 +83,7 @@ void TriggersManager::AddAction(ScriptAction *action)
 void TriggersManager::DeleteAction(const std::string &name)
 {
 	auto it = mActionMap.find(name);
-
-	myAssert(it != mActionMap.end(), "L'action n'existe pas.");
-
+	if (it != mActionMap.end()) return;
 	mActionMap.erase(it);
 }
 std::shared_ptr<ScriptAction> TriggersManager::GetAction(const std::string &name)

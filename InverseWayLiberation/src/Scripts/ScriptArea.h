@@ -13,16 +13,16 @@ public:
     // Ctors
     ScriptArea(b2AABB b2area, const std::string &action, bool once = false);
 
+    // Change l'action
+    void SetOnce(bool once);
+    bool SetAction(const std::string &action);
+
     // Accesseurs
-    void Done();
-
-    bool IsOnce();
-
-    bool IsDone();
-
-    b2AABB GetAABB();
-
-    const std::string &GetAction();
+    void Done(); //
+    bool IsOnce(); //
+    bool IsDone(); //
+    b2AABB &GetAABB(); //
+    const std::string &GetAction(); //
 
     // TODO: Les actions connaissent les areas : une fois faite, toutes les areas sont supprimées (faire une classe Area)
 private:

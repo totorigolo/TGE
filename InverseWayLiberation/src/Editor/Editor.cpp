@@ -29,6 +29,7 @@ Editor::Editor(sf::RenderWindow &window)
         mInputManager(InputManager::GetInstance()),
         // Ajout d'Entities
         mPolyCreationWindow(nullptr),
+        mAreaCreationWindow(nullptr),
         mDecoCreationWindow(nullptr),
         mHumCreationWindow(nullptr),
         mBasicBodyCreationWindow(nullptr),
@@ -128,6 +129,7 @@ bool Editor::OnInit() {
     mEditBox = std::unique_ptr<EditBox>(new EditBox(mDesktop));
     mHumCreationWindow = mEditBox->GetHumCreationWindow();
     mPolyCreationWindow = mEditBox->GetPolyCreationWindow();
+    mAreaCreationWindow = mEditBox->GetAreaCreationWindow();
     mDecoCreationWindow = mEditBox->GetDecoCreationWindow();
     mBasicBodyCreationWindow = mEditBox->GetBasicBodyCreationWindow();
     mPointLightCreationWindow = mEditBox->GetPointLightCreationWindow();
@@ -171,9 +173,10 @@ bool Editor::OnInit() {
     mScriptMachine.RegisterInputManager();
     mScriptMachine.RegisterGlobalVar("inputMgr", &mInputManager);
     mScriptMachine.RegisterResourceManager();
+    mScriptMachine.RegisterGlobalVar("resourceMgr", &mResourceManager);
 
     // Enregistre la machine de script
-    mLevel.SetScriptConsole(&mScriptMachine);
+    mLevel.SetScriptMachine(&mScriptMachine);
     mEditBox->SetScriptMachine(&mScriptMachine);
     mScriptMachine.SetConsole(mEditBox->GetScriptConsoleWindow());
 
@@ -293,6 +296,14 @@ void Editor::OnEvent() {
         // Si la fenêtre de création de polygones est en mode création, on transmet les clics
         if (mPolyCreationWindow->IsInEditMode()) {
             mPolyCreationWindow->AddPoint(mMp);
+        }
+    }
+
+    // EditBox : Area Creation
+    if (mInputManager.IsLMBClicked() && ctrl && mAreaCreationWindow) {
+        // Si la fenêtre de création est en mode ajout, on transmet les clics
+        if (mAreaCreationWindow->IsInAddMode()) {
+            mAreaCreationWindow->Add(mMp);
         }
     }
 
@@ -459,6 +470,21 @@ void Editor::OnEvent() {
                         found = true;
                         break;
                     }
+                }
+            }
+
+            // Les ScriptArea
+            TriggersManager &triggersMgr = TriggersManager::GetInstance();
+            auto &areas = triggersMgr.GetAreas();
+            b2Vec2 b2MousePos = sf2b2Vec(mousePos, mPhysicMgr.GetMPP());
+            for (auto it = areas.rbegin(); it != areas.rend(); ++it) {
+                b2Vec2 mouseToArea = b2MousePos - (*it)->GetAABB().upperBound;
+                float distSquared = mouseToArea.LengthSquared() * mPhysicMgr.GetPPM();
+
+                if (distSquared < 30) {
+                    mEditBox->ChangeSelectedObject((*it).get());
+                    found = true;
+                    break;
                 }
             }
         }

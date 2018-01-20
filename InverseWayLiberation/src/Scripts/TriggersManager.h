@@ -6,7 +6,7 @@
 #include "ScriptAction.h"
 #include "ScriptArea.h"
 
-typedef std::map<std::string, std::shared_ptr<ScriptAction>> ActionMap;
+using ActionMap = std::map<std::string, std::shared_ptr<ScriptAction>>;
 
 class PhysicManager;
 class TriggersManager : public Singleton<TriggersManager>

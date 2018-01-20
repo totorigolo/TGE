@@ -73,7 +73,7 @@ public:
     sf::Color const &GetBckgColor() const;
 
     // TODO
-    void SetScriptConsole(ScriptMachine *machine);
+    void SetScriptMachine(ScriptMachine *machine);
 
 private:
     bool mIsCharged;

@@ -20,7 +20,7 @@ void ScriptAction::Execute(ScriptMachine *luaMachine) {
         luaMachine->DoFile(mFile);
 
         try {
-//			luabind::call_function<void>(luaMachine->GetLuaState(), mFunction.c_str());
+			luabind::call_function<void>(luaMachine->GetLuaState(), mFunction.c_str());
             mDone = true;
         }
         catch (const std::exception &e) {

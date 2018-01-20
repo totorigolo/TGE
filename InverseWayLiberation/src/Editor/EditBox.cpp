@@ -1,4 +1,5 @@
 #include "EditBox.h"
+
 #include "../App/InputManager.h"
 
 #include "../Entities/BasicBody.h"
@@ -6,6 +7,8 @@
 #include "../Entities/PolyChain.h"
 #include "../Entities/Deco.h"
 #include "../Entities/Player.h"
+
+#include "../Scripts/ScriptArea.h"
 
 #include "../Physics/Joints/DistanceJoint.h"
 #include "../Physics/Joints/FrictionJoint.h"
@@ -28,17 +31,21 @@ EditBox::EditBox(sfg::Desktop &desktop)
           mEntityMgr(EntityManager::GetInstance()),
           mSelectedEntity(nullptr),
           mSelectedJoint(nullptr),
+          mSelectedArea(nullptr),
           mSelectionType(SelectionType::Null),
           mSelectionChanged(false),
           mHumScenario(*this),
+          mAreaScenario(*this),
           mDecoScenario(*this),
           mBodyScenario(*this),
           mEmptyScenario(*this),
           mPointLightScenario(*this),
           mLevelWindowAdded(false),
+          mActionsWindowAdded(false),
           mTexturesWindowAdded(false),
           mHumCreationWindowAdded(false),
           mColFilteringWindowAdded(false),
+          mAreaCreationWindowAdded(false),
           mDecoCreationWindowAdded(false),
           mPolyCreationWindowAdded(false),
           mScriptConsoleWindowAdded(false),
@@ -115,6 +122,23 @@ void EditBox::ChangeSelectedObject(Joint * joint) {
     UpdateGUI();
 }
 
+void EditBox::ChangeSelectedObject(ScriptArea * area) {
+    // Si la sélection n'a pas changé, on ne fait rien
+    if (area == mSelectedArea)
+        return;
+
+    // Déselectionne l'objet actuel
+    Unselect();
+
+    // Retient l'objet donné
+    myAssert(area, "L'Area passée est invalide.");
+    mSelectedArea = area;
+    mSelectionChanged = true;
+
+    // Mise à jour
+    UpdateGUI();
+}
+
 void EditBox::Unselect() {
     // Oublie l'Entity
     if (mSelectedEntity) {
@@ -125,6 +149,12 @@ void EditBox::Unselect() {
     // Oublie le Joint
     if (mSelectedJoint) {
         mSelectedJoint = nullptr;
+        mSelectionChanged = true;
+    }
+
+    // Oublie l'Area
+    if (mSelectedArea) {
+        mSelectedArea = nullptr;
         mSelectionChanged = true;
     }
 
@@ -190,6 +220,7 @@ void EditBox::EmptyGUI() {
     mSelectionType = SelectionType::Null;
 
     // Cache les scénari
+    mAreaScenario.Hide();
     mDecoScenario.Hide();
     mEmptyScenario.Hide();
     mHumScenario.Hide();
@@ -200,7 +231,7 @@ void EditBox::EmptyGUI() {
     mWindow->RemoveAll();
 }
 
-// Mise à jour des Widgets en f° de la sélection
+// Mise à jour des Widgets en fonction de la sélection
 void EditBox::UpdateGUI() {
     // Si la sélection n'a pas changé, on ne fait rien
     if (!mSelectionChanged)
@@ -300,6 +331,12 @@ void EditBox::UpdateGUI() {
         } else if (e->GetType() == JointType::WheelJoint) {
             mSelectionType = SelectionType::WheelJoint;
         }
+    } else if (mSelectedArea) {
+        // Texte par défaut
+        mSelectionType = SelectionType::Area;
+
+        mAreaScenario.Select(mSelectedArea);
+        ShowAreaScenario();
     }
 
     // Affiche le scénario par défaut si on n'a pas de sélection
@@ -370,6 +407,8 @@ sf::CircleShape EditBox::GetSelectionMark() {
         myAssert(h, "Erreur lors du la détermination du type.");
 
         cs.setPosition(b22sfVec(h->GetPosition(), mPhysicMgr.GetPPM()));
+    } else if (mSelectionType == SelectionType::Area) {
+        cs.setPosition(b22sfVec(mSelectedArea->GetAABB().GetCenter(), mPhysicMgr.GetPPM()));
     }
 
     // Retourne le disque
@@ -406,9 +445,23 @@ void EditBox::ShowDecoScenario() {
     mDecoScenario.Show();
 }
 
+void EditBox::ShowAreaScenario() {
+    mAreaScenario.AddInWindow(mWindow);
+    mAreaScenario.Show();
+}
+
 void EditBox::ShowPointLightScenario() {
     mPointLightScenario.AddInWindow(mWindow);
     mPointLightScenario.Show();
+}
+
+void EditBox::ShowActionsWindow() {
+    if (!mActionsWindowAdded) {
+        mActionsWindow.RegisterInDesktop(&mDesktop);
+        mActionsWindowAdded = true;
+    }
+
+    mActionsWindow.Show();
 }
 
 void EditBox::ShowTexturesWindow() {
@@ -445,6 +498,15 @@ void EditBox::ShowDecoCreationWindow() {
     }
 
     mDecoCreationWindow.Show();
+}
+
+void EditBox::ShowAreaCreationWindow() {
+    if (!mAreaCreationWindowAdded) {
+        mAreaCreationWindow.RegisterInDesktop(&mDesktop);
+        mAreaCreationWindowAdded = true;
+    }
+
+    mAreaCreationWindow.Show();
 }
 
 void EditBox::ShowHumCreationWindow() {
@@ -501,12 +563,24 @@ HumScenario *EditBox::GetHumScenario() {
     return &mHumScenario;
 }
 
+AreaScenario *EditBox::GetAreaScenario() {
+    return &mAreaScenario;
+}
+
+PointLightScenario *EditBox::GetPointLightScenario() {
+    return &mPointLightScenario;
+}
+
 DecoScenario *EditBox::GetDecoScenario() {
     return &mDecoScenario;
 }
 
 BodyScenario *EditBox::GetBodyScenario() {
     return &mBodyScenario;
+}
+
+ActionsWindow *EditBox::GetActionsWindow() {
+    return &mActionsWindow;
 }
 
 TexturesWindow *EditBox::GetTexturesWindow() {
@@ -519,6 +593,10 @@ ScriptConsoleWindow *EditBox::GetScriptConsoleWindow() {
 
 ColFilteringWindow *EditBox::GetColFilteringWindow() {
     return &mColFilteringWindow;
+}
+
+AreaCreationWindow *EditBox::GetAreaCreationWindow() {
+    return &mAreaCreationWindow;
 }
 
 DecoCreationWindow *EditBox::GetDecoCreationWindow() {

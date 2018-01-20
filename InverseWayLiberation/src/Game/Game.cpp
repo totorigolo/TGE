@@ -9,18 +9,20 @@
 
 // Ctor
 Game::Game(sf::RenderWindow &window)
-        : mWindow(window),
-        // Etats du jeu
+        : // Etats du jeu
           mPaused(false),
           mDebugDraw(false),
+        // Fenêtre
           mQuit(false),
-        // Ressources
-          mResourceManager(ResourceManager::GetInstance()),
+          mWindow(window),
+        // Evènements
           mInputManager(InputManager::GetInstance()),
+        // Niveau
+          mLevel(LevelManager::GetInstance()),
         // Physique
           mPhysicMgr(PhysicManager::GetInstance()),
-        // Level
-          mLevel(LevelManager::GetInstance()),
+        // Ressources
+          mResourceManager(ResourceManager::GetInstance()),
         // GUI
           mSfGUI(App::GetInstance().GetSfGUI()) {
     myAssert(mSfGUI, "La GUI n'a pas été créée.");
@@ -116,19 +118,22 @@ bool Game::OnInit() {
     mSpyedKeys.push_back(SpyedKey::Create(sf::Keyboard::M)); // Pause physique
     mSpyedKeys.push_back(SpyedKey::Create(sf::Keyboard::O)); // Debug Draw
     mSpyedKeys.push_back(SpyedKey::Create(sf::Keyboard::R)); // Recharger
+    mSpyedKeys.push_back(SpyedKey::Create(sf::Keyboard::F12)); // Console de scripts
 
     // Initialise la machine de script
-    mConsole.RegisterEntityFactory();
-    mConsole.RegisterLevelManager();
-    mConsole.RegisterGlobalVar("level", &mLevel);
-    mConsole.RegisterPhysicManager();
-    mConsole.RegisterGlobalVar("physicMgr", &mPhysicMgr);
-    mConsole.RegisterInputManager();
-    mConsole.RegisterGlobalVar("inputMgr", &mInputManager);
-    mConsole.RegisterResourceManager();
+    mScriptMachine.RegisterEntityFactory();
+    mScriptMachine.RegisterLevelManager();
+    mScriptMachine.RegisterGlobalVar("level", &mLevel);
+    mScriptMachine.RegisterPhysicManager();
+    mScriptMachine.RegisterGlobalVar("physicMgr", &mPhysicMgr);
+    mScriptMachine.RegisterInputManager();
+    mScriptMachine.RegisterGlobalVar("inputMgr", &mInputManager);
+    mScriptMachine.RegisterResourceManager();
 
     // Enregistre la console
-    mLevel.SetScriptConsole(&mConsole);
+    mLevel.SetScriptMachine(&mScriptMachine);
+    mScriptConsole.SetScriptMachine(&mScriptMachine);
+    mScriptConsole.RegisterInDesktop(&mDesktop);
 
     // Charge le niveau
     //Init();
@@ -174,13 +179,21 @@ void Game::OnEvent() {
         mDebugDraw = !mDebugDraw;
     }
 
+    // DebugDraw
+    if (mInputManager.KeyPressed(sf::Keyboard::F12)) {
+        if (!mScriptConsole.IsVisible()) {
+            mScriptConsole.Show();
+        } else {
+            mScriptConsole.Hide();
+        }
+    }
+
     // Recharger le niveau
     if (mInputManager.KeyPressed(sf::Keyboard::R) && ctrl) {
         // Charge le niveau
         Init();
-        mConsole.Reset();
+        mScriptMachine.Reset();
         LevelLoader("lvls/level_1.xvl");
-
     }
 }
 
@@ -271,7 +284,7 @@ void Game::OnQuit() {
 
     // Vide
     // TODO: Déplacer vers la ScriptMachine
-    mConsole.UnregisterGlobalVar("level");
-    mConsole.UnregisterGlobalVar("physicMgr");
-    mConsole.UnregisterGlobalVar("inputMgr");
+    mScriptMachine.UnregisterGlobalVar("level");
+    mScriptMachine.UnregisterGlobalVar("physicMgr");
+    mScriptMachine.UnregisterGlobalVar("inputMgr");
 }

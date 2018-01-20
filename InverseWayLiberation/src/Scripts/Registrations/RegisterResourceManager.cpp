@@ -4,7 +4,8 @@
 void ScriptMachine::RegisterResourceManager() {
     try {
         // Texture
-        luabind::module(mLuaState)[
+        luabind::module(mLuaState)
+        [
                 // La classe
                 luabind::class_<Texture>("Texture")
                         // Ctors
@@ -14,17 +15,14 @@ void ScriptMachine::RegisterResourceManager() {
                         .property("path", &Texture::GetPath)
         ];
 
-        // ResourceManager
-        luabind::module(mLuaState)[
-                // Level
-                luabind::namespace_("ResourceManager")
-                [
-                        // Fxs
-                        luabind::def("LoadTexture", &ResourceManager::LoadTexture),
-                                luabind::def("GetTexture", &ResourceManager::GetTexture,
-                                             luabind::dependency_policy<0, 1>())
+        // InputManager
+        luabind::module(mLuaState)
+        [
+                luabind::class_<ResourceManager>("ResourceManager")
+                        /* Fxs */
+                        .def("LoadTexture", &ResourceManager::LoadTexture)
+                        .def("GetTexture", &ResourceManager::GetTexture, luabind::dependency_policy<0, 1>())
 //                                             luabind::dependency(luabind::result, _1))
-                ]
         ];
     }
     catch (const std::exception &e) {

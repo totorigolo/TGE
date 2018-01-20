@@ -137,7 +137,7 @@ sf::Color const& LevelManager::GetBckgColor() const
 }
 
 // TODO
-void LevelManager::SetScriptConsole(ScriptMachine *machine)
+void LevelManager::SetScriptMachine(ScriptMachine *machine)
 {
 	mTriggersManager.SetScriptMachine(machine);
 }

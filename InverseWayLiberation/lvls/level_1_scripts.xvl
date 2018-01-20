@@ -1,0 +1,517 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<level>
+    <world gravity="(0, -9.79993)" PPM="100.000000" bckgcolor="(0, 0, 0)" originview="(-3.91396, -2.66362)" defaultzoom="3.001744"/>
+    <textures>
+        <img name="cascade" src="tex/level_1/cascade.png"/>
+        <img name="echelle_maison_3" src="tex/level_1/echelle_maison_3.png"/>
+        <img name="fond_1" src="tex/level_1/fond_1.png"/>
+        <img name="maison_1" src="tex/level_1/maison_1.png"/>
+        <img name="maison_2" src="tex/level_1/maison_2.png"/>
+        <img name="maison_3" src="tex/level_1/maison_3.png"/>
+        <img name="none" src="tex/none.png"/>
+        <img name="unknown" src="tex/unknown.png"/>
+    </textures>
+    <basicbodies>
+        <box type="dynamic" texture="unknown" pos="(-16.2953, -4.57646)" rotation="-183.845642" linvel="(-6.89162e-009, 2.17055e-009)" angvel="-0.000000" shadows="true"/>
+        <box type="dynamic" texture="unknown" pos="(-15.75, -4.58169)" rotation="361.325623" linvel="(-9.52335e-009, 2.76354e-009)" angvel="0.000000" shadows="true"/>
+        <box type="dynamic" texture="unknown" pos="(-17.2169, -3.25431)" shadows="true"/>
+        <box type="dynamic" texture="unknown" pos="(-20.7411, -3.28333)" rotation="-3.198129" shadows="true"/>
+        <box type="dynamic" texture="unknown" pos="(-8.92026, -4.33153)" rotation="-434.939270" linvel="(8.72727e-009, -5.06135e-009)" angvel="-0.000000" friction="10.000000" shadows="true"/>
+        <box type="dynamic" texture="unknown" pos="(-6.00076, -4.58791)" rotation="0.921996" friction="0.900000" shadows="true"/>
+        <box type="dynamic" texture="unknown" pos="(-6.82782, -4.5606)" rotation="-5.626174" shadows="true"/>
+        <box type="dynamic" texture="unknown" pos="(-10.3895, -4.50023)" rotation="2.570600" shadows="true"/>
+        <box type="dynamic" texture="unknown" pos="(-8.2001, -4.43611)" rotation="-4.531137" linvel="(-5.86969e-011, 3.44395e-012)" angvel="0.000000" shadows="true"/>
+        <box type="dynamic" texture="unknown" pos="(-7.78348, -4.46631)" rotation="-4.136395" linvel="(-8.03388e-011, 3.77424e-011)" angvel="0.000000" shadows="true"/>
+        <box type="dynamic" texture="unknown" pos="(-4.60219, -4.58098)" rotation="-0.675782" shadows="true"/>
+        <box type="dynamic" texture="unknown" pos="(17.1524, -4.65624)" rotation="-1715.613159" shadows="true"/>
+        <box type="dynamic" texture="unknown" pos="(18.9887, -4.84255)" rotation="624.868652" linvel="(7.33497e-009, -7.55068e-010)" angvel="0.000000" shadows="true"/>
+        <box type="dynamic" texture="unknown" pos="(15.0814, -4.54805)" rotation="88.304405" shadows="true"/>
+        <box type="dynamic" texture="unknown" pos="(15.9163, -4.54995)" rotation="-0.615641" shadows="true"/>
+        <box type="dynamic" texture="unknown" pos="(19.589, -4.90048)" rotation="-4.463965" linvel="(-2.70474e-009, -6.61401e-010)" angvel="-0.000000" shadows="true"/>
+        <box type="dynamic" texture="unknown" pos="(20.151, -4.797)" rotation="-247.771545" linvel="(3.22889e-011, 1.33359e-011)" angvel="-0.000000" shadows="true"/>
+        <box type="dynamic" texture="unknown" pos="(21.0726, -4.57529)" rotation="1.644562" shadows="true"/>
+        <box type="dynamic" texture="unknown" pos="(22.9998, -4.5496)" rotation="-0.312220" shadows="true"/>
+        <box type="dynamic" texture="unknown" pos="(-21.7656, -4.54771)" rotation="449.827423" friction="3.000000" shadows="true"/>
+    </basicbodies>
+    <polybodies/>
+    <polychains>
+        <loop type="static" texture="none" pos="(-19.0881, -3.15398)" shadows="true">
+            <point pos="(0.0613785, 2.82378)"/>
+            <point pos="(2.07538, 1.33994)"/>
+            <point pos="(1.75854, 1.31798)"/>
+            <point pos="(1.45424, 1.32739)"/>
+            <point pos="(1.3068, 1.03564)"/>
+            <point pos="(0.983679, 0.408229)"/>
+            <point pos="(1.38209, -0.49525)"/>
+            <point pos="(1.78991, -0.432508)"/>
+            <point pos="(2.35145, -0.426234)"/>
+            <point pos="(2.42987, -0.664652)"/>
+            <point pos="(1.98127, -0.931303)"/>
+            <point pos="(1.77736, -1.67479)"/>
+            <point pos="(-1.30325, -1.72498)"/>
+            <point pos="(-1.29384, -1.46147)"/>
+            <point pos="(-1.64833, -1.04737)"/>
+            <point pos="(-2.02478, -0.846602)"/>
+            <point pos="(-2.36672, -0.78386)"/>
+            <point pos="(-2.19418, -0.426234)"/>
+            <point pos="(-1.14953, -0.488975)"/>
+            <point pos="(-1.26247, 0.0976582)"/>
+            <point pos="(-1.81146, 1.03251)"/>
+            <point pos="(-2.16281, 0.828597)"/>
+            <point pos="(-2.13457, 1.1925)"/>
+        </loop>
+        <loop type="static" texture="none" pos="(-12.8258, -2.46741)" shadows="true">
+            <point pos="(0.0797949, 1.42422)"/>
+            <point pos="(0.267139, 1.33402)"/>
+            <point pos="(0.451015, 1.21953)"/>
+            <point pos="(0.655707, 1.04953)"/>
+            <point pos="(0.836114, 0.889942)"/>
+            <point pos="(1.01999, 0.73382)"/>
+            <point pos="(1.19693, 0.563822)"/>
+            <point pos="(1.45366, 0.317498)"/>
+            <point pos="(1.55774, 0.209948)"/>
+            <point pos="(1.61325, 0.150969)"/>
+            <point pos="(1.69998, 0.0642347)"/>
+            <point pos="(1.73468, 0.0191331)"/>
+            <point pos="(1.98794, -0.171681)"/>
+            <point pos="(1.5959, -0.18209)"/>
+            <point pos="(1.25244, -0.813512)"/>
+            <point pos="(1.11366, -1.25759)"/>
+            <point pos="(1.5508, -1.62881)"/>
+            <point pos="(1.76591, -2.37472)"/>
+            <point pos="(-1.82835, -2.35391)"/>
+            <point pos="(-2.09896, -1.72942)"/>
+            <point pos="(-1.91161, -1.54901)"/>
+            <point pos="(-1.95325, -0.487391)"/>
+            <point pos="(-2.31406, -0.535962)"/>
+            <point pos="(-2.67487, -0.473514)"/>
+            <point pos="(-2.10937, -0.258414)"/>
+            <point pos="(-1.29407, 0.248112)"/>
+            <point pos="(-1.56468, 0.837903)"/>
+            <point pos="(-1.18652, 0.876066)"/>
+            <point pos="(-1.07203, 0.400764)"/>
+            <point pos="(-0.773666, 0.608925)"/>
+            <point pos="(-0.551627, 0.789332)"/>
+            <point pos="(-0.336527, 0.95933)"/>
+            <point pos="(-0.163059, 1.11892)"/>
+        </loop>
+        <loop type="static" texture="none" pos="(-8.55802, 0.906441)" shadows="true">
+            <point pos="(-0.0791178, 1.48867)"/>
+            <point pos="(2.03366, 0.59582)"/>
+            <point pos="(1.34413, 0.529519)"/>
+            <point pos="(1.56071, -0.310286)"/>
+            <point pos="(1.23805, -0.90699)"/>
+            <point pos="(-0.861464, -1.23407)"/>
+            <point pos="(-1.38303, -0.716929)"/>
+            <point pos="(-1.03826, -0.0760247)"/>
+            <point pos="(-1.27695, 0.277578)"/>
+            <point pos="(-1.53773, 0.352718)"/>
+        </loop>
+        <chain type="static" texture="none" pos="(-22.6015, -4.86354)" shadows="true">
+            <point pos="(2.26005, 0.0244994)"/>
+            <point pos="(2.21107, -0.0171437)"/>
+            <point pos="(0.598938, -0.0089817)"/>
+            <point pos="(-0.723419, 0.00326252)"/>
+            <point pos="(-1.94579, 0.0828495)"/>
+            <point pos="(-2.40086, -0.0844865)"/>
+        </chain>
+        <chain type="static" texture="none" pos="(-15.7501, -4.82422)" shadows="true">
+            <point pos="(-1.61192, 0.0563307)"/>
+            <point pos="(-1.56642, -0.00216675)"/>
+            <point pos="(-0.0617485, -0.119161)"/>
+            <point pos="(1.00095, 0.0010829)"/>
+            <point pos="(1.10819, 0.00758266)"/>
+            <point pos="(1.13094, 0.0563307)"/>
+        </chain>
+        <chain type="static" texture="none" pos="(-7.05299, -4.87691)" shadows="true">
+            <point pos="(-4.08239, 0.0862675)"/>
+            <point pos="(-4.01414, 0.0407696)"/>
+            <point pos="(-3.39342, 0.0310202)"/>
+            <point pos="(-1.98299, 0.157764)"/>
+            <point pos="(-0.709054, 0.0830178)"/>
+            <point pos="(-0.270326, 0.0375204)"/>
+            <point pos="(0.373141, -0.0469756)"/>
+            <point pos="(1.78682, -0.0242243)"/>
+            <point pos="(2.92426, -0.0469732)"/>
+            <point pos="(4.2372, -0.141218)"/>
+            <point pos="(5.1309, -0.176966)"/>
+        </chain>
+        <chain type="static" texture="none" pos="(0.283692, -4.67611)" shadows="true">
+            <point pos="(-2.30008, -0.379323)"/>
+            <point pos="(-2.21477, -0.375911)"/>
+            <point pos="(-1.79162, -0.140449)"/>
+            <point pos="(-1.63464, -0.0653739)"/>
+            <point pos="(-1.50497, 0.00287628)"/>
+            <point pos="(-1.31407, 0.0726414)"/>
+            <point pos="(-1.19386, 0.0978012)"/>
+            <point pos="(-1.02893, 0.103392)"/>
+            <point pos="(-0.713032, 0.124358)"/>
+            <point pos="(-0.376171, 0.145324)"/>
+            <point pos="(0.0389632, 0.166291)"/>
+            <point pos="(0.353459, 0.176075)"/>
+            <point pos="(1.00481, 0.16629)"/>
+            <point pos="(1.28297, 0.136938)"/>
+            <point pos="(1.39199, 0.113176)"/>
+            <point pos="(1.46048, 0.088016)"/>
+            <point pos="(1.5122, 0.0544696)"/>
+            <point pos="(1.56252, 0.0209236)"/>
+            <point pos="(1.61703, -0.0154185)"/>
+            <point pos="(1.79036, -0.135625)"/>
+            <point pos="(2.05733, -0.356472)"/>
+        </chain>
+        <chain type="static" texture="none" pos="(12.4847, -4.97519)" shadows="true">
+            <point pos="(-10.1755, -0.0513296)"/>
+            <point pos="(-10.1485, -0.0537844)"/>
+            <point pos="(-9.94477, -0.0316896)"/>
+            <point pos="(-9.17145, -0.0341439)"/>
+            <point pos="(-8.44723, -0.0464187)"/>
+            <point pos="(-7.68374, -0.0513287)"/>
+            <point pos="(-6.73612, -0.0685129)"/>
+            <point pos="(-5.92843, -0.0758791)"/>
+            <point pos="(-4.66903, -0.0906076)"/>
+            <point pos="(-3.3679, -0.10534)"/>
+            <point pos="(-1.46775, -0.127433)"/>
+            <point pos="(1.46839, 0.277635)"/>
+            <point pos="(2.29817, 0.0959678)"/>
+            <point pos="(3.71715, 0.0886021)"/>
+            <point pos="(7.38978, -0.289462)"/>
+            <point pos="(8.22398, 0.055068)"/>
+            <point pos="(9.5037, 0.0951338)"/>
+            <point pos="(9.83365, 0.0880632)"/>
+            <point pos="(11.144, 0.102204)"/>
+            <point pos="(11.6484, 0.109274)"/>
+            <point pos="(12.5133, 0.113988)"/>
+        </chain>
+        <chain type="static" texture="none" pos="(-21.3924, 3.46552)" shadows="true">
+            <point pos="(-3.61633, -2.26503)"/>
+            <point pos="(-3.01981, -2.12467)"/>
+            <point pos="(-2.88725, -1.87515)"/>
+            <point pos="(-2.77418, -1.58663)"/>
+            <point pos="(-2.3609, -1.60613)"/>
+            <point pos="(-2.13087, -1.22014)"/>
+            <point pos="(-1.99051, -0.970614)"/>
+            <point pos="(-1.89304, -0.771773)"/>
+            <point pos="(-1.89116, -0.478501)"/>
+            <point pos="(-1.85872, -0.263908)"/>
+            <point pos="(-1.56178, -0.313814)"/>
+            <point pos="(-1.19, -0.271394)"/>
+            <point pos="(-0.733362, -0.204022)"/>
+            <point pos="(-0.548712, -0.0867448)"/>
+            <point pos="(-0.122025, 0.182744)"/>
+            <point pos="(0.122511, 0.334955)"/>
+            <point pos="(0.324627, 0.66932)"/>
+            <point pos="(0.661488, 0.838998)"/>
+            <point pos="(0.846138, 0.824026)"/>
+            <point pos="(2.01642, 0.819035)"/>
+            <point pos="(2.39071, 1.29563)"/>
+            <point pos="(2.77747, 1.28066)"/>
+            <point pos="(2.99206, 1.33056)"/>
+            <point pos="(3.25656, 1.44784)"/>
+            <point pos="(4.01762, 1.48777)"/>
+            <point pos="(4.53164, 1.59756)"/>
+            <point pos="(4.64143, 1.92943)"/>
+        </chain>
+        <loop type="static" texture="none" pos="(-22.7838, 2.38087)" shadows="true">
+            <point pos="(-0.170561, 0.774695)"/>
+            <point pos="(-0.193678, 0.229804)"/>
+            <point pos="(-0.140892, 0.196054)"/>
+            <point pos="(-0.176397, 0.0861509)"/>
+            <point pos="(-0.183163, -0.0220609)"/>
+            <point pos="(-0.152729, -0.0913842)"/>
+            <point pos="(-0.137512, -0.277374)"/>
+            <point pos="(-0.11384, -0.33148)"/>
+            <point pos="(-0.125675, -0.471817)"/>
+            <point pos="(-0.125675, -0.559739)"/>
+            <point pos="(-0.103695, -0.613845)"/>
+            <point pos="(-0.0343723, -0.678096)"/>
+            <point pos="(0.0112801, -0.728821)"/>
+            <point pos="(0.0518608, -0.716985)"/>
+            <point pos="(0.075531, -0.679787)"/>
+            <point pos="(0.0704594, -0.14549)"/>
+            <point pos="(0.155001, 0.059098)"/>
+            <point pos="(0.168526, 0.153784)"/>
+            <point pos="(0.163452, 0.282285)"/>
+            <point pos="(0.139782, 0.376971)"/>
+            <point pos="(0.124563, 0.466583)"/>
+            <point pos="(0.139782, 0.529144)"/>
+            <point pos="(0.175287, 0.623829)"/>
+            <point pos="(0.193886, 0.725278)"/>
+            <point pos="(0.188814, 0.8132)"/>
+        </loop>
+        <loop type="static" texture="none" pos="(-22.4602, 2.79702)" shadows="true">
+            <point pos="(0.131021, 0.437459)"/>
+            <point pos="(0.143194, 0.329247)"/>
+            <point pos="(0.156721, 0.230504)"/>
+            <point pos="(0.137783, 0.141229)"/>
+            <point pos="(0.0877342, 0.0289588)"/>
+            <point pos="(0.0904408, -0.338962)"/>
+            <point pos="(0.0782661, -0.382247)"/>
+            <point pos="(0.0349827, -0.384952)"/>
+            <point pos="(0.0106354, -0.359252)"/>
+            <point pos="(-0.0177708, -0.326788)"/>
+            <point pos="(-0.0529385, -0.278093)"/>
+            <point pos="(-0.0610561, -0.206402)"/>
+            <point pos="(-0.0488815, -0.172586)"/>
+            <point pos="(-0.0475292, -0.104953)"/>
+            <point pos="(-0.0610561, -0.0833111)"/>
+            <point pos="(-0.0664673, 0.0438378)"/>
+            <point pos="(-0.0867577, 0.0898283)"/>
+            <point pos="(-0.0921669, 0.195335)"/>
+            <point pos="(-0.0664673, 0.216977)"/>
+            <point pos="(-0.0705242, 0.256204)"/>
+            <point pos="(-0.0935192, 0.267025)"/>
+            <point pos="(-0.105694, 0.400938)"/>
+        </loop>
+        <loop type="static" texture="none" pos="(-21.6865, 2.02342)" shadows="true">
+            <point pos="(-0.255812, 1.35715)"/>
+            <point pos="(-0.243635, 0.806619)"/>
+            <point pos="(-0.223349, 0.675413)"/>
+            <point pos="(-0.189531, 0.56179)"/>
+            <point pos="(-0.193586, 0.319666)"/>
+            <point pos="(-0.216583, 0.184401)"/>
+            <point pos="(-0.215231, 0.0112619)"/>
+            <point pos="(-0.193583, -0.107772)"/>
+            <point pos="(-0.161119, -0.194341)"/>
+            <point pos="(-0.128656, -0.2755)"/>
+            <point pos="(-0.123247, -0.689411)"/>
+            <point pos="(-0.134071, -0.754338)"/>
+            <point pos="(-0.135424, -0.904482)"/>
+            <point pos="(-0.128658, -0.982936)"/>
+            <point pos="(-0.10837, -1.03298)"/>
+            <point pos="(-0.0677891, -1.04516)"/>
+            <point pos="(-0.0475006, -1.02081)"/>
+            <point pos="(-0.0123291, -0.988347)"/>
+            <point pos="(0.0620651, -0.869313)"/>
+            <point pos="(0.0782986, -0.828734)"/>
+            <point pos="(0.075592, -0.708348)"/>
+            <point pos="(0.0620651, -0.677237)"/>
+            <point pos="(0.0674744, -0.543325)"/>
+            <point pos="(0.0837078, -0.502745)"/>
+            <point pos="(0.0837078, -0.463518)"/>
+            <point pos="(0.0931778, -0.256563)"/>
+            <point pos="(0.124289, -0.153762)"/>
+            <point pos="(0.126993, -0.134825)"/>
+            <point pos="(0.128347, -0.0198493)"/>
+            <point pos="(0.125637, 0.013967)"/>
+            <point pos="(0.112108, 0.0491362)"/>
+            <point pos="(0.0891132, 0.111358)"/>
+            <point pos="(0.108051, 0.139764)"/>
+            <point pos="(0.132399, 0.149232)"/>
+            <point pos="(0.13781, 0.29126)"/>
+            <point pos="(0.133747, 0.487394)"/>
+            <point pos="(0.126984, 0.667297)"/>
+            <point pos="(0.113459, 0.686234)"/>
+            <point pos="(0.11887, 0.935122)"/>
+            <point pos="(0.122929, 1.26517)"/>
+            <point pos="(0.141867, 1.37203)"/>
+            <point pos="(0.159452, 1.44101)"/>
+            <point pos="(0.170273, 1.62903)"/>
+        </loop>
+        <chain type="static" texture="none" pos="(3.23317, 3.10748)" shadows="true">
+            <point pos="(-17.8688, 2.28956)"/>
+            <point pos="(-17.8717, 2.05064)"/>
+            <point pos="(-17.1929, 1.86125)"/>
+            <point pos="(-15.7506, 1.61067)"/>
+            <point pos="(-15.1154, 1.01046)"/>
+            <point pos="(-13.6236, 0.934699)"/>
+            <point pos="(-11.5403, 0.497646)"/>
+            <point pos="(-10.1417, 0.372358)"/>
+            <point pos="(-9.52694, 0.576316)"/>
+            <point pos="(-7.61847, 0.570488)"/>
+            <point pos="(-5.36037, 0.0518517)"/>
+            <point pos="(-4.75432, -0.743585)"/>
+            <point pos="(-4.03172, -0.463871)"/>
+            <point pos="(-3.28873, 0.121781)"/>
+            <point pos="(-2.12035, 0.573403)"/>
+            <point pos="(-0.864546, 0.553006)"/>
+            <point pos="(-0.52073, 0.547179)"/>
+            <point pos="(-0.436234, 0.553006)"/>
+            <point pos="(-0.226448, 0.547179)"/>
+            <point pos="(0.193123, 0.541352)"/>
+            <point pos="(0.944854, 0.544265)"/>
+            <point pos="(2.6785, 1.56988)"/>
+            <point pos="(5.36492, 0.890993)"/>
+            <point pos="(5.44131, 0.0189428)"/>
+            <point pos="(6.89008, -2.57524)"/>
+            <point pos="(8.0878, -3.94556)"/>
+            <point pos="(9.56272, -3.26563)"/>
+            <point pos="(10.6088, -3.51145)"/>
+            <point pos="(11.0115, -2.4811)"/>
+            <point pos="(11.1998, -1.98423)"/>
+            <point pos="(11.4038, -1.53966)"/>
+            <point pos="(11.681, -0.922497)"/>
+            <point pos="(12.8002, -0.472698)"/>
+            <point pos="(12.7218, 0.369367)"/>
+            <point pos="(15.4938, 1.60893)"/>
+            <point pos="(21.77, 1.64031)"/>
+        </chain>
+        <loop type="static" texture="none" pos="(2.51371, 2.92988)" shadows="true">
+            <point pos="(-0.143293, 0.738888)"/>
+            <point pos="(-0.151497, 0.430426)"/>
+            <point pos="(-0.126886, 0.348388)"/>
+            <point pos="(-0.103915, 0.282757)"/>
+            <point pos="(-0.036644, 0.207282)"/>
+            <point pos="(-0.0300808, 0.0628958)"/>
+            <point pos="(-0.0300808, -0.130714)"/>
+            <point pos="(-0.0267994, -0.322682)"/>
+            <point pos="(-0.0350034, -0.388313)"/>
+            <point pos="(-0.0382848, -0.480195)"/>
+            <point pos="(-0.036644, -0.578641)"/>
+            <point pos="(0.0437531, -0.604893)"/>
+            <point pos="(0.0585198, -0.508088)"/>
+            <point pos="(0.0716462, -0.217674)"/>
+            <point pos="(0.0896945, -0.0339091)"/>
+            <point pos="(0.115947, 0.126885)"/>
+            <point pos="(0.175014, 0.343466)"/>
+            <point pos="(0.204548, 0.724121)"/>
+        </loop>
+        <loop type="static" texture="none" pos="(2.9162, 3.00701)" shadows="true">
+            <point pos="(-0.112622, 0.656829)"/>
+            <point pos="(-0.112622, 0.53049)"/>
+            <point pos="(-0.0912917, 0.450093)"/>
+            <point pos="(-0.0601172, 0.363133)"/>
+            <point pos="(-0.0207388, 0.272891)"/>
+            <point pos="(-0.0092535, 0.212183)"/>
+            <point pos="(-0.0108938, -0.0519788)"/>
+            <point pos="(-0.0240202, -0.148784)"/>
+            <point pos="(-0.0404277, -0.22754)"/>
+            <point pos="(-0.0519128, -0.311219)"/>
+            <point pos="(-0.0568354, -0.411305)"/>
+            <point pos="(-0.0502722, -0.472013)"/>
+            <point pos="(-0.0305831, -0.499906)"/>
+            <point pos="(-0.00597167, -0.504828)"/>
+            <point pos="(0.00387287, -0.494983)"/>
+            <point pos="(0.0153582, -0.473654)"/>
+            <point pos="(0.0186396, -0.44412)"/>
+            <point pos="(0.023562, -0.29153)"/>
+            <point pos="(0.0662215, -0.14058)"/>
+            <point pos="(0.0760663, -0.084794)"/>
+            <point pos="(0.0809884, 0.103893)"/>
+            <point pos="(0.100677, 0.200698)"/>
+            <point pos="(0.1056, 0.520646)"/>
+            <point pos="(0.0957553, 0.589557)"/>
+            <point pos="(0.0908332, 0.656829)"/>
+        </loop>
+        <loop type="static" texture="none" pos="(3.7946, 2.62344)" shadows="true">
+            <point pos="(-0.36917, 1.02728)"/>
+            <point pos="(-0.370811, 0.416914)"/>
+            <point pos="(-0.3462, 0.123218)"/>
+            <point pos="(-0.328151, -0.0014801)"/>
+            <point pos="(-0.318306, -0.0310137)"/>
+            <point pos="(-0.282209, -0.0621879)"/>
+            <point pos="(-0.229705, -0.0785956)"/>
+            <point pos="(-0.198531, -0.0785956)"/>
+            <point pos="(-0.173919, -0.0621879)"/>
+            <point pos="(-0.17556, -0.0178876)"/>
+            <point pos="(-0.172279, 0.0296943)"/>
+            <point pos="(-0.155871, 0.0296943)"/>
+            <point pos="(-0.147667, -0.116333)"/>
+            <point pos="(-0.10993, -0.296816)"/>
+            <point pos="(-0.0968039, -0.446125)"/>
+            <point pos="(-0.0902407, -0.567541)"/>
+            <point pos="(-0.0771148, -0.659424)"/>
+            <point pos="(-0.0639887, -0.739821)"/>
+            <point pos="(-0.041018, -0.784122)"/>
+            <point pos="(-0.0180473, -0.779199)"/>
+            <point pos="(0.00328255, -0.752947)"/>
+            <point pos="(0.0164084, -0.702084)"/>
+            <point pos="(0.0328162, -0.451048)"/>
+            <point pos="(0.0492237, -0.265642)"/>
+            <point pos="(0.0705531, 0.0296946)"/>
+            <point pos="(0.0902421, 0.2151)"/>
+            <point pos="(0.105009, 0.597397)"/>
+            <point pos="(0.142746, 0.359487)"/>
+            <point pos="(0.154232, 0.241352)"/>
+            <point pos="(0.159154, 0.111732)"/>
+            <point pos="(0.165717, 0.0559461)"/>
+            <point pos="(0.182124, 0.0231311)"/>
+            <point pos="(0.210017, 0.0214906)"/>
+            <point pos="(0.224784, 0.0428202)"/>
+            <point pos="(0.229706, 0.0739946)"/>
+            <point pos="(0.234629, 0.279089)"/>
+            <point pos="(0.25924, 0.369331)"/>
+            <point pos="(0.318307, 0.479262)"/>
+            <point pos="(0.36753, 0.643338)"/>
+            <point pos="(0.36753, 0.69092)"/>
+            <point pos="(0.382297, 1.0322)"/>
+        </loop>
+        <chain type="static" texture="none" pos="(0.453656, -4.94834)" shadows="true">
+            <point pos="(-1.16162, -0.449707)"/>
+            <point pos="(-1.08957, -0.320028)"/>
+            <point pos="(-1.01032, -0.201155)"/>
+            <point pos="(-0.898656, -0.067873)"/>
+            <point pos="(-0.776181, 0.0293865)"/>
+            <point pos="(-0.639297, 0.123044)"/>
+            <point pos="(-0.495208, 0.202292)"/>
+            <point pos="(-0.336711, 0.259928)"/>
+            <point pos="(-0.174612, 0.295949)"/>
+            <point pos="(0.0163047, 0.310359)"/>
+            <point pos="(0.221631, 0.299552)"/>
+            <point pos="(0.401741, 0.252723)"/>
+            <point pos="(0.560238, 0.180679)"/>
+            <point pos="(0.686315, 0.0978284)"/>
+            <point pos="(0.783574, 0.0113759)"/>
+            <point pos="(0.862823, -0.0822816)"/>
+            <point pos="(0.942072, -0.19395)"/>
+            <point pos="(1.01051, -0.302016)"/>
+            <point pos="(1.09697, -0.446105)"/>
+        </chain>
+    </polychains>
+    <entities>
+        <hum pos="(0.167745, -4.4936)" age="60.000000" strengh="5.000000" color="(0, 100, 42)"/>
+        <hum pos="(1.44683, -4.49137)" age="6.000000" strengh="8.000000" color="(100, 100, 42)"/>
+        <hum pos="(0.670924, -4.48127)" age="20.000000" strengh="-15.000000" color="(255, 0, 84)"/>
+        <hum pos="(1.06127, -4.48912)" age="40.000000" strengh="0.000000" color="(25, 100, 84)"/>
+        <player pos="(-0.474388, -4.53385)" age="20.000000" strengh="20.000000" color="(64, 0, 42)"/>
+    </entities>
+    <joints/>
+    <deco>
+        <layer z="10">
+            <img texture="fond_1" position="(0, 0)"/>
+        </layer>
+        <layer z="-1">
+            <img texture="echelle_maison_3" position="(-8.40406, -2.54472)"/>
+            <img texture="maison_1" position="(-19.0559, -2.72178)" shadows="true"/>
+            <img texture="maison_2" position="(-13.1698, -3.12442)" shadows="true"/>
+            <img texture="maison_3" position="(-8.30593, 1.82596)" shadows="true"/>
+        </layer>
+    </deco>
+
+    <!-- Défini les actions -->
+    <actions>
+        <!-- Fichiers -->
+        <file name="test-creations" path="scripts/test-creations.lua"/>
+
+        <!-- Fonctions -->
+        <function name="hello" func="hello" file="scripts/test-compteur.lua"/>
+        <function name="createObjects" func="testAll" file="scripts/test-creations.lua"/>
+    </actions>
+
+    <!-- Défini les évènements -->
+    <events>
+        <!-- Déclencheurs -->
+        <triggers>
+            <!-- Zone -->
+            <area top="100.f" left="  0.f" bottom="90.f" right="10.f" action="createObjects" once="true"/>
+            <area top="100.f" left="-10.f" bottom="90.f" right=" 0.f" action="hello"/>
+
+            <!-- Limite ->
+            <limit top="100.f" scriptT="print 'Si haut ?'"/>
+            <limit left="" scriptF=""/>
+            <limit bottom="" scriptF=""/>
+            <limit right="" scriptF=""/>
+
+            <!- Temps ->
+            <time max="" scriptF=""/-->
+        </triggers>
+    </events>
+
+    <lights>
+        <point layer="1" pos="(1, 2)" radius="600" color="(140, 20, 200)"/>
+        <point layer="1" pos="(3.6, 1.8)" radius="200" color="(0, 200, 100)"/>
+        <point layer="1" pos="(12.8, -0.6)" radius="400" color="(0, 150, 255)"/>
+        <point layer="1" pos="(-1.8, -3)" radius="400" color="(100, 255, 0)"/>
+        <point layer="1" pos="(-12, 2)" radius="400" color="(255, 20, 50)"/>
+        <point layer="1" pos="(-10, -2)" radius="400" color="(37, 50, 168)"/>
+    </lights>
+</level>

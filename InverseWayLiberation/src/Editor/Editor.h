@@ -74,6 +74,7 @@ private:
 
     // Ajout d'Entities
     PolyCreationWindow *mPolyCreationWindow;
+    AreaCreationWindow *mAreaCreationWindow;
     DecoCreationWindow *mDecoCreationWindow;
     HumCreationWindow *mHumCreationWindow;
     BasicBodyCreationWindow *mBasicBodyCreationWindow;

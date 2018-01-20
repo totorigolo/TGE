@@ -146,7 +146,7 @@ void LightEngine::CreateShadows(PointLight *light) {
     mShadowShader.setUniform("renderTargetSize", light->GetBoundingBox().width);//light->mLightRadius * 2.f); // Fix ?
     mShadowShader.setUniform(
             "lightColor",
-            sf::Glsl::Vec4(light->mLightColor.r / 256., light->mLightColor.g / 256., light->mLightColor.b / 256., 1)
+            sf::Glsl::Vec4(light->mLightColor.r / 256.f, light->mLightColor.g / 256.f, light->mLightColor.b / 256.f, 1)
     );
     sf::RenderStates mShaderStates;
     mShaderStates.shader = &mShadowShader;

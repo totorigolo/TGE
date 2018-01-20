@@ -9,6 +9,8 @@
 #include "../../Physics/PhysicManager.h"
 #include "../../Entities/EntityManager.h"
 
+#define DEFAULT_LEVEL "level_1_scripts"
+
 class Editor;
 class EditBox;
 class ScriptMachine;

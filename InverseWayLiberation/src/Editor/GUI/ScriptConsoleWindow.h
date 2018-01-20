@@ -3,6 +3,7 @@
 #include <SFGUI/Box.hpp>
 #include <SFGUI/Label.hpp>
 #include <SFGUI/Button.hpp>
+#include <SFGUI/Adjustment.hpp>
 #include <SFGUI/ScrolledWindow.hpp>
 #include "Window.h"
 #include "../../Tools/PromptEntry.h"
@@ -15,7 +16,7 @@ public:
     ScriptConsoleWindow();
 
     // Actualisation
-    virtual void Update();
+    void Update() override;
 
     // Gestion de la Machine de script
     void SetScriptMachine(ScriptMachine *luaMachine);
@@ -26,8 +27,10 @@ public:
     // Ajoute du texte dans la console
     template<typename T>
     ScriptConsoleWindow &operator<<(const T &text) {
-        mText += text;
-        Update();
+        sfg::Label::Ptr toAdd(sfg::Label::Create(text));
+        toAdd->SetAlignment(sf::Vector2f(0.f,0.f));
+        mScrolledBox->PackEnd(toAdd);
+        autoscroll();
         return *this;
     }
 
@@ -41,6 +44,9 @@ protected:
     void OnUp();
 
     void OnDown();
+
+    // Auto-scroll
+    void autoscroll();
 
 private:
     // Machine de script
@@ -62,5 +68,4 @@ private:
     sfg::Button::Ptr mCloseBtn;
     sfg::ScrolledWindow::Ptr mScrolled;
     sfg::Box::Ptr mScrolledBox;
-    sfg::Label::Ptr mTextLabel;
 };

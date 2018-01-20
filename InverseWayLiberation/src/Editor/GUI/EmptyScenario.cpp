@@ -29,6 +29,12 @@ void EmptyScenario::Fill()
 	mTexturesBtn = sfg::Button::Create(L"Textures");
 	mTexturesBtn->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind(&EditBox::ShowTexturesWindow, &mEditBox));
 
+	mAreasBtn = sfg::Button::Create(L"Actions");
+	mAreasBtn->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind(&EditBox::ShowActionsWindow, &mEditBox));
+
+	mAreaCreationBtn = sfg::Button::Create(L"Area Creation");
+	mAreaCreationBtn->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind(&EditBox::ShowAreaCreationWindow, &mEditBox));
+
 	mDecoCreationBtn = sfg::Button::Create(L"Deco Creation");
 	mDecoCreationBtn->GetSignal(sfg::Button::OnLeftClick).Connect(std::bind(&EditBox::ShowDecoCreationWindow, &mEditBox));
 
@@ -48,6 +54,8 @@ void EmptyScenario::Fill()
 	AddToVBox(mOpenLevelBtn);
 	AddToVBox(mOpenScriptConsoleBtn);
 	AddToVBox(mTexturesBtn);
+	AddToVBox(mAreasBtn);
+	AddToVBox(mAreaCreationBtn);
 	AddToVBox(mDecoCreationBtn);
 	AddToVBox(mPolyCreationBtn);
 	AddToVBox(mBasicBodyCreationBtn);

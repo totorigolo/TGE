@@ -3,27 +3,30 @@
 #include "../../Editor/Editor.h"
 
 // Ctor & Dtor
-Editor_State::Editor_State()
-{
+Editor_State::Editor_State() {
 }
-Editor_State::~Editor_State()
-{
+
+Editor_State::~Editor_State() {
 }
 
 // Exécute le State
-State* Editor_State::Run(App *app)
-{
-	// Obtient un pointeur vers la fenêtre
-	sf::RenderWindow *window = app->GetRenderWindow();
-	window->setFramerateLimit(60U);
+State *Editor_State::Run(App *app) {
+    // Obtient un pointeur vers la fenêtre
+    sf::RenderWindow *window = app->GetRenderWindow();
+    window->setFramerateLimit(60U);
 
-	// Change le titre de la fenêtre
-	window->setTitle("Inverse Way Liberation - DevGame");
+    // Change le titre de la fenêtre
+    window->setTitle("Inverse Way Liberation - DevGame");
 
-	// Lance le jeu
-	Editor *editor = new Editor(*window);
-	editor->Run();
-	delete editor;
+    // Lance le jeu
+    Editor *editor = new Editor(*window);
+    try {
+        editor->Run();
+    } catch (std::exception const &e) {
+        std::cerr << "L'éditeur a crashé :(" << std::endl
+                  << e.what() << std::endl;
+    }
+    delete editor;
 
-	return &MainMenu_State::GetInstance();
+    return &MainMenu_State::GetInstance();
 }

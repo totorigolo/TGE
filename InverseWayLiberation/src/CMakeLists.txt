@@ -3,13 +3,9 @@ project(inverse_way_liberation)
 
 set(SRC_DIR InverseWayLiberation/src)
 
-set(main_src
+set(IWL_src
         ${SRC_DIR}/main.cpp
 
-        PARENT_SCOPE
-)
-
-set(App_src
         ${SRC_DIR}/App/App.h
         ${SRC_DIR}/App/App.cpp
         ${SRC_DIR}/App/InputManager.h
@@ -29,14 +25,16 @@ set(App_src
         ${SRC_DIR}/App/States/Configuration_State.h
         ${SRC_DIR}/App/States/Configuration_State.cpp
 
-        PARENT_SCOPE
-)
-
-set(Editor_src
         ${SRC_DIR}/Editor/Editor.h
         ${SRC_DIR}/Editor/Editor.cpp
         ${SRC_DIR}/Editor/EditBox.h
         ${SRC_DIR}/Editor/EditBox.cpp
+        ${SRC_DIR}/Editor/GUI/AreaCreationWindow.h
+        ${SRC_DIR}/Editor/GUI/AreaCreationWindow.cpp
+        ${SRC_DIR}/Editor/GUI/AreaScenario.h
+        ${SRC_DIR}/Editor/GUI/AreaScenario.cpp
+        ${SRC_DIR}/Editor/GUI/ActionsWindow.h
+        ${SRC_DIR}/Editor/GUI/ActionsWindow.cpp
         ${SRC_DIR}/Editor/GUI/EmptyScenario.h
         ${SRC_DIR}/Editor/GUI/EmptyScenario.cpp
         ${SRC_DIR}/Editor/GUI/BodyScenario.h
@@ -69,10 +67,6 @@ set(Editor_src
         ${SRC_DIR}/Editor/GUI/HumCreationWindow.h
         ${SRC_DIR}/Editor/GUI/HumCreationWindow.cpp
 
-        PARENT_SCOPE
-)
-
-set(Entities_src
         ${SRC_DIR}/Entities/Entity.h
         ${SRC_DIR}/Entities/Entity.cpp
         ${SRC_DIR}/Entities/EntityManager.h
@@ -100,24 +94,12 @@ set(Entities_src
         ${SRC_DIR}/Entities/PointLight.h
         ${SRC_DIR}/Entities/PointLight.cpp
 
-        PARENT_SCOPE
-)
-
-set(Game_src
         ${SRC_DIR}/Game/Game.h
         ${SRC_DIR}/Game/Game.cpp
 
-        PARENT_SCOPE
-)
-
-set(Graphics_src
         ${SRC_DIR}/Graphics/LightEngine.h
         ${SRC_DIR}/Graphics/LightEngine.cpp
 
-        PARENT_SCOPE
-)
-
-set(Level_src
         ${SRC_DIR}/Level/LevelManager.h
         ${SRC_DIR}/Level/LevelManager.cpp
         ${SRC_DIR}/Level/LevelLoader.h
@@ -125,10 +107,6 @@ set(Level_src
         ${SRC_DIR}/Level/LevelSaver.h
         ${SRC_DIR}/Level/LevelSaver.cpp
 
-        PARENT_SCOPE
-)
-
-set(Scripts_src
         ${SRC_DIR}/Scripts/ScriptMachine.h
         ${SRC_DIR}/Scripts/ScriptMachine.cpp
         ${SRC_DIR}/Scripts/ScriptArea.h
@@ -148,10 +126,6 @@ set(Scripts_src
         ${SRC_DIR}/Scripts/Registrations/RegisterPhysicManager.cpp
         ${SRC_DIR}/Scripts/Registrations/RegisterResourceManager.cpp
 
-        PARENT_SCOPE
-)
-
-set(Physics_src
         ${SRC_DIR}/Physics/PhysicManager.h
         ${SRC_DIR}/Physics/PhysicManager.cpp
         ${SRC_DIR}/Physics/Joint.h
@@ -187,26 +161,14 @@ set(Physics_src
         ${SRC_DIR}/Physics/Joints/WheelJoint.h
         ${SRC_DIR}/Physics/Joints/WheelJoint.cpp
 
-        PARENT_SCOPE
-)
-
-set(Resources_src
         ${SRC_DIR}/Resources/ResourceManager.h
         ${SRC_DIR}/Resources/ResourceManager.cpp
         ${SRC_DIR}/Resources/Font.h
         ${SRC_DIR}/Resources/Texture.h
 
-        PARENT_SCOPE
-)
-
-set(Sounds_src
         ${SRC_DIR}/Sounds/SoundManager.h
         ${SRC_DIR}/Sounds/SoundManager.cpp
 
-        PARENT_SCOPE
-)
-
-set(Tools_src
         ${SRC_DIR}/Tools/Dialog.h
         ${SRC_DIR}/Tools/Dialog.cpp
         ${SRC_DIR}/Tools/Error.h

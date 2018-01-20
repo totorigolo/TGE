@@ -5,9 +5,9 @@
 #include "Texture.h"
 #include "Font.h"
 
-typedef std::map<std::string, Font::Ptr> FontMap;
-typedef std::map<std::string, std::shared_ptr<sf::Sound>> SoundMap;
-typedef std::map<std::string, Texture::Ptr> TextureMap;
+using FontMap = std::map<std::string, Font::Ptr>;
+using SoundMap = std::map<std::string, std::shared_ptr<sf::Sound>>;
+using TextureMap = std::map<std::string, Texture::Ptr>;
 
 class ResourceManager : public Singleton<ResourceManager>
 {

@@ -22,7 +22,9 @@ private:
 	// Boutons
 	sfg::Button::Ptr mOpenLevelBtn;
 	sfg::Button::Ptr mOpenScriptConsoleBtn;
+	sfg::Button::Ptr mAreasBtn;
 	sfg::Button::Ptr mTexturesBtn;
+	sfg::Button::Ptr mAreaCreationBtn;
 	sfg::Button::Ptr mDecoCreationBtn;
 	sfg::Button::Ptr mPolyCreationBtn;
 	sfg::Button::Ptr mBasicBodyCreationBtn;

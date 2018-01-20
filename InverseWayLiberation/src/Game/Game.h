@@ -74,11 +74,12 @@ private:
     // Monde physique
     PhysicManager &mPhysicMgr;
 
-    // Textures
+    // Ressources
     ResourceManager &mResourceManager;
 
     // Machine de script
-    ScriptMachine mConsole;
+    ScriptMachine mScriptMachine;
+    ScriptConsoleWindow mScriptConsole;
 
     // Positions de la souris
     b2Vec2 mMp;
