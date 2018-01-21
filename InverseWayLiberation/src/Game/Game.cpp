@@ -5,6 +5,7 @@
 #include "../Level/LevelManager.h"
 #include "../Physics/PhysicManager.h"
 #include "../Entities/EntityManager.h"
+#include "../Entities/Player.h"
 #include "../Tools/utils.h"
 
 // Ctor
@@ -211,7 +212,14 @@ void Game::OnStepPhysics() {
     if (!mPaused) {
         mPhysicMgr.Step(10, 4);
 
-        mPhysicMgr.DestroyBodiesOut(b2Vec2(1000.f, -200.f), b2Vec2(-200.f, 200.f));
+        b2Body *playerBody{mLevel.GetPlayer() ? mLevel.GetPlayer()->GetBody() : nullptr};
+        mPhysicMgr.DestroyBodiesOut(b2Vec2(1000.f, -200.f), b2Vec2(-200.f, 200.f), playerBody);
+    }
+
+    // Centrage de la caméra sur le joueur
+    if (mLevel.GetPlayer()) {
+        sf::Vector2f playerPos{b22sfVec(mLevel.GetPlayer()->GetPosition(), mPhysicMgr.GetPPM())};
+        mInputManager.SetCenter(playerPos - sf::Vector2f(0, 150));
     }
 }
 
@@ -275,6 +283,7 @@ void Game::OnQuit() {
 
     // Enlève le Desktop du InputManager
     mInputManager.RemoveDesktop(&mDesktop);
+    mScriptConsole.Hide();
 
     // Supprime les SpyedKeys
     mSpyedKeys.clear();

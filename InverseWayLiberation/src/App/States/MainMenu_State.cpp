@@ -48,7 +48,7 @@ State *MainMenu_State::Run(App *app) {
 
     // Charge la police
     sf::Font font;
-    if (!font.loadFromFile("data/default.otf"))
+    if (!font.loadFromFile("data/menu.otf"))
         Dialog::Error(L"Impossible de charger la police du menu.", true);
 
     // Crée les entrées du menu

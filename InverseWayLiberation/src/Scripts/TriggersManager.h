@@ -5,6 +5,7 @@
 #include "../Scripts/ScriptMachine.h"
 #include "ScriptAction.h"
 #include "ScriptArea.h"
+#include "../Entities/Player.h"
 
 using ActionMap = std::map<std::string, std::shared_ptr<ScriptAction>>;
 
@@ -17,7 +18,7 @@ public:
 	virtual ~TriggersManager(void);
 
 	// Mise à jour
-	void Update();
+    void Update(Player *player);
 
 	// Vidage
 	void Clear();

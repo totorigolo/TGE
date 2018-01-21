@@ -123,6 +123,42 @@ void LightEngine::DrawPhysicalHull(PointLight *light, const b2Body &body) {
                 pt1 = pt1 + (((pt1 - lpos) / dist) * float(light->mLightRadius) * 10000.f);
                 light->mShadowsVertexArray.append(sf::Vertex(pt1, c, mZero));
             }
+        } else if (shape->GetType() == b2Shape::e_circle) // polygon
+        {
+            // Récupère le shape
+            b2CircleShape *b2Circle = (b2CircleShape *) shape;
+            sf::CircleShape circle(b2Circle->m_radius);
+            sf::Vector2f offset(-b2Circle->m_radius, -b2Circle->m_radius);
+
+            // Crée les ombres
+            const float ppm = PhysicManager::GetInstance().GetPPM();
+            const sf::Color &c = sf::Color::Green;
+            const sf::Vector2f lpos = light->GetPosition_sf();
+            for (size_t i = 0; i < circle.getPointCount(); ++i) // Chaque pt -> chaque arrête
+            {
+                // N° pt suivant (overflow)
+                size_t j = ((i + 1) < circle.getPointCount()) ? (i + 1) : 0;
+
+                // Pts formant l'arrête
+                sf::Vector2f pt1w = circle.getPoint(static_cast<size_t>(i)) + offset;
+                sf::Vector2f pt2w = circle.getPoint(static_cast<size_t>(j)) + offset;
+                sf::Vector2f pt1 = b22sfVec(b2Mul(t, sf2b2Vec(pt1w, 1)), ppm);
+                sf::Vector2f pt2 = b22sfVec(b2Mul(t, sf2b2Vec(pt2w, 1)), ppm);
+
+                // Ajoute les pts au VertexArray
+                light->mShadowsVertexArray.append(sf::Vertex(pt1, c, mZero));
+                light->mShadowsVertexArray.append(sf::Vertex(pt2, c, mZero));
+
+                // Projette les points
+                // Pt1
+                float dist = sqrt((pt2.y - lpos.y) * (pt2.y - lpos.y) + (pt2.x - lpos.x) * (pt2.x - lpos.x));
+                pt2 = pt2 + (((pt2 - lpos) / dist) * float(light->mLightRadius) * 10000.f);
+                light->mShadowsVertexArray.append(sf::Vertex(pt2, c, mZero));
+                // Pt2
+                dist = sqrt((pt1.y - lpos.y) * (pt1.y - lpos.y) + (pt1.x - lpos.x) * (pt1.x - lpos.x));
+                pt1 = pt1 + (((pt1 - lpos) / dist) * float(light->mLightRadius) * 10000.f);
+                light->mShadowsVertexArray.append(sf::Vertex(pt1, c, mZero));
+            }
         }
     }
 }

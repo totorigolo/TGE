@@ -9,7 +9,7 @@
 #include "../../Physics/PhysicManager.h"
 #include "../../Entities/EntityManager.h"
 
-#define DEFAULT_LEVEL "level_1_scripts"
+#define DEFAULT_LEVEL "level_1"
 
 class Editor;
 class EditBox;

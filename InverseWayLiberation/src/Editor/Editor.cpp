@@ -428,6 +428,7 @@ void Editor::OnEvent() {
         mEditBox->ChangeSelectedObject((Entity *) mMouseMovingBody->GetUserData());
     } else if (mInputManager.GetRMBState()) {
         bool found = false;
+        int layer = 30000000;
 
         // Demande au monde les formes qui sont sous l'AABB
         PointCallback callback(mMp, false);
@@ -442,34 +443,34 @@ void Editor::OnEvent() {
             myAssert(e, "Un b2Body sans Entity a été sélectionné.");
             mEditBox->ChangeSelectedObject(e);
             found = true;
+            layer = e->GetLayer();
         }
 
-            // Si on n'a pas de b2Body, on cherche ce qui n'est pas physique
-        else {
-            // Récupère la position de la souris en mode SFML
-            sf::Vector2f mousePos = mInputManager.GetMousePosRV();
+        // On cherche ce qui n'est pas physique, et qui est au dessus (layer)
 
-            // Les Entities (Déco et PointLight)
-            std::list<Entity *> &entities(mEntityMgr.GetEntities());
-            for (auto it = entities.rbegin(); it != entities.rend(); ++it) // Par Layer
-            {
-                // Pour chaque type
-                if ((*it)->GetType() == EntityType::Deco) {
-                    // Vérifie si le curseur est dessus
-                    Deco * d = (Deco *) (*it);
-                    if (d->GetSprite()->getGlobalBounds().contains(mousePos)) {
-                        mEditBox->ChangeSelectedObject(d);
-                        found = true;
-                        break;
-                    }
-                } else if ((*it)->GetType() == EntityType::PointLight) {
-                    // Vérifie si le curseur est dessus
-                    PointLight * pl = (PointLight *) (*it);
-                    if (pl->GetBoundingBox().contains(mousePos)) {
-                        mEditBox->ChangeSelectedObject(pl);
-                        found = true;
-                        break;
-                    }
+        // Récupère la position de la souris en mode SFML
+        sf::Vector2f mousePos = mInputManager.GetMousePosRV();
+
+        // Les Entities (Déco et PointLight)
+        std::list<Entity *> &entities(mEntityMgr.GetEntities());
+        for (auto it = entities.rbegin(); it != entities.rend() && (*it)->GetLayer() < layer; ++it) // Par Layer
+        {
+            // Pour chaque type
+            if ((*it)->GetType() == EntityType::Deco) {
+                // Vérifie si le curseur est dessus
+                Deco * d = (Deco *) (*it);
+                if (d->GetSprite()->getGlobalBounds().contains(mousePos)) {
+                    mEditBox->ChangeSelectedObject(d);
+                    found = true;
+                    break;
+                }
+            } else if ((*it)->GetType() == EntityType::PointLight) {
+                // Vérifie si le curseur est dessus
+                PointLight * pl = (PointLight *) (*it);
+                if (pl->GetBoundingBox().contains(mousePos)) {
+                    mEditBox->ChangeSelectedObject(pl);
+                    found = true;
+                    break;
                 }
             }
 

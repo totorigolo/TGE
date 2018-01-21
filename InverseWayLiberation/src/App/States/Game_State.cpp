@@ -23,7 +23,7 @@ State* Game_State::Run(App *app)
 	// Lance le jeu
 	Game *game = new Game(*window);
 	game->Run();
-	delete game;
+//	delete game;
 
 	return &MainMenu_State::GetInstance();
 }

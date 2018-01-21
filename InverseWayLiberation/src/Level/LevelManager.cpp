@@ -62,7 +62,7 @@ void LevelManager::Clear() {
 // Mise à jour
 void LevelManager::Update() {
     mEntityManager.Update();
-    mTriggersManager.Update();
+    mTriggersManager.Update(mPlayer);
     mPartitioningTree.PostUpdateAll();
 }
 
