@@ -70,6 +70,9 @@ void LevelManager::Update() {
 void LevelManager::PrepareForGame() {
     // Trie les Entities par leur Layer
     mEntityManager.SortByLayer();
+
+    // Averti le Physics Manager qu'un nouveau niveau a été chargé
+    PhysicManager::GetInstance().NewLevelLoaded();
 }
 
 // Pour le rendu

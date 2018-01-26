@@ -245,6 +245,10 @@ float PhysicManager::GetTimeStep() const {
     return mTimeStep;
 }
 
+void PhysicManager::NewLevelLoaded() {
+    mStepClock.restart();
+}
+
 void PhysicManager::Step(int velocityIt, int positionIt, bool pause) {
     // TODO: Fixer le Timestep
     if (!pause) {

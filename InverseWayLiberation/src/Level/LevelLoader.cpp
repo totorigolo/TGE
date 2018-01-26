@@ -184,24 +184,24 @@ bool LevelLoader::ProcessPoly() {
         return true;
 
     // On crée les attributs
-    PolyBody * pb = nullptr;
-    PolyChain * pc = nullptr;
-    unsigned int id = 0U;
+    PolyBody * pb;
+    PolyChain * pc;
+    unsigned int id;
     sf::String name;
-    int layer = 1;
-    bool bullet = false, osp = false;
-    float density = 1.f, friction = 0.2f, restitution = 0.0f;
-    int16 groupIndex = 0;
-    uint16 categoryBits = 0x0001, maskBits = 0xFFFF;
-    float rotation = 0.f;
+    int layer;
+    bool bullet, osp;
+    float density, friction, restitution;
+    int16 groupIndex;
+    uint16 categoryBits, maskBits;
+    float rotation;
     sf::String texture, type;
     b2BodyType b2type;
-    PolyChain::Type chainType = PolyChain::None;
+    PolyChain::Type chainType;
     b2Vec3 posRot;
     b2Vec2 linvel; // Linear velocity
-    float angvel = 0.f; // Angular velocity
+    float angvel; // Angular velocity
     std::vector<b2Vec2> vertices;
-    bool shadows = true;
+    bool shadows;
 
     // Pour tous les bodies
     bool polyBodiesDone = false;
@@ -418,21 +418,21 @@ bool LevelLoader::ProcessBasicBodies() {
         return true;
 
     // On crée les attributs
-    BasicBody * bb = nullptr;
-    unsigned int id = 0U;
+    BasicBody * bb;
+    unsigned int id;
     sf::String name;
-    int layer = 1;
-    bool bullet = false, osp = false;
-    float density = 1.f, friction = 0.2f, restitution = 0.0f;
-    int16 groupIndex = 0;
-    uint16 categoryBits = 0x0001, maskBits = 0xFFFF;
-    float rotation = 0.f;
+    int layer;
+    bool bullet, osp;
+    float density, friction, restitution;
+    int16 groupIndex;
+    uint16 categoryBits, maskBits;
+    float rotation;
     sf::String texture, forme;
     b2BodyType type;
     b2Vec3 posRot;
     b2Vec2 linvel; // Linear velocity
-    float angvel = 0.f; // Angular velocity
-    bool shadows = true;
+    float angvel; // Angular velocity
+    bool shadows;
 
     // Pour tous les bodies
     tinyxml2::XMLElement *body = bodies.FirstChildElement().ToElement();
@@ -584,10 +584,10 @@ bool LevelLoader::ProcessEntities() {
                  "Une erreur est survenue lors du chargement du niveau.\n<entities> non trouvé (" + mPath + ").");
 
     // On crée les attributs
-    Entity * e = nullptr;
-    unsigned int id = 0U;
+    Entity * e;
+    unsigned int id;
     sf::String name;
-    int layer = 1;
+    int layer;
     b2Vec2 position;
     sf::String type, animation;
 
@@ -688,15 +688,15 @@ bool LevelLoader::ProcessJoints() {
     }
 
     // On crée les attributs
-    Joint *j = nullptr;
-    bool hasID = false;
-    unsigned int id = 0U;
+    Joint *j;
+    bool hasID;
+    unsigned int id;
     std::string name;
     std::string type;
-    unsigned int IDb1 = 0U, IDb2 = 0U;
-    b2Body *b1 = nullptr, *b2 = nullptr;
+    unsigned int IDb1, IDb2;
+    b2Body *b1, *b2;
     b2Vec2 pt1, pt2, anchor;
-    bool collision = true;
+    bool collision;
 
     // Pour tous les joints
     tinyxml2::XMLElement *joint = joints.FirstChildElement().ToElement();
@@ -1006,13 +1006,10 @@ bool LevelLoader::ProcessDeco() {
     }
 
     // On crée les attributs
-    Deco * d = nullptr;
-    bool hasID = false;
-    unsigned int id = 0U;
     std::string texture;
     b2Vec3 posRot;
-    float rotation = 0.f;
-    int zindex = 0;
+    float rotation;
+    int zindex;
 
     // Pour toutes les niveau
     int z = 0;
@@ -1025,9 +1022,6 @@ bool LevelLoader::ProcessDeco() {
         tinyxml2::XMLElement *img = layer.FirstChildElement("img").ToElement();
         while (img) {
             // Réinitialise les attributs
-            d = nullptr;
-            hasID = false;
-            id = 0U;
             rotation = 0.f;
             zindex = 0;
 
@@ -1039,7 +1033,7 @@ bool LevelLoader::ProcessDeco() {
             posRot.z = rotation;
 
             // Ajoute la déco
-            d = new Deco(z, mResourceManager.GetTexture(texture),
+            new Deco(z, mResourceManager.GetTexture(texture),
                          getVec3(b22sfVec(getVec2(posRot), mPhysicManager.GetPPM()), posRot.z));
 
             // On récupère la prochaine image
@@ -1134,7 +1128,7 @@ bool LevelLoader::ProcessTriggers() {
 
     // On crée les attributs
     b2AABB rect;
-    bool once = false;
+    bool once;
     std::string action;
     std::string type;
 
@@ -1184,8 +1178,8 @@ bool LevelLoader::ProcessLights() {
                  "Une erreur est survenue lors du chargement du niveau.\n<lights> non trouvé (" + mPath + ").");
 
     // On crée les attributs
-    PointLight * l = nullptr;
-    int layer = 1;
+    PointLight * l;
+    int layer;
     b2Vec2 position;
     unsigned int radius;
     sf::Color color;
