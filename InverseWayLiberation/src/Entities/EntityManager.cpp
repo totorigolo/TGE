@@ -124,7 +124,8 @@ unsigned int EntityManager::GetNewID() {
 void EntityManager::RemoveID(unsigned int id) {
     myCheckError_v(id != 0U, "Il est impossible de supprimer l'ID d'Entity 0.");
     if (mIDs.find(id) == mIDs.end()) {
-        std::cerr << "Tentative de suppression d'ID d'Entity inconnu." << std::endl;
+        std::cerr << "Tentative de suppression d'ID d'Entity inconnu (id: " << id << ")." << std::endl;
+        return;
     };
 
     // Enlève l'ID de la liste
@@ -176,6 +177,7 @@ void EntityManager::ChangeID(unsigned int id, unsigned int newID) {
         e2->mID = GetNewID();
     } else {
         this->RemoveID(id);
+        mIDs.insert(newID);
     }
     e1->mID = newID;
 }
