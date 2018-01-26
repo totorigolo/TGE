@@ -94,10 +94,12 @@ void Editor::Run() {
             if (focus) {
                 // Appel de la logique
                 this->OnLogic();
+            }
 
-                // Gestion de la physique
-                this->OnStepPhysics();
+            // Gestion de la physique
+            this->OnStepPhysics(focus);
 
+            if (focus) {
                 // Appel des mises à jour
                 this->OnUpdate();
             }
@@ -538,11 +540,12 @@ void Editor::OnLogic() {
 }
 
 /// Appelé pour la physique
-void Editor::OnStepPhysics() {
+void Editor::OnStepPhysics(bool hasFocus) {
     // Simule
-    if (!mPaused) {
-        mPhysicMgr.Step(10, 4);
+    mPhysicMgr.Step(10, 4, !hasFocus || mPaused);
 
+    // Suppression des objets hors zone
+    if (!mPaused) {
         b2Body *b = nullptr;
         Entity * e = mEditBox->GetSelectedEntity();
         if (e) {

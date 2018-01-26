@@ -73,7 +73,7 @@ public:
 
     float GetTimeStep() const;
 
-    void Step(int velocityIt = 6, int positionIt = 2);
+    void Step(int velocityIt = 6, int positionIt = 2, bool pause = false);
 
     // Gestion des propriétés du monde (gravité)
     void SetGravity(const b2Vec2 &gravity);

@@ -45,7 +45,7 @@ protected:
     inline void OnLogic();
 
     /// Appelé pour la physique
-    inline void OnStepPhysics();
+    inline void OnStepPhysics(bool hasFocus = false);
 
     /// Appelé pour les mises à jour
     inline void OnUpdate();
